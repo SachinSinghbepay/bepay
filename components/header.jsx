@@ -39,7 +39,7 @@ export default function Header() {
                 height={46}
                 width={110}
                 alt="BePay Logo"
-                className="object-cover h-14 md:h-14 w-auto"
+                className="object-cover h-12 md:h-14 w-auto"
                 priority
               />
             </div>

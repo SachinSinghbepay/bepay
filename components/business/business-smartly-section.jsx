@@ -15,7 +15,7 @@ import { IconCircleCheckFilled } from "@tabler/icons-react";
 // FeatureCard component
 function FeatureCard({ title, image, features }) {
   return (
-    <div className="flex-col w-full max-w-[670px] h-[607px] bg-white rounded-[30px] shadow-lg border border-gray-100">
+    <div className="flex-col w-full max-w-[670px] h-full md:h-[607px] bg-white rounded-[30px] shadow-lg border border-gray-100">
       <div className="relative w-full h-[225px] overflow-hidden rounded-[30px]">
         {" "}
         {/* Removed 'p' typo */}
@@ -36,7 +36,7 @@ function FeatureCard({ title, image, features }) {
             {features.map((feature, index) => (
               <li
                 key={index}
-                className="flex items-start gap-3 text-base md:text-[16px] font-[500] text-gray-700"
+                className="flex items-start gap-3 text-[14px] md:text-[16px] font-[500] text-gray-700"
               >
                 <IconCircleCheckFilled className="w-5 h-5 text-[#0D8D37] flex-shrink-0 mt-0.5" />{" "}
                 {/* Changed to CheckCircle */}
