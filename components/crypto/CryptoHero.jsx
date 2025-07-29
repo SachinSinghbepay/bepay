@@ -1,0 +1,225 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
+import Image from "next/image";
+import { SmartphoneIcon as DeviceMobile } from "lucide-react";
+
+const iconsData = [
+  {
+    src: "/eth.png",
+    alt: "ETH",
+    initialX: "-800vw",
+    initialY: "-500vh",
+    finalX: "-0px",
+    finalY: "-20px",
+  },
+  {
+    src: "/usdt.png",
+    alt: "USDT",
+    initialX: "800vw",
+    initialY: "-500vh",
+    finalX: "-25px",
+    finalY: "-20px",
+  },
+  {
+    src: "/doller.png",
+    alt: "Doller",
+    initialX: "-800vw",
+    initialY: "500vh",
+    finalX: "-55px",
+    finalY: "-20px",
+  },
+  {
+    src: "/bitcoin.png",
+    alt: "Bitcoin",
+    initialX: "800vw",
+    initialY: "500vh",
+    finalX: "-85px",
+    finalY: "-20px",
+  },
+];
+
+export default function CryptoHeroSection() {
+  const [currentWord, setCurrentWord] = useState(0);
+  const words = ["Save", "Send", "Spend", "Grow"];
+  const containerRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+
+  const mockupY = useTransform(scrollYProgress, [0, 1], [0, -700]);
+
+  const xTransforms = iconsData.map((icon) =>
+    useTransform(scrollYProgress, [0, 0.6], [icon.initialX, icon.finalX])
+  );
+  const yTransforms = iconsData.map((icon) =>
+    useTransform(scrollYProgress, [0, 0.6], [icon.initialY, icon.finalY])
+  );
+  const scaleTransforms = iconsData.map(() =>
+    useTransform(scrollYProgress, [0, 0.6], [1.5, 1])
+  );
+  const opacityTransforms = iconsData.map(() =>
+    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1])
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentWord((prev) => (prev + 1) % words.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    // Make the container taller to allow for scroll
+    <div ref={containerRef} className="h-[300vh] bg-[#F9F9F9] relative">
+      {/* Sticky background content */}
+      <div className="sticky top-0 h-screen flex-col items-center justify-center px-4 py-8 overflow-hidden">
+        {/* Background text that stays sticky - positioned absolutely to stay in place */}
+        <div className=" flex items-center justify-center z-10">
+          <div className="text-center">
+            <div>
+              <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[60px]  font-[600] leading-[100%]">
+                SPEND
+              </div>
+              <div className="text-[#6F6F6F] text-6xl lg:-mt-6 9 lg:tracking-tighter sm:text-8xl lg:text-[120px] font-semibold leading-none">
+                CRYPTO
+              </div>
+              <div className="text-[#B7B7B7] text-6xl sm:text-8xl lg:tracking-tighter lg:-mt-9 2xl:-mt-11 lg:text-[200px] font-[100] leading-none">
+                LIKE
+                <span className="text-[#404040] lg:-ml-14 font-semibold lg:tracking-tighter leading-none">
+                  {" "}
+                  CASH
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Phone mockup with scroll animations - higher z-index to appear above text */}
+        <div className="relative z-20 max-w-7xl lg:-mt-10 mx-auto w-full flex items-center justify-center">
+          <motion.div style={{ y: mockupY }} className="flex-shrink-0">
+            <div className="relative">
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="w-[280px] h-[560px] sm:w-[320px] sm:h-[640px] lg:w-[393px] 3xl:w-[409px] lg:h-[868px] rounded-[40px] lg:rounded-[60px] p-2"
+                style={{
+                  background: "rgba(19, 19, 19, 0.15)",
+                  backdropFilter: "blur(10px)",
+                  boxShadow: "120px 120px 120px 0px rgba(0, 0, 0, 0.03)",
+                }}
+              >
+                <div className="w-full h-full bg-gradient-to-t from-white via-white to-[#F9F9F966] rounded-[32px] lg:rounded-[52px] flex flex-col items-center justify-start p-6 lg:p-16">
+                  <div className="mb-6">
+                    <Image
+                      src="/bepayiconlogo.png"
+                      alt="BePay Logo"
+                      width={105}
+                      height={105}
+                      className="mx-auto h-[40px] w-[40px] lg:h-[60px] lg:w-[60px] 2xl:h-[105px] 2xl:w-[105px] object-cover transition-all"
+                      priority
+                    />
+                  </div>
+                  <div className="text-center mb-6 lg:mb-4">
+                    <p className="text-xs 3xl:text-sm text-gray-800 leading-relaxed max-w-[200px] lg:max-w-[280px]">
+                      <span className="font-semibold text-black">
+                        Web3 Powered Super App
+                      </span>{" "}
+                      <br />
+                      for lifestyle, finance and freedom!
+                    </p>
+                  </div>
+                  <div className="mb-8 lg:mb-4 h-8 lg:h-10 flex items-center justify-center">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={currentWord}
+                        initial={{ y: 30, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -30, opacity: 0 }}
+                        transition={{
+                          duration: 0.5,
+                          ease: "easeInOut",
+                        }}
+                        className="text-md 3xl:text-xl font-[400] text-gray-800"
+                      >
+                        {words[currentWord]}
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                  <div>
+                    <p className="text-xs 3xl:text-sm text-center text-gray-800 leading-relaxed max-w-[200px] lg:max-w-[280px]">
+                      <span className="text-black font-semibold">
+                        your Crypto
+                      </span>{" "}
+                      like never before. Take control of your financial future
+                      with{" "}
+                      <span className="text-black font-semibold">
+                        self-custody wallets, earning opportunities, and
+                        seamless spending solutions.
+                      </span>
+                    </p>
+                  </div>
+                  {/* Crypto icons with scroll animations */}
+                  <div className="absolute inset-0 w-full h-full z-10">
+                    {iconsData.map((icon, index) => {
+                      const x = xTransforms[index];
+                      const y = yTransforms[index];
+                      const scale = scaleTransforms[index];
+                      const opacity = opacityTransforms[index];
+
+                      return (
+                        <motion.div
+                          key={index}
+                          style={{ x, y, scale, opacity }}
+                          className="absolute flex top-[67%]  lg:top-1/2 left-1/2 translate-x-1/2"
+                        >
+                          <Image
+                            src={icon.src || "/placeholder.svg"}
+                            alt={icon.alt}
+                            width={80}
+                            height={80}
+                            className="w-10 h-10"
+                          />
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                  <div className="my-4 mt-20 lg:mt-32">
+                    <Image
+                      src={"/images/crypto/line.png"}
+                      height={100}
+                      width={10}
+                      alt="arrow"
+                      className="object-contain h-16 w-auto"
+                    />
+                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    initial={{ opacity: 0, y: 100 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.3 }}
+                    viewport={{ once: false, amount: 0.5 }}
+                    className="bg-black  h-[56px]  whitespace-nowrap text-white px-4 py-2 lg:px-6 lg:py-3 rounded-full flex items-center justify-center gap-2 text-[12px] font-medium hover:bg-gray-800 transition-colors"
+                  >
+                    <DeviceMobile className="w-3 h-3 -mt-[1px] lg:w-4 lg:h-8" />
+                    Download App & Start Earning
+                  </motion.button>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}
