@@ -188,7 +188,7 @@ export default function ScrollTextAnimation() {
   return (
     <div className="bg-gray-50">
       {/* Animation container */}
-      <div ref={containerRef} className="relative h-[400vh] overflow-hidden">
+      <div ref={containerRef} className="relative h-[200vh] md:h-[400vh] overflow-hidden">
         <div className="min-h-screen sticky inset-0">
           {/* First phase: "Maximize Your" */}
           <div className="fixed z-10 inset-0 flex items-center justify-center pointer-events-none">
