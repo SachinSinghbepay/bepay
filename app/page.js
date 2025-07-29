@@ -88,7 +88,7 @@ const page = () => {
         <CryptoScrollSection />
 
         <PaymentProofSection />
-        <BusinessSection />
+        {/* <BusinessSection /> */}
         <Footer />
       </main>
     </>

@@ -542,13 +542,12 @@ export default function OneWallet() {
             <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-15">
               {/* Virtual Crypto Debit Card Section */}
               <div className="space-y-3 sm:space-y-4">
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-black">
+                <h1 className="text-xl sm:text-2xl lg:whitespace-nowrap md:text-3xl lg:text-4xl font-semibold text-black">
                   Virtual Crypto Debit Card
                 </h1>
                 <p className="text-sm sm:text-base md:text-sm text-gray-600 leading-relaxed">
                   Spend your crypto anywhere with our instant virtual debit
-                  card. No waiting. No approvals. Link directly to your
-                  self-custody wallet and start spending in seconds.
+                  card. No waiting. No approvals.
                 </p>
               </div>
 
@@ -570,7 +569,7 @@ export default function OneWallet() {
                   <img src="/businessnew/virtual2.svg" alt="" />
                 </div>
                 <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
+                  <h3 className="text-[10px] lg:whitespace-nowrap sm:text-sm font-medium text-black">
                     Instant crypto-to-fiat conversion at competitive rates!
                   </h3>
                 </div>
@@ -735,7 +734,7 @@ export default function OneWallet() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Mockup Image */}
-            <div className="relative w-full aspect-[4/3] sm:aspect-square lg:aspect-auto lg:h-full bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full aspect-[4/3] sm:aspect-square lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
               <div ref={mockupImage4Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/p2p1.svg"
@@ -827,7 +826,7 @@ export default function OneWallet() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Mockup Image */}
-            <div className="relative w-full aspect-[4/3] sm:aspect-square lg:aspect-auto lg:h-full bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full aspect-[4/3] sm:aspect-square lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
               <div ref={mockupImage5Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/qr1.svg"
@@ -914,11 +913,11 @@ export default function OneWallet() {
         {/* sixth card */}
         <div
           ref={card6Ref}
-          className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="absolute top-1/2 left-1/2  transform -translate-y-1/2 -translate-x-1/2 w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Mockup Image */}
-            <div className="relative w-full aspect-[4/3] sm:aspect-square lg:aspect-auto lg:h-full bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full aspect-[4/3] sm:aspect-square lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
               <div
                 ref={mockupImage6_1Ref}
                 className="absolute top-[5%] left-[2.5%] w-1/2 h-1/2 z-[2]"

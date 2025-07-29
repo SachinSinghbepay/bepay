@@ -199,7 +199,7 @@ const MobileView = () => {
           >
             {servicesData.map((service, i) => (
               <div key={i} className="w-[75vw] sm:w-[65vw] flex-shrink-0">
-                <div className="relative w-full aspect-[530/679] rounded-2xl sm:rounded-3xl overflow-hidden mb-4 sm:mb-6 shadow-lg">
+                <div className="relative w-full aspect-[530/520] sm:aspect-[530/450] rounded-2xl sm:rounded-3xl overflow-hidden mb-4 sm:mb-6 shadow-lg">
                   <Image
                     src={service.image || "/placeholder.svg"}
                     alt={service.title}
