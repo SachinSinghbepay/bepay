@@ -248,7 +248,7 @@ export default function CryptoWalletSection() {
                 )}
               </AnimatePresence>
             </div>
-            <p className=" md:hidden mt-3  text-sm font-medium text-gray-500">
+            <p className=" md:hidden mt-6  text-sm font-medium text-gray-500">
               ALL IN ONE MOBILE APP
             </p>
             <motion.div
@@ -284,7 +284,7 @@ export default function CryptoWalletSection() {
                   </span>
                 </button>
               ))}
-              <button className="flex items-center lg:ml-7 gap-2 lg:h-[56px]  whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100">
+              <button className="flex items-center lg:ml-7 gap-2 lg:h-[56px] text-[12px]  whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100">
                 <IconDeviceMobile className="h-5 w-5" />
                 <span>Download App & Get Bitcoin Reward</span>
               </button>

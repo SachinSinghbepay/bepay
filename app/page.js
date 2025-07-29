@@ -70,7 +70,7 @@ const page = () => {
   return (
     <>
       <main>
-         <WaitlistPopup />
+        <WaitlistPopup />
         <Header />
         <CryptoHeroSection />
         <CryptoWalletSection />
