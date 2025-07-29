@@ -393,7 +393,7 @@ export default function OneWallet() {
             </h2>
             <p
               ref={textLine4Ref}
-              className="text-[2vw] w-[50%] mt-8 sm:text-[1vw] md:text-[1vw] lg:text-[1vw] xl:text-[1vw] font-montserrat font-normal "
+              className="text-[3vw] w-[50%] mt-8 sm:text-[1vw] md:text-[1vw] lg:text-[1vw] xl:text-[1vw] font-montserrat font-normal "
             >
               <span className="text-[#9e9e9e]">
                 From earning opportunities to seamless payments,{" "}
@@ -655,7 +655,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                  CHF, EUR, USD, CNY & more
+                    CHF, EUR, USD, CNY & more
                   </h3>
                 </div>
                 <div className="h-6 sm:h-5 rounded-full flex-shrink-0">
@@ -941,8 +941,7 @@ export default function OneWallet() {
                   AI Personalization
                 </h1>
                 <p className="text-sm sm:text-base md:text-sm text-gray-600 leading-relaxed">
-                  AI-powered insights and personalized financial
-                  recommendations
+                  AI-powered insights and personalized financial recommendations
                 </p>
               </div>
 

@@ -253,7 +253,7 @@ export default function CryptoWalletSection() {
             </p>
             <motion.div
               style={{ opacity: contentOpacity, y: contentY }}
-              className="flex w-full flex-col items-start justify-center space-y-11 p-8 md:w-1/2 md:pl-8"
+              className="flex w-full flex-col items-start justify-center space-y-4 md:space-y-11 p-8 md:w-1/2 md:pl-8"
             >
               {featureData.map((feature) => (
                 <button
