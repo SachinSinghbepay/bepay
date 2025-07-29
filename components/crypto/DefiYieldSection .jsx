@@ -118,7 +118,7 @@ const DefiYieldSection = () => {
     <div className="relative">
       <section
         ref={sectionRef}
-        className="relative min-h-[500vh]" // Extended height for scroll animation
+        className="relative min-h-[600vh]" // Extended height for scroll animation
       >
         <div className="sticky top-0 h-screen">
           <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6 md:p-10">
@@ -306,7 +306,7 @@ const DefiYieldSection = () => {
                     Restaking
                   </h3>
                   <p className="text-sm md:text-sm text-gray-600 leading-relaxed w-[70%]">
-                    Maximize your rewards through restaking protocols. 
+                    Maximize your rewards through restaking protocols.
                   </p>
                   <p className="text-sm md:text-sm italic text-gray-800 leading-relaxed w-[70%]">
                     Enhanced yields through restaking
@@ -325,7 +325,7 @@ const DefiYieldSection = () => {
                   </h3>
                   <p className="text-sm md:text-sm text-gray-600 leading-relaxed w-[70%]">
                     Earn Bitcoin for every friend you refer to bepay money or
-                    bepay business. 
+                    bepay business.
                   </p>
                   <p className="text-sm md:text-sm italic text-gray-800 leading-relaxed w-[70%]">
                     *$1000+ worth Bitcoin every month
@@ -344,7 +344,6 @@ const DefiYieldSection = () => {
                   </h3>
                   <p className="text-sm md:text-sm text-gray-600 leading-relaxed w-[70%]">
                     Earn by sharing your unused storage and computing power.
-                
                   </p>
                   <p className="text-sm md:text-sm italic text-gray-800 leading-relaxed w-[70%]">
                     Monetize your hardware resources

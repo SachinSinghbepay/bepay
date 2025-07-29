@@ -18,7 +18,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
-  title: "Bepay",
+  title: "bepay - Stablecoin Payment, Wallet, Merchant Payment",
   description: "A simple and secure way to pay your bills",
 };
 

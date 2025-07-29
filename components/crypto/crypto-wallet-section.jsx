@@ -107,7 +107,7 @@ export default function CryptoWalletSection() {
   const cardX = useTransform(
     scrollYProgress,
     [0.1, 0.4],
-    [isMobile ? "-50%" : "0%", isMobile ? "-50%" : "-35%"]
+    [isMobile ? "-50%" : "0%", isMobile ? "-30%" : "-35%"]
   );
   const cardY = useTransform(
     scrollYProgress,
@@ -124,38 +124,38 @@ export default function CryptoWalletSection() {
   const currentView = featureData.find((f) => f.id === activeView);
 
   return (
-    <section id="crypto-card" className="relative bg-[#F9F9F9]">
+    <section id="crypto-card" className="relative -mt-60 md:mt-0 bg-[#F9F9F9]">
       <div
         ref={sectionRef}
         className="relative mx-auto min-h-[300vh] max-w-7xl"
       >
-        <div className="sticky top-0 flexh-[130vh] sm:h-[120vh] md:h-[110vh] w-full flex-col items-center justify-center overflow-hidden">
+        <div className="sticky top-0 flex h-[130vh] sm:h-[120vh] md:h-[110vh] w-full flex-col items-center justify-center overflow-hidden">
           <motion.div
             style={{ opacity: headingOpacity, y: headingY }}
-            className="absolute top-0 px-4 text-start"
+            className="absolute top-4 md:top-0 px-4 text-start"
           >
             <motion.h2
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.1 }}
               viewport={{ once: false, amount: 0.5 }}
-              className="text-4xl font-[400] text-[#C0C0C0] md:text-7xl xl:text-[120px]"
+              className="text-4xl font-[400] text-[#C0C0C0] md:text-7xl xl:text-[120px] leading-tight md:leading-normal"
             >
               The only <span className="font-normal text-black">card</span>{" "}
-              you’ll
+              you'll
             </motion.h2>
             <motion.h2
               initial={{ opacity: 0, y: 100 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.3 }}
               viewport={{ once: false, amount: 0.5 }}
-              className="text-4xl font-[400] text-[#C0C0C0] md:text-7xl xl:text-[120px]"
+              className="text-4xl font-[400] text-[#C0C0C0] md:text-7xl xl:text-[120px] leading-tight md:leading-normal -mt-2 md:mt-0"
             >
               ever need!
             </motion.h2>
           </motion.div>
 
-          <div className="relative flex h-full w-full flex-col items-center justify-center md:flex-row md:justify-start">
+          <div className="relative flex h-full w-full flex-col items-center justify-center md:flex-row md:justify-start mt-8 md:mt-0">
             <div className="relative flex h-full w-full items-center justify-center md:w-1/2 md:justify-end md:pr-8">
               <motion.div
                 style={{
@@ -241,14 +241,14 @@ export default function CryptoWalletSection() {
                       alt="Black Debit Card"
                       fill
                       priority
-                      className="object-contain"
+                      className="object-contain -mt-32 md:mt-0"
                       sizes="(max-width: 768px) 80vw, 90vw"
                     />
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
-            <p className=" md:hidden mt-6  text-sm font-medium text-gray-500">
+            <p className=" md:hidden mt-2 text-sm font-medium text-gray-500">
               ALL IN ONE MOBILE APP
             </p>
             <motion.div

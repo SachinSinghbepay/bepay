@@ -47,7 +47,7 @@ const iconsData = [
 
 export default function CryptoHeroSection() {
   const [currentWord, setCurrentWord] = useState(0);
-  const words = ["Save", "Send", "Spend", "Grow"];
+  const words = ["Save", "Send", "Earn", "Grow"];
   const containerRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
