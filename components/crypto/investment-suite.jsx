@@ -48,8 +48,7 @@ const investmentData = [
     id: 5,
     image: "/images/crypto/invest5.png",
     title: "Tokenized Energy",
-    description:
-      "Invest in renewable energy projects and green initiatives",
+    description: "Invest in renewable energy projects and green initiatives",
     details: "Sustainable investment options",
     category: "Energy",
   },
@@ -70,18 +69,30 @@ export default function InvestmentSuite() {
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex flex-col sm:flex-row sm:items-center lg:justify-between gap-24 mb-4"
+          className="flex flex-col md:flex-row items-start md:items-center justify-start lg:justify-between md:gap-24 mb-4"
         >
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-white mb-4 sm:mb-0">
+          <h2 className="text-4xl sm:text-5xl  lg:text-6xl font-light text-white mb-4 sm:mb-4">
             Investment suite
           </h2>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-gray-400 md:hidden text-lg sm:text-xl mb-16 max-w-2xl"
+          >
+            Diversify your portfolio with{" "}
+            <span className="text-white font-medium">
+              tokenized real-world assets
+            </span>{" "}
+            and traditional investments
+          </motion.p>
           <motion.button
             initial={{ opacity: 0, scale: 0.8 }}
             animate={
               isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }
             }
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex items-center gap-2 bg-white text-black px-6 py-2 rounded-full font-medium hover:bg-gray-100 transition-colors self-start"
+            className="flex items-center gap-2 -mt-6 md:mt-0 bg-white text-black px-6 py-2 rounded-full font-medium hover:bg-gray-100 transition-colors self-start"
           >
             <HandCoins size={20} />
             Start Investing
@@ -93,7 +104,7 @@ export default function InvestmentSuite() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="text-gray-400 text-lg sm:text-xl mb-16 max-w-2xl"
+          className="text-gray-400 hidden md:block text-lg sm:text-xl mb-16 max-w-2xl"
         >
           Diversify your portfolio with{" "}
           <span className="text-white font-medium">
