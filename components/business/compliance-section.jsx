@@ -23,7 +23,7 @@ const complianceData = [
   {
     icon: Shield,
     title: "Protected",
-    badges: ["Multi-sig wallets", "fraud detection"],
+    badges: ["Multi-sig wallets", "fraud detection", "", ""], // Added empty badges for alignment
   },
 ];
 
@@ -87,16 +87,18 @@ export default function ComplianceSection() {
               </div>
               <div
                 className={`${
-                  index === complianceData.length - 1 ? "-mt-8" : ""
+                  index === complianceData.length - 1 ? "md:-mt-8" : ""
                 }`}
               >
                 <div className={`flex flex-wrap  gap-3  `}>
                   {item.badges.map((badge, badgeIndex) => (
                     <span
                       key={badgeIndex}
-                      className="px-6 py-3 border text-[#080808] text-sm lg:text-[16px] 3xl:text-[20px] rounded-[24px] font-medium"
+                      className={`px-6 py-3 border text-[#080808] text-sm lg:text-[16px] 3xl:text-[20px] rounded-[24px] font-medium ${
+                        badge === "" ? "invisible" : ""
+                      }`}
                     >
-                      {badge}
+                      {badge || "placeholder"}
                     </span>
                   ))}
                 </div>
