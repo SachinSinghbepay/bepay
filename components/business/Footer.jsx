@@ -72,7 +72,7 @@ const Footer = () => {
 
         {/* Download Buttons */}
         <motion.div
-          className="w-full flex flex-col lg:flex-row gap-6 lg:gap-14 items-center text-left text-[0.8rem] justify-center my-8"
+          className="w-full flex flex-row gap-6 lg:gap-14 items-center text-left text-[0.8rem] justify-center my-8"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"

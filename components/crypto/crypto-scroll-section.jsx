@@ -4,14 +4,14 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 
 const steps = [
-     {
+  {
     number: "1",
     title: "Create your Wallet",
     description:
       "Create your wallet within in one tap.  Complete your KYC to get your virtual crypto debit card and Swiss IBAN. (Takes 5 min or less)",
     mockup: "/images/crypto/mocup1.png",
   },
-    {
+  {
     number: "2",
     title: "Fund your wallet",
     description:
@@ -25,8 +25,6 @@ const steps = [
       "Use your virtual crypto debit card, earn yield, and access all platform features. Start earning and spending immediately!",
     mockup: "/images/crypto/mocup2.png",
   },
- 
-
 ];
 
 export default function CryptoScrollSection() {
@@ -93,7 +91,7 @@ export default function CryptoScrollSection() {
 
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             {/* Left side - Mockups */}
-            <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] order-2 lg:order-1">
+            <div className="relative -mt-40 md:mt-0 h-[450px] sm:h-[550px] md:h-[650px] lg:h-[600px] w-full order-2 lg:order-1">
               {steps.map((step, index) => {
                 const isActive = index === activeStep;
                 const isPrev = index < activeStep;
@@ -127,14 +125,17 @@ export default function CryptoScrollSection() {
                       opacity,
                     }}
                   >
-                    <div className="relative w-full h-full flex items-center justify-center">
-                      <Image
-                        src={step.mockup || "/placeholder.svg"}
-                        alt={`${step.title} mockup`}
-                        fill
-                        className="object-contain"
-                        priority={index === 0}
-                      />
+                    <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-6 md:p-8">
+                      <div className="relative w-full h-full max-w-[300px] sm:max-w-[350px] md:max-w-[400px] lg:max-w-none">
+                        <Image
+                          src={step.mockup || "/placeholder.svg"}
+                          alt={`${step.title} mockup`}
+                          fill
+                          className="object-contain"
+                          priority={index === 0}
+                          sizes="(max-width: 640px) 300px, (max-width: 768px) 350px, (max-width: 1024px) 400px, 500px"
+                        />
+                      </div>
                     </div>
                   </div>
                 );
@@ -151,10 +152,10 @@ export default function CryptoScrollSection() {
                     className={`absolute transition-all duration-700 ease-out font-bold leading-none select-none ${
                       index === activeStep
                         ? "opacity-100 scale-100 translate-y-0"
-                        : "opacity-0 scale-95 translate-y-8" // Added translate-y-8 for bottom animation
+                        : "opacity-0 scale-95 translate-y-8"
                     }`}
                     style={{
-                      fontSize: "clamp(400px, 40vw, 800px)",
+                      fontSize: "clamp(200px, 25vw, 800px)",
                       background:
                         "linear-gradient(180deg, #ECECEC 0%, rgba(236, 236, 236, 0.02) 112.87%)",
                       WebkitBackgroundClip: "text",
@@ -175,7 +176,7 @@ export default function CryptoScrollSection() {
                     className={`transition-all duration-700 ease-out ${
                       index === activeStep
                         ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-12 absolute inset-0" // Changed from translate-y-8 to translate-y-12
+                        : "opacity-0 translate-y-12 absolute inset-0"
                     }`}
                   >
                     <h3 className="text-2xl sm:text-3xl lg:text-[48px] font-[500] text-gray-600 mb-4 lg:mb-6">

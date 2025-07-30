@@ -328,7 +328,7 @@ const BusinessHero = () => {
                                   value={email}
                                   onChange={(e) => setEmail(e.target.value)}
                                   placeholder="Enter your email"
-                                  className="w-full px-2 md:px-4 py-3 lg:w-[200px] rounded-full border border-gray-300 text-[6px] md:text-[12px] focus:outline-none focus:border-gray-500"
+                                  className=" w-[130px] sm:w-[180px] px-2 md:px-4 py-3 lg:w-[200px] rounded-full border border-gray-300 text-[6px] md:text-[12px] focus:outline-none focus:border-gray-500"
                                   required
                                 />
                                 {submitMessage && !isSubmitted && (
@@ -342,7 +342,7 @@ const BusinessHero = () => {
                                 disabled={isSubmitting}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="bg-black cursor-pointer text-white whitespace-nowrap px-2 md:px-6 py-3 rounded-full font-medium text-[6px] md:text-[12px] hover:bg-black/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                                className="bg-black  w-[130px] sm:w-[180px]  cursor-pointer text-white whitespace-nowrap px-2 md:px-6 py-3 rounded-full font-medium text-[6px] md:text-[12px] hover:bg-black/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                               >
                                 {isSubmitting ? (
                                   <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />

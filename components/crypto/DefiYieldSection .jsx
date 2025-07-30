@@ -115,7 +115,7 @@ const DefiYieldSection = () => {
   const content6Opacity = useTransform(scrollYProgress, [0.6, 0.7], [0, 1]);
 
   return (
-    <div className="relative">
+    <div className="relative -mt-96 lg:mt-0">
       <section
         ref={sectionRef}
         className="relative min-h-[600vh]" // Extended height for scroll animation
