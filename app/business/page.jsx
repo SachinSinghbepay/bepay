@@ -30,7 +30,7 @@ const page = () => {
       <BepayComparison />
       <GetStartedSection />
       <ComplianceSection />
-      <TestimonialsSection />
+      {/* <TestimonialsSection /> */}
       <TrustedBySection />
       <ReadyToStartSection />
       <BusinessSection />
