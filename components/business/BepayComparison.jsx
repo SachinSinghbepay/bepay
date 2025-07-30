@@ -207,7 +207,7 @@ const BepayComparison = () => {
                         transition={{ duration: 0.2 }}
                       >
                         {/* BePay Value - Aligned to left */}
-                        <div className="text-left">
+                        <div className="text-center">
                           <motion.div
                             className="inline-block px-6 py-1 rounded-full transition-all duration-300"
                             animate={{
@@ -257,7 +257,7 @@ const BepayComparison = () => {
                         transition={{ duration: 0.2 }}
                       >
                         {/* Traditional Value - Aligned to left */}
-                        <div className="text-left">
+                        <div className="text-center">
                           <motion.div
                             className="inline-block px-6 py-1 rounded-full transition-all duration-300"
                             animate={{

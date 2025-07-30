@@ -465,18 +465,17 @@ export default function OneWallet() {
                     <img src="/images/crypto/cryptocurrencies.png" alt="" />
                   </div>
                   <span className="text-[10px] sm:text-sm font-medium text-black">
-                    100+ cryptocurrencies supported!
+                    100+ cryptocurrencies supported.
                   </span>
                 </div>
               </div>
               <div className="space-y-2 sm:space-y-3">
                 <div className="flex items-center space-x-4">
-                  s
                   <div className="w-5 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
                     <img src="/images/crypto/login.png" alt="" />
                   </div>
                   <span className="text-[10px] sm:text-sm font-medium text-black">
-                    Social login integration
+                    Social login integration.
                   </span>
                   {/* Cryptocurrency icons placeholder */}
                 </div>
@@ -558,7 +557,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Instant Activation & Global Acceptance!
+                    Instant Activation & Global Acceptance.
                   </h3>
                 </div>
               </div>
@@ -570,7 +569,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] lg:whitespace-nowrap sm:text-sm font-medium text-black">
-                    Instant crypto-to-fiat conversion at competitive rates!
+                    Instant crypto-to-fiat conversion at competitive rates.
                   </h3>
                 </div>
               </div>
@@ -582,7 +581,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    bepay App Integration & Advanced Security
+                    bepay App Integration & Advanced Security.
                   </h3>
                 </div>
               </div>
@@ -594,7 +593,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Cashback rewards on every purchase
+                    Cashback rewards on every purchase.
                   </h3>
                 </div>
               </div>
@@ -654,7 +653,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    CHF, EUR, USD, CNY & more
+                    CHF, EUR, USD, CNY & more.
                   </h3>
                 </div>
                 <div className="h-6 sm:h-5 rounded-full flex-shrink-0">
@@ -676,7 +675,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    No transfer fee
+                    No transfer fee.
                   </h3>
                 </div>
               </div>
@@ -692,7 +691,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Instant settlements
+                    Instant settlements.
                   </h3>
                 </div>
               </div>
@@ -708,7 +707,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Bank-grade security
+                    Bank-grade security.
                   </h3>
                 </div>
               </div>
@@ -769,7 +768,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Instant P2P transfers
+                    Instant P2P transfers.
                   </h3>
                 </div>
               </div>
@@ -785,7 +784,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    QR code payments
+                    QR code payments.
                   </h3>
                 </div>
               </div>
@@ -801,7 +800,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Split payment options
+                    Split payment options.
                   </h3>
                 </div>
               </div>
@@ -860,7 +859,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Fiat & crypto QR codes
+                    Fiat & crypto QR codes.
                   </h3>
                 </div>
               </div>
@@ -876,7 +875,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Offline payment capability
+                    Offline payment capability.
                   </h3>
                 </div>
               </div>
@@ -892,7 +891,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Merchant integration
+                    Merchant integration.
                   </h3>
                 </div>
               </div>
@@ -955,7 +954,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Smart spending insights
+                    Smart spending insights.
                   </h3>
                 </div>
               </div>
@@ -971,7 +970,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Personalized investment advice
+                    Personalized investment advice.
                   </h3>
                 </div>
               </div>
@@ -987,7 +986,7 @@ export default function OneWallet() {
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    AI agent assistance
+                    AI agent assistance.
                   </h3>
                 </div>
               </div>

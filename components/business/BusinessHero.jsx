@@ -251,13 +251,13 @@ const BusinessHero = () => {
                     }}
                   >
                     {/* Logo at top */}
-                    <div className="absolute top-4 md:top-9 left-1/3 z-10">
+                    <div className="absolute top-4 md:top-9 left-1/2 -translate-x-1/2 z-10">
                       <Image
-                        src="/bepaylogo1.png"
+                        src="/bepaymoney.svg"
                         alt="Bepay Logo"
                         width={200}
                         height={100}
-                        className="w-[40px] h-[40px] md:w-[80px] lg:h-[100px] object-contain"
+                        className="w-[40px] h-[40px] md:w-[120px] lg:h-[100px] object-contain"
                       />
                     </div>
 

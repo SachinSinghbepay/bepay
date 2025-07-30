@@ -10,7 +10,7 @@ const testimonialsData = [
     companyLogo:
       "/images/business/t1l.png",
     quote:
-      "Integrating BePay into our store was shockingly simple. In under 10 minutes, we were accepting crypto payments from customers around the world. The dashboard gives us full control and visibility over our sales in real-time.",
+      "Integrating bepay into our store was shockingly simple. In under 10 minutes, we were accepting crypto payments from customers around the world. The dashboard gives us full control and visibility over our sales in real-time.",
     name: "Anya R.",
     role: "Co-founder, GreenFork Organics",
   },
@@ -20,7 +20,7 @@ const testimonialsData = [
     companyLogo:
       "/images/business/t21.png",
     quote:
-      "I've tried other crypto payment solutions, but BePay is by far the smoothest. The onboarding was easy, the QR payment system works like magic, and our international customers love the flexibility.",
+      "I've tried other crypto payment solutions, but bepay is by far the smoothest. The onboarding was easy, the QR payment system works like magic, and our international customers love the flexibility.",
     name: "James T.",
     role: "Owner, Print & Pixel Studio",
   },
@@ -30,7 +30,7 @@ const testimonialsData = [
     companyLogo:
       "/images/business/t21.png",
     quote:
-      "What sold me on BePay was the ability to run my entire crypto shop inside one app. I can manage products, view transactions, and even track merchant ratings — all in one sleek dashboard.",
+      "What sold me on bepay was the ability to run my entire crypto shop inside one app. I can manage products, view transactions, and even track merchant ratings — all in one sleek dashboard.",
     name: "Sara L.",
     role: "Founder, NFTee Market",
   },
@@ -40,7 +40,7 @@ const testimonialsData = [
     companyLogo:
       "/images/business/t21.png",
     quote:
-      "With BePay, I no longer worry about delayed or failed payments. Funds hit my non-custodial wallet instantly. Plus, the crypto debit card for customers has boosted our sales like never before.",
+      "With bepay, I no longer worry about delayed or failed payments. Funds hit my non-custodial wallet instantly. Plus, the crypto debit card for customers has boosted our sales like never before.",
     name: "Rohan S.",
     role: "CEO, CryptoKart India",
   },
@@ -50,7 +50,7 @@ const testimonialsData = [
     companyLogo:
       "/images/business/t21.png",
     quote:
-      "BePay made accepting crypto at my café effortless. We get paid directly to our wallet with zero middlemen. My team just scans and serves — no technical headaches.",
+      "bepay made accepting crypto at my café effortless. We get paid directly to our wallet with zero middlemen. My team just scans and serves — no technical headaches.",
     name: "Luis M.",
     role: "Café Owner, BrewBlock BCN",
   },
@@ -60,7 +60,7 @@ const testimonialsData = [
     companyLogo:
       "/images/business/t21.png",
     quote:
-      "The analytics dashboard is incredible. Real-time transaction monitoring, customer insights, and seamless integration with our existing systems. BePay transformed how we handle digital payments.",
+      "The analytics dashboard is incredible. Real-time transaction monitoring, customer insights, and seamless integration with our existing systems. bepay transformed how we handle digital payments.",
     name: "Alex K.",
     role: "CTO, TechFlow Solutions",
   },

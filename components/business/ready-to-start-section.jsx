@@ -1,23 +1,24 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
 import { DollarSign, Clock, Headphones, ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 const features = [
   {
     id: 1,
-    icon: DollarSign,
+    icon: "/images/business/icon1.png",
     title: "No",
     subtitle: "setup or monthly fees",
   },
   {
     id: 2,
-    icon: Clock,
+    icon: "/images/business/icon2.png",
     title: "30-sec",
     subtitle: "settlements",
   },
   {
     id: 3,
-    icon: Headphones,
+    icon: "/images/business/icon3.png",
     title: "24/7",
     subtitle: "merchant support",
   },
@@ -227,7 +228,7 @@ export default function AnimatedCardsSection() {
                   >
                     {/* Background Icon - positioned at top right */}
                     <div
-                      className="absolute -right-4 -top-4 w-36 h-36 text-gray-300 z-0 transition-all duration-700 ease-in-out"
+                      className="absolute top-0 right-0 w-36 h-36 text-gray-300 z-0 transition-all duration-700 ease-in-out"
                       style={{
                         opacity: getOriginalContentOpacity(index) * 0.8,
                         transform: `scale(${
@@ -235,9 +236,12 @@ export default function AnimatedCardsSection() {
                         })`,
                       }}
                     >
-                      <feature.icon
-                        className="w-full h-full"
-                        strokeWidth={1.5}
+                      <Image
+                        src={feature.icon}
+                        height={200}
+                        width={200}
+                        alt="icon"
+                        className="object-cover"
                       />
                     </div>
 
