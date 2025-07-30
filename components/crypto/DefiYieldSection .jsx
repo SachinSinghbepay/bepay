@@ -23,99 +23,197 @@ const DefiYieldSection = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Both sections animate from bottom together (0.0 - 0.2)
-  const containerY = useTransform(scrollYProgress, [0.0, 0.2], ["100%", "0%"]);
-  const containerOpacity = useTransform(scrollYProgress, [0.0, 0.2], [0, 1]);
+  // Faster animation for mobile, slower for desktop
+  const animationStart = isMobile ? 0.0 : 0.0;
+  const animationEnd = isMobile ? 0.1 : 0.2; // Faster on mobile
 
-  // Individual image exit animations (0.2 - 0.95)
+  // Both sections animate from bottom together - faster on mobile
+  const containerY = useTransform(
+    scrollYProgress,
+    [animationStart, animationEnd],
+    [isMobile ? "50%" : "100%", "0%"]
+  );
+  const containerOpacity = useTransform(
+    scrollYProgress,
+    [animationStart, animationEnd],
+    [0, 1]
+  );
+
+  // Individual image exit animations (adjusted for mobile)
+  const imageStart = animationEnd;
+
   // Image 1 (bottom) - exits first
-  const image1Y = useTransform(scrollYProgress, [0.2, 0.3], ["0%", "-200%"]);
-  const image1Rotate = useTransform(scrollYProgress, [0.2, 0.3], [0, 15]);
-  const image1Opacity = useTransform(scrollYProgress, [0.2, 0.3], [1, 0]);
+  const image1Y = useTransform(
+    scrollYProgress,
+    [imageStart, imageStart + 0.1],
+    ["0%", "-200%"]
+  );
+  const image1Rotate = useTransform(
+    scrollYProgress,
+    [imageStart, imageStart + 0.1],
+    [0, 15]
+  );
+  const image1Opacity = useTransform(
+    scrollYProgress,
+    [imageStart, imageStart + 0.1],
+    [1, 0]
+  );
 
   // Image 2 - exits second
-  const image2Y = useTransform(scrollYProgress, [0.3, 0.4], ["0%", "-200%"]);
-  const image2Rotate = useTransform(scrollYProgress, [0.3, 0.4], [0, 15]);
-  const image2Opacity = useTransform(scrollYProgress, [0.3, 0.4], [1, 0]);
+  const image2Y = useTransform(
+    scrollYProgress,
+    [imageStart + 0.1, imageStart + 0.2],
+    ["0%", "-200%"]
+  );
+  const image2Rotate = useTransform(
+    scrollYProgress,
+    [imageStart + 0.1, imageStart + 0.2],
+    [0, 15]
+  );
+  const image2Opacity = useTransform(
+    scrollYProgress,
+    [imageStart + 0.1, imageStart + 0.2],
+    [1, 0]
+  );
 
   // Image 3 - exits third
-  const image3Y = useTransform(scrollYProgress, [0.4, 0.5], ["0%", "-200%"]);
-  const image3Rotate = useTransform(scrollYProgress, [0.4, 0.5], [0, 15]);
-  const image3Opacity = useTransform(scrollYProgress, [0.4, 0.5], [1, 0]);
+  const image3Y = useTransform(
+    scrollYProgress,
+    [imageStart + 0.2, imageStart + 0.3],
+    ["0%", "-200%"]
+  );
+  const image3Rotate = useTransform(
+    scrollYProgress,
+    [imageStart + 0.2, imageStart + 0.3],
+    [0, 15]
+  );
+  const image3Opacity = useTransform(
+    scrollYProgress,
+    [imageStart + 0.2, imageStart + 0.3],
+    [1, 0]
+  );
 
   // Image 4 - exits fourth
-  const image4Y = useTransform(scrollYProgress, [0.5, 0.6], ["0%", "-200%"]);
-  const image4Rotate = useTransform(scrollYProgress, [0.5, 0.6], [0, 15]);
-  const image4Opacity = useTransform(scrollYProgress, [0.5, 0.6], [1, 0]);
+  const image4Y = useTransform(
+    scrollYProgress,
+    [imageStart + 0.3, imageStart + 0.4],
+    ["0%", "-200%"]
+  );
+  const image4Rotate = useTransform(
+    scrollYProgress,
+    [imageStart + 0.3, imageStart + 0.4],
+    [0, 15]
+  );
+  const image4Opacity = useTransform(
+    scrollYProgress,
+    [imageStart + 0.3, imageStart + 0.4],
+    [1, 0]
+  );
 
   // Image 5 - exits fifth
-  const image5Y = useTransform(scrollYProgress, [0.6, 0.7], ["0%", "-200%"]);
-  const image5Rotate = useTransform(scrollYProgress, [0.6, 0.7], [0, 15]);
-  const image5Opacity = useTransform(scrollYProgress, [0.6, 0.7], [1, 0]);
+  const image5Y = useTransform(
+    scrollYProgress,
+    [imageStart + 0.4, imageStart + 0.5],
+    ["0%", "-200%"]
+  );
+  const image5Rotate = useTransform(
+    scrollYProgress,
+    [imageStart + 0.4, imageStart + 0.5],
+    [0, 15]
+  );
+  const image5Opacity = useTransform(
+    scrollYProgress,
+    [imageStart + 0.4, imageStart + 0.5],
+    [1, 0]
+  );
 
   // Image 6 (top) - moves up and scales
-  const image6Y = useTransform(scrollYProgress, [0.7, 0.85], ["0%", "-50%"]);
-  const image6Scale = useTransform(scrollYProgress, [0.7, 0.85], [1, 1.1]);
+  const image6Y = useTransform(
+    scrollYProgress,
+    [imageStart + 0.5, imageStart + 0.65],
+    ["0%", "-50%"]
+  );
+  const image6Scale = useTransform(
+    scrollYProgress,
+    [imageStart + 0.5, imageStart + 0.65],
+    [1, 1.1]
+  );
 
   // Right side content animations - synchronized with image exits
   // Content 1 - exits when image 1 exits
-  const content1Y = useTransform(scrollYProgress, [0.2, 0.3], ["0%", "-100%"]);
-  const content1Opacity = useTransform(scrollYProgress, [0.2, 0.3], [1, 0]);
+  const content1Y = useTransform(
+    scrollYProgress,
+    [imageStart, imageStart + 0.1],
+    ["0%", "-100%"]
+  );
+  const content1Opacity = useTransform(
+    scrollYProgress,
+    [imageStart, imageStart + 0.1],
+    [1, 0]
+  );
 
   // Content 2 - appears when image 1 exits, exits when image 2 exits
   const content2Y = useTransform(
     scrollYProgress,
-    [0.2, 0.3, 0.3, 0.4],
+    [imageStart, imageStart + 0.1, imageStart + 0.1, imageStart + 0.2],
     ["100%", "0%", "0%", "-100%"]
   );
   const content2Opacity = useTransform(
     scrollYProgress,
-    [0.2, 0.3, 0.3, 0.4],
+    [imageStart, imageStart + 0.1, imageStart + 0.1, imageStart + 0.2],
     [0, 1, 1, 0]
   );
 
   // Content 3 - appears when image 2 exits, exits when image 3 exits
   const content3Y = useTransform(
     scrollYProgress,
-    [0.3, 0.4, 0.4, 0.5],
+    [imageStart + 0.1, imageStart + 0.2, imageStart + 0.2, imageStart + 0.3],
     ["100%", "0%", "0%", "-100%"]
   );
   const content3Opacity = useTransform(
     scrollYProgress,
-    [0.3, 0.4, 0.4, 0.5],
+    [imageStart + 0.1, imageStart + 0.2, imageStart + 0.2, imageStart + 0.3],
     [0, 1, 1, 0]
   );
 
   // Content 4 - appears when image 3 exits, exits when image 4 exits
   const content4Y = useTransform(
     scrollYProgress,
-    [0.4, 0.5, 0.5, 0.6],
+    [imageStart + 0.2, imageStart + 0.3, imageStart + 0.3, imageStart + 0.4],
     ["100%", "0%", "0%", "-100%"]
   );
   const content4Opacity = useTransform(
     scrollYProgress,
-    [0.4, 0.5, 0.5, 0.6],
+    [imageStart + 0.2, imageStart + 0.3, imageStart + 0.3, imageStart + 0.4],
     [0, 1, 1, 0]
   );
 
   // Content 5 - appears when image 4 exits, exits when image 5 exits
   const content5Y = useTransform(
     scrollYProgress,
-    [0.5, 0.6, 0.6, 0.7],
+    [imageStart + 0.3, imageStart + 0.4, imageStart + 0.4, imageStart + 0.5],
     ["100%", "0%", "0%", "-100%"]
   );
   const content5Opacity = useTransform(
     scrollYProgress,
-    [0.5, 0.6, 0.6, 0.7],
+    [imageStart + 0.3, imageStart + 0.4, imageStart + 0.4, imageStart + 0.5],
     [0, 1, 1, 0]
   );
 
   // Content 6 - appears when image 5 exits, remains when image 6 moves up
-  const content6Y = useTransform(scrollYProgress, [0.6, 0.7], ["100%", "0%"]);
-  const content6Opacity = useTransform(scrollYProgress, [0.6, 0.7], [0, 1]);
+  const content6Y = useTransform(
+    scrollYProgress,
+    [imageStart + 0.4, imageStart + 0.5],
+    ["100%", "0%"]
+  );
+  const content6Opacity = useTransform(
+    scrollYProgress,
+    [imageStart + 0.4, imageStart + 0.5],
+    [0, 1]
+  );
 
   return (
-    <div className="relative -mt-96 lg:mt-0">
+    <div className="relative ">
       <section
         ref={sectionRef}
         className="relative min-h-[600vh]" // Extended height for scroll animation

@@ -410,7 +410,7 @@ export default function OneWallet() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Mockup Image */}
-            <div className="relative w-full aspect-[4/3] sm:aspect-square lg:aspect-auto lg:h-full bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full aspect-[4/3] md:aspect-[300/100] lg:aspect-auto lg:h-full bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
               <div ref={mockupImageRef} className="relative w-full h-full">
                 <Image
                   src="/businessnew/mockupImage.png"
@@ -501,7 +501,7 @@ export default function OneWallet() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Stacked Cards Animation */}
-            <div className="relative w-full aspect-[4/3] sm:aspect-square lg:aspect-auto lg:h-full bg-[#f8f8f8] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full aspect-[4/3] md:aspect-[300/100]  lg:aspect-auto lg:h-full bg-[#f8f8f8] rounded-xl sm:rounded-2xl overflow-hidden">
               <div
                 ref={mockupImage2_1Ref}
                 className="absolute transform -translate-x-8 sm:-translate-x-20 w-full h-full z-[2]"
@@ -618,7 +618,7 @@ export default function OneWallet() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Mockup Image */}
-            <div className="relative w-full aspect-[4/3] sm:aspect-square lg:aspect-auto lg:h-full bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full aspect-[4/3] md:aspect-[300/100]  lg:aspect-auto lg:h-full bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
               <div ref={mockupImage3Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/IBAN0.svg"
@@ -733,7 +733,7 @@ export default function OneWallet() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Mockup Image */}
-            <div className="relative w-full aspect-[4/3] sm:aspect-square lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full aspect-[4/3] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
               <div ref={mockupImage4Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/p2p1.svg"
@@ -825,7 +825,7 @@ export default function OneWallet() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Mockup Image */}
-            <div className="relative w-full aspect-[4/3] sm:aspect-square lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full aspect-[4/3] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
               <div ref={mockupImage5Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/qr1.svg"
@@ -916,7 +916,7 @@ export default function OneWallet() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Mockup Image */}
-            <div className="relative w-full aspect-[4/3] sm:aspect-square lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full aspect-[4/3] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
               <div
                 ref={mockupImage6_1Ref}
                 className="absolute top-[5%] left-[2.5%] w-1/2 h-1/2 z-[2]"

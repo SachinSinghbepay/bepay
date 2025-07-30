@@ -186,7 +186,7 @@ export default function ScrollTextAnimation() {
   const subDescriptionAnimation = getSubDescriptionAnimation()
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 hidden md:block">
       {/* Animation container */}
       <div ref={containerRef} className="relative h-[200vh] md:h-[400vh] overflow-hidden">
         <div className="min-h-screen sticky inset-0">

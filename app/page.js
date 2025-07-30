@@ -65,6 +65,7 @@ import InvestmentSuite from "@/components/crypto/investment-suite";
 import DefiYieldSection from "@/components/crypto/DefiYieldSection ";
 import InvestmentSuitePage from "@/components/crypto/InvestmentSuitePage";
 import WaitlistPopup from "@/components/waitlist-popup";
+import ScrollTextMobile from "@/components/crypto/ScrollTextMobile";
 
 const page = () => {
   return (
@@ -77,6 +78,7 @@ const page = () => {
         {/* <InvestmentSuitePage /> */}
         <OneWallet />
         <ScrollTextAnimation />
+        <ScrollTextMobile />
         {/* <OneWallet />
         <CryptoDebit />
         <SwissIBAN /> */}
