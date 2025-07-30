@@ -173,7 +173,7 @@ export default function AnimatedCardsSection() {
           {/* Title - appears first */}
           <div className="mb-16">
             <h2
-              className={`text-3xl md:text-4xl lg:text-[80px] font-[400] mb-6 transition-all duration-1000 ease-out ${
+              className={`text-3xl md:text-4xl  lg:text-[70px] font-[400] transition-all duration-1000 ease-out ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-12"
@@ -219,7 +219,7 @@ export default function AnimatedCardsSection() {
                   }}
                 >
                   <div
-                    className="w-full lg:w-[399px] max-w-[399px] h-[400px] md:h-[512px] p-4 md:p-6 lg:p-8 border border-white/10 flex flex-col justify-center mx-auto relative overflow-hidden rounded-3xl"
+                    className="w-full lg:w-[399px] max-w-[399px] h-[300px] md:h-[500px] p-4 md:p-6 lg:p-8 border border-white/10 flex flex-col justify-center mx-auto relative overflow-hidden rounded-3xl"
                     style={{
                       boxShadow: "50px 50px 60px 0px #0000000F",
                       background: "#FFFFFF",
