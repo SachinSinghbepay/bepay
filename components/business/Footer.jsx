@@ -134,14 +134,20 @@ const Footer = () => {
             Sign-up to our newsletter for exclusive updates!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="bg-transparent border border-white/20 rounded-full px-6 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-white/40 flex-1 max-w-md"
-            />
-            <button className="bg-white text-black px-8 py-3 rounded-full font-medium hover:bg-gray-200 transition-colors">
-              Submit
-            </button>
+             <form className="flex items-center gap-2 border border-white/20 rounded-full p-1 pr-2">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="bg-transparent px-4 py-1 text-white placeholder-gray-500 focus:outline-none w-48"
+                aria-label="Email for newsletter"
+              />
+              <button
+                type="submit"
+                className="bg-white text-black px-5 py-1.5 rounded-full font-medium hover:bg-gray-200 transition-colors text-sm shrink-0"
+              >
+                Submit
+              </button>
+            </form>
           </div>
         </motion.div>
 
