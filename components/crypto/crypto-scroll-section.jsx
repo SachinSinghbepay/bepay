@@ -91,7 +91,7 @@ export default function CryptoScrollSection() {
 
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             {/* Left side - Mockups */}
-            <div className="relative -mt-40 md:mt-0 h-[450px] sm:h-[550px] md:h-[650px] lg:h-[600px] w-full order-2 lg:order-1">
+            <div className="relative -mt-60 md:mt-0 h-[450px] sm:h-[550px] md:h-[650px] lg:h-[600px] w-full order-2 lg:order-1">
               {steps.map((step, index) => {
                 const isActive = index === activeStep;
                 const isPrev = index < activeStep;
@@ -125,7 +125,7 @@ export default function CryptoScrollSection() {
                       opacity,
                     }}
                   >
-                    <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-6 md:p-8">
+                    <div className="relative w-full h-full flex items-center justify-center -mt-12 md:mt-0 p-4 sm:p-6 md:p-8">
                       <div className="relative w-full h-full max-w-[300px] sm:max-w-[350px] md:max-w-[400px] lg:max-w-none">
                         <Image
                           src={step.mockup || "/placeholder.svg"}
@@ -149,7 +149,7 @@ export default function CryptoScrollSection() {
                 {steps.map((step, index) => (
                   <div
                     key={`bg-${index}`}
-                    className={`absolute transition-all duration-700 ease-out font-bold leading-none select-none ${
+                    className={`absolute top-3 md:top-10 transition-all duration-700 ease-out font-bold leading-none select-none ${
                       index === activeStep
                         ? "opacity-100 scale-100 translate-y-0"
                         : "opacity-0 scale-95 translate-y-8"
