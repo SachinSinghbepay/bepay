@@ -276,7 +276,7 @@ const BusinessHero = () => {
 
                     {/* Content that appears inside the mockup after rotation and image fade */}
                     {showContent && (
-                      <div className="absolute inset-0 top-3  rotate-90 bg-white rounded-[2rem] flex flex-row md:flex-col justify-center items-center p-4">
+                      <div className="absolute inset-0 top-3  rotate-90 bg-white rounded-[2rem] flex flex-row gap-7 md:flex-col justify-center items-center p-4">
                         {/* Content Grid matching your image layout */}
                         <div className="flex flex-col  mb-1 md:mb-6 w-full max-w-[500px]">
                           {contentItems.map((item, index) => (
