@@ -53,7 +53,7 @@ const BepayComparison = () => {
 
         {/* Mobile Layout */}
         <div
-          className="lg:hidden bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+          className="lg:hidden bg-white rounded-2xl shadow-sm border border-gray-300 overflow-hidden"
           style={{
             width: "100%",
             maxWidth: "700px",
@@ -63,7 +63,7 @@ const BepayComparison = () => {
           }}
         >
           {/* Header */}
-          <div className="px-6 py-8 border-b border-gray-100">
+          <div className="px-6 py-8 border-b bg-[#f9f9f9] border-gray-100">
             <div className="grid grid-cols-2 gap-4">
               {/* Bepay Column */}
               <div className="text-center flex justify-center items-center">
@@ -72,13 +72,13 @@ const BepayComparison = () => {
                   height={46}
                   width={110}
                   alt="BePay Logo"
-                  className="object-cover h-8 sm:h-10 md:h-12 w-auto"
+                  className="object-cover h-12 w-auto"
                   priority
                 />
               </div>
               {/* Traditional Column */}
               <div className="text-center">
-                <div className="bg-gray-100 rounded-full px-4 py-2 inline-block">
+                <div className="rounded-full px-4 py-2 inline-block">
                   <span className="font-medium text-gray-600 text-sm">Traditional payments</span>
                 </div>
               </div>
