@@ -253,8 +253,9 @@ export default function CryptoWalletSection() {
             </p>
             <motion.div
               style={{ opacity: contentOpacity, y: contentY }}
-              className="flex w-full flex-col items-start justify-center space-y-4 md:space-y-11 p-8 md:w-1/2 md:pl-8"
+              className="flex w-full flex-col items-center lg:items-start justify-center  md:w-1/2 md:pl-8"
             >
+              <div className="flex w-full flex-col items-start justify-center space-y-2 md:space-y-11 p-8">
               {featureData.map((feature) => (
                 <button
                   key={feature.id}
@@ -284,10 +285,13 @@ export default function CryptoWalletSection() {
                   </span>
                 </button>
               ))}
-              <button className="flex items-center lg:ml-7 gap-2 lg:h-[56px] text-[12px]  whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100">
-                <IconDeviceMobile className="h-5 w-5" />
-                <span>Download App & Get Bitcoin Reward</span>
-              </button>
+              </div>
+              <div className="flex justify-center items-center">
+                <button className="flex items-center lg:ml-7 gap-2 lg:h-[56px] text-[12px]  whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100">
+                  <IconDeviceMobile className="h-5 w-5" />
+                  <span>Download App & Get Bitcoin Reward</span>
+                </button>
+              </div>
             </motion.div>
           </div>
           <p className="absolute hidden md:block -bottom-0 md:bottom-2 left-1/4 text-sm font-medium text-gray-500">
