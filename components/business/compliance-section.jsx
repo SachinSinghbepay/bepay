@@ -69,7 +69,7 @@ export default function ComplianceSection() {
             <motion.div
               key={index}
               variants={cardVariants}
-              className="bg-white rounded-[32px] p-8 lg:p-12 h-auto  min-h-[300px] lg:min-h-[300px] 3xl:min-h-[463px] flex flex-col justify-between"
+              className="bg-white rounded-[32px] p-8 lg:p-12 h-auto  min-h-[200px] lg:min-h-[300px] 3xl:min-h-[463px] flex flex-col justify-between"
               style={{
                 boxShadow: "50px 50px 100px 0px rgba(0, 0, 0, 0.06)",
               }}

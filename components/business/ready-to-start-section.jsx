@@ -201,7 +201,7 @@ export default function AnimatedCardsSection() {
 
           {/* Cards Container */}
           <div className="relative max-w-7xl pb-10 mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 h-full relative">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 h-full relative">
               {features.map((feature, index) => (
                 <div
                   key={feature.id}
@@ -220,7 +220,7 @@ export default function AnimatedCardsSection() {
                   }}
                 >
                   <div
-                    className="w-full lg:w-[399px] max-w-[399px] h-[300px] md:h-[500px] p-4 md:p-6 lg:p-8 border border-white/10 flex flex-col justify-center mx-auto relative overflow-hidden rounded-3xl"
+                    className="w-full lg:w-[399px] max-w-[399px] h-[200px] md:h-[500px] p-4 md:p-6 lg:p-8 border border-white/10 flex flex-col justify-center mx-auto relative overflow-hidden rounded-3xl"
                     style={{
                       boxShadow: "50px 50px 60px 0px #0000000F",
                       background: "#FFFFFF",
@@ -286,20 +286,20 @@ export default function AnimatedCardsSection() {
                         }}
                       >
                         <h3
-                          className="text-xl md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4"
+                          className="text-md md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4"
                           style={{ color: "#333333" }}
                         >
                           The future of payments is here!
                         </h3>
                         <p
-                          className="text-sm md:text-base lg:text-lg mb-4 md:mb-6 leading-relaxed"
+                          className="text-[12px] md:text-base lg:text-lg mb-4 md:mb-6 leading-relaxed"
                           style={{ color: "#333333" }}
                         >
                           Start accepting crypto payments in minutes. Reach
                           global customers, boost your revenue, and manage your
                           store — all in one powerful dashboard.
                         </p>
-                        <button className="bg-black cursor-pointer  whitespace-nowrap text-white px-4 md:px-6 py-2 md:py-3 rounded-full font-medium text-xs  lg:text-[12px] hover:bg-black/90 transition-colors duration-300 flex items-center gap-2 mx-auto">
+                        <button className="bg-black cursor-pointer text-[12px]  whitespace-nowrap text-white px-4 md:px-6 py-2 md:py-3 rounded-full font-medium text-xs  lg:text-[12px] hover:bg-black/90 transition-colors duration-300 flex items-center gap-2 mx-auto">
                           Become a merchant on bepay
                           <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
                         </button>
