@@ -216,7 +216,7 @@ const DefiYieldSection = () => {
     <div className="relative ">
       <section
         ref={sectionRef}
-        className="relative min-h-[400vh]" // Extended height for scroll animation
+        className="relative min-h-[700vh]" // Extended height for scroll animation
       >
         <div className="sticky top-0 h-screen">
           <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6 md:p-10">

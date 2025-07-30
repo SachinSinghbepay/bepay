@@ -17,7 +17,7 @@ const ScrollTextMobile = () => {
             viewport={{ once: false, amount: 0.2 }}
           >
             <span className="block  text-[#999999] ">
-              maximize your
+              Maximize Your
             </span>
           </motion.h1>
 
