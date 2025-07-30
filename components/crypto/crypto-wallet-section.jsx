@@ -256,42 +256,41 @@ export default function CryptoWalletSection() {
               className="flex w-full flex-col items-center lg:items-start justify-center  md:w-1/2 md:pl-8"
             >
               <div className="flex w-full flex-col items-start justify-center space-y-2 md:space-y-11 p-8">
-              {featureData.map((feature) => (
-                <button
-                  key={feature.id}
-                  onClick={() => setActiveView(feature.id)}
-                  className="group flex items-center gap-4 text-left"
-                >
-                  <div className="flex h-6 w-6 items-center justify-center">
-                    <motion.div
-                      className="h-2 w-2 bg-black"
-                      style={{
-                        clipPath: "polygon(0 0, 100% 50%, 0 100%)",
-                      }}
-                      animate={{
-                        opacity: activeView === feature.id ? 1 : 0,
-                        scale: activeView === feature.id ? 1.5 : 0.5,
-                        x: activeView === feature.id ? 5 : 0,
-                      }}
-                      transition={{ duration: 0.3, ease: "easeOut" }}
-                    />
-                  </div>
-                  <span
-                    className={`text-lg font-semibold max-w-[500px] lg:text-[32px] transition-colors ${
-                      activeView === feature.id ? "opacity-100" : "opacity-40"
-                    }`}
+                {featureData.map((feature) => (
+                  <button
+                    key={feature.id}
+                    onClick={() => setActiveView(feature.id)}
+                    className="group flex items-center gap-4 text-left"
                   >
-                    {feature.title}
-                  </span>
-                </button>
-              ))}
+                    <div className="flex h-6 w-6 items-center justify-center">
+                      <motion.div
+                        className="h-2 w-2 bg-black"
+                        style={{
+                          clipPath: "polygon(0 0, 100% 50%, 0 100%)",
+                        }}
+                        animate={{
+                          opacity: activeView === feature.id ? 1 : 0,
+                          scale: activeView === feature.id ? 1.5 : 0.5,
+                          x: activeView === feature.id ? 5 : 0,
+                        }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                      />
+                    </div>
+                    <span
+                      className={`text-lg font-semibold max-w-[500px] lg:text-[32px] transition-colors ${
+                        activeView === feature.id ? "opacity-100" : "opacity-40"
+                      }`}
+                    >
+                      {feature.title}
+                    </span>
+                  </button>
+                ))}
               </div>
-              <div className="flex justify-center items-center">
-                <button className="flex items-center lg:ml-7 gap-2 lg:h-[56px] text-[12px]  whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100">
-                  <IconDeviceMobile className="h-5 w-5" />
-                  <span>Download App & Get Bitcoin Reward</span>
-                </button>
-              </div>
+
+              <button className="flex items-center lg:ml-16 gap-2 lg:h-[56px] text-[12px]  whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100">
+                <IconDeviceMobile className="h-5 w-5" />
+                <span>Download App & Get Bitcoin Reward</span>
+              </button>
             </motion.div>
           </div>
           <p className="absolute hidden md:block -bottom-0 md:bottom-2 left-1/4 text-sm font-medium text-gray-500">
