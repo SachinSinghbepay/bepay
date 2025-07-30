@@ -20,11 +20,10 @@ const montserrat = Montserrat({
 export const metadata = {
   title: "bepay - Stablecoin Payment, Wallet, Merchant Payment",
   description: "A simple and secure way to pay your bills",
-   openGraph: {
+  openGraph: {
     title: "bepay - Stablecoin Payment, Wallet, Merchant Payment",
-    description:
-      "A simple and secure way to pay your bills",
-    url: "https://www.bepay.money/", 
+    description: "A simple and secure way to pay your bills",
+    url: "https://www.bepay.money/",
     siteName: "bepay",
     images: [
       {
@@ -40,8 +39,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "bepay - Stablecoin Payment, Wallet, Merchant Payment",
-    description:
-      "A simple and secure way to pay your bills",
+    description: "A simple and secure way to pay your bills",
     images: ["/thumbnail.png"],
   },
 };
@@ -50,9 +48,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${montserrat.variable} antialiased`}>
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );
