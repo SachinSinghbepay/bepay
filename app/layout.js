@@ -20,6 +20,30 @@ const montserrat = Montserrat({
 export const metadata = {
   title: "bepay - Stablecoin Payment, Wallet, Merchant Payment",
   description: "A simple and secure way to pay your bills",
+   openGraph: {
+    title: "bepay - Stablecoin Payment, Wallet, Merchant Payment",
+    description:
+      "A simple and secure way to pay your bills",
+    url: "https://www.bepay.money/", 
+    siteName: "bepay",
+    images: [
+      {
+        url: "/thumbnail.png",
+        width: 1200,
+        height: 630,
+        alt: "bepay Money",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "bepay - Stablecoin Payment, Wallet, Merchant Payment",
+    description:
+      "A simple and secure way to pay your bills",
+    images: ["/thumbnail.png"],
+  },
 };
 
 export default function RootLayout({ children }) {
