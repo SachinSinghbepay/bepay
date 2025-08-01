@@ -84,6 +84,7 @@ export default function HeroSection() {
             width: "696.8125px",
             height: "464.5983581542969px",
             maxWidth: "100%",
+            maxHeight: "100%",
             backgroundColor: "#EBEBEB",
             borderRadius: "16px",
           }}
@@ -93,16 +94,12 @@ export default function HeroSection() {
           viewport={{ once: false, amount: 0.3 }}
           transition={{ duration: 1, ease: "easeOut" }}
         >
-          {/* Main Hero Image */}
-          <div className="relative w-full h-full flex items-center justify-center">
-            <Image
-              src="/images/aboutus/about hero.png"
-              alt="Three people looking at mobile phone"
-              width={500}
-              height={350}
-              className="object-contain w-full h-full"
-            />
-          </div>
+          <Image
+            src="/images/aboutus/about hero.png"
+            alt="Three people looking at mobile phone"
+            fill
+            className="object-cover w-full h-full"
+          />
 
           {/* Floating Icons */}
           {/* Bitcoin Icon - Top Left */}
