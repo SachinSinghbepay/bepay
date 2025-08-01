@@ -1,5 +1,6 @@
 "use client";
 
+import WaitlistTriggerButton from "@/components/waitlist-trigger-button";
 import { MoreVertical, ChevronDown } from "lucide-react";
 
 const accounts = [
@@ -58,9 +59,12 @@ export function BankAccountView({ setActiveView }) {
           </div>
         ))}
       </div>
-      <button className="mt-4 w-full rounded-full text-[12px] bg-black py-3 font-medium text-white">
-        Get a free swiss bank account
-      </button>
+       <WaitlistTriggerButton>
+              <button className="mt-auto mx-auto items-center flex justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white">
+                Get a free swiss bank account
+              </button>
+            </WaitlistTriggerButton>
+     
     </div>
   );
 }

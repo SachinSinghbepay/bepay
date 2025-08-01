@@ -4,6 +4,7 @@ import { Eye, Snowflake, Settings, MoreVertical } from "lucide-react";
 import { ActionButton } from "../action-button";
 import { motion, useTransform } from "framer-motion";
 import Image from "next/image";
+import WaitlistTriggerButton from "@/components/waitlist-trigger-button";
 
 export function DebitCardView({ setActiveView, scrollYProgress }) {
   const innerCardScale = useTransform(
@@ -61,9 +62,11 @@ export function DebitCardView({ setActiveView, scrollYProgress }) {
         <p className="text-sm font-medium text-gray-800">Recent transactions</p>
         <p className="mt-2 text-xs text-gray-400">No transactions to see</p>
       </div>
-      <button className="mt-auto whitespace-nowrap rounded-full bg-black px-2 py-3 text-[12px] font-medium text-white">
-        Get your virtual crypto debit card
-      </button>
+      <WaitlistTriggerButton>
+        <button className="mt-auto mx-auto items-center flex justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white">
+          Get your virtual crypto debit card
+        </button>
+      </WaitlistTriggerButton>
     </div>
   );
 }
