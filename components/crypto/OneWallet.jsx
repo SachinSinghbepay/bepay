@@ -4,6 +4,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import { IconSquareKey } from "@tabler/icons-react";
+import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -480,17 +481,18 @@ export default function OneWallet() {
                   {/* Cryptocurrency icons placeholder */}
                 </div>
               </div>
-
-              <button className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
-                <Image
-                  src="/businessnew/buttonIcon.png"
-                  alt="Create Wallet"
-                  width={24}
-                  height={24}
-                  className="w-5 h-5 sm:w-6 sm:h-6"
-                />
-                <span>Create your wallet</span>
-              </button>
+              <WaitlistTriggerButton>
+                <button className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
+                  <Image
+                    src="/businessnew/buttonIcon.png"
+                    alt="Create Wallet"
+                    width={24}
+                    height={24}
+                    className="w-5 h-5 sm:w-6 sm:h-6"
+                  />
+                  <span>Create your wallet</span>
+                </button>
+              </WaitlistTriggerButton>
             </div>
           </div>
         </div>
@@ -597,17 +599,18 @@ export default function OneWallet() {
                   </h3>
                 </div>
               </div>
-
-              <button className="flex items-center space-x-2 cursor-pointer sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
-                <Image
-                  src="/businessnew/virtual5.svg"
-                  alt="Get Card"
-                  width={24}
-                  height={24}
-                  className="w-5 h-5 sm:w-6 sm:h-6 "
-                />
-                <span>Get your crypto debit card now</span>
-              </button>
+              <WaitlistTriggerButton>
+                <button className="flex items-center space-x-2 cursor-pointer sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
+                  <Image
+                    src="/businessnew/virtual5.svg"
+                    alt="Get Card"
+                    width={24}
+                    height={24}
+                    className="w-5 h-5 sm:w-6 sm:h-6 "
+                  />
+                  <span>Get your crypto debit card now</span>
+                </button>
+              </WaitlistTriggerButton>
             </div>
           </div>
         </div>
@@ -711,17 +714,18 @@ export default function OneWallet() {
                   </h3>
                 </div>
               </div>
-
-              <button className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
-                <Image
-                  src="/businessnew/IBAN6.svg"
-                  alt="Get Swiss bank account"
-                  width={24}
-                  height={24}
-                  className="w-5 h-5 sm:w-6 sm:h-6"
-                />
-                <span>Get a Swiss bank account</span>
-              </button>
+              <WaitlistTriggerButton>
+                <button className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
+                  <Image
+                    src="/businessnew/IBAN6.svg"
+                    alt="Get Swiss bank account"
+                    width={24}
+                    height={24}
+                    className="w-5 h-5 sm:w-6 sm:h-6"
+                  />
+                  <span>Get a Swiss bank account</span>
+                </button>
+              </WaitlistTriggerButton>
             </div>
           </div>
         </div>
@@ -804,17 +808,18 @@ export default function OneWallet() {
                   </h3>
                 </div>
               </div>
-
-              <button className="flex items-center space-x-2 cursor-pointer sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
-                <Image
-                  src="/businessnew/buttonIcon.png"
-                  alt="Get Swiss bank account"
-                  width={24}
-                  height={24}
-                  className="w-5 h-5 sm:w-6 sm:h-6"
-                />
-                <span>Start paying with crypto</span>
-              </button>
+              <WaitlistTriggerButton>
+                <button className="flex items-center space-x-2 cursor-pointer sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
+                  <Image
+                    src="/businessnew/buttonIcon.png"
+                    alt="Get Swiss bank account"
+                    width={24}
+                    height={24}
+                    className="w-5 h-5 sm:w-6 sm:h-6"
+                  />
+                  <span>Start paying with crypto</span>
+                </button>
+              </WaitlistTriggerButton>
             </div>
           </div>
         </div>
@@ -895,17 +900,18 @@ export default function OneWallet() {
                   </h3>
                 </div>
               </div>
-
-              <button className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
-                <Image
-                  src="/businessnew/qr5.svg"
-                  alt="Get Swiss bank account"
-                  width={24}
-                  height={24}
-                  className="w-5 h-5 sm:w-6 sm:h-6"
-                />
-                <span>Start spending your crypto</span>
-              </button>
+              <WaitlistTriggerButton>
+                <button className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
+                  <Image
+                    src="/businessnew/qr5.svg"
+                    alt="Get Swiss bank account"
+                    width={24}
+                    height={24}
+                    className="w-5 h-5 sm:w-6 sm:h-6"
+                  />
+                  <span>Start spending your crypto</span>
+                </button>
+              </WaitlistTriggerButton>
             </div>
           </div>
         </div>
@@ -990,17 +996,18 @@ export default function OneWallet() {
                   </h3>
                 </div>
               </div>
-
-              <button className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
-                <Image
-                  src="/businessnew/ai5.svg"
-                  alt="Get Swiss bank account"
-                  width={24}
-                  height={24}
-                  className="w-5 h-5 sm:w-6 sm:h-6"
-                />
-                <span>Download app and get started</span>
-              </button>
+              <WaitlistTriggerButton>
+                <button className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
+                  <Image
+                    src="/businessnew/ai5.svg"
+                    alt="Get Swiss bank account"
+                    width={24}
+                    height={24}
+                    className="w-5 h-5 sm:w-6 sm:h-6"
+                  />
+                  <span>Download app and get started</span>
+                </button>
+              </WaitlistTriggerButton>
             </div>
           </div>
         </div>
