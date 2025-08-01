@@ -130,7 +130,7 @@ export default function CryptoWalletSection() {
         ref={sectionRef}
         className="relative mx-auto min-h-[300vh] max-w-7xl"
       >
-        <div className="sticky top-0 flex h-[130vh] sm:h-[120vh] md:h-[110vh] w-full flex-col items-center justify-center overflow-hidden">
+        <div className="sticky top-0 flex h-[150vh] sm:h-[140vh] md:h-[110vh] w-full flex-col items-center justify-center overflow-hidden">
           <motion.div
             style={{ opacity: headingOpacity, y: headingY }}
             className="absolute top-4 md:top-0 px-4 text-start"
@@ -249,7 +249,7 @@ export default function CryptoWalletSection() {
                 )}
               </AnimatePresence>
             </div>
-            <p className=" md:hidden mt-2 text-sm font-medium text-gray-500">
+            <p className=" md:hidden  text-sm font-medium text-gray-500">
               ALL IN ONE MOBILE APP
             </p>
             <motion.div
