@@ -72,7 +72,7 @@ const page = () => {
     <>
       <main>
         <WaitlistPopup />
-        <Header />
+        {/* <Header /> */}
         <CryptoHeroSection />
         <CryptoWalletSection />
         {/* <InvestmentSuitePage /> */}
@@ -91,7 +91,7 @@ const page = () => {
 
         <PaymentProofSection />
         {/* <BusinessSection /> */}
-        <Footer />
+        {/* <Footer /> */}
       </main>
     </>
   );

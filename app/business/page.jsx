@@ -20,7 +20,7 @@ import React from "react";
 const page = () => {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <BusinessHero />
       {/* <Hero /> */}
       {/* <CryptoPaymentFlowSection /> */}
@@ -36,7 +36,7 @@ const page = () => {
       <BusinessSection />
       <MerchantSection />
       <FAQSection />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

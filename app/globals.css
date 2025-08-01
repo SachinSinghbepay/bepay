@@ -159,3 +159,222 @@ html {
     -webkit-backdrop-filter: blur(12.725351333618164px);
   }
 }
+
+/* Privacy Policy Page Specific Styles */
+/* Only targets the privacy policy content container */
+
+/* Main container spacing adjustments */
+.max-w-\[979px\].py-8.space-y-12 {
+  padding-top: 3rem !important; /* Increased from py-8 */
+  padding-bottom: 3rem !important;
+  gap: 4rem !important; /* Increased from space-y-12 (3rem) to 4rem */
+}
+
+/* Section spacing adjustments */
+.max-w-\[979px\].py-8.space-y-12 > section {
+  margin-bottom: 4rem !important;
+}
+
+/* Subsection spacing within sections */
+.max-w-\[979px\].py-8.space-y-12 section .space-y-6 {
+  gap: 3rem !important; /* Increased from 1.5rem to 2rem */
+}
+
+.max-w-\[979px\].py-8.space-y-12 section .space-y-4 {
+  gap: 3rem !important; /* Increased from 1rem to 1.5rem */
+}
+
+/* Paragraph and content spacing */
+.max-w-\[979px\].py-8.space-y-12 p {
+  font-size: 16px !important; /* Desktop: 24px */
+  line-height: 1.6 !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* List spacing */
+.max-w-\[979px\].py-8.space-y-12 ul,
+.max-w-\[979px\].py-8.space-y-12 ol {
+  margin-bottom: 3rem !important;
+}
+
+.max-w-\[979px\].py-8.space-y-12 li {
+  font-size: 16px !important; /* Desktop: 24px */
+  line-height: 1.6 !important;
+  margin-bottom: 0.75rem !important;
+}
+
+/* Disc bullet points gray color and smaller size */
+.max-w-\[979px\].py-8.space-y-12 ul li::marker {
+
+  font-size: 0.75em !important; /* Smaller bullet points */
+}
+
+.max-w-\[979px\].py-8.space-y-12 .list-disc li::marker {
+
+  font-size: 0.75em !important; /* Smaller bullet points */
+}
+
+/* Nested list items */
+.max-w-\[979px\].py-8.space-y-12 li li {
+  margin-bottom: 0.5rem !important;
+}
+
+/* Header spacing */
+.max-w-\[979px\].py-8.space-y-12 h2 {
+  margin-bottom: 2.5rem !important; /* Increased spacing after main headers */
+  margin-top: 3rem !important; /* Increased spacing before main headers */
+}
+
+.max-w-\[979px\].py-8.space-y-12 h3 {
+  margin-bottom: 1.5rem !important;
+  margin-top: 2rem !important;
+}
+
+.max-w-\[979px\].py-8.space-y-12 h4 {
+  margin-bottom: 1rem !important;
+  margin-top: 1.5rem !important;
+}
+
+/* Contact section specific styling */
+.max-w-\[979px\].py-8.space-y-12 section.border-t {
+  padding-top: 3rem !important; /* Increased border-top section padding */
+  margin-top: 4rem !important;
+}
+
+/* Background box in contact section */
+.max-w-\[979px\].py-8.space-y-12 .bg-gray-50 {
+  padding: 2rem !important; /* Increased padding */
+  margin: 1.5rem 0 !important;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  /* Main container mobile adjustments */
+  .max-w-\[979px\].py-8.space-y-12 {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+    gap: 2.5rem !important;
+  }
+
+  /* Section spacing for mobile */
+  .max-w-\[979px\].py-8.space-y-12 > section {
+    margin-bottom: 2.5rem !important;
+  }
+
+  /* Subsection spacing for mobile */
+  .max-w-\[979px\].py-8.space-y-12 section .space-y-6 {
+    gap: 1.5rem !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 section .space-y-4 {
+    gap: 1rem !important;
+  }
+
+  /* Mobile paragraph and content styling */
+  .max-w-\[979px\].py-8.space-y-12 p {
+    font-size: 16px !important; /* Mobile: 16px */
+    line-height: 1.7 !important; /* Slightly increased line height for mobile readability */
+    margin-bottom: 1.25rem !important;
+  }
+
+  /* Mobile list styling */
+  .max-w-\[979px\].py-8.space-y-12 ul,
+  .max-w-\[979px\].py-8.space-y-12 ol {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 li {
+    font-size: 16px !important; /* Mobile: 16px */
+    line-height: 1.7 !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Mobile header spacing */
+  .max-w-\[979px\].py-8.space-y-12 h2 {
+    margin-bottom: 1.5rem !important;
+    margin-top: 2rem !important;
+    font-size: 1.75rem !important; /* Slightly smaller on mobile */
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 h3 {
+    margin-bottom: 1rem !important;
+    margin-top: 1.5rem !important;
+    font-size: 1.5rem !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 h4 {
+    margin-bottom: 0.75rem !important;
+    margin-top: 1rem !important;
+    font-size: 1.25rem !important;
+  }
+
+  /* Mobile contact section */
+  .max-w-\[979px\].py-8.space-y-12 section.border-t {
+    padding-top: 2rem !important;
+    margin-top: 2.5rem !important;
+  }
+
+  /* Mobile background box */
+  .max-w-\[979px\].py-8.space-y-12 .bg-gray-50 {
+    padding: 1.5rem !important;
+    margin: 1rem 0 !important;
+  }
+}
+
+/* Tablet Responsive Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .max-w-\[979px\].py-8.space-y-12 p {
+    font-size: 16px !important; /* Tablet: 20px */
+    line-height: 1.65 !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 li {
+    font-size: 16px !important; /* Tablet: 20px */
+    line-height: 1.65 !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 h2 {
+    font-size: 2rem !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 h3 {
+    font-size: 1.75rem !important;
+  }
+}
+
+/* Additional spacing utilities for better readability */
+.max-w-\[979px\].py-8.space-y-12 strong {
+  font-weight: 600 !important;
+}
+
+.max-w-\[979px\].py-8.space-y-12 .font-semibold {
+  font-weight: 600 !important;
+}
+
+.max-w-\[979px\].py-8.space-y-12 .font-bold {
+  font-weight: 700 !important;
+}
+
+/* Ensure proper spacing between different content types */
+.max-w-\[979px\].py-8.space-y-12 p + ul,
+.max-w-\[979px\].py-8.space-y-12 p + ol {
+  margin-top: 1rem !important;
+}
+
+.max-w-\[979px\].py-8.space-y-12 ul + p,
+.max-w-\[979px\].py-8.space-y-12 ol + p {
+  margin-top: 1.5rem !important;
+}
+
+/* Mobile spacing adjustments for content transitions */
+@media (max-width: 768px) {
+  .max-w-\[979px\].py-8.space-y-12 p + ul,
+  .max-w-\[979px\].py-8.space-y-12 p + ol {
+    margin-top: 0.75rem !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 ul + p,
+  .max-w-\[979px\].py-8.space-y-12 ol + p {
+    margin-top: 1rem !important;
+  }
+}

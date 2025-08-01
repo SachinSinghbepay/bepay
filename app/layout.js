@@ -2,6 +2,8 @@
 import { Open_Sans, Montserrat } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/smoothScroll";
+import Header from "@/components/header";
+import Footer from "@/components/Footer1";
 
 // Load Open Sans as the main font
 const openSans = Open_Sans({
@@ -48,7 +50,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${montserrat.variable} antialiased`}>
-        <SmoothScroll>{children}</SmoothScroll>
+        <SmoothScroll>
+          <Header />
+          {children}
+          <Footer />
+        </SmoothScroll>
       </body>
     </html>
   );
