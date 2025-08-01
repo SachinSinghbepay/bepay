@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
+import WaitlistTriggerButton from "./waitlist-trigger-button";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -79,17 +80,19 @@ export default function Header() {
           </nav>
 
           {/* Download Button - Hidden on small screens */}
-          <Button
-            variant="outline"
-            className="hidden lg:flex  cursor-pointer  lg:w-[199px]  lg:h-[56px] items-center  border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
-          >
-            <div className="flex gap-2">
-              <Smartphone className="w-4 h-4 lg:w-5 lg:h-9" />
-              <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">
-                Download bepay app
-              </span>
-            </div>
-          </Button>
+          <WaitlistTriggerButton>
+            <Button
+              variant="outline"
+              className="hidden lg:flex  cursor-pointer  lg:w-[199px]  lg:h-[56px] items-center  border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
+            >
+              <div className="flex gap-2">
+                <Smartphone className="w-4 h-4 lg:w-5 lg:h-9" />
+                <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">
+                  Download bepay app
+                </span>
+              </div>
+            </Button>
+          </WaitlistTriggerButton>
 
           {/* Animated Mobile menu button */}
           <button
@@ -168,13 +171,17 @@ export default function Header() {
               <span className="text-sm font-[700]">CRYPTO CARD</span>
             </Link> */}
             {/* Mobile Download Button */}
-            <Button
-              variant="outline"
-              className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2  border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
-            >
-              <Smartphone className="w-4 h-4" />
-              <span className="font-semibold text-xs">Download bepay app</span>
-            </Button>
+            <WaitlistTriggerButton>
+              <Button
+                variant="outline"
+                className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2  border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
+              >
+                <Smartphone className="w-4 h-4" />
+                <span className="font-semibold text-xs">
+                  Download bepay app
+                </span>
+              </Button>
+            </WaitlistTriggerButton>
           </nav>
         </motion.div>
       </div>

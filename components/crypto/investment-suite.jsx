@@ -8,6 +8,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 const investmentData = [
   {
@@ -86,17 +87,19 @@ export default function InvestmentSuite() {
             </span>{" "}
             and traditional investments
           </motion.p>
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={
-              isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }
-            }
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex items-center gap-2 -mt-6 md:mt-0 bg-white text-black px-6 py-2 rounded-full font-medium hover:bg-gray-100 transition-colors self-start"
-          >
-            <HandCoins size={20} />
-            Start Investing
-          </motion.button>
+          <WaitlistTriggerButton>
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={
+                isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }
+              }
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex items-center gap-2 -mt-6 md:mt-0 bg-white text-black px-6 py-2 rounded-full font-medium hover:bg-gray-100 transition-colors self-start"
+            >
+              <HandCoins size={20} />
+              Start Investing
+            </motion.button>
+          </WaitlistTriggerButton>
         </motion.div>
 
         {/* Subtitle */}

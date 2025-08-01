@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
 import Image from "next/image";
 import { ArrowUpRight, CheckCircle } from "lucide-react";
+import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 const servicesData = [
   {
@@ -286,6 +287,7 @@ export const FinancialServicesSection = () => {
                 Banking, lending, insurance, and more - all in one comprehensive
                 platform
               </motion.p>
+                <WaitlistTriggerButton>
               <motion.button
                 className="flex items-center gap-2 bg-black text-white px-5 lg:px-6 py-2.5 lg:py-3 rounded-full mt-6 lg:mt-8 hover:bg-gray-800 transition-colors text-sm"
                 variants={itemVariants}
@@ -293,6 +295,7 @@ export const FinancialServicesSection = () => {
                 Explore all features
                 <ArrowUpRight size={16} />
               </motion.button>
+              </WaitlistTriggerButton>
             </motion.div>
           </div>
           <div className="bg-[#F9F9F9] relative overflow-hidden">

@@ -21,6 +21,7 @@ import { DebitCardView } from "./mocup-views/debit-card-view";
 import { BankAccountView } from "./mocup-views/bank-account-view";
 import { CryptoWalletView } from "./mocup-views/crypto-wallet-view";
 import { IconDeviceMobile } from "@tabler/icons-react";
+import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 export default function CryptoWalletSection() {
   const sectionRef = useRef(null);
@@ -286,11 +287,12 @@ export default function CryptoWalletSection() {
                   </button>
                 ))}
               </div>
-
-              <button className="flex items-center lg:ml-16 gap-2 lg:h-[56px] text-[12px]  whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100">
-                <IconDeviceMobile className="h-5 w-5" />
-                <span>Download App & Get Bitcoin Reward</span>
-              </button>
+              <WaitlistTriggerButton>
+                <button className="flex items-center lg:ml-16 gap-2 lg:h-[56px] text-[12px]  whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100">
+                  <IconDeviceMobile className="h-5 w-5" />
+                  <span>Download App & Get Bitcoin Reward</span>
+                </button>
+              </WaitlistTriggerButton>
             </motion.div>
           </div>
           <p className="absolute hidden md:block -bottom-0 md:bottom-2 left-1/4 text-sm font-medium text-gray-500">

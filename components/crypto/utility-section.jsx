@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { Wallet } from "lucide-react";
+import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 const utilityData = [
   {
@@ -176,7 +177,7 @@ export const UtilitySection = () => {
             );
           })}
         </div>
-
+  <WaitlistTriggerButton>
         <motion.div
           style={{
             opacity: useTransform(scrollYProgress, [0.95, 1], [0, 1]),
@@ -189,6 +190,7 @@ export const UtilitySection = () => {
             Start paying with crypto
           </button>
         </motion.div>
+        </WaitlistTriggerButton>
       </div>
     </section>
   );

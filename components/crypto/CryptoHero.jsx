@@ -9,6 +9,7 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 import { SmartphoneIcon as DeviceMobile } from "lucide-react";
+import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 const iconsData = [
   {
@@ -47,6 +48,7 @@ const iconsData = [
 
 export default function CryptoHeroSection() {
   const [currentWord, setCurrentWord] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const words = ["Save", "Send", "Earn", "Grow"];
   const containerRef = useRef(null);
 
@@ -57,6 +59,7 @@ export default function CryptoHeroSection() {
 
   const mockupY = useTransform(scrollYProgress, [0, 1], [0, -700]);
 
+  // Desktop scroll transforms
   const xTransforms = iconsData.map((icon) =>
     useTransform(scrollYProgress, [0, 0.6], [icon.initialX, icon.finalX])
   );
@@ -70,6 +73,17 @@ export default function CryptoHeroSection() {
     useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1])
   );
 
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentWord((prev) => (prev + 1) % words.length);
@@ -77,9 +91,19 @@ export default function CryptoHeroSection() {
     return () => clearInterval(interval);
   }, []);
 
+  // Button click handler
+  const handleButtonClick = () => {
+    console.log("Button clicked!");
+    // Add your click logic here
+    // For example: navigate to download page, open modal, etc.
+  };
+
   return (
     // Make the container taller to allow for scroll
-    <div ref={containerRef} className="h-[300vh] bg-[#F9F9F9] relative">
+    <div
+      ref={containerRef}
+      className="h-[160vh] lg:h-[300vh] bg-[#F9F9F9] relative"
+    >
       {/* Sticky background content */}
       <div className="sticky top-0 h-screen flex-col items-center justify-center px-4 py-8 overflow-hidden">
         {/* Background text that stays sticky - positioned absolutely to stay in place */}
@@ -87,7 +111,7 @@ export default function CryptoHeroSection() {
           <div className="text-center">
             <div>
               <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[60px]  font-[600] leading-[100%]">
-                SPEND
+                EARN
               </div>
               <div className="text-[#6F6F6F] text-6xl lg:-mt-6 9 lg:tracking-tighter sm:text-8xl lg:text-[120px] font-semibold leading-none">
                 CRYPTO
@@ -118,7 +142,7 @@ export default function CryptoHeroSection() {
                   boxShadow: "120px 120px 120px 0px rgba(0, 0, 0, 0.03)",
                 }}
               >
-                <div className="w-full h-full bg-gradient-to-t from-white via-white to-[#F9F9F966] rounded-[32px] lg:rounded-[52px] flex flex-col items-center justify-start p-6 lg:p-16">
+                <div className="w-full h-full bg-gradient-to-t from-white via-white to-[#F9F9F966] rounded-[32px] lg:rounded-[52px] flex flex-col items-center justify-start p-6 lg:p-16 relative">
                   <div className="mb-6">
                     <Image
                       src="/bepayiconlogo.png"
@@ -157,20 +181,53 @@ export default function CryptoHeroSection() {
                   </div>
                   <div>
                     <p className="text-xs 3xl:text-sm text-center text-gray-800 leading-relaxed max-w-[200px] lg:max-w-[280px]">
-                      <span className="text-black font-semibold">
-                        your Crypto
-                      </span>{" "}
-                      like never before. Take control of your financial future
-                      with{" "}
+                      Take control of your financial future with{" "}
                       <span className="text-black font-semibold">
                         self-custody wallets, earning opportunities, and
                         seamless spending solutions.
                       </span>
                     </p>
                   </div>
-                  {/* Crypto icons with scroll animations */}
-                  <div className="absolute inset-0 w-full h-full z-10">
+
+                  {/* Crypto icons with conditional animations - lowered z-index */}
+                  <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
                     {iconsData.map((icon, index) => {
+                      // Mobile: Simple bottom-up animation with delays
+                      if (isMobile) {
+                        return (
+                          <motion.div
+                            key={index}
+                            initial={{
+                              opacity: 0,
+                              y: 100,
+                              x: index * -25, // Stagger horizontally
+                            }}
+                            animate={{
+                              opacity: 1,
+                              y: -20,
+                              x: index * -25,
+                            }}
+                            transition={{
+                              duration: 0.6,
+                              delay: index * 0.2, // Stagger the animations
+                              ease: "easeOut",
+                            }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false, amount: 0.5 }}
+                            className="absolute top-[67%] left-1/2 translate-x-1/2"
+                          >
+                            <Image
+                              src={icon.src || "/placeholder.svg"}
+                              alt={icon.alt}
+                              width={80}
+                              height={80}
+                              className="w-10 h-10"
+                            />
+                          </motion.div>
+                        );
+                      }
+
+                      // Desktop: Original scroll-based animation
                       const x = xTransforms[index];
                       const y = yTransforms[index];
                       const scale = scaleTransforms[index];
@@ -180,7 +237,7 @@ export default function CryptoHeroSection() {
                         <motion.div
                           key={index}
                           style={{ x, y, scale, opacity }}
-                          className="absolute flex top-[67%]  lg:top-1/2 left-1/2 translate-x-1/2"
+                          className="absolute flex top-1/2 left-1/2 translate-x-1/2"
                         >
                           <Image
                             src={icon.src || "/placeholder.svg"}
@@ -193,7 +250,8 @@ export default function CryptoHeroSection() {
                       );
                     })}
                   </div>
-                  <div className="my-4 mt-20 lg:mt-32">
+
+                  <div className="my-4 mt-20 lg:mt-32 relative z-10">
                     <Image
                       src={"/images/crypto/line.png"}
                       height={100}
@@ -202,18 +260,26 @@ export default function CryptoHeroSection() {
                       className="object-contain h-16 w-auto"
                     />
                   </div>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    initial={{ opacity: 0, y: 100 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.3 }}
-                    viewport={{ once: false, amount: 0.5 }}
-                    className="bg-black  h-[56px]  whitespace-nowrap text-white px-4 py-2 lg:px-6 lg:py-3 rounded-full flex items-center justify-center gap-2 text-[12px] font-medium hover:bg-gray-800 transition-colors"
-                  >
-                    <DeviceMobile className="w-3 h-3 -mt-[1px] lg:w-4 lg:h-8" />
-                    Download App & Start Earning
-                  </motion.button>
+                  
+                  {/* Fixed clickable button with proper z-index and pointer events */}
+                  <div className="relative z-50 pointer-events-auto">
+                    <WaitlistTriggerButton>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        initial={{ opacity: 0, y: 100 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.3 }}
+                        viewport={{ once: false, amount: 0.5 }}
+                        onClick={handleButtonClick}
+                        className="bg-black cursor-pointer h-[56px] whitespace-nowrap text-white px-4 py-2 lg:px-6 lg:py-3 rounded-full flex items-center justify-center gap-2 text-[12px] font-medium hover:bg-black/90 transition-colors active:scale-95 select-none"
+                        style={{ pointerEvents: 'auto' }}
+                      >
+                        <DeviceMobile className="w-3 h-3 -mt-[1px] lg:w-4 lg:h-4" />
+                        Download App & Start Earning
+                      </motion.button>
+                    </WaitlistTriggerButton>
+                  </div>
                 </div>
               </motion.div>
             </div>

@@ -1,10 +1,14 @@
 "use client";
-
 import { motion } from "framer-motion";
-import { Linkedin, Twitter, Facebook, Send } from "lucide-react";
-import Image from "next/image";
+import React from "react";
 
-// A custom component for the app store buttons to reduce repetition
+import { Linkedin, Twitter, Facebook, Send, Check } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { IconBrandX } from "@tabler/icons-react";
+
 const AppStoreButton = ({ iconSrc, iconAlt, line1, line2 }) => (
   <motion.button
     className="flex items-center w-full sm:w-auto justify-center gap-3 border border-white/20 rounded-full px-6 py-3 hover:bg-white/10 transition-colors"
@@ -29,6 +33,49 @@ const AppStoreButton = ({ iconSrc, iconAlt, line1, line2 }) => (
 );
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [error, setError] = useState("");
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!email.trim()) {
+      setError("Email is required");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await addDoc(collection(db, "newsletter_subscribers"), {
+        email: email.trim(),
+        subscribedAt: new Date(),
+        timestamp: Date.now(),
+      });
+
+      setIsSubscribed(true);
+      setEmail("");
+    } catch (error) {
+      console.error("Error adding email to newsletter:", error);
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -106,55 +153,104 @@ const Footer = () => {
           className="w-full flex flex-col items-center gap-6"
           variants={itemVariants}
         >
-          <p className="text-[#6A6A6A] text-sm">
-            Sign-up to our newsletter for exclusive updates!
-          </p>
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            <form className="flex items-center gap-2 border border-[#C6C6C626] rounded-full p-1 pr-2 ">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="bg-transparent px-4 py-2 text-white placeholder-gray-500 focus:outline-none w-64"
-                aria-label="Email for newsletter"
-              />
-              <button
-                type="submit"
-                className="bg-[#3333334D] text-white cursor-pointer  px-6 py-2 rounded-full font-medium  transition-colors text-sm shrink-0"
-              >
-                Submit
-              </button>
-            </form>
-            <div className="flex gap-3">
-              <a
-                href="#"
-                aria-label="LinkedIn"
-                className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                aria-label="Twitter"
-                className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                aria-label="Facebook"
-                className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
-              >
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                aria-label="Telegram"
-                className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
-              >
-                <Send className="w-5 h-5" />
-              </a>
+          <>
+            <p className="text-[#6A6A6A] text-sm">
+              Sign-up to our newsletter for exclusive updates!
+            </p>
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              {!isSubscribed ? (
+                <form
+                  onSubmit={handleSubmit}
+                  className="flex flex-col items-center gap-2"
+                >
+                  <div className="flex items-center gap-2 border border-[#C6C6C626] rounded-full p-1 pr-2">
+                    <input
+                      type="email"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="bg-transparent px-4 py-2 text-white placeholder-gray-500 focus:outline-none w-64"
+                      aria-label="Email for newsletter"
+                      disabled={isSubmitting}
+                    />
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="bg-[#3333334D] text-white cursor-pointer px-6 py-2 rounded-full font-medium transition-colors text-sm shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSubmitting ? "Submitting..." : "Submit"}
+                    </button>
+                  </div>
+                  {error && (
+                    <p className="text-red-400 text-sm mt-1">{error}</p>
+                  )}
+                </form>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex flex-col items-center gap-4 text-center"
+                >
+                  <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center">
+                    <Check className="w-8 h-8 text-green-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-2">
+                      Thanks for subscribing to our newsletter!
+                    </h3>
+                    <p className="text-[#6A6A6A] text-sm">
+                      You'll receive exclusive updates and offers directly in
+                      your inbox.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setIsSubscribed(false)}
+                    className="text-[#6A6A6A] text-sm hover:text-white transition-colors underline"
+                  >
+                    Subscribe another email
+                  </button>
+                </motion.div>
+              )}
+              <div className="flex gap-3">
+                <a
+                  href="https://www.linkedin.com/company/bepaymoney/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                  className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://x.com/bepaymoney"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Twitter"
+                  className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                >
+                  <IconBrandX className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://www.facebook.com/bepaymoney/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                  className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                >
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://t.me/officialbepaymoney"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Telegram"
+                  className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                >
+                  <Send className="w-5 h-5" />
+                </a>
+              </div>
             </div>
-          </div>
+          </>
         </motion.div>
 
         {/* Footer Links Grid */}
@@ -206,13 +302,13 @@ const Footer = () => {
                 href="/privacy-policy-for-deleting-user-account"
                 className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
-                for user url content
+                for deleting user account 
               </a>
               <a
                 href="/privacy-policy-for-deleting-merchant-account"
                 className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
-                for merchant url content
+                for deleting merchant account
               </a>
             </div>
           </div>
