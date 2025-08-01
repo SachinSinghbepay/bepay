@@ -2,6 +2,7 @@
 import { useRef, useEffect, useState } from "react";
 import { DollarSign, Clock, Headphones, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 const features = [
   {
@@ -299,10 +300,12 @@ export default function AnimatedCardsSection() {
                           global customers, boost your revenue, and manage your
                           store — all in one powerful dashboard.
                         </p>
-                        <button className="bg-black cursor-pointer text-[12px]  whitespace-nowrap text-white px-4 md:px-6 py-2 md:py-3 rounded-full font-medium text-xs  lg:text-[12px] hover:bg-black/90 transition-colors duration-300 flex items-center gap-2 mx-auto">
-                          Become a merchant on bepay
-                          <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
-                        </button>
+                        <WaitlistTriggerButton>
+                          <button className="bg-black cursor-pointer text-[12px]  whitespace-nowrap text-white px-4 md:px-6 py-2 md:py-3 rounded-full font-medium text-xs  lg:text-[12px] hover:bg-black/90 transition-colors duration-300 flex items-center gap-2 mx-auto">
+                            Become a merchant on bepay
+                            <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
+                          </button>
+                        </WaitlistTriggerButton>s
                       </div>
                     )}
                   </div>

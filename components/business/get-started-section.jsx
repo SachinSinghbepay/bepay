@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Phone } from "lucide-react";
+import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 const steps = [
   {
@@ -29,14 +30,16 @@ const steps = [
     rightTitle: "Go Live",
     rightSubtitle: "Accept your first crypto payment in minutes",
     rightButtons: (
+         <WaitlistTriggerButton>
       <div className="flex flex-col gap-4 mt-8 w-full justify-center mx-auto max-w-[260px]">
         <button className="bg-black cursor-pointer whitespace-nowrap text-white hover:bg-black/90 transition-colors duration-200 px-8 py-4 rounded-full font-medium text-[12px]">
           Become a merchant on bepay ↗
         </button>
-        <button className="border-2 items-center flex gap-2 cursor-pointer border-gray-300 text-gray-700 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 px-8 py-4 rounded-full font-medium text-[12px] bg-transparent">
+        {/* <button className="border-2 items-center flex gap-2 cursor-pointer border-gray-300 text-gray-700 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 px-8 py-4 rounded-full font-medium text-[12px] bg-transparent">
           <Phone size={18} /> Know more about us
-        </button>
+        </button> */}
       </div>
+      </WaitlistTriggerButton>
     ),
   },
 ]; 

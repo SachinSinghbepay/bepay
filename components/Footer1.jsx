@@ -189,26 +189,23 @@ const Footer = () => {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center gap-4 text-center"
+                  className="flex flex-row items-center gap-2 text-center"
                 >
-                  <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center">
-                    <Check className="w-8 h-8 text-green-400" />
+                  <div className="w-8 h-8  bg-green-500/20 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-green-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">
+                    <h3 className="text-md font-semibold text-white ">
                       Thanks for subscribing to our newsletter!
                     </h3>
-                    <p className="text-[#6A6A6A] text-sm">
-                      You'll receive exclusive updates and offers directly in
-                      your inbox.
-                    </p>
+                  
                   </div>
-                  <button
+                  {/* <button
                     onClick={() => setIsSubscribed(false)}
                     className="text-[#6A6A6A] text-sm hover:text-white transition-colors underline"
                   >
                     Subscribe another email
-                  </button>
+                  </button> */}
                 </motion.div>
               )}
               <div className="flex gap-3">
@@ -302,7 +299,7 @@ const Footer = () => {
                 href="/privacy-policy-for-deleting-user-account"
                 className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
-                for deleting user account 
+                for deleting user account
               </a>
               <a
                 href="/privacy-policy-for-deleting-merchant-account"
@@ -313,6 +310,7 @@ const Footer = () => {
             </div>
           </div>
           <div className="space-y-4">
+            s
             <div className="space-y-3 lg:space-y-6">
               <a
                 href="/terms-and-conditions"

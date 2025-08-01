@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
+import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 export default function MerchantSection() {
   const containerVariants = {
@@ -43,8 +44,9 @@ export default function MerchantSection() {
             <motion.div variants={itemVariants} className="space-y-4">
               <h1 className="text-4xl md:text-5xl lg:text-[60px] font-[400] leading-tight">
                 <span className="lg:whitespace-nowrap">
-                Become a{" "}
-                <span className="font-[400] text-gray-900">merchant</span></span>
+                  Become a{" "}
+                  <span className="font-[400] text-gray-900">merchant</span>
+                </span>
                 <br />
                 on{" "}
                 <span className="font-[400] text-gray-900">
@@ -58,22 +60,22 @@ export default function MerchantSection() {
               <p className="text-gray-600 text-lg md:text-xl leading-relaxed max-w-md">
                 Experience the power of receiving{" "}
                 <span className="font-semibold text-gray-900">
-                   lightning fast global payments
+                  lightning fast global payments
                 </span>{" "}
                 for your business!
               </p>
             </motion.div>
+            <WaitlistTriggerButton>
+              <motion.div
+                variants={itemVariants}
+                className="flex flex-col max-w-[300px] gap-4"
+              >
+                <button className="bg-black cursor-pointer whitespace-nowrap text-white px-8 py-4 rounded-full text-[12px] font-medium hover:bg-black/90 transition-colors duration-200 flex items-center justify-center gap-2">
+                  Become a merchant
+                  <ArrowUpRight size={18} />
+                </button>
 
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-col max-w-[300px] gap-4"
-            >
-              <button className="bg-black cursor-pointer whitespace-nowrap text-white px-8 py-4 rounded-full text-[12px] font-medium hover:bg-black/90 transition-colors duration-200 flex items-center justify-center gap-2">
-                Become a merchant
-                <ArrowUpRight size={18} />
-              </button>
-
-              <button className="border-2 cursor-pointer border-gray-300 text-gray-700 px-8 py-4 rounded-full text-[12px] font-medium hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center gap-2">
+                {/* <button className="border-2 cursor-pointer border-gray-300 text-gray-700 px-8 py-4 rounded-full text-[12px] font-medium hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center gap-2">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -88,8 +90,9 @@ export default function MerchantSection() {
                   />
                 </svg>
                 Talk to us
-              </button>
-            </motion.div>
+              </button> */}
+              </motion.div>
+            </WaitlistTriggerButton>
           </div>
 
           {/* Right Side - Mobile Mockup */}

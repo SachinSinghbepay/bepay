@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Phone } from "lucide-react";
 import Image from "next/image";
 import { useRef } from "react";
+import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 const HowCryptoMake = () => {
   const containerRef = useRef(null);
@@ -166,7 +167,6 @@ const HowCryptoMake = () => {
                   y: mockup1Y,
                   opacity: mockup1Opacity,
                 }}
-                
               >
                 <div className="relative w-[400px] h-[700px] drop-shadow-2xl">
                   <Image
@@ -279,25 +279,27 @@ const HowCryptoMake = () => {
                   </p>
 
                   {/* Action Buttons */}
-                  <div className="space-y-3">
-                    <motion.button
-                      className="w-full  bg-black text-white py-4 px-6 rounded-full text-sm font-medium hover:bg-black/90 cursor-pointer transition-colors"
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.9, duration: 0.6 }}
-                    >
-                      Become a merchant on bepay →
-                    </motion.button>
+                  <WaitlistTriggerButton>
+                    <div className="space-y-3">
+                      <motion.button
+                        className="w-full  bg-black text-white py-4 px-6 rounded-full text-sm font-medium hover:bg-black/90 cursor-pointer transition-colors"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.9, duration: 0.6 }}
+                      >
+                        Become a merchant on bepay →
+                      </motion.button>
 
-                    <motion.button
+                      {/* <motion.button
                       className="w-full border border-gray-300 text-gray-700 py-3 px-6 rounded-full cursor-pointer  text-sm font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
                       initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 1.1, duration: 0.6 }}
                     >
                       <Phone /> Quick chat with sales
-                    </motion.button>
-                  </div>
+                    </motion.button> */}
+                    </div>
+                  </WaitlistTriggerButton>
                 </div>
               </motion.div>
 
@@ -341,7 +343,7 @@ const HowCryptoMake = () => {
 
                     boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
                     backdropFilter: "blur(20px)",
-                    
+
                     background: "rgba(255, 255, 255, 255)",
                   }}
                 >
@@ -547,25 +549,27 @@ const HowCryptoMake = () => {
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="space-y-3 mt-6">
-                        <motion.button
-                          className="w-full bg-black rounded-full text-white py-4 px-4  text-sm font-medium hover:bg-black/90 cursor-pointer transition-colors"
-                          initial={{ opacity: 0, y: 30 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.9, duration: 0.6 }}
-                        >
-                          Become a merchant on bepay →
-                        </motion.button>
+                      <WaitlistTriggerButton>
+                        <div className="space-y-3 mt-6">
+                          <motion.button
+                            className="w-full bg-black rounded-full text-white py-4 px-4  text-sm font-medium hover:bg-black/90 cursor-pointer transition-colors"
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.9, duration: 0.6 }}
+                          >
+                            Become a merchant on bepay →
+                          </motion.button>
 
-                        <motion.button
+                          {/* <motion.button
                           className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-full text-sm font-medium cursor-pointer hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
                           initial={{ opacity: 0, y: 30 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 1.1, duration: 0.6 }}
                         >
                           <Phone /> Quick chat with sales
-                        </motion.button>
-                      </div>
+                        </motion.button> */}
+                        </div>
+                      </WaitlistTriggerButton>
                     </div>
                   </motion.div>
                 </motion.div>
