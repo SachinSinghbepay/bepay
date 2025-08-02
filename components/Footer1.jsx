@@ -310,7 +310,7 @@ const Footer = () => {
             </div>
           </div>
           <div className="space-y-4">
-            s
+            
             <div className="space-y-3 lg:space-y-6">
               <a
                 href="/terms-and-conditions"

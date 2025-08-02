@@ -305,7 +305,7 @@ export default function AnimatedCardsSection() {
                             Become a merchant on bepay
                             <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
                           </button>
-                        </WaitlistTriggerButton>s
+                        </WaitlistTriggerButton>
                       </div>
                     )}
                   </div>
