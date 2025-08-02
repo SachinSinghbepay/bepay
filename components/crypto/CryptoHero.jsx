@@ -214,7 +214,7 @@ export default function CryptoHeroSection() {
                             }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: false, amount: 0.5 }}
-                            className="absolute top-[67%] left-1/2 translate-x-1/2"
+                            className="absolute top-[56%] lg:top-[67%] left-1/2 translate-x-1/2"
                           >
                             <Image
                               src={icon.src || "/placeholder.svg"}
@@ -251,7 +251,7 @@ export default function CryptoHeroSection() {
                     })}
                   </div>
 
-                  <div className="my-4 mt-20 lg:mt-32 relative z-10">
+                  <div className="my-4 mt-10 lg:mt-32 relative z-10">
                     <Image
                       src={"/images/crypto/line.png"}
                       height={100}
@@ -260,7 +260,7 @@ export default function CryptoHeroSection() {
                       className="object-contain h-16 w-auto"
                     />
                   </div>
-                  
+
                   {/* Fixed clickable button with proper z-index and pointer events */}
                   <div className="relative z-50 pointer-events-auto">
                     <WaitlistTriggerButton>
@@ -273,7 +273,7 @@ export default function CryptoHeroSection() {
                         viewport={{ once: false, amount: 0.5 }}
                         onClick={handleButtonClick}
                         className="bg-black cursor-pointer h-[56px] whitespace-nowrap text-white px-4 py-2 lg:px-6 lg:py-3 rounded-full flex items-center justify-center gap-2 text-[12px] font-medium hover:bg-black/90 transition-colors active:scale-95 select-none"
-                        style={{ pointerEvents: 'auto' }}
+                        style={{ pointerEvents: "auto" }}
                       >
                         <DeviceMobile className="w-3 h-3 -mt-[1px] lg:w-4 lg:h-4" />
                         Download App & Start Earning

@@ -315,7 +315,7 @@ const BusinessHero = () => {
                             duration: 0.4,
                             ease: "easeOut",
                           }}
-                          className="flex flex-col lg:-mt-4 md:flex-row gap-3 w-full max-w-[600px]"
+                          className="flex flex-col lg:-mt-9 md:flex-row gap-3 w-full max-w-[600px]"
                         >
                           {!isSubmitted ? (
                             <form

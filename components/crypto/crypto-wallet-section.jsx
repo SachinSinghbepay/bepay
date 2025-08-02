@@ -1,28 +1,23 @@
-"use client";
-import Image from "next/image";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  AnimatePresence,
-} from "framer-motion";
-import { useRef, useState, useEffect } from "react";
-import { Wallet, CreditCard, ScanLine, Globe, Gift, Plus } from "lucide-react";
-import { DebitCardView } from "./mocup-views/debit-card-view";
-import { BankAccountView } from "./mocup-views/bank-account-view";
-import { CryptoWalletView } from "./mocup-views/crypto-wallet-view";
-import { IconDeviceMobile } from "@tabler/icons-react";
-import WaitlistTriggerButton from "../waitlist-trigger-button";
+"use client"
+import Image from "next/image"
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
+import { useRef, useState, useEffect } from "react"
+import { Wallet, CreditCard, ScanLine, Globe, Plus } from "lucide-react"
+import { DebitCardView } from "./mocup-views/debit-card-view"
+import { BankAccountView } from "./mocup-views/bank-account-view"
+import { CryptoWalletView } from "./mocup-views/crypto-wallet-view"
+import { IconDeviceMobile } from "@tabler/icons-react"
+import WaitlistTriggerButton from "../waitlist-trigger-button"
 
 export default function CryptoWalletSection() {
-  const sectionRef = useRef(null);
+  const sectionRef = useRef(null)
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
-  });
+  })
 
-  const [isMobile, setIsMobile] = useState(false);
-  const [activeView, setActiveView] = useState("debit-card");
+  const [isMobile, setIsMobile] = useState(false)
+  const [activeView, setActiveView] = useState("debit-card")
 
   const featureData = [
     {
@@ -32,12 +27,7 @@ export default function CryptoWalletSection() {
           A VIRTUAL <span className="text-[#333333]">CRYPTO DEBIT CARD</span>{" "}
         </>
       ),
-      component: (
-        <DebitCardView
-          setActiveView={setActiveView}
-          scrollYProgress={scrollYProgress}
-        />
-      ),
+      component: <DebitCardView setActiveView={setActiveView} scrollYProgress={scrollYProgress} />,
     },
     {
       id: "bank-account",
@@ -52,74 +42,63 @@ export default function CryptoWalletSection() {
       id: "crypto-wallet",
       title: (
         <>
-          A SECURE <span className="text-[#333333]">SELF CUSTODY CRYPTO</span>{" "}
-          WALLET
+          A SECURE <span className="text-[#333333]">SELF CUSTODY CRYPTO</span> WALLET
         </>
       ),
       component: <CryptoWalletView />,
     },
-  ];
+  ]
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768); // Tailwind's 'md' breakpoint
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+      setIsMobile(window.innerWidth < 768) // Tailwind's 'md' breakpoint
+    }
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
-  // Auto-change views based on scroll progress
+  // Fixed: More evenly distributed scroll-based view changes
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
-      if (latest >= 0.5 && latest < 0.7) {
-        setActiveView("debit-card");
-      } else if (latest >= 0.7 && latest < 0.85) {
-        setActiveView("bank-account");
-      } else if (latest >= 0.85) {
-        setActiveView("crypto-wallet");
+      // More evenly distributed ranges with smoother transitions
+      if (latest >= 0.4 && latest < 0.6) {
+        setActiveView("debit-card")
+      } else if (latest >= 0.6 && latest < 0.8) {
+        setActiveView("bank-account")
+      } else if (latest >= 0.8) {
+        setActiveView("crypto-wallet")
       }
-    });
-    return () => unsubscribe();
-  }, [scrollYProgress]);
+      // Keep debit-card as default for early scroll (0-0.4)
+      else if (latest < 0.4) {
+        setActiveView("debit-card")
+      }
+    })
+    return () => unsubscribe()
+  }, [scrollYProgress])
 
-  const headingOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.1, 0.15],
-    [1, 1, 0]
-  );
+  const headingOpacity = useTransform(scrollYProgress, [0, 0.1, 0.15], [1, 1, 0])
 
-  const headingY = useTransform(scrollYProgress, [0, 0.15], ["0%", "-100%"]);
+  const headingY = useTransform(scrollYProgress, [0, 0.15], ["0%", "-100%"])
 
-  const cardScale = useTransform(scrollYProgress, [0.1, 0.4], [1, 0.46]);
-  const cardRotate = useTransform(scrollYProgress, [0.1, 0.4], [0, -90]);
-  const cardX = useTransform(
-    scrollYProgress,
-    [0.1, 0.4],
-    [isMobile ? "-50%" : "0%", isMobile ? "-30%" : "-35%"]
-  );
-  const cardY = useTransform(
-    scrollYProgress,
-    [0.1, 0.4],
-    ["0%", isMobile ? "-40%" : "-75%"]
-  );
+  const cardScale = useTransform(scrollYProgress, [0.1, 0.4], [1, 0.46])
+  const cardRotate = useTransform(scrollYProgress, [0.1, 0.4], [0, -90])
+  const cardX = useTransform(scrollYProgress, [0.1, 0.4], [isMobile ? "-50%" : "0%", isMobile ? "-30%" : "-35%"])
+  const cardY = useTransform(scrollYProgress, [0.1, 0.4], ["0%", isMobile ? "-40%" : "-75%"])
 
-  const flyingCardOpacity = useTransform(scrollYProgress, [0.39, 0.4], [1, 0]);
+  const flyingCardOpacity = useTransform(scrollYProgress, [0.39, 0.4], [1, 0])
 
-  const mockupOpacity = useTransform(scrollYProgress, [0.15, 0.3], [0, 1]);
-  const mockupScale = useTransform(scrollYProgress, [0.15, 0.3], [0.8, 1]);
+  const mockupOpacity = useTransform(scrollYProgress, [0.15, 0.3], [0, 1])
+  const mockupScale = useTransform(scrollYProgress, [0.15, 0.3], [0.8, 1])
 
-  const contentOpacity = useTransform(scrollYProgress, [0.4, 0.5], [0, 1]);
-  const contentY = useTransform(scrollYProgress, [0.4, 0.5], ["20px", "0px"]);
+  const contentOpacity = useTransform(scrollYProgress, [0.4, 0.5], [0, 1])
+  const contentY = useTransform(scrollYProgress, [0.4, 0.5], ["20px", "0px"])
 
-  const currentView = featureData.find((f) => f.id === activeView);
+  const currentView = featureData.find((f) => f.id === activeView)
 
   return (
     <section id="crypto-card" className="relative mt-0 md:mt-0 bg-[#F9F9F9]">
-      <div
-        ref={sectionRef}
-        className="relative mx-auto min-h-[300vh] max-w-7xl"
-      >
+      <div ref={sectionRef} className="relative mx-auto min-h-[500vh] max-w-7xl">
         <div className="sticky -top-36 lg:top-0 flex h-[130vh] md:h-[110vh] w-full flex-col items-center justify-start md:justify-center overflow-hidden">
           <motion.div
             style={{ opacity: headingOpacity, y: headingY }}
@@ -132,8 +111,7 @@ export default function CryptoWalletSection() {
               viewport={{ once: false, amount: 0.5 }}
               className="text-4xl font-[400] text-[#C0C0C0] md:text-7xl xl:text-[120px] leading-tight md:leading-normal"
             >
-              The only <span className="font-normal text-black">card</span>{" "}
-              you'll
+              The only <span className="font-normal text-black">card</span> you'll
             </motion.h2>
             <motion.h2
               initial={{ opacity: 0, y: 100 }}
@@ -163,8 +141,8 @@ export default function CryptoWalletSection() {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -300 }}
                       transition={{
-                        duration: 0.5,
-                        ease: [0.4, 0, 0.2, 1],
+                        duration: 0.6,
+                        ease: [0.25, 0.1, 0.25, 1],
                       }}
                       className="absolute h-full w-full"
                     >
@@ -185,14 +163,8 @@ export default function CryptoWalletSection() {
                     active={activeView === "debit-card"}
                     onClick={() => setActiveView("debit-card")}
                   />
-                  <BottomNavItem
-                    icon={<ScanLine strokeWidth={1} size={20} />}
-                    label="Scan & Pay"
-                  />
-                  <BottomNavItem
-                    icon={<Globe strokeWidth={1} size={20} />}
-                    label="Explore"
-                  />
+                  <BottomNavItem icon={<ScanLine strokeWidth={1} size={20} />} label="Scan & Pay" />
+                  <BottomNavItem icon={<Globe strokeWidth={1} size={20} />} label="Explore" />
                   <BottomNavItem
                     icon={<Plus strokeWidth={1} size={20} />}
                     label="SWISS"
@@ -240,9 +212,7 @@ export default function CryptoWalletSection() {
               </AnimatePresence>
             </div>
 
-            <p className="md:hidden text-sm font-medium text-gray-500 mt-4 mb-2">
-              ALL IN ONE MOBILE APP
-            </p>
+            <p className="md:hidden text-sm font-medium text-gray-500 mt-4 mb-2">ALL IN ONE MOBILE APP</p>
 
             <motion.div
               style={{ opacity: contentOpacity, y: contentY }}
@@ -266,11 +236,11 @@ export default function CryptoWalletSection() {
                           scale: activeView === feature.id ? 1.5 : 0.5,
                           x: activeView === feature.id ? 5 : 0,
                         }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
                       />
                     </div>
                     <span
-                      className={`text-base md:text-lg font-semibold max-w-[500px] lg:text-[32px] transition-colors ${
+                      className={`text-base md:text-lg font-semibold max-w-[500px] lg:text-[32px] transition-all duration-500 ${
                         activeView === feature.id ? "opacity-100" : "opacity-40"
                       }`}
                     >
@@ -294,7 +264,7 @@ export default function CryptoWalletSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 const BottomNavItem = ({ icon, label, active = false, onClick }) => (
@@ -307,4 +277,4 @@ const BottomNavItem = ({ icon, label, active = false, onClick }) => (
     {icon}
     <span>{label}</span>
   </button>
-);
+)

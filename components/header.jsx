@@ -1,6 +1,7 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
-import { CreditCard, Smartphone } from "lucide-react";
+import { Smartphone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -11,6 +12,9 @@ import WaitlistTriggerButton from "./waitlist-trigger-button";
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+
+  // Check if current page is contact us
+  const isContactPage = pathname === "/contact" || pathname === "/contact-us";
 
   // Helper function to determine if a link is active
   const isActivePage = (path) => {
@@ -28,8 +32,13 @@ export default function Header() {
     } transition-colors duration-200`;
   };
 
+  // Conditional header classes
+  const headerClasses = isContactPage
+    ? "w-full absolute top-0 left-0 right-0 bg-transparent z-50"
+    : "w-full relative bg-[#F9F9F9] z-50";
+
   return (
-    <header className="w-full relative bg-[#F9F9F9] z-50">
+    <header className={headerClasses}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
@@ -45,6 +54,7 @@ export default function Header() {
               />
             </div>
           </Link>
+
           {/* Navigation - Hidden on mobile */}
           <nav className="hidden md:flex items-center space-x-8 lg:space-x-14">
             <Link
@@ -65,25 +75,13 @@ export default function Header() {
             >
               BUSINESS
             </Link>
-            {/* <Link
-              href="/#crypto-card"
-              className={getLinkClasses(
-                "/crypto",
-                "flex items-center space-x-2 cursor-pointer"
-              )}
-            >
-              <CreditCard className="w-4 h-4 lg:w-5 lg:h-5" />
-              <span className="text-sm lg:text-[14px] font-[700]">
-                CRYPTO CARD
-              </span>
-            </Link> */}
           </nav>
 
           {/* Download Button - Hidden on small screens */}
           <WaitlistTriggerButton>
             <Button
               variant="outline"
-              className="hidden lg:flex  cursor-pointer  lg:w-[199px]  lg:h-[56px] items-center  border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
+              className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
             >
               <div className="flex gap-2">
                 <Smartphone className="w-4 h-4 lg:w-5 lg:h-9" />
@@ -101,32 +99,38 @@ export default function Header() {
             aria-label="Toggle mobile menu"
           >
             <div className="w-6 h-6 relative flex flex-col justify-center items-center">
-              {/* Top bar */}
+              {/* Top bar - longer line */}
               <motion.span
-                className="absolute w-6 h-0.5 bg-black rounded-full"
+                className="absolute h-0.5 bg-black rounded-full"
+                initial={{ width: 24 }}
                 animate={{
                   rotate: isMobileMenuOpen ? 45 : 0,
                   y: isMobileMenuOpen ? 0 : -6,
+                  width: isMobileMenuOpen ? 24 : 24,
                 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               />
 
-              {/* Middle bar */}
+              {/* Middle bar - shorter line, positioned to the right */}
               <motion.span
-                className="absolute w-6 h-0.5 bg-black rounded-full"
+                className="absolute h-0.5 bg-black rounded-full"
+                initial={{ width: 16, x: 4 }}
                 animate={{
                   opacity: isMobileMenuOpen ? 0 : 1,
-                  x: isMobileMenuOpen ? -10 : 0,
+                  x: isMobileMenuOpen ? -10 : 4,
+                  width: isMobileMenuOpen ? 16 : 16,
                 }}
                 transition={{ duration: 0.2, ease: "easeInOut" }}
               />
 
-              {/* Bottom bar */}
+              {/* Bottom bar - longer line */}
               <motion.span
-                className="absolute w-6 h-0.5 bg-black rounded-full"
+                className="absolute h-0.5 bg-black rounded-full"
+                initial={{ width: 24 }}
                 animate={{
                   rotate: isMobileMenuOpen ? -45 : 0,
                   y: isMobileMenuOpen ? 0 : 6,
+                  width: isMobileMenuOpen ? 24 : 24,
                 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               />
@@ -141,10 +145,28 @@ export default function Header() {
             height: isMobileMenuOpen ? "auto" : 0,
             opacity: isMobileMenuOpen ? 1 : 0,
           }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          transition={{
+            duration: 0.4,
+            ease: "easeInOut",
+            opacity: {
+              duration: isMobileMenuOpen ? 0.3 : 0.2,
+              delay: isMobileMenuOpen ? 0.1 : 0,
+            },
+          }}
           className="md:hidden overflow-hidden absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40"
         >
-          <nav className="flex flex-col p-4 space-y-4">
+          <motion.nav
+            className="flex flex-col p-4 space-y-4"
+            initial={false}
+            animate={{
+              y: isMobileMenuOpen ? 0 : -10,
+            }}
+            transition={{
+              duration: 0.3,
+              ease: "easeInOut",
+              delay: isMobileMenuOpen ? 0.1 : 0,
+            }}
+          >
             <Link
               href="/"
               className={getLinkClasses("/", "text-sm font-[700] py-2")}
@@ -159,22 +181,13 @@ export default function Header() {
             >
               BUSINESS
             </Link>
-            {/* <Link
-              href="/#crypto-card"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={getLinkClasses(
-                "/crypto",
-                "flex items-center space-x-2 cursor-pointer py-2"
-              )}
-            >
-              <CreditCard className="w-4 h-4" />
-              <span className="text-sm font-[700]">CRYPTO CARD</span>
-            </Link> */}
+
             {/* Mobile Download Button */}
             <WaitlistTriggerButton>
               <Button
                 variant="outline"
-                className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2  border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
+                className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2 border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
+                onClick={() => setIsMobileMenuOpen(false)}
               >
                 <Smartphone className="w-4 h-4" />
                 <span className="font-semibold text-xs">
@@ -182,7 +195,7 @@ export default function Header() {
                 </span>
               </Button>
             </WaitlistTriggerButton>
-          </nav>
+          </motion.nav>
         </motion.div>
       </div>
     </header>

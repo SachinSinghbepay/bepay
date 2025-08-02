@@ -196,7 +196,7 @@ const Footer = () => {
                   </div>
                   <div>
                     <h3 className="text-md font-semibold text-white ">
-                      Thanks for subscribing to our newsletter!
+                     Thankyou for subscribing to our newsletter
                     </h3>
                   
                   </div>

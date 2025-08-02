@@ -43,7 +43,7 @@ function PortalContent({
   const modalStyle = {
     position: 'relative',
     width: '100%',
-    maxWidth: '48rem',
+    maxWidth: '30rem',
     backgroundColor: '#f9f9f9',
     border: '1px solid rgba(0, 0, 0, 0.2)',
     borderRadius: '1.5rem',
@@ -247,7 +247,7 @@ function PortalContent({
 
                     <Button
                       type="submit"
-                      className="w-full lg:w-auto h-12 bg-black rounded-full cursor-pointer hover:bg-black/90 text-white font-semibold transition-all duration-200 transform hover:scale-[1.02]"
+                      className="w-full  h-12 bg-black rounded-full cursor-pointer hover:bg-black/90 text-white font-semibold transition-all duration-200 transform hover:scale-[1.02]"
                     >
                       {isSubmitting ? (
                         <motion.div
