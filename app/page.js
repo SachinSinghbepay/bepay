@@ -66,7 +66,6 @@ import DefiYieldSection from "@/components/crypto/DefiYieldSection ";
 import InvestmentSuitePage from "@/components/crypto/InvestmentSuitePage";
 import WaitlistPopup from "@/components/waitlist-popup";
 import ScrollTextMobile from "@/components/crypto/ScrollTextMobile";
-import ScrollArrow from "@/components/ui/ScrollArrow";
 
 const page = () => {
   return (
@@ -95,7 +94,6 @@ const page = () => {
         {/* <Footer /> */}
       </main>
 
-      <ScrollArrow />
     </>
   );
 };

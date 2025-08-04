@@ -4,6 +4,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/smoothScroll";
 import Header from "@/components/header";
 import Footer from "@/components/Footer1";
+import ScrollArrow from "@/components/ui/ScrollArrow";
 
 // Load Open Sans as the main font
 const openSans = Open_Sans({
@@ -54,6 +55,7 @@ export default function RootLayout({ children }) {
           <Header />
           {children}
           <Footer />
+          <ScrollArrow />
         </SmoothScroll>
       </body>
     </html>
