@@ -52,11 +52,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${montserrat.variable} antialiased`}>
-        <SmoothScroll>
+        {/* <SmoothScroll> */}
           <Header />
           <AuthProvider>{children}</AuthProvider>
           <Footer />
-        </SmoothScroll>
+        {/* </SmoothScroll> */}
       </body>
     </html>
   );
