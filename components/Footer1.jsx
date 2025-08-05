@@ -290,10 +290,10 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="space-y-3 lg:space-y-6">
               <a
-                href="/privacy-policy"
+                href="/delete-account"
                 className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
-                PRIVACY POLICY
+                ACCOUNT DELETION FORM
               </a>
               <a
                 href="/privacy-policy-for-deleting-user-account"
@@ -312,6 +312,12 @@ const Footer = () => {
           <div className="space-y-4">
             
             <div className="space-y-3 lg:space-y-6">
+               <a
+                href="/privacy-policy"
+                className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
+              >
+                PRIVACY POLICY
+              </a>
               <a
                 href="/terms-and-conditions"
                 className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
