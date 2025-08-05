@@ -111,7 +111,7 @@ export default function CryptoHeroSection() {
           <div className="text-center">
             <div>
               <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[60px]  font-[600] leading-[100%]">
-                EARN
+                USE
               </div>
               <div className="text-[#6F6F6F] text-6xl lg:-mt-6 9 lg:tracking-tighter sm:text-8xl lg:text-[120px] font-semibold leading-none">
                 CRYPTO
