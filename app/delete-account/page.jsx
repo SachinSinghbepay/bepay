@@ -124,10 +124,10 @@ export default function DeleteAccountPage() {
           <div className="flex items-center justify-between p-8 md:p-12">
             {/* Left side - Content */}
             <div className="flex-1 pr-8">
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              <h1 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4">
                 Delete Account
               </h1>
-              <p className="text-lg text-gray-700 leading-relaxed max-w-lg">
+              <p className="text-sm md:text-lg text-gray-700 leading-relaxed max-w-lg">
                 Fill in the form below to remove your bepay.money or bepay.business account.
               </p>
             </div>
