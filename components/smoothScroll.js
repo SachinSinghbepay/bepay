@@ -257,7 +257,7 @@ const SmoothScroll = ({ children }) => {
   const pageScrollUp = useCallback(() => {
     if (!lenisRef.current || lenisRef.current.isDestroyed) return;
 
-    const scrollAmount = window.innerHeight * 0.25; // 80vh for page up/down
+    const scrollAmount = window.innerHeight * 0.50; // 80vh for page up/down
     const targetScroll = Math.max(0, lenisRef.current.scroll - scrollAmount);
 
     lenisRef.current.scrollTo(targetScroll, {
@@ -269,7 +269,7 @@ const SmoothScroll = ({ children }) => {
   const pageScrollDown = useCallback(() => {
     if (!lenisRef.current || lenisRef.current.isDestroyed) return;
 
-    const scrollAmount = window.innerHeight * 0.25; // 80vh for page up/down
+    const scrollAmount = window.innerHeight * 0.50; // 80vh for page up/down
     const maxScroll =
       document.documentElement.scrollHeight - window.innerHeight;
     const targetScroll = Math.min(
