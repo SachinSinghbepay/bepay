@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/smoothScroll";
 import Header from "@/components/header";
 import Footer from "@/components/Footer1";
 import ScrollArrow from "@/components/ui/ScrollArrow";
+import { AuthProvider } from "@/lib/auth";
 
 // Load Open Sans as the main font
 const openSans = Open_Sans({
@@ -53,7 +54,7 @@ export default function RootLayout({ children }) {
       <body className={`${montserrat.variable} antialiased`}>
         <SmoothScroll>
           <Header />
-          {children}
+          <AuthProvider>{children}</AuthProvider>
           <Footer />
         </SmoothScroll>
       </body>
