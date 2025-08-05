@@ -1,59 +1,64 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useCallback, useState } from "react"
-import Lenis from "@studio-freight/lenis"
-import { ArrowUp, ArrowDown } from "lucide-react"
+import { useEffect, useRef, useCallback, useState } from "react";
+import Lenis from "@studio-freight/lenis";
+import { ArrowUp, ArrowDown } from "lucide-react";
 
 const SmoothScroll = ({ children }) => {
-  const lenisRef = useRef(null)
-  const rafRef = useRef(null)
-  const isInitialized = useRef(false)
-  const wheelTimeout = useRef(null)
-  const lastWheelTime = useRef(0)
-  const wheelDeltaHistory = useRef([])
+  const lenisRef = useRef(null);
+  const rafRef = useRef(null);
+  const isInitialized = useRef(false);
+  const wheelTimeout = useRef(null);
+  const lastWheelTime = useRef(0);
+  const wheelDeltaHistory = useRef([]);
 
-  // Better trackpad detection
+  // Improved trackpad detection
   const detectInputType = useCallback((e) => {
-    const now = Date.now()
-    const timeDelta = now - lastWheelTime.current
-    lastWheelTime.current = now
+    const now = Date.now();
+    const timeDelta = now - lastWheelTime.current;
+    lastWheelTime.current = now;
 
     // Store recent wheel deltas for analysis
     wheelDeltaHistory.current.push({
       delta: Math.abs(e.deltaY),
       time: now,
-      deltaMode: e.deltaMode
-    })
+      deltaMode: e.deltaMode,
+    });
 
-    // Keep only recent history
+    // Keep only recent history (reduced window)
     wheelDeltaHistory.current = wheelDeltaHistory.current.filter(
-      entry => now - entry.time < 200
-    )
+      (entry) => now - entry.time < 100
+    );
 
-    // Trackpad characteristics:
-    // - Smaller delta values
-    // - Higher frequency
-    // - deltaMode is usually 0
-    const avgDelta = wheelDeltaHistory.current.reduce((sum, entry) => sum + entry.delta, 0) / wheelDeltaHistory.current.length
-    const isHighFrequency = wheelDeltaHistory.current.length > 3 && timeDelta < 16
-    const hasSmallDeltas = avgDelta < 50
-    const isDeltaModePixel = e.deltaMode === 0
+    // More reliable trackpad detection
+    const avgDelta =
+      wheelDeltaHistory.current.length > 0
+        ? wheelDeltaHistory.current.reduce(
+            (sum, entry) => sum + entry.delta,
+            0
+          ) / wheelDeltaHistory.current.length
+        : Math.abs(e.deltaY);
+
+    const isHighFrequency =
+      wheelDeltaHistory.current.length > 2 && timeDelta < 20;
+    const hasSmallDeltas = avgDelta < 30;
+    const isDeltaModePixel = e.deltaMode === 0;
 
     return {
-      isTrackpad: hasSmallDeltas && isDeltaModePixel && (isHighFrequency || timeDelta < 50),
-      isMouse: !hasSmallDeltas || e.deltaMode === 1 || timeDelta > 100
-    }
-  }, [])
+      isTrackpad: hasSmallDeltas && isDeltaModePixel && isHighFrequency,
+      isMouse: !hasSmallDeltas || e.deltaMode === 1 || timeDelta > 80,
+    };
+  }, []);
 
   useEffect(() => {
-    if (isInitialized.current) return
+    if (isInitialized.current) return;
 
-    // Create Lenis instance with stable settings
+    // Create Lenis instance with more stable settings
     lenisRef.current = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smooth: true,
-      smoothTouch: false, // Disable to prevent conflicts
+      smoothTouch: false,
       touchMultiplier: 1,
       infinite: false,
       gestureOrientation: "vertical",
@@ -62,14 +67,14 @@ const SmoothScroll = ({ children }) => {
       autoResize: true,
       wrapper: window,
       content: document.documentElement,
-      lerp: 0.1,
+      lerp: 0.08, // Slightly reduced for better stability
       orientation: "vertical",
       smoothWheel: true,
 
-      // Improved prevent function
+      // Simplified prevent function
       prevent: (node) => {
-        if (!node) return false
-        
+        if (!node) return false;
+
         return (
           node.hasAttribute("data-lenis-prevent") ||
           node.classList.contains("no-smooth-scroll") ||
@@ -77,254 +82,337 @@ const SmoothScroll = ({ children }) => {
           node.tagName === "TEXTAREA" ||
           node.tagName === "SELECT" ||
           node.contentEditable === "true" ||
-          node.closest("input, textarea, select, [contenteditable]") ||
-          node.closest('[data-lenis-prevent]')
-        )
+          !!node.closest(
+            "input, textarea, select, [contenteditable], [data-lenis-prevent]"
+          )
+        );
       },
-    })
+    });
 
-    // Handle wheel events with proper debouncing
+    // Simplified wheel event handling
     const handleWheel = (e) => {
-      if (!lenisRef.current || lenisRef.current.isDestroyed) return
+      if (!lenisRef.current || lenisRef.current.isDestroyed) return;
 
       // Clear existing timeout
       if (wheelTimeout.current) {
-        clearTimeout(wheelTimeout.current)
+        clearTimeout(wheelTimeout.current);
       }
 
-      const inputType = detectInputType(e)
-      
-      // Apply different settings based on input type
+      const inputType = detectInputType(e);
+
+      // More conservative settings adjustment
       if (inputType.isTrackpad) {
-        lenisRef.current.options.lerp = 0.15
-        lenisRef.current.options.duration = 0.8
-        lenisRef.current.options.wheelMultiplier = 0.8
+        lenisRef.current.options.lerp = 0.12;
+        lenisRef.current.options.wheelMultiplier = 0.9;
       } else {
-        lenisRef.current.options.lerp = 0.1
-        lenisRef.current.options.duration = 1.2
-        lenisRef.current.options.wheelMultiplier = 1
+        lenisRef.current.options.lerp = 0.08;
+        lenisRef.current.options.wheelMultiplier = 1;
       }
 
-      // Reset to default after inactivity
+      // Reset to default after longer inactivity
       wheelTimeout.current = setTimeout(() => {
         if (lenisRef.current && !lenisRef.current.isDestroyed) {
-          lenisRef.current.options.lerp = 0.1
-          lenisRef.current.options.duration = 1.2
-          lenisRef.current.options.wheelMultiplier = 1
+          lenisRef.current.options.lerp = 0.08;
+          lenisRef.current.options.wheelMultiplier = 1;
         }
-      }, 150)
-    }
+      }, 200);
+    };
 
-    // Add wheel event listener
-    document.addEventListener('wheel', handleWheel, { passive: true })
+    // Add wheel event listener with passive false for better control
+    document.addEventListener("wheel", handleWheel, { passive: false });
 
-    // Optimized RAF loop with better error handling
+    // RAF loop with better error handling
     const raf = (time) => {
       try {
         if (lenisRef.current && !lenisRef.current.isDestroyed) {
-          lenisRef.current.raf(time)
+          lenisRef.current.raf(time);
         }
+        rafRef.current = requestAnimationFrame(raf);
       } catch (error) {
-        console.warn('Lenis RAF error:', error)
+        console.warn("Lenis RAF error:", error);
+        // Restart RAF on error
+        rafRef.current = requestAnimationFrame(raf);
       }
-      
-      rafRef.current = requestAnimationFrame(raf)
-    }
+    };
 
-    rafRef.current = requestAnimationFrame(raf)
+    rafRef.current = requestAnimationFrame(raf);
 
     // Device optimization
     const optimizeForDevice = () => {
-      if (!lenisRef.current) return
-      
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-      const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4
-      const hasReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      
-      if (isMobile || isLowEnd || hasReducedMotion) {
-        lenisRef.current.options.lerp = 0.2
-        lenisRef.current.options.duration = 0.6
-      }
-    }
+      if (!lenisRef.current) return;
 
-    optimizeForDevice()
-    isInitialized.current = true
+      const isMobile =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+      const isLowEnd =
+        navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+      const hasReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      if (isMobile || isLowEnd || hasReducedMotion) {
+        lenisRef.current.options.lerp = 0.15;
+        lenisRef.current.options.duration = 0.8;
+      }
+    };
+
+    optimizeForDevice();
+    isInitialized.current = true;
 
     // Cleanup function
     return () => {
-      document.removeEventListener('wheel', handleWheel)
-      
+      document.removeEventListener("wheel", handleWheel);
+
       if (wheelTimeout.current) {
-        clearTimeout(wheelTimeout.current)
+        clearTimeout(wheelTimeout.current);
       }
-      
+
       if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current)
+        cancelAnimationFrame(rafRef.current);
       }
-      
+
       if (lenisRef.current && !lenisRef.current.isDestroyed) {
-        lenisRef.current.destroy()
+        lenisRef.current.destroy();
       }
-      
-      isInitialized.current = false
-    }
-  }, [detectInputType])
+
+      isInitialized.current = false;
+    };
+  }, [detectInputType]);
 
   // Expose Lenis instance
   useEffect(() => {
     if (typeof window !== "undefined" && lenisRef.current) {
-      window.lenis = lenisRef.current
+      window.lenis = lenisRef.current;
     }
 
     return () => {
       if (typeof window !== "undefined") {
-        delete window.lenis
+        delete window.lenis;
       }
-    }
-  }, [])
+    };
+  }, []);
 
-  // Scroll functions with safety checks
+  // Updated scroll functions for buttons (now 25vh)
   const scrollUp = useCallback(() => {
-    if (!lenisRef.current || lenisRef.current.isDestroyed) return
-    
-    const scrollAmount = window.innerHeight * 0.8
-    const targetScroll = Math.max(0, lenisRef.current.scroll - scrollAmount)
-    
+    if (!lenisRef.current || lenisRef.current.isDestroyed) return;
+
+    const scrollAmount = window.innerHeight * 0.25; // Changed to 25vh
+    const targetScroll = Math.max(0, lenisRef.current.scroll - scrollAmount);
+
     lenisRef.current.scrollTo(targetScroll, {
-      duration: 1.2,
+      duration: 0.8, // Shorter duration for smaller scroll
       easing: (t) => 1 - Math.pow(1 - t, 3),
-    })
-  }, [])
+    });
+  }, []);
 
   const scrollDown = useCallback(() => {
-    if (!lenisRef.current || lenisRef.current.isDestroyed) return
-    
-    const scrollAmount = window.innerHeight * 0.8
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-    const targetScroll = Math.min(maxScroll, lenisRef.current.scroll + scrollAmount)
-    
+    if (!lenisRef.current || lenisRef.current.isDestroyed) return;
+
+    const scrollAmount = window.innerHeight * 0.25; // Changed to 25vh
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const targetScroll = Math.min(
+      maxScroll,
+      lenisRef.current.scroll + scrollAmount
+    );
+
+    lenisRef.current.scrollTo(targetScroll, {
+      duration: 0.8, // Shorter duration for smaller scroll
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+    });
+  }, []);
+
+  // Keyboard scroll functions (same 25vh for consistency)
+  const keyboardScrollUp = useCallback(() => {
+    if (!lenisRef.current || lenisRef.current.isDestroyed) return;
+
+    const scrollAmount = window.innerHeight * 0.25; // 25vh
+    const targetScroll = Math.max(0, lenisRef.current.scroll - scrollAmount);
+
+    lenisRef.current.scrollTo(targetScroll, {
+      duration: 0.8,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+    });
+  }, []);
+
+  const keyboardScrollDown = useCallback(() => {
+    if (!lenisRef.current || lenisRef.current.isDestroyed) return;
+
+    const scrollAmount = window.innerHeight * 0.25; // 25vh
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const targetScroll = Math.min(
+      maxScroll,
+      lenisRef.current.scroll + scrollAmount
+    );
+
+    lenisRef.current.scrollTo(targetScroll, {
+      duration: 0.8,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+    });
+  }, []);
+
+  // Page Up/Down with larger scroll amounts
+  const pageScrollUp = useCallback(() => {
+    if (!lenisRef.current || lenisRef.current.isDestroyed) return;
+
+    const scrollAmount = window.innerHeight * 0.25; // 80vh for page up/down
+    const targetScroll = Math.max(0, lenisRef.current.scroll - scrollAmount);
+
     lenisRef.current.scrollTo(targetScroll, {
       duration: 1.2,
       easing: (t) => 1 - Math.pow(1 - t, 3),
-    })
-  }, [])
+    });
+  }, []);
+
+  const pageScrollDown = useCallback(() => {
+    if (!lenisRef.current || lenisRef.current.isDestroyed) return;
+
+    const scrollAmount = window.innerHeight * 0.25; // 80vh for page up/down
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const targetScroll = Math.min(
+      maxScroll,
+      lenisRef.current.scroll + scrollAmount
+    );
+
+    lenisRef.current.scrollTo(targetScroll, {
+      duration: 1.2,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+    });
+  }, []);
 
   // Enhanced keyboard navigation
   useEffect(() => {
-    let keyTimeout = null
-    const keyPressedKeys = new Set()
+    let keyTimeout = null;
+    const keyPressedKeys = new Set();
 
     const handleKeyDown = (event) => {
       // Prevent handling if user is in an input
-      const activeElement = document.activeElement
+      const activeElement = document.activeElement;
       const isInputActive =
         activeElement?.tagName === "INPUT" ||
         activeElement?.tagName === "TEXTAREA" ||
         activeElement?.tagName === "SELECT" ||
         activeElement?.contentEditable === "true" ||
-        activeElement?.closest("input, textarea, select, [contenteditable]")
+        activeElement?.closest("input, textarea, select, [contenteditable]");
 
-      if (isInputActive || !lenisRef.current) return
+      if (isInputActive || !lenisRef.current) return;
 
       // Prevent rapid firing
-      if (keyPressedKeys.has(event.key)) return
-      keyPressedKeys.add(event.key)
+      if (keyPressedKeys.has(event.key)) return;
+      keyPressedKeys.add(event.key);
 
-      if (keyTimeout) clearTimeout(keyTimeout)
+      if (keyTimeout) clearTimeout(keyTimeout);
 
       const executeScroll = () => {
-        if (!lenisRef.current || lenisRef.current.isDestroyed) return
+        if (!lenisRef.current || lenisRef.current.isDestroyed) return;
 
         switch (event.key) {
           case "ArrowUp":
-          case "PageUp":
-            event.preventDefault()
-            scrollUp()
-            break
+            event.preventDefault();
+            keyboardScrollUp(); // 25vh
+            break;
           case "ArrowDown":
+            event.preventDefault();
+            keyboardScrollDown(); // 25vh
+            break;
+          case "PageUp":
+            event.preventDefault();
+            pageScrollUp(); // 80vh
+            break;
           case "PageDown":
-            event.preventDefault()
-            scrollDown()
-            break
+            event.preventDefault();
+            pageScrollDown(); // 80vh
+            break;
           case "Home":
-            event.preventDefault()
-            lenisRef.current.scrollTo(0, { duration: 1.5 })
-            break
+            event.preventDefault();
+            lenisRef.current.scrollTo(0, { duration: 1.5 });
+            break;
           case "End":
-            event.preventDefault()
-            lenisRef.current.scrollTo(document.documentElement.scrollHeight, { duration: 1.5 })
-            break
+            event.preventDefault();
+            lenisRef.current.scrollTo(document.documentElement.scrollHeight, {
+              duration: 1.5,
+            });
+            break;
         }
-      }
+      };
 
-      keyTimeout = setTimeout(executeScroll, 16)
-    }
+      keyTimeout = setTimeout(executeScroll, 16);
+    };
 
     const handleKeyUp = (event) => {
-      keyPressedKeys.delete(event.key)
-    }
+      keyPressedKeys.delete(event.key);
+    };
 
-    document.addEventListener("keydown", handleKeyDown)
-    document.addEventListener("keyup", handleKeyUp)
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown)
-      document.removeEventListener("keyup", handleKeyUp)
-      if (keyTimeout) clearTimeout(keyTimeout)
-    }
-  }, [scrollUp, scrollDown])
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+      if (keyTimeout) clearTimeout(keyTimeout);
+    };
+  }, [keyboardScrollUp, keyboardScrollDown, pageScrollUp, pageScrollDown]);
 
   // Scroll progress with throttling
-  const [scrollProgress, setScrollProgress] = useState(0)
-  
+  const [scrollProgress, setScrollProgress] = useState(0);
+
   useEffect(() => {
-    let ticking = false
+    let ticking = false;
 
     const updateScrollProgress = () => {
       if (!ticking && lenisRef.current) {
         requestAnimationFrame(() => {
-          const progress = lenisRef.current.progress || 0
-          setScrollProgress(progress)
-          ticking = false
-        })
-        ticking = true
+          const progress = lenisRef.current.progress || 0;
+          setScrollProgress(progress);
+          ticking = false;
+        });
+        ticking = true;
       }
-    }
+    };
 
     if (lenisRef.current) {
-      lenisRef.current.on('scroll', updateScrollProgress)
+      lenisRef.current.on("scroll", updateScrollProgress);
     }
 
     return () => {
       if (lenisRef.current) {
-        lenisRef.current.off('scroll', updateScrollProgress)
+        lenisRef.current.off("scroll", updateScrollProgress);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   // Handle visibility change to prevent issues when tab is hidden
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden && rafRef.current) {
-        cancelAnimationFrame(rafRef.current)
-      } else if (!document.hidden && lenisRef.current && !lenisRef.current.isDestroyed) {
+        cancelAnimationFrame(rafRef.current);
+      } else if (
+        !document.hidden &&
+        lenisRef.current &&
+        !lenisRef.current.isDestroyed
+      ) {
         const raf = (time) => {
           try {
             if (lenisRef.current && !lenisRef.current.isDestroyed) {
-              lenisRef.current.raf(time)
+              lenisRef.current.raf(time);
             }
+            rafRef.current = requestAnimationFrame(raf);
           } catch (error) {
-            console.warn('Lenis RAF error:', error)
+            console.warn("Lenis RAF error:", error);
+            rafRef.current = requestAnimationFrame(raf);
           }
-          rafRef.current = requestAnimationFrame(raf)
-        }
-        rafRef.current = requestAnimationFrame(raf)
+        };
+        rafRef.current = requestAnimationFrame(raf);
       }
-    }
+    };
 
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
-  }, [])
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () =>
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
 
   return (
     <>
@@ -358,10 +446,8 @@ const SmoothScroll = ({ children }) => {
           />
         </button>
       </div>
-
-    
     </>
-  )
-}
+  );
+};
 
-export default SmoothScroll
+export default SmoothScroll;
