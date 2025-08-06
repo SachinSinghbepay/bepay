@@ -1,7 +1,6 @@
 "use client"
 import { useEffect, useRef, useCallback, useState } from "react"
 import Lenis from "@studio-freight/lenis"
-import { ArrowUp, ArrowDown } from 'lucide-react'
 
 const SmoothScroll = ({ children }) => {
   const lenisRef = useRef(null)
@@ -408,38 +407,7 @@ const SmoothScroll = ({ children }) => {
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
   }, [])
 
-  return (
-    <>
-      {children}
-      {/* Fixed Scroll Buttons - Only show on desktop */}
-      <div className="fixed bottom-8 right-8 flex-col gap-3 z-50 lg:flex hidden">
-        <button
-          onClick={scrollUp}
-          className="group relative w-14 h-14 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/20 rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:-translate-y-1 shadow-2xl hover:shadow-black/25"
-          aria-label="Scroll up"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl"></div>
-          <ArrowUp
-            size={20}
-            className="text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300 relative z-10"
-            strokeWidth={2.5}
-          />
-        </button>
-        <button
-          onClick={scrollDown}
-          className="group relative w-14 h-14 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/20 rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:translate-y-1 shadow-2xl hover:shadow-black/25"
-          aria-label="Scroll down"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-2xl"></div>
-          <ArrowDown
-            size={20}
-            className="text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300 relative z-10"
-            strokeWidth={2.5}
-          />
-        </button>
-      </div>
-    </>
-  )
+  return children
 }
 
 export default SmoothScroll
