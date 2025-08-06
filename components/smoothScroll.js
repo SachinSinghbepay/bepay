@@ -1,177 +1,243 @@
 "use client"
 import { useEffect, useRef, useCallback, useState } from "react"
+import Lenis from "@studio-freight/lenis"
 import { ArrowUp, ArrowDown } from "lucide-react"
 
 const SmoothScroll = ({ children }) => {
-  const [scrollProgress, setScrollProgress] = useState(0)
-  const isScrolling = useRef(false)
-  const scrollTimeout = useRef(null)
+  const lenisRef = useRef(null)
+  const rafRef = useRef(null)
+  const isInitialized = useRef(false)
+  const deviceType = useRef("unknown")
 
-  // Apply CSS smooth scrolling globally and handle mouse wheel
+  // Simplified and more reliable device detection
+  const detectDevice = useCallback(() => {
+    const userAgent = navigator.userAgent.toLowerCase()
+    const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent)
+    const isMac = /mac|macintosh/i.test(userAgent)
+    const isWindows = /win/i.test(userAgent)
+    const hasCoarsePointer = window.matchMedia("(pointer: coarse)").matches
+    const hasTouchscreen = "ontouchstart" in window || navigator.maxTouchPoints > 0
+
+    if (isMobile || hasCoarsePointer || hasTouchscreen) {
+      return "mobile"
+    } else if (isMac) {
+      return "mac"
+    } else if (isWindows) {
+      return "windows"
+    }
+    return "desktop"
+  }, [])
+
   useEffect(() => {
-    // Set CSS smooth scrolling
-    document.documentElement.style.scrollBehavior = 'smooth'
-    document.body.style.scrollBehavior = 'smooth'
+    if (isInitialized.current) return
 
-    // Optional: Add custom CSS for enhanced smooth scrolling
-    const style = document.createElement('style')
-    style.textContent = `
-      html {
-        scroll-behavior: smooth;
-        scroll-snap-type: y proximity;
-      }
-      
-      body {
-        scroll-behavior: smooth;
-      }
-      
-      /* Enhanced smooth scrolling for webkit browsers */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      
-      ::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      
-      ::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 4px;
-      }
-      
-      ::-webkit-scrollbar-thumb:hover {
-        background: rgba(0, 0, 0, 0.3);
-      }
-      
-      /* Respect user's motion preferences */
-      @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after {
-          animation-duration: 0.01ms !important;
-          animation-iteration-count: 1 !important;
-          transition-duration: 0.01ms !important;
-          scroll-behavior: auto !important;
-        }
-      }
-    `
-    document.head.appendChild(style)
+    deviceType.current = detectDevice()
 
-    // Enhanced mouse wheel handling for smooth scrolling
-    let isWheelScrolling = false
-    let wheelTimeout = null
-
-    const handleWheel = (e) => {
-      e.preventDefault()
-      
-      if (isWheelScrolling) return
-      
-      const delta = e.deltaY
-      const scrollAmount = Math.abs(delta) > 100 ? window.innerHeight * 0.15 : window.innerHeight * 0.08
-      const direction = delta > 0 ? 1 : -1
-      const currentScroll = window.pageYOffset
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-      
-      let targetScroll
-      if (direction > 0) {
-        targetScroll = Math.min(maxScroll, currentScroll + scrollAmount)
-      } else {
-        targetScroll = Math.max(0, currentScroll - scrollAmount)
+    // Device-specific configurations
+    const getDeviceConfig = () => {
+      const baseConfig = {
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smooth: true,
+        smoothTouch: false, // Default to false, adjusted for mobile
+        touchMultiplier: 1,
+        infinite: false,
+        gestureOrientation: "vertical",
+        normalizeWheel: true,
+        autoResize: true,
+        wrapper: window,
+        content: document.documentElement,
+        orientation: "vertical",
+        smoothWheel: true,
       }
-      
-      isWheelScrolling = true
-      scrollWithEasing(targetScroll, 400)
-      
-      clearTimeout(wheelTimeout)
-      wheelTimeout = setTimeout(() => {
-        isWheelScrolling = false
-      }, 100)
+
+      // Adjust settings based on device type
+      switch (deviceType.current) {
+        case "mobile":
+          return {
+            ...baseConfig,
+            lerp: 0.15,
+            wheelMultiplier: 0.8,
+            duration: 0.8,
+            smoothTouch: true, // Enable smooth touch for mobile
+            touchMultiplier: 1.5,
+          }
+        case "mac":
+          return {
+            ...baseConfig,
+            lerp: 0.1,
+            wheelMultiplier: 0.7,
+            duration: 1.0,
+            smoothTouch: false, // Mac trackpads often behave like precise wheels
+          }
+        case "windows":
+          return {
+            ...baseConfig,
+            lerp: 0.08,
+            wheelMultiplier: 1.2,
+            duration: 1.2,
+            smoothTouch: false, // Windows touchpads often behave like precise wheels
+          }
+        default: // Desktop with regular mouse wheel
+          return {
+            ...baseConfig,
+            lerp: 0.08,
+            wheelMultiplier: 1,
+            smoothTouch: false,
+          }
+      }
     }
 
-    // Add wheel event listener
-    document.addEventListener('wheel', handleWheel, { passive: false })
+    // Create Lenis instance with device-optimized settings
+    const config = getDeviceConfig()
+    lenisRef.current = new Lenis({
+      ...config,
+      prevent: (node) => {
+        if (!node) return false
 
+        return (
+          node.hasAttribute("data-lenis-prevent") ||
+          node.classList.contains("no-smooth-scroll") ||
+          node.tagName === "INPUT" ||
+          node.tagName === "TEXTAREA" ||
+          node.tagName === "SELECT" ||
+          node.contentEditable === "true" ||
+          !!node.closest("input, textarea, select, [contenteditable], [data-lenis-prevent]")
+        )
+      },
+    })
+
+    // Simplified RAF loop without dynamic changes
+    const raf = (time) => {
+      if (lenisRef.current && !lenisRef.current.isDestroyed) {
+        lenisRef.current.raf(time)
+        rafRef.current = requestAnimationFrame(raf)
+      }
+    }
+    rafRef.current = requestAnimationFrame(raf)
+
+    // Handle reduced motion preference
+    const handleReducedMotion = () => {
+      const hasReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      if (hasReducedMotion && lenisRef.current) {
+        // Adjust Lenis options for reduced motion
+        lenisRef.current.options.lerp = 0.25
+        lenisRef.current.options.duration = 0.5
+        // Potentially disable smooth scrolling entirely for reduced motion
+        // lenisRef.current.options.smooth = false;
+        // lenisRef.current.options.smoothTouch = false;
+      } else if (lenisRef.current) {
+        // Revert to original config if reduced motion is off
+        const originalConfig = getDeviceConfig()
+        lenisRef.current.options.lerp = originalConfig.lerp
+        lenisRef.current.options.duration = originalConfig.duration
+        lenisRef.current.options.smooth = originalConfig.smooth
+        lenisRef.current.options.smoothTouch = originalConfig.smoothTouch
+      }
+    }
+    handleReducedMotion()
+
+    // Listen for changes in motion preference
+    const motionMediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    motionMediaQuery.addEventListener("change", handleReducedMotion)
+
+    isInitialized.current = true
+
+    // Cleanup function
     return () => {
-      document.head.removeChild(style)
-      document.documentElement.style.scrollBehavior = 'auto'
-      document.body.style.scrollBehavior = 'auto'
-      document.removeEventListener('wheel', handleWheel)
-      if (wheelTimeout) clearTimeout(wheelTimeout)
+      motionMediaQuery.removeEventListener("change", handleReducedMotion)
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+      }
+      if (lenisRef.current && !lenisRef.current.isDestroyed) {
+        lenisRef.current.destroy()
+      }
+      isInitialized.current = false
+    }
+  }, [detectDevice])
+
+  // Expose Lenis instance globally
+  useEffect(() => {
+    if (typeof window !== "undefined" && lenisRef.current) {
+      window.lenis = lenisRef.current
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        delete window.lenis
+      }
     }
   }, [])
 
-  // Enhanced scroll functions with smooth behavior
-  const scrollWithEasing = useCallback((targetY, duration = 800) => {
-    const startY = window.pageYOffset
-    const difference = targetY - startY
-    const startTime = performance.now()
-
-    const easeInOutCubic = (t) => {
-      return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1
-    }
-
-    const animateScroll = (currentTime) => {
-      const timeElapsed = currentTime - startTime
-      const progress = Math.min(timeElapsed / duration, 1)
-      const easedProgress = easeInOutCubic(progress)
-      
-      window.scrollTo(0, startY + difference * easedProgress)
-      
-      if (progress < 1) {
-        requestAnimationFrame(animateScroll)
-      } else {
-        isScrolling.current = false
-      }
-    }
-
-    isScrolling.current = true
-    requestAnimationFrame(animateScroll)
+  // Scroll functions with device-aware durations
+  const getScrollDuration = useCallback((amount) => {
+    const baseDuration = deviceType.current === "mobile" ? 0.6 : 0.8
+    return amount > 0.4 ? baseDuration * 1.5 : baseDuration
   }, [])
 
   const scrollUp = useCallback(() => {
-    if (isScrolling.current) return
+    if (!lenisRef.current || lenisRef.current.isDestroyed) return
     const scrollAmount = window.innerHeight * 0.25
-    const targetScroll = Math.max(0, window.pageYOffset - scrollAmount)
-    scrollWithEasing(targetScroll, 600)
-  }, [scrollWithEasing])
+    const targetScroll = Math.max(0, lenisRef.current.scroll - scrollAmount)
+    lenisRef.current.scrollTo(targetScroll, {
+      duration: getScrollDuration(0.25),
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+    })
+  }, [getScrollDuration])
 
   const scrollDown = useCallback(() => {
-    if (isScrolling.current) return
+    if (!lenisRef.current || lenisRef.current.isDestroyed) return
     const scrollAmount = window.innerHeight * 0.25
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-    const targetScroll = Math.min(maxScroll, window.pageYOffset + scrollAmount)
-    scrollWithEasing(targetScroll, 600)
-  }, [scrollWithEasing])
+    const targetScroll = Math.min(maxScroll, lenisRef.current.scroll + scrollAmount)
+    lenisRef.current.scrollTo(targetScroll, {
+      duration: getScrollDuration(0.25),
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+    })
+  }, [getScrollDuration])
 
   const keyboardScrollUp = useCallback(() => {
-    if (isScrolling.current) return
+    if (!lenisRef.current || lenisRef.current.isDestroyed) return
     const scrollAmount = window.innerHeight * 0.25
-    const targetScroll = Math.max(0, window.pageYOffset - scrollAmount)
-    scrollWithEasing(targetScroll, 500)
-  }, [scrollWithEasing])
+    const targetScroll = Math.max(0, lenisRef.current.scroll - scrollAmount)
+    lenisRef.current.scrollTo(targetScroll, {
+      duration: getScrollDuration(0.25),
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+    })
+  }, [getScrollDuration])
 
   const keyboardScrollDown = useCallback(() => {
-    if (isScrolling.current) return
+    if (!lenisRef.current || lenisRef.current.isDestroyed) return
     const scrollAmount = window.innerHeight * 0.25
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-    const targetScroll = Math.min(maxScroll, window.pageYOffset + scrollAmount)
-    scrollWithEasing(targetScroll, 500)
-  }, [scrollWithEasing])
+    const targetScroll = Math.min(maxScroll, lenisRef.current.scroll + scrollAmount)
+    lenisRef.current.scrollTo(targetScroll, {
+      duration: getScrollDuration(0.25),
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+    })
+  }, [getScrollDuration])
 
   const pageScrollUp = useCallback(() => {
-    if (isScrolling.current) return
+    if (!lenisRef.current || lenisRef.current.isDestroyed) return
     const scrollAmount = window.innerHeight * 0.8
-    const targetScroll = Math.max(0, window.pageYOffset - scrollAmount)
-    scrollWithEasing(targetScroll, 800)
-  }, [scrollWithEasing])
+    const targetScroll = Math.max(0, lenisRef.current.scroll - scrollAmount)
+    lenisRef.current.scrollTo(targetScroll, {
+      duration: getScrollDuration(0.8),
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+    })
+  }, [getScrollDuration])
 
   const pageScrollDown = useCallback(() => {
-    if (isScrolling.current) return
+    if (!lenisRef.current || lenisRef.current.isDestroyed) return
     const scrollAmount = window.innerHeight * 0.8
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-    const targetScroll = Math.min(maxScroll, window.pageYOffset + scrollAmount)
-    scrollWithEasing(targetScroll, 800)
-  }, [scrollWithEasing])
+    const targetScroll = Math.min(maxScroll, lenisRef.current.scroll + scrollAmount)
+    lenisRef.current.scrollTo(targetScroll, {
+      duration: getScrollDuration(0.8),
+      easing: (t) => 1 - Math.pow(1 - t, 3),
+    })
+  }, [getScrollDuration])
 
-  // Keyboard navigation with debouncing
+  // Improved keyboard navigation with debouncing
   useEffect(() => {
     let keyTimeout = null
     const pressedKeys = new Set()
@@ -185,13 +251,16 @@ const SmoothScroll = ({ children }) => {
         activeElement?.contentEditable === "true" ||
         activeElement?.closest("input, textarea, select, [contenteditable]")
 
-      if (isInputActive || pressedKeys.has(event.key)) return
+      if (isInputActive || !lenisRef.current || pressedKeys.has(event.key)) return
 
       pressedKeys.add(event.key)
 
       if (keyTimeout) clearTimeout(keyTimeout)
 
+      // Debounce key presses
       keyTimeout = setTimeout(() => {
+        if (!lenisRef.current || lenisRef.current.isDestroyed) return
+
         switch (event.key) {
           case "ArrowUp":
             event.preventDefault()
@@ -211,14 +280,20 @@ const SmoothScroll = ({ children }) => {
             break
           case "Home":
             event.preventDefault()
-            scrollWithEasing(0, 800)
+            lenisRef.current.scrollTo(0, {
+              duration: getScrollDuration(1),
+              easing: (t) => 1 - Math.pow(1 - t, 3),
+            })
             break
           case "End":
             event.preventDefault()
-            scrollWithEasing(document.documentElement.scrollHeight, 800)
+            lenisRef.current.scrollTo(document.documentElement.scrollHeight, {
+              duration: getScrollDuration(1),
+              easing: (t) => 1 - Math.pow(1 - t, 3),
+            })
             break
         }
-      }, 50)
+      }, 50) // 50ms debounce
     }
 
     const handleKeyUp = (event) => {
@@ -233,36 +308,58 @@ const SmoothScroll = ({ children }) => {
       document.removeEventListener("keyup", handleKeyUp)
       if (keyTimeout) clearTimeout(keyTimeout)
     }
-  }, [keyboardScrollUp, keyboardScrollDown, pageScrollUp, pageScrollDown, scrollWithEasing])
+  }, [keyboardScrollUp, keyboardScrollDown, pageScrollUp, pageScrollDown, getScrollDuration])
 
   // Scroll progress tracking
+  const [scrollProgress, setScrollProgress] = useState(0)
+
   useEffect(() => {
+    let animationFrame = null
     const updateScrollProgress = () => {
-      if (scrollTimeout.current) {
-        clearTimeout(scrollTimeout.current)
-      }
+      if (animationFrame) return
 
-      scrollTimeout.current = setTimeout(() => {
-        const scrollTop = window.pageYOffset
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight
-        const progress = docHeight > 0 ? scrollTop / docHeight : 0
-        setScrollProgress(Math.min(Math.max(progress, 0), 1))
-      }, 10)
+      animationFrame = requestAnimationFrame(() => {
+        if (lenisRef.current && !lenisRef.current.isDestroyed) {
+          const progress = lenisRef.current.progress || 0
+          setScrollProgress(progress)
+        }
+        animationFrame = null
+      })
     }
 
-    const handleScroll = () => {
-      requestAnimationFrame(updateScrollProgress)
+    if (lenisRef.current) {
+      lenisRef.current.on("scroll", updateScrollProgress)
     }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    updateScrollProgress() // Initial call
 
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-      if (scrollTimeout.current) {
-        clearTimeout(scrollTimeout.current)
+      if (lenisRef.current) {
+        lenisRef.current.off("scroll", updateScrollProgress)
+      }
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame)
       }
     }
+  }, [])
+
+  // Handle visibility change
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+      } else if (!document.hidden && lenisRef.current && !lenisRef.current.isDestroyed) {
+        const raf = (time) => {
+          if (lenisRef.current && !lenisRef.current.isDestroyed) {
+            lenisRef.current.raf(time)
+            rafRef.current = requestAnimationFrame(raf)
+          }
+        }
+        rafRef.current = requestAnimationFrame(raf)
+      }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange)
   }, [])
 
   return (
