@@ -149,7 +149,7 @@ body {
 /* Smooth scrolling and animation optimizations */
 html {
   scroll-behavior: auto;
-  overflow: hidden; /* Lenis manages this */
+
 }
 
 body {
