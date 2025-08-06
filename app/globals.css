@@ -143,11 +143,18 @@
 
 body {
   font-family: var(--font-montserrat);
+  overscroll-behavior: none;
 }
 
 /* Smooth scrolling and animation optimizations */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+  overflow: hidden; /* Lenis manages this */
+}
+
+body {
+  font-family: var(--font-montserrat);
+  overscroll-behavior: none; /* optional: prevents rubber banding on touch devices */
 }
 
 /* Optimize animations for better performance */
