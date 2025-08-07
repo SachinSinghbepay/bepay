@@ -438,7 +438,12 @@ export default function OneWallet() {
               {/* Private Key Ownership */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className=" w-5 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img src="/businessnew/Self1.svg" alt="" />
+                  <Image
+                    src="/businessnew/Self1.svg"
+                    width={28}
+                    height={28}
+                    alt="private "
+                  />
                 </div>
                 <div>
                   <h3 className=" text-[10px] sm:text-sm font-medium text-black">
@@ -463,7 +468,12 @@ export default function OneWallet() {
                 <div className="flex items-center space-x-4">
                   {/* Cryptocurrency icons placeholder */}
                   <div className=" w-5 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                    <img src="/images/crypto/cryptocurrencies.png" alt="" />
+                    <Image
+                      width={28}
+                      height={28}
+                      src="/images/crypto/cryptocurrencies.png"
+                      alt="cryptocurrencies"
+                    />
                   </div>
                   <span className="text-[10px] sm:text-sm font-medium text-black">
                     100+ cryptocurrencies supported.
@@ -473,7 +483,12 @@ export default function OneWallet() {
               <div className="space-y-2 sm:space-y-3">
                 <div className="flex items-center space-x-4">
                   <div className="w-5 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                    <img src="/images/crypto/login.png" alt="" />
+                    <Image
+                      width={28}
+                      height={28}
+                      src="/images/crypto/login.png"
+                      alt="login card"
+                    />
                   </div>
                   <span className="text-[10px] sm:text-sm font-medium text-black">
                     Social login integration.
@@ -555,7 +570,12 @@ export default function OneWallet() {
               {/* Instant Activation & Global Acceptance */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img src="/businessnew/Global icon.svg" alt="" />
+                  <Image
+                    width={28}
+                    height={28}
+                    src="/businessnew/Global icon.svg"
+                    alt="virtual5"
+                  />
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
@@ -567,7 +587,12 @@ export default function OneWallet() {
               {/* Instant crypto-to-fiat conversion */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img src="/businessnew/virtual2.svg" alt="" />
+                  <Image
+                    width={28}
+                    height={28}
+                    src="/businessnew/virtual2.svg"
+                    alt="virutal3"
+                  />
                 </div>
                 <div>
                   <h3 className="text-[10px] lg:whitespace-nowrap sm:text-sm font-medium text-black">
@@ -579,7 +604,12 @@ export default function OneWallet() {
               {/* bepay App Integration */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img src="/businessnew/virtual3.svg" alt="" />
+                  <Image
+                    width={28}
+                    height={28}
+                    src="/businessnew/virtual3.svg"
+                    alt="virtualicon2"
+                  />
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
@@ -591,7 +621,12 @@ export default function OneWallet() {
               {/* Cashback rewards */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img src="/businessnew/virtual4.svg" alt="" />
+                  <Image
+                    width={28}
+                    height={28}
+                    src="/businessnew/virtual4.svg"
+                    alt="virtual icon"
+                  />
                 </div>
                 <div>
                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
@@ -648,10 +683,12 @@ export default function OneWallet() {
               {/* Multi-currency support */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/IBAN1.svg"
                     alt="No transfer fee icon"
                     className="w-full h-full"
+                    width={28}
+                    height={28}
                   />
                 </div>
                 <div>
@@ -660,20 +697,24 @@ export default function OneWallet() {
                   </h3>
                 </div>
                 <div className="h-6 sm:h-5 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/IBAN2.svg"
                     alt="No transfer fee icon"
                     className="w-full h-full"
+                    width={28}
+                    height={28}
                   />
                 </div>
               </div>
               {/* No transfer fee */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/IBAN3.svg"
                     alt="No transfer fee icon"
                     className="w-full h-full"
+                    width={28}
+                    height={28}
                   />
                 </div>
                 <div>
@@ -686,10 +727,12 @@ export default function OneWallet() {
               {/* Instant settlements */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/IBAN4.svg"
                     alt="Instant settlements icon"
                     className="w-full h-full"
+                    width={28}
+                    height={28}
                   />
                 </div>
                 <div>
@@ -702,10 +745,12 @@ export default function OneWallet() {
               {/* Bank-grade security */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/IBAN5.svg"
                     alt="Bank-grade security icon"
                     className="w-full h-full"
+                    width={28}
+                    height={28}
                   />
                 </div>
                 <div>
@@ -764,10 +809,12 @@ export default function OneWallet() {
               {/* Instant P2P transfers */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/p2p2.svg"
                     alt="No transfer fee icon"
                     className="w-full h-full"
+                    width={28}
+                    height={28}
                   />
                 </div>
                 <div>
@@ -780,10 +827,12 @@ export default function OneWallet() {
               {/* QR code payments */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/p2p3.svg"
                     alt="Instant settlements icon"
                     className="w-full h-full"
+                    width={28}
+                    height={28}
                   />
                 </div>
                 <div>
@@ -796,10 +845,12 @@ export default function OneWallet() {
               {/* Split payment options */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/p2p4.svg"
                     alt="Bank-grade security icon"
                     className="w-full h-full"
+                    width={28}
+                    height={28}
                   />
                 </div>
                 <div>
@@ -856,10 +907,12 @@ export default function OneWallet() {
               {/* Instant P2P transfers */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/qr2.svg"
                     alt="No transfer fee icon"
                     className="w-full h-full"
+                    width={28}
+                    height={28}
                   />
                 </div>
                 <div>
@@ -872,10 +925,12 @@ export default function OneWallet() {
               {/* QR code payments */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/qr3.svg"
                     alt="Instant settlements icon"
                     className="w-full h-full"
+                    width={28}
+                    height={28}
                   />
                 </div>
                 <div>
@@ -888,9 +943,11 @@ export default function OneWallet() {
               {/* Split payment options */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/qr4.svg"
                     alt="Bank-grade security icon"
+                    width={28}
+                    height={28}
                     className="w-full h-full"
                   />
                 </div>
@@ -952,9 +1009,11 @@ export default function OneWallet() {
               {/* Instant P2P transfers */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/ai3.svg"
                     alt="No transfer fee icon"
+                    width={28}
+                    height={28}
                     className="w-full h-full"
                   />
                 </div>
@@ -968,10 +1027,12 @@ export default function OneWallet() {
               {/* QR code payments */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/ai4.svg"
                     alt="Instant settlements icon"
                     className="w-full h-full"
+                    width={28}
+                    height={28}
                   />
                 </div>
                 <div>
@@ -984,10 +1045,12 @@ export default function OneWallet() {
               {/* Split payment options */}
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <img
+                  <Image
                     src="/businessnew/ai6.svg"
                     alt="Bank-grade security icon"
-                    className="w-full h-full"
+                    width={28}
+                    height={28}
+                    className="w-full h-full object-contain"
                   />
                 </div>
                 <div>

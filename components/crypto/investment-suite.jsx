@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
+import Image from "next/image";
 
 const investmentData = [
   {
@@ -155,9 +156,11 @@ export default function InvestmentSuite() {
                 >
                   {/* Card Image */}
                   <div className="relative overflow-hidden rounded-2xl mb-6">
-                    <img
+                    <Image
                       src={item.image || "/placeholder.svg"}
                       alt={item.title}
+                      width={400}
+                      height={400}
                       className="w-full h-[252px] object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>

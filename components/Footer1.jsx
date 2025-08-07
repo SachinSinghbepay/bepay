@@ -8,6 +8,7 @@ import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { IconBrandX } from "@tabler/icons-react";
+import Link from "next/link";
 
 const AppStoreButton = ({ iconSrc, iconAlt, line1, line2 }) => (
   <motion.button
@@ -209,7 +210,7 @@ const Footer = () => {
                 </motion.div>
               )}
               <div className="flex gap-3">
-                <a
+                <Link
                   href="https://www.linkedin.com/company/bepaymoney/"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -217,8 +218,8 @@ const Footer = () => {
                   className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
                 >
                   <Linkedin className="w-5 h-5" />
-                </a>
-                <a
+                </Link>
+                <Link
                   href="https://x.com/bepaymoney"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -226,8 +227,8 @@ const Footer = () => {
                   className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
                 >
                   <IconBrandX className="w-5 h-5" />
-                </a>
-                <a
+                </Link>
+                <Link
                   href="https://www.facebook.com/bepaymoney/"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -235,8 +236,8 @@ const Footer = () => {
                   className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
                 >
                   <Facebook className="w-5 h-5" />
-                </a>
-                <a
+                </Link>
+                <Link
                   href="https://t.me/officialbepaymoney"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -244,7 +245,7 @@ const Footer = () => {
                   className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
                 >
                   <Send className="w-5 h-5" />
-                </a>
+                </Link>
               </div>
             </div>
           </>
@@ -257,79 +258,79 @@ const Footer = () => {
         >
           <div className="space-y-4">
             <div className="space-y-3 lg:space-y-6">
-              <a
+              <Link
                 href="/"
                 className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
                 PERSONAL
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/business"
                 className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
                 BUSINESS
-              </a>
+              </Link>
             </div>
           </div>
           <div className="space-y-4">
             <div className="space-y-3 lg:space-y-6">
-              <a
+              <Link
                 href="/about-us"
                 className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
                 ABOUT US
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/contact-us"
                 className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
                 CONTACT US
-              </a>
+              </Link>
             </div>
           </div>
           <div className="space-y-4">
             <div className="space-y-3 lg:space-y-6">
-              <a
+              <Link
                 href="/delete-account"
                 className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
                 ACCOUNT DELETION FORM
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/privacy-policy-for-deleting-user-account"
                 className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
                 for deleting user account
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/privacy-policy-for-deleting-merchant-account"
                 className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
                 for deleting merchant account
-              </a>
+              </Link>
             </div>
           </div>
           <div className="space-y-4">
             
             <div className="space-y-3 lg:space-y-6">
-               <a
+               <Link
                 href="/privacy-policy"
                 className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
                 PRIVACY POLICY
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/terms-and-conditions"
                 className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
                 TERMS & CONDITIONS
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/legal-disclamer"
                 className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
                 Legal disclaimer
-              </a>
+              </Link>
             </div>
           </div>
         </motion.div>

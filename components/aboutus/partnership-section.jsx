@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import { Download } from "lucide-react"
+import Link from "next/link"
 
 export default function PartnershipSection() {
   // Animation variants for content
@@ -53,12 +54,12 @@ export default function PartnershipSection() {
                 <h2 className="text-3xl md:text-4xl font-bold text-black leading-tight">Partnership inquiries</h2>
                 <p className="text-base md:text-lg text-[#666666] leading-relaxed">
                   Drop us an email:{" "}
-                  <a
+                  <Link
                     href="mailto:info@bepaymoney.com"
                     className="font-semibold text-black hover:text-gray-700 transition-colors duration-300"
                   >
                     info@bepaymoney.com
-                  </a>
+                  </Link>
                 </p>
               </div>
             </div>
@@ -78,12 +79,12 @@ export default function PartnershipSection() {
                   <h2 className="text-[48px] font-bold text-black leading-tight">Partnership inquiries</h2>
                   <p className="text-xl text-[#666666] leading-relaxed">
                     Drop us an email:{" "}
-                    <a
+                    <Link
                       href="mailto:info@bepaymoney.com"
                       className="font-semibold text-black hover:text-gray-700 transition-colors duration-300"
                     >
                       info@bepaymoney.com
-                    </a>
+                    </Link>
                   </p>
                 </div>
               </div>
