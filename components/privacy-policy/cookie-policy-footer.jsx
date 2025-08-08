@@ -240,7 +240,7 @@ const CookiePolicyFooter = () => {
                   </button>
                   <button
                     onClick={handleManagePreferences}
-                    className="px-4 py-2 text-[#080808]  hover:bg-black/90 transition-colors cursor-pointer text-[12px] font-medium underline"
+                    className="px-4 py-2 text-[#080808]   transition-colors cursor-pointer text-[12px] font-medium underline"
                   >
                     Manage preferences
                   </button>
