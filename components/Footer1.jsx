@@ -300,6 +300,12 @@ const Footer = () => {
               >
                 CONTACT US
               </Link>
+              <Link
+                href="/privacy-policy"
+                className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
+              >
+                PRIVACY POLICY
+              </Link>
             </div>
           </div>
           <div className="space-y-4">
@@ -327,12 +333,6 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="space-y-3 lg:space-y-6">
               <Link
-                href="/privacy-policy"
-                className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
-              >
-                PRIVACY POLICY
-              </Link>
-              <Link
                 href="/terms-and-conditions"
                 className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
@@ -343,6 +343,12 @@ const Footer = () => {
                 className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
                 Legal disclaimer
+              </Link>
+              <Link
+                href="/cookie-policy"
+                className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors"
+              >
+                Cookie Policy
               </Link>
             </div>
           </div>
@@ -501,7 +507,7 @@ const Footer = () => {
           </div>
         </motion.div>
       </motion.div>
-      <p className="text-[8px] font-[400] lg:tracking-[2%] lg:leading-[20px] max-w-[1359px] mx-auto lg:text-[10px] text-[#333333]">
+      <p className="text-[8px] font-[400] lg:tracking-[2%] lg:leading-[20px] max-w-[1359px] mx-auto lg:text-[10px] text-[#6A6A6A]">
         The information and services presented on this website are provided for
         informational purposes only and do not constitute financial, investment,
         or legal advice. The group operates under the brand name bepay through
