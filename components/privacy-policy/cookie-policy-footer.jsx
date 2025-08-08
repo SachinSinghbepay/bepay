@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Linkedin, Facebook, X } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import Image from "next/image";
+import Link from "next/link";
 
 const CookiePolicyFooter = () => {
   const containerVariants = {
@@ -111,36 +112,36 @@ const CookiePolicyFooter = () => {
           <div className="flex flex-col gap-6 lg:gap-12">
             <div className="flex flex-col sm:flex-row gap-8 lg:gap-16">
               <div className="flex flex-col gap-4">
-                <a
+                <Link
                   href="/about-us"
                   className="block text-[#6A6A6A] hover:text-gray-400 transition-colors text-sm font-medium"
                 >
                   ABOUT US
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/contact-us"
                   className="block text-[#6A6A6A] hover:text-gray-400 transition-colors text-sm font-medium"
                 >
                   CONTACT US
-                </a>
+                </Link>
               </div>
               <div className="flex flex-col gap-4">
-                <a
+                <Link
                   href="/"
                   className="block text-[#6A6A6A] hover:text-gray-400 transition-colors text-sm font-medium"
                 >
                   PERSONAL
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/business"
                   className="block text-[#6A6A6A] hover:text-gray-400 transition-colors text-sm font-medium"
                 >
                   BUSINESS
-                </a>
+                </Link>
               </div>
             </div>
             <div className="flex gap-3 justify-start">
-              <a
+              <Link
                 href="https://www.linkedin.com/company/bepaymoney/"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -148,8 +149,8 @@ const CookiePolicyFooter = () => {
                 className="w-10 h-10 border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
               >
                 <Linkedin className="w-5 h-5" />
-              </a>
-              <a
+              </Link>
+              <Link
                 href="https://x.com/bepaymoney"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -157,8 +158,8 @@ const CookiePolicyFooter = () => {
                 className="w-10 h-10 border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
               >
                 <TwitterIcon />
-              </a>
-              <a
+              </Link>
+              <Link
                 href="https://www.facebook.com/bepaymoney/"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -166,8 +167,8 @@ const CookiePolicyFooter = () => {
                 className="w-10 h-10 border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
               >
                 <Facebook className="w-5 h-5" />
-              </a>
-              <a
+              </Link>
+              <Link
                 href="https://t.me/officialbepaymoney"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -175,7 +176,7 @@ const CookiePolicyFooter = () => {
                 className="w-10 h-10 border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
               >
                 <TelegramIcon />
-              </a>
+              </Link>
             </div>
             {/* Logo Section */}
             <motion.div
