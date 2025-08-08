@@ -441,7 +441,7 @@ export default function OneWallet() {
                   <Image
                     width={28}
                     height={28}
-                    src="/businessnew/self1.svg"
+                    src="/businessnew/Self1.svg"
                     alt="Keys and Crypto"
                   />
                 </div>
