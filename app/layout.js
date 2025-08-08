@@ -1,10 +1,10 @@
-// app/layout.js or app/layout.jsx
-import { Open_Sans, Montserrat } from "next/font/google";
+import { Open_Sans, Montserrat } from 'next/font/google';
 import "./globals.css";
 import SmoothScroll from "@/components/smoothScroll";
 import Header from "@/components/header";
 import { AuthProvider } from "@/lib/auth";
 import ConditionalFooter from "@/components/ConditionalFooter";
+import CookieConsentProvider from "@/components/cookie-consent-provider"; 
 
 // Load Open Sans as the main font
 const openSans = Open_Sans({
@@ -53,6 +53,8 @@ export default function RootLayout({ children }) {
       <body className={`${montserrat.variable} antialiased`}>
         <SmoothScroll>
           <Header />
+          {/* Render the new Client Component here */}
+          <CookieConsentProvider />
           <AuthProvider>{children}</AuthProvider>
           <ConditionalFooter />
         </SmoothScroll>

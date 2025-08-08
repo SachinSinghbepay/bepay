@@ -1,166 +1,87 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from 'react'
+import { setCookieConsent, getCookieConsent } from '@/app/actions'
 
+/**
+ * A client-side hook to manage cookie consent state and interact with server actions.
+ * @param initialConsent The initial cookie preferences fetched from the server.
+ * @returns An object containing consent state, functions to update consent, and banner visibility.
+ */
+export function useCookieConsent(initialConsent) {
+  const [consent, setConsent] = useState(initialConsent)
+  const [showBanner, setShowBanner] = useState(false)
 
-const COOKIE_CONSENT_KEY = "bepay-cookie-consent";
-const COOKIE_PREFERENCES_KEY = "bepay-cookie-preferences";
-
-export function useCookieConsent() {
-  const [showConsent, setShowConsent] = useState(false);
-  const [preferences, setPreferences] = useState<CookiePreferences>({
-    essential: true,
-    tracking: false,
-    functionality: false,
-    marketing: false,
-  });
-
+  // Initialize banner visibility based on initial server-fetched consent
   useEffect(() => {
-    // Check if user has already made a choice
-    const hasConsented = localStorage.getItem(COOKIE_CONSENT_KEY);
-    const savedPreferences = localStorage.getItem(COOKIE_PREFERENCES_KEY);
-
-    if (!hasConsented) {
-      // Show consent popup after a short delay
-      const timer = setTimeout(() => {
-        setShowConsent(true);
-      }, 2000);
-      return () => clearTimeout(timer);
-    } else if (savedPreferences) {
-      // Load saved preferences
-      try {
-        const parsed = JSON.parse(savedPreferences);
-        setPreferences(parsed);
-      } catch (error) {
-        console.error("Error parsing cookie preferences:", error);
-      }
+    if (!initialConsent) {
+      setShowBanner(true)
+    } else {
+      setShowBanner(false)
     }
-  }, []);
+  }, [initialConsent])
 
-  const acceptAll = () => {
-    const allAccepted = {
+  // Function to update consent via server action
+  const updateConsent = useCallback(async (preferences) => {
+    await setCookieConsent(preferences)
+    setConsent(preferences) // Update local state immediately
+    setShowBanner(false) // Hide banner after consent is given
+  }, [])
+
+  // Function to handle accepting all cookies
+  const acceptAllCookies = useCallback(() => {
+    const preferences = {
       essential: true,
       tracking: true,
       functionality: true,
       marketing: true,
-    };
-    
-    localStorage.setItem(COOKIE_CONSENT_KEY, "true");
-    localStorage.setItem(COOKIE_PREFERENCES_KEY, JSON.stringify(allAccepted));
-    setPreferences(allAccepted);
-    setShowConsent(false);
-
-    // Initialize tracking scripts if accepted
-    if (allAccepted.tracking) {
-      initializeTracking();
     }
-    if (allAccepted.marketing) {
-      initializeMarketing();
-    }
-  };
+    updateConsent(preferences)
+  }, [updateConsent])
 
-  const rejectNonEssentials = () => {
-    const essentialOnly = {
+  // Function to handle rejecting non-essential cookies
+  const rejectNonEssentials = useCallback(() => {
+    const preferences = {
       essential: true,
       tracking: false,
       functionality: false,
       marketing: false,
-    };
-    
-    localStorage.setItem(COOKIE_CONSENT_KEY, "true");
-    localStorage.setItem(COOKIE_PREFERENCES_KEY, JSON.stringify(essentialOnly));
-    setPreferences(essentialOnly);
-    setShowConsent(false);
-  };
-
-  const savePreferences = (newPreferences) => {
-    localStorage.setItem(COOKIE_CONSENT_KEY, "true");
-    localStorage.setItem(COOKIE_PREFERENCES_KEY, JSON.stringify(newPreferences));
-    setPreferences(newPreferences);
-    setShowConsent(false);
-
-    // Initialize or remove scripts based on preferences
-    if (newPreferences.tracking) {
-      initializeTracking();
-    } else {
-      removeTracking();
     }
-    
-    if (newPreferences.marketing) {
-      initializeMarketing();
-    } else {
-      removeMarketing();
-    }
-  };
+    updateConsent(preferences)
+  }, [updateConsent])
 
-  const resetConsent = () => {
-    localStorage.removeItem(COOKIE_CONSENT_KEY);
-    localStorage.removeItem(COOKIE_PREFERENCES_KEY);
-    setShowConsent(true);
-    setPreferences({
+  // Function to handle saving custom preferences
+  const saveCustomPreferences = useCallback((
+    tracking,
+    functionality,
+    marketing
+  ) => {
+    const preferences = {
       essential: true,
-      tracking: false,
-      functionality: false,
-      marketing: false,
-    });
-  };
+      tracking,
+      functionality,
+      marketing,
+    }
+    updateConsent(preferences)
+  }, [updateConsent])
+
+  // Function to hide the banner without explicitly setting consent (e.g., if user closes)
+  const dismissBanner = useCallback(() => {
+    // If no consent was given yet, treat dismissal as rejecting non-essentials
+    if (!consent) {
+      rejectNonEssentials();
+    } else {
+      setShowBanner(false);
+    }
+  }, [consent, rejectNonEssentials]);
+
 
   return {
-    showConsent,
-    preferences,
-    acceptAll,
+    consent,
+    showBanner,
+    acceptAllCookies,
     rejectNonEssentials,
-    savePreferences,
-    resetConsent,
-    closeConsent: () => setShowConsent(false),
-  };
-}
-
-// Helper functions to initialize/remove tracking scripts
-function initializeTracking() {
-  // Add Google Analytics or other tracking scripts here
-  console.log("Tracking cookies enabled");
-  
-  // Example: Google Analytics
-  // if (typeof gtag !== 'undefined') {
-  //   gtag('consent', 'update', {
-  //     analytics_storage: 'granted'
-  //   });
-  // }
-}
-
-function removeTracking() {
-  // Remove tracking cookies and scripts
-  console.log("Tracking cookies disabled");
-  
-  // Example: Disable Google Analytics
-  // if (typeof gtag !== 'undefined') {
-  //   gtag('consent', 'update', {
-  //     analytics_storage: 'denied'
-  //   });
-  // }
-}
-
-function initializeMarketing() {
-  // Add marketing/advertising scripts here
-  console.log("Marketing cookies enabled");
-  
-  // Example: Facebook Pixel, Google Ads, etc.
-  // if (typeof gtag !== 'undefined') {
-  //   gtag('consent', 'update', {
-  //     ad_storage: 'granted'
-  //   });
-  // }
-}
-
-function removeMarketing() {
-  // Remove marketing cookies and scripts
-  console.log("Marketing cookies disabled");
-  
-  // Example: Disable marketing scripts
-  // if (typeof gtag !== 'undefined') {
-  //   gtag('consent', 'update', {
-  //     ad_storage: 'denied'
-  //   });
-  // }
+    saveCustomPreferences,
+    dismissBanner,
+  }
 }

@@ -81,7 +81,7 @@ export default function CryptoScrollSection() {
         <div className="w-full max-w-7xl mt-10 mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center mb-8 lg:mb-16">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-400 mb-4">
+            <h2 className="text-4xl sm:text-5xl lg:text-7xl font-[400] text-gray-400 mb-4">
               Get <span className="text-black font-normal">started</span>
             </h2>
             <p className="text-lg sm:text-xl text-gray-600 max-w-md mx-auto">

@@ -1,184 +1,158 @@
 "use client";
-
-import { motion, AnimatePresence } from "framer-motion";
-import { X } from 'lucide-react';
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { X } from 'lucide-react';
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
-export default function CookieConsent({
-  isOpen,
-  onClose,
+export default function CookiePolicyBanner({
+  currentPreferences,
   onAcceptAll,
   onRejectNonEssentials,
-  onSavePreferences,
+  onSaveCustom,
+  onDismiss,
 }) {
   const [showPreferences, setShowPreferences] = useState(false);
-  const [preferences, setPreferences] = useState({
-    essential: true, // Always true, cannot be disabled
-    tracking: false,
-    functionality: false,
-    marketing: false,
-  });
-
-  const handleToggle = (type) => {
-    if (type === 'essential') return; // Essential cookies cannot be disabled
-    
-    setPreferences(prev => ({
-      ...prev,
-      [type]: !prev[type]
-    }));
-  };
-
-  const handleAcceptAll = () => {
-    const allAccepted = {
-      essential: true,
-      tracking: true,
-      functionality: true,
-      marketing: true,
-    };
-    setPreferences(allAccepted);
-    onAcceptAll();
-    onClose();
-  };
-
-  const handleRejectNonEssentials = () => {
-    const essentialOnly = {
-      essential: true,
-      tracking: false,
-      functionality: false,
-      marketing: false,
-    };
-    setPreferences(essentialOnly);
-    onRejectNonEssentials();
-    onClose();
-  };
-
-  const handleSavePreferences = () => {
-    onSavePreferences(preferences);
-    onClose();
-  };
-
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, x: 400 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 400 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="fixed bottom-4 right-4 z-50 w-full max-w-md"
-        >
-          <div className="bg-black text-white rounded-lg p-6 shadow-2xl border border-gray-800">
-            <div className="flex justify-between items-start mb-4">
-              <div className="flex-1">
-                <p className="text-sm leading-relaxed">
-                  We use cookies to enhance your browsing experience, analyze site traffic, and 
-                  personalize content. By clicking "Accept All Cookies", you consent to our use of 
-                  cookies as described in our Cookies Policy. You can manage your preferences or 
-                  withdraw consent at any time.
-                </p>
-              </div>
-              <button
-                onClick={onClose}
-                className="ml-4 text-gray-400 hover:text-white transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            {!showPreferences ? (
-              <div className="space-y-3">
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <Button
-                    onClick={handleRejectNonEssentials}
-                    variant="outline"
-                    className="flex-1 bg-transparent border-gray-600 text-white hover:bg-gray-800"
-                  >
-                    Reject non-essentials
-                  </Button>
-                  <Button
-                    onClick={handleAcceptAll}
-                    className="flex-1 bg-white text-black hover:bg-gray-200"
-                  >
-                    Accept all cookies
-                  </Button>
-                </div>
-                <Button
-                  onClick={() => setShowPreferences(true)}
-                  variant="ghost"
-                  className="w-full text-gray-300 hover:text-white hover:bg-gray-800"
-                >
-                  Manage preferences
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="space-y-3">
-                  <CookieToggle
-                    label="Essential cookies"
-                    checked={preferences.essential}
-                    disabled={true}
-                    onChange={() => handleToggle('essential')}
-                  />
-                  <CookieToggle
-                    label="Tracking cookies"
-                    checked={preferences.tracking}
-                    onChange={() => handleToggle('tracking')}
-                  />
-                  <CookieToggle
-                    label="Functionality cookies"
-                    checked={preferences.functionality}
-                    onChange={() => handleToggle('functionality')}
-                  />
-                  <CookieToggle
-                    label="Marketing cookies"
-                    checked={preferences.marketing}
-                    onChange={() => handleToggle('marketing')}
-                  />
-                </div>
-                <div className="flex gap-2 pt-2">
-                  <Button
-                    onClick={() => setShowPreferences(false)}
-                    variant="outline"
-                    className="flex-1 bg-transparent border-gray-600 text-white hover:bg-gray-800"
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    onClick={handleSavePreferences}
-                    className="flex-1 bg-white text-black hover:bg-gray-200"
-                  >
-                    Save preferences
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+  const [essentialCookies, setEssentialCookies] = useState(true); // Always true and disabled
+  const [trackingCookies, setTrackingCookies] = useState(
+    currentPreferences?.tracking ?? false
   );
-}
+  const [functionalityCookies, setFunctionalityCookies] = useState(
+    currentPreferences?.functionality ?? false
+  );
+  const [marketingCookies, setMarketingCookies] = useState(
+    currentPreferences?.marketing ?? false
+  );
 
+  // Update local state if currentPreferences prop changes
+  // This ensures the switches reflect the actual cookie state after an action
+  useEffect(() => {
+    if (currentPreferences) {
+      setTrackingCookies(currentPreferences.tracking);
+      setFunctionalityCookies(currentPreferences.functionality);
+      setMarketingCookies(currentPreferences.marketing);
+    }
+  }, [currentPreferences]);
 
+  const handleManagePreferencesClick = () => {
+    setShowPreferences(!showPreferences);
+  };
 
-function CookieToggle({ label, checked, disabled = false, onChange }) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-gray-300">{label}</span>
-      <button
-        onClick={onChange}
-        disabled={disabled}
-        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-          checked ? 'bg-white' : 'bg-gray-600'
-        } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-      >
-        <span
-          className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
-            checked ? 'translate-x-6 bg-black' : 'translate-x-1 bg-white'
-          }`}
-        />
-      </button>
+    <div className="fixed bottom-0 md:right-10 z-50 bg-black text-white p-4 md:p-6 shadow-lg rounded-3xl md:max-w-[610px] md:mx-auto md:bottom-4">
+      <div className="relative">
+        <button
+          className="absolute top-0 right-0 text-gray-400 hover:text-white transition-colors"
+          onClick={onDismiss}
+          aria-label="Close cookie policy"
+        >
+          <X className="h-5 w-5" />
+        </button>
+        <p className="text-[12px] leading-[20px] tracking-[2%] mb-4 pr-8">
+          We use cookies to enhance your browsing experience, analyze site
+          traffic, and personalize content. By clicking
+          {' "Accept All Cookies"'}, you consent to our use of cookies as
+          described in our Cookies Policy. You can manage your preferences or
+          withdraw consent at any time.
+        </p>
+        <div className="flex flex-col md:flex-row items-center gap-3 mb-6">
+          <Button
+            className="w-full md:w-auto text-[12px] border rounded-xl cursor-pointer bg-transparent text-[#F9F9F9] border-[#333333]"
+            onClick={onRejectNonEssentials}
+          >
+            Reject non-essentials
+          </Button>
+          <Button
+            className="w-full md:w-auto bg-white rounded-xl cursor-pointer text-[12px] text-black hover:bg-gray-100"
+            onClick={onAcceptAll}
+          >
+            Accept all cookies
+          </Button>
+          <Button
+            variant="link"
+            className={cn(
+              "w-full md:w-auto text-[#6A6A6A] text-[12px] hover:text-white transition-colors",
+              showPreferences && "text-white"
+            )}
+            onClick={handleManagePreferencesClick}
+          >
+            Manage preferences
+          </Button>
+        </div>
+        <AnimatePresence>
+          {showPreferences && (
+            <motion.div
+              key="cookie-switches"
+              initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
+              animate={{ opacity: 1, height: 'auto', transition: { duration: 0.3 } }}
+              exit={{ opacity: 0, height: 0, transition: { duration: 0.3 } }}
+              className="grid grid-cols-2 md:grid-cols-4 gap-4"
+            >
+              <div className="flex flex-col items-start gap-2">
+                <span className="text-[11px] font-medium">Essential cookies</span>
+                <Switch
+                  checked={essentialCookies}
+                  onCheckedChange={setEssentialCookies}
+                  disabled={true} // Always disabled
+                  className="data-[state=checked]:bg-transparent border border-[#333333] data-[state=unchecked]:bg-transparent"
+                />
+              </div>
+              <div className="flex flex-col items-start gap-2">
+                <span className="text-[11px] font-medium">Tracking cookies</span>
+                <Switch
+                  checked={trackingCookies}
+                  onCheckedChange={setTrackingCookies}
+                  disabled={!showPreferences}
+                  className="data-[state=checked]:bg-transparent border border-[#333333] data-[state=unchecked]:bg-transparent"
+                />
+              </div>
+              <div className="flex flex-col items-start gap-2">
+                <span className="text-[11px] font-medium">Functionality cookies</span>
+                <Switch
+                  checked={functionalityCookies}
+                  onCheckedChange={setFunctionalityCookies}
+                  disabled={!showPreferences}
+                  className="data-[state=checked]:bg-transparent border border-[#333333] data-[state=unchecked]:bg-transparent"
+                />
+              </div>
+              <div className="flex flex-col items-start gap-2">
+                <span className="text-[11px] font-medium">Marketing cookies</span>
+                <Switch
+                  checked={marketingCookies}
+                  onCheckedChange={setMarketingCookies}
+                  disabled={!showPreferences}
+                  className="data-[state=checked]:bg-transparent border border-[#333333] data-[state=unchecked]:bg-transparent"
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {showPreferences && (
+            <motion.div
+              key="save-preferences-button"
+              initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
+              animate={{ opacity: 1, height: 'auto', transition: { duration: 0.3, delay: 0.1 } }}
+              exit={{ opacity: 0, height: 0, transition: { duration: 0.3 } }}
+              className="mt-6 flex justify-end"
+            >
+              <Button
+                onClick={() =>
+                  onSaveCustom(
+                    trackingCookies,
+                    functionalityCookies,
+                    marketingCookies
+                  )
+                }
+                className="w-full md:w-auto bg-white rounded-xl cursor-pointer text-[12px] text-black hover:bg-gray-100"
+              >
+                Save preferences
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
