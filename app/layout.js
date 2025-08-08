@@ -3,9 +3,8 @@ import { Open_Sans, Montserrat } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/smoothScroll";
 import Header from "@/components/header";
-import Footer from "@/components/Footer1";
-import ScrollArrow from "@/components/ui/ScrollArrow";
 import { AuthProvider } from "@/lib/auth";
+import ConditionalFooter from "@/components/ConditionalFooter";
 
 // Load Open Sans as the main font
 const openSans = Open_Sans({
@@ -55,7 +54,7 @@ export default function RootLayout({ children }) {
         <SmoothScroll>
           <Header />
           <AuthProvider>{children}</AuthProvider>
-          <Footer />
+          <ConditionalFooter />
         </SmoothScroll>
       </body>
     </html>

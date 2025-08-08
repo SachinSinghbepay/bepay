@@ -2,17 +2,30 @@
 import { motion } from "framer-motion";
 import React from "react";
 
-import { Linkedin, Twitter, Facebook, Send, Check } from "lucide-react";
+import {
+  Linkedin,
+  Twitter,
+  Facebook,
+  Send,
+  Check,
+  LinkedinIcon,
+  LucideFacebook,
+} from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { IconBrandX } from "@tabler/icons-react";
+import {
+  IconBrandFacebookFilled,
+  IconBrandLinkedinFilled,
+  IconBrandTelegram,
+  IconBrandX,
+} from "@tabler/icons-react";
 import Link from "next/link";
 
 const AppStoreButton = ({ iconSrc, iconAlt, line1, line2 }) => (
   <motion.button
-    className="flex items-center w-full sm:w-auto justify-center gap-3 border border-white/20 rounded-full px-6 py-3 hover:bg-white/10 transition-colors"
+    className="flex items-center w-full sm:w-auto justify-center gap-3 border border-white/20 rounded-full px-8 py-3 hover:bg-white/10 transition-colors"
     variants={{
       hidden: { opacity: 0, y: 20 },
       visible: { opacity: 1, y: 0 },
@@ -28,7 +41,7 @@ const AppStoreButton = ({ iconSrc, iconAlt, line1, line2 }) => (
     />
     <div className="text-left">
       <span className="text-xs block">{line1}</span>
-      <span className="font-semibold">{line2}</span>
+      <span className="text-xs block">{line2}</span>
     </div>
   </motion.button>
 );
@@ -115,12 +128,14 @@ const Footer = () => {
       >
         {/* CTA Section */}
         <motion.div className="text-center max-w-4xl" variants={itemVariants}>
-          <h2 className="text-4xl md:text-5xl font-light mb-6 leading-tight">
+          <h2 className="text-xl md:text-2xl text-transparent bg-clip-text [background-image:linear-gradient(90deg,#F9F9F9_0%,rgba(249,249,249,0.5)_31.33%,#F9F9F9_64.79%,rgba(249,249,249,0.5)_98.29%)] lg:text-[24px] font-light mb-6 leading-tight">
             Ready to make every transaction an opportunity?
           </h2>
-          <p className="text-[#6A6A6A] text-lg leading-relaxed">
-            Join the financial revolution where spending no longer means losing
-            money
+
+          <p className="text-[#6A6A6A] text-[16px] leading-relaxed">
+            Join millions of users who trust bepay for their crypto financial
+            needs. Start earning, spending, and growing your wealth today with
+            the most comprehensive crypto financial platform.
           </p>
         </motion.div>
 
@@ -155,15 +170,15 @@ const Footer = () => {
           variants={itemVariants}
         >
           <>
-            <p className="text-[#6A6A6A] text-sm">
-              Sign-up to our newsletter for exclusive updates!
-            </p>
             <div className="flex flex-col md:flex-row items-center gap-6">
               {!isSubscribed ? (
                 <form
                   onSubmit={handleSubmit}
-                  className="flex flex-col items-center gap-2"
+                  className="flex flex-col items-center lg:items-start gap-3"
                 >
+                  <p className="text-[#6A6A6A] text-sm">
+                    Sign-up to our newsletter for exclusive updates!
+                  </p>
                   <div className="flex items-center gap-2 border border-[#C6C6C626] rounded-full p-1 pr-2">
                     <input
                       type="email"
@@ -197,9 +212,8 @@ const Footer = () => {
                   </div>
                   <div>
                     <h3 className="text-md font-semibold text-white ">
-                     Thankyou for subscribing to our newsletter
+                      Thankyou for subscribing to our newsletter
                     </h3>
-                  
                   </div>
                   {/* <button
                     onClick={() => setIsSubscribed(false)}
@@ -209,22 +223,22 @@ const Footer = () => {
                   </button> */}
                 </motion.div>
               )}
-              <div className="flex gap-3">
+              <div className="flex gap-3 lg:mt-7">
                 <Link
                   href="https://www.linkedin.com/company/bepaymoney/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn"
-                  className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                  className="w-10 h-10 border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
                 >
-                  <Linkedin className="w-5 h-5" />
+                  <LinkedinIcon className="w-5 h-5" />
                 </Link>
                 <Link
                   href="https://x.com/bepaymoney"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Twitter"
-                  className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                  className="w-10 h-10 border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
                 >
                   <IconBrandX className="w-5 h-5" />
                 </Link>
@@ -233,18 +247,18 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                  className="w-10 h-10 border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
                 >
-                  <Facebook className="w-5 h-5" />
+                  <LucideFacebook className="w-5 h-5" />
                 </Link>
                 <Link
                   href="https://t.me/officialbepaymoney"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Telegram"
-                  className="w-10 h-10 border border-gray-600 rounded-full flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                  className="w-10 h-10 border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
                 >
-                  <Send className="w-5 h-5" />
+                  <IconBrandTelegram className="w-5 h-5" />
                 </Link>
               </div>
             </div>
@@ -311,9 +325,8 @@ const Footer = () => {
             </div>
           </div>
           <div className="space-y-4">
-            
             <div className="space-y-3 lg:space-y-6">
-               <Link
+              <Link
                 href="/privacy-policy"
                 className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
               >
@@ -364,19 +377,39 @@ const Footer = () => {
             >
               <style jsx>{`
                 .hover-logo:hover #paint0_linear_2175_15792 stop:first-child {
-                  stop-color: #ffffff;
+                  stop-color: #cacaca;
+                }
+                .hover-logo:hover #paint0_linear_2175_15792 stop:last-child {
+                  stop-color: #cacaca;
+                  stop-opacity: 0;
                 }
                 .hover-logo:hover #paint1_linear_2175_15792 stop:first-child {
-                  stop-color: #ffffff;
+                  stop-color: #cacaca;
+                }
+                .hover-logo:hover #paint1_linear_2175_15792 stop:last-child {
+                  stop-color: #cacaca;
+                  stop-opacity: 0;
                 }
                 .hover-logo:hover #paint2_linear_2175_15792 stop:first-child {
-                  stop-color: #ffffff;
+                  stop-color: #cacaca;
+                }
+                .hover-logo:hover #paint2_linear_2175_15792 stop:last-child {
+                  stop-color: #cacaca;
+                  stop-opacity: 0;
                 }
                 .hover-logo:hover #paint3_linear_2175_15792 stop:first-child {
-                  stop-color: #ffffff;
+                  stop-color: #cacaca;
+                }
+                .hover-logo:hover #paint3_linear_2175_15792 stop:last-child {
+                  stop-color: #cacaca;
+                  stop-opacity: 0;
                 }
                 .hover-logo:hover #paint4_linear_2175_15792 stop:first-child {
-                  stop-color: #ffffff;
+                  stop-color: #cacaca;
+                }
+                .hover-logo:hover #paint4_linear_2175_15792 stop:last-child {
+                  stop-color: #cacaca;
+                  stop-opacity: 0;
                 }
                 .hover-logo:hover g {
                   opacity: 1;
@@ -468,6 +501,20 @@ const Footer = () => {
           </div>
         </motion.div>
       </motion.div>
+      <p className="text-[8px] font-[400] lg:tracking-[2%] lg:leading-[20px] max-w-[1359px] mx-auto lg:text-[10px] text-[#333333]">
+        The information and services presented on this website are provided for
+        informational purposes only and do not constitute financial, investment,
+        or legal advice. The group operates under the brand name bepay through
+        its legal entity, Bepay money fintech UAB, registered in the European
+        Union (Company Registration No. 306999867). bepay does not operate as a
+        bank, financial institution, or digital asset exchange. All wallet and
+        payment-related services are offered in a non-custodial capacity,
+        leveraging public distributed ledger technologies and open-source data
+        from integrated platforms and partners. Cryptocurrency trading is highly
+        volatile, and users may lose their entire investment; all activities are
+        undertaken at your own risk. bepay holds ISO 9001, 20022, and 27001
+        certifications across India, UAE, USA, and the EU
+      </p>
     </footer>
   );
 };

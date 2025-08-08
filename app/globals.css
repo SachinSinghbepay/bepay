@@ -149,6 +149,7 @@ body {
 /* Smooth scrolling and animation optimizations */
 html {
   scroll-behavior: auto;
+  overflow: visible;
 
 }
 
@@ -485,3 +486,5 @@ body {
   margin-top: 1em;
   margin-bottom: 1em;
 }
+
+

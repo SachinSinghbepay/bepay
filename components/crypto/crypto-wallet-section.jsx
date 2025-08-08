@@ -118,7 +118,7 @@ export default function CryptoWalletSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.3 }}
               viewport={{ once: false, amount: 0.5 }}
-              className="text-4xl font-[400] text-[#C0C0C0] md:text-7xl xl:text-[120px] leading-tight md:leading-normal -mt-2 md:mt-0"
+              className="text-4xl font-[400] text-[#C0C0C0] md:text-7xl xl:text-[120px] leading-tight md:leading-normal -mt-2 lg:-mt-18"
             >
               ever need!
             </motion.h2>

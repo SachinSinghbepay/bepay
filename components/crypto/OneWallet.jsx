@@ -375,26 +375,26 @@ export default function OneWallet() {
           <div className="flex flex-col items-center justify-center min-h-[100vh]">
             <h2
               ref={textLine1Ref}
-              className="text-[11vw] sm:text-[9vw] md:text-[8vw] lg:text-[9vw] xl:text-[10vw] font-montserrat font-normal leading-[0.9] tracking-tight mb-2 sm:mb-3"
+              className="text-[11vw] sm:text-[9vw] md:text-[8vw] lg:text-[9vw] xl:text-[140px] font-montserrat font-normal leading-[0.9] tracking-tight mb-2 sm:mb-3"
             >
               <span className="text-[#9e9e9e]">Everything</span>{" "}
             </h2>
             <h2
               ref={textLine2Ref}
-              className="text-[11vw] sm:text-[9vw] md:text-[8vw] lg:text-[9vw] xl:text-[10vw] font-montserrat font-normal leading-[0.9] tracking-tight mb-2 sm:mb-3"
+              className="text-[11vw] sm:text-[9vw] md:text-[8vw] lg:text-[9vw] xl:text-[140px] font-montserrat font-normal leading-[0.9] tracking-tight mb-2 sm:mb-3"
             >
               <span className="text-[#9e9e9e]">you need in</span>{" "}
             </h2>
 
             <h2
               ref={textLine3Ref}
-              className="text-[11vw] sm:text-[9vw] md:text-[8vw] lg:text-[9vw] xl:text-[10vw] font-montserrat font-normal leading-[0.9] tracking-tight"
+              className="text-[11vw] sm:text-[9vw] md:text-[8vw] lg:text-[9vw]xl:text-[140px] font-montserrat font-normal leading-[0.9] tracking-tight"
             >
               <span className="text-black">one platform</span>
             </h2>
             <p
               ref={textLine4Ref}
-              className="text-[3vw] w-[50%] mt-8 sm:text-[1vw] md:text-[1vw] lg:text-[1vw] xl:text-[1vw] font-montserrat font-normal "
+              className="text-[3vw] w-[70%] mt-8 sm:text-[1vw] md:text-[1vw] lg:text-[1vw] xl:text-[20px] font-montserrat font-normal "
             >
               <span className="text-[#9e9e9e]">
                 From earning opportunities to seamless payments,{" "}
@@ -423,7 +423,7 @@ export default function OneWallet() {
             </div>
 
             {/* Right Side - Content */}
-            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-15">
+            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-10">
               {/* Self-Custody Wallet Section */}
               <div className="space-y-3 sm:space-y-4">
                 <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-black">
@@ -439,63 +439,56 @@ export default function OneWallet() {
               <div className="flex items-center space-x-3 sm:space-x-4">
                 <div className=" w-5 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
                   <Image
-                    src="/businessnew/Self1.svg"
                     width={28}
                     height={28}
-                    alt="private "
+                    src="/businessnew/self1.svg"
+                    alt="Keys and Crypto"
                   />
                 </div>
                 <div>
                   <h3 className=" text-[10px] sm:text-sm font-medium text-black">
-                    100% Private Key Ownership.
+                    100% Private Key Ownership.Your keys, your Crypto.
                   </h3>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className=" w-5 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <IconSquareKey strokeWidth={1} />
-                </div>
-                <div>
-                  <h3 className=" text-[10px] sm:text-sm font-medium text-black">
-                    Your Keys, Your Crypto.
-                  </h3>
+              <div className="space-y-2 sm:space-y-3">
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] sm:text-sm font-medium text-black">
+                    100+ cryptocurrencies supported!
+                  </span>
+                  {/* Cryptocurrency icons placeholder */}
+                  <div className="flex   items-center space-x-1">
+                    <Image
+                      src="/businessnew/self2.svg"
+                      width={200}
+                      height={30}
+                      alt=""
+                      className="w-full h-full"
+                    />
+                  </div>
                 </div>
               </div>
 
               {/* Cryptocurrency Support */}
               <div className="space-y-2 sm:space-y-3">
-                <div className="flex items-center space-x-4">
-                  {/* Cryptocurrency icons placeholder */}
-                  <div className=" w-5 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                    <Image
-                      width={28}
-                      height={28}
-                      src="/images/crypto/cryptocurrencies.png"
-                      alt="cryptocurrencies"
-                    />
-                  </div>
+                <div className="flex items-center space-x-2">
                   <span className="text-[10px] sm:text-sm font-medium text-black">
-                    100+ cryptocurrencies supported.
-                  </span>
-                </div>
-              </div>
-              <div className="space-y-2 sm:space-y-3">
-                <div className="flex items-center space-x-4">
-                  <div className="w-5 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                    <Image
-                      width={28}
-                      height={28}
-                      src="/images/crypto/login.png"
-                      alt="login card"
-                    />
-                  </div>
-                  <span className="text-[10px] sm:text-sm font-medium text-black">
-                    Social login integration.
+                    Social login integration
                   </span>
                   {/* Cryptocurrency icons placeholder */}
+                  <div className="flex items-center space-x-1">
+                    <Image
+                      width={100}
+                      height={20}
+                      src="/businessnew/self3.svg"
+                      alt="login"
+                      className="h-full w-full"
+                    />
+                  </div>
                 </div>
               </div>
+
               <WaitlistTriggerButton>
                 <button className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
                   <Image
@@ -555,7 +548,7 @@ export default function OneWallet() {
             </div>
 
             {/* Right Side - Updated Content */}
-            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-15">
+            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-10">
               {/* Virtual Crypto Debit Card Section */}
               <div className="space-y-3 sm:space-y-4">
                 <h1 className="text-xl sm:text-2xl lg:whitespace-nowrap md:text-3xl lg:text-4xl font-semibold text-black">
@@ -668,7 +661,7 @@ export default function OneWallet() {
             </div>
 
             {/* Right Side - Swiss IBAN Account Content */}
-            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-15">
+            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-10">
               {/* Swiss IBAN Account Section */}
               <div className="space-y-3 sm:space-y-4">
                 <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-black">
@@ -794,7 +787,7 @@ export default function OneWallet() {
             </div>
 
             {/* Right Side - P2P Transactions Content */}
-            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-15">
+            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-10">
               {/* P2P Transactions Section */}
               <div className="space-y-3 sm:space-y-4">
                 <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-black">
@@ -893,7 +886,7 @@ export default function OneWallet() {
             </div>
 
             {/* Right Side - P2P Transactions Content */}
-            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-15">
+            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-10">
               {/* P2P Transactions Section */}
               <div className="space-y-3 sm:space-y-4">
                 <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-black">
@@ -995,7 +988,7 @@ export default function OneWallet() {
             </div>
 
             {/* Right Side - P2P Transactions Content */}
-            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-15">
+            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-10">
               {/* P2P Transactions Section */}
               <div className="space-y-3 sm:space-y-4">
                 <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-black">
