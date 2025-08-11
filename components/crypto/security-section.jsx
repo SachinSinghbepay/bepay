@@ -12,6 +12,8 @@ const securityData = {
       "SOC 2 Type II Security Controls",
       "PCI DSS Payment Security Standards",
       "GDPR Privacy Protection Compliance",
+      "ISO 9001 Quality Management Systems (QMS)",
+      "ISO 20022 Global Financial Messaging Standard"
     ],
   },
   monitoring: {
@@ -28,7 +30,7 @@ const securityData = {
   compliance: {
     icon: "/images/crypto/icon4.png",
     title: "Regulatory Compliance",
-    description: "Licensed by FCA (UK), VASP (EU), and MSB (USA)",
+    description: "Licensed by FCA (UK), VASP (EU), MiCA (EU), DORA (EU), MSME (India) and MSB (USA)",
   },
   encryption: {
     // icon: "/images/crypto/icon5.png",

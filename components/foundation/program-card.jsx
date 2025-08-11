@@ -61,14 +61,14 @@ export default function ProgramCard({
             </li>
           ))}
         </ul>
-        <Link href={buttonLink} passHref>
+        {/* <Link href={buttonLink} passHref>
           <Button
             variant="default"
             className="rounded-full cursor-pointer bg-black px-8 py-6 text-[12px] font-medium text-white hover:bg-black/90"
           >
             {buttonText}
           </Button>
-        </Link>
+        </Link> */}
       </div>
     </motion.div>
   )
