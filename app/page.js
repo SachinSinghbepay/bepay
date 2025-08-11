@@ -12,7 +12,6 @@ import InvestmentSuite from "@/components/crypto/investment-suite";
 import DefiYieldSection from "@/components/crypto/DefiYieldSection ";
 import WaitlistPopup from "@/components/waitlist-popup";
 import ScrollTextMobile from "@/components/crypto/ScrollTextMobile";
-import AnimatedSection from "@/components/crypto/scroll-text-animation";
 
 const page = () => {
   return (
@@ -22,8 +21,7 @@ const page = () => {
         <CryptoHeroSection />
         <CryptoWalletSection />
         <OneWallet />
-        {/* <ScrollTextAnimation /> */}
-        <AnimatedSection />
+        <ScrollTextAnimation />
         <ScrollTextMobile />
         <DefiYieldSection />
         <InvestmentSuite />

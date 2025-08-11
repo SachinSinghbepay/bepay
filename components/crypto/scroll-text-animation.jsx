@@ -58,8 +58,8 @@ export default function ScrollTextAnimation() {
       const exitProgress = (scrollProgress - exitStart) / 0.05;
       
       return {
-        transform: `translate(${exitProgress * 200}%, 0%)`, // Instant move to right
-        opacity: Math.max(0, 1 - exitProgress * 3), // Quick fade
+        transform: `translate(${exitProgress * -100}%, 0%)`, // Instant move to right
+        opacity: Math.max(1, 1 - exitProgress * 3), // Quick fade
       };
     }
 
@@ -174,7 +174,7 @@ export default function ScrollTextAnimation() {
           <div className="fixed inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
             <div className="flex items-center gap-2 sm:gap-4 mb-8">
               <span
-                className="text-4xl sm:text-6xl md:text-8xl lg:text-[160px] font-500 bg-gradient-to-r from-[#333333] via-[#999999] to-[#333333] bg-clip-text text-transparent inline-block"
+                className="text-4xl sm:text-6xl pb-5 md:text-8xl lg:text-[160px] font-500 bg-gradient-to-r from-[#333333] via-[#999999] to-[#333333] bg-clip-text text-transparent inline-block"
                 style={{
                   transform: earningPotentialAnimation.transform,
                   opacity: earningPotentialAnimation.opacity,
