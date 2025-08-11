@@ -6,8 +6,8 @@ import Footer from '@/components/Footer1';
 export default function ConditionalFooter() {
   const pathname = usePathname();
   
-  // Don't render footer on cookie-policy page
-  if (pathname === '/cookie-policy') {
+  // Don't render footer on specific pages
+  if (pathname === '/cookie-policy' || pathname === '/bepay-foundations') {
     return null;
   }
   
