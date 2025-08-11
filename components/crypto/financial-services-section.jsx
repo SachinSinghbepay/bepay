@@ -80,7 +80,7 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
     // Fixed: Make the first item stay longer before moving up
     y = useTransform(
       progress,
-      [0, end - segmentDuration * 0.2, end + segmentDuration * 0.2],
+      [0, end - segmentDuration * 0.4, end + segmentDuration * 0.4],
       [0, 0, -travelDistance]
     );
   } else if (isLast) {
@@ -107,7 +107,7 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
       style={{
         y,
       }}
-      className="absolute inset-0 flex flex-col items-start justify-center text-start px-4 lg:px-8"
+      className="absolute inset-0 flex flex-col 2xl:ml-20 items-start justify-center text-start px-4 lg:px-8"
     >
       <div className="relative w-full max-w-sm lg:max-w-md aspect-[530/633] overflow-hidden mb-6 lg:mb-8 shadow-2xl ">
         <Image
@@ -117,21 +117,23 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
           objectFit="cover"
         />
       </div>
-      <h3 className="text-xl lg:text-2xl text-start xl:text-4xl font-[400] text-[#6A6A6A] mb-3 lg:mb-4">
-        {service.title}
-      </h3>
-      <div className="flex flex-col space-y-2 items-start text-start">
-        {service.points.map((point, idx) => (
-          <div key={idx} className="flex gap-2 lg:gap-3 items-start text-left">
-            <CheckCircle
-              size={10}
-              className="text-gray-600 mt-0.5 flex-shrink-0 lg:w-3 lg:h-3"
-            />
-            <span className="text-xs lg:text-sm text-gray-500 leading-relaxed">
-              {point}
-            </span>
-          </div>
-        ))}
+      <div>
+        <h3 className="text-xl lg:text-2xl text-start xl:text-4xl font-[400] text-[#6A6A6A] mb-3 lg:mb-4">
+          {service.title}
+        </h3>
+        <div className="flex flex-col space-y-2 items-start text-start">
+          {service.points.map((point, idx) => (
+            <div key={idx} className="flex gap-2  items-start text-left">
+              <CheckCircle
+                size={10}
+                className="text-gray-600 mt-1 flex-shrink-0 lg:w-3 lg:h-3"
+              />
+              <span className="text-xs lg:text-sm text-gray-500 leading-relaxed">
+                {point}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </motion.div>
   );
