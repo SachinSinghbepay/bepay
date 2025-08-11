@@ -9,7 +9,7 @@ const DefiYieldSection = () => {
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start start", "end end"],
+    offset: ["start start", "end start"],
   });
 
   const [isMobile, setIsMobile] = useState(false);
@@ -261,7 +261,7 @@ const DefiYieldSection = () => {
                     className="absolute inset-0 rounded-full overflow-hidden transform "
                   >
                     <Image
-                      src="/images/crypto/earning2.png"
+                      src="/images/crypto/earning5.png"
                       fill
                       priority
                       alt="Woman looking at phone with excitement"
@@ -279,7 +279,7 @@ const DefiYieldSection = () => {
                     className="absolute inset-0 rounded-full overflow-hidden transform "
                   >
                     <Image
-                      src="/images/crypto/earning3.png"
+                      src="/images/crypto/earning2.png"
                       fill
                       priority
                       alt="Woman looking at phone with excitement"
@@ -297,7 +297,7 @@ const DefiYieldSection = () => {
                     className="absolute inset-0 rounded-full overflow-hidden transform "
                   >
                     <Image
-                      src="/images/crypto/earning4.png"
+                      src="/images/crypto/earning3.png"
                       fill
                       priority
                       alt="Woman looking at phone with excitement"
@@ -315,7 +315,7 @@ const DefiYieldSection = () => {
                     className="absolute inset-0 rounded-full overflow-hidden transform "
                   >
                     <Image
-                      src="/images/crypto/earning5.png"
+                      src="/images/crypto/earning4.png"
                       fill
                       priority
                       alt="Woman looking at phone with excitement"
@@ -378,13 +378,14 @@ const DefiYieldSection = () => {
                   className="absolute inset-0 opacity-80 flex flex-col items-center justify-center p-6 space-y-3 text-center"
                 >
                   <h3 className="text-lg md:text-lg font-bold mb-3 text-gray-800">
-                    Cashback Rewards
+                    Referral Rewards
                   </h3>
                   <p className="text-sm md:text-sm text-gray-600 leading-relaxed w-[70%]">
-                    Earn cashback on every card transaction.
+                    Earn Bitcoin for every friend you refer to bepay money or
+                    bepay business.
                   </p>
                   <p className="text-sm md:text-sm italic text-gray-800 leading-relaxed w-[70%]">
-                    Instant cashback on purchases
+                    *$1000+ worth Bitcoin every month
                   </p>
                 </motion.div>
                 {/* Content 3 - Restaking */}
@@ -393,6 +394,24 @@ const DefiYieldSection = () => {
                     y: content3Y,
                   }}
                   className="absolute inset-0 flex opacity-80  flex-col items-center justify-center p-6 space-y-3 text-center"
+                >
+                  <h3 className="text-lg md:text-lg font-bold mb-3 text-gray-800">
+                    Staking Rewards
+                  </h3>
+                  <p className="text-sm md:text-sm text-gray-600 leading-relaxed w-[70%]">
+                    Stake your crypto and earn passive income with flexible
+                    terms
+                  </p>
+                  <p className="text-sm md:text-sm italic text-gray-800 leading-relaxed w-[70%]">
+                    Flexible & fixed staking options
+                  </p>
+                </motion.div>
+                {/* Content 4 - Referral Rewards */}
+                <motion.div
+                  style={{
+                    y: content4Y,
+                  }}
+                  className="absolute inset-0 flex opacity-80  flex-col items-center justify-center space-y-3 p-6 text-center"
                 >
                   <h3 className="text-lg md:text-lg font-bold mb-3 text-gray-800">
                     Restaking
@@ -404,24 +423,6 @@ const DefiYieldSection = () => {
                     Enhanced yields through restaking
                   </p>
                 </motion.div>
-                {/* Content 4 - Referral Rewards */}
-                <motion.div
-                  style={{
-                    y: content4Y,
-                  }}
-                  className="absolute inset-0 flex opacity-80  flex-col items-center justify-center space-y-3 p-6 text-center"
-                >
-                  <h3 className="text-lg md:text-lg font-bold mb-3 text-gray-800">
-                    Referral Rewards
-                  </h3>
-                  <p className="text-sm md:text-sm text-gray-600 leading-relaxed w-[70%]">
-                    Earn Bitcoin for every friend you refer to bepay money or
-                    bepay business.
-                  </p>
-                  <p className="text-sm md:text-sm italic text-gray-800 leading-relaxed w-[70%]">
-                    *$1000+ worth Bitcoin every month
-                  </p>
-                </motion.div>
                 {/* Content 5 - DePIN Storage & Compute */}
                 <motion.div
                   style={{
@@ -430,13 +431,13 @@ const DefiYieldSection = () => {
                   className="absolute inset-0 flex opacity-80  flex-col items-center justify-center space-y-3 p-6 text-center"
                 >
                   <h3 className="text-lg md:text-lg font-bold mb-3 text-gray-800">
-                    DePIN Storage & Compute
+                    Cashback Rewards
                   </h3>
                   <p className="text-sm md:text-sm text-gray-600 leading-relaxed w-[70%]">
-                    Earn by sharing your unused storage and computing power.
+                    Earn cashback on every card transaction
                   </p>
                   <p className="text-sm md:text-sm italic text-gray-800 leading-relaxed w-[70%]">
-                    Monetize your hardware resources
+                    Instant cashback on purchases
                   </p>
                 </motion.div>
                 {/* Content 6 - Final Content */}
@@ -447,13 +448,13 @@ const DefiYieldSection = () => {
                   className="absolute inset-0 opacity-80  flex flex-col items-center justify-center space-y-3 p-6 text-center"
                 >
                   <h3 className="text-lg md:text-lg font-bold mb-3 text-gray-800">
-                    Multi-Chain Rewards
+                    DePIN Storage & Compute
                   </h3>
-                  <p className="text-sm md:text-sm text-gray-600 mb-4 leading-relaxed w-[70%]">
-                    Access rewards across multiple blockchain networks.
+                  <p className="text-sm md:text-sm text-gray-600 leading-relaxed w-[70%]">
+                    Earn by sharing your unused storage and computing power.
                   </p>
                   <p className="text-sm md:text-sm italic text-gray-800 leading-relaxed w-[70%]">
-                    Diversify your earning strategies.
+                    Monetize your hardware resources
                   </p>
                   <WaitlistTriggerButton>
                     <motion.button
@@ -461,8 +462,33 @@ const DefiYieldSection = () => {
                       whileTap={{ scale: 0.95 }}
                       className="bg-black cursor-pointer   whitespace-nowrap text-white px-4 py-2 lg:px-6 lg:py-2 rounded-full flex items-center justify-center gap-2 text-[12px] font-medium hover:bg-gray-800 transition-colors"
                     >
-                      Start Earning{" "}
-                      <ArrowUpRight className="w-3 h-3 -mt-[1px] lg:w-4 lg:h-8" />
+                      <svg
+                        width="24"
+                        height="25"
+                        viewBox="0 0 24 25"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M9.87318 9.47184L13.5646 4.21036C13.8717 3.77265 14.4754 3.66657 14.9133 3.97337L18.2824 6.33367C18.7203 6.64045 18.8268 7.24401 18.5203 7.68214L17.5578 9.05838C17.3765 9.3175 17.0802 9.47184 16.764 9.47184H9.87318ZM9.87318 9.47184H6.69107C5.90694 9.47184 5.44778 8.58874 5.89817 7.94686L8.5197 4.21079C8.82695 3.77291 9.43098 3.66699 9.86888 3.9742L11.6632 5.23294C12.101 5.54014 12.207 6.14414 11.8999 6.58207L9.87318 9.47184Z"
+                          stroke="#F9F9F9"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M20.0825 9.46875H3.9385C3.38155 9.46875 2.92969 9.92061 2.92969 10.4776V20.5677C2.92969 21.1246 3.38155 21.5765 3.9385 21.5765H20.0825C20.6394 21.5765 21.0913 21.1246 21.0913 20.5677V10.4776C21.0913 9.92061 20.6394 9.46875 20.0825 9.46875Z"
+                          stroke="#F9F9F9"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <circle
+                          cx="17.0482"
+                          cy="15.4779"
+                          r="0.4935"
+                          fill="#F9F9F9"
+                        />
+                      </svg>
+                      Start earning with bepay{" "}
                     </motion.button>
                   </WaitlistTriggerButton>
                 </motion.div>
