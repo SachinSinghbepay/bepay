@@ -31,7 +31,7 @@ const DefiYieldSection = () => {
   const containerY = useTransform(
     scrollYProgress,
     [animationStart, animationEnd],
-    [isMobile ? "100%" : "100%", "0%"]
+    [isMobile ? "0%" : "0%", "0%"]
   );
 
   const containerOpacity = useTransform(
