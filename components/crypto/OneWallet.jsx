@@ -975,13 +975,13 @@ export default function OneWallet() {
             <div className="relative w-full aspect-[4/3] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
               <div
                 ref={mockupImage6_1Ref}
-                className="absolute top-[5%] left-[2.5%] w-1/2 h-1/2 z-[2]"
+                className="absolute -top-[1%] left-[2.5%] w-1/2 h-1/2 z-[2]"
               >
                 <Image src="/businessnew/ai1.png" alt="Card Mockup" fill />
               </div>
               <div
                 ref={mockupImage6_2Ref}
-                className="absolute bottom-[10%] right-[5%] w-1/2 h-1/2 z-[1]"
+                className="absolute bottom-[12%] right-[5%] w-1/2 h-1/2 z-[1]"
               >
                 <Image src="/businessnew/ai2.png" alt="Card Mockup" fill />
               </div>

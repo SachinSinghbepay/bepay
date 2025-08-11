@@ -187,20 +187,20 @@ export default function ScrollTextAnimation() {
 
             {/* Sub-description */}
             <div
-              className="max-w-4xl text-center px-4"
+              className="max-w-7xl text-center px-4"
               style={{
                 transform: subDescriptionAnimation.transform,
                 opacity: subDescriptionAnimation.opacity,
                 transition: "none",
               }}
             >
-              <p className="text-lg sm:text-xl md:text-2xl text-[#666666] font-light leading-relaxed">
+              <p className="text-lg sm:text-xl md:text-[20px] font-[500] text-[#666666]  leading-relaxed">
                 Multiple ways to grow your wealth with{" "}
-                <span className="font-medium text-[#333333]">
+                <span className=" text-[#333333]">
                   industry-leading returns
                 </span>{" "}
                 and{" "}
-                <span className="font-medium text-[#333333]">
+                <span className=" text-[#333333]">
                   innovative earning opportunities
                 </span>
               </p>
