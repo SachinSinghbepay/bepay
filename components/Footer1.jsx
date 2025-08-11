@@ -284,6 +284,12 @@ const Footer = () => {
               >
                 BUSINESS
               </Link>
+              <Link
+                href="/bepay-foundations"
+                className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
+              >
+                BEPAY FOUNDATIONS
+              </Link>
             </div>
           </div>
           <div className="space-y-4">
