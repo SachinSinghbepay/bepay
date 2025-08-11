@@ -136,20 +136,20 @@ export const SecuritySection = () => {
         </motion.p>
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start"
+          className="grid grid-cols-1 md:grid-cols-3 gap-2 items-start"
           variants={containerVariants}
         >
           {/* Column 1 */}
           <motion.div variants={containerVariants}>
             <SecurityCard
               {...securityData.certifications}
-              className="md:h-[620px]"
+              className="md:h-[610px]"
             />
           </motion.div>
 
           {/* Column 2 */}
           <motion.div
-            className="flex flex-col gap-6"
+            className="flex flex-col gap-2"
             variants={containerVariants}
           >
             <SecurityCard {...securityData.monitoring} className="md:h-[300px]" />
@@ -158,7 +158,7 @@ export const SecuritySection = () => {
 
           {/* Column 3 */}
           <motion.div
-            className="flex flex-col gap-6"
+            className="flex flex-col gap-2"
             variants={containerVariants}
           >
             <SecurityCard {...securityData.compliance} className="md:h-[400px]" />

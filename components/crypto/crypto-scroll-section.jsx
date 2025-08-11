@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 const steps = [
   {
@@ -31,6 +32,7 @@ const steps = [
     description:
       "Use your virtual crypto debit card, earn yield, and access all platform features. Start earning and spending immediately!",
     mockup: "/images/crypto/mocup2.png",
+    hasCTA: true,
   },
 ];
 
@@ -324,7 +326,7 @@ export default function CryptoScrollSection() {
                             {step.title}
                           </motion.h3>
                           <motion.p
-                            className="text-base sm:text-lg font-medium lg:text-[20px] text-[#6A6A6A] leading-relaxed"
+                            className="text-base sm:text-lg font-medium lg:text-[20px] text-[#6A6A6A] leading-relaxed mb-6"
                             initial={{
                               opacity: isInView ? 0 : 0,
                               x: isInView ? -20 : -40,
@@ -337,6 +339,41 @@ export default function CryptoScrollSection() {
                           >
                             {step.description}
                           </motion.p>
+
+                          {/* CTA Button for last step */}
+                          {step.hasCTA && (
+                            <WaitlistTriggerButton>
+                            <motion.div
+                              initial={{
+                                opacity: isInView ? 0 : 0,
+                                y: isInView ? 20 : 40,
+                              }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{
+                                duration: isInView ? 0.6 : 0.8,
+                                delay: isInView ? 0.4 : 1.5,
+                              }}
+                            >
+                              <button className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95">
+                                <span>Get started</span>
+                                <svg 
+                                  className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" 
+                                  viewBox="0 0 24 24" 
+                                  fill="none" 
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path 
+                                    d="M7 17L17 7M17 7H7M17 7V17" 
+                                    stroke="currentColor" 
+                                    strokeWidth="2" 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </button>
+                            </motion.div>
+                            </WaitlistTriggerButton>
+                          )}
                         </motion.div>
                       )
                   )}
