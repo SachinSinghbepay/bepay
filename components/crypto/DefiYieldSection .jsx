@@ -37,7 +37,7 @@ const DefiYieldSection = () => {
   const containerOpacity = useTransform(
     scrollYProgress,
     [animationStart, animationEnd],
-    [0, 1]
+    [1, 1]
   );
 
   // Individual image exit animations (adjusted for mobile)
@@ -150,7 +150,7 @@ const DefiYieldSection = () => {
   const content1Opacity = useTransform(
     scrollYProgress,
     [imageStart, imageStart + 0.1],
-    [1, 0]
+    [1, 1]
   );
 
   // Content 2 - appears when image 1 exits, exits when image 2 exits
