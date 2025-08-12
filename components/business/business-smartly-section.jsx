@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
-import { CheckCircle } from "lucide-react"; 
+import { CheckCircle } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -123,28 +123,30 @@ export default function BusinessSmartlySection() {
   ];
 
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-[#F9F9F9] dark:bg-gray-950">
-      <div className="max-w-[1200px] mx-auto px-4 md:px-6">
-        <motion.div
-          ref={ref}
-          className="flex flex-col items-center justify-center space-y-4 text-center mb-12 "
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          <motion.h2
-            className="text-4xl sm:text-5xl md:text-6xl 3xl:text-[90px] font-[400] tracking-tight leading-tight text-[#C0C0C0] dark:text-[#333333]"
-            variants={itemVariants}
+    <section className="w-full py-12 md:py-24 lg:py-32 bg-[#F9F9F9] overflow-hidden dark:bg-gray-950">
+      <div>
+        <div className="max-w-[1200px] mx-auto px-4 md:px-6">
+          <motion.div
+            ref={ref}
+            className="flex flex-col items-center justify-center space-y-4 text-center mb-12 "
+            variants={containerVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
           >
-            Everything you need
-          </motion.h2>
-          <motion.h2
-            className="text-4xl sm:text-5xl -mt-4 md:text-6xl 3xl:text-[90px] font-[400] leading-tight tracking-tight text-black dark:text-white"
-            variants={itemVariants}
-          >
-            to run business smartly
-          </motion.h2>
-        </motion.div>
+            <motion.h2
+              className="text-4xl sm:text-5xl md:text-6xl 3xl:text-[90px] font-[400] tracking-tight leading-tight text-[#C0C0C0] dark:text-[#333333]"
+              variants={itemVariants}
+            >
+              Everything you need
+            </motion.h2>
+            <motion.h2
+              className="text-4xl sm:text-5xl -mt-4 md:text-6xl 3xl:text-[90px] font-[400] leading-tight tracking-tight text-black dark:text-white"
+              variants={itemVariants}
+            >
+              to run business smartly
+            </motion.h2>
+          </motion.div>
+        </div>
         <Carousel
           opts={{
             align: "start",
@@ -156,15 +158,15 @@ export default function BusinessSmartlySection() {
               stopOnInteraction: true, // Stop autoplay on user interaction
             }),
           ]}
-          className="w-full"
+          className="w-full "
         >
-          <CarouselContent className="-ml-4">
+          <CarouselContent className="lg:ml-20">
             {" "}
             {/* Adjust negative margin for gap */}
             {cardsData.map((card) => (
               <CarouselItem
                 key={card.id}
-                className="pb-5 basis-[95%] md:basis-1/2 lg:basis-[47.6%]" /* Responsive basis: 1 card (95%) on mobile, 2 on tablet, 2.1 on desktop */
+                className="pb-5 basis-[95%] md:basis-1/2 lg:basis-[35.6%]" /* Responsive basis: 1 card (95%) on mobile, 2 on tablet, 2.1 on desktop */
               >
                 <FeatureCard {...card} />
               </CarouselItem>

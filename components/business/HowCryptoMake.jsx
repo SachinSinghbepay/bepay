@@ -84,6 +84,26 @@ const HowCryptoMake = () => {
   );
   const content4Opacity = useTransform(scrollYProgress, [0.65, 0.75], [0, 1]);
 
+  // Fixed: Floating elements opacity - only show when last mockup is visible
+  const floatingElementsOpacity = useTransform(
+    scrollYProgress,
+    [0.7, 0.75],
+    [0, 1]
+  );
+
+  // Fixed: Floating elements Y position - animate from bottom
+  const floatingElement1Y = useTransform(scrollYProgress, [0.7, 0.8], [50, 0]);
+  const floatingElement2Y = useTransform(
+    scrollYProgress,
+    [0.72, 0.82],
+    [50, 0]
+  );
+  const floatingElement3Y = useTransform(
+    scrollYProgress,
+    [0.74, 0.84],
+    [50, 0]
+  );
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -303,20 +323,19 @@ const HowCryptoMake = () => {
                 </div>
               </motion.div>
 
-              {/* Floating Elements on top of Mockup 4 */}
+              {/* Fixed: Floating Elements on top of Mockup 4 */}
               {/* NO HASSLE Element */}
               <motion.div
                 className="absolute left-[30%] shadow-2xl rounded-[20px] top-[250px] z-30"
-                style={{ opacity: content4Opacity }}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
+                style={{
+                  opacity: floatingElementsOpacity,
+                  y: floatingElement1Y,
+                }}
               >
                 <div
                   className="p-4 rounded-[20px] mx-auto "
                   style={{
                     border: "1px #ffffff1a",
-
                     boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
                     backdropFilter: "blur(20px)",
                     background: "rgba(255, 255, 255, 255)",
@@ -331,19 +350,17 @@ const HowCryptoMake = () => {
               {/* NO VOLATILITY Element */}
               <motion.div
                 className="absolute left-[23%]  shadow-2xl rounded-[20px] top-[450px] z-30"
-                style={{ opacity: content4Opacity }}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
+                style={{
+                  opacity: floatingElementsOpacity,
+                  y: floatingElement2Y,
+                }}
               >
                 <div
                   className="p-4 border border-white/15 rounded-[20px]"
                   style={{
                     border: "1px #ffffff1a",
-
                     boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
                     backdropFilter: "blur(20px)",
-
                     background: "rgba(255, 255, 255, 255)",
                   }}
                 >
@@ -356,16 +373,15 @@ const HowCryptoMake = () => {
               {/* NO DELAYS Element */}
               <motion.div
                 className="absolute shadow-2xl  rounded-[20px] left-[60%] top-[200px] z-30"
-                style={{ opacity: content4Opacity }}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7, duration: 0.8 }}
+                style={{
+                  opacity: floatingElementsOpacity,
+                  y: floatingElement3Y,
+                }}
               >
                 <div
                   className="p-4 rounded-[20px]"
                   style={{
                     border: "1px #ffffff1a",
-
                     boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
                     backdropFilter: "blur(20px)",
                     background: "rgba(255, 255, 255, 255)",
@@ -491,7 +507,7 @@ const HowCryptoMake = () => {
                       </p>
                     </div>
 
-                    {/* Mobile Interactive Elements */}
+                    {/* Fixed: Mobile Interactive Elements with proper timing */}
                     <div className="space-y-4">
                       {/* Main Content Card - NO HASSLE */}
                       <motion.div
@@ -501,10 +517,9 @@ const HowCryptoMake = () => {
                           boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
                           backdropFilter: "blur(20px)",
                           background: "rgba(255, 255, 255, 255)",
+                          opacity: floatingElementsOpacity,
+                          y: floatingElement1Y,
                         }}
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3, duration: 0.8 }}
                       >
                         <h3 className="text-base font-semibold text-gray-800 mb-2">
                           NO HASSLE!
@@ -520,10 +535,9 @@ const HowCryptoMake = () => {
                             boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
                             backdropFilter: "blur(20px)",
                             background: "rgba(255, 255, 255, 255)",
+                            opacity: floatingElementsOpacity,
+                            y: floatingElement2Y,
                           }}
-                          initial={{ opacity: 0, y: 50 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.5, duration: 0.8 }}
                         >
                           <h4 className="font-medium text-gray-800 text-xs">
                             NO VOLATILITY!
@@ -537,10 +551,9 @@ const HowCryptoMake = () => {
                             boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
                             backdropFilter: "blur(20px)",
                             background: "rgba(255, 255, 255, 255)",
+                            opacity: floatingElementsOpacity,
+                            y: floatingElement3Y,
                           }}
-                          initial={{ opacity: 0, y: 50 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.7, duration: 0.8 }}
                         >
                           <h4 className="font-medium text-gray-800 text-xs">
                             NO DELAYS!
