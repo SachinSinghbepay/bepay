@@ -98,6 +98,7 @@ export default function HeroSection() {
             src="/images/aboutus/about hero.png"
             alt="Three people looking at mobile phone"
             fill
+            loading="lazy"
             className="object-cover w-full h-full"
           />
 
@@ -114,6 +115,7 @@ export default function HeroSection() {
               height={30}
               width={30}
               alt="usflag"
+              loading="lazy"
               className="object-cover rounded-full"
             />
           </motion.div>
@@ -129,6 +131,7 @@ export default function HeroSection() {
               src={"/bitcoin.png"}
               height={30}
               alt="bitcoin"
+              loading="lazy"
               width={30}
               className="object-cover rounded-full"
             />
@@ -145,6 +148,7 @@ export default function HeroSection() {
               src={"/doller.png"}
               height={30}
               alt="doller"
+              loading="lazy"
               width={30}
               className="object-cover rounded-full"
             />
@@ -160,6 +164,7 @@ export default function HeroSection() {
             <Image
               src={"/usdt.png"}
               height={30}
+              loading="lazy"
               width={30}
               alt="usdt"
               className="object-cover rounded-full"

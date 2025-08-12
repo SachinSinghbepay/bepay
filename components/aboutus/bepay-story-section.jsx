@@ -55,6 +55,7 @@ export default function BepayStorySection() {
         <Image
           src={src || "/placeholder.svg"}
           alt={alt}
+          loading="lazy"
           fill
           className="object-contain rotate-[30deg] rounded-lg"
         />
@@ -104,6 +105,7 @@ export default function BepayStorySection() {
               <Image
                 src="/images/aboutus/mocup.png"
                 alt="bepay mobile app mockup"
+                loading="lazy"
                 fill
                 className="object-contain pt-10 z-10"
               />
@@ -119,6 +121,7 @@ export default function BepayStorySection() {
               <Image
                 src="/images/aboutus/i1.png"
                 width={80}
+                loading="lazy"
                 height={80}
                 alt="icon 1"
                 className="object-contain"
@@ -135,6 +138,7 @@ export default function BepayStorySection() {
                 src="/images/aboutus/i4.png"
                 width={80}
                 height={80}
+                loading="lazy"
                 alt="icon 4"
                 className="object-contain"
               />
@@ -151,6 +155,7 @@ export default function BepayStorySection() {
                 src="/images/aboutus/i2.png"
                 width={80}
                 height={80}
+                loading="lazy"
                 alt="icon 2"
                 className="object-contain"
               />
@@ -167,6 +172,7 @@ export default function BepayStorySection() {
                 width={80}
                 height={80}
                 alt="icon 3"
+                loading="lazy"
                 className="object-contain"
               />
             </motion.div>

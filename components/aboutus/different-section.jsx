@@ -128,6 +128,7 @@ export default function WhatMakesYouDifferent() {
                     alt={card.title}
                     fill
                     className="object-cover"
+                      loading="lazy"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 571px"
                   />
                   {/* Overlay Box Image */}
@@ -141,6 +142,7 @@ export default function WhatMakesYouDifferent() {
                             alt="Feature icon"
                             fill
                             className="object-contain"
+                              loading="lazy"
                             sizes="200px"
                           />
                         </div>

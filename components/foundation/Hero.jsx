@@ -41,6 +41,7 @@ export default function BepayHero() {
               src="/bepayicon.png"
               width={80}
               height={80}
+              loading="lazy"
               alt="Bepay Foundation Logo"
               className="h-16 w-16 md:h-24 md:w-24"
             />
@@ -59,11 +60,11 @@ export default function BepayHero() {
       <div className="w-full">
         <Image
           src="/images/foundation/hero.png"
-          width={1920} // Provide a large width for better quality, actual display will be w-full
-          height={1080} // Provide a height that maintains aspect ratio with the width
+          width={1920}
+          height={1080} 
           alt="Students sitting in a circle on a sports field"
           className="w-full h-auto object-cover"
-          priority // Load this image with high priority as it's the main hero image
+          priority 
         />
       </div>
     </section>

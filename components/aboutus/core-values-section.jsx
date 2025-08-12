@@ -114,7 +114,7 @@ export default function CoreValuesSection() {
                 width={365}
                 height={1035}
                 className="absolute inset-0 w-full h-full object-contain rotate-90 lg:rotate-0 lg:relative lg:w-[365px] lg:h-[900px]"
-                priority
+                  loading="lazy"
               />
             </div>
           </motion.div>
