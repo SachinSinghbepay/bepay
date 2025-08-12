@@ -190,7 +190,7 @@ const SmoothScroll = ({ children }) => {
 
   const scrollUp = useCallback(() => {
     if (!lenisRef.current || lenisRef.current.isDestroyed) return;
-    const scrollAmount = window.innerHeight * 0.3;
+    const scrollAmount = window.innerHeight * 0.5;
     const targetScroll = Math.max(0, lenisRef.current.scroll - scrollAmount);
     lenisRef.current.scrollTo(targetScroll, {
       duration: 1.0,
@@ -200,7 +200,7 @@ const SmoothScroll = ({ children }) => {
 
   const scrollDown = useCallback(() => {
     if (!lenisRef.current || lenisRef.current.isDestroyed) return;
-    const scrollAmount = window.innerHeight * 0.3;
+    const scrollAmount = window.innerHeight * 0.5;
     const maxScroll =
       document.documentElement.scrollHeight - window.innerHeight;
     const targetScroll = Math.min(
@@ -215,7 +215,7 @@ const SmoothScroll = ({ children }) => {
 
   const pageScrollUp = useCallback(() => {
     if (!lenisRef.current || lenisRef.current.isDestroyed) return;
-    const scrollAmount = window.innerHeight * 0.9; // Slightly increased for full page feel
+    const scrollAmount = window.innerHeight * 0.9; 
     const targetScroll = Math.max(0, lenisRef.current.scroll - scrollAmount);
     lenisRef.current.scrollTo(targetScroll, {
       duration: getScrollDuration(0.9), // Longer duration for page scroll

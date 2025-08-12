@@ -229,36 +229,84 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn"
-                  className="w-10 h-10 border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                  className="w-10 h-10 border p-[10px] border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
                 >
-                  <LinkedinIcon className="w-5 h-5" />
+                  <svg
+                    width="21"
+                    height="20"
+                    viewBox="0 0 21 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M7.93279 7.197H11.5081V8.97791C12.0231 7.95365 13.3439 7.03335 15.3279 7.03335C19.1313 7.03335 20.0343 9.07225 20.0343 12.8131V19.7413H16.1837V13.6651C16.1837 11.5347 15.6687 10.3333 14.3575 10.3333C12.5391 10.3333 11.7834 11.6281 11.7834 13.6641V19.7413H7.93279V7.197ZM1.32996 19.5777H5.18057V7.03335H1.32996V19.5777ZM5.73217 2.94304C5.73231 3.2658 5.6683 3.58536 5.54386 3.88316C5.41942 4.18096 5.23703 4.45105 5.00729 4.67774C4.77687 4.90697 4.50354 5.08854 4.20292 5.21209C3.9023 5.33564 3.58028 5.39875 3.25526 5.39781C2.60028 5.39633 1.97197 5.13816 1.50516 4.6787C1.27634 4.45118 1.09462 4.18077 0.970407 3.88295C0.846191 3.58512 0.781913 3.26573 0.78125 2.94304C0.78125 2.29133 1.04117 1.66753 1.50613 1.20738C1.97176 0.746159 2.60083 0.48768 3.25623 0.488282C3.91276 0.488282 4.54233 0.747236 5.00729 1.20738C5.47225 1.66753 5.73217 2.29133 5.73217 2.94304Z"
+                      fill="#C0C0C0"
+                    />
+                  </svg>
                 </Link>
                 <Link
                   href="https://x.com/bepaymoney"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Twitter"
-                  className="w-10 h-10 border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                  className="w-10 h-10 border p-[10px] border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
                 >
-                  <IconBrandX className="w-5 h-5" />
+                  <svg
+                    width="21"
+                    height="19"
+                    viewBox="0 0 21 19"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M16.1562 0.0546875H19.2234L12.5234 7.73183L20.4062 18.1804H14.2348L9.39768 11.8447L3.86911 18.1804H0.799107L7.96482 9.96611L0.40625 0.0561161H6.73482L11.1005 5.84612L16.1562 0.0546875ZM15.0777 16.3404H16.7777L5.80625 1.79897H3.98339L15.0777 16.3404Z"
+                      fill="#C0C0C0"
+                    />
+                  </svg>
                 </Link>
                 <Link
                   href="https://www.facebook.com/bepaymoney/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="w-10 h-10 border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                  className="w-10 h-10 border p-[10px] border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
                 >
-                  <LucideFacebook className="w-5 h-5" />
+                  <svg
+                    width="11"
+                    height="20"
+                    viewBox="0 0 11 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M7.11656 11.586H9.56054L10.5381 7.67567H7.11656V5.72049C7.11656 4.71357 7.11656 3.76531 9.07174 3.76531H10.5381V0.480613C10.2194 0.438576 9.01602 0.34375 7.74515 0.34375C5.091 0.34375 3.20621 1.96362 3.20621 4.93842V7.67567H0.273438V11.586H3.20621V19.8955H7.11656V11.586Z"
+                      fill="#C0C0C0"
+                    />
+                  </svg>
                 </Link>
                 <Link
                   href="https://t.me/officialbepaymoney"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Telegram"
-                  className="w-10 h-10 border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                  className="w-10 h-10 p-[10px] border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
                 >
-                  <IconBrandTelegram className="w-5 h-5" />
+                  <svg
+                    width="21"
+                    height="18"
+                    viewBox="0 0 21 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M18.0371 1.00318C18.2739 0.903518 18.533 0.869146 18.7876 0.903639C19.0422 0.938133 19.2829 1.04023 19.4846 1.19931C19.6864 1.35838 19.8418 1.56862 19.9347 1.80814C20.0276 2.04766 20.0546 2.3077 20.0129 2.5612L17.8397 15.7431C17.6289 17.0146 16.2338 17.7438 15.0676 17.1104C14.0922 16.5805 12.6434 15.7641 11.3403 14.9123C10.6887 14.4859 8.69279 13.1205 8.93809 12.1489C9.14889 11.3181 12.5026 8.19633 14.419 6.34031C15.1711 5.61113 14.8281 5.19048 13.9399 5.86122C11.7341 7.52656 8.19262 10.0591 7.02171 10.772C5.98877 11.4005 5.45027 11.5078 4.80636 11.4005C3.63162 11.2051 2.54215 10.9023 1.65295 10.5334C0.451377 10.0351 0.509827 8.38318 1.65199 7.90217L18.0371 1.00318Z"
+                      fill="#C0C0C0"
+                    />
+                  </svg>
                 </Link>
               </div>
             </div>
@@ -389,47 +437,42 @@ const Footer = () => {
             >
               <style jsx>{`
                 .hover-logo:hover #paint0_linear_2175_15792 stop:first-child {
-                  stop-color: #cacaca;
+                  stop-color: #8c8c8c; /* softer light gray */
                 }
                 .hover-logo:hover #paint0_linear_2175_15792 stop:last-child {
-                  stop-color: #cacaca;
+                  stop-color: #8c8c8c;
                   stop-opacity: 0;
                 }
                 .hover-logo:hover #paint1_linear_2175_15792 stop:first-child {
-                  stop-color: #cacaca;
+                  stop-color: #8c8c8c;
                 }
                 .hover-logo:hover #paint1_linear_2175_15792 stop:last-child {
-                  stop-color: #cacaca;
+                  stop-color: #8c8c8c;
                   stop-opacity: 0;
                 }
                 .hover-logo:hover #paint2_linear_2175_15792 stop:first-child {
-                  stop-color: #cacaca;
+                  stop-color: #8c8c8c;
                 }
                 .hover-logo:hover #paint2_linear_2175_15792 stop:last-child {
-                  stop-color: #cacaca;
+                  stop-color: #8c8c8c;
                   stop-opacity: 0;
                 }
                 .hover-logo:hover #paint3_linear_2175_15792 stop:first-child {
-                  stop-color: #cacaca;
+                  stop-color: #8c8c8c;
                 }
                 .hover-logo:hover #paint3_linear_2175_15792 stop:last-child {
-                  stop-color: #cacaca;
+                  stop-color: #8c8c8c;
                   stop-opacity: 0;
                 }
                 .hover-logo:hover #paint4_linear_2175_15792 stop:first-child {
-                  stop-color: #cacaca;
+                  stop-color: #8c8c8c;
                 }
                 .hover-logo:hover #paint4_linear_2175_15792 stop:last-child {
-                  stop-color: #cacaca;
+                  stop-color: #8c8c8c;
                   stop-opacity: 0;
                 }
-                .hover-logo:hover g {
-                  opacity: 1;
-                }
-                .hover-logo g {
-                  transition: opacity 0.5s ease;
-                }
               `}</style>
+
               <g opacity="0.3">
                 <path
                   d="M152.735 418.863C129.162 418.863 107.584 413.604 87.9988 403.089C68.7796 392.57 53.9104 377.701 43.3954 358.482L50.4657 349.777V412.337H0.964844V0.546875H51.5563V182.233L43.9385 169.722C54.8197 152.317 69.689 138.534 88.5461 128.381C107.403 117.862 128.981 112.607 153.278 112.607C180.84 112.607 205.499 119.315 227.258 132.732C249.379 146.152 266.787 164.466 279.479 187.673C292.171 210.522 298.517 236.631 298.517 266.007C298.517 294.655 292.171 320.586 279.479 343.793C266.787 367.005 249.379 385.318 227.258 398.735C205.499 412.155 180.658 418.863 152.735 418.863ZM148.924 369.906C167.419 369.906 183.922 365.371 198.429 356.304C212.932 347.242 224.176 334.908 232.155 319.315C240.493 303.359 244.666 285.589 244.666 266.007C244.666 245.697 240.493 227.926 232.155 212.695C224.176 197.102 212.932 184.772 198.429 175.705C183.922 166.277 167.419 161.565 148.924 161.565C130.429 161.565 113.749 166.096 98.8801 175.162C84.3731 184.228 72.7714 196.739 64.0672 212.695C55.7252 228.293 51.5563 246.059 51.5563 266.007C51.5563 285.589 55.7252 303.359 64.0672 319.315C72.7714 334.908 84.3731 347.242 98.8801 356.304C113.749 365.371 130.429 369.906 148.924 369.906Z"
