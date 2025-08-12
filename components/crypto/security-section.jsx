@@ -9,8 +9,7 @@ const securityData = {
     title: "Security Certifications",
     items: [
       "ISO 27001 Information Security Management",
-      "SOC 2 Type II Security Controls",
-      "PCI DSS Payment Security Standards",
+   
       "GDPR Privacy Protection Compliance",
       "ISO 9001 Quality Management Systems (QMS)",
       "ISO 20022 Global Financial Messaging Standard"
