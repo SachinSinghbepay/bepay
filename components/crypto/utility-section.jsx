@@ -77,7 +77,7 @@ const AnimatedText = () => {
       viewport={{ once: true, amount: 0.3 }}
       initial="hidden"
       whileInView="visible"
-      className="text-4xl md:text-7xl lg:text-[140px] font-[400] text-center lg:leading-tight lg:tracking-tighter"
+      className="text-4xl md:text-7xl lg:text-[140px] font-[400] text-center lg:tracking-[-0.09em] leading-[130px]"
     >
       <motion.div
         initial={{ opacity: 1, y: 100 }}
@@ -93,9 +93,9 @@ const AnimatedText = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.2 }}
         viewport={{ once: false, amount: 0.5 }}
-        className="lg:-mt-9"
+      
       >
-        <span className="text-[#333333] ">daily utility</span>
+        <span className="text-[#333333]">daily utility</span>
       </motion.div>
     </motion.h2>
   );
@@ -122,7 +122,7 @@ const Card = ({ cardData }) => (
 );
 
 const CardPair = ({ pair, progress, range, isLastPair }) => {
-  const y = useTransform(progress, range, ["90%", "-100%"]);
+  const y = useTransform(progress, range, ["100%", "-100%"]);
   const buttonOpacity = useTransform(
     progress,
     [range[1] - 0.05, range[1]],
