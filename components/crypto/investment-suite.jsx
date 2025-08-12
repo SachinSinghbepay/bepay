@@ -156,7 +156,7 @@ export default function InvestmentSuite() {
             {investmentData.map((item, index) => (
               <CarouselItem
                 key={item.id}
-                className="pl-6 basis-[90%] md:basis-[45%] lg:basis-[42%]" // Mobile: 1 card + 10%, Desktop: ~2.2 cards
+                className="pl-6 basis-[90%] md:basis-[45%] lg:basis-[38%]" // Mobile: 1 card + 10%, Desktop: ~2.2 cards
               >
                 <motion.div
                   initial={{ opacity: 0, y: 100 }}
