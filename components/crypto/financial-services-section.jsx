@@ -114,6 +114,7 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
           src={service.image || "/placeholder.svg"}
           alt={service.title}
           layout="fill"
+          loading="lazy"
           objectFit="cover"
         />
       </div>
@@ -229,6 +230,7 @@ const MobileView = () => {
                     src={service.image || "/placeholder.svg"}
                     alt={service.title}
                     layout="fill"
+                    loading="lazy"
                     objectFit="cover"
                   />
                 </div>

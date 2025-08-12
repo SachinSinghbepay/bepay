@@ -37,6 +37,7 @@ const AppStoreButton = ({ iconSrc, iconAlt, line1, line2 }) => (
       alt={iconAlt}
       width={24}
       height={24}
+      loading="lazy"
       className="h-6 w-6"
     />
     <div className="text-left">

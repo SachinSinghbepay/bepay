@@ -180,6 +180,7 @@ export default function InvestmentSuite() {
                       src={item.image || "/placeholder.svg"}
                       alt={item.title}
                       width={400}
+                      loading="lazy"
                       height={400}
                       className="w-full h-[268px] object-cover transition-transform duration-500 group-hover:scale-105"
                     />

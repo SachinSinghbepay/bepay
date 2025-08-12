@@ -26,6 +26,7 @@ export const PaymentProofSection = () => {
         alt="Two women looking at a smartphone"
         layout="fill"
         objectFit="cover"
+        loading="lazy"
         className="z-0"
       />
 
@@ -35,6 +36,7 @@ export const PaymentProofSection = () => {
         alt="Geometric overlay"
         layout="fill"
         objectFit="cover"
+        loading="lazy"
         className="z-10"
       />
 
@@ -54,6 +56,7 @@ export const PaymentProofSection = () => {
               src={"/bitcoin.png"}
               alt="bitcoin"
               height={30}
+              loading="lazy"
               width={30}
               className="object-cover"
             />

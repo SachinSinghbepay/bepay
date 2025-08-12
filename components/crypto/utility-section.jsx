@@ -77,7 +77,7 @@ const AnimatedText = () => {
       viewport={{ once: true, amount: 0.3 }}
       initial="hidden"
       whileInView="visible"
-      className="text-4xl md:text-7xl lg:text-[140px] font-[400] text-center lg:tracking-[-0.09em] leading-[130px]"
+      className="text-4xl md:text-7xl lg:text-[140px] font-[400] tracking-tight text-center lg:tracking-[-0.09em] lg:leading-[130px]"
     >
       <motion.div
         initial={{ opacity: 1, y: 100 }}
@@ -108,6 +108,7 @@ const Card = ({ cardData }) => (
       alt={cardData.title}
       width={200}
       height={200}
+      loading="lazy"
       className="opacity-100 absolute top-4 left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0 w-[150px] h-[150px] md:w-[200px] md:h-[200px] z-0"
     />
     <div className="relative mb-5 z-10">
