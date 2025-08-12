@@ -199,17 +199,17 @@ const BusinessHero = () => {
                   MODERN BUSINESSES
                 </span>
               </h1>
-              <p className="text-[#C0C0C0] text-left text-base sm:text-lg md:text-[16px] max-w-[986px] mx-auto leading-relaxed px-4 sm:px-6">
+              <p className="text-[#6A6A6AE5] text-left text-base sm:text-lg md:text-[16px] max-w-[986px] mx-auto leading-relaxed px-4 sm:px-6">
                 Join{" "}
-                <span className="text-[#333333] font-semibold">
+                <span className="text-[#080808] font-semibold">
                   1,000+ businesses
                 </span>{" "}
                 using bepay to process crypto payments with{" "}
-                <span className="text-[#333333] font-semibold">
+                <span className="text-[#080808] font-semibold">
                   30-second settlements
                 </span>{" "}
                 and up to{" "}
-                <span className="text-[#333333] font-semibold">
+                <span className="text-[#080808] font-semibold">
                   70% lower fees
                 </span>{" "}
                 than traditional processors
@@ -253,7 +253,7 @@ const BusinessHero = () => {
                     {/* Logo at top */}
                     <div className="absolute top-4 md:top-9 left-1/2 -translate-x-1/2 z-10">
                       <Image
-                        src="/bepaymoney.svg"
+                        src="/bepaybusiness.svg"
                         alt="Bepay Logo"
                         width={200}
                         height={100}
@@ -276,7 +276,7 @@ const BusinessHero = () => {
 
                     {/* Content that appears inside the mockup after rotation and image fade */}
                     {showContent && (
-                      <div className="absolute inset-0 top-3  rotate-90 bg-white rounded-[2rem] flex flex-row gap-7 md:flex-col justify-center items-center p-4">
+                      <div className="absolute inset-0 top-3  rotate-90 bg-white rounded-[2rem] flex flex-row gap-7  justify-center items-center p-4">
                         {/* Content Grid matching your image layout */}
                         <div className="flex flex-col  mb-1 md:mb-6 w-full max-w-[500px]">
                           {contentItems.map((item, index) => (
@@ -315,12 +315,12 @@ const BusinessHero = () => {
                             duration: 0.4,
                             ease: "easeOut",
                           }}
-                          className="flex flex-col lg:-mt-9 md:flex-row gap-3 w-full max-w-[600px]"
+                          className="flex flex-col  lg:-mt-9 md:flex-row gap-3 w-full max-w-[600px]"
                         >
                           {!isSubmitted ? (
                             <form
                               onSubmit={handleEmailSubmit}
-                              className="flex flex-col md:flex-row gap-3 w-full"
+                              className="flex flex-col  gap-3 w-full"
                             >
                               <div className="flex-1">
                                 <input
@@ -342,7 +342,7 @@ const BusinessHero = () => {
                                 disabled={isSubmitting}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="bg-black  w-[130px] sm:w-[180px]  cursor-pointer text-white whitespace-nowrap px-2 md:px-6 py-3 rounded-full font-medium text-[10px] md:text-[12px] hover:bg-black/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                                className="bg-black   w-[130px] sm:w-[180px] md:w-full cursor-pointer text-white whitespace-nowrap px-2 md:px-6 py-3 rounded-full font-medium text-[10px] md:text-[12px] hover:bg-black/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                               >
                                 {isSubmitting ? (
                                   <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />
@@ -372,9 +372,12 @@ const BusinessHero = () => {
                               animate={{ opacity: 1, scale: 1 }}
                               transition={{ duration: 0.5, ease: "easeOut" }}
                               className="flex flex-row items-center gap-1 justify-center   w-full"
-                            ><div> <CheckCircle className="w-4 h-4 mt-2 text-green-600 mb-2" /></div>
-                             
-                              
+                            >
+                              <div>
+                                {" "}
+                                <CheckCircle className="w-4 h-4 mt-2 text-green-600 mb-2" />
+                              </div>
+
                               <div className="text-green-600 lg:whitespace-nowrap text-[6px] md:text-[10px] leading-relaxed">
                                 {submitMessage}
                               </div>
