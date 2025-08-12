@@ -240,7 +240,7 @@ export default function CryptoWalletSection() {
                       />
                     </div>
                     <span
-                      className={`text-base md:text-lg text-[#6A6A6A] font-semibold max-w-[500px] lg:text-[32px] transition-all duration-500 ${
+                      className={`text-base md:text-lg lg:tracking-tighter text-[#6A6A6A] font-semibold max-w-[400px] lg:text-[32px] transition-all duration-500 ${
                         activeView === feature.id ? "opacity-100" : "opacity-40"
                       }`}
                     >
