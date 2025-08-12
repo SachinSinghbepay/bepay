@@ -200,8 +200,8 @@ export default function CryptoWalletSection() {
                     }}
                   >
                     <Image
-                      src="/creditcard.png"
-                      alt="Black Debit Card"
+                      src="/cryptocard.png"
+                      alt="Black Crypto Card"
                       fill
                       priority
                       className="object-contain -mt-32 md:mt-0"
@@ -240,7 +240,7 @@ export default function CryptoWalletSection() {
                       />
                     </div>
                     <span
-                      className={`text-base md:text-lg font-semibold max-w-[500px] lg:text-[32px] transition-all duration-500 ${
+                      className={`text-base md:text-lg text-[#6A6A6A] font-semibold max-w-[500px] lg:text-[32px] transition-all duration-500 ${
                         activeView === feature.id ? "opacity-100" : "opacity-40"
                       }`}
                     >

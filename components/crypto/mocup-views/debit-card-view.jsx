@@ -50,8 +50,8 @@ export function DebitCardView({ setActiveView, scrollYProgress }) {
           className="relative mx-auto -rotate-90 aspect-[1.5/1] rounded-xl"
         >
           <Image
-            src="/creditcard.png"
-            alt="Debit Card in Mockup"
+            src="/cryptocard.png"
+            alt="Crypto Card in Mockup"
             fill
             className="object-contain"
           />
