@@ -209,7 +209,7 @@ export default function BlogForm({ blog = null }) {
 
         <div>
           <label htmlFor="readTime" className="block text-lg font-bold text-black mb-1">
-            Read Time (e.g., "7 MIN READ")
+            Read Time (e.g., &quot;7 MIN READ&quot;)
           </label>
           <input
             type="text"

@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { Linkedin, Twitter, Facebook, Send } from "lucide-react";
+import Image from "next/image";
 
 const Footer = () => {
   // Animation variants
@@ -79,14 +80,14 @@ const Footer = () => {
           viewport={{ once: true, amount: 0.3 }}
         >
           <motion.button
-           
+            
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: false, amount: 0.5 }}
             whileTap={{ scale: 0.95 }}
           >
-            <img src="apple.png" alt="" className="h-5 lg:h-10" />
+            <Image src="/apple.png" alt="Download on the App Store" width={100} height={30} className="h-5 lg:h-10" />
             {/* <div className="text-left">
               <div>Download on the</div>
               <div>App Store</div>
@@ -100,21 +101,21 @@ const Footer = () => {
             viewport={{ once: false, amount: 0.5 }}
             whileTap={{ scale: 0.95 }}
           >
-            <img src="playstore.png" alt="" className="h-5 lg:h-10" />
+            <Image src="/playstore.png" alt="Get the App on Google Play" width={100} height={30} className="h-5 lg:h-10" />
             {/* <div className="text-left">
               <div>Get the App on</div>
               <div>Google Play</div>
             </div> */}
           </motion.button>
           <motion.button
-         
+          
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
             viewport={{ once: false, amount: 0.5 }}
             whileTap={{ scale: 0.95 }}
           >
-            <img src="huawei.png" alt="" className="h-5 lg:h-10" />
+            <Image src="/huawei.png" alt="Get it on the App Gallery" width={100} height={30} className="h-5 lg:h-10" />
             {/* <div className="text-left">
               <div>Get it on the App</div>
               <div>Gallery!</div>
@@ -134,7 +135,7 @@ const Footer = () => {
             Sign-up to our newsletter for exclusive updates!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-             <form className="flex items-center gap-2 border border-white/20 rounded-full p-1 pr-2">
+              <form className="flex items-center gap-2 border border-white/20 rounded-full p-1 pr-2">
               <input
                 type="email"
                 placeholder="Enter your email"

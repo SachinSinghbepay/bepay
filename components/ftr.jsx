@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const FTR = () => {
   // Animation variants
@@ -61,7 +62,7 @@ const FTR = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             viewport={{ once: false, amount: 0.5 }}
           >
-            It's time your wallet started working for you.<br></br>
+            It&apos;s time your wallet started working for you.<br></br>
             With bepay, every swipe, scan, and spend puts money back where it
             belongs — in your hands.
           </motion.span>
@@ -83,7 +84,7 @@ const FTR = () => {
             viewport={{ once: false, amount: 0.5 }}
             whileTap={{ scale: 0.95 }}
           >
-            <img src="apple.png" alt="" className="h-5" />
+            <Image src="apple.png" alt="" className="h-5" />
             <div className="text-left">
               <div>Download on the</div>
               <div>App Store</div>
@@ -97,7 +98,7 @@ const FTR = () => {
             viewport={{ once: false, amount: 0.5 }}
             whileTap={{ scale: 0.95 }}
           >
-            <img src="playstore.png" alt="" className="h-5" />
+            <Image src="playstore.png" alt="" className="h-5" />
             <div className="text-left">
               <div>Get the App on</div>
               <div>Google Play</div>
@@ -111,7 +112,7 @@ const FTR = () => {
             viewport={{ once: false, amount: 0.5 }}
             whileTap={{ scale: 0.95 }}
           >
-            <img src="huawei.png" alt="" className="h-5" />
+            <Image src="huawei.png" alt="" className="h-5" />
             <div className="text-left">
               <div>Get it on the App</div>
               <div>Gallery!</div>
@@ -167,7 +168,7 @@ const FTR = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: false, amount: 0.5 }}
           >
-            <img src="linkdin.png" className="h-8" alt="" />
+            <Image src="linkdin.png" className="h-8" alt="" />
           </motion.li>
           <motion.li
             initial={{ opacity: 0, y: 50 }}
@@ -175,7 +176,7 @@ const FTR = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             viewport={{ once: false, amount: 0.5 }}
           >
-            <img src="x.png" className="h-8" alt="" />
+            <Image src="x.png" className="h-8" alt="" />
           </motion.li>
           <motion.li
             initial={{ opacity: 0, y: 50 }}
@@ -183,7 +184,7 @@ const FTR = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             viewport={{ once: false, amount: 0.5 }}
           >
-            <img src="facebook.png" className="h-8" alt="" />
+            <Image src="facebook.png" className="h-8" alt="" />
           </motion.li>
           <motion.li
             initial={{ opacity: 0, y: 50 }}
@@ -191,7 +192,7 @@ const FTR = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
             viewport={{ once: false, amount: 0.5 }}
           >
-            <img src="teligram.png" className="h-8" alt="" />
+            <Image src="teligram.png" className="h-8" alt="" />
           </motion.li>
         </motion.ul>
 
@@ -210,7 +211,7 @@ const FTR = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: false, amount: 0.5 }}
           >
-            <img
+            <Image
               src="/Bepay hover effect.png"
               alt="Bepay Hover Effect"
               className="w-full h-full relative object-contain rounded-3xl shadow-2xl z-5"

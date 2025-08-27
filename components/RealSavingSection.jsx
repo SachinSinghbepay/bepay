@@ -1,34 +1,35 @@
-"use client"
+"use client";
 
-import { useRef, useLayoutEffect, useState } from "react"
-import { gsap } from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-import Image from "next/image"
+import { useRef, useLayoutEffect, useState, useMemo } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 
 export default function RealSavingSection() {
-  const sectionRef = useRef(null)
-  const leftContentRef = useRef(null)
-  const rightContentRef = useRef(null)
-  const numberRef = useRef(null)
-  const mockupRef = useRef(null)
-  const line1Ref = useRef(null)
-  const line2Ref = useRef(null)
-  const line3Ref = useRef(null)
-  const line4Ref = useRef(null)
+  const sectionRef = useRef(null);
+  const leftContentRef = useRef(null);
+  const rightContentRef = useRef(null);
+  const numberRef = useRef(null);
+  const mockupRef = useRef(null);
+  const line1Ref = useRef(null);
+  const line2Ref = useRef(null);
+  const line3Ref = useRef(null);
+  const line4Ref = useRef(null);
 
-  const [currentStep, setCurrentStep] = useState(1)
-  const [currentImage, setCurrentImage] = useState("m1.png")
+  const [currentStep, setCurrentStep] = useState(1);
+  const [currentImage, setCurrentImage] = useState("m1.png");
 
-  const steps = [
+  // ✅ CORRECTED: Memoize the steps array to prevent it from changing on every render.
+  const steps = useMemo(() => [
     { number: "1", image: "m1.png" },
     { number: "2", image: "m2.png" },
     { number: "3", image: "m3.png" },
     { number: "4", image: "m4.png" },
     { number: "TOTAL", image: "m5.png" },
-  ]
+  ], []);
 
   useLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger)
+    gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
       // Ensure all elements exist before animating
@@ -39,36 +40,44 @@ export default function RealSavingSection() {
         line4Ref.current,
         numberRef.current,
         mockupRef.current,
-      ]
+      ];
       if (elements.some((el) => !el)) {
-        console.warn("Some animation elements not found")
-        return
+        console.warn("Some animation elements not found");
+        return;
       }
 
       // Set initial states to hidden for all elements
-      gsap.set([line1Ref.current, line2Ref.current, line3Ref.current, line4Ref.current], {
-        opacity: 0,
-        y: 100,
-        visibility: "hidden",
-      })
+      gsap.set(
+        [
+          line1Ref.current,
+          line2Ref.current,
+          line3Ref.current,
+          line4Ref.current,
+        ],
+        {
+          opacity: 0,
+          y: 100,
+          visibility: "hidden",
+        }
+      );
       gsap.set(numberRef.current, {
         opacity: 0,
         y: -200,
         visibility: "hidden",
-      })
+      });
       gsap.set(mockupRef.current, {
         opacity: 0,
         y: 200,
         visibility: "hidden",
-      })
+      });
 
       // 1. Left Content Animation: Animates once when the section enters the viewport
       gsap
         .timeline({
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 80%", // When the top of the section hits 80% from the top of the viewport
-            toggleActions: "play none none none", // Play once when entering, then do nothing
+            start: "top 80%",
+            toggleActions: "play none none none",
           },
         })
         .to(line1Ref.current, {
@@ -87,7 +96,7 @@ export default function RealSavingSection() {
             ease: "power3.out",
             visibility: "visible",
           },
-          "-=0.4", // Overlap slightly with the previous animation
+          "-=0.4"
         )
         .to(
           line3Ref.current,
@@ -98,7 +107,7 @@ export default function RealSavingSection() {
             ease: "power3.out",
             visibility: "visible",
           },
-          "-=0.4",
+          "-=0.4"
         )
         .to(
           line4Ref.current,
@@ -109,33 +118,30 @@ export default function RealSavingSection() {
             ease: "power3.out",
             visibility: "visible",
           },
-          "-=0.4",
-        )
+          "-=0.4"
+        );
 
       // 2. Main ScrollTrigger for Pinning and Right Content Entrance
-      // This timeline handles the initial animation of the number and mockup into view
       const mainPinTimeline = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top top", // Pin the section when its top hits the top of the viewport
-          end: "bottom top", // Unpin when the bottom of the section hits the top of the viewport
-          pin: true, // Keep the section fixed in the viewport
-          pinSpacing: true, // Add spacing to prevent content from jumping
-          scrub: 1, // Smoothly scrub the entrance animation of number/mockup
-          invalidateOnRefresh: true, // Recalculate on refresh
+          start: "top top",
+          end: "bottom top",
+          pin: true,
+          pinSpacing: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
         },
-      })
+      });
 
       mainPinTimeline
-        // Animate number into view from top
         .to(numberRef.current, {
           opacity: 1,
           y: 0,
-          duration: 0.5, // Duration for entrance animation
+          duration: 0.5,
           ease: "power3.out",
           visibility: "visible",
         })
-        // Animate mockup into view from bottom
         .to(
           mockupRef.current,
           {
@@ -145,42 +151,44 @@ export default function RealSavingSection() {
             ease: "power3.out",
             visibility: "visible",
           },
-          "<", // Start at the same time as the number animation
-        )
+          "<"
+        );
 
-      // 3. Step Progression: Updates the current step and image based on scroll progress
-      // This ScrollTrigger is separate and only responsible for updating the React state.
+      // 3. Step Progression
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start: "top top", // Start tracking progress when the section pins
-        end: "bottom top", // End tracking when the section unpins
-        scrub: true, // Smoothly update progress
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
         onUpdate: (self) => {
-          const progress = self.progress // Progress from 0 to 1 over the pinned duration
-          const totalSteps = steps.length
-          const stepSegment = 1 / totalSteps
-          // Calculate the current step index based on scroll progress
-          const currentStepIndex = Math.min(Math.floor(progress / stepSegment), totalSteps - 1)
+          const progress = self.progress;
+          const totalSteps = steps.length;
+          const stepSegment = 1 / totalSteps;
+          const currentStepIndex = Math.min(
+            Math.floor(progress / stepSegment),
+            totalSteps - 1
+          );
 
-          // Update state only if the step has changed to avoid unnecessary re-renders [^3]
           if (currentStepIndex + 1 !== currentStep) {
-            setCurrentStep(currentStepIndex + 1)
-            setCurrentImage(steps[currentStepIndex].image)
+            setCurrentStep(currentStepIndex + 1);
+            setCurrentImage(steps[currentStepIndex].image);
           }
         },
-      })
-    }, sectionRef) // GSAP Context scope [^1]
+      });
+    }, sectionRef);
 
-    // Comprehensive cleanup function for GSAP animations and ScrollTriggers [^2]
     return () => {
-      ctx.revert() // Reverts all GSAP animations and ScrollTriggers created within this context
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill()) // Ensure all ScrollTriggers are killed
-      ScrollTrigger.refresh() // Refresh ScrollTrigger to ensure a clean state
-    }
-  }, []) // Empty dependency array ensures this effect runs only once on mount and cleans up on unmount
+      ctx.revert();
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      ScrollTrigger.refresh();
+    };
+  }, [currentStep, steps]);
 
   return (
-    <section ref={sectionRef} className="min-h-screen flex items-start justify-center py-20 px-4 sm:px-6 lg:px-8">
+    <section
+      ref={sectionRef}
+      className="min-h-screen flex items-start justify-center py-20 px-4 sm:px-6 lg:px-8"
+    >
       <div className="w-full h-screen flex items-center">
         <div className="grid grid-cols-1 lg:grid-cols-5 items-center w-full">
           {/* Left Content */}
@@ -202,10 +210,16 @@ export default function RealSavingSection() {
                 Real <span className="text-gray-800 font-normal">savings.</span>
               </h2>
               <div className="pt-4 sm:pt-6 space-y-1 sm:space-y-2">
-                <p ref={line3Ref} className="text-sm sm:text-lg md:text-xl lg:text-2xl text-gray-600 font-medium">
+                <p
+                  ref={line3Ref}
+                  className="text-sm sm:text-lg md:text-xl lg:text-2xl text-gray-600 font-medium"
+                >
                   Your Life Already Costs Money.
                 </p>
-                <p ref={line4Ref} className="text-sm sm:text-lg md:text-xl lg:text-2xl text-gray-800 font-medium">
+                <p
+                  ref={line4Ref}
+                  className="text-sm sm:text-lg md:text-xl lg:text-2xl text-gray-800 font-medium"
+                >
                   We Just <span className="font-semibold">Pay You Back.</span>
                 </p>
               </div>
@@ -242,7 +256,7 @@ export default function RealSavingSection() {
                   width={400}
                   height={600}
                   className="w-full h-auto object-contain"
-                  priority // Keep priority for the initial load
+                  priority
                 />
               </div>
             </div>
@@ -250,5 +264,5 @@ export default function RealSavingSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

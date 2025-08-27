@@ -432,7 +432,7 @@ export default function Hero() {
                   {/* 99% returns element */}
                   <div className=" px-3 py-2 flex items-center gap-2 bg-[#f2f2f2] rounded-xl rounded-br-none rounded-bl-none ">
                     <div className="bg-black text-white rounded-xl">
-                      <img src="/cash.png" alt="" className="h-16" />
+                      <Image src="/cash.png" alt="" className="h-16" />
                     </div>
                     <div className="text-xs">
                       <div className="font-semibold">9% returns</div>
@@ -443,7 +443,7 @@ export default function Hero() {
                   {/* 7% cashback element */}
                   <div className=" px-3 py-2 flex items-center gap-2 bg-white">
                     <div className="bg-black text-white rounded-xl">
-                      <img src="/wallet.png" alt="" className="h-16" />
+                      <Image src="/wallet.png" alt="" className="h-16" />
                     </div>
                     <div className="text-xs">
                       <div className="font-semibold">
@@ -481,14 +481,14 @@ export default function Hero() {
                 {/* Download Buttons */}
                 <div className="download absolute top-[80%] md:top-[60%] lg:top-1/2 left-[64vw] md:left-[30vw] lg:left-[30vw] scale-[0.8] sm:scale-[1] sm:left-[38.5vw] transform -translate-x-1/2 z-2 flex flex-col sm:flex-row gap-3 text-left text-[0.4rem] sm:text-[0.6rem] items-center">
                   <button className="bg-black w-[42vw] sm:w-[40vw] md:w-[40vw] lg:w-[13vw] text-white px-5 py-4 sm:px-7 sm:py-5 rounded-full flex items-center gap-2 justify-center">
-                    <img src="apple.png" alt="" className="h-3 sm:h-5" />
+                    <Image src="apple.png" alt="" className="h-3 sm:h-5" />
                     <div className="text-left">
                       <div>Download on the</div>
                       <div>App Store</div>
                     </div>
                   </button>
                   <button className="bg-black w-[42vw] sm:w-[40vw] md:w-[40vw]  lg:w-[13vw] text-white px-5 py-4 sm:px-7 sm:py-5 rounded-full flex items-center gap-2 justify-center">
-                    <img src="playstore.png" alt="" className="h-3 sm:h-5" />
+                    <Image src="playstore.png" alt="" className="h-3 sm:h-5" />
                     <div className="text-left">
                       <div>Get the App on</div>
                       <div>Google Play</div>

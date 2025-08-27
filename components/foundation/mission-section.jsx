@@ -16,7 +16,7 @@ export default function MissionSection() {
           <p className="text-lg lg:text-2xl leading-[40px] tracking-[0.02em]">
             We believe that real progress begins at the grassroots with the
             people. Our mission is to build a more inclusive future where
-            opportunity, dignity, and progress are within everyone's reach.
+            opportunity, dignity, and progress are within everyone`&apos;s reach.
           </p>
           <p className="text-lg lg:text-2xl font-bold leading-[40px] tracking-[0.02em]">
             {

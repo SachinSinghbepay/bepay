@@ -173,7 +173,7 @@ export default function TestimonialsSection() {
                   </div>
 
                   <blockquote className="text-gray-700 text-base lg:text-lg leading-relaxed mb-6">
-                    "{testimonial.quote}"
+                    &quot;{testimonial.quote}&quot;
                   </blockquote>
                 </div>
 
@@ -216,7 +216,7 @@ export default function TestimonialsSection() {
                   </div>
 
                   <blockquote className="text-[#333333] text-[14px] leading-relaxed mb-6">
-                    "{testimonial.quote}"
+                    &quot;{testimonial.quote}&quot;
                   </blockquote>
                 </div>
 
