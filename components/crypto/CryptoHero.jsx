@@ -128,13 +128,14 @@ export default function CryptoHeroSection() {
         <div className=" flex items-center justify-center z-10">
           <div className="text-center">
             <div>
-              <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[64px]  font-[600] leading-[100%]">
-                USE
+
+              <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[64px]  font-[600] leading-[100%]">
+                SPEND
               </div>
               <div className="text-[#6F6F6F] text-5xl lg:-mt-6 9 lg:tracking-tighter sm:text-8xl lg:text-[120px] font-semibold leading-none">
                 CRYPTO
               </div>
-              <div className="text-[#B7B7B7] text-6xl sm:text-8xl lg:-mt-9 2xl:-mt-11 lg:text-[200px] font-[100] leading-none">
+              <div className="text-[#B7B7B7] text-6xl sm:text-8xl lg:-mt-11 2xl:-mt-11 lg:text-[200px] font-[100] leading-none">
                 <span style={{ letterSpacing: "-0.11em" }}>L</span>
                 <span style={{ letterSpacing: "-0.24em" }}>I</span>
                 <span style={{ letterSpacing: "-0.12em" }}>KE</span>
