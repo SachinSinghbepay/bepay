@@ -117,20 +117,37 @@ export default function CryptoWalletSection() {
 
   const headingY = useTransform(scrollYProgress, [0, 0.15], ["0%", "-100%"]);
 
-  const cardScale = useTransform(scrollYProgress, [0.1, 0.4], [1, 0]);
-  const cardRotate = useTransform(scrollYProgress, [0.1, 0.4], [0, -90]);
+  // Enhanced card scaling - starts bigger and scales down more gradually
+  const cardScale = useTransform(
+    scrollYProgress, 
+    [0, 0.05, 0.2, 0.35, 0.5], 
+    [1.2, 1.1, 0.8, 0.3, 0]
+  );
+  
+  const cardRotate = useTransform(
+    scrollYProgress, 
+    [0.1, 0.25, 0.4], 
+    [0, -45, -90]
+  );
+  
   const cardX = useTransform(
     scrollYProgress,
-    [0.1, 0.4],
-    [isMobile ? "-50%" : "-20%", isMobile ? "-50%" : "-37%"]
+    [0.1, 0.25, 0.4],
+    [isMobile ? "-50%" : "-20%", isMobile ? "-50%" : "-30%", isMobile ? "-50%" : "-37%"]
   );
+  
   const cardY = useTransform(
     scrollYProgress,
-    [0.1, 0.4],
-    ["0%", isMobile ? "-20%" : "-65%"]
+    [0.1, 0.25, 0.4],
+    ["0%", isMobile ? "-10%" : "-40%", isMobile ? "-20%" : "-65%"]
   );
 
-  const flyingCardOpacity = useTransform(scrollYProgress, [0.39, 0.4], [1, 0]);
+  // Enhanced opacity control for smoother transition
+  const flyingCardOpacity = useTransform(
+    scrollYProgress, 
+    [0.45, 0.5], 
+    [1, 0]
+  );
 
   const mockupOpacity = useTransform(scrollYProgress, [0.15, 0.3], [0, 1]);
   const mockupScale = useTransform(scrollYProgress, [0.15, 0.3], [0.8, 1]);
@@ -181,7 +198,7 @@ export default function CryptoWalletSection() {
           </motion.div>
 
           <div className="relative lg:mb-32 flex h-full w-full flex-col items-center justify-center md:flex-row md:justify-start pt-32 md:pt-8">
-            <div className="relative flex h-auto md:h-full w-full items-start md:items-center justify-center md:w-1/2 md:justify-end md:pr-8">
+            <div className="relative flex h-auto md:h-full w-full items-start md:items-center justify-center md:w-1/2 md:justify-center md:-mr-16">
               <div className="flex flex-col items-center">
                 {/* Mobile Title - Above Mockup */}
                 <AnimatePresence mode="wait">
@@ -267,10 +284,14 @@ export default function CryptoWalletSection() {
                   style={{ opacity: mockupOpacity }}
                   className="block mt-4"
                 >
-                  <p className="text-xs md:text-sm font-medium text-gray-500 text-center">
-                    First of it&apos;s kind{" "}
-                    <span className="font-semibold text-[#333333]">
-                      on-chain banking app
+
+                  <p className="text-xs md:text-sm text-center">
+                    <span className="font-medium text-gray-500">
+                      FIRST OF IT'S KIND
+                    </span>
+                    <span className="font-bold text-[#333333] ml-1">
+                      ON-CHAIN BANKING APP
+
                     </span>
                   </p>
                 </motion.div>
@@ -279,13 +300,13 @@ export default function CryptoWalletSection() {
               <AnimatePresence>
                 {activeView === "debit-card" && (
                   <motion.div
-                    className="z-50 top-[10%] md:top-1/2 left-1/2 absolute"
+                    className="z-50 top-[10%] md:top-1/2 left-1/2 absolute pointer-events-none"
                     style={{
                       rotate: cardRotate,
                       scale: cardScale,
                       x: cardX,
                       y: cardY,
-                      //opacity: flyingCardOpacity,
+                      opacity: flyingCardOpacity,
                       width: "clamp(600px, 68vw, 960px)",
                       aspectRatio: "1 / 1",
                       transform: "translate(-50%, -50%)",
