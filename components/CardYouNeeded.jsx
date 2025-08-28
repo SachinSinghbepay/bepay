@@ -4,12 +4,12 @@ import Image from "next/image";
 const CardYouNeeded = () => {
   return (
     <section className="mt-[42vw] max-w-[1500px] relative mx-auto w-full flex flex-col items-center bg-white ">
-      <h2 className="text-[100px] lg:text-[160px] w-full font-[400] mb-0 z-1 text-left leading-none">
-        <span className="text-[#C0C0C0]">The only </span>
-        <span className="text-black ">card</span>
-        <span className="text-[#C0C0C0]">
+      <h2 className="text-[100px] lg:text-[160px] w-full font-[400] mb-0 z-1 text-left leading-none tracking-[-0.15em]">
+        <span className="text-[#C0C0C0] tracking-[-0.3em]">The only </span>
+        <span className="text-black tracking-[-0.3em]">card</span>
+        <span className="text-[#C0C0C0] tracking-[-0.3em]">
           {" "}
-          you’ll
+          you'll
           <br />
           ever need!
         </span>
