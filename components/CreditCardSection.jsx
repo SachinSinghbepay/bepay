@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/dist/ScrollTrigger';
+import Image from 'next/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -162,13 +163,13 @@ const CreditCardSection = () => {
         <h2 ref={headingRef} className="text-[3.5rem] md:text-[7rem] lg:text-[9rem] leading-none mb-20 font-[350]">
           <span className="text-[#c0c0c0]">The only </span>
           <span className="text-black">card </span>
-          <span className="text-[#c0c0c0]">you'll<br />ever need</span>
+          <span className="text-[#c0c0c0]">you&apos;ll<br />ever need</span>
           <span className="text-[#c0c0c0]">!</span>
         </h2>
 
         {/* Mobile Mockup */}
         <div ref={mobileRef} className="absolute right-54 top-[60%] lg:top-[80%] -translate-y-1/2   w-[300px] md:w-[350px] h-[600px] md:h-[700px] bg-gray-100 rounded-4xl border-8 border-[#d7d7d7] overflow-hidden shadow-2xl">
-          <img
+          <Image
             src="/Account screen.png"
             ref={accountRef}
             alt="App Interface"
@@ -178,7 +179,7 @@ const CreditCardSection = () => {
 
         {/* Credit Card */}
         <div ref={cardRef} className="absolute left-1/2 top-1/2 -translate-x-1/2">
-          <img
+          <Image
             src="/Credit card mockup.png"
             alt="Credit Card Mockup"
             className="w-[20rem] sm:w-[30rem] md:w-[40rem] lg:w-[50rem] h-auto"
@@ -204,7 +205,7 @@ const CreditCardSection = () => {
         {/* Cards Stack */}
         <div ref={cardsRef} className="cards absolute top-[130vh] sm:top-[45vh] sm:left-[10%] left-[5%] w-full h-full flex flex-col gap-4 mt-10 sm:z-2 z-10">
           <div className="absolute card-1 bg-white rounded-3xl shadow-xl p-2 sm:max-w-[23rem] max-w-[20rem] mx-auto">
-            <img src="/cardupi.png" alt="Card Image" className="rounded-xl" />
+            <Image src="/cardupi.png" alt="Card Image" className="rounded-xl" />
             <div className="my-8 text-center space-y-1 flex gap-1 sm:ml-7 ml-4">
               <span className="text-sm font-medium text-gray-500">Seamless</span>
               <span className="text-sm font-semibold text-black">UPI payments</span>
@@ -212,7 +213,7 @@ const CreditCardSection = () => {
           </div>
 
           <div className="absolute card-2 bg-white rounded-3xl shadow-xl p-2 sm:max-w-[23rem] max-w-[20rem] mx-auto">
-            <img src="/cardemi.png" alt="Card Image" className="rounded-xl" />
+            <Image src="/cardemi.png" alt="Card Image" className="rounded-xl" />
             <div className="my-8 text-center space-y-1 flex gap-1 sm:ml-7 ml-4">
               <span className="text-sm font-medium text-gray-500">Cashback on</span>
               <span className="text-sm font-semibold text-black">EMI</span>
@@ -221,7 +222,7 @@ const CreditCardSection = () => {
           </div>
 
           <div className="absolute card-3 bg-white rounded-3xl shadow-xl p-2 sm:max-w-[23rem] max-w-[20rem] mx-auto">
-            <img src="/cardlounge.png" alt="Card Image" className="rounded-xl" />
+            <Image src="/cardlounge.png" alt="Card Image" className="rounded-xl" />
             <div className="my-8 text-center space-y-1 flex gap-1 sm:ml-7 ml-4">
               <span className="text-sm font-medium text-gray-500">Airport lounge</span>
               <span className="text-sm font-semibold text-black">access</span>
@@ -229,7 +230,7 @@ const CreditCardSection = () => {
           </div>
 
           <div className="absolute card-4 bg-white rounded-3xl shadow-xl p-2 sm:max-w-[23rem] max-w-[20rem] mx-auto">
-            <img src="/cardfores.png" alt="Card Image" className="rounded-xl" />
+            <Image src="/cardfores.png" alt="Card Image" className="rounded-xl" />
             <div className="my-8 text-center space-y-1 flex gap-1 sm:ml-7 ml-4">
               <span className="text-sm font-semibold text-black">No </span>
               <span className="text-sm font-medium text-gray-500">forex fees</span>
@@ -237,7 +238,7 @@ const CreditCardSection = () => {
           </div>
 
           <div className="absolute card-5 bg-white rounded-3xl shadow-xl p-2 sm:max-w-[23rem] max-w-[20rem] mx-auto">
-            <img src="/cardtinder.png" alt="Card Image" className="rounded-xl" />
+            <Image src="/cardtinder.png" alt="Card Image" className="rounded-xl" />
             <div className="my-8 text-center space-y-1 flex gap-1 sm:ml-7 ml-4 flex-wrap">
               <span className="text-sm font-medium text-gray-500">Includes </span>
               <span className="text-sm font-semibold text-black">free Bumble & Tinder Gold</span>
@@ -246,7 +247,7 @@ const CreditCardSection = () => {
           </div>
 
           <div className="absolute card-6 bg-white rounded-3xl shadow-xl p-2 sm:max-w-[23rem] max-w-[20rem] mx-auto">
-            <img src="/cardonetime.png" alt="Card Image" className="rounded-xl" />
+            <Image src="/cardonetime.png" alt="Card Image" className="rounded-xl" />
             <div className="my-8 text-center space-y-1 flex gap-1 sm:ml-7 ml-4 flex-wrap">
               <span className="text-sm font-semibold text-black">One-time<span className="text-sm font-medium text-gray-500">setup. </span></span>
               <span className="text-sm font-semibold text-black">No</span>
@@ -257,7 +258,7 @@ const CreditCardSection = () => {
           </div>
 
           <div className="absolute card-7 bg-white rounded-3xl shadow-xl p-2 sm:max-w-[23rem] max-w-[20rem] mx-auto">
-            <img src="/cardwallet.png" alt="Card Image" className="rounded-xl" />
+            <Image src="/cardwallet.png" alt="Card Image" className="rounded-xl" />
             <div className="my-8 text-center space-y-1 flex gap-1 sm:ml-7 ml-4 flex-wrap leading-tight">
               <span className="text-sm font-medium text-gray-500">Unlimited </span>
               <span className="text-sm font-semibold text-black">7% cashback & rewards</span>
@@ -269,7 +270,7 @@ const CreditCardSection = () => {
           
         </div>
         <button ref={buttonRef} className="absolute cardbutton top-[89vh] sm:left-57 left-18 bg-black sm:w-[13vw] w-[50vw] text-white px-7 py-5 rounded-full flex items-center gap-2">
-            <img src="/cardbutton.png" alt="" className="h-3" />
+            <Image src="/cardbutton.png" alt="" className="h-3" />
             <div className="text-left sm:text-[0.6rem] text-[0.5rem]"> 
               <div>Get your bepay card now</div>
             </div>

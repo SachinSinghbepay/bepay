@@ -112,7 +112,7 @@ export default function CreditCardSection() {
                   viewport={{ once: false, amount: 0.5 }}
                   className="block text-[60px] text-[#C0C0C0] sm:text-[80px] md:text-[120px] 3xl:text-[160px]"
                 >
-                  The only <span className="text-[#333333]">card</span> you'll
+                  The only <span className="text-[#333333]">card</span> you&apos;ll
                 </motion.span>
                 <motion.span
                   initial={{ opacity: 0, y: 50 }}

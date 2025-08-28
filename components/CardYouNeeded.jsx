@@ -14,7 +14,7 @@ const CardYouNeeded = () => {
       </h2>
       <div className="relative w-full flex justify-start mt-[3rem]">
         <div className="relative w-1/2 h-full">
-          <img
+          <Image
             src="/Credit card mockup.png"
             alt="Credit Card Mockup"
             className="w-full h-full object-contain rounded-3xl shadow-2xl"

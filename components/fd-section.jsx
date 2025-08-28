@@ -10,41 +10,38 @@ export default function FdSection() {
   /* big wrapper we pin against */
   const sectionRef = useRef(null);
 
-  /* scroll progress from 0‑1 while we’re inside the section */
+  /* scroll progress from 0-1 while we’re inside the section */
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    /* the section is 200 vh tall and its content is sticky,
-       so progress runs while the user scrolls through that space */
+    /* the section is 200 vh tall and its content is sticky,
+           so progress runs while the user scrolls through that space */
     offset: ["start start", "end start"],
   });
 
-  /* helper – a tiny spring makes the transforms buttery‑smooth */
-  const spring = (value) => useSpring(value, { stiffness: 120, damping: 20 });
+  // ✅ CORRECTED: Remove the 'spring' helper function and call useSpring directly
+  const item2OpacityTransform = useTransform(scrollYProgress, [0.05, 0.2], [0, 1]);
+  const item2YTransform = useTransform(scrollYProgress, [0.05, 0.2], [40, 0]);
+  const item2Opacity = useSpring(item2OpacityTransform, { stiffness: 120, damping: 20 });
+  const item2Y = useSpring(item2YTransform, { stiffness: 120, damping: 20 });
 
-  /* sequential reveal windows (tweak the numeric ranges if you want) */
-  const item2Opacity = spring(
-    useTransform(scrollYProgress, [0.05, 0.2], [0, 1])
-  );
-  const item2Y = spring(useTransform(scrollYProgress, [0.05, 0.2], [40, 0]));
+  const item3OpacityTransform = useTransform(scrollYProgress, [0.2, 0.35], [0, 1]);
+  const item3YTransform = useTransform(scrollYProgress, [0.2, 0.35], [40, 0]);
+  const item3Opacity = useSpring(item3OpacityTransform, { stiffness: 120, damping: 20 });
+  const item3Y = useSpring(item3YTransform, { stiffness: 120, damping: 20 });
 
-  const item3Opacity = spring(
-    useTransform(scrollYProgress, [0.2, 0.35], [0, 1])
-  );
-  const item3Y = spring(useTransform(scrollYProgress, [0.2, 0.35], [40, 0]));
+  const item4OpacityTransform = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
+  const item4YTransform = useTransform(scrollYProgress, [0.35, 0.5], [40, 0]);
+  const item4Opacity = useSpring(item4OpacityTransform, { stiffness: 120, damping: 20 });
+  const item4Y = useSpring(item4YTransform, { stiffness: 120, damping: 20 });
 
-  const item4Opacity = spring(
-    useTransform(scrollYProgress, [0.35, 0.5], [0, 1])
-  );
-  const item4Y = spring(useTransform(scrollYProgress, [0.35, 0.5], [40, 0]));
-
-  const buttonOpacity = spring(
-    useTransform(scrollYProgress, [0.5, 0.65], [0, 1])
-  );
-  const buttonY = spring(useTransform(scrollYProgress, [0.5, 0.65], [40, 0]));
+  const buttonOpacityTransform = useTransform(scrollYProgress, [0.5, 0.65], [0, 1]);
+  const buttonYTransform = useTransform(scrollYProgress, [0.5, 0.65], [40, 0]);
+  const buttonOpacity = useSpring(buttonOpacityTransform, { stiffness: 120, damping: 20 });
+  const buttonY = useSpring(buttonYTransform, { stiffness: 120, damping: 20 });
 
   return (
-    /* 200 vh of space so the user has room to scroll;
-       the sticky child stays fixed during that time              */
+    /* 200 vh of space so the user has room to scroll;
+        the sticky child stays fixed during that time              */
     <section ref={sectionRef} className="relative min-h-[300vh]">
       {/* sticky “card” that sits in the viewport while the user scrolls */}
       <motion.div
@@ -70,8 +67,9 @@ export default function FdSection() {
             While others offer 4‑6%, we give you{" "}
             <span className="font-bold text-gray-800">9%*</span>
             <br />
-            Just <span className="font-bold text-gray-800">
-              safe & secure
+            Just{" "}
+            <span className="font-bold text-gray-800">
+              safe&secure
             </span>{" "}
             returns.
             <br />
@@ -116,7 +114,7 @@ export default function FdSection() {
             }}
           >
             <p className="mb-2">
-              Invest <span className="font-bold"> ₹1,00,000 today</span> 
+              Invest <span className="font-bold"> ₹1,00,000 today</span>{" "}
             </p>
 
             {/* sequential reveals driven by scroll progress */}
@@ -131,7 +129,7 @@ export default function FdSection() {
               className="mb-2"
               style={{ opacity: item3Opacity, y: item3Y }}
             >
-              That's <span className="font-bold">₹750</span> extra every month!
+              That&apos;s <span className="font-bold">₹750</span> extra every month!
             </motion.p>
 
             <motion.p
@@ -146,7 +144,7 @@ export default function FdSection() {
               className="inline-flex items-center rounded-full px-4 py-2 h-10 bg-black text-white text-sm font-medium hover:bg-black/90 transition-colors"
             >
               <Wallet className="w-4 h-4 mr-2" />
-              Start earning 9%* today
+              Start earning 9%* today
             </motion.button>
           </motion.div>
         </div>

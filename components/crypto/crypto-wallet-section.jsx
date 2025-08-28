@@ -184,7 +184,7 @@ export default function CryptoWalletSection() {
               className="text-4xl font-[400] text-[#C0C0C0] md:text-7xl xl:text-[120px] leading-tight md:leading-normal"
             >
               The only <span className="font-normal text-black">card</span>{" "}
-              you'll
+              you&apos;ll
             </motion.h2>
             <motion.h2
               initial={{ opacity: 0, y: 100 }}
@@ -284,12 +284,14 @@ export default function CryptoWalletSection() {
                   style={{ opacity: mockupOpacity }}
                   className="block mt-4"
                 >
+
                   <p className="text-xs md:text-sm text-center">
                     <span className="font-medium text-gray-500">
                       FIRST OF IT'S KIND
                     </span>
                     <span className="font-bold text-[#333333] ml-1">
                       ON-CHAIN BANKING APP
+
                     </span>
                   </p>
                 </motion.div>

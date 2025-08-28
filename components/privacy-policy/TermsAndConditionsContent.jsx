@@ -50,7 +50,7 @@ export default function TermsAndConditionsContent() {
           <p>
             This agreement applies to all users, including individual consumers,
             merchants, and businesses that integrate{" "}
-            <span className="font-semibold">bepay's</span> services for
+            <span className="font-semibold">bepay&apos;s</span> services for
             financial transactions. <span className="font-semibold">bepay</span>{" "}
             reserves the right to update these Terms periodically, and continued
             use of the platform indicates acceptance of any revisions.
@@ -72,13 +72,13 @@ export default function TermsAndConditionsContent() {
             </li>
             <li>
               <strong>User:</strong> Any individual, business, or entity that
-              registers for or accesses bepay's services, including customers
+              registers for or accesses bepay&apos;s services, including customers
               making payments, merchants accepting transactions, and partners
-              integrating bepay's payment solutions.
+              integrating bepay&apos;s payment solutions.
             </li>
             <li>
               <strong>Merchant:</strong> A business or entity that accepts
-              payments through bepay's platform for goods and services.
+              payments through bepay&apos;s platform for goods and services.
             </li>
             <li>
               <strong>Cryptocurrency:</strong> A form of digital asset secured
@@ -92,7 +92,7 @@ export default function TermsAndConditionsContent() {
             </li>
             <li>
               <strong>Central Bank Digital Currency (CBDC):</strong> A digitized
-              version of a nation's fiat currency, issued and regulated by a
+              version of a nation&apos;s fiat currency, issued and regulated by a
               central bank.
             </li>
             <li>
@@ -136,7 +136,7 @@ export default function TermsAndConditionsContent() {
             </li>
             <li>
               <strong>Service Suspension:</strong> Temporary or permanent
-              restriction of access to bepay's services due to suspected fraud,
+              restriction of access to bepay&apos;s services due to suspected fraud,
               non-compliance, or violations of these Terms.
             </li>
           </ul>
@@ -293,7 +293,7 @@ export default function TermsAndConditionsContent() {
                 <li>
                   Users can earn rewards by making payments in cryptoassets,
                   and/or staking cryptoassets within{" "}
-                  <span className="font-semibold">bepay's</span> integrated DeFi
+                  <span className="font-semibold">bepay&apos;s</span> integrated DeFi
                   ecosystem (where permitted by the law).
                 </li>
                 <li>
@@ -333,7 +333,7 @@ export default function TermsAndConditionsContent() {
                   and account security issues.
                 </li>
                 <li>
-                  Users can escalate unresolved disputes through the platform's
+                  Users can escalate unresolved disputes through the platform&apos;s
                   dispute resolution center.
                 </li>
               </ul>
@@ -353,7 +353,7 @@ export default function TermsAndConditionsContent() {
               6.1. User Registration & KYC Verification
             </h3>
             <p>
-              To access <span className="font-semibold">bepay's</span> services,
+              To access <span className="font-semibold">bepay&apos;s</span> services,
               users must:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4">
@@ -409,7 +409,7 @@ export default function TermsAndConditionsContent() {
               <li>
                 Report any suspicious activity, unauthorized access, or security
                 breaches immediately to{" "}
-                <span className="font-semibold">bepay's</span> support.
+                <span className="font-semibold">bepay&apos;s</span> support.
               </li>
             </ul>
           </div>
@@ -424,7 +424,7 @@ export default function TermsAndConditionsContent() {
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
-                Contact <span className="font-semibold">bepay's</span> customer
+                Contact <span className="font-semibold">bepay&apos;s</span> customer
                 support within 48 hours of the transaction.
               </li>
               <li>
@@ -448,13 +448,13 @@ export default function TermsAndConditionsContent() {
         <div className="space-y-6 text-base md:text-lg leading-relaxed text-[#080808]">
           <div className="space-y-4">
             <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
-              7.1. Ownership of bepay's Intellectual Property
+              7.1. Ownership of bepay&apos;s Intellectual Property
             </h3>
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
                 All content, technology, design elements, branding, software,
                 and features available on{" "}
-                <span className="font-semibold">bepay's</span> platform,
+                <span className="font-semibold">bepay&apos;s</span> platform,
                 including but not limited to logos, trademarks, copyrights,
                 source code, smart contracts, website layout, user interface,
                 and proprietary algorithms, are the exclusive property of{" "}
@@ -488,16 +488,16 @@ export default function TermsAndConditionsContent() {
             <p>Users are strictly prohibited from:</p>
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
-                Reverse engineering or attempting to derive the platform's
+                Reverse engineering or attempting to derive the platform&apos;s
                 source code.
               </li>
               <li>
                 Modifying, copying, or distributing{" "}
-                <span className="font-semibold">bepay's</span> content or
+                <span className="font-semibold">bepay&apos;s</span> content or
                 services.
               </li>
               <li>
-                Using <span className="font-semibold">bepay's</span>{" "}
+                Using <span className="font-semibold">bepay&apos;s</span>{" "}
                 intellectual property without prior written authorization.
               </li>
             </ul>
@@ -681,7 +681,7 @@ export default function TermsAndConditionsContent() {
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
                 <span className="font-semibold">bepay</span> provides its
-                services on an "as is" and "as available" basis without any
+                services on an &quot;as is&quot; and &quot;as available&quot; basis without any
                 explicit or implied warranties, including but not limited to
                 merchantability, fitness for a particular purpose, or
                 non-infringement.
@@ -704,7 +704,7 @@ export default function TermsAndConditionsContent() {
                   <li>Delays or failures in processing transactions.</li>
                   <li>
                     Unauthorized access to user accounts, unless due to{" "}
-                    <span className="font-semibold">bepay's</span> negligence.
+                    <span className="font-semibold">bepay&apos;s</span> negligence.
                   </li>
                 </ul>
               </li>
@@ -765,7 +765,7 @@ export default function TermsAndConditionsContent() {
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
                 Users are responsible for ensuring that their use of{" "}
-                <span className="font-semibold">bepay's</span> services complies
+                <span className="font-semibold">bepay&apos;s</span> services complies
                 with local laws.
               </li>
               <li>
@@ -828,7 +828,7 @@ export default function TermsAndConditionsContent() {
             </h3>
             <p>
               Users are strictly prohibited from using{" "}
-              <span className="font-semibold">bepay's</span> services for any
+              <span className="font-semibold">bepay&apos;s</span> services for any
               illegal or unethical purpose, including but not limited to:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4">
@@ -891,7 +891,7 @@ export default function TermsAndConditionsContent() {
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
                 Users shall not attempt to access restricted areas of{" "}
-                <span className="font-semibold">bepay's</span> platform,
+                <span className="font-semibold">bepay&apos;s</span> platform,
                 interfere with service operations, or deploy automated scraping
                 tools to extract platform data.
               </li>
@@ -957,7 +957,7 @@ export default function TermsAndConditionsContent() {
                 <li>Engaging in fraudulent activities.</li>
                 <li>
                   Attempting to manipulate{" "}
-                  <span className="font-semibold">bepay's</span> systems.
+                  <span className="font-semibold">bepay&apos;s</span> systems.
                 </li>
                 <li>
                   Using <span className="font-semibold">bepay</span> for illicit
@@ -1064,7 +1064,7 @@ export default function TermsAndConditionsContent() {
               <li>
                 Users must comply with local, national, and international
                 financial regulations when using{" "}
-                <span className="font-semibold">bepay's</span> services.
+                <span className="font-semibold">bepay&apos;s</span> services.
               </li>
             </ul>
           </div>
@@ -1220,7 +1220,7 @@ export default function TermsAndConditionsContent() {
               <li>
                 <span className="font-semibold">bepay</span> does not provide
                 financial or investment advice. Any decision to trade, hold, or
-                invest in cryptoassets is solely at the user's discretion.
+                invest in cryptoassets is solely at the user&apos;s discretion.
               </li>
               <li>
                 Users acknowledge that:
@@ -1242,7 +1242,7 @@ export default function TermsAndConditionsContent() {
                     permanent and immutable.
                   </li>
                   <li>
-                    It is the user's responsibility to file and pay the correct
+                    It is the user&apos;s responsibility to file and pay the correct
                     taxes in his name wherever the tax liability is due.{" "}
                     <span className="font-semibold">bepay</span> is not
                     responsible and cannot be held liable for any tax filing,
@@ -1304,8 +1304,8 @@ export default function TermsAndConditionsContent() {
               14.5. Limitation of Warranties
             </h3>
             <p>
-              <span className="font-semibold">bepay's</span> platform is
-              provided "as is", with no warranties regarding:
+              <span className="font-semibold">bepay&apos;s</span> platform is
+              provided &quot;as is&quot;, with no warranties regarding:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
@@ -1345,7 +1345,7 @@ export default function TermsAndConditionsContent() {
             <span className="font-semibold">bepay</span>, its subsidiaries, and
             their directors, officers, officials, agents, employees and counsel
             and their respective heirs, administrators, executors, successors
-            and assigns (each of the foregoing, an "Indemnified Party"), from
+            and assigns (each of the foregoing, an &quot;Indemnified Party&quot;), from
             and against, any and all losses, liabilities, claims, damages,
             interest, judgments, costs, or expenses, including without
             limitation fees and disbursements of counsel, incurred by any
