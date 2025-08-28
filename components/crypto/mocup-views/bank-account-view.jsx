@@ -2,6 +2,7 @@
 
 import WaitlistTriggerButton from "@/components/waitlist-trigger-button";
 import { ChevronDown, GripVertical } from "lucide-react";
+import Image from "next/image";
 
 const accounts = [
   { name: "USD", code: "us", balance: "$1190", sub: "$1190" },
@@ -52,7 +53,7 @@ export function BankAccountView({ setActiveView }) {
           className="flex items-center justify-between rounded-lg bg-[#C0C0C01F] p-3"
           >
             <div className="flex items-center gap-3">
-              <img
+              <Image
                 src={`https://flagcdn.com/w40/${account.code}.png`}
                 alt={`${account.name} flag`}
                 className="w-6 h-6 rounded-full object-cover"

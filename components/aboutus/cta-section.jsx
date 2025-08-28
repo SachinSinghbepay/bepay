@@ -42,7 +42,7 @@ export default function CTASection() {
           >
             {/* Title */}
             <h2 className="text-2xl md:text-3xl lg:text-[40px] font-bold leading-tight mb-6 lg:mb-8">
-              <span style={{ color: "#C0C0C0" }}>Let's </span>
+              <span style={{ color: "#C0C0C0" }}>Let&apos;s </span>
               <span className="text-black">move money</span>
               <br />
               <span className="text-black">freely </span>

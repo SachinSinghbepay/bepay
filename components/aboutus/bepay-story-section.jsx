@@ -188,9 +188,9 @@ export default function BepayStorySection() {
               Started by blockchain pioneers who saw the gap between traditional
               banking and the crypto revolution,{" "}
               <span className="font-semibold">bepay</span> was born from a
-              simple question: "Why should you have to choose between the
+              simple question: &quot;Why should you have to choose between the
               convenience of traditional finance and the freedom of digital
-              finance?"
+              finance?&quot;
             </p>
           </motion.div>
         </div>
@@ -204,7 +204,7 @@ export default function BepayStorySection() {
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <p className="text-base lg:text-[20px] leading-relaxed text-[#080808] font-medium text-center lg:text-end">
-              Today, we're building that answer – a platform where your Bitcoin
+              Today, we&apos;re building that answer – a platform where your Bitcoin
               earns yield, your everyday purchases get cashback, and your money
               works harder across multiple blockchains, all while you stay in
               complete control.

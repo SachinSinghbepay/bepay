@@ -78,8 +78,8 @@ export default function HeroSection() {
               users, merchants, and institutions to transact seamlessly across
               fiat and crypto.
             </span>{" "}
-            We're the bridge between the financial world, you know, and the
-            decentralized future you're stepping into.
+            We&apos;re the bridge between the financial world, you know, and the
+            decentralized future you&apos;re stepping into.
           </motion.p>
 
           {/* Second Paragraph */}
@@ -97,8 +97,8 @@ export default function HeroSection() {
             and without compromising your control.{" "}
             <span className="font-semibold">
               {" "}
-              We're building the financial infrastructure that makes money work
-              for you, whether you're earning yield on your morning coffee
+              We&apos;re building the financial infrastructure that makes money work
+              for you, whether you&apos;re earning yield on your morning coffee
               purchase or sending Bitcoin to family across the globe.
             </span>
           </motion.p>
