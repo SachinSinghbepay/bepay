@@ -14,7 +14,7 @@ export default function UrlDeletionPolicyContent() {
             protecting user privacy and ensuring compliance with data protection
             laws when handling user-generated content, including URLs submitted
             through our platform. This policy outlines how users can request the
-            deletion of URLs submitted through bepay's platform and what happens
+            deletion of URLs submitted through bepay&apos;s platform and what happens
             to associated data when an account or URL content is removed.
           </p>
         </div>
@@ -30,11 +30,11 @@ export default function UrlDeletionPolicyContent() {
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>
               Users who have submitted URLs, links, or associated metadata via
-              bepay's platform.
+              bepay&apos;s platform.
             </li>
             <li>
               Requests related to removing, anonymizing, or erasing such content
-              from bepay's systems.
+              from bepay&apos;s systems.
             </li>
             <li>
               The process bepay follows when verifying, processing, and
@@ -54,7 +54,7 @@ export default function UrlDeletionPolicyContent() {
         </h2>
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
-            When users submit URLs through bepay's platform, the following
+            When users submit URLs through bepay&apos;s platform, the following
             information may be collected and processed:
           </p>
           <ul className="list-disc list-inside space-y-2 ml-4">
@@ -96,7 +96,7 @@ export default function UrlDeletionPolicyContent() {
               </li>
               <li>
                 The URL is linked to outdated, expired, or non-functional
-                content that is no longer relevant to bepay's services.
+                content that is no longer relevant to bepay&apos;s services.
               </li>
               <li>
                 The URL was submitted erroneously or without proper
@@ -115,12 +115,12 @@ export default function UrlDeletionPolicyContent() {
               4.2. How to Submit a Deletion Request
             </h3>
             <p>
-              To request the deletion of a URL submitted to bepay's platform,
+              To request the deletion of a URL submitted to bepay&apos;s platform,
               users must:
             </p>
             <ol className="list-decimal list-inside space-y-2 ml-4">
               <li>
-                Submit a written request via bepay's privacy support portal or
+                Submit a written request via bepay&apos;s privacy support portal or
                 designated email address.
               </li>
               <li>
@@ -150,7 +150,7 @@ export default function UrlDeletionPolicyContent() {
               <li>
                 If a user deletes their bepay account, all associated URLs,
                 search history, and stored data will be automatically erased
-                from bepay's systems.
+                from bepay&apos;s systems.
               </li>
               <li>
                 Users will receive a confirmation message stating that all
@@ -236,7 +236,7 @@ export default function UrlDeletionPolicyContent() {
               processed.
             </li>
             <li>
-              Appeal a denied request, if applicable, through bepay's privacy
+              Appeal a denied request, if applicable, through bepay&apos;s privacy
               dispute resolution mechanism.
             </li>
             <li>
@@ -264,7 +264,7 @@ export default function UrlDeletionPolicyContent() {
               notifications, or our official website.
             </li>
             <li>
-              Continued use of bepay's services following a policy update
+              Continued use of bepay&apos;s services following a policy update
               constitutes acceptance of the revised terms.
             </li>
           </ul>
@@ -274,12 +274,12 @@ export default function UrlDeletionPolicyContent() {
       {/* Section 8: Children's Privacy */}
       <section className="space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          8. Children's Privacy:
+          8. Children&apos;s Privacy:
         </h2>
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>
-              bepay's services are not intended for individuals under the age of
+              bepay&apos;s services are not intended for individuals under the age of
               13.
             </li>
             <li>

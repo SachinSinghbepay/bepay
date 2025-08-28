@@ -16,7 +16,7 @@ export default function PrivacyPolicyContent() {
           <p>
             <span className="font-semibold">bepay</span> is committed to
             ensuring the highest level of data security, privacy, and
-            transparency in handling users' personal and financial information.
+            transparency in handling users&apos; personal and financial information.
             This Privacy Policy explains how we collect, store, use, and protect
             user data while ensuring compliance with global data protection
             regulations, including various act.
@@ -32,7 +32,7 @@ export default function PrivacyPolicyContent() {
             <p className="mb-2">This Privacy Policy applies to:</p>
             <ul className="list-disc list-inside space-y-1 ml-4">
               <li>Individuals who register an account on bepay.</li>
-              <li>Businesses and merchants using bepay's services.</li>
+              <li>Businesses and merchants using bepay&apos;s services.</li>
               <li>Website visitors who engage with our platform.</li>
             </ul>
           </div>
@@ -52,16 +52,16 @@ export default function PrivacyPolicyContent() {
         </h3>
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
-            Reference in this policy to 'you' or 'your' is reference to user(s)
+            Reference in this policy to &apos;you&apos; or &apos;your&apos; is reference to user(s)
           </p>
-          <p>Reference to 'we', 'us' or 'our' is reference to bepay.</p>
+          <p>Reference to &apos;we&apos;, &apos;us&apos; or &apos;our&apos; is reference to bepay.</p>
           <p>
-            Reference to website ("bepay") means a reference to website(s),
+            Reference to website (&quot;bepay&quot;) means a reference to website(s),
             mobile site(s) and mobile app(s).
           </p>
           <p>
             First, we need to define, and it is important for you to understand,
-            the expression: "Personal Data" (PD). It generically represents any
+            the expression: &quot;Personal Data&quot; (PD). It generically represents any
             kind of information about a physical person, whose particularities
             can lead, directly or indirectly, to its identification. Here you
             have, by way of example, but not limited to: name and surname,
@@ -89,7 +89,7 @@ export default function PrivacyPolicyContent() {
             <span className="font-semibold">bepay</span>.
           </p>
           <p>
-            This Policy does not apply to other companies' or Companys' websites
+            This Policy does not apply to other companies&apos; or Companys&apos; websites
             to which we may link to or may link to us. You should carefully
             review the privacy policies of those websites in order to determine
             how they treat your personal information.
@@ -159,7 +159,7 @@ export default function PrivacyPolicyContent() {
             </li>
             <li>
               <strong>Consent</strong> - is any freely given, specific, informed
-              and unambiguous indication of data subject's acceptance to the
+              and unambiguous indication of data subject&apos;s acceptance to the
               processing of their personal data.
             </li>
           </ul>
@@ -186,7 +186,7 @@ export default function PrivacyPolicyContent() {
             </li>
             <li>
               Federal Decree-Law No. 45 of 2021 on the Protection of Personal
-              Data Protection ("PDPL") of Dubai
+              Data Protection (&quot;PDPL&quot;) of Dubai
             </li>
             <li>
               Any other applicable law, as the case may be, at any given time.
@@ -195,10 +195,10 @@ export default function PrivacyPolicyContent() {
           <p>
             We are able to provide our services worldwide. For the purpose of
             avoiding any compliance conflict with any terminology used by any
-            particular legislation, in this document: "Users" are the "data
-            subjects" or the "data principals" and{" "}
-            <span className="font-semibold">bepay</span> is the "data
-            controller" or "data fiduciary."
+            particular legislation, in this document: &quot;Users&quot; are the &quot;data
+            subjects&quot; or the &quot;data principals&quot; and{" "}
+            <span className="font-semibold">bepay</span> is the &quot;data
+            controller&quot; or &quot;data fiduciary.&quot;
           </p>
         </div>
       </section>
@@ -236,7 +236,7 @@ export default function PrivacyPolicyContent() {
                 </li>
                 <li>
                   <strong>Government-Issued Identification</strong> – Such as
-                  passports, national ID cards, or driver's licenses, required
+                  passports, national ID cards, or driver&apos;s licenses, required
                   for Know Your Customer (KYC) compliance and fraud prevention.
                 </li>
                 <li>
@@ -303,14 +303,14 @@ export default function PrivacyPolicyContent() {
               <ul className="list-disc list-inside space-y-2 ml-4">
                 <li>
                   <strong>Customer Support Interactions</strong> – Records of
-                  inquiries, complaints, and chat conversations with bepay's
+                  inquiries, complaints, and chat conversations with bepay&apos;s
                   support team, maintained for quality assurance and dispute
                   resolution.
                 </li>
                 <li>
                   <strong>Marketing Preferences</strong> – User choices
                   regarding promotional communications, newsletters, and
-                  engagement with bepay's marketing campaigns.
+                  engagement with bepay&apos;s marketing campaigns.
                 </li>
               </ul>
             </div>
@@ -509,7 +509,7 @@ export default function PrivacyPolicyContent() {
             </h3>
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
-                In the event of a merger, acquisition, or sale of bepay's
+                In the event of a merger, acquisition, or sale of bepay&apos;s
                 assets, user data may be transferred to the acquiring entity,
                 subject to applicable data protection regulations.
               </li>
@@ -532,7 +532,7 @@ export default function PrivacyPolicyContent() {
               </li>
               <li>
                 Any data shared through user-authorized connections remains
-                under the user's control and is governed by the third party's
+                under the user&apos;s control and is governed by the third party&apos;.s
                 privacy policies.
               </li>
             </ul>
@@ -652,7 +652,7 @@ export default function PrivacyPolicyContent() {
               </li>
               <li>
                 <strong>The right to object to processing</strong> – You have
-                the right to object to bepay's processing of your personal data,
+                the right to object to bepay&apos;s processing of your personal data,
                 under certain conditions.
               </li>
               <li>
@@ -718,7 +718,7 @@ export default function PrivacyPolicyContent() {
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
                 Users may accept, reject, or customize cookie preferences
-                through browser settings or bepay's cookie management tool.
+                through browser settings or bepay&apos;s cookie management tool.
               </li>
               <li>
                 Disabling certain cookies may limit access to specific features,
@@ -856,16 +856,16 @@ export default function PrivacyPolicyContent() {
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
                 Users are advised to review the Privacy Policy periodically to
-                stay informed about their rights and bepay's data protection
+                stay informed about their rights and bepay&apos;s data protection
                 measures.
               </li>
               <li>
-                Continued use of bepay's services following a policy update
+                Continued use of bepay&apos;s services following a policy update
                 constitutes acceptance of the revised terms.
               </li>
               <li>
                 If a user disagrees with any changes, they must discontinue use
-                of bepay's platform and request account closure.
+                of bepay&apos;s platform and request account closure.
               </li>
             </ul>
           </div>
@@ -956,14 +956,14 @@ export default function PrivacyPolicyContent() {
               California or US resident, you have the right to request
               information from us regarding whether we share certain categories
               of your personal information with third parties for the third
-              parties' direct marketing purposes. To the extent we share your
+              parties&apos; direct marketing purposes. To the extent we share your
               personal information in this way, you may receive the following
               information:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
                 the categories of information we disclosed to third parties for
-                the third parties' direct marketing purposes during the
+                the third parties&apos; direct marketing purposes during the
                 preceding calendar year; and
               </li>
               <li>
@@ -975,7 +975,7 @@ export default function PrivacyPolicyContent() {
             </ul>
             <p>
               Effective January 1, 2020, pursuant to the California Consumer
-              Privacy Act of 2018 ("CCPA"), California residents have certain
+              Privacy Act of 2018 (&quot;CCPA&quot;), California residents have certain
               rights in relation to their personal information, subject to
               limited exceptions. Any terms defined in the CCPA have the same
               meaning when used in this California Privacy Rights section.

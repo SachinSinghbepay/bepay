@@ -13,12 +13,12 @@ export default function CookiesPolicyContent() {
         <p className="text-base md:text-lg leading-relaxed text-[#080808]">
           This Cookies Policy explains how{" "}
           <span className="font-semibold">Bepay money fintech UAB</span>{" "}
-          ("bepay", "we", "us", or "our") uses cookies and similar technologies
+          (&quot;bepay&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) uses cookies and similar technologies
           when you visit our website{" "}
           <a href="https://bepay.money" className="text-blue-500 font-semibold">
             https://bepay.money
           </a>{" "}
-          ("Website"). This policy is compliant with the EU General Data
+          (&quot;Website&quot;). This policy is compliant with the EU General Data
           Protection Regulation (GDPR) and other applicable data protection
           laws.
         </p>
@@ -91,7 +91,7 @@ export default function CookiesPolicyContent() {
                 We may allow third-party services (e.g., payment providers,
                 analytics tools, partners) to place cookies to enable their
                 features or gather usage statistics. These cookies are subject
-                to the respective third parties' privacy policies.
+                to the respective third parties&apos; privacy policies.
               </p>
             </div>
           </div>
@@ -164,7 +164,7 @@ export default function CookiesPolicyContent() {
           <p>
             We may update this Cookies Policy from time to time to reflect
             changes in our practices or legal requirements. The updated version
-            will be posted on this page with a revised "Last Updated" date.
+            will be posted on this page with a revised &quot;Last Updated&quot; date.
           </p>
         </div>
       </section>

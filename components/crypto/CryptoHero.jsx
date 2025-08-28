@@ -59,19 +59,36 @@ export default function CryptoHeroSection() {
 
   const mockupY = useTransform(scrollYProgress, [0, 1], [0, -700]);
 
-  // Desktop scroll transforms
-  const xTransforms = iconsData.map((icon) =>
-    useTransform(scrollYProgress, [0, 0.6], [icon.initialX, icon.finalX])
-  );
-  const yTransforms = iconsData.map((icon) =>
-    useTransform(scrollYProgress, [0, 0.6], [icon.initialY, icon.finalY])
-  );
-  const scaleTransforms = iconsData.map(() =>
-    useTransform(scrollYProgress, [0, 0.6], [1.5, 1])
-  );
-  const opacityTransforms = iconsData.map(() =>
-    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1])
-  );
+  // ✅ CORRECTED: Moved hook calls out of the map function
+  // These hooks are now called at the top level of the component.
+  const xTransforms = [
+    useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialX, iconsData[0].finalX]),
+    useTransform(scrollYProgress, [0, 0.6], [iconsData[1].initialX, iconsData[1].finalX]),
+    useTransform(scrollYProgress, [0, 0.6], [iconsData[2].initialX, iconsData[2].finalX]),
+    useTransform(scrollYProgress, [0, 0.6], [iconsData[3].initialX, iconsData[3].finalX]),
+  ];
+
+  const yTransforms = [
+    useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialY, iconsData[0].finalY]),
+    useTransform(scrollYProgress, [0, 0.6], [iconsData[1].initialY, iconsData[1].finalY]),
+    useTransform(scrollYProgress, [0, 0.6], [iconsData[2].initialY, iconsData[2].finalY]),
+    useTransform(scrollYProgress, [0, 0.6], [iconsData[3].initialY, iconsData[3].finalY]),
+  ];
+
+  const scaleTransforms = [
+    useTransform(scrollYProgress, [0, 0.6], [1.5, 1]),
+    useTransform(scrollYProgress, [0, 0.6], [1.5, 1]),
+    useTransform(scrollYProgress, [0, 0.6], [1.5, 1]),
+    useTransform(scrollYProgress, [0, 0.6], [1.5, 1]),
+  ];
+  
+  const opacityTransforms = [
+    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]),
+    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]),
+    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]),
+    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]),
+  ];
+
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -84,12 +101,13 @@ export default function CryptoHeroSection() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // ✅ CORRECTED: Added `words.length` to the dependency array
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentWord((prev) => (prev + 1) % words.length);
     }, 2000);
     return () => clearInterval(interval);
-  }, []);
+  }, [words.length]);
 
   // Button click handler
   const handleButtonClick = () => {
@@ -110,7 +128,7 @@ export default function CryptoHeroSection() {
         <div className=" flex items-center justify-center z-10">
           <div className="text-center">
             <div>
-              <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[64px]  font-[600] leading-[100%]">
+              <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[64px]  font-[600] leading-[100%]">
                 USE
               </div>
               <div className="text-[#6F6F6F] text-5xl lg:-mt-6 9 lg:tracking-tighter sm:text-8xl lg:text-[120px] font-semibold leading-none">

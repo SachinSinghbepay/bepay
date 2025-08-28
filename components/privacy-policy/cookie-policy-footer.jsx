@@ -219,8 +219,8 @@ const CookiePolicyFooter = () => {
               <div className="pr-8">
                 <p className="text-[#080808] text-[12px] leading-relaxed mb-6">
                   We use cookies to enhance your browsing experience, analyze
-                  site traffic, and personalize content. By clicking "Accept All
-                  Cookies", you consent to our use of cookies as described in
+                  site traffic, and personalize content. By clicking &quot;Accept All
+                  Cookies&quot;, you consent to our use of cookies as described in
                   our Cookies Policy. You can manage your preferences or
                   withdraw consent at any time.
                 </p>

@@ -178,7 +178,7 @@ function PortalContent({
                       Welcome aboard!
                     </h3>
                     <p style={{ color: 'rgb(75, 85, 99)' }}>
-                      You're now on our exclusive waitlist. We'll notify you when we're ready!
+                      You&apos;re now on our exclusive waitlist. We&apos;ll notify you when we&apos;re ready!
                     </p>
                   </motion.div>
                 ) : (

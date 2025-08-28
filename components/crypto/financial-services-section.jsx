@@ -69,38 +69,33 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
   const end = start + segmentDuration;
 
   const travelDistance = 900;
+  const fixedTransformDistance = 0.4;
 
-  // Special handling for first and last items
+  // Define input and output ranges based on index
+  let inputRange = [];
+  let outputRange = [];
+
   const isFirst = index === 0;
   const isLast = index === totalServices - 1;
 
-  let y;
-
   if (isFirst) {
-    // Fixed: Make the first item stay longer before moving up
-    y = useTransform(
-      progress,
-      [0, end - segmentDuration * 0.4, end + segmentDuration * 0.4],
-      [0, 0, -travelDistance]
-    );
+    inputRange = [0, end - segmentDuration * fixedTransformDistance, end + segmentDuration * fixedTransformDistance];
+    outputRange = [0, 0, -travelDistance];
   } else if (isLast) {
-    y = useTransform(
-      progress,
-      [start - segmentDuration * 0.4, start + segmentDuration * 0.4, 1],
-      [travelDistance, 0, 0]
-    );
+    inputRange = [start - segmentDuration * fixedTransformDistance, start + segmentDuration * fixedTransformDistance, 1];
+    outputRange = [travelDistance, 0, 0];
   } else {
-    y = useTransform(
-      progress,
-      [
-        start - segmentDuration * 0.4,
-        start + segmentDuration * 0.4,
-        end - segmentDuration * 0.4,
-        end + segmentDuration * 0.4,
-      ],
-      [travelDistance, 0, 0, -travelDistance]
-    );
+    inputRange = [
+      start - segmentDuration * fixedTransformDistance,
+      start + segmentDuration * fixedTransformDistance,
+      end - segmentDuration * fixedTransformDistance,
+      end + segmentDuration * fixedTransformDistance,
+    ];
+    outputRange = [travelDistance, 0, 0, -travelDistance];
   }
+  
+  // ✅ CORRECTED: Conditionally build the arrays, but call the hook unconditionally
+  const y = useTransform(progress, inputRange, outputRange);
 
   return (
     <motion.div
@@ -124,7 +119,7 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
         </h3>
         <div className="flex flex-col space-y-2 items-start text-start">
           {service.points.map((point, idx) => (
-            <div key={idx} className="flex gap-2  items-start text-left">
+            <div key={idx} className="flex gap-2 items-start text-left">
               <CheckCircle
                 size={10}
                 className="text-gray-600 mt-1 flex-shrink-0 lg:w-3 lg:h-3"
