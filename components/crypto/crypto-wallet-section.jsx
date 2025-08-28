@@ -117,7 +117,7 @@ export default function CryptoWalletSection() {
 
   const headingY = useTransform(scrollYProgress, [0, 0.15], ["0%", "-100%"]);
 
-  const cardScale = useTransform(scrollYProgress, [0.1, 0.4], [1, 0.20]);
+  const cardScale = useTransform(scrollYProgress, [0.1, 0.4], [1, 0]);
   const cardRotate = useTransform(scrollYProgress, [0.1, 0.4], [0, -90]);
   const cardX = useTransform(
     scrollYProgress,
@@ -285,7 +285,7 @@ export default function CryptoWalletSection() {
                       scale: cardScale,
                       x: cardX,
                       y: cardY,
-                      opacity: flyingCardOpacity,
+                      //opacity: flyingCardOpacity,
                       width: "clamp(600px, 68vw, 960px)",
                       aspectRatio: "1 / 1",
                       transform: "translate(-50%, -50%)",
