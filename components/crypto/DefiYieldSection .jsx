@@ -91,7 +91,10 @@ const DefiYieldSection = () => {
   );
   const image3Opacity = useTransform(
     scrollYProgress,
-    [imageStart + intervalSize * 2, imageStart + intervalSize * 2 + intervalSize * 0.5],
+    [
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 2 + intervalSize * 0.5,
+    ],
     [1, 0]
   );
 
@@ -108,7 +111,10 @@ const DefiYieldSection = () => {
   );
   const image4Opacity = useTransform(
     scrollYProgress,
-    [imageStart + intervalSize * 3, imageStart + intervalSize * 3 + intervalSize * 0.5],
+    [
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 3 + intervalSize * 0.5,
+    ],
     [1, 0]
   );
 
@@ -125,7 +131,10 @@ const DefiYieldSection = () => {
   );
   const image5Opacity = useTransform(
     scrollYProgress,
-    [imageStart + intervalSize * 4, imageStart + intervalSize * 4 + intervalSize * 0.5],
+    [
+      imageStart + intervalSize * 4,
+      imageStart + intervalSize * 4 + intervalSize * 0.5,
+    ],
     [1, 0]
   );
 
@@ -157,48 +166,88 @@ const DefiYieldSection = () => {
   // Content 2 - appears when image 1 exits, exits when image 2 exits
   const content2Y = useTransform(
     scrollYProgress,
-    [imageStart, imageStart + intervalSize, imageStart + intervalSize, imageStart + intervalSize * 2],
+    [
+      imageStart,
+      imageStart + intervalSize,
+      imageStart + intervalSize,
+      imageStart + intervalSize * 2,
+    ],
     ["100%", "0%", "0%", "-100%"]
   );
   const content2Opacity = useTransform(
     scrollYProgress,
-    [imageStart, imageStart + intervalSize, imageStart + intervalSize, imageStart + intervalSize * 2],
+    [
+      imageStart,
+      imageStart + intervalSize,
+      imageStart + intervalSize,
+      imageStart + intervalSize * 2,
+    ],
     [0, 1, 1, 0]
   );
 
   // Content 3 - appears when image 2 exits, exits when image 3 exits
   const content3Y = useTransform(
     scrollYProgress,
-    [imageStart + intervalSize, imageStart + intervalSize * 2, imageStart + intervalSize * 2, imageStart + intervalSize * 3],
+    [
+      imageStart + intervalSize,
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 3,
+    ],
     ["100%", "0%", "0%", "-100%"]
   );
   const content3Opacity = useTransform(
     scrollYProgress,
-    [imageStart + intervalSize, imageStart + intervalSize * 2, imageStart + intervalSize * 2, imageStart + intervalSize * 3],
+    [
+      imageStart + intervalSize,
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 3,
+    ],
     [0, 1, 1, 0]
   );
 
   // Content 4 - appears when image 3 exits, exits when image 4 exits
   const content4Y = useTransform(
     scrollYProgress,
-    [imageStart + intervalSize * 2, imageStart + intervalSize * 3, imageStart + intervalSize * 3, imageStart + intervalSize * 4],
+    [
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 4,
+    ],
     ["100%", "0%", "0%", "-100%"]
   );
   const content4Opacity = useTransform(
     scrollYProgress,
-    [imageStart + intervalSize * 2, imageStart + intervalSize * 3, imageStart + intervalSize * 3, imageStart + intervalSize * 4],
+    [
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 4,
+    ],
     [0, 1, 1, 0]
   );
 
   // Content 5 - appears when image 4 exits, exits when image 5 exits
   const content5Y = useTransform(
     scrollYProgress,
-    [imageStart + intervalSize * 3, imageStart + intervalSize * 4, imageStart + intervalSize * 4, imageStart + intervalSize * 5],
+    [
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 4,
+      imageStart + intervalSize * 4,
+      imageStart + intervalSize * 5,
+    ],
     ["100%", "0%", "0%", "-100%"]
   );
   const content5Opacity = useTransform(
     scrollYProgress,
-    [imageStart + intervalSize * 3, imageStart + intervalSize * 4, imageStart + intervalSize * 4, imageStart + intervalSize * 5],
+    [
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 4,
+      imageStart + intervalSize * 4,
+      imageStart + intervalSize * 5,
+    ],
     [0, 1, 1, 0]
   );
 
@@ -474,14 +523,15 @@ const DefiYieldSection = () => {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="bg-black cursor-pointer   whitespace-nowrap text-white px-4 py-2 lg:px-6 lg:py-2 rounded-full flex items-center justify-center gap-2 text-[12px] font-medium hover:bg-gray-800 transition-colors"
+                      className="bg-black cursor-pointer whitespace-nowrap text-white w-[221px] h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-normal hover:bg-gray-800 transition-colors"
                     >
                       <svg
                         width="24"
-                        height="25"
-                        viewBox="0 0 24 25"
-                        fill="none"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
                         xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5"
                       >
                         <path
                           d="M9.87318 9.47184L13.5646 4.21036C13.8717 3.77265 14.4754 3.66657 14.9133 3.97337L18.2824 6.33367C18.7203 6.64045 18.8268 7.24401 18.5203 7.68214L17.5578 9.05838C17.3765 9.3175 17.0802 9.47184 16.764 9.47184H9.87318ZM9.87318 9.47184H6.69107C5.90694 9.47184 5.44778 8.58874 5.89817 7.94686L8.5197 4.21079C8.82695 3.77291 9.43098 3.66699 9.86888 3.9742L11.6632 5.23294C12.101 5.54014 12.207 6.14414 11.8999 6.58207L9.87318 9.47184Z"
@@ -502,7 +552,7 @@ const DefiYieldSection = () => {
                           fill="#F9F9F9"
                         />
                       </svg>
-                      Start earning with bepay{" "}
+                      Start earning with bepay
                     </motion.button>
                   </WaitlistTriggerButton>
                 </motion.div>

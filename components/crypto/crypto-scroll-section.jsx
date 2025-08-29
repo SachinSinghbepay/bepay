@@ -329,7 +329,7 @@ export default function CryptoScrollSection() {
                           {/* Corrected part: New flex container for number and description */}
                           <div className="flex items-start gap-4 mb-6">
                             <span className="text-black text-4xl font-bold font-sans">
-                              {step.number}
+                              {/* {step.number} */}
                             </span>
                             <motion.p
                               className="text-base sm:text-lg font-medium lg:text-[20px] text-[#6A6A6A] leading-relaxed pt-1"

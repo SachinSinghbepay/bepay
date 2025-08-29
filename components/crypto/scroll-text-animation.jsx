@@ -141,7 +141,7 @@ export default function ScrollTextAnimation() {
           <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-10">
             <span
               ref={maximizeYourRef}
-              className="text-4xl sm:text-6xl md:text-8xl whitespace-nowrap lg:text-[180px] font-[400] text-[#C0C0C0]"
+              className="tracking-[-0.09em] text-4xl sm:text-6xl md:text-8xl whitespace-nowrap lg:text-[180px] font-[400] text-[#C0C0C0]"
               style={{ visibility: fontsLoaded ? 'visible' : 'hidden' }}
             >
               Maximize Your
@@ -152,7 +152,7 @@ export default function ScrollTextAnimation() {
           <div className="fixed inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
             <span
               ref={earningPotentialRef}
-              className="text-4xl sm:text-6xl pb-5 md:text-8xl lg:text-[160px] font-500 bg-gradient-to-r from-[#333333] via-[#999999] to-[#333333] bg-clip-text text-transparent mb-8"
+              className="tracking-[-0.09em] text-4xl sm:text-6xl pb-5 md:text-8xl lg:text-[160px] font-500 bg-gradient-to-r from-[#333333] via-[#999999] to-[#333333] bg-clip-text text-transparent mb-8"
               style={{ visibility: fontsLoaded ? 'visible' : 'hidden' }}
             >
               earning potential

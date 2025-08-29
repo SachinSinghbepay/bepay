@@ -42,7 +42,7 @@ function PortalContent({
   const modalStyle = {
     position: 'relative',
     width: '100%',
-    maxWidth: '45rem',
+    maxWidth: '38rem',
     backgroundColor: '#ffffff',
     border: '1px solid rgba(0, 0, 0, 0.1)',
     borderRadius: '1.5rem',
@@ -50,7 +50,7 @@ function PortalContent({
     overflow: 'hidden',
     zIndex: '2147483647',
     isolation: 'isolate',
-    minHeight: '27rem',
+    minHeight: '24rem',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -136,6 +136,10 @@ function PortalContent({
                       marginBottom: '0.5rem',
                       textAlign: 'center',
                       lineHeight: '1.3',
+                      backgroundImage: 'linear-gradient(to bottom, #4a4a4a, #9c9c9c)',
+                      WebkitBackgroundClip: 'text',
+                      backgroundClip: 'text',
+                      color: 'transparent',
                     }}
                   >
                     Every business starts with a spark!
@@ -162,8 +166,11 @@ function PortalContent({
     style={{
       fontSize: '1.5rem',
       fontWeight: 600,
-      color: '#111827',
-      marginBottom: '0.5rem'
+      marginBottom: '0.5rem',
+      backgroundImage: 'linear-gradient(to bottom, #4a4a4a, #9c9c9c)',
+      WebkitBackgroundClip: 'text',
+      backgroundClip: 'text',
+      color: 'transparent',
     }}
   >
     Yay! You’re on the waitlist.
@@ -185,7 +192,7 @@ function PortalContent({
                         fontWeight: '600',
                         cursor: 'pointer',
                         border: 'none',
-                        marginTop: '2rem' 
+                        marginTop: '0.2rem' 
                       }}
                     >
                       Awesome!
@@ -218,7 +225,7 @@ function PortalContent({
                       color: '#333333',
                       textAlign: 'center',
                       whiteSpace: 'nowrap',
-                      transform: 'translateY(45px)'
+                      transform: 'translateY(15px)'
                     }}>
                       We&apos;re launching soon! Join the waitlist and stay ahead of other businesses!
                     </p>
@@ -232,7 +239,7 @@ function PortalContent({
                       borderRadius: '9999px', 
                       overflow: 'hidden', 
                       backgroundColor: 'rgb(249, 250, 251)',
-                      marginTop: '2.5rem' 
+                      marginTop: '0.2rem' 
                     }}>
                       <input
                         type="email"
@@ -262,17 +269,19 @@ function PortalContent({
                         style={{
                           height: '3.5rem',
                           padding: '0 1.5rem',
-                          backgroundColor: 'rgb(17, 24, 39)',
+                          backgroundColor: '#000000',
                           color: 'white',
                           border: 'none',
                           fontSize: '1rem',
-                          fontWeight: '600',
+                          fontWeight: '400',
                           cursor: isSubmitting || !email ? 'not-allowed' : 'pointer',
-                          opacity: isSubmitting || !email ? 0.5 : 1,
+                          opacity: 1,
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          whiteSpace: 'nowrap'
+                          whiteSpace: 'nowrap',
+                          borderRadius: '9999px',
+                          margin: '0.5rem', 
                         }}
                       >
                         {isSubmitting ? (

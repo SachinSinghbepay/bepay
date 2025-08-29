@@ -25,61 +25,65 @@ export default function CryptoWalletSection() {
   const [activeView, setActiveView] = useState("debit-card");
 
   const featureData = [
-    {
-      id: "debit-card",
-      title: (
-        <>
-          A VIRTUAL <span className="text-[#333333]">CRYPTO DEBIT CARD</span>{" "}
-        </>
-      ),
-      mobileTitle: (
-        <>
-          VIRTUAL <span className="text-[#333333]">CRYPTO</span>
-          <br />
-          <span className="text-[#333333]">DEBIT CARD</span>
-        </>
-      ),
-      component: (
-        <DebitCardView
-          setActiveView={setActiveView}
-          scrollYProgress={scrollYProgress}
-        />
-      ),
-    },
-    {
-      id: "bank-account",
-      title: (
-        <>
-          A <span className="text-[#333333]">SWISS BANK</span> ACCOUNT
-        </>
-      ),
-      mobileTitle: (
-        <>
-          <span className="text-[#333333]">SWISS BANK</span>
-          <br />
-          ACCOUNT
-        </>
-      ),
-      component: <BankAccountView setActiveView={setActiveView} />,
-    },
-    {
-      id: "crypto-wallet",
-      title: (
-        <>
-          A SECURE <span className="text-[#333333]">SELF CUSTODY CRYPTO</span>{" "}
-          WALLET
-        </>
-      ),
-      mobileTitle: (
-        <>
-          SECURE <span className="text-[#333333]">SELF CUSTODY</span>
-          <br />
-          <span className="text-[#333333]">CRYPTO</span> WALLET
-        </>
-      ),
-      component: <CryptoWalletView />,
-    },
-  ];
+  {
+    id: "debit-card",
+    title: (activeView) => (
+      <>
+        A VIRTUAL <span className={activeView === "debit-card" ? "text-black" : "text-[#333333]"}>CRYPTO</span>
+        <br />
+        <span className={activeView === "debit-card" ? "text-black" : "text-[#333333]"}>DEBIT CARD</span>
+      </>
+    ),
+    mobileTitle: (activeView) => (
+      <>
+        A VIRTUAL <span className={activeView === "debit-card" ? "text-black" : "text-[#333333]"}>CRYPTO</span>
+        <br />
+        <span className={activeView === "debit-card" ? "text-black" : "text-[#333333]"}>DEBIT CARD</span>
+      </>
+    ),
+    component: (
+      <DebitCardView
+        setActiveView={setActiveView}
+        scrollYProgress={scrollYProgress}
+      />
+    ),
+  },
+  {
+    id: "bank-account",
+    title: (activeView) => (
+      <>
+        A <span className={activeView === "bank-account" ? "text-black" : "text-[#333333]"}>SWISS BANK</span> 
+        <br />
+        ACCOUNT
+      </>
+    ),
+    mobileTitle: (activeView) => (
+      <>
+        A <span className={activeView === "bank-account" ? "text-black" : "text-[#333333]"}>SWISS BANK</span>
+        <br />
+        ACCOUNT
+      </>
+    ),
+    component: <BankAccountView setActiveView={setActiveView} />,
+  },
+  {
+    id: "crypto-wallet",
+    title: (activeView) => (
+      <>
+        A SECURE<span className={activeView === "crypto-wallet" ? "text-black" : "text-[#333333]"}> SELF CUSTODY</span>{" "}
+        <span className={activeView === "crypto-wallet" ? "text-black" : "text-[#333333]"}>CRYPTO</span> WALLET
+      </>
+    ),
+    mobileTitle: (activeView) => (
+      <>
+        A <span className={activeView === "crypto-wallet" ? "text-black" : "text-[#333333]"}>SECURE SELF CUSTODY</span>
+        <br />
+        <span className={activeView === "crypto-wallet" ? "text-black" : "text-[#333333]"}>CRYPTO</span> WALLET
+      </>
+    ),
+    component: <CryptoWalletView />,
+  },
+];
 
   useEffect(() => {
     const handleResize = () => {
@@ -159,7 +163,7 @@ export default function CryptoWalletSection() {
               transition={{ duration: 0.3, delay: 0.1 }}
               viewport={{ once: false, amount: 0.5 }}
               className="text-4xl font-[400] text-[#C0C0C0] md:text-7xl xl:text-[120px] leading-tight md:leading-normal"
-              style={{ letterSpacing: "-0.04em" }}
+              style={{ letterSpacing: "-0.08em" }}
             >
               The only <span className="font-normal text-black">card</span>{" "}
               you&apos;ll
@@ -170,7 +174,7 @@ export default function CryptoWalletSection() {
               transition={{ duration: 0.3, delay: 0.3 }}
               viewport={{ once: false, amount: 0.5 }}
               className="text-4xl font-[400] text-[#C0C0C0] md:text-7xl xl:text-[120px] leading-tight md:leading-normal -mt-2 lg:-mt-18"
-              style={{ letterSpacing: "-0.04em" }}
+              style={{ letterSpacing: "-0.0em" }}
             >
               ever need!
             </motion.h2>
@@ -326,41 +330,46 @@ export default function CryptoWalletSection() {
             {/* Right Content Panel */}
             <motion.div
               style={{ opacity: contentOpacity, y: contentY }}
-              className="w-full hidden md:flex flex-col items-start justify-start md:w-1/2 md:pl-8 mt-4 md:mt-0 md:pt-24"
+              className="w-full hidden md:flex flex-col items-start justify-start md:w-1/2 md:pl-16 lg:pl-20 xl:pl-24 mt-4 md:mt-0 md:pt-24"
             >
-              <div className="flex w-full flex-col items-start justify-center space-y-4 md:space-y-11 p-4 md:p-8">
-                {featureData.map((feature) => (
-                  <button
-                    key={feature.id}
-                    onClick={() => setActiveView(feature.id)}
-                    className="group flex items-center gap-4 text-left"
-                  >
-                    <div className="flex h-6 w-6 items-center justify-center">
-                      <motion.div
-                        className="h-2 w-2 bg-black"
-                        style={{
-                          clipPath: "polygon(0 0, 100% 50%, 0 100%)",
-                        }}
-                        animate={{
-                          opacity: activeView === feature.id ? 1 : 0,
-                          scale: activeView === feature.id ? 1.5 : 0.5,
-                          x: activeView === feature.id ? 5 : 0,
-                        }}
-                        transition={{ duration: 0.4, ease: "easeOut" }}
-                      />
-                    </div>
-                    <span
-                      className={`text-base md:text-lg lg:tracking-tighter text-[#6A6A6A] font-semibold max-w-[400px] lg:text-[32px] transition-all duration-500 ${
-                        activeView === feature.id ? "opacity-100" : "opacity-40"
-                      }`}
-                    >
-                      {feature.title}
-                    </span>
-                  </button>
-                ))}
+              <div className="flex w-full flex-col items-start justify-center space-y-6 md:space-y-15 p-4 md:p-8">
+                
+
+
+{featureData.map((feature) => (
+  <button
+    key={feature.id}
+    onClick={() => setActiveView(feature.id)}
+    className="group flex items-center gap-4 text-left"
+  >
+    <div className="flex h-6 w-6 items-center justify-center">
+      <motion.div
+        className="h-4 w-4 bg-black"
+        style={{
+          borderRadius: "20%",
+          clipPath: "polygon(0 0, 0 100%, 100% 50%)",
+        }}
+        animate={{
+          opacity: activeView === feature.id ? 1 : 0,
+          scale: activeView === feature.id ? 1.2 : 0.8,
+          x: activeView === feature.id ? 3 : 0,
+        }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      />
+    </div>
+    <span
+      className={`text-base md:text-lg lg:tracking-tighter text-[#6A6A6A] font-semibold max-w-[400px] lg:text-[32px] leading-tight transition-all duration-500 ${
+        activeView === feature.id ? "opacity-100" : "opacity-40"
+      }`}
+      style={{ lineHeight: '1.1' }}
+    >
+      {typeof feature.title === 'function' ? feature.title(activeView) : feature.title}
+    </span>
+  </button>
+))}
               </div>
               <WaitlistTriggerButton>
-                <button className="flex drop-shadow-2xl items-center lg:ml-16 gap-2 lg:h-[56px] text-[12px] whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100 mt-4 md:mt-0">
+                <button className="flex drop-shadow-2xl items-center lg:ml-16 gap-2 lg:h-[56px] text-[12px] whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100 mt-8 md:mt-6">
                   <IconDeviceMobile className="h-5 w-5" />
                   <span>Download App & Get Bitcoin Reward</span>
                 </button>

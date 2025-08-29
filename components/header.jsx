@@ -28,7 +28,9 @@ export default function Header() {
   const getLinkClasses = (path, baseClasses) => {
     const isActive = isActivePage(path);
     return `${baseClasses} ${
-      isActive ? "text-black" : "text-[#6A6A6A] hover:text-black"
+      isActive
+        ? "text-black font-[700]" // Active → bold black
+        : "text-[#6A6A6A] hover:text-black font-[400]" // Inactive → thin gray
     } transition-colors duration-200`;
   };
 
@@ -61,7 +63,7 @@ export default function Header() {
               href="/"
               className={getLinkClasses(
                 "/",
-                "text-sm lg:text-[14px] font-[700] tracking-wide uppercase"
+                "text-sm lg:text-[14px] tracking-wide uppercase"
               )}
             >
               PERSONAL
@@ -70,7 +72,7 @@ export default function Header() {
               href="/business"
               className={getLinkClasses(
                 "/business",
-                "text-sm lg:text-[14px] font-[700] tracking-wide uppercase"
+                "text-sm lg:text-[14px] tracking-wide uppercase"
               )}
             >
               BUSINESS
@@ -169,7 +171,7 @@ export default function Header() {
               href="/"
               className={getLinkClasses(
                 "/",
-                "text-sm font-[700] uppercase tracking-wide py-2"
+                "text-sm uppercase tracking-wide py-2"
               )}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -179,7 +181,7 @@ export default function Header() {
               href="/business"
               className={getLinkClasses(
                 "/business",
-                "text-sm font-[700] uppercase tracking-wide py-2"
+                "text-sm uppercase tracking-wide py-2"
               )}
               onClick={() => setIsMobileMenuOpen(false)}
             >
