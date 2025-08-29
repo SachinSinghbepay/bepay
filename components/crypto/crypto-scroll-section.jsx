@@ -292,7 +292,7 @@ export default function CryptoScrollSection() {
               </div>
 
               {/* Content */}
-              <div className="relative z-10 max-w-lg">
+              <div className="relative z-10 max-w-lg pt-4">
                 <AnimatePresence mode="wait">
                   {steps.map(
                     (step, index) =>
@@ -325,53 +325,60 @@ export default function CryptoScrollSection() {
                           >
                             {step.title}
                           </motion.h3>
-                          <motion.p
-                            className="text-base sm:text-lg font-medium lg:text-[20px] text-[#6A6A6A] leading-relaxed mb-6"
-                            initial={{
-                              opacity: isInView ? 0 : 0,
-                              x: isInView ? -20 : -40,
-                            }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{
-                              duration: isInView ? 0.7 : 0.8,
-                              delay: isInView ? 0.3 : 1.4,
-                            }}
-                          >
-                            {step.description}
-                          </motion.p>
+
+                          {/* Corrected part: New flex container for number and description */}
+                          <div className="flex items-start gap-4 mb-6">
+                            <span className="text-black text-4xl font-bold font-sans">
+                              {step.number}
+                            </span>
+                            <motion.p
+                              className="text-base sm:text-lg font-medium lg:text-[20px] text-[#6A6A6A] leading-relaxed pt-1"
+                              initial={{
+                                opacity: isInView ? 0 : 0,
+                                x: isInView ? -20 : -40,
+                              }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{
+                                duration: isInView ? 0.7 : 0.8,
+                                delay: isInView ? 0.3 : 1.4,
+                              }}
+                            >
+                              {step.description}
+                            </motion.p>
+                          </div>
 
                           {/* CTA Button for last step */}
                           {step.hasCTA && (
                             <WaitlistTriggerButton>
-                            <motion.div
-                              initial={{
-                                opacity: isInView ? 0 : 0,
-                                y: isInView ? 20 : 40,
-                              }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{
-                                duration: isInView ? 0.6 : 0.8,
-                                delay: isInView ? 0.4 : 1.5,
-                              }}
-                            >
-                              <button className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95">
-                                <span>Get started</span>
-                                <svg 
-                                  className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" 
-                                  viewBox="0 0 24 24" 
-                                  fill="none" 
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path 
-                                    d="M7 17L17 7M17 7H7M17 7V17" 
-                                    stroke="currentColor" 
-                                    strokeWidth="2" 
-                                    strokeLinecap="round" 
-                                    strokeLinejoin="round"
-                                  />
-                                </svg>
-                              </button>
-                            </motion.div>
+                              <motion.div
+                                initial={{
+                                  opacity: isInView ? 0 : 0,
+                                  y: isInView ? 20 : 40,
+                                }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{
+                                  duration: isInView ? 0.6 : 0.8,
+                                  delay: isInView ? 0.4 : 1.5,
+                                }}
+                              >
+                                <button className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95">
+                                  <span>Get started</span>
+                                  <svg
+                                    className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      d="M7 17L17 7M17 7H7M17 7V17"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    />
+                                  </svg>
+                                </button>
+                              </motion.div>
                             </WaitlistTriggerButton>
                           )}
                         </motion.div>
