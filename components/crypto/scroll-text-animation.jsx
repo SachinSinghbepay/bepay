@@ -1,8 +1,9 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ScrollTextAnimation() {
   const containerRef = useRef(null);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
   // Refs for elements we animate
   const maximizeYourRef = useRef(null);
@@ -10,6 +11,20 @@ export default function ScrollTextAnimation() {
   const subDescriptionRef = useRef(null);
 
   useEffect(() => {
+    // Check if fonts are loaded
+    if (document.fonts) {
+      document.fonts.ready.then(() => {
+        setFontsLoaded(true);
+      });
+    } else {
+      // Fallback for browsers that don't support document.fonts
+      setTimeout(() => setFontsLoaded(true), 100);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!fontsLoaded) return;
+    
     let animationFrameId;
 
     const handleScroll = () => {
@@ -116,17 +131,18 @@ export default function ScrollTextAnimation() {
       window.removeEventListener("scroll", handleScroll);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [fontsLoaded]);
 
   return (
     <div className="bg-gray-50 hidden md:block">
       <div ref={containerRef} className="relative h-[200vh] md:h-[400vh] overflow-hidden">
-        <div className="min-h-screen sticky inset-0">
+        <div className="min-h-screen sticky inset-0" style={{ opacity: fontsLoaded ? 1 : 0, transition: 'opacity 0.3s ease-in-out' }}>
           {/* Maximize Your */}
           <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-10">
             <span
               ref={maximizeYourRef}
               className="text-4xl sm:text-6xl md:text-8xl whitespace-nowrap lg:text-[180px] font-[400] text-[#C0C0C0]"
+              style={{ visibility: fontsLoaded ? 'visible' : 'hidden' }}
             >
               Maximize Your
             </span>
@@ -137,6 +153,7 @@ export default function ScrollTextAnimation() {
             <span
               ref={earningPotentialRef}
               className="text-4xl sm:text-6xl pb-5 md:text-8xl lg:text-[160px] font-500 bg-gradient-to-r from-[#333333] via-[#999999] to-[#333333] bg-clip-text text-transparent mb-8"
+              style={{ visibility: fontsLoaded ? 'visible' : 'hidden' }}
             >
               earning potential
             </span>
@@ -145,6 +162,7 @@ export default function ScrollTextAnimation() {
             <p
               ref={subDescriptionRef}
               className="max-w-7xl text-center px-4 text-lg sm:text-xl md:text-[20px] font-[500] text-[#666666] leading-relaxed"
+              style={{ visibility: fontsLoaded ? 'visible' : 'hidden' }}
             >
               Multiple ways to grow your wealth with{" "}
               <span className=" text-[#333333]">industry-leading returns</span>{" "}
