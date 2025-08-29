@@ -124,7 +124,7 @@ export default function CryptoWalletSection() {
     [0.1, 0.4],
     ["0%", isMobile ? "-20%" : "-65%"]
   );
-  const flyingCardOpacity = useTransform(scrollYProgress, [0.39, 0.4], [1, 0]);
+  const flyingCardOpacity = useTransform(scrollYProgress, [0, 1], [1, 1]);
 
   const mockupOpacity = useTransform(scrollYProgress, [0.15, 0.3], [0, 1]);
   const mockupScale = useTransform(scrollYProgress, [0.15, 0.3], [0.8, 1]);
