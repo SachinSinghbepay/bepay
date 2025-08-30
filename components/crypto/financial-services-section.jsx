@@ -122,22 +122,14 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
       </div>
 
       {/* Text */}
-      {/* Text */}
-{/* Text */}
-<div className="max-w-sm lg:max-w-md text-left">
-  <h3 className="text-4xl lg:text-5xl font-light mb-3 text-left tracking-[-0.07em]" style={{ color: "#6a6a6a" }}>
-  {service.title}
-</h3>
-
-  <p className="text-xs text-gray-500 leading-relaxed">
-    {service.points.slice(0, -2).join(" ")}{" "}
-    <span className="font-semibold text-gray-700">
-      {service.points.slice(-2).join(" ")}
-    </span>
-  </p>
-</div>
-
-
+      <div className="max-w-sm lg:max-w-md text-center">
+        <h3 className="text-2xl font-light text-gray-700 mb-3">
+          {service.title}
+        </h3>
+        <p className="text-sm lg:text-base text-gray-500 leading-relaxed">
+          {service.points.join(" ")}
+        </p>
+      </div>
     </motion.div>
   );
 };
@@ -217,26 +209,12 @@ const MobileView = () => {
                 </div>
 
                 {/* Text */}
-                {/* Text */}
-<div className="max-w-sm lg:max-w-md text-center">
-  <h3 className="text-2xl font-light text-gray-700 mb-3">
-    {service.title}
-  </h3>
-  <div className="text-sm lg:text-base text-gray-500 leading-relaxed space-y-1">
-    {service.points.map((point, i) => {
-      const isLastTwo = i >= service.points.length - 2;
-      return (
-        <p
-          key={i}
-          className={isLastTwo ? "font-semibold text-gray-700" : ""}
-        >
-          {point}
-        </p>
-      );
-    })}
-  </div>
-</div>
-
+                <h3 className="text-lg sm:text-xl font-light text-gray-500 mb-2 sm:mb-3 text-center">
+                  {service.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed text-center">
+                  {service.points.join(" ")}
+                </p>
               </div>
             ))}
           </motion.div>

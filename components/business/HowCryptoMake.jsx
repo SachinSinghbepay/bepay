@@ -150,7 +150,7 @@ const HowCryptoMake = () => {
   ];
 
   return (
-    <div ref={containerRef} className="relative bg-[#F9F9F9] h-[500vh]">
+    <div ref={containerRef} className="relative bg-[#F9F9F9] h-[400vh]">
       {/* Sticky Header */}
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="py-20 relative h-full">

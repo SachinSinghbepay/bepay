@@ -171,6 +171,7 @@ export default function OneWallet() {
             y: getResponsiveValue("5%", "7.5%", "10%"),
             duration: getResponsiveValue(0.6, 0.8, 1),
             ease: "power3.out",
+          
           },
           "-=0.3"
         )
@@ -191,6 +192,7 @@ export default function OneWallet() {
             y: 0,
             duration: getResponsiveValue(1, 1.25, 1.5),
             ease: "power2.inOut",
+            
           },
           "-=1"
         )
@@ -377,24 +379,24 @@ export default function OneWallet() {
               ref={textLine1Ref}
               className="text-[11vw] sm:text-[9vw] md:text-[8vw] lg:text-[9vw] xl:text-[140px] font-montserrat font-normal leading-[0.9] tracking-tight mb-2 sm:mb-3"
             >
-              <span className="text-[#9e9e9e]">Everything</span>{" "}
+              <span className="text-[#9e9e9e] tracking-[-0.05em]">Everything</span>{" "}
             </h2>
             <h2
               ref={textLine2Ref}
               className="text-[11vw] sm:text-[9vw] md:text-[8vw] lg:text-[9vw] xl:text-[140px] font-montserrat font-normal leading-[0.9] tracking-tight mb-2 sm:mb-3"
             >
-              <span className="text-[#9e9e9e]">you need in</span>{" "}
+              <span className="text-[#9e9e9e] tracking-[-0.08em]">you need in</span>{" "}
             </h2>
 
             <h2
               ref={textLine3Ref}
               className="text-[11vw] sm:text-[9vw] md:text-[8vw] lg:text-[9vw]xl:text-[140px] font-montserrat font-normal leading-[0.9] tracking-tight"
             >
-              <span className="text-black">one platform</span>
+              <span className="text-black tracking-[-0.07em]">one platform</span>
             </h2>
             <p
               ref={textLine4Ref}
-              className="text-[3vw] w-[70%] mt-8 sm:text-[1vw] md:text-[1vw] lg:text-[1vw] xl:text-[20px] font-montserrat font-normal "
+              className="text-black text-[3vw] w-[70%] mt-8 sm:text-[1vw] md:text-[1vw] lg:text-[1vw] xl:text-[20px] font-montserrat font-normal "
             >
               <span className="text-[#9e9e9e]">
                 From earning opportunities to seamless payments,{" "}

@@ -23,15 +23,15 @@ const DefiYieldSection = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Faster animation for mobile, slower for desktop
-  const animationStart = isMobile ? 0.0 : 0.0;
-  const animationEnd = isMobile ? 0.2 : 0.2; // Faster on mobile
+  // Animation timing - much slower intervals
+  const animationStart = 0.0;
+  const animationEnd = 0.1;
 
-  // Both sections animate from bottom together - faster on mobile
+  // Container animation
   const containerY = useTransform(
     scrollYProgress,
     [animationStart, animationEnd],
-    [isMobile ? "0%" : "0%", "0%"]
+    ["0%", "0%"]
   );
 
   const containerOpacity = useTransform(
@@ -40,103 +40,113 @@ const DefiYieldSection = () => {
     [1, 1]
   );
 
-  // Individual image exit animations (adjusted for mobile)
+  // Individual image exit animations - much larger intervals (0.15 each instead of 0.1)
   const imageStart = animationEnd;
+  const intervalSize = 0.15; // Increased from 0.1 to make scrolling slower
 
   // Image 1 (bottom) - exits first
   const image1Y = useTransform(
     scrollYProgress,
-    [imageStart, imageStart + 0.1],
+    [imageStart, imageStart + intervalSize],
     ["0%", "-200%"]
   );
   const image1Rotate = useTransform(
     scrollYProgress,
-    [imageStart, imageStart + 0.1],
+    [imageStart, imageStart + intervalSize],
     [0, 15]
   );
   const image1Opacity = useTransform(
     scrollYProgress,
-    [imageStart, imageStart + 0],
+    [imageStart, imageStart + intervalSize * 0.5],
     [1, 0]
   );
 
   // Image 2 - exits second
   const image2Y = useTransform(
     scrollYProgress,
-    [imageStart + 0.1, imageStart + 0.2],
+    [imageStart + intervalSize, imageStart + intervalSize * 2],
     ["0%", "-200%"]
   );
   const image2Rotate = useTransform(
     scrollYProgress,
-    [imageStart + 0.1, imageStart + 0.2],
+    [imageStart + intervalSize, imageStart + intervalSize * 2],
     [0, 15]
   );
   const image2Opacity = useTransform(
     scrollYProgress,
-    [imageStart + 0.1, imageStart + 0.2],
+    [imageStart + intervalSize, imageStart + intervalSize + intervalSize * 0.5],
     [1, 0]
   );
 
   // Image 3 - exits third
   const image3Y = useTransform(
     scrollYProgress,
-    [imageStart + 0.2, imageStart + 0.3],
+    [imageStart + intervalSize * 2, imageStart + intervalSize * 3],
     ["0%", "-200%"]
   );
   const image3Rotate = useTransform(
     scrollYProgress,
-    [imageStart + 0.2, imageStart + 0.3],
+    [imageStart + intervalSize * 2, imageStart + intervalSize * 3],
     [0, 15]
   );
   const image3Opacity = useTransform(
     scrollYProgress,
-    [imageStart + 0.2, imageStart + 0.3],
+    [
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 2 + intervalSize * 0.5,
+    ],
     [1, 0]
   );
 
   // Image 4 - exits fourth
   const image4Y = useTransform(
     scrollYProgress,
-    [imageStart + 0.3, imageStart + 0.4],
+    [imageStart + intervalSize * 3, imageStart + intervalSize * 4],
     ["0%", "-200%"]
   );
   const image4Rotate = useTransform(
     scrollYProgress,
-    [imageStart + 0.3, imageStart + 0.4],
+    [imageStart + intervalSize * 3, imageStart + intervalSize * 4],
     [0, 15]
   );
   const image4Opacity = useTransform(
     scrollYProgress,
-    [imageStart + 0.3, imageStart + 0.4],
+    [
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 3 + intervalSize * 0.5,
+    ],
     [1, 0]
   );
 
   // Image 5 - exits fifth
   const image5Y = useTransform(
     scrollYProgress,
-    [imageStart + 0.4, imageStart + 0.5],
+    [imageStart + intervalSize * 4, imageStart + intervalSize * 5],
     ["0%", "-200%"]
   );
   const image5Rotate = useTransform(
     scrollYProgress,
-    [imageStart + 0.4, imageStart + 0.5],
+    [imageStart + intervalSize * 4, imageStart + intervalSize * 5],
     [0, 15]
   );
   const image5Opacity = useTransform(
     scrollYProgress,
-    [imageStart + 0.4, imageStart + 0.5],
+    [
+      imageStart + intervalSize * 4,
+      imageStart + intervalSize * 4 + intervalSize * 0.5,
+    ],
     [1, 0]
   );
 
   // Image 6 (top) - moves up and scales
   const image6Y = useTransform(
     scrollYProgress,
-    [imageStart + 0.5, imageStart + 0.65],
+    [imageStart + intervalSize * 5, imageStart + intervalSize * 6],
     ["0%", "-50%"]
   );
   const image6Scale = useTransform(
     scrollYProgress,
-    [imageStart + 0.5, imageStart + 0.65],
+    [imageStart + intervalSize * 5, imageStart + intervalSize * 6],
     [1, 1.1]
   );
 
@@ -144,72 +154,112 @@ const DefiYieldSection = () => {
   // Content 1 - exits when image 1 exits
   const content1Y = useTransform(
     scrollYProgress,
-    [imageStart, imageStart + 0.1],
+    [imageStart, imageStart + intervalSize],
     ["0%", "-100%"]
   );
   const content1Opacity = useTransform(
     scrollYProgress,
-    [imageStart, imageStart + 0.1],
-    [1, 1]
+    [imageStart, imageStart + intervalSize],
+    [1, 0]
   );
 
   // Content 2 - appears when image 1 exits, exits when image 2 exits
   const content2Y = useTransform(
     scrollYProgress,
-    [imageStart, imageStart + 0.1, imageStart + 0.1, imageStart + 0.2],
+    [
+      imageStart,
+      imageStart + intervalSize,
+      imageStart + intervalSize,
+      imageStart + intervalSize * 2,
+    ],
     ["100%", "0%", "0%", "-100%"]
   );
   const content2Opacity = useTransform(
     scrollYProgress,
-    [imageStart, imageStart + 0.1, imageStart + 0.1, imageStart + 0.2],
+    [
+      imageStart,
+      imageStart + intervalSize,
+      imageStart + intervalSize,
+      imageStart + intervalSize * 2,
+    ],
     [0, 1, 1, 0]
   );
 
   // Content 3 - appears when image 2 exits, exits when image 3 exits
   const content3Y = useTransform(
     scrollYProgress,
-    [imageStart + 0.1, imageStart + 0.2, imageStart + 0.2, imageStart + 0.3],
+    [
+      imageStart + intervalSize,
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 3,
+    ],
     ["100%", "0%", "0%", "-100%"]
   );
   const content3Opacity = useTransform(
     scrollYProgress,
-    [imageStart + 0.1, imageStart + 0.2, imageStart + 0.2, imageStart + 0.3],
+    [
+      imageStart + intervalSize,
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 3,
+    ],
     [0, 1, 1, 0]
   );
 
   // Content 4 - appears when image 3 exits, exits when image 4 exits
   const content4Y = useTransform(
     scrollYProgress,
-    [imageStart + 0.2, imageStart + 0.3, imageStart + 0.3, imageStart + 0.4],
+    [
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 4,
+    ],
     ["100%", "0%", "0%", "-100%"]
   );
   const content4Opacity = useTransform(
     scrollYProgress,
-    [imageStart + 0.2, imageStart + 0.3, imageStart + 0.3, imageStart + 0.4],
+    [
+      imageStart + intervalSize * 2,
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 4,
+    ],
     [0, 1, 1, 0]
   );
 
   // Content 5 - appears when image 4 exits, exits when image 5 exits
   const content5Y = useTransform(
     scrollYProgress,
-    [imageStart + 0.3, imageStart + 0.4, imageStart + 0.4, imageStart + 0.5],
+    [
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 4,
+      imageStart + intervalSize * 4,
+      imageStart + intervalSize * 5,
+    ],
     ["100%", "0%", "0%", "-100%"]
   );
   const content5Opacity = useTransform(
     scrollYProgress,
-    [imageStart + 0.3, imageStart + 0.4, imageStart + 0.4, imageStart + 0.5],
+    [
+      imageStart + intervalSize * 3,
+      imageStart + intervalSize * 4,
+      imageStart + intervalSize * 4,
+      imageStart + intervalSize * 5,
+    ],
     [0, 1, 1, 0]
   );
 
   // Content 6 - appears when image 5 exits, remains when image 6 moves up
   const content6Y = useTransform(
     scrollYProgress,
-    [imageStart + 0.4, imageStart + 0.5],
+    [imageStart + intervalSize * 4, imageStart + intervalSize * 5],
     ["100%", "0%"]
   );
   const content6Opacity = useTransform(
     scrollYProgress,
-    [imageStart + 0.4, imageStart + 0.5],
+    [imageStart + intervalSize * 4, imageStart + intervalSize * 5],
     [0, 1]
   );
 
@@ -238,6 +288,7 @@ const DefiYieldSection = () => {
                     style={{
                       y: image1Y,
                       rotate: image1Rotate,
+                      opacity: image1Opacity,
                       zIndex: 6,
                     }}
                     className="absolute inset-0 rounded-full overflow-hidden"
@@ -256,6 +307,7 @@ const DefiYieldSection = () => {
                     style={{
                       y: image2Y,
                       rotate: image2Rotate,
+                      opacity: image2Opacity,
                       zIndex: 5,
                     }}
                     className="absolute inset-0 rounded-full overflow-hidden transform "
@@ -274,6 +326,7 @@ const DefiYieldSection = () => {
                     style={{
                       y: image3Y,
                       rotate: image3Rotate,
+                      opacity: image3Opacity,
                       zIndex: 4,
                     }}
                     className="absolute inset-0 rounded-full overflow-hidden transform "
@@ -292,6 +345,7 @@ const DefiYieldSection = () => {
                     style={{
                       y: image4Y,
                       rotate: image4Rotate,
+                      opacity: image4Opacity,
                       zIndex: 3,
                     }}
                     className="absolute inset-0 rounded-full overflow-hidden transform "
@@ -310,6 +364,7 @@ const DefiYieldSection = () => {
                     style={{
                       y: image5Y,
                       rotate: image5Rotate,
+                      opacity: image5Opacity,
                       zIndex: 2,
                     }}
                     className="absolute inset-0 rounded-full overflow-hidden transform "
@@ -326,6 +381,8 @@ const DefiYieldSection = () => {
                   {/* Image 6 - Top layer (remains) */}
                   <motion.div
                     style={{
+                      y: image6Y,
+                      scale: image6Scale,
                       zIndex: 1,
                     }}
                     className="absolute inset-0 rounded-full overflow-hidden transform "
@@ -356,8 +413,9 @@ const DefiYieldSection = () => {
                 <motion.div
                   style={{
                     y: content1Y,
+                    opacity: content1Opacity,
                   }}
-                  className="absolute opacity-80  inset-0 flex flex-col items-center justify-center p-6 space-y-3 text-center"
+                  className="absolute inset-0 flex flex-col items-center justify-center p-6 space-y-3 text-center"
                 >
                   <h3 className="text-lg md:text-lg font-bold mb-3 text-gray-800">
                     DeFi Yield Farming
@@ -374,8 +432,9 @@ const DefiYieldSection = () => {
                 <motion.div
                   style={{
                     y: content2Y,
+                    opacity: content2Opacity,
                   }}
-                  className="absolute inset-0 opacity-80 flex flex-col items-center justify-center p-6 space-y-3 text-center"
+                  className="absolute inset-0 flex flex-col items-center justify-center p-6 space-y-3 text-center"
                 >
                   <h3 className="text-lg md:text-lg font-bold mb-3 text-gray-800">
                     Referral Rewards
@@ -392,8 +451,9 @@ const DefiYieldSection = () => {
                 <motion.div
                   style={{
                     y: content3Y,
+                    opacity: content3Opacity,
                   }}
-                  className="absolute inset-0 flex opacity-80  flex-col items-center justify-center p-6 space-y-3 text-center"
+                  className="absolute inset-0 flex flex-col items-center justify-center p-6 space-y-3 text-center"
                 >
                   <h3 className="text-lg md:text-lg font-bold mb-3 text-gray-800">
                     Staking Rewards
@@ -410,8 +470,9 @@ const DefiYieldSection = () => {
                 <motion.div
                   style={{
                     y: content4Y,
+                    opacity: content4Opacity,
                   }}
-                  className="absolute inset-0 flex opacity-80  flex-col items-center justify-center space-y-3 p-6 text-center"
+                  className="absolute inset-0 flex flex-col items-center justify-center space-y-3 p-6 text-center"
                 >
                   <h3 className="text-lg md:text-lg font-bold mb-3 text-gray-800">
                     Restaking
@@ -427,8 +488,9 @@ const DefiYieldSection = () => {
                 <motion.div
                   style={{
                     y: content5Y,
+                    opacity: content5Opacity,
                   }}
-                  className="absolute inset-0 flex opacity-80  flex-col items-center justify-center space-y-3 p-6 text-center"
+                  className="absolute inset-0 flex flex-col items-center justify-center space-y-3 p-6 text-center"
                 >
                   <h3 className="text-lg md:text-lg font-bold mb-3 text-gray-800">
                     Cashback Rewards
@@ -444,8 +506,9 @@ const DefiYieldSection = () => {
                 <motion.div
                   style={{
                     y: content6Y,
+                    opacity: content6Opacity,
                   }}
-                  className="absolute inset-0 opacity-80  flex flex-col items-center justify-center space-y-3 p-6 text-center"
+                  className="absolute inset-0 flex flex-col items-center justify-center space-y-3 p-6 text-center"
                 >
                   <h3 className="text-lg md:text-lg font-bold mb-3 text-gray-800">
                     DePIN Storage & Compute
@@ -460,14 +523,15 @@ const DefiYieldSection = () => {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="bg-black cursor-pointer   whitespace-nowrap text-white px-4 py-2 lg:px-6 lg:py-2 rounded-full flex items-center justify-center gap-2 text-[12px] font-medium hover:bg-gray-800 transition-colors"
+                      className="bg-black cursor-pointer whitespace-nowrap text-white w-[221px] h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-normal hover:bg-gray-800 transition-colors"
                     >
                       <svg
                         width="24"
-                        height="25"
-                        viewBox="0 0 24 25"
-                        fill="none"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
                         xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5"
                       >
                         <path
                           d="M9.87318 9.47184L13.5646 4.21036C13.8717 3.77265 14.4754 3.66657 14.9133 3.97337L18.2824 6.33367C18.7203 6.64045 18.8268 7.24401 18.5203 7.68214L17.5578 9.05838C17.3765 9.3175 17.0802 9.47184 16.764 9.47184H9.87318ZM9.87318 9.47184H6.69107C5.90694 9.47184 5.44778 8.58874 5.89817 7.94686L8.5197 4.21079C8.82695 3.77291 9.43098 3.66699 9.86888 3.9742L11.6632 5.23294C12.101 5.54014 12.207 6.14414 11.8999 6.58207L9.87318 9.47184Z"
@@ -488,7 +552,7 @@ const DefiYieldSection = () => {
                           fill="#F9F9F9"
                         />
                       </svg>
-                      Start earning with bepay{" "}
+                      Start earning with bepay
                     </motion.button>
                   </WaitlistTriggerButton>
                 </motion.div>

@@ -30,7 +30,7 @@ const iconsData = [
   },
   {
     src: "/doller.png",
-    alt: "Doller",
+    alt: "Dollar",
     initialX: "-800vw",
     initialY: "500vh",
     finalX: "-55px",
@@ -59,36 +59,19 @@ export default function CryptoHeroSection() {
 
   const mockupY = useTransform(scrollYProgress, [0, 1], [0, -700]);
 
-  // ✅ CORRECTED: Moved hook calls out of the map function
-  // These hooks are now called at the top level of the component.
-  const xTransforms = [
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialX, iconsData[0].finalX]),
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[1].initialX, iconsData[1].finalX]),
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[2].initialX, iconsData[2].finalX]),
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[3].initialX, iconsData[3].finalX]),
-  ];
-
-  const yTransforms = [
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialY, iconsData[0].finalY]),
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[1].initialY, iconsData[1].finalY]),
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[2].initialY, iconsData[2].finalY]),
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[3].initialY, iconsData[3].finalY]),
-  ];
-
-  const scaleTransforms = [
-    useTransform(scrollYProgress, [0, 0.6], [1.5, 1]),
-    useTransform(scrollYProgress, [0, 0.6], [1.5, 1]),
-    useTransform(scrollYProgress, [0, 0.6], [1.5, 1]),
-    useTransform(scrollYProgress, [0, 0.6], [1.5, 1]),
-  ];
-  
-  const opacityTransforms = [
-    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]),
-    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]),
-    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]),
-    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]),
-  ];
-
+  // Desktop scroll transforms
+  const xTransforms = iconsData.map((icon) =>
+    useTransform(scrollYProgress, [0, 0.6], [icon.initialX, icon.finalX])
+  );
+  const yTransforms = iconsData.map((icon) =>
+    useTransform(scrollYProgress, [0, 0.6], [icon.initialY, icon.finalY])
+  );
+  const scaleTransforms = iconsData.map(() =>
+    useTransform(scrollYProgress, [0, 0.6], [1.5, 1])
+  );
+  const opacityTransforms = iconsData.map(() =>
+    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1])
+  );
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -101,19 +84,17 @@ export default function CryptoHeroSection() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // ✅ CORRECTED: Added `words.length` to the dependency array
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentWord((prev) => (prev + 1) % words.length);
     }, 2000);
     return () => clearInterval(interval);
-  }, [words.length]);
+  }, []);
 
   // Button click handler
   const handleButtonClick = () => {
     console.log("Button clicked!");
     // Add your click logic here
-    // For example: navigate to download page, open modal, etc.
   };
 
   return (
@@ -124,11 +105,10 @@ export default function CryptoHeroSection() {
     >
       {/* Sticky background content */}
       <div className="sticky top-0 h-screen flex-col items-center justify-center px-4 py-8 overflow-hidden">
-        {/* Background text that stays sticky - positioned absolutely to stay in place */}
+        {/* Background text */}
         <div className=" flex items-center justify-center z-10">
           <div className="text-center">
             <div>
-
               <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[64px]  font-[600] leading-[100%]">
                 SPEND
               </div>
@@ -139,7 +119,6 @@ export default function CryptoHeroSection() {
                 <span style={{ letterSpacing: "-0.11em" }}>L</span>
                 <span style={{ letterSpacing: "-0.24em" }}>I</span>
                 <span style={{ letterSpacing: "-0.12em" }}>KE</span>
-                {/* <span style={{ letterSpacing: "-0.07em" }}></span> */}
                 <span className="text-[#404040] font-semibold">
                   <span style={{ letterSpacing: "-0.10em" }}>C</span>
                   <span style={{ letterSpacing: "-0.10em" }}>A</span>
@@ -151,7 +130,7 @@ export default function CryptoHeroSection() {
           </div>
         </div>
 
-        {/* Phone mockup with scroll animations - higher z-index to appear above text */}
+        {/* Phone mockup with scroll animations */}
         <div className="relative z-20 max-w-7xl lg:-mt-10 mx-auto w-full flex items-center justify-center">
           <motion.div style={{ y: mockupY }} className="flex-shrink-0">
             <div className="relative">
@@ -167,6 +146,7 @@ export default function CryptoHeroSection() {
                 }}
               >
                 <div className="w-full h-full bg-gradient-to-t from-white via-white to-[#F9F9F966] rounded-[32px] lg:rounded-[52px] flex flex-col items-center justify-start p-6 lg:p-16 relative">
+                  {/* Logo */}
                   <div className="mb-6">
                     <Image
                       src="/bepayiconlogo.png"
@@ -177,6 +157,8 @@ export default function CryptoHeroSection() {
                       priority
                     />
                   </div>
+
+                  {/* Text */}
                   <div className="text-center mb-6 lg:mb-4">
                     <p className="text-xs 3xl:text-sm text-gray-800 leading-relaxed max-w-[200px] lg:max-w-[280px]">
                       <span className="font-semibold text-black">
@@ -186,7 +168,9 @@ export default function CryptoHeroSection() {
                       for lifestyle, finance and freedom!
                     </p>
                   </div>
-                  <div className="mb-8 lg:mb-4 h-8 lg:h-10 flex items-center justify-center">
+
+                  {/* Animated words */}
+                  <div className="mb-4 lg:mb-6 h-8 lg:h-10 flex items-center justify-center">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={currentWord}
@@ -203,7 +187,9 @@ export default function CryptoHeroSection() {
                       </motion.div>
                     </AnimatePresence>
                   </div>
-                  <div>
+
+                  {/* Secondary text */}
+                  <div className="mb-4 lg:mb-6">
                     <p className="text-xs 3xl:text-sm text-center text-gray-800 leading-relaxed max-w-[200px] lg:max-w-[280px]">
                       Take control of your financial future with{" "}
                       <span className="text-black font-semibold">
@@ -213,18 +199,18 @@ export default function CryptoHeroSection() {
                     </p>
                   </div>
 
-                  {/* Crypto icons with conditional animations - lowered z-index */}
+                  {/* Crypto icons */}
                   <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
                     {iconsData.map((icon, index) => {
-                      // Mobile: Simple bottom-up animation with delays
                       if (isMobile) {
+                        // Mobile animation
                         return (
                           <motion.div
                             key={index}
                             initial={{
                               opacity: 0,
                               y: 100,
-                              x: index * -25, // Stagger horizontally
+                              x: index * -25,
                             }}
                             animate={{
                               opacity: 1,
@@ -233,25 +219,24 @@ export default function CryptoHeroSection() {
                             }}
                             transition={{
                               duration: 0.6,
-                              delay: index * 0.2, // Stagger the animations
+                              delay: index * 0.2,
                               ease: "easeOut",
                             }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: false, amount: 0.5 }}
                             className="absolute top-[56%] lg:top-[67%] left-1/2 translate-x-1/2"
                           >
-                            <Image
-                              src={icon.src || "/placeholder.svg"}
-                              alt={icon.alt}
-                              width={80}
-                              height={80}
-                              className="w-10 h-10"
-                            />
+                            <div className="w-12 h-12 overflow-hidden">
+                              <Image
+                                src={icon.src || "/placeholder.svg"}
+                                alt={icon.alt}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
                           </motion.div>
                         );
                       }
 
-                      // Desktop: Original scroll-based animation
+                      // Desktop scroll animation
                       const x = xTransforms[index];
                       const y = yTransforms[index];
                       const scale = scaleTransforms[index];
@@ -263,19 +248,21 @@ export default function CryptoHeroSection() {
                           style={{ x, y, scale, opacity }}
                           className="absolute flex top-1/2 left-1/2 translate-x-1/2"
                         >
-                          <Image
-                            src={icon.src || "/placeholder.svg"}
-                            alt={icon.alt}
-                            width={80}
-                            height={80}
-                            className="w-10 h-10"
-                          />
+                          <div className="w-12 h-12 overflow-hidden">
+                            <Image
+                              src={icon.src || "/placeholder.svg"}
+                              alt={icon.alt}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
                         </motion.div>
                       );
                     })}
                   </div>
 
-                  <div className="my-4 mt-10 lg:mt-32 relative z-10">
+                  {/* Arrow */}
+                  <div className="relative z-30 flex justify-center mt-15">
                     <Image
                       src={"/images/crypto/line.png"}
                       height={100}
@@ -285,8 +272,8 @@ export default function CryptoHeroSection() {
                     />
                   </div>
 
-                  {/* Fixed clickable button with proper z-index and pointer events */}
-                  <div className="relative z-50 pointer-events-auto">
+                  {/* Button */}
+                  <div className="relative z-50 pointer-events-auto mt-10">
                     <WaitlistTriggerButton>
                       <motion.button
                         whileHover={{ scale: 1.05 }}
