@@ -10,7 +10,7 @@ const WaitlistTriggerButton = ({ children }) => children;
 
 const servicesData = [
   {
-    title: "Bitcoin-Backed Loans",
+    title: "Bitcoin backed loans",
     points: [
       "Get instant loans using your Bitcoin as collateral.",
       "No credit check required.",

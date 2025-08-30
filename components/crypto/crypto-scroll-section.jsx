@@ -12,9 +12,9 @@ const steps = [
     description: (
       <>
         Create your wallet within in{" "}
-        <span className="text-black font-semibold">one tap</span>. Complete your
-        KYC to get your virtual crypto debit card and Swiss IBAN. (Takes 5 min
-        or less)
+        <span className="text-black font-semibold">one tap</span>. Your wallet is ready to receive and send!
+        Complete your KYC to get your virtual crypto debit card and Swiss IBAN.
+        (Takes 5 min or less)
       </>
     ),
     mockup: "/images/crypto/mocup1.png",
@@ -262,7 +262,7 @@ export default function CryptoScrollSection() {
                       index === activeStep && (
                         <motion.div
                           key={`bg-${index}`}
-                          className="absolute top-3 md:-top-40 font-bold leading-none select-none"
+                          className="absolute top-20 md:-top-34 font-bold leading-none select-none"
                           initial={{
                             opacity: isInView ? 0 : 0,
                             scale: isInView ? 0.8 : 0.5,
