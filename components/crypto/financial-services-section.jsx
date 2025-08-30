@@ -175,10 +175,13 @@ const MobileView = () => {
             <br />
             FINANCIAL SERVICES
           </motion.h2>
-          <motion.p className="text-gray-600 mt-3 sm:mt-4 text-sm sm:text-base">
-            Banking, lending, insurance, and more - all in one comprehensive
-            platform
-          </motion.p>
+          <motion.p className="text-[#333333] mt-4 font-medium lg:mt-6 text-sm lg:text-base leading-relaxed">
+  <span className="font-semibold block">
+    Banking, lending, insurance, and more -
+  </span>
+  <span className="block">all in one comprehensive platform</span>
+</motion.p>
+
           <motion.button className="flex items-center gap-2 bg-black text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full mt-4 sm:mt-6 hover:bg-gray-800 transition-colors text-xs sm:text-sm">
             Explore all features
             <ArrowUpRight size={14} className="sm:w-4 sm:h-4" />
@@ -247,18 +250,27 @@ export const FinancialServicesSection = () => {
                 <br />
                 SERVICES
               </motion.h2>
-              <motion.p className="text-[#333333] mt-4 font-medium lg:mt-6 text-sm lg:text-base">
-                <span className="font-semibold">
-                  Banking, lending, insurance, and more -{" "}
-                </span>
-                all in one comprehensive platform
-              </motion.p>
+              <motion.p className="text-[#333333] mt-4 font-medium lg:mt-6 text-sm lg:text-base leading-relaxed">
+  <span className="font-semibold block">
+    Banking, lending, insurance, and more -
+  </span>
+  <span className="block">all in one comprehensive platform</span>
+</motion.p>
+
               <WaitlistTriggerButton>
-                <motion.button className="flex items-center cursor-pointer gap-2 bg-black text-white px-5 lg:px-6 py-2.5 lg:py-3 rounded-full mt-6 lg:mt-8 hover:bg-black/90 transition-colors text-sm">
-                  Explore all features
-                  <ArrowUpRight size={16} />
-                </motion.button>
-              </WaitlistTriggerButton>
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="bg-black cursor-pointer whitespace-nowrap text-white 
+               w-[180px] h-[56px] rounded-full flex items-center 
+               justify-center gap-2 text-xs font-normal 
+               hover:bg-gray-800 transition-colors mt-7"
+  >
+    Explore all features
+    <ArrowUpRight size={18} className="w-5 h-5" />
+  </motion.button>
+</WaitlistTriggerButton>
+
             </motion.div>
           </div>
           <div className="bg-[#F9F9F9] relative overflow-hidden">

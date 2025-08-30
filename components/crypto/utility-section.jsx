@@ -53,15 +53,15 @@ const AnimatedText = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.1 }}
       >
-        <span className="text-[#333333]">Crypto </span>
-        <span className="text-[#C0C0C0]">meets</span>
+        <span className="text-[#333333] tracking-[-0.05em]">Crypto </span>
+        <span className="text-[#C0C0C0] tracking-[-0.07em]">meets</span>
       </motion.div>
       <motion.div
         initial={{ opacity: 0, y: 100 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.2 }}
       >
-        <span className="text-[#333333]">daily utility</span>
+        <span className="text-[#333333] tracking-[-0.09em]">daily utility</span>
       </motion.div>
     </motion.h2>
   );
@@ -116,7 +116,7 @@ const IndividualCard = ({ cardData, index, progress, totalCards, isLastCard }) =
           <Card cardData={cardData} />
 
           {/* CTA on last card */}
-          {isLastCard && (
+          {/* {isLastCard && (
             <WaitlistTriggerButton>
               <motion.div
                 style={{
@@ -131,7 +131,7 @@ const IndividualCard = ({ cardData, index, progress, totalCards, isLastCard }) =
                 </button>
               </motion.div>
             </WaitlistTriggerButton>
-          )}
+          )} */}
         </div>
       </div>
     </motion.div>
@@ -175,19 +175,40 @@ export const UtilitySection = () => {
 
         {/* Final button */}
         <WaitlistTriggerButton>
-          <motion.div
-            style={{
-              opacity: buttonOpacity,
-              y: buttonY,
-            }}
-            transition={{ ease: "easeOut", duration: 0.6 }}
-            className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20"
-          >
-            <button className="flex items-center whitespace-nowrap gap-2 bg-black text-white px-6 py-3 rounded-full hover:bg-black/90 transition-colors">
-              Start paying with crypto
-            </button>
-          </motion.div>
-        </WaitlistTriggerButton>
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    style={{
+      opacity: buttonOpacity,
+      y: buttonY,
+    }}
+    transition={{ ease: "easeOut", duration: 0.6 }}
+    className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20
+               bg-black cursor-pointer whitespace-nowrap text-white 
+               w-[221px] h-[56px] rounded-full flex items-center 
+               justify-center gap-2 text-xs font-normal 
+               hover:bg-gray-800 transition-colors"
+  >
+    {/* keep your original icon here */}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="w-5 h-5"
+    >
+      <path d="M12 2v20M2 12h20" />
+    </svg>
+
+    Start paying with crypto
+  </motion.button>
+</WaitlistTriggerButton>
+
       </div>
     </section>
   );
