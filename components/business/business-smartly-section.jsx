@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { CheckCircle } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -49,11 +48,14 @@ function FeatureCard({ title, image, features }) {
 
 export default function BusinessSmartlySection() {
   const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref });
+  const { scrollYProgress } = useScroll({ 
+    target: ref,
+    offset: ["start end", "end start"]
+  });
 
-  // Transform scroll progress to animate the Y position of the heading
-  const y1 = useTransform(scrollYProgress, [0, 1], [50, 0]); // Moves from 50px to 0px
-  const y2 = useTransform(scrollYProgress, [0, 1], [-50, 0]); // Moves from -50px to 0px
+  // Single unified transform for the entire heading
+  const headingY = useTransform(scrollYProgress, [0, 0.5, 1], [30, 0, -30]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.6, 1, 1, 0.8]);
 
   const cardsData = [
     {
@@ -102,49 +104,56 @@ export default function BusinessSmartlySection() {
 
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 bg-[#F9F9F9] overflow-hidden dark:bg-gray-950">
-      <div>
+      <div className="container mx-auto px-4">
         <div
           ref={ref}
-          className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
+          className="flex flex-col items-center justify-center text-center mb-12 md:mb-16 lg:mb-20"
         >
-          <motion.h2
-            className="text-4xl sm:text-5xl md:text-6xl 3xl:text-[90px] font-[400] tracking-tight leading-tight text-[#C0C0C0] dark:text-[#333333]"
-            style={{ y: y1 }}
+          <motion.div
+            className="max-w-6xl mx-auto"
+            style={{ 
+              y: headingY,
+              opacity: opacity
+            }}
           >
-            Everything you need
-          </motion.h2>
-          <motion.h2
-            className="text-4xl sm:text-5xl -mt-4 md:text-6xl 3xl:text-[90px] font-[400] leading-tight tracking-tight text-black dark:text-white"
-            style={{ y: y2 }}
-          >
-            to run business smartly
-          </motion.h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-[400] tracking-tight leading-[1.1] md:leading-[1.05]">
+              <span className="block text-[#C0C0C0] dark:text-[#333333] mb-2 md:mb-4">
+                Everything you need
+              </span>
+              <span className="block text-black dark:text-white">
+                to run your business smartly
+              </span>
+            </h2>
+          </motion.div>
         </div>
       </div>
-      <Carousel
-        opts={{
-          align: "start",
-          loop: false,
-        }}
-        plugins={[
-          Autoplay({
-            delay: 3000,
-            stopOnInteraction: true,
-          }),
-        ]}
-        className="w-full"
-      >
-        <CarouselContent className="lg:ml-20">
-          {cardsData.map((card) => (
-            <CarouselItem
-              key={card.id}
-              className="pb-5 basis-[95%] md:basis-1/2 lg:basis-[35.6%]"
-            >
-              <FeatureCard {...card} />
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
+      
+      <div className="w-full">
+        <Carousel
+          opts={{
+            align: "start",
+            loop: false,
+          }}
+          plugins={[
+            Autoplay({
+              delay: 3000,
+              stopOnInteraction: true,
+            }),
+          ]}
+          className="w-full"
+        >
+          <CarouselContent className="ml-4 md:ml-8 lg:ml-20">
+            {cardsData.map((card) => (
+              <CarouselItem
+                key={card.id}
+                className="pb-5 basis-[90%] sm:basis-[80%] md:basis-1/2 lg:basis-[35.6%] xl:basis-[33%]"
+              >
+                <FeatureCard {...card} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </div>
     </section>
   );
 }
