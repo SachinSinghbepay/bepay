@@ -25,7 +25,7 @@ import Link from "next/link";
 
 const AppStoreButton = ({ iconSrc, iconAlt, line1, line2 }) => (
   <motion.button
-    className="flex items-center w-full sm:w-auto justify-center gap-3 border border-white/20 rounded-full px-8 py-3 hover:bg-white/10 transition-colors"
+    className="flex items-center w-full sm:w-auto justify-center gap-3 border border-white/20 rounded-full px-12 py-6 hover:bg-white/10 transition-colors"
     variants={{
       hidden: { opacity: 0, y: 20 },
       visible: { opacity: 1, y: 0 },
@@ -130,7 +130,7 @@ const Footer = () => {
         {/* CTA Section */}
         <motion.div className="text-center max-w-4xl" variants={itemVariants}>
           <h2 className="text-xl md:text-2xl text-transparent bg-clip-text [background-image:linear-gradient(90deg,#F9F9F9_0%,rgba(249,249,249,0.5)_31.33%,#F9F9F9_64.79%,rgba(249,249,249,0.5)_98.29%)] lg:text-[24px] font-light mb-6 leading-tight">
-            Ready to make every transaction an opportunity?
+            Ready to transform your financial future?
           </h2>
 
           <p className="text-[#6A6A6A] text-[16px] leading-relaxed">
@@ -150,6 +150,7 @@ const Footer = () => {
             iconAlt="Apple Store"
             line1="Download on the"
             line2="App Store!"
+        
           />
           <AppStoreButton
             iconSrc="/playstore.png"
