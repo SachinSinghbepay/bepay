@@ -162,24 +162,23 @@ function PortalContent({
                   >
                     {/* Heading */}
                     <div className="-mt-9 mb-6">
-              <h2 
-    style={{
-      fontSize: '1.5rem',
-      fontWeight: 600,
-      marginBottom: '0.5rem',
-      backgroundImage: 'linear-gradient(to bottom, #4a4a4a, #9c9c9c)',
-      WebkitBackgroundClip: 'text',
-      backgroundClip: 'text',
-      color: 'transparent',
-    }}
-  >
-    Yay! You’re on the waitlist.
-  </h2>
-              <p className="text-sm text-gray-600 mt-6 ">
-                We’ll email you as soon as we launch!
-              </p>
-            </div>
-
+                      <h2 
+                        style={{
+                          fontSize: '1.5rem',
+                          fontWeight: 600,
+                          marginBottom: '0.5rem',
+                          backgroundImage: 'linear-gradient(to bottom, #4a4a4a, #9c9c9c)',
+                          WebkitBackgroundClip: 'text',
+                          backgroundClip: 'text',
+                          color: 'transparent',
+                        }}
+                      >
+                        Yay! You’re on the waitlist.
+                      </h2>
+                      <p className="text-sm text-gray-600 mt-6 ">
+                        We’ll email you as soon as we launch!
+                      </p>
+                    </div>
 
                     {/* Button */}
                     <button
@@ -197,8 +196,6 @@ function PortalContent({
                     >
                       Awesome!
                     </button>
-
-
                   </motion.div>
                 ) : (
                   <motion.div
@@ -341,7 +338,7 @@ export default function WaitlistPopup({
   const [referralLink, setReferralLink] = useState("");
 
   const searchParams = useSearchParams();
-  const referredBy = searchParams.get("referralId") || searchParams.get("referalId");
+  const campaignId = searchParams.get("campaignId");
 
   const finalIsOpen = externalIsOpen !== undefined ? externalIsOpen : isOpen;
   const onClose = externalOnClose || (() => setIsOpen(false));
@@ -372,8 +369,8 @@ export default function WaitlistPopup({
     setError("");
 
     try {
-      const { referralId } = await addToWaitlist(email, referredBy);
-      const link = `${window.location.origin}/?referralId=${referralId}`;
+      const { campaignId: newCampaignId } = await addToWaitlist(email, campaignId);
+      const link = `${window.location.origin}/?campaignId=${newCampaignId}`;
       setReferralLink(link);
 
       setIsSuccess(true);
