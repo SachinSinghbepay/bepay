@@ -12,9 +12,9 @@ const steps = [
     description: (
       <>
         Create your wallet within in{" "}
-        <span className="text-black font-semibold">one tap</span>. Complete your
-        KYC to get your virtual crypto debit card and Swiss IBAN. (Takes 5 min
-        or less)
+        <span className="text-black font-semibold">one tap</span>. Your wallet is ready to receive and send!
+        Complete your KYC to get your virtual crypto debit card and Swiss IBAN.
+        (Takes 5 min or less)
       </>
     ),
     mockup: "/images/crypto/mocup1.png",
@@ -262,7 +262,7 @@ export default function CryptoScrollSection() {
                       index === activeStep && (
                         <motion.div
                           key={`bg-${index}`}
-                          className="absolute top-3 md:-top-40 font-bold leading-none select-none"
+                          className="absolute top-20 md:-top-34 font-bold leading-none select-none"
                           initial={{
                             opacity: isInView ? 0 : 0,
                             scale: isInView ? 0.8 : 0.5,
@@ -292,7 +292,7 @@ export default function CryptoScrollSection() {
               </div>
 
               {/* Content */}
-              <div className="relative z-10 max-w-lg">
+              <div className="relative mt-19  z-10 max-w-lg">
                 <AnimatePresence mode="wait">
                   {steps.map(
                     (step, index) =>
@@ -343,35 +343,36 @@ export default function CryptoScrollSection() {
                           {/* CTA Button for last step */}
                           {step.hasCTA && (
                             <WaitlistTriggerButton>
-                            <motion.div
-                              initial={{
-                                opacity: isInView ? 0 : 0,
-                                y: isInView ? 20 : 40,
-                              }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{
-                                duration: isInView ? 0.6 : 0.8,
-                                delay: isInView ? 0.4 : 1.5,
-                              }}
-                            >
-                              <button className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95">
-                                <span>Get started</span>
-                                <svg 
-                                  className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" 
-                                  viewBox="0 0 24 24" 
-                                  fill="none" 
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path 
-                                    d="M7 17L17 7M17 7H7M17 7V17" 
-                                    stroke="currentColor" 
-                                    strokeWidth="2" 
-                                    strokeLinecap="round" 
-                                    strokeLinejoin="round"
-                                  />
-                                </svg>
-                              </button>
-                            </motion.div>
+                              <motion.div
+  initial={{
+    opacity: isInView ? 0 : 0,
+    y: isInView ? 20 : 40,
+  }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{
+    duration: isInView ? 0.6 : 0.8,
+    delay: isInView ? 0.4 : 1.5,
+  }}
+>
+  <WaitlistTriggerButton className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95">
+    <span>Get started</span>
+    <svg
+      className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M7 17L17 7M17 7H7M17 7V17"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  </WaitlistTriggerButton>
+</motion.div>
+
                             </WaitlistTriggerButton>
                           )}
                         </motion.div>
