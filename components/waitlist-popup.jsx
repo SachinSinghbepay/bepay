@@ -224,7 +224,7 @@ function PortalContent({
                       whiteSpace: 'nowrap',
                       transform: 'translateY(15px)'
                     }}>
-                      We&apos;re launching soon! Join the waitlist and stay ahead of other businesses!
+                      We’re launching soon! Join the waitlist and stay ahead of others!
                     </p>
 
                     {/* Input + Button */}
