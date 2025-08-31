@@ -164,7 +164,7 @@ function PortalContent({
                       color: "transparent",
                     }}
                   >
-                    Every business starts with a spark!
+                    Be the first to experience the future of payments.
                   </h2>
                 </motion.div>
               )}
@@ -247,17 +247,16 @@ function PortalContent({
                     <p
                       style={{
                         fontFamily: "'Montserrat', sans-serif",
-                        fontWeight: 500,
-                        fontSize: isMobile ? "13px" : "14px",
-                        lineHeight: "1.4",
+                        fontWeight: 550,
+                        fontSize: isMobile ? "13px" : "25px",
+                        lineHeight: "1.1",
                         color: "#333333",
                         textAlign: "center",
                         marginTop: isMobile ? "-0.5rem" : "0",
                         padding: isMobile ? "0 0.5rem" : "0",
                       }}
                     >
-                      We&apos;re launching soon! Join the waitlist and stay
-                      ahead of other businesses!
+                      Join the waitlist
                     </p>
 
                     {/* Input + Button (Mobile vs Desktop) */}
