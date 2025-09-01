@@ -52,7 +52,7 @@ function PortalContent({
     maxWidth: isMobile ? "22rem" : "38rem",
     backgroundColor: "#ffffff",
     border: "1px solid rgba(0, 0, 0, 0.1)",
-    borderRadius: isMobile ? "1rem" : "1.5rem",
+    borderRadius: isMobile ? "47px" : "47px",
     boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.2)",
     overflow: "hidden",
     zIndex: 2147483647,
@@ -152,16 +152,21 @@ function PortalContent({
                   transition={{ delay: 0.3 }}
                 >
                   <h2
-                    style={{
-                      fontSize: isMobile ? "1.1rem" : "1.2rem",
-                      fontWeight: "600",
-                      marginBottom: "0.5rem",
-                      lineHeight: "1.2",
-                      color: "#000000",
-                    }}
-                  >
-                    Be the first to experience the future of payments.
-                  </h2>
+  style={{
+    fontFamily: "'Montserrat', sans-serif",
+    fontWeight: 600,             // SemiBold
+    fontStyle: "normal",
+    fontSize: isMobile ? "15px" : "20px",
+    lineHeight: "24px",
+    letterSpacing: "-2%",
+    textAlign: "center",
+    marginBottom: "0.5rem",
+    color: "#000000",
+  }}
+>
+  Be the first to experience the future of payments.
+</h2>
+
                 </motion.div>
               )}
             </div>
@@ -184,9 +189,9 @@ function PortalContent({
                     <div className={isMobile ? "-mt-6 mb-4" : "-mt-9 mb-6"}>
                       <h2
                         style={{
-                          fontSize: isMobile ? "1.25rem" : "1.5rem",
+                          fontSize: isMobile ? "1rem" : "1.5rem",
                           fontWeight: 600,
-                          marginBottom: "0.5rem",
+                          marginBottom: isMobile ? "1.5rem" : "0.5rem", // Adjust this line
                           backgroundImage:
                             "linear-gradient(to bottom, #4a4a4a, #9c9c9c)",
                           WebkitBackgroundClip: "text",
@@ -197,28 +202,38 @@ function PortalContent({
                         Yay! You're on the waitlist.
                       </h2>
                       <p
-                        style={{
-                          fontSize: isMobile ? "0.8rem" : "0.9rem",
-                          color: "#4b5563",
-                          marginTop: isMobile ? "0.5rem" : "1.5rem",
-                        }}
-                      >
-                        We'll email you as soon as we launch!
-                      </p>
+  style={{
+    fontFamily: "'Montserrat', sans-serif",
+    fontWeight: 400,            // Medium
+    fontStyle: "normal",
+    fontSize: isMobile ? "12px" : "14px",
+    lineHeight: isMobile ? "18px" : "24.992px",
+    letterSpacing: "0%",
+    textAlign: "center",
+    color: isMobile ? "#6A6A6A" : "#333333",
+    marginTop: isMobile ? "-0.5rem" : "0",
+    padding: isMobile ? "0 0.5rem" : "0",
+    color: "#6A6A6A",
+  }}
+>
+  Keep an eye on your inbox. We'll email you as soon as we launch!
+</p>
+
                     </div>
 
                     <button
                       onClick={onClose}
                       style={{
-                        padding: isMobile ? "0.6rem 1.5rem" : "0.75rem 2rem",
+                        padding: isMobile ? "0.6rem 1.5rem" : "1rem 1.5rem",
                         borderRadius: "9999px",
                         backgroundColor: "#111827",
                         color: "white",
-                        fontWeight: "600",
+                        fontWeight: "400",
                         cursor: "pointer",
                         border: "none",
-                        marginTop: "0.2rem",
+                        marginTop: isMobile ? "4.5rem" : "0.2rem", 
                         width: isMobile ? "100%" : "auto",
+                        fontSize: isMobile ? "14px" : "12px",
                       }}
                     >
                       Awesome!
@@ -244,12 +259,13 @@ function PortalContent({
                       style={{
                         fontFamily: "'Montserrat', sans-serif",
                         fontWeight: 550,
-                        fontSize: isMobile ? "13px" : "13px",
+                        fontSize: isMobile ? "12px" : "11.5px",
                         lineHeight: "1.1",
                         color: "#333333",
                         textAlign: "center",
                         marginTop: isMobile ? "-0.5rem" : "0",
                         padding: isMobile ? "0 0.5rem" : "0",
+                         marginBottom: isMobile ? '1.5rem' : '-0.4rem', 
                       }}
                     >
                       We’re launching soon! Join the waitlist and stay ahead of others!
@@ -262,7 +278,7 @@ function PortalContent({
                           width: "100%",
                           display: "flex",
                           flexDirection: "column",
-                          gap: "0.75rem",
+                          gap: "0.55rem",
                         }}
                       >
                         <input
@@ -272,11 +288,11 @@ function PortalContent({
                           placeholder="Enter your email"
                           style={{
                             width: "100%",
-                            height: "3.2rem",
+                            height: "42px",
                             padding: "0 1rem",
                             border: "1px solid rgb(209, 213, 219)",
                             borderRadius: "9999px",
-                            fontSize: "1rem",
+                            fontSize: "13px",
                             outline: "none",
                             backgroundColor: "rgb(249, 250, 251)",
                           }}
@@ -290,7 +306,7 @@ function PortalContent({
                           disabled={isSubmitting || !email}
                           style={{
                             width: "100%",
-                            height: "3.2rem",
+                            height: "42px",
                             borderRadius: "9999px",
                             backgroundColor: "#000000",
                             color: "white",
@@ -306,31 +322,27 @@ function PortalContent({
                             fontSize: "1rem",
                           }}
                         >
-                          {isSubmitting ? (
-                            <motion.div
-                              animate={{ rotate: 360 }}
-                              transition={{
-                                duration: 1,
-                                repeat: Number.POSITIVE_INFINITY,
-                                ease: "linear",
-                              }}
-                              style={{
-                                width: "1.25rem",
-                                height: "1.25rem",
-                                border: "2px solid white",
-                                borderTop: "2px solid transparent",
-                                borderRadius: "50%",
-                              }}
-                            />
-                          ) : (
-                            "Join the waitlist"
-                          )}
+                          <span
+  style={{
+    fontFamily: "'Montserrat', sans-serif",
+    fontWeight: 400,          // Medium
+    fontStyle: "normal",
+    fontSize: isMobile ? "12px" : "12px",
+    lineHeight: "100%",
+    letterSpacing: "0%",
+    textAlign: "center",
+    color: isMobile ? "#F9F9F9" : "#FFFFFF",  // optional contrast if mobile bg is light
+  }}
+>
+  Join the waitlist
+</span>
+
                         </button>
                       </div>
                     ) : (
                       <div
                         style={{
-                          width: "100%",
+                          width: "85%",
                           display: "flex",
                           alignItems: "center",
                           border: "1px solid rgb(209, 213, 219)",
@@ -346,13 +358,14 @@ function PortalContent({
                           placeholder="Enter your email"
                           style={{
                             flex: 1,
-                            height: "3.5rem",
-                            padding: "0 1.5rem",
+                            height: isMobile ? "2.6rem" : "1.8rem",
+                            padding: "0 1rem",
                             border: "none",
                             outline: "none",
-                            fontSize: "1rem",
+                            fontSize: "0.9rem",
                             backgroundColor: "transparent",
                             color: "rgb(17, 24, 39)",
+                         
                           }}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") handleSubmit(e);
@@ -363,13 +376,13 @@ function PortalContent({
                           onClick={handleSubmit}
                           disabled={isSubmitting || !email}
                           style={{
-                            height: "3.5rem",
-                            padding: "0 1.5rem",
+                            height: "2.8rem",
+                            padding: "0 1.8rem",
                             backgroundColor: "#000000",
                             color: "white",
                             border: "none",
-                            fontSize: "1rem",
-                            fontWeight: "500",
+                            fontSize: "0.8rem",
+                            fontWeight: "250",
                             cursor:
                               isSubmitting || !email
                                 ? "not-allowed"
@@ -378,7 +391,7 @@ function PortalContent({
                             alignItems: "center",
                             justifyContent: "center",
                             borderRadius: "9999px",
-                            margin: "0.3rem",
+                            margin: "0.2rem",
                           }}
                         >
                           {isSubmitting ? (
