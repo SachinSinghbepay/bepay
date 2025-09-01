@@ -57,6 +57,7 @@ export default function BusinessSmartlySection() {
   const headingY = useTransform(scrollYProgress, [0, 0.5, 1], [30, 0, -30]);
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.6, 1, 1, 0.8]);
 
+
   const cardsData = [
     {
       id: "1",
@@ -105,6 +106,7 @@ export default function BusinessSmartlySection() {
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 bg-[#F9F9F9] overflow-hidden dark:bg-gray-950">
       <div className="container mx-auto px-4">
+
         <div
           ref={ref}
           className="flex flex-col items-center justify-center text-center mb-12 md:mb-16 lg:mb-20"
@@ -154,6 +156,7 @@ export default function BusinessSmartlySection() {
           </CarouselContent>
         </Carousel>
       </div>
+
     </section>
   );
 }

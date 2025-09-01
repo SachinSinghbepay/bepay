@@ -105,6 +105,12 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
 
   const y = useTransform(progress, inputRange, outputRange);
 
+  // Split into normal + bold parts
+  const normalPart = service.points
+    .slice(0, service.points.length - 2)
+    .join(" ");
+  const boldPart = service.points.slice(-2).join(" ");
+
   return (
     <motion.div
       style={{ y }}
@@ -133,6 +139,7 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
             dangerouslySetInnerHTML={{ __html: service.points.join(" ") }}
           />
         </div>
+
       </div>
     </motion.div>
   );
@@ -184,6 +191,7 @@ const MobileView = () => {
               Banking, lending, insurance, and more -
             </span>
             <span className="block">all in one comprehensive platform</span>
+
           </motion.p>
 
           <motion.button className="flex items-center gap-2 bg-black text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full mt-4 sm:mt-6 hover:bg-gray-800 transition-colors text-xs sm:text-sm">
@@ -199,6 +207,7 @@ const MobileView = () => {
             style={{ x }}
             className="flex gap-4 sm:gap-6 px-4 sm:px-6 pb-8"
           >
+
             {servicesData.map((service, i) => (
               <div key={i} className="w-[75vw] sm:w-[65vw] flex-shrink-0">
                 {/* Container for aligned content */}
@@ -227,6 +236,7 @@ const MobileView = () => {
                 </div>
               </div>
             ))}
+
           </motion.div>
         </div>
       </div>
@@ -265,6 +275,7 @@ export const FinancialServicesSection = () => {
                   Banking, lending, insurance, and more -
                 </span>
                 <span className="block">all in one comprehensive platform</span>
+
               </motion.p>
 
               <WaitlistTriggerButton>
@@ -275,6 +286,7 @@ export const FinancialServicesSection = () => {
                      w-[180px] h-[56px] rounded-full flex items-center
                      justify-center gap-2 text-xs font-normal
                      hover:bg-gray-800 transition-colors mt-7"
+
                 >
                   Explore all features
                   <ArrowUpRight size={18} className="w-5 h-5" />

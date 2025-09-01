@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+
 import Image from "next/image";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
 
@@ -106,17 +107,17 @@ const AnimatedText = () => {
 };
 
 const Card = ({ cardData }) => (
-  <div className="w-[300px] h-[400px] lg:w-[380px] drop-shadow-2xl lg:h-[500px] bg-white shadow-utility-card rounded-[40px] p-8 flex flex-col items-start justify-end text-center relative overflow-hidden">
+  <div className="w-[280px] h-[360px] md:w-[300px] md:h-[400px] lg:w-[380px] drop-shadow-2xl lg:h-[500px] bg-white md:shadow-utility-card rounded-[40px] p-6 md:p-8 flex flex-col items-start justify-end text-center relative overflow-hidden flex-shrink-0 border-0">
     <Image
       src={cardData.icon || "/placeholder.svg"}
       alt={cardData.title}
       width={200}
       height={200}
       loading="lazy"
-      className="opacity-100 absolute top-4 left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0 w-[150px] h-[150px] md:w-[200px] md:h-[200px] z-0"
+      className="opacity-100 absolute top-4 left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0 w-[120px] h-[120px] md:w-[150px] md:h-[150px] lg:w-[200px] lg:h-[200px] z-0"
     />
     <div className="relative mb-5 z-10">
-      <h3 className="text-xl md:text-2xl lg:text-[32px] text-start font-[500] text-[#6A6A6A]">
+      <h3 className="text-lg md:text-xl lg:text-[32px] text-start font-[500] text-[#6A6A6A]">
         {cardData.title}
       </h3>
       <p className="text-gray-600 mt-2 text-start text-sm">
@@ -129,12 +130,11 @@ const Card = ({ cardData }) => (
 // DESKTOP ANIMATION: Exact original animation
 const DesktopCard = ({ cardData, index, progress, totalCards, isLastCard }) => {
   const segment = 1 / totalCards;
-  const overlap = segment * 0.7; // Increased overlap for consistent gaps
+  const overlap = segment * 0.7;
   const start = Math.max(0, index * segment - overlap * 0.5);
   const peak = index * segment + segment * 0.5;
   const end = Math.min(1, (index + 1) * segment + overlap * 0.5);
 
-  // More precise animation timing for consistent gaps
   const y = useTransform(progress, [start, peak, end], ["40%", "0%", "-40%"]);
   const opacity = useTransform(progress, [start, peak, end], [0, 1, 0]);
 
@@ -153,9 +153,10 @@ const DesktopCard = ({ cardData, index, progress, totalCards, isLastCard }) => {
           } relative`}
         >
           <Card cardData={cardData} />
+
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -272,5 +273,6 @@ export const UtilitySection = () => {
         </WaitlistTriggerButton>
       </div>
     </section>
+
   );
 };
