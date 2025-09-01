@@ -20,24 +20,14 @@ function PortalContent({
   handleSubmit,
   referralLink
 }) {
-  const [buttonText, setButtonText] = useState('Join the waitlist');
+  // Detect mobile
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => {
-      const mobileBreakpoint = 640;
-      setIsMobile(window.innerWidth < mobileBreakpoint);
-      if (window.innerWidth < mobileBreakpoint) {
-        setButtonText('Join');
-      } else {
-        setButtonText('Join the waitlist');
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-
+    const check = () => setIsMobile(window.innerWidth <= 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
   }, []);
 
   const overlayStyle = {
@@ -163,18 +153,11 @@ function PortalContent({
                 >
                   <h2
                     style={{
-                      fontSize: '1.75rem',
-                      fontWeight: '600',
-                      color: 'rgb(55, 65, 81)',
-                      // Increased marginBottom for more gap
-                      marginBottom: '2.5rem', 
-                      textAlign: 'center',
-                      lineHeight: '1.3',
-                      backgroundImage: 'linear-gradient(to bottom, #4a4a4a, #9c9c9c)',
-                      WebkitBackgroundClip: 'text',
-                      backgroundClip: 'text',
-                      color: 'transparent',
-
+                      fontSize: isMobile ? "1.1rem" : "1.2rem",
+                      fontWeight: "600",
+                      marginBottom: "0.5rem",
+                      lineHeight: "1.2",
+                      color: "#000000",
                     }}
                   >
                     Be the first to experience the future of payments.
@@ -184,7 +167,7 @@ function PortalContent({
             </div>
 
             {/* Form Content */}
-            <div style={{ padding: isMobile ? "0 1rem 1rem" : "0 2rem 2rem" }}>
+            <div style={{ padding: isMobile ? "0 1rem 1rem" : "0 2rem 2rem", marginTop: isMobile ? "1rem" : "0.9rem" }}>
               <AnimatePresence mode="wait">
                 {isSuccess ? (
                   <motion.div
@@ -211,7 +194,7 @@ function PortalContent({
                           color: "transparent",
                         }}
                       >
-                        Yay! You’re on the waitlist.
+                        Yay! You're on the waitlist.
                       </h2>
                       <p
                         style={{
@@ -220,7 +203,7 @@ function PortalContent({
                           marginTop: isMobile ? "0.5rem" : "1.5rem",
                         }}
                       >
-                        We’ll email you as soon as we launch!
+                        We'll email you as soon as we launch!
                       </p>
                     </div>
 
@@ -247,77 +230,58 @@ function PortalContent({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    style={{ 
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      // Changed gap here to control spacing
-                      gap: '1.5rem',
-                      maxWidth: '32rem',
-                      margin: '0 auto'
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: isMobile ? "1rem" : "1.5rem",
+                      maxWidth: "32rem",
+                      margin: "0 auto",
                     }}
                   >
-                    {/* New container for subtext and input/button */}
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      width: '100%',
-                    }}>
-                      {/* Subtext */}
-                      <p style={{
+                    <p
+                      style={{
                         fontFamily: "'Montserrat', sans-serif",
-                        fontWeight: 500,
-                        fontSize: '14px',
-                        lineHeight: '1.5',
-                        color: '#333333',
-                        textAlign: 'center',
-                        whiteSpace: isMobile ? 'normal' : 'nowrap',
-                        // Margin adjustment to space it from the input container
-                        marginBottom: '1rem',
-                      }}>
-                        We&apos;re launching soon! Join the waitlist and stay ahead of other businesses!
-                      </p>
+                        fontWeight: 550,
+                        fontSize: isMobile ? "13px" : "13px",
+                        lineHeight: "1.1",
+                        color: "#333333",
+                        textAlign: "center",
+                        marginTop: isMobile ? "-0.5rem" : "0",
+                        padding: isMobile ? "0 0.5rem" : "0",
+                      }}
+                    >
+                      We’re launching soon! Join the waitlist and stay ahead of others!
+                    </p>
 
-                      {/* Input + Button Container */}
-                      <div style={{ 
-                        width: '100%', 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        border: isMobile ? 'none' : '1px solid rgb(209, 213, 219)', 
-                        borderRadius: '9999px', 
-                        overflow: 'hidden', 
-                        backgroundColor: isMobile ? 'transparent' : 'rgb(249, 250, 251)',
-                        // Removed margin here and added it to the paragraph above
-                        marginTop: '0',
-                        // Responsive flex direction and gap
-                        flexDirection: isMobile ? 'column' : 'row',
-                        gap: isMobile ? '0.5rem' : '0',
-                        padding: isMobile ? '0' : '0',
-                      }}>
-
+                    {/* Input + Button (Mobile vs Desktop) */}
+                    {isMobile ? (
+                      <div
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "0.75rem",
+                        }}
+                      >
                         <input
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="Enter your email"
                           style={{
-                            flex: 1,
-                            height: '3.5rem',
-                            padding: '0 1.5rem',
-                            border: isMobile ? '1px solid rgb(209, 213, 219)' : 'none',
-                            outline: 'none',
-                            fontSize: '1rem',
-                            backgroundColor: 'rgb(249, 250, 251)',
-                            color: 'rgb(17, 24, 39)',
-                            width: '100%',
-                            borderRadius: '9999px',
+                            width: "100%",
+                            height: "3.2rem",
+                            padding: "0 1rem",
+                            border: "1px solid rgb(209, 213, 219)",
+                            borderRadius: "9999px",
+                            fontSize: "1rem",
+                            outline: "none",
+                            backgroundColor: "rgb(249, 250, 251)",
                           }}
                           onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              handleSubmit(e);
-                            }
+                            if (e.key === "Enter") handleSubmit(e);
                           }}
                         />
 
@@ -325,45 +289,120 @@ function PortalContent({
                           onClick={handleSubmit}
                           disabled={isSubmitting || !email}
                           style={{
-                            height: '3.5rem',
-                            padding: '0 1.5rem',
-                            backgroundColor: '#000000',
-                            color: 'white',
-                            border: 'none',
-                            fontSize: '1rem',
-                            fontWeight: '400',
-                            cursor: isSubmitting || !email ? 'not-allowed' : 'pointer',
-                            opacity: 1,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            whiteSpace: 'nowrap',
-                            borderRadius: '9999px',
-                            margin: isMobile ? '0' : '0.5rem',
-                            width: isMobile ? '100%' : 'auto',
-
+                            width: "100%",
+                            height: "3.2rem",
+                            borderRadius: "9999px",
+                            backgroundColor: "#000000",
+                            color: "white",
+                            fontWeight: "600",
+                            border: "none",
+                            cursor:
+                              isSubmitting || !email
+                                ? "not-allowed"
+                                : "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "1rem",
                           }}
                         >
                           {isSubmitting ? (
                             <motion.div
                               animate={{ rotate: 360 }}
-                              transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                              transition={{
+                                duration: 1,
+                                repeat: Number.POSITIVE_INFINITY,
+                                ease: "linear",
+                              }}
                               style={{
-                                width: "1rem",
-                                height: "1rem",
+                                width: "1.25rem",
+                                height: "1.25rem",
                                 border: "2px solid white",
                                 borderTop: "2px solid transparent",
                                 borderRadius: "50%",
-                                margin: "auto",
                               }}
                             />
                           ) : (
-                            <span>{buttonText}</span>
+                            "Join the waitlist"
                           )}
                         </button>
                       </div>
-                    </div>
+                    ) : (
+                      <div
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          border: "1px solid rgb(209, 213, 219)",
+                          borderRadius: "9999px",
+                          overflow: "hidden",
+                          backgroundColor: "rgb(249, 250, 251)",
+                        }}
+                      >
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="Enter your email"
+                          style={{
+                            flex: 1,
+                            height: "3.5rem",
+                            padding: "0 1.5rem",
+                            border: "none",
+                            outline: "none",
+                            fontSize: "1rem",
+                            backgroundColor: "transparent",
+                            color: "rgb(17, 24, 39)",
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") handleSubmit(e);
+                          }}
+                        />
 
+                        <button
+                          onClick={handleSubmit}
+                          disabled={isSubmitting || !email}
+                          style={{
+                            height: "3.5rem",
+                            padding: "0 1.5rem",
+                            backgroundColor: "#000000",
+                            color: "white",
+                            border: "none",
+                            fontSize: "1rem",
+                            fontWeight: "500",
+                            cursor:
+                              isSubmitting || !email
+                                ? "not-allowed"
+                                : "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "9999px",
+                            margin: "0.3rem",
+                          }}
+                        >
+                          {isSubmitting ? (
+                            <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{
+                                duration: 1,
+                                repeat: Number.POSITIVE_INFINITY,
+                                ease: "linear",
+                              }}
+                              style={{
+                                width: "1.25rem",
+                                height: "1.25rem",
+                                border: "2px solid white",
+                                borderTop: "2px solid transparent",
+                                borderRadius: "50%",
+                              }}
+                            />
+                          ) : (
+                            "Join the waitlist"
+                          )}
+                        </button>
+                      </div>
+                    )}
 
                     {error && (
                       <motion.p
@@ -404,7 +443,7 @@ export default function WaitlistPopup({
   const [referralLink, setReferralLink] = useState("");
 
   const searchParams = useSearchParams();
-  const referredBy = searchParams.get("referralId") || searchParams.get("referalId");
+  const campaignId = searchParams.get("campaignId");
 
   const finalIsOpen = externalIsOpen !== undefined ? externalIsOpen : isOpen;
   const onClose = externalOnClose || (() => setIsOpen(false));
@@ -435,9 +474,11 @@ export default function WaitlistPopup({
     setError("");
 
     try {
-      const { referralId } = await addToWaitlist(email, referredBy);
-      const link = `${window.location.origin}/?referralId=${referralId}`;
-
+      const { campaignId: newCampaignId } = await addToWaitlist(
+        email,
+        campaignId
+      );
+      const link = `${window.location.origin}/?campaignId=${newCampaignId}`;
       setReferralLink(link);
 
       setIsSuccess(true);

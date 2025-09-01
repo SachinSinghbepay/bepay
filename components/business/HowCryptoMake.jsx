@@ -150,42 +150,7 @@ const HowCryptoMake = () => {
     [50, 0]
   );
 
-  // NEW: Mobile-specific transforms with tighter transitions
-  const mobileMockup1Y = useTransform(scrollYProgress, [0, 0.2], [0, -600]);
-  const mobileMockup1Opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-
-  const mobileMockup2Y = useTransform(
-    scrollYProgress,
-    [0.15, 0.25, 0.45],
-    [400, 0, -600]
-  );
-  const mobileMockup2Opacity = useTransform(
-    scrollYProgress,
-    [0.15, 0.25, 0.45],
-    [0, 1, 0]
-  );
-
-  const mobileMockup3Y = useTransform(
-    scrollYProgress,
-    [0.4, 0.5, 0.7],
-    [400, 0, -600]
-  );
-  const mobileMockup3Opacity = useTransform(
-    scrollYProgress,
-    [0.4, 0.5, 0.7],
-    [0, 1, 0]
-  );
-
-  const mobileMockup4Y = useTransform(
-    scrollYProgress,
-    [0.65, 0.75, 1],
-    [400, 0, -200]
-  );
-  const mobileMockup4Opacity = useTransform(
-    scrollYProgress,
-    [0.65, 0.75, 1],
-    [0, 1, 1]
-  );
+  
 
   // Mobile content transforms with reduced movement
   const mobileContent1Y = useTransform(
