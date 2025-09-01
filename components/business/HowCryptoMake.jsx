@@ -2,17 +2,27 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Phone } from "lucide-react";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 const HowCryptoMake = () => {
   const containerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+  
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
-  // Transform values for mockup transitions
+  // Check if mobile on mount
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Desktop transform values
   const mockup1Y = useTransform(scrollYProgress, [0, 0.25], [0, -1200]);
   const mockup1Opacity = useTransform(scrollYProgress, [0, 0.25], [1, 1]);
 
@@ -49,6 +59,44 @@ const HowCryptoMake = () => {
     [0, 1, 1]
   );
 
+  // Mobile transform values - adjusted timing
+  const mobileMockup1Y = useTransform(scrollYProgress, [0, 0.2], [0, -600]);
+  const mobileMockup1Opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+
+  const mobileMockup2Y = useTransform(
+    scrollYProgress,
+    [0.15, 0.2, 0.4],
+    [400, 0, -600]
+  );
+  const mobileMockup2Opacity = useTransform(
+    scrollYProgress,
+    [0.15, 0.2, 0.4],
+    [0, 1, 0]
+  );
+
+  const mobileMockup3Y = useTransform(
+    scrollYProgress,
+    [0.35, 0.4, 0.6],
+    [400, 0, -600]
+  );
+  const mobileMockup3Opacity = useTransform(
+    scrollYProgress,
+    [0.35, 0.4, 0.6],
+    [0, 1, 0]
+  );
+
+  const mobileMockup4Y = useTransform(
+    scrollYProgress,
+    [0.55, 0.6, 1],
+    [400, 0, -400]
+  );
+  const mobileMockup4Opacity = useTransform(
+    scrollYProgress,
+    [0.55, 0.6, 1],
+    [0, 1, 1]
+  );
+
+  // Desktop content transforms
   const content1Y = useTransform(
     scrollYProgress,
     [0, 0.15, 0.25],
@@ -70,7 +118,29 @@ const HowCryptoMake = () => {
     [200, 0, -200]
   );
 
-  // Content animations
+  // Mobile content transforms
+  const mobileContent1Y = useTransform(
+    scrollYProgress,
+    [0, 0.1, 0.2],
+    [50, 0, -50]
+  );
+  const mobileContent2Y = useTransform(
+    scrollYProgress,
+    [0.15, 0.25, 0.4],
+    [50, 0, -50]
+  );
+  const mobileContent3Y = useTransform(
+    scrollYProgress,
+    [0.35, 0.45, 0.6],
+    [50, 0, -50]
+  );
+  const mobileContent4Y = useTransform(
+    scrollYProgress,
+    [0.55, 0.65, 1],
+    [50, 0, -50]
+  );
+
+  // Content opacity animations
   const content1Opacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
   const content2Opacity = useTransform(
     scrollYProgress,
@@ -84,23 +154,40 @@ const HowCryptoMake = () => {
   );
   const content4Opacity = useTransform(scrollYProgress, [0.65, 0.75], [0, 1]);
 
-  // Fixed: Floating elements opacity - only show when last mockup is visible
+  // Mobile content opacity - increased opacity values
+  const mobileContent1Opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0.3]);
+  const mobileContent2Opacity = useTransform(
+    scrollYProgress,
+    [0.15, 0.2, 0.4],
+    [1, 1, 1]
+  );
+  const mobileContent3Opacity = useTransform(
+    scrollYProgress,
+    [0.35, 0.4, 0.6],
+    [0.3, 1, 0.3]
+  );
+  const mobileContent4Opacity = useTransform(scrollYProgress, [0.55, 0.6], [0.3, 1]);
+
+  // Floating elements - adjusted for mobile
   const floatingElementsOpacity = useTransform(
     scrollYProgress,
-    [0.7, 0.75],
+    isMobile ? [0.55, 0.6] : [0.7, 0.75],
     [0, 1]
   );
 
-  // Fixed: Floating elements Y position - animate from bottom
-  const floatingElement1Y = useTransform(scrollYProgress, [0.7, 0.8], [50, 0]);
+  const floatingElement1Y = useTransform(
+    scrollYProgress, 
+    isMobile ? [0.55, 0.65] : [0.7, 0.8], 
+    [50, 0]
+  );
   const floatingElement2Y = useTransform(
     scrollYProgress,
-    [0.72, 0.82],
+    isMobile ? [0.57, 0.67] : [0.72, 0.82],
     [50, 0]
   );
   const floatingElement3Y = useTransform(
     scrollYProgress,
-    [0.74, 0.84],
+    isMobile ? [0.59, 0.69] : [0.74, 0.84],
     [50, 0]
   );
 
@@ -180,7 +267,7 @@ const HowCryptoMake = () => {
 
             {/* Desktop Layout */}
             <div className="hidden lg:block">
-              {/* Mockup 1 */}
+              {/* Desktop Mockups - using original transforms */}
               <motion.div
                 className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
                 style={{
@@ -198,7 +285,6 @@ const HowCryptoMake = () => {
                 </div>
               </motion.div>
 
-              {/* Mockup 2 */}
               <motion.div
                 className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
                 style={{
@@ -216,7 +302,6 @@ const HowCryptoMake = () => {
                 </div>
               </motion.div>
 
-              {/* Mockup 3 */}
               <motion.div
                 className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
                 style={{
@@ -234,7 +319,6 @@ const HowCryptoMake = () => {
                 </div>
               </motion.div>
 
-              {/* Mockup 4 */}
               <motion.div
                 className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
                 style={{
@@ -252,19 +336,18 @@ const HowCryptoMake = () => {
                 </div>
               </motion.div>
 
-              {/* Content 1 - Left */}
+              {/* Desktop Content - using original transforms */}
               <motion.div
                 className="absolute left-8 top-[200px] translate-y-1/2 z-20"
                 style={{ opacity: content1Opacity, y: content1Y }}
               >
                 <div className="p-4 max-w-[400px]">
-                  <p className="text-sm  text-gray-600 font-bold">
+                  <p className="text-sm text-gray-600 font-bold">
                     {contentData[0].text}
                   </p>
                 </div>
               </motion.div>
 
-              {/* Content 2 - Right */}
               <motion.div
                 className="absolute -right-5 top-[400px] translate-y-1/2 z-20"
                 style={{ opacity: content2Opacity, y: content2Y }}
@@ -276,7 +359,6 @@ const HowCryptoMake = () => {
                 </div>
               </motion.div>
 
-              {/* Content 3 - Left */}
               <motion.div
                 className="absolute left-0 top-[400px] translate-y-1/2 z-20"
                 style={{ opacity: content3Opacity, y: content3Y }}
@@ -288,7 +370,6 @@ const HowCryptoMake = () => {
                 </div>
               </motion.div>
 
-              {/* Content 4 - Right with Action Buttons */}
               <motion.div
                 className="absolute -right-10 top-[300px] translate-y-1/2 z-20"
                 style={{ opacity: content4Opacity, y: content4Y }}
@@ -298,33 +379,22 @@ const HowCryptoMake = () => {
                     {contentData[3].text}
                   </p>
 
-                  {/* Action Buttons */}
                   <WaitlistTriggerButton>
                     <div className="space-y-3">
                       <motion.button
-                        className="w-full  bg-black text-white py-4 px-6 rounded-full text-sm font-medium hover:bg-black/90 cursor-pointer transition-colors"
+                        className="w-full bg-black text-white py-4 px-6 rounded-full text-sm font-medium hover:bg-black/90 cursor-pointer transition-colors"
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.9, duration: 0.6 }}
                       >
                         Become a merchant on bepay →
                       </motion.button>
-
-                      {/* <motion.button
-                      className="w-full border border-gray-300 text-gray-700 py-3 px-6 rounded-full cursor-pointer  text-sm font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 1.1, duration: 0.6 }}
-                    >
-                      <Phone /> Quick chat with sales
-                    </motion.button> */}
                     </div>
                   </WaitlistTriggerButton>
                 </div>
               </motion.div>
 
-              {/* Fixed: Floating Elements on top of Mockup 4 */}
-              {/* NO HASSLE Element */}
+              {/* Desktop Floating Elements */}
               <motion.div
                 className="absolute left-[30%] shadow-2xl rounded-[20px] top-[250px] z-30"
                 style={{
@@ -333,7 +403,7 @@ const HowCryptoMake = () => {
                 }}
               >
                 <div
-                  className="p-4 rounded-[20px] mx-auto "
+                  className="p-4 rounded-[20px] mx-auto"
                   style={{
                     border: "1px #ffffff1a",
                     boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
@@ -347,9 +417,8 @@ const HowCryptoMake = () => {
                 </div>
               </motion.div>
 
-              {/* NO VOLATILITY Element */}
               <motion.div
-                className="absolute left-[23%]  shadow-2xl rounded-[20px] top-[450px] z-30"
+                className="absolute left-[23%] shadow-2xl rounded-[20px] top-[450px] z-30"
                 style={{
                   opacity: floatingElementsOpacity,
                   y: floatingElement2Y,
@@ -370,9 +439,8 @@ const HowCryptoMake = () => {
                 </div>
               </motion.div>
 
-              {/* NO DELAYS Element */}
               <motion.div
-                className="absolute shadow-2xl  rounded-[20px] left-[60%] top-[200px] z-30"
+                className="absolute shadow-2xl rounded-[20px] left-[60%] top-[200px] z-30"
                 style={{
                   opacity: floatingElementsOpacity,
                   y: floatingElement3Y,
@@ -394,15 +462,15 @@ const HowCryptoMake = () => {
               </motion.div>
             </div>
 
-            {/* Mobile Layout */}
+            {/* Mobile Layout - using mobile-specific transforms */}
             <div className="lg:hidden px-4">
               <div className="flex flex-col items-center space-y-8 relative mt-12">
                 {/* Mobile Container 1 */}
                 <motion.div
                   className="flex flex-col items-center"
                   style={{
-                    y: mockup1Y,
-                    opacity: mockup1Opacity,
+                    y: mobileMockup1Y,
+                    opacity: mobileMockup1Opacity,
                   }}
                 >
                   <div className="relative w-[240px] h-[420px] drop-shadow-xl mb-6">
@@ -415,7 +483,10 @@ const HowCryptoMake = () => {
                   </div>
                   <motion.div
                     className="w-full max-w-sm"
-                    style={{ opacity: content1Opacity, y: content1Y }}
+                    style={{ 
+                      opacity: mobileContent1Opacity, 
+                      y: mobileContent1Y 
+                    }}
                   >
                     <div className="text-center">
                       <p className="text-base text-gray-600 font-medium">
@@ -427,10 +498,10 @@ const HowCryptoMake = () => {
 
                 {/* Mobile Container 2 */}
                 <motion.div
-                  className="absolute flex flex-col items-center"
+                  className="absolute flex flex-col items-center top-0"
                   style={{
-                    y: mockup2Y,
-                    opacity: mockup2Opacity,
+                    y: mobileMockup2Y,
+                    opacity: mobileMockup2Opacity,
                   }}
                 >
                   <div className="relative w-[240px] h-[420px] drop-shadow-xl mb-6">
@@ -443,7 +514,10 @@ const HowCryptoMake = () => {
                   </div>
                   <motion.div
                     className="w-full max-w-sm"
-                    style={{ opacity: content2Opacity, y: content2Y }}
+                    style={{ 
+                      opacity: mobileContent2Opacity, 
+                      y: mobileContent2Y 
+                    }}
                   >
                     <div className="text-center">
                       <p className="text-base text-gray-600 font-medium">
@@ -455,10 +529,10 @@ const HowCryptoMake = () => {
 
                 {/* Mobile Container 3 */}
                 <motion.div
-                  className="absolute flex flex-col items-center"
+                  className="absolute flex flex-col items-center top-0"
                   style={{
-                    y: mockup3Y,
-                    opacity: mockup3Opacity,
+                    y: mobileMockup3Y,
+                    opacity: mobileMockup3Opacity,
                   }}
                 >
                   <div className="relative w-[240px] h-[420px] drop-shadow-xl mb-6">
@@ -471,7 +545,10 @@ const HowCryptoMake = () => {
                   </div>
                   <motion.div
                     className="w-full max-w-sm"
-                    style={{ opacity: content3Opacity, y: content3Y }}
+                    style={{ 
+                      opacity: mobileContent3Opacity, 
+                      y: mobileContent3Y 
+                    }}
                   >
                     <div className="text-center">
                       <p className="text-base text-gray-600 font-medium">
@@ -483,10 +560,10 @@ const HowCryptoMake = () => {
 
                 {/* Mobile Container 4 */}
                 <motion.div
-                  className="absolute flex flex-col items-center"
+                  className="absolute flex flex-col items-center top-0"
                   style={{
-                    y: mockup4Y,
-                    opacity: mockup4Opacity,
+                    y: mobileMockup4Y,
+                    opacity: mobileMockup4Opacity,
                   }}
                 >
                   <div className="relative w-[240px] h-[420px] drop-shadow-xl mb-6">
@@ -499,7 +576,10 @@ const HowCryptoMake = () => {
                   </div>
                   <motion.div
                     className="w-full max-w-sm px-4"
-                    style={{ opacity: content4Opacity, y: content4Y }}
+                    style={{ 
+                      opacity: mobileContent4Opacity, 
+                      y: mobileContent4Y 
+                    }}
                   >
                     <div className="text-center mb-6">
                       <p className="text-base text-gray-600 font-medium mb-6">
@@ -507,9 +587,8 @@ const HowCryptoMake = () => {
                       </p>
                     </div>
 
-                    {/* Fixed: Mobile Interactive Elements with proper timing */}
+                    {/* Mobile Interactive Elements */}
                     <div className="space-y-4">
-                      {/* Main Content Card - NO HASSLE */}
                       <motion.div
                         className="p-4 rounded-lg"
                         style={{
@@ -526,7 +605,6 @@ const HowCryptoMake = () => {
                         </h3>
                       </motion.div>
 
-                      {/* Feature Cards */}
                       <div className="grid grid-cols-2 gap-3">
                         <motion.div
                           className="p-3 rounded-lg text-center"
@@ -561,26 +639,16 @@ const HowCryptoMake = () => {
                         </motion.div>
                       </div>
 
-                      {/* Action Buttons */}
                       <WaitlistTriggerButton>
                         <div className="space-y-3 mt-6">
                           <motion.button
-                            className="w-full bg-black rounded-full text-white py-4 px-4  text-sm font-medium hover:bg-black/90 cursor-pointer transition-colors"
+                            className="w-full bg-black rounded-full text-white py-4 px-4 text-sm font-medium hover:bg-black/90 cursor-pointer transition-colors"
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.9, duration: 0.6 }}
                           >
                             Become a merchant on bepay →
                           </motion.button>
-
-                          {/* <motion.button
-                          className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-full text-sm font-medium cursor-pointer hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
-                          initial={{ opacity: 0, y: 30 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 1.1, duration: 0.6 }}
-                        >
-                          <Phone /> Quick chat with sales
-                        </motion.button> */}
                         </div>
                       </WaitlistTriggerButton>
                     </div>

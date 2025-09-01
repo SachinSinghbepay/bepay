@@ -244,19 +244,20 @@ function PortalContent({
                       margin: "0 auto",
                     }}
                   >
-                    <p
-                      style={{
-                        fontFamily: "'Montserrat', sans-serif",
-                        fontWeight: 550,
-                        fontSize: isMobile ? "13px" : "25px",
-                        lineHeight: "1.1",
-                        color: "#333333",
-                        textAlign: "center",
-                        marginTop: isMobile ? "-0.5rem" : "0",
-                        padding: isMobile ? "0 0.5rem" : "0",
-                      }}
-                    >
-                      Join the waitlist
+
+                    {/* Subtext */}
+                    <p style={{
+                      fontFamily: "'Montserrat', sans-serif",
+                      fontWeight: 500,
+                      fontSize: '14px',
+                      lineHeight: '1.5',
+                      color: '#333333',
+                      textAlign: 'center',
+                      whiteSpace: 'nowrap',
+                      transform: 'translateY(15px)'
+                    }}>
+                      We’re launching soon! Join the waitlist and stay ahead of others!
+
                     </p>
 
                     {/* Input + Button (Mobile vs Desktop) */}
