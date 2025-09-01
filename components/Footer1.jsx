@@ -31,7 +31,7 @@ import Link from "next/link";
 
 const AppStoreButton = ({ iconSrc, iconAlt, line1, line2 }) => (
   <motion.button
-    className="flex items-center w-full sm:w-auto justify-center gap-3 border border-white/20 rounded-full px-12 py-6 hover:bg-white/10 transition-colors"
+    className="flex items-center w-auto max-w-[280px] sm:w-auto justify-center gap-3 border border-white/20 rounded-full px-8 sm:px-12 py-6 hover:bg-white/10 transition-colors"
     variants={{
       hidden: { opacity: 0, y: 20 },
       visible: { opacity: 1, y: 0 },

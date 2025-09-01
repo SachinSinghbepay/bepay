@@ -13,8 +13,8 @@ const servicesData = [
     title: "Bitcoin backed loans",
     points: [
       "Get instant loans using your Bitcoin as collateral.",
-      "No credit check required.",
-      "Flexible repayment terms.",
+      "<strong>No credit check required.</strong>",
+      "<strong>Flexible repayment terms.</strong>",
     ],
     image: "/images/crypto/co1.png",
   },
@@ -22,8 +22,8 @@ const servicesData = [
     title: "Savings Products",
     points: [
       "High-yield savings on BTC, ETH, USDT, and USDC.",
-      "No minimum balance.",
-      "Instant withdrawals.",
+      "<strong>No minimum balance.</strong>",
+      "<strong>Instant withdrawals.</strong>",
     ],
     image: "/images/crypto/co2.png",
   },
@@ -31,8 +31,8 @@ const servicesData = [
     title: "Insurance Products",
     points: [
       "Protect your assets, income, and life with crypto-powered insurance solutions.",
-      "Health, Travel & Life Coverage.",
-      "Flexible Plans & Instant Claims.",
+      "<strong>Health, Travel & Life Coverage.</strong>",
+      "<strong>Flexible Plans & Instant Claims.</strong>",
     ],
     image: "/images/crypto/co3.png",
   },
@@ -40,8 +40,8 @@ const servicesData = [
     title: "Cross-Border Payments",
     points: [
       "Fast, cheap international money transfers.",
-      "Instant settlements globally.",
-      "Lowest fee guarantee.",
+      "<strong>Instant settlements globally.</strong>",
+      "<strong>Lowest fee guarantee.</strong>",
     ],
     image: "/images/crypto/co5.png",
   },
@@ -49,8 +49,8 @@ const servicesData = [
     title: "Remittance Services",
     points: [
       "Send money home to family and friends globally.",
-      "Competitive exchange rates.",
-      "Real-time tracking & Multiple payout options.",
+      "<strong>Competitive exchange rates.</strong>",
+      "<strong>Real-time tracking & Multiple payout options.</strong>",
     ],
     image: "/images/crypto/co6.png",
   },
@@ -58,8 +58,8 @@ const servicesData = [
     title: "DeFi Marketplace",
     points: [
       "Access DApps and DeFi protocols directly from your wallet.",
-      "One-Click Access to Top Protocols.",
-      "Secure & Gas-Optimized Transactions.",
+      "<strong>One-Click Access to Top Protocols.</strong>",
+      "<strong>Secure & Gas-Optimized Transactions.</strong>",
     ],
     image: "/images/crypto/co4.png",
   },
@@ -114,29 +114,32 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
   return (
     <motion.div
       style={{ y }}
-      className="absolute inset-0 flex flex-col items-start justify-center text-left p-12 lg:p-16 2xl:p-20 pl-6"
+      className="absolute inset-0 flex flex-col justify-center p-8 lg:p-12"
     >
-      {/* Image */}
-      <div className="relative w-full max-w-[420px] aspect-[2/3] overflow-hidden mb-6 lg:mb-10 shadow-xl">
-        <Image
-          src={service.image || "/placeholder.svg"}
-          alt={service.title}
-          fill
-          className="object-cover"
-          loading="lazy"
-        />
-      </div>
+      {/* Container with more compact sizing */}
+      <div className="w-full max-w-[360px] mx-auto">
+        {/* Image - larger proportion, less margin */}
+        <div className="relative w-full aspect-[4/5] overflow-hidden mb-4 lg:mb-5 shadow-lg">
+          <Image
+            src={service.image || "/placeholder.svg"}
+            alt={service.title}
+            fill
+            className="object-cover"
+            loading="lazy"
+          />
+        </div>
 
-      {/* Text */}
-      <div className="max-w-sm lg:max-w-md text-left">
-        <h3 className="text-3xl font-light text-gray-700 mb-4">
-          {service.title}
-        </h3>
+        {/* Text (More compact spacing) */}
+        <div className="text-left px-1">
+          <h3 className="text-lg lg:text-xl font-medium text-gray-800 mb-2">
+            {service.title}
+          </h3>
+          <p 
+            className="text-xs lg:text-sm text-gray-600 leading-snug"
+            dangerouslySetInnerHTML={{ __html: service.points.join(" ") }}
+          />
+        </div>
 
-        <p className="text-sm lg:text-base text-gray-500 leading-tight">
-          {normalPart}{" "}
-          <span className="font-semibold text-gray-700">{boldPart}</span>
-        </p>
       </div>
     </motion.div>
   );
@@ -187,9 +190,8 @@ const MobileView = () => {
             <span className="font-semibold block">
               Banking, lending, insurance, and more -
             </span>
-            <span className="block">
-              all in one comprehensive platform
-            </span>
+            <span className="block">all in one comprehensive platform</span>
+
           </motion.p>
 
           <motion.button className="flex items-center gap-2 bg-black text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full mt-4 sm:mt-6 hover:bg-gray-800 transition-colors text-xs sm:text-sm">
@@ -205,19 +207,13 @@ const MobileView = () => {
             style={{ x }}
             className="flex gap-4 sm:gap-6 px-4 sm:px-6 pb-8"
           >
-            {servicesData.map((service, i) => {
-              const normalPart = service.points
-                .slice(0, service.points.length - 2)
-                .join(" ");
-              const boldPart = service.points.slice(-2).join(" ");
 
-              return (
-                <div
-                  key={i}
-                  className="w-[75vw] sm:w-[65vw] flex-shrink-0 pl-6"
-                >
+            {servicesData.map((service, i) => (
+              <div key={i} className="w-[75vw] sm:w-[65vw] flex-shrink-0">
+                {/* Container for aligned content */}
+                <div className="px-6">
                   {/* Image */}
-                  <div className="relative w-full aspect-[2/3] overflow-hidden mb-4 sm:mb-6 shadow-md">
+                  <div className="relative w-full aspect-[3/4] overflow-hidden mb-4 sm:mb-6 shadow-md">
                     <Image
                       src={service.image || "/placeholder.svg"}
                       alt={service.title}
@@ -227,19 +223,20 @@ const MobileView = () => {
                     />
                   </div>
 
-                  {/* Text */}
-                  <h3 className="text-xl sm:text-2xl font-light text-gray-500 mb-3 text-center">
-                    {service.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed text-center">
-                    {normalPart}{" "}
-                    <span className="font-semibold text-gray-700">
-                      {boldPart}
-                    </span>
-                  </p>
+                  {/* Text - aligned to start from same position as image */}
+                  <div className="text-left">
+                    <h3 className="text-lg sm:text-xl font-light text-gray-500 mb-2 sm:mb-3">
+                      {service.title}
+                    </h3>
+                    <p 
+                      className="text-xs sm:text-sm text-gray-600 leading-relaxed"
+                      dangerouslySetInnerHTML={{ __html: service.points.join(" ") }}
+                    />
+                  </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
+
           </motion.div>
         </div>
       </div>
@@ -277,19 +274,19 @@ export const FinancialServicesSection = () => {
                 <span className="font-semibold block">
                   Banking, lending, insurance, and more -
                 </span>
-                <span className="block">
-                  all in one comprehensive platform
-                </span>
+                <span className="block">all in one comprehensive platform</span>
+
               </motion.p>
 
               <WaitlistTriggerButton>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-black cursor-pointer whitespace-nowrap text-white 
-               w-[180px] h-[56px] rounded-full flex items-center 
-               justify-center gap-2 text-xs font-normal 
-               hover:bg-gray-800 transition-colors mt-7"
+                  className="bg-black cursor-pointer whitespace-nowrap text-white
+                     w-[180px] h-[56px] rounded-full flex items-center
+                     justify-center gap-2 text-xs font-normal
+                     hover:bg-gray-800 transition-colors mt-7"
+
                 >
                   Explore all features
                   <ArrowUpRight size={18} className="w-5 h-5" />

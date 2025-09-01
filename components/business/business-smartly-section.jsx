@@ -57,7 +57,6 @@ export default function BusinessSmartlySection() {
   const headingY = useTransform(scrollYProgress, [0, 0.5, 1], [30, 0, -30]);
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.6, 1, 1, 0.8]);
 
-   const y = useTransform(scrollYProgress, [0, 1], [50, 0]);
 
   const cardsData = [
     {
@@ -107,25 +106,28 @@ export default function BusinessSmartlySection() {
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 bg-[#F9F9F9] overflow-hidden dark:bg-gray-950">
       <div className="container mx-auto px-4">
-       <div
-      ref={ref}
-      className="flex flex-col items-center justify-center text-center mb-12"
-    >
-      <motion.h2
-        style={{ y }}
-        className="text-4xl sm:text-5xl md:text-6xl 3xl:text-[90px] font-[400] tracking-tight leading-tight text-[#C0C0C0] dark:text-[#333333] mb-4"
-      >
-        Everything you need
-      </motion.h2>
 
-      <motion.h2
-        style={{ y }}
-        className="text-4xl sm:text-5xl md:text-6xl 3xl:text-[90px] font-[400] tracking-tight leading-tight text-black dark:text-white"
-      >
-        to run business smartly
-      </motion.h2>
-    </div>
-
+        <div
+          ref={ref}
+          className="flex flex-col items-center justify-center text-center mb-12 md:mb-16 lg:mb-20"
+        >
+          <motion.div
+            className="max-w-6xl mx-auto"
+            style={{ 
+              y: headingY,
+              opacity: opacity
+            }}
+          >
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-[400] tracking-tight leading-[1.1] md:leading-[1.05]">
+              <span className="block text-[#C0C0C0] dark:text-[#333333] mb-2 md:mb-4">
+                Everything you need
+              </span>
+              <span className="block text-black dark:text-white">
+                to run your business smartly
+              </span>
+            </h2>
+          </motion.div>
+        </div>
       </div>
       
       <div className="w-full">
@@ -154,6 +156,7 @@ export default function BusinessSmartlySection() {
           </CarouselContent>
         </Carousel>
       </div>
+
     </section>
   );
 }
