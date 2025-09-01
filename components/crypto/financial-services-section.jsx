@@ -105,13 +105,19 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
 
   const y = useTransform(progress, inputRange, outputRange);
 
+  // Split into normal + bold parts
+  const normalPart = service.points
+    .slice(0, service.points.length - 2)
+    .join(" ");
+  const boldPart = service.points.slice(-2).join(" ");
+
   return (
     <motion.div
       style={{ y }}
-      className="absolute inset-0 flex flex-col items-center justify-center text-center p-12 lg:p-16 2xl:p-20 pl-6"
+      className="absolute inset-0 flex flex-col items-start justify-center text-left p-12 lg:p-16 2xl:p-20 pl-6"
     >
       {/* Image */}
-      <div className="relative w-full max-w-[380px] aspect-[3/4] overflow-hidden mb-6 lg:mb-8 shadow-xl">
+      <div className="relative w-full max-w-[420px] aspect-[2/3] overflow-hidden mb-6 lg:mb-10 shadow-xl">
         <Image
           src={service.image || "/placeholder.svg"}
           alt={service.title}
@@ -122,12 +128,14 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
       </div>
 
       {/* Text */}
-      <div className="max-w-sm lg:max-w-md text-center">
-        <h3 className="text-2xl font-light text-gray-700 mb-3">
+      <div className="max-w-sm lg:max-w-md text-left">
+        <h3 className="text-3xl font-light text-gray-700 mb-4">
           {service.title}
         </h3>
-        <p className="text-sm lg:text-base text-gray-500 leading-relaxed">
-          {service.points.join(" ")}
+
+        <p className="text-sm lg:text-base text-gray-500 leading-tight">
+          {normalPart}{" "}
+          <span className="font-semibold text-gray-700">{boldPart}</span>
         </p>
       </div>
     </motion.div>
@@ -176,11 +184,13 @@ const MobileView = () => {
             FINANCIAL SERVICES
           </motion.h2>
           <motion.p className="text-[#333333] mt-4 font-medium lg:mt-6 text-sm lg:text-base leading-relaxed">
-  <span className="font-semibold block">
-    Banking, lending, insurance, and more -
-  </span>
-  <span className="block">all in one comprehensive platform</span>
-</motion.p>
+            <span className="font-semibold block">
+              Banking, lending, insurance, and more -
+            </span>
+            <span className="block">
+              all in one comprehensive platform
+            </span>
+          </motion.p>
 
           <motion.button className="flex items-center gap-2 bg-black text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full mt-4 sm:mt-6 hover:bg-gray-800 transition-colors text-xs sm:text-sm">
             Explore all features
@@ -195,28 +205,41 @@ const MobileView = () => {
             style={{ x }}
             className="flex gap-4 sm:gap-6 px-4 sm:px-6 pb-8"
           >
-            {servicesData.map((service, i) => (
-              <div key={i} className="w-[75vw] sm:w-[65vw] flex-shrink-0 pl-6">
-                {/* Image */}
-                <div className="relative w-full aspect-[3/4] overflow-hidden mb-4 sm:mb-6 shadow-md">
-                  <Image
-                    src={service.image || "/placeholder.svg"}
-                    alt={service.title}
-                    fill
-                    className="object-cover"
-                    loading="lazy"
-                  />
-                </div>
+            {servicesData.map((service, i) => {
+              const normalPart = service.points
+                .slice(0, service.points.length - 2)
+                .join(" ");
+              const boldPart = service.points.slice(-2).join(" ");
 
-                {/* Text */}
-                <h3 className="text-lg sm:text-xl font-light text-gray-500 mb-2 sm:mb-3 text-center">
-                  {service.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed text-center">
-                  {service.points.join(" ")}
-                </p>
-              </div>
-            ))}
+              return (
+                <div
+                  key={i}
+                  className="w-[75vw] sm:w-[65vw] flex-shrink-0 pl-6"
+                >
+                  {/* Image */}
+                  <div className="relative w-full aspect-[2/3] overflow-hidden mb-4 sm:mb-6 shadow-md">
+                    <Image
+                      src={service.image || "/placeholder.svg"}
+                      alt={service.title}
+                      fill
+                      className="object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  {/* Text */}
+                  <h3 className="text-xl sm:text-2xl font-light text-gray-500 mb-3 text-center">
+                    {service.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed text-center">
+                    {normalPart}{" "}
+                    <span className="font-semibold text-gray-700">
+                      {boldPart}
+                    </span>
+                  </p>
+                </div>
+              );
+            })}
           </motion.div>
         </div>
       </div>
@@ -251,26 +274,27 @@ export const FinancialServicesSection = () => {
                 SERVICES
               </motion.h2>
               <motion.p className="text-[#333333] mt-4 font-medium lg:mt-6 text-sm lg:text-base leading-relaxed">
-  <span className="font-semibold block">
-    Banking, lending, insurance, and more -
-  </span>
-  <span className="block">all in one comprehensive platform</span>
-</motion.p>
+                <span className="font-semibold block">
+                  Banking, lending, insurance, and more -
+                </span>
+                <span className="block">
+                  all in one comprehensive platform
+                </span>
+              </motion.p>
 
               <WaitlistTriggerButton>
-  <motion.button
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-    className="bg-black cursor-pointer whitespace-nowrap text-white 
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-black cursor-pointer whitespace-nowrap text-white 
                w-[180px] h-[56px] rounded-full flex items-center 
                justify-center gap-2 text-xs font-normal 
                hover:bg-gray-800 transition-colors mt-7"
-  >
-    Explore all features
-    <ArrowUpRight size={18} className="w-5 h-5" />
-  </motion.button>
-</WaitlistTriggerButton>
-
+                >
+                  Explore all features
+                  <ArrowUpRight size={18} className="w-5 h-5" />
+                </motion.button>
+              </WaitlistTriggerButton>
             </motion.div>
           </div>
           <div className="bg-[#F9F9F9] relative overflow-hidden">

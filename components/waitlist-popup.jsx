@@ -20,56 +20,64 @@ function PortalContent({
   handleSubmit,
   referralLink
 }) {
+  // Detect mobile
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   const overlayStyle = {
-    position: 'fixed',
-    top: '0px',
-    left: '0px',
-    right: '0px',
-    bottom: '0px',
-    width: '100vw',
-    height: '100vh',
-    zIndex: '2147483647',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '1rem',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    backdropFilter: 'blur(8px)',
-    WebkitBackdropFilter: 'blur(8px)',
-    isolation: 'isolate'
+    position: "fixed",
+    inset: 0,
+    width: "100vw",
+    height: "100vh",
+    zIndex: 2147483647,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: isMobile ? "0.5rem" : "1rem",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    backdropFilter: "blur(8px)",
+    WebkitBackdropFilter: "blur(8px)",
+    isolation: "isolate",
   };
 
   const modalStyle = {
-    position: 'relative',
-    width: '100%',
-    maxWidth: '38rem',
-    backgroundColor: '#ffffff',
-    border: '1px solid rgba(0, 0, 0, 0.1)',
-    borderRadius: '1.5rem',
-    boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.2)',
-    overflow: 'hidden',
-    zIndex: '2147483647',
-    isolation: 'isolate',
-    minHeight: '24rem',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
+    position: "relative",
+    width: "100%",
+    maxWidth: isMobile ? "22rem" : "38rem",
+    backgroundColor: "#ffffff",
+    border: "1px solid rgba(0, 0, 0, 0.1)",
+    borderRadius: isMobile ? "1rem" : "1.5rem",
+    boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.2)",
+    overflow: "hidden",
+    zIndex: 2147483647,
+    isolation: "isolate",
+    minHeight: isMobile ? "20rem" : "24rem",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    paddingBottom: isMobile ? "0.5rem" : "0",
   };
 
   const closeButtonStyle = {
-    position: 'absolute',
-    top: '1.25rem',
-    right: '1.25rem',
-    zIndex: '2147483647',
-    padding: '0.5rem',
-    borderRadius: '9999px',
-    backgroundColor: 'transparent',
-    border: 'none',
-    cursor: 'pointer',
-    transition: 'background-color 0.2s',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+    position: "absolute",
+    top: isMobile ? "0.75rem" : "1.25rem",
+    right: isMobile ? "0.75rem" : "1.25rem",
+    zIndex: 2147483647,
+    padding: "0.4rem",
+    borderRadius: "9999px",
+    backgroundColor: "transparent",
+    border: "none",
+    cursor: "pointer",
+    transition: "background-color 0.2s",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   };
 
   return (
@@ -94,62 +102,76 @@ function PortalContent({
             <button
               onClick={onClose}
               style={closeButtonStyle}
-              onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(0, 0, 0, 0.05)'}
-              onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+              onMouseEnter={(e) =>
+                (e.target.style.backgroundColor = "rgba(0, 0, 0, 0.05)")
+              }
+              onMouseLeave={(e) =>
+                (e.target.style.backgroundColor = "transparent")
+              }
             >
-              <X style={{ width: '20px', height: '20px', color: 'rgb(107, 114, 128)' }} />
+              <X
+                style={{
+                  width: isMobile ? "18px" : "20px",
+                  height: isMobile ? "18px" : "20px",
+                  color: "rgb(107, 114, 128)",
+                }}
+              />
             </button>
 
             {/* Header with Logo */}
-            <div style={{ position: 'relative', padding: '2rem 2rem 1.5rem', textAlign: 'center' }}>
+            <div
+              style={{
+                padding: isMobile ? "1.5rem 1rem 1rem" : "2rem 2rem 1.5rem",
+                textAlign: "center",
+              }}
+            >
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring" }}
-                style={{ marginBottom: '1.5rem' }}
+                style={{ marginBottom: isMobile ? "1rem" : "1.5rem" }}
               >
                 <Image
                   src="/bepaymoney.svg"
                   alt="BePayMoney"
-                  width={180}
-                  height={70}
-                  style={{ 
-                    margin: '0 auto', 
-                    borderRadius: '0.75rem', 
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)', 
-                    padding: '0.5rem' 
+                  width={isMobile ? 140 : 180}
+                  height={isMobile ? 50 : 70}
+                  style={{
+                    margin: "0 auto",
+                    borderRadius: "0.75rem",
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    padding: "0.4rem",
                   }}
                 />
               </motion.div>
 
               {!isSuccess && (
-                <motion.div 
-                  initial={{ y: 20, opacity: 0 }} 
-                  animate={{ y: 0, opacity: 1 }} 
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
                   <h2
                     style={{
-                      fontSize: '1.75rem',
-                      fontWeight: '600',
-                      color: 'rgb(55, 65, 81)',
-                      marginBottom: '0.5rem',
-                      textAlign: 'center',
-                      lineHeight: '1.3',
-                      backgroundImage: 'linear-gradient(to bottom, #4a4a4a, #9c9c9c)',
-                      WebkitBackgroundClip: 'text',
-                      backgroundClip: 'text',
-                      color: 'transparent',
+                      fontSize: isMobile ? "1.25rem" : "1.75rem",
+                      fontWeight: "600",
+                      marginBottom: "0.5rem",
+                      lineHeight: "1.3",
+                      backgroundImage:
+                        "linear-gradient(to bottom, #4a4a4a, #9c9c9c)",
+                      WebkitBackgroundClip: "text",
+                      backgroundClip: "text",
+                      color: "transparent",
                     }}
                   >
-                    Every business starts with a spark!
+                    Be the first to experience the future of payments.
                   </h2>
                 </motion.div>
               )}
             </div>
 
             {/* Form Content */}
-            <div style={{ padding: '0 2rem 2rem' }}>
+            <div style={{ padding: isMobile ? "0 1rem 1rem" : "0 2rem 2rem" }}>
               <AnimatePresence mode="wait">
                 {isSuccess ? (
                   <motion.div
@@ -157,41 +179,50 @@ function PortalContent({
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.8, opacity: 0 }}
-                    style={{ textAlign: 'center', padding: '1rem 0' }}
+                    style={{
+                      textAlign: "center",
+                      padding: isMobile ? "0.5rem 0" : "1rem 0",
+                    }}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    {/* Heading */}
-                    <div className="-mt-9 mb-6">
-                      <h2 
+                    <div className={isMobile ? "-mt-6 mb-4" : "-mt-9 mb-6"}>
+                      <h2
                         style={{
-                          fontSize: '1.5rem',
+                          fontSize: isMobile ? "1.25rem" : "1.5rem",
                           fontWeight: 600,
-                          marginBottom: '0.5rem',
-                          backgroundImage: 'linear-gradient(to bottom, #4a4a4a, #9c9c9c)',
-                          WebkitBackgroundClip: 'text',
-                          backgroundClip: 'text',
-                          color: 'transparent',
+                          marginBottom: "0.5rem",
+                          backgroundImage:
+                            "linear-gradient(to bottom, #4a4a4a, #9c9c9c)",
+                          WebkitBackgroundClip: "text",
+                          backgroundClip: "text",
+                          color: "transparent",
                         }}
                       >
                         Yay! You’re on the waitlist.
                       </h2>
-                      <p className="text-sm text-gray-600 mt-6 ">
+                      <p
+                        style={{
+                          fontSize: isMobile ? "0.8rem" : "0.9rem",
+                          color: "#4b5563",
+                          marginTop: isMobile ? "0.5rem" : "1.5rem",
+                        }}
+                      >
                         We’ll email you as soon as we launch!
                       </p>
                     </div>
 
-                    {/* Button */}
                     <button
                       onClick={onClose}
                       style={{
-                        padding: '0.75rem 2rem',
-                        borderRadius: '9999px',
-                        backgroundColor: '#111827',
-                        color: 'white',
-                        fontWeight: '600',
-                        cursor: 'pointer',
-                        border: 'none',
-                        marginTop: '0.2rem' 
+                        padding: isMobile ? "0.6rem 1.5rem" : "0.75rem 2rem",
+                        borderRadius: "9999px",
+                        backgroundColor: "#111827",
+                        color: "white",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        border: "none",
+                        marginTop: "0.2rem",
+                        width: isMobile ? "100%" : "auto",
                       }}
                     >
                       Awesome!
@@ -203,111 +234,189 @@ function PortalContent({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    style={{ 
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '1.5rem',
-                      maxWidth: '32rem',
-                      margin: '0 auto'
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: isMobile ? "1rem" : "1.5rem",
+                      maxWidth: "32rem",
+                      margin: "0 auto",
                     }}
                   >
-                    {/* Subtext */}
-                    <p style={{
-                      fontFamily: "'Montserrat', sans-serif",
-                      fontWeight: 500,
-                      fontSize: '14px',
-                      lineHeight: '1.5',
-                      color: '#333333',
-                      textAlign: 'center',
-                      whiteSpace: 'nowrap',
-                      transform: 'translateY(15px)'
-                    }}>
-                      We&apos;re launching soon! Join the waitlist and stay ahead of other businesses!
+                    <p
+                      style={{
+                        fontFamily: "'Montserrat', sans-serif",
+                        fontWeight: 550,
+                        fontSize: isMobile ? "13px" : "25px",
+                        lineHeight: "1.1",
+                        color: "#333333",
+                        textAlign: "center",
+                        marginTop: isMobile ? "-0.5rem" : "0",
+                        padding: isMobile ? "0 0.5rem" : "0",
+                      }}
+                    >
+                      Join the waitlist
                     </p>
 
-                    {/* Input + Button */}
-                    <div style={{ 
-                      width: '100%', 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      border: '1px solid rgb(209, 213, 219)', 
-                      borderRadius: '9999px', 
-                      overflow: 'hidden', 
-                      backgroundColor: 'rgb(249, 250, 251)',
-                      marginTop: '0.2rem' 
-                    }}>
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Enter your email"
+                    {/* Input + Button (Mobile vs Desktop) */}
+                    {isMobile ? (
+                      <div
                         style={{
-                          flex: 1,
-                          height: '3.5rem',
-                          padding: '0 1.5rem',
-                          border: 'none',
-                          outline: 'none',
-                          fontSize: '1rem',
-                          backgroundColor: 'transparent',
-                          color: 'rgb(17, 24, 39)'
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            handleSubmit(e);
-                          }
-                        }}
-                      />
-
-                      <button
-                        onClick={handleSubmit}
-                        disabled={isSubmitting || !email}
-                        style={{
-                          height: '3.5rem',
-                          padding: '0 1.5rem',
-                          backgroundColor: '#000000',
-                          color: 'white',
-                          border: 'none',
-                          fontSize: '1rem',
-                          fontWeight: '400',
-                          cursor: isSubmitting || !email ? 'not-allowed' : 'pointer',
-                          opacity: 1,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          whiteSpace: 'nowrap',
-                          borderRadius: '9999px',
-                          margin: '0.5rem', 
+                          width: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "0.75rem",
                         }}
                       >
-                        {isSubmitting ? (
-                          <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                            style={{
-                              width: '1.25rem',
-                              height: '1.25rem',
-                              border: '2px solid white',
-                              borderTop: '2px solid transparent',
-                              borderRadius: '50%'
-                            }}
-                          />
-                        ) : (
-                          "Join the waitlist"
-                        )}
-                      </button>
-                    </div>
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="Enter your email"
+                          style={{
+                            width: "100%",
+                            height: "3.2rem",
+                            padding: "0 1rem",
+                            border: "1px solid rgb(209, 213, 219)",
+                            borderRadius: "9999px",
+                            fontSize: "1rem",
+                            outline: "none",
+                            backgroundColor: "rgb(249, 250, 251)",
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") handleSubmit(e);
+                          }}
+                        />
+
+                        <button
+                          onClick={handleSubmit}
+                          disabled={isSubmitting || !email}
+                          style={{
+                            width: "100%",
+                            height: "3.2rem",
+                            borderRadius: "9999px",
+                            backgroundColor: "#000000",
+                            color: "white",
+                            fontWeight: "600",
+                            border: "none",
+                            cursor:
+                              isSubmitting || !email
+                                ? "not-allowed"
+                                : "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "1rem",
+                          }}
+                        >
+                          {isSubmitting ? (
+                            <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{
+                                duration: 1,
+                                repeat: Number.POSITIVE_INFINITY,
+                                ease: "linear",
+                              }}
+                              style={{
+                                width: "1.25rem",
+                                height: "1.25rem",
+                                border: "2px solid white",
+                                borderTop: "2px solid transparent",
+                                borderRadius: "50%",
+                              }}
+                            />
+                          ) : (
+                            "Join the waitlist"
+                          )}
+                        </button>
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          border: "1px solid rgb(209, 213, 219)",
+                          borderRadius: "9999px",
+                          overflow: "hidden",
+                          backgroundColor: "rgb(249, 250, 251)",
+                        }}
+                      >
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="Enter your email"
+                          style={{
+                            flex: 1,
+                            height: "3.5rem",
+                            padding: "0 1.5rem",
+                            border: "none",
+                            outline: "none",
+                            fontSize: "1rem",
+                            backgroundColor: "transparent",
+                            color: "rgb(17, 24, 39)",
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") handleSubmit(e);
+                          }}
+                        />
+
+                        <button
+                          onClick={handleSubmit}
+                          disabled={isSubmitting || !email}
+                          style={{
+                            height: "3.5rem",
+                            padding: "0 1.5rem",
+                            backgroundColor: "#000000",
+                            color: "white",
+                            border: "none",
+                            fontSize: "1rem",
+                            fontWeight: "500",
+                            cursor:
+                              isSubmitting || !email
+                                ? "not-allowed"
+                                : "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "9999px",
+                            margin: "0.3rem",
+                          }}
+                        >
+                          {isSubmitting ? (
+                            <motion.div
+                              animate={{ rotate: 360 }}
+                              transition={{
+                                duration: 1,
+                                repeat: Number.POSITIVE_INFINITY,
+                                ease: "linear",
+                              }}
+                              style={{
+                                width: "1.25rem",
+                                height: "1.25rem",
+                                border: "2px solid white",
+                                borderTop: "2px solid transparent",
+                                borderRadius: "50%",
+                              }}
+                            />
+                          ) : (
+                            "Join the waitlist"
+                          )}
+                        </button>
+                      </div>
+                    )}
 
                     {error && (
                       <motion.p
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        style={{ 
-                          marginTop: '0.5rem',
-                          color: 'rgb(239, 68, 68)', 
-                          fontSize: '0.875rem',
-                          textAlign: 'center'
+                        style={{
+                          marginTop: "0.5rem",
+                          color: "rgb(239, 68, 68)",
+                          fontSize: "0.8rem",
+                          textAlign: "center",
                         }}
                       >
                         {error}
@@ -351,12 +460,12 @@ export default function WaitlistPopup({
   useEffect(() => {
     if (finalIsOpen) {
       const originalStyle = window.getComputedStyle(document.body).overflow;
-      document.body.style.overflow = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-      
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+
       return () => {
         document.body.style.overflow = originalStyle;
-        document.documentElement.style.overflow = 'unset';
+        document.documentElement.style.overflow = "unset";
       };
     }
   }, [finalIsOpen]);
@@ -369,7 +478,10 @@ export default function WaitlistPopup({
     setError("");
 
     try {
-      const { campaignId: newCampaignId } = await addToWaitlist(email, campaignId);
+      const { campaignId: newCampaignId } = await addToWaitlist(
+        email,
+        campaignId
+      );
       const link = `${window.location.origin}/?campaignId=${newCampaignId}`;
       setReferralLink(link);
 
