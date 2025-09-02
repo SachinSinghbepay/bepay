@@ -1,9 +1,9 @@
 "use client";
+
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
-import { IconSquareKey } from "@tabler/icons-react";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -44,7 +44,6 @@ export default function OneWallet() {
     const getResponsiveValue = (mobile, tablet, desktop) => {
       const width = window.innerWidth;
       const height = window.innerHeight;
-
       // Adjust values based on both screen width and height
       if (width < 640 || height < 700) return mobile;
       if (width < 1000 || height < 800) return tablet;
@@ -54,18 +53,15 @@ export default function OneWallet() {
     const updateAnimations = () => {
       // Set initial states with responsive values
       gsap.set(
-        [
-          textLine1Ref.current,
-          textLine2Ref.current,
-          textLine3Ref.current,
-          textLine4Ref.current,
-        ],
+        [textLine1Ref.current, textLine2Ref.current, textLine3Ref.current, textLine4Ref.current],
         {
           y: getResponsiveValue(50, 75, 100),
           opacity: 0,
         }
       );
 
+      // ✅ MOBILE CHANGE: cards start offscreen to the RIGHT instead of bottom
+      // Desktop/tablet remain from bottom as before.
       gsap.set(
         [
           cardRef.current,
@@ -76,7 +72,8 @@ export default function OneWallet() {
           card6Ref.current,
         ],
         {
-          y: "100vh",
+          x: getResponsiveValue("150%", "0", "0"),
+          y: getResponsiveValue("0", "100vh", "100vh"),
         }
       );
 
@@ -104,7 +101,6 @@ export default function OneWallet() {
           trigger: sectionRef.current,
           start: "top top",
           end: () => {
-            // Adjust end point based on screen size to ensure complete animation
             const width = window.innerWidth;
             if (width < 640) return "+=500%"; // More scroll space for mobile
             if (width < 1000) return "+=475%"; // Extra space for small tablets
@@ -160,6 +156,8 @@ export default function OneWallet() {
         )
         // Then animate the first card
         .to(cardRef.current, {
+          // ✅ MOBILE CHANGE: also animate x -> 0 (slide in from right)
+          x: getResponsiveValue("0%", "0%", "0%"),
           y: 0,
           duration: getResponsiveValue(1, 1.25, 1.5),
           ease: "power2.inOut",
@@ -171,7 +169,6 @@ export default function OneWallet() {
             y: getResponsiveValue("5%", "7.5%", "10%"),
             duration: getResponsiveValue(0.6, 0.8, 1),
             ease: "power3.out",
-          
           },
           "-=0.3"
         )
@@ -189,10 +186,10 @@ export default function OneWallet() {
         .to(
           card2Ref.current,
           {
+            x: getResponsiveValue("0%", "0%", "0%"),
             y: 0,
             duration: getResponsiveValue(1, 1.25, 1.5),
             ease: "power2.inOut",
-            
           },
           "-=1"
         )
@@ -237,6 +234,7 @@ export default function OneWallet() {
         .to(
           card3Ref.current,
           {
+            x: getResponsiveValue("0%", "0%", "0%"),
             y: 0,
             duration: getResponsiveValue(1, 1.25, 1.5),
             ease: "power2.inOut",
@@ -266,6 +264,7 @@ export default function OneWallet() {
         .to(
           card4Ref.current,
           {
+            x: getResponsiveValue("0%", "0%", "0%"),
             y: 0,
             duration: getResponsiveValue(1, 1.25, 1.5),
             ease: "power2.inOut",
@@ -295,6 +294,7 @@ export default function OneWallet() {
         .to(
           card5Ref.current,
           {
+            x: getResponsiveValue("0%", "0%", "0%"),
             y: 0,
             duration: getResponsiveValue(1, 1.25, 1.5),
             ease: "power2.inOut",
@@ -310,7 +310,8 @@ export default function OneWallet() {
           },
           "-=0.3"
         )
-        // sixth card sequence - scale down fourth card and bring up fifth card
+
+        // Sixth card sequence - scale down fifth card and bring up sixth card
         .to(
           card5Ref.current,
           {
@@ -323,6 +324,7 @@ export default function OneWallet() {
         .to(
           card6Ref.current,
           {
+            x: getResponsiveValue("0%", "0%", "0%"),
             y: 0,
             duration: getResponsiveValue(1, 1.25, 1.5),
             ease: "power2.inOut",
@@ -406,14 +408,15 @@ export default function OneWallet() {
             </p>
           </div>
         </div>
+
         {/*first card*/}
         <div
           ref={cardRef}
-          className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="  absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[65vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Mockup Image */}
-            <div className="relative w-full aspect-[4/3] md:aspect-[300/100] lg:aspect-auto lg:h-full bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full h-[20vh] md:aspect-[300/100] lg:aspect-auto lg:h-full bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
               <div ref={mockupImageRef} className="relative w-full h-full">
                 <Image
                   src="/businessnew/mockupImage.png"
@@ -506,14 +509,15 @@ export default function OneWallet() {
             </div>
           </div>
         </div>
+
         {/*second card*/}
         <div
           ref={card2Ref}
-          className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className=" absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Stacked Cards Animation */}
-            <div className="relative w-full aspect-[4/3] md:aspect-[300/100]  lg:aspect-auto lg:h-full bg-[#f8f8f8] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full h-[18vh] md:aspect-[300/100]  lg:aspect-auto lg:h-full bg-[#f8f8f8] rounded-xl sm:rounded-2xl overflow-hidden">
               <div
                 ref={mockupImage2_1Ref}
                 className="absolute transform -translate-x-8 sm:-translate-x-20 w-full h-full z-[2]"
@@ -550,7 +554,7 @@ export default function OneWallet() {
             </div>
 
             {/* Right Side - Updated Content */}
-            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-10">
+            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-2 sm:p-6 md:p-8 lg:p-10" >
               {/* Virtual Crypto Debit Card Section */}
               <div className="space-y-3 sm:space-y-4">
                 <h1 className="text-xl sm:text-2xl lg:whitespace-nowrap md:text-3xl lg:text-4xl font-semibold text-black">
@@ -644,14 +648,15 @@ export default function OneWallet() {
             </div>
           </div>
         </div>
+
         {/*third card - Swiss IBAN Account*/}
         <div
           ref={card3Ref}
-          className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Mockup Image */}
-            <div className="relative w-full aspect-[4/3] md:aspect-[300/100]  lg:aspect-auto lg:h-full bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full h-[22vh] md:aspect-[300/100]  lg:aspect-auto lg:h-full bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
               <div ref={mockupImage3Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/IBAN0.svg"
@@ -773,11 +778,11 @@ export default function OneWallet() {
         {/* fourth card */}
         <div
           ref={card4Ref}
-          className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Mockup Image */}
-            <div className="relative w-full aspect-[4/3] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full h-[30vh] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
               <div ref={mockupImage4Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/p2p1.svg"
@@ -869,14 +874,15 @@ export default function OneWallet() {
             </div>
           </div>
         </div>
+
         {/* fifth card */}
         <div
           ref={card5Ref}
-          className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Mockup Image */}
-            <div className="relative w-full aspect-[4/3] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full h-[29vh] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
               <div ref={mockupImage5Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/qr1.svg"
@@ -967,27 +973,40 @@ export default function OneWallet() {
             </div>
           </div>
         </div>
+
         {/* sixth card */}
         <div
           ref={card6Ref}
-          className="absolute top-1/2 left-1/2  transform -translate-y-1/2 -translate-x-1/2 w-[95vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="absolute top-[48%] lg:top-1/2 left-1/2  transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             {/* Left Side - Mockup Image */}
-            <div className="relative w-full aspect-[4/3] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
-  <div
-    ref={mockupImage6_1Ref}
-    className="absolute -top-[5%] left-[2.5%] w-[55%] h-[55%] z-[2]"
-  >
-    <Image src="/businessnew/ai1.png" alt="Card Mockup" fill quality={100} className="rounded-xl object-contain" />
-  </div>
-  <div
-    ref={mockupImage6_2Ref}
-    className="absolute bottom-[12%] right-[2%] w-[55%] h-[55%] z-[1]"
-  >
-    <Image src="/businessnew/ai2.png" alt="Card Mockup" fill quality={100} className="rounded-xl object-contain" />
-  </div>
-</div>
+            <div className="relative w-full aspect-[5/3] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+              <div
+                ref={mockupImage6_1Ref}
+                className="absolute -top-[5%] left-[2.5%] w-[55%] h-[55%] z-[2]"
+              >
+                <Image
+                  src="/businessnew/ai1.png"
+                  alt="Card Mockup"
+                  fill
+                  quality={100}
+                  className="rounded-xl object-contain"
+                />
+              </div>
+              <div
+                ref={mockupImage6_2Ref}
+                className="absolute bottom-[12%] right-[2%] w-[55%] h-[55%] z-[1]"
+              >
+                <Image
+                  src="/businessnew/ai2.png"
+                  alt="Card Mockup"
+                  fill
+                  quality={100}
+                  className="rounded-xl object-contain"
+                />
+              </div>
+            </div>
 
             {/* Right Side - P2P Transactions Content */}
             <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-10">

@@ -156,7 +156,7 @@ const DesktopCard = ({ cardData, index, progress, totalCards, isLastCard }) => {
 
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
