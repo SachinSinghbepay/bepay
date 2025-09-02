@@ -56,14 +56,14 @@ const AnimatedText = () => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
-    // Mobile: Simple entrance animation, stays visible
+    // Mobile: Simple entrance animation, stays visible, and is now left-aligned
     return (
       <motion.h2
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true, amount: 0.3 }}
-        className="text-4xl font-[400] tracking-tight text-center px-4"
+        className="text-4xl font-[400] tracking-tight text-left px-4"
       >
         <div>
           <span className="text-[#333333] tracking-[-0.05em]">Crypto </span>
@@ -76,7 +76,7 @@ const AnimatedText = () => {
     );
   }
 
-  // Desktop: Original animation
+  // Desktop: Original animation remains centered
   return (
     <motion.h2
       initial="hidden"
@@ -103,6 +103,7 @@ const AnimatedText = () => {
   );
 };
 
+
 const Card = ({ cardData }) => (
   <div className="w-[280px] h-[360px] md:w-[300px] md:h-[400px] lg:w-[380px] drop-shadow-2xl lg:h-[500px] bg-white md:shadow-utility-card rounded-[40px] p-6 md:p-8 flex flex-col items-start justify-end text-center relative overflow-hidden flex-shrink-0 border-0">
     <img
@@ -112,17 +113,19 @@ const Card = ({ cardData }) => (
       height="200"
       loading="lazy"
       className="opacity-100 absolute top-4 left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0 w-[120px] h-[120px] md:w-[150px] md:h-[150px] lg:w-[200px] lg:h-[200px] z-0"
+
     />
-    <div className="relative mb-5 z-10">
-      <h3 className="text-lg md:text-xl lg:text-[32px] text-start font-[500] text-[#6A6A6A]">
+    <div className="absolute bottom-[30px] left-6 right-6 z-10">
+      <h3 className="text-xl font-semibold leading-[24px] tracking-[-0.06em] text-[#333333] text-start">
         {cardData.title}
       </h3>
-      <p className="text-gray-600 mt-2 text-start text-sm">
+      <p className="text-gray-600 mt-2 text-start text-xs leading-[16px]">
         {cardData.description}
       </p>
     </div>
   </div>
 );
+
 
 // DESKTOP ANIMATION: Exact original animation (unchanged)
 const DesktopCard = ({ cardData, index, progress, totalCards, isLastCard }) => {
@@ -150,6 +153,7 @@ const DesktopCard = ({ cardData, index, progress, totalCards, isLastCard }) => {
           } relative`}
         >
           <Card cardData={cardData} />
+
         </div>
       </div>
     </motion.div>
@@ -166,6 +170,7 @@ const MobileView = () => {
     target: mobileContainerRef,
     offset: ["start start", "end end"],
   });
+
 
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
@@ -196,6 +201,7 @@ const MobileView = () => {
           viewport={{ once: true, amount: 0.3 }}
         >
           <h2 className="text-4xl font-[400] tracking-tight text-center">
+
             <div>
               <span className="text-[#333333] tracking-[-0.05em]">Crypto </span>
               <span className="text-[#C0C0C0] tracking-[-0.07em]">meets</span>
@@ -216,6 +222,7 @@ const MobileView = () => {
             {utilityData.map((cardData, i) => (
               <div key={i} className="flex-shrink-0">
                 <Card cardData={cardData} />
+
               </div>
             ))}
           </motion.div>
@@ -228,6 +235,7 @@ const MobileView = () => {
                        w-[221px] h-[56px] rounded-full flex items-center 
                        justify-center gap-2 text-xs font-normal 
                        hover:bg-gray-800 transition-colors"
+
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -302,6 +310,7 @@ export const UtilitySection = () => {
                        w-[221px] h-[56px] rounded-full flex items-center 
                        justify-center gap-2 text-xs font-normal 
                        hover:bg-gray-800 transition-colors"
+
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
