@@ -255,7 +255,7 @@ const MobileView = () => {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
