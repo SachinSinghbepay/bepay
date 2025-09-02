@@ -103,40 +103,17 @@ const AnimatedText = () => {
   );
 };
 
-// Desktop Card Component
-const DesktopCardComponent = ({ cardData, index }) => {
-  const isElevatedCard = index === 0 || index === 1 ||index === 2 ||index === 3 || index === 4 ||index === 5;
-  const bottomPosition = isElevatedCard ? 'bottom-20' : 'bottom-8';
-  
-  return (
-    <div className="w-[300px] h-[400px] lg:w-[380px] drop-shadow-2xl lg:h-[500px] bg-white shadow-utility-card rounded-[40px] p-8 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-      <img
-        src={cardData.icon || "/placeholder.svg"}
-        alt={cardData.title}
-        width="200"
-        height="200"
-        loading="lazy"
-        className="opacity-100 absolute top-4 left-4 w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] z-0"
-      />
-      <div className={`absolute ${bottomPosition} left-8 right-8 z-10`}>
-        <h3 className="text-xl lg:text-[32px] font-[500] text-[#6A6A6A] leading-[38px] tracking-[-0.06em] text-start">
-          {cardData.title}
-        </h3>
-        <p className="text-gray-600 mt-2 text-start text-sm">
-          {cardData.description}
-        </p>
-      </div>
-    </div>
-  );
-};
 
-// Mobile Card Components - Each with fixed positioning
-const MobileBillPaymentsCard = ({ cardData }) => (
-  <div className="w-[280px] h-[360px] bg-white drop-shadow-2xl rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
+const Card = ({ cardData }) => (
+  <div className="w-[280px] h-[360px] md:w-[300px] md:h-[400px] lg:w-[380px] drop-shadow-2xl lg:h-[500px] bg-white md:shadow-utility-card rounded-[40px] p-6 md:p-8 flex flex-col items-start justify-end text-center relative overflow-hidden flex-shrink-0 border-0">
     <img
       src={cardData.icon || "/placeholder.svg"}
       alt={cardData.title}
-      className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
+      width="200"
+      height="200"
+      loading="lazy"
+      className="opacity-100 absolute top-4 left-1/2 -translate-x-1/2 md:left-4 md:translate-x-0 w-[120px] h-[120px] md:w-[150px] md:h-[150px] lg:w-[200px] lg:h-[200px] z-0"
+
     />
     <div className="absolute bottom-[30px] left-6 right-6 z-10">
       <h3 className="text-xl font-semibold leading-[24px] tracking-[-0.06em] text-[#333333] text-start">
@@ -149,110 +126,6 @@ const MobileBillPaymentsCard = ({ cardData }) => (
   </div>
 );
 
-const MobileTravelBookingsCard = ({ cardData }) => (
-  <div className="w-[280px] h-[360px] bg-white drop-shadow-2xl rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
-      src={cardData.icon || "/placeholder.svg"}
-      alt={cardData.title}
-      className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
-    />
-    <div className="absolute bottom-[50px] left-6 right-6 z-10">
-      <h3 className="text-xl font-semibold leading-[24px] tracking-[-0.06em] text-[#333333] text-start">
-        {cardData.title}
-      </h3>
-      <p className="text-gray-600 mt-2 text-start text-xs leading-[16px]">
-        {cardData.description}
-      </p>
-    </div>
-  </div>
-);
-
-const MobileTrainTicketsCard = ({ cardData }) => (
-  <div className="w-[280px] h-[360px] bg-white drop-shadow-2xl rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
-      src={cardData.icon || "/placeholder.svg"}
-      alt={cardData.title}
-      className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
-    />
-    <div className="absolute bottom-[34px] left-6 right-6 z-10">
-      <h3 className="text-xl font-semibold leading-[24px] tracking-[-0.06em] text-[#333333] text-start">
-        {cardData.title}
-      </h3>
-      <p className="text-gray-600 mt-2 text-start text-xs leading-[16px]">
-        {cardData.description}
-      </p>
-    </div>
-  </div>
-);
-
-const MobileMovieTicketsCard = ({ cardData }) => (
-  <div className="w-[280px] h-[360px] bg-white drop-shadow-2xl rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
-      src={cardData.icon || "/placeholder.svg"}
-      alt={cardData.title}
-      className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
-    />
-    <div className="absolute bottom-[35px] left-6 right-6 z-10">
-      <h3 className="text-xl font-semibold leading-[24px] tracking-[-0.06em] text-[#333333] text-start">
-        {cardData.title}
-      </h3>
-      <p className="text-gray-600 mt-2 text-start text-xs leading-[16px]">
-        {cardData.description}
-      </p>
-    </div>
-  </div>
-);
-
-const MobileEcommerceCard = ({ cardData }) => (
-  <div className="w-[280px] h-[360px] bg-white drop-shadow-2xl rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
-      src={cardData.icon || "/placeholder.svg"}
-      alt={cardData.title}
-      className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
-    />
-    <div className=" absolute bottom-[54px] left-6 right-6 z-10">
-      <h3 className=" text-xl font-semibold leading-[24px] tracking-[-0.06em] text-[#333333] text-start">
-        {cardData.title}
-      </h3>
-      <p className="text-gray-600 mt-2 text-start text-xs leading-[16px]">
-        {cardData.description}
-      </p>
-    </div>
-  </div>
-);
-
-const MobileGiftCardsCard = ({ cardData }) => (
-  <div className="w-[280px] h-[360px] bg-white drop-shadow-2xl rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
-      src={cardData.icon || "/placeholder.svg"}
-      alt={cardData.title}
-      className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
-    />
-    <div className="absolute bottom-[24px] left-6 right-6 z-10">
-      <h3 className="text-xl font-semibold leading-[24px] tracking-[-0.06em] text-[#333333] text-start">
-        {cardData.title}
-      </h3>
-      <p className="text-gray-600 mt-2 text-start text-xs leading-[16px]">
-        {cardData.description}
-      </p>
-    </div>
-  </div>
-);
-
-// Mobile card renderer
-const MobileCard = ({ cardData, index }) => {
-  const mobileCardComponents = [
-    MobileBillPaymentsCard,
-    MobileTravelBookingsCard,
-    MobileTrainTicketsCard,
-    MobileMovieTicketsCard,
-    MobileEcommerceCard,
-    MobileGiftCardsCard,
-  ];
-  
-  const CardComponent = mobileCardComponents[index];
-  return <CardComponent cardData={cardData} />;
-};
 
 // DESKTOP ANIMATION: Exact original animation (unchanged)
 const DesktopCard = ({ cardData, index, progress, totalCards, isLastCard }) => {
@@ -279,7 +152,8 @@ const DesktopCard = ({ cardData, index, progress, totalCards, isLastCard }) => {
             isEven ? "md:absolute md:top-0 md:left-0" : "md:absolute md:bottom-0 md:right-0"
           } relative`}
         >
-          <DesktopCardComponent cardData={cardData} index={index} />
+          <Card cardData={cardData} />
+
         </div>
       </div>
     </motion.div>
@@ -296,6 +170,7 @@ const MobileView = () => {
     target: mobileContainerRef,
     offset: ["start start", "end end"],
   });
+
 
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
@@ -325,7 +200,8 @@ const MobileView = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           viewport={{ once: true, amount: 0.3 }}
         >
-          <h2 className="text-4xl font-[400] tracking-tight text-left">
+          <h2 className="text-4xl font-[400] tracking-tight text-center">
+
             <div>
               <span className="text-[#333333] tracking-[-0.05em]">Crypto </span>
               <span className="text-[#C0C0C0] tracking-[-0.07em]">meets</span>
@@ -345,7 +221,8 @@ const MobileView = () => {
           >
             {utilityData.map((cardData, i) => (
               <div key={i} className="flex-shrink-0">
-                <MobileCard cardData={cardData} index={i} />
+                <Card cardData={cardData} />
+
               </div>
             ))}
           </motion.div>
@@ -355,9 +232,10 @@ const MobileView = () => {
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
           <button
             className="bg-black cursor-pointer whitespace-nowrap text-white 
-              w-[221px] h-[56px] rounded-full flex items-center 
-              justify-center gap-2 text-xs font-normal 
-              hover:bg-gray-800 transition-colors"
+                       w-[221px] h-[56px] rounded-full flex items-center 
+                       justify-center gap-2 text-xs font-normal 
+                       hover:bg-gray-800 transition-colors"
+
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -428,10 +306,11 @@ export const UtilitySection = () => {
             }}
             transition={{ ease: "easeOut", duration: 0.6 }}
             className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20
-              bg-black cursor-pointer whitespace-nowrap text-white 
-              w-[221px] h-[56px] rounded-full flex items-center 
-              justify-center gap-2 text-xs font-normal 
-              hover:bg-gray-800 transition-colors"
+                       bg-black cursor-pointer whitespace-nowrap text-white 
+                       w-[221px] h-[56px] rounded-full flex items-center 
+                       justify-center gap-2 text-xs font-normal 
+                       hover:bg-gray-800 transition-colors"
+
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -108,30 +108,61 @@ export default function CryptoHeroSection() {
         {/* Background text */}
         <div className=" flex items-center justify-center z-10">
           <div className="text-center">
-            <div>
-              <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[64px]  font-[600] leading-[100%]">
-                SPEND
+            {isMobile ? (
+              // Mobile Heading with decreased distance
+              <div className="leading-none">
+                <div
+                  className="text-[#C0C0C0] font-[250] text-4xl sm:text-[50px] my-[-0.5rem]"
+                  style={{ letterSpacing: "-0.17em" }}
+                >
+                  USE
+                  <span
+                    className="text-[#4F4F4F] font-[900] text-4xl sm:text-[50px] ml-2 sm:ml-4"
+                    style={{ letterSpacing: "-0.06em" }}
+                  >
+                    CRYPTO
+                  </span>
+                </div>
+                <div
+                  className="text-[#B7B7B7] font-[250] text-4xl sm:text-[50px] my-[-0.8rem]"
+                  style={{ letterSpacing: "-0.11em" }}
+                >
+                  LIKE
+                  <span
+                    className="text-[#C0C0C0] font-[900] text-4xl sm:text-[50px] ml-2 sm:ml-4"
+                    style={{ letterSpacing: "-0.03em" }}
+                  >
+                    CASH
+                  </span>
+                </div>
               </div>
-              <div className="text-[#6F6F6F] text-5xl lg:-mt-6 9 lg:tracking-tighter sm:text-8xl lg:text-[120px] font-semibold leading-none">
-                CRYPTO
+            ) : (
+              // Desktop Heading (unchanged)
+              <div>
+                <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[64px]  font-[600] leading-[100%]">
+                  SPEND
+                </div>
+                <div className="text-[#6F6F6F] text-5xl lg:-mt-6 9 lg:tracking-tighter sm:text-8xl lg:text-[120px] font-semibold leading-none">
+                  CRYPTO
+                </div>
+                <div className="text-[#B7B7B7] text-6xl sm:text-8xl lg:-mt-11 2xl:-mt-11 lg:text-[200px] font-[100] leading-none">
+                  <span style={{ letterSpacing: "-0.11em" }}>L</span>
+                  <span style={{ letterSpacing: "-0.24em" }}>I</span>
+                  <span style={{ letterSpacing: "-0.12em" }}>KE</span>
+                  <span className="text-[#404040] font-semibold">
+                    <span style={{ letterSpacing: "-0.10em" }}>C</span>
+                    <span style={{ letterSpacing: "-0.10em" }}>A</span>
+                    <span style={{ letterSpacing: "-0.10em" }}>S</span>
+                    <span style={{ letterSpacing: "-0.11em" }}>H</span>
+                  </span>
+                </div>
               </div>
-              <div className="text-[#B7B7B7] text-6xl sm:text-8xl lg:-mt-11 2xl:-mt-11 lg:text-[200px] font-[100] leading-none">
-                <span style={{ letterSpacing: "-0.11em" }}>L</span>
-                <span style={{ letterSpacing: "-0.24em" }}>I</span>
-                <span style={{ letterSpacing: "-0.12em" }}>KE</span>
-                <span className="text-[#404040] font-semibold">
-                  <span style={{ letterSpacing: "-0.10em" }}>C</span>
-                  <span style={{ letterSpacing: "-0.10em" }}>A</span>
-                  <span style={{ letterSpacing: "-0.10em" }}>S</span>
-                  <span style={{ letterSpacing: "-0.11em" }}>H</span>
-                </span>
-              </div>
-            </div>
+            )}
           </div>
         </div>
 
         {/* Phone mockup with scroll animations */}
-        <div className="relative z-20 max-w-7xl lg:-mt-10 mx-auto w-full flex items-center justify-center">
+        <div className="relative z-20 max-w-7xl mx-auto w-full flex items-center justify-center mt-10 lg:-mt-10">
           <motion.div style={{ y: mockupY }} className="flex-shrink-0">
             <div className="relative">
               <motion.div
@@ -215,7 +246,7 @@ export default function CryptoHeroSection() {
                             animate={{
                               opacity: 1,
                               y: -20,
-                              x: index * -25,
+                              x: icon.finalX, // Use finalX for mobile for consistency
                             }}
                             transition={{
                               duration: 0.6,
