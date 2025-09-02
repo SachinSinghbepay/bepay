@@ -70,73 +70,104 @@ const NewsletterModal = ({ isOpen, onClose, userEmail }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 p-4">
-      {/* Modal container */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        transition={{ duration: 0.3 }}
+  <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50 p-4">
+    {/* Modal container */}
+    <motion.div
+  initial={{ opacity: 0, scale: 0.95 }}
+  animate={{ opacity: 1, scale: 1 }}
+  exit={{ opacity: 0, scale: 0.95 }}
+  transition={{ duration: 0.3 }}
+  className="
+    bg-[rgba(27,27,27,0.4)] border border-gray-700/30
+    flex flex-col items-center justify-center
+    rounded-2xl backdrop-blur-md p-6
+    
+    w-[80%] max-w-[280px]
+    -mt-29 sm:mt-0
+    sm:w-[90%] sm:max-w-md sm:min-h-[auto] 
+    md:max-w-lg 
+    
+    /* MODIFIED START */
+    min-h-[250px]
+    md:min-h-[auto] 
+    lg:max-w-[40vw] lg:h-[48vh]
+    lg:rounded-[44px]
+    /* MODIFIED END */
+    
+    translate-x-[-26px] sm:translate-x-0
+  "
+>
+
+      {/* Logo */}
+      <Image
+  src="/bepay_logo.png"
+  alt="BePayMoney"
+  width={120}
+  height={50}
+  className="
+    mx-auto rounded-xl p-2 
+    mb-5 -mt-2
+    sm:mb-13 sm:mt-0 
+    sm:w-[150px] sm:h-[60px] 
+    md:w-[180px] md:h-[70px]
+    
+    /* MODIFIED START */
+    lg:-mt-10 
+    /* MODIFIED END */
+  "
+/>
+
+
+      {/* Heading */}
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
         className="
-          bg-[rgba(27,27,27,0.4)] border border-gray-700/30 
-          flex flex-col items-center justify-center
-          w-[50vw] h-[80vh] max-w-[40vw] max-h-[200vh] 
-          rounded-[44px] backdrop-blur-md p-6
-          sm:w-[95vw] sm:h-auto sm:rounded-3xl
+          font-light leading-tight text-center mb-3
+          text-white
+          
+          text-xs sm:text-xl md:text-2xl
         "
-        style={{
-    height: "330px", // ✅ Inline style forces the height
-  }}
       >
-        {/* Logo */}
-        <Image
-          src="/bepay_logo.png"
-          alt="BePayMoney"
-          width={180}
-          height={70}
-          className="mx-auto rounded-xl p-2 mb-6 -mt-17"
-        />
+        Thanks for signing up to our newsletter.
+      </motion.h2>
 
-        {/* Heading */}
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="
-            font-light leading-tight text-center mb-6 mt-3
-            bg-gradient-to-b from-[rgba(249,249,249,1)] to-[rgba(147,147,147,1)] 
-            bg-clip-text text-transparent
-            whitespace-nowrap sm:whitespace-normal text-[22px]
-          "
-        >
-          Thank you for signing up to our newsletter.
-        </motion.h2>
-
-        {/* Subtext */}
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="text-gray-300 text-center text-sm max-w-md mb-6 px-4 -mt-2"
-        >
-          We'll send updates directly to your inbox.
-        </motion.p>
-
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="
-            absolute top-4 right-4 text-white/70 hover:text-white
-            text-xl font-bold
-          "
-        >
-          ✕
-        </button>
-      </motion.div>
-    </div>
+      {/* Subtext */}
+      <motion.p
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.3 }}
+  className="
+    text-[10px] sm:text-sm md:text-base 
+    text-[#6A6A6A] text-center max-w-xs sm:max-w-md 
+    mb-4 px-2 leading-snug
+    
+    /* MODIFIED START */
+    lg:mt-4
+    /* MODIFIED END */
+  "
+>
+  We'll send updates directly to your inbox.
+</motion.p>
 
 
-  );
+      {/* Close Button */}
+      <button
+        onClick={onClose}
+        className="
+          absolute top-6 right-6 text-white/70 hover:text-white
+          text-xs sm:text-2xl 
+        "
+      >
+        ✕
+      </button>
+    </motion.div>
+  </div>
+);
+
+
+
 };
 
 const Footer = () => {
