@@ -52,64 +52,7 @@ const HowCryptoMake = () => {
     [0, 1, 1]
   );
 
-  // Mobile transform values - adjusted timing
-  const mobileMockup1Y = useTransform(scrollYProgress, [0, 0.2], [0, -600]);
-  const mobileMockup1Opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-
-  const mobileMockup2Y = useTransform(
-    scrollYProgress,
-    [0.15, 0.2, 0.4],
-    [400, 0, -600]
-  );
-  const mobileMockup2Opacity = useTransform(
-    scrollYProgress,
-    [0.15, 0.2, 0.4],
-    [0, 1, 0]
-  );
-
-  const mobileMockup3Y = useTransform(
-    scrollYProgress,
-    [0.35, 0.4, 0.6],
-    [400, 0, -600]
-  );
-  const mobileMockup3Opacity = useTransform(
-    scrollYProgress,
-    [0.35, 0.4, 0.6],
-    [0, 1, 0]
-  );
-
-  const mobileMockup4Y = useTransform(
-    scrollYProgress,
-    [0.55, 0.6, 1],
-    [400, 0, -400]
-  );
-  const mobileMockup4Opacity = useTransform(
-    scrollYProgress,
-    [0.55, 0.6, 1],
-    [0, 1, 1]
-  );
-
-  // Desktop content transforms
-  const content1Y = useTransform(
-    scrollYProgress,
-    [0, 0.15, 0.25],
-    [200, 0, -200]
-  );
-  const content2Y = useTransform(
-    scrollYProgress,
-    [0.15, 0.3, 0.5],
-    [200, 0, -200]
-  );
-  const content3Y = useTransform(
-    scrollYProgress,
-    [0.4, 0.55, 0.75],
-    [200, 0, -200]
-  );
-  const content4Y = useTransform(
-    scrollYProgress,
-    [0.65, 0.8, 1],
-    [200, 0, -200]
-  );
+  
 
 
   // Content animations (Desktop - unchanged)
