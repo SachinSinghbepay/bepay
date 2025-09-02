@@ -136,6 +136,7 @@ const HowCryptoMake = () => {
     [0.65, 0.75, 1],
     [0, 1, 1]
   );
+
   const mobileContent1Y = useTransform(
     scrollYProgress,
     [0, 0.1, 0.2],
