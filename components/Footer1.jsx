@@ -106,7 +106,7 @@ const NewsletterModal = ({ isOpen, onClose, userEmail }) => {
   height={50}
   className="
     mx-auto rounded-xl p-2 
-    mb-5 -mt-2
+    mb-5 -mt-6
     sm:mb-13 sm:mt-0 
     sm:w-[150px] sm:h-[60px] 
     md:w-[180px] md:h-[70px]
@@ -124,7 +124,7 @@ const NewsletterModal = ({ isOpen, onClose, userEmail }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
         className="
-          font-light leading-tight text-center mb-3
+          font-light leading-tight text-center mb-6
           text-white
           
           text-xs sm:text-xl md:text-2xl
@@ -141,7 +141,7 @@ const NewsletterModal = ({ isOpen, onClose, userEmail }) => {
   className="
     text-[10px] sm:text-sm md:text-base 
     text-[#6A6A6A] text-center max-w-xs sm:max-w-md 
-    mb-4 px-2 leading-snug
+    mb-7 px-2 leading-snug
     
     /* MODIFIED START */
     lg:mt-4
@@ -263,7 +263,7 @@ const Footer = () => {
         >
           {/* CTA Section */}
           <motion.div className="text-center max-w-4xl" variants={itemVariants}>
-            <h2 className="text-xl md:text-2xl text-transparent bg-clip-text [background-image:linear-gradient(90deg,#F9F9F9_0%,rgba(249,249,249,0.5)_31.33%,#F9F9F9_64.79%,rgba(249,249,249,0.5)_98.29%)] lg:text-[24px] font-light mb-6 leading-tight">
+            <h2 className="text-xl md:text-2xl text-transparent bg-clip-text [background-image:linear-gradient(90deg,#F9F9F9_0%,rgba(249,249,249,0.5)_31.33%,#F9F9F9_64.79%,rgba(249,249,249,0.5)_98.29%)] lg:text-[24px] font-medium mb-6 leading-tight">
               Ready to transform your financial future?
             </h2>
 
@@ -307,35 +307,60 @@ const Footer = () => {
             <>
               <div className="flex flex-col md:flex-row items-center gap-6">
                 {!isSubscribed ? (
-                  <form
-                    onSubmit={handleSubmit}
-                    className="flex flex-col items-center lg:items-start gap-3"
-                  >
-                    <p className="text-[#6A6A6A] text-sm">
-                      Sign-up to our newsletter for exclusive updates!
-                    </p>
-                    <div className="flex items-center gap-2 border border-[#C6C6C626] rounded-full p-1 pr-2">
-                      <input
-                        type="email"
-                        placeholder="Enter your email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="bg-transparent px-4 py-2 text-white placeholder-gray-500 focus:outline-none w-64"
-                        aria-label="Email for newsletter"
-                        disabled={isSubmitting}
-                      />
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="bg-[#3333334D] text-white cursor-pointer px-6 py-2 rounded-full font-medium transition-colors text-sm shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {isSubmitting ? "Submitting..." : "Submit"}
-                      </button>
-                    </div>
-                    {error && (
-                      <p className="text-red-400 text-sm mt-1">{error}</p>
-                    )}
-                  </form>
+  <form
+  onSubmit={handleSubmit}
+  className="flex flex-col items-center lg:items-start gap-3 w-full max-w-md px-4 sm:px-0"
+>
+  <p className="text-[#6A6A6A] text-sm text-center lg:text-left">
+    Sign-up to our newsletter for exclusive updates!
+  </p>
+
+  {/* Mobile Layout */}
+  <div className="flex flex-col gap-2 w-full sm:hidden">
+    <input
+      type="email"
+      placeholder="Enter your email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      className="bg-transparent px-4 py-3 text-white placeholder-gray-500 focus:outline-none border border-[#C6C6C626] rounded-full w-full text-sm"
+      aria-label="Email for newsletter"
+      disabled={isSubmitting}
+    />
+    <button
+      type="submit"
+      disabled={isSubmitting}
+      className="bg-[#3333334D] text-white cursor-pointer px-6 py-3 rounded-full font-medium transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed w-full text-center"
+    >
+      {isSubmitting ? "Submitting..." : "Submit"}
+    </button>
+  </div>
+
+  {/* Desktop Layout */}
+  <div className="hidden sm:flex items-center border border-[#C6C6C626] rounded-full p-1 pr-2 w-full">
+    <input
+      type="email"
+      placeholder="Enter your email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      className="bg-transparent px-4 py-2 text-white placeholder-gray-500 focus:outline-none w-full text-sm"
+      aria-label="Email for newsletter"
+      disabled={isSubmitting}
+    />
+    <button
+      type="submit"
+      disabled={isSubmitting}
+      className="bg-[#3333334D] text-white cursor-pointer px-6 py-2 rounded-full font-medium transition-colors text-sm shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {isSubmitting ? "Submitting..." : "Submit"}
+    </button>
+  </div>
+
+  {error && (
+    <p className="text-red-400 text-sm mt-1 text-center lg:text-left">{error}</p>
+  )}
+</form>
+
+
                 ) : (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}

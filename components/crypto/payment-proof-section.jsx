@@ -42,31 +42,33 @@ export const PaymentProofSection = () => {
 
       {/* Floating Notification */}
       <motion.div
-        className="absolute z-20 left-[14%] bottom-1/2 translate-y-1/2 sm:bottom-auto sm:translate-y-0 sm:top-1/2"
-        initial="hidden"
-        whileInView="visible"
-        exit="hidden"
-        viewport={{ once: false, amount: 0.5 }}
-        variants={notificationVariants}
-      >
-        <div className="rounded-t-2xl rounded-bl-2xl p-4 lg:p-6 shadow-lg bg-white/60 backdrop-blur-xl border border-white/20">
-          <p className="text-xs text-gray-700 mb-1">Paid for groceries!</p>
-          <div className="flex items-center gap-2">
-            <Image
-              src={"/bitcoin.png"}
-              alt="bitcoin"
-              height={30}
-              loading="lazy"
-              width={30}
-              className="object-cover"
-            />
-            <p className="font-semibold text-sm text-black">
-              0.0012 BTC{" "}
-              <span className="font-normal text-gray-600">($102)</span>
-            </p>
-          </div>
-        </div>
-      </motion.div>
+  className="absolute z-20 left-[22%] bottom-1/2 translate-y-[169%] sm:bottom-auto sm:translate-y-0 sm:top-1/2"
+  initial="hidden"
+  whileInView="visible"
+  exit="hidden"
+  viewport={{ once: false, amount: 0.5 }}
+  variants={notificationVariants}
+>
+  <div className="rounded-t-2xl rounded-br-2xl p-2 sm:p-3 shadow-lg bg-white/30 backdrop-blur-xl border border-white/20">
+    <p className="text-[10px] text-gray-700 mb-1">Paid for groceries!</p>
+    <div className="flex items-center gap-1 sm:gap-2">
+      <Image
+        src={"/bitcoin.png"}
+        alt="bitcoin"
+        height={24}
+        width={24}
+        loading="lazy"
+        className="object-cover"
+      />
+      <p className="font-semibold text-[12px] sm:text-sm text-black">
+        0.0012 BTC{" "}
+        <span className="font-normal text-gray-600 text-[10px]">($102)</span>
+      </p>
+    </div>
+  </div>
+</motion.div>
+
+
     </section>
   );
 };
