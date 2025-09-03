@@ -57,7 +57,7 @@ const steps = [
       width: 260,
       height: 100,
       offsetX: 10,
-      offsetY: 10,
+      offsetY: 0,
     },
     headingOffsetMobile: -2,
   },
@@ -90,7 +90,8 @@ export default function CryptoScrollSection() {
       const containerHeight = container.offsetHeight;
       const windowHeight = window.innerHeight;
 
-      const inView = rect.top < windowHeight * 0.8 && rect.bottom > windowHeight * 0.2;
+      const inView =
+        rect.top < windowHeight * 0.8 && rect.bottom > windowHeight * 0.2;
       setIsInView(inView);
 
       const scrolled = -rect.top;
@@ -172,20 +173,6 @@ export default function CryptoScrollSection() {
   if (isMobile) {
     const isScrollingDown = activeStep > prevActiveStepRef.current;
 
-    const getDirectionalVariants = (initialY, exitY, initialX, exitX) => ({
-      initial: {
-        opacity: 0,
-        y: isScrollingDown ? initialY : exitY,
-        x: isScrollingDown ? initialX : exitX,
-      },
-      animate: { opacity: 1, y: 0, x: 0 },
-      exit: {
-        opacity: 0,
-        y: isScrollingDown ? exitY : initialY,
-        x: isScrollingDown ? exitX : initialX,
-      },
-    });
-
     return (
       <div ref={containerRef} className="relative" style={{ height: "300vh" }}>
         {/* Mobile Sticky content */}
@@ -193,7 +180,7 @@ export default function CryptoScrollSection() {
           <div className="w-full max-w-sm mx-auto px-4">
             {/* Mobile Header */}
             <motion.div
-              className="text-left mb-8"
+              className="flex items-center justify-between mb-8"
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
               transition={{
@@ -202,37 +189,71 @@ export default function CryptoScrollSection() {
                 delay: 0.2,
               }}
             >
-              <motion.h2
-                className="text-2xl font-[400] text-gray-400 mb-2"
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                transition={{
-                  duration: 0.8,
-                  ease: [0.25, 0.1, 0.25, 1],
-                  delay: 0.3,
-                }}
-              >
-                Get <span className="text-black font-normal">started</span>
-              </motion.h2>
-              <motion.p
-                className="text-sm text-[#6A6A6A] mt-1"
+              <div>
+                <motion.h2
+                  className="text-2xl font-[400] text-gray-400 mb-2"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={
+                    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
+                  }
+                  transition={{
+                    duration: 0.8,
+                    ease: [0.25, 0.1, 0.25, 1],
+                    delay: 0.3,
+                  }}
+                >
+                  Get <span className="text-black font-normal">started</span>
+                </motion.h2>
+                <motion.p
+                  className="text-xs text-[#6A6A6A] mt-1"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={
+                    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+                  }
+                  transition={{
+                    duration: 0.8,
+                    ease: [0.25, 0.1, 0.25, 1],
+                    delay: 0.4,
+                  }}
+                >
+                  Start your journey with <br/> bepay money in 3 simple <br/> steps!
+                </motion.p>
+              </div>
+
+              {/* REPLACED THE BUTTON WITH A CLICKABLE IMAGE */}
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                animate={
+                  isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+                }
                 transition={{
                   duration: 0.8,
                   ease: [0.25, 0.1, 0.25, 1],
-                  delay: 0.4,
+                  delay: 0.5,
                 }}
               >
-                Start your journey with bepay money in 3 simple steps!
-              </motion.p>
+                <WaitlistTriggerButton>
+                  <div className="cursor-pointer">
+                    <Image
+                      src="/cta.png"
+                      alt="Get started CTA"
+                      width={125}  // Adjust width as needed
+                      height={45}   // Adjust height as needed
+                      className="object-contain"
+                    />
+                  </div>
+                </WaitlistTriggerButton>
+              </motion.div>
+
             </motion.div>
 
             {/* Mobile Content Card */}
             <motion.div
               className="relative flex flex-col justify-center min-h-[400px]"
               initial={{ opacity: 0, y: 100 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 100 }}
+              animate={
+                isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 100 }
+              }
               transition={{
                 duration: 1,
                 ease: [0.25, 0.1, 0.25, 1],
@@ -251,7 +272,10 @@ export default function CryptoScrollSection() {
                           initial={{ opacity: 0, scale: 0.8, y: 50 }}
                           animate={{ opacity: 1, scale: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.8, y: 50 }}
-                          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+                          transition={{
+                            duration: 0.4,
+                            ease: [0.25, 0.1, 0.25, 1],
+                          }}
                           style={{
                             fontSize: "clamp(500px, 40vw, 400px)",
                             background:
@@ -289,7 +313,9 @@ export default function CryptoScrollSection() {
                           <motion.h3
                             className="text-lg font-bold text-black mb-4"
                             style={{
-                              transform: `translateY(${step.headingOffsetMobile || 0}px)`,
+                              transform: `translateY(${
+                                step.headingOffsetMobile || 0
+                              }px)`,
                             }}
                             initial={{ opacity: 0, y: 50 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -338,9 +364,17 @@ export default function CryptoScrollSection() {
                               {index === activeStep && (
                                 <motion.div
                                   key={`additional-image-${index}`}
-                                  initial={isScrollingDown ? { opacity: 0, x: 300 } : { opacity: 0, x: -300 }}
+                                  initial={
+                                    isScrollingDown
+                                      ? { opacity: 0, x: 300 }
+                                      : { opacity: 0, x: -300 }
+                                  }
                                   animate={{ opacity: 1, x: 0 }}
-                                  exit={isScrollingDown ? { opacity: 0, x: -300 } : { opacity: 0, x: 300 }}
+                                  exit={
+                                    isScrollingDown
+                                      ? { opacity: 0, x: -300 }
+                                      : { opacity: 0, x: 300 }
+                                  }
                                   transition={{
                                     duration: 0.4,
                                     ease: [0.25, 0.1, 0.25, 1],
@@ -351,7 +385,11 @@ export default function CryptoScrollSection() {
                                   <div
                                     className="absolute"
                                     style={{
-                                      transform: `translate(${step.additionalImage.offsetX || 0}px, ${step.additionalImage.offsetY || 0}px)`,
+                                      transform: `translate(${
+                                        step.additionalImage.offsetX || 0
+                                      }px, ${
+                                        step.additionalImage.offsetY || 0
+                                      }px)`,
                                     }}
                                   >
                                     <Image
@@ -378,9 +416,7 @@ export default function CryptoScrollSection() {
     );
   }
 
-  // Desktop version JSX (unchanged
-
-  // Desktop version JSX (unchanged)
+  // Desktop version JSX
   return (
     <div ref={containerRef} className="relative" style={{ height: "300vh" }}>
       <div className="sticky top-0 h-[140vh] lg:h-[120vh] flex items-start justify-start bg-gray-50 overflow-hidden">
@@ -408,7 +444,7 @@ export default function CryptoScrollSection() {
               Get <span className="text-black font-normal">started</span>
             </motion.h2>
             <motion.p
-              className="text-base sm:text-lg text-[#6A6A6A] max-w-4xl mx-auto"
+              className="text-sm sm:text-base text-[#6A6A6A] max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{
@@ -487,7 +523,9 @@ export default function CryptoScrollSection() {
             <motion.div
               className="relative order-1 lg:order-2 min-h-[400px]"
               initial={{ opacity: 0, x: 100 }}
-              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 100 }}
+              animate={
+                isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 100 }
+              }
               transition={{
                 duration: 1,
                 ease: [0.25, 0.1, 0.25, 1],
@@ -595,7 +633,9 @@ export default function CryptoScrollSection() {
                                   delay: isInView ? 0.4 : 1.5,
                                 }}
                               >
-                                <button className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95">
+                                <button
+                                  className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-10 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95"
+                                >
                                   <span>Get started</span>
                                   <svg
                                     className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"

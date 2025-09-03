@@ -13,31 +13,31 @@ import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 const iconsData = [
   {
-    src: "/eth.png",
+    src: "/usdt_n.png",
     alt: "ETH",
-    initialX: "-800vw",
+    initialX: "-950vw",
     initialY: "-500vh",
-    finalX: "-0px",
+    finalX: "11.5px",
     finalY: "-20px",
   },
   {
-    src: "/usdt.png",
+    src: "/dollar_n.png",
     alt: "USDT",
     initialX: "800vw",
     initialY: "-500vh",
-    finalX: "-25px",
+    finalX: "-20px",
     finalY: "-20px",
   },
   {
-    src: "/doller.png",
+    src: "/eth_n.png",
     alt: "Dollar",
     initialX: "-800vw",
     initialY: "500vh",
-    finalX: "-55px",
+    finalX: "-52px",
     finalY: "-20px",
   },
   {
-    src: "/bitcoin.png",
+    src: "/bitcoin_n.png",
     alt: "Bitcoin",
     initialX: "800vw",
     initialY: "500vh",
@@ -110,24 +110,26 @@ export default function CryptoHeroSection() {
           <div className="text-center">
             {isMobile ? (
               // Mobile Heading with decreased distance
-              <div className="leading-none">
+              <div className="block lg:hidden leading-none">
                 <div
-                  className="text-[#C0C0C0] font-[250] text-4xl sm:text-[50px] my-[-0.5rem]"
-                  style={{ letterSpacing: "-0.17em" }}
+                  className="text-[#C0C0C0] font-thin text-4xl sm:text-[50px] my-[-0.5rem]"
+                  style={{ letterSpacing: "-0.14em" }}
                 >
                   USE
                   <span
                     className="text-[#4F4F4F] font-[900] text-4xl sm:text-[50px] ml-2 sm:ml-4"
                     style={{ letterSpacing: "-0.06em" }}
                   >
-                    CRYPTO
+                    CRYP
+                    <span className="inline-block ml-0.5">T</span>O
                   </span>
                 </div>
                 <div
-                  className="text-[#B7B7B7] font-[250] text-4xl sm:text-[50px] my-[-0.8rem]"
+                  className="text-[#B7B7B7] font-thin text-4xl sm:text-[50px] my-[-0.8rem]"
                   style={{ letterSpacing: "-0.11em" }}
                 >
-                  LIKE
+                  LI
+                  <span className="inline-block -ml-1">K</span>E
                   <span
                     className="text-[#C0C0C0] font-[900] text-4xl sm:text-[50px] ml-2 sm:ml-4"
                     style={{ letterSpacing: "-0.03em" }}
@@ -138,7 +140,7 @@ export default function CryptoHeroSection() {
               </div>
             ) : (
               // Desktop Heading (unchanged)
-              <div>
+              <div className="hidden lg:block">
                 <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[64px]  font-[600] leading-[100%]">
                   SPEND
                 </div>
@@ -162,7 +164,8 @@ export default function CryptoHeroSection() {
         </div>
 
         {/* Phone mockup with scroll animations */}
-        <div className="relative z-20 max-w-7xl mx-auto w-full flex items-center justify-center mt-10 lg:-mt-10">
+        <div className="relative z-20 max-w-7xl mx-auto w-full flex items-center justify-center mt-15 sm:mt-24 lg:-mt-10">
+
           <motion.div style={{ y: mockupY }} className="flex-shrink-0">
             <div className="relative">
               <motion.div
@@ -201,7 +204,7 @@ export default function CryptoHeroSection() {
                   </div>
 
                   {/* Animated words */}
-                  <div className="mb-4 lg:mb-6 h-8 lg:h-10 flex items-center justify-center">
+                  {/* <div className="mb-4 lg:mb-6 h-8 lg:h-10 flex items-center justify-center">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={currentWord}
@@ -217,15 +220,19 @@ export default function CryptoHeroSection() {
                         {words[currentWord]}
                       </motion.div>
                     </AnimatePresence>
-                  </div>
+                  </div> */}
 
                   {/* Secondary text */}
                   <div className="mb-4 lg:mb-6">
-                    <p className="text-xs 3xl:text-sm text-center text-gray-800 leading-relaxed max-w-[200px] lg:max-w-[280px]">
-                      Take control of your financial future with{" "}
-                      <span className="text-black font-semibold">
-                        self-custody wallets, earning opportunities, and
-                        seamless spending solutions.
+                    <p className="text-[11px] sm:text-sm 3xl:text-sm text-gray-800 leading-relaxed max-w-[260px] sm:max-w-[320px] mx-auto">
+                      <span className="block text-left whitespace-nowrap">
+                        Take control of your financial future with
+                      </span>
+                      <span className="block text-center text-black font-semibold text-[10px] sm:text-sm whitespace-nowrap">
+                        self-custody wallets, earning opportunities,
+                      </span>
+                      <span className="block text-center text-black font-semibold">
+                        and seamless spending solutions.
                       </span>
                     </p>
                   </div>
@@ -245,7 +252,7 @@ export default function CryptoHeroSection() {
                             }}
                             animate={{
                               opacity: 1,
-                              y: -20,
+                              y: -80,
                               x: icon.finalX, // Use finalX for mobile for consistency
                             }}
                             transition={{
@@ -253,14 +260,20 @@ export default function CryptoHeroSection() {
                               delay: index * 0.2,
                               ease: "easeOut",
                             }}
-                            className="absolute top-[56%] lg:top-[67%] left-1/2 translate-x-1/2"
+                            className="absolute top-[56%] lg:top-[67%] left-1/2 translate-x-[30%]
+"
                           >
-                            <div className="w-12 h-12 overflow-hidden">
+                            <div
+                              className="w-12 h-12 rounded-full overflow-hidden"
+                              style={{
+                                boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.15)", // shadow toward right-bottom
+                              }}
+                            >
                               <Image
                                 src={icon.src || "/placeholder.svg"}
                                 alt={icon.alt}
                                 fill
-                                className="object-cover"
+                                className="object-cover rounded-full"
                               />
                             </div>
                           </motion.div>
@@ -293,7 +306,7 @@ export default function CryptoHeroSection() {
                   </div>
 
                   {/* Arrow */}
-                  <div className="relative z-30 flex justify-center mt-15">
+                  <div className="relative z-30 flex justify-center mt-20">
                     <Image
                       src={"/images/crypto/line.png"}
                       height={100}

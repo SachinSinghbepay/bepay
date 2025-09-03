@@ -8,26 +8,44 @@ import { addToWaitlist } from "@/lib/firebase";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 
-function PortalContent({ 
-  isOpen, 
-  onClose, 
-  onSubmit, 
-  email, 
-  setEmail, 
-  isSubmitting, 
-  isSuccess, 
-  error, 
+function PortalContent({
+  isOpen,
+  onClose,
+  onSubmit,
+  email,
+  setEmail,
+  isSubmitting,
+  isSuccess,
+  error,
   handleSubmit,
-  referralLink
+  referralLink,
 }) {
-  // Detect mobile
   const [isMobile, setIsMobile] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
+  // Detect mobile
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= 640);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
+    const checkMobile = () => setIsMobile(window.innerWidth <= 640);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Detect dark mode
+  useEffect(() => {
+    const darkCheck = () =>
+      setIsDarkMode(
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      );
+    darkCheck();
+    const listener = (e) => setIsDarkMode(e.matches);
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", listener);
+    return () =>
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .removeEventListener("change", listener);
   }, []);
 
   const overlayStyle = {
@@ -50,9 +68,9 @@ function PortalContent({
     position: "relative",
     width: "100%",
     maxWidth: isMobile ? "22rem" : "38rem",
-    backgroundColor: "#ffffff",
-    border: "1px solid rgba(0, 0, 0, 0.1)",
-    borderRadius: isMobile ? "47px" : "47px",
+    backgroundColor: isDarkMode ? "#1F2937" : "#ffffff",
+    border: "1px solid " + (isDarkMode ? "#374151" : "rgba(0,0,0,0.1)"),
+    borderRadius: "47px",
     boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.2)",
     overflow: "hidden",
     zIndex: 2147483647,
@@ -62,22 +80,50 @@ function PortalContent({
     flexDirection: "column",
     justifyContent: "flex-start",
     paddingBottom: isMobile ? "0.5rem" : "0",
+    color: isDarkMode ? "#F9FAFB" : "#111827",
   };
 
   const closeButtonStyle = {
     position: "absolute",
-    top: isMobile ? "0.75rem" : "1.25rem",
-    right: isMobile ? "0.75rem" : "1.25rem",
+    top: isMobile ? "1rem" : "1.6rem",
+    right: isMobile ? "1.3rem" : "2rem",
     zIndex: 2147483647,
     padding: "0.4rem",
     borderRadius: "9999px",
     backgroundColor: "transparent",
     border: "none",
     cursor: "pointer",
-    transition: "background-color 0.2s",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    transition: "background-color 0.2s",
+  };
+
+  const inputStyle = {
+    width: "100%",
+    height: "42px",
+    padding: "0 1rem",
+    border: "1px solid " + (isDarkMode ? "#4B5563" : "rgb(209,213,219)"),
+    borderRadius: "9999px",
+    fontSize: "13px",
+    outline: "none",
+    backgroundColor: isDarkMode ? "#374151" : "rgb(249,250,251)",
+    color: isDarkMode ? "#F9FAFB" : "#111827",
+  };
+
+  const buttonStyle = {
+    width: "100%",
+    height: "42px",
+    borderRadius: "9999px",
+    backgroundColor: isDarkMode ? "#F9FAFB" : "#000000",
+    color: isDarkMode ? "#111827" : "#ffffff",
+    fontWeight: "600",
+    border: "none",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "1rem",
   };
 
   return (
@@ -103,7 +149,7 @@ function PortalContent({
               onClick={onClose}
               style={closeButtonStyle}
               onMouseEnter={(e) =>
-                (e.target.style.backgroundColor = "rgba(0, 0, 0, 0.05)")
+                (e.target.style.backgroundColor = "rgba(255,255,255,0.1)")
               }
               onMouseLeave={(e) =>
                 (e.target.style.backgroundColor = "transparent")
@@ -111,9 +157,9 @@ function PortalContent({
             >
               <X
                 style={{
-                  width: isMobile ? "18px" : "20px",
-                  height: isMobile ? "18px" : "20px",
-                  color: "rgb(107, 114, 128)",
+                  width: isMobile ? "18px" : "22px",
+                  height: isMobile ? "18px" : "22px",
+                  color: isDarkMode ? "#D1D5DB" : "rgb(107,114,128)",
                 }}
               />
             </button>
@@ -139,7 +185,9 @@ function PortalContent({
                   style={{
                     margin: "0 auto",
                     borderRadius: "0.75rem",
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    backgroundColor: isDarkMode
+                      ? "rgba(255,255,255,0.1)"
+                      : "rgba(255, 255, 255, 0.1)",
                     padding: "0.4rem",
                   }}
                 />
@@ -152,27 +200,30 @@ function PortalContent({
                   transition={{ delay: 0.3 }}
                 >
                   <h2
-  style={{
-    fontFamily: "'Montserrat', sans-serif",
-    fontWeight: 600,             // SemiBold
-    fontStyle: "normal",
-    fontSize: isMobile ? "15px" : "20px",
-    lineHeight: "24px",
-    letterSpacing: "-2%",
-    textAlign: "center",
-    marginBottom: "0.5rem",
-    color: "#000000",
-  }}
->
-  Be the first to experience the future of payments.
-</h2>
-
+                    style={{
+                      fontFamily: "'Montserrat', sans-serif",
+                      fontWeight: 600,
+                      fontSize: isMobile ? "17px" : "20px",
+                      lineHeight: "22px",
+                      letterSpacing: "-2%",
+                      textAlign: "center",
+                      marginBottom: "0.5rem",
+                      color: isDarkMode ? "#F9FAFB" : "#000000",
+                    }}
+                  >
+                    Be the first to experience the future of payments.
+                  </h2>
                 </motion.div>
               )}
             </div>
 
             {/* Form Content */}
-            <div style={{ padding: isMobile ? "0 1rem 1rem" : "0 2rem 2rem", marginTop: isMobile ? "1rem" : "0.9rem" }}>
+            <div
+              style={{
+                padding: isMobile ? "0 1rem 1rem" : "0 2rem 2rem",
+                marginTop: isMobile ? "1rem" : "0.9rem",
+              }}
+            >
               <AnimatePresence mode="wait">
                 {isSuccess ? (
                   <motion.div
@@ -191,34 +242,27 @@ function PortalContent({
                         style={{
                           fontSize: isMobile ? "1rem" : "1.5rem",
                           fontWeight: 600,
-                          marginBottom: isMobile ? "1.5rem" : "0.5rem", // Adjust this line
-                          backgroundImage:
-                            "linear-gradient(to bottom, #4a4a4a, #9c9c9c)",
-                          WebkitBackgroundClip: "text",
-                          backgroundClip: "text",
-                          color: "transparent",
+                          marginBottom: isMobile ? "1.5rem" : "0.5rem",
+                          color: isDarkMode ? "#F9FAFB" : "#000000",
                         }}
                       >
                         Yay! You're on the waitlist.
                       </h2>
                       <p
-  style={{
-    fontFamily: "'Montserrat', sans-serif",
-    fontWeight: 400,            // Medium
-    fontStyle: "normal",
-    fontSize: isMobile ? "12px" : "14px",
-    lineHeight: isMobile ? "18px" : "24.992px",
-    letterSpacing: "0%",
-    textAlign: "center",
-    color: isMobile ? "#6A6A6A" : "#333333",
-    marginTop: isMobile ? "-0.5rem" : "0",
-    padding: isMobile ? "0 0.5rem" : "0",
-    color: "#6A6A6A",
-  }}
->
-  Keep an eye on your inbox. We'll email you as soon as we launch!
-</p>
-
+                        style={{
+                          fontFamily: "'Montserrat', sans-serif",
+                          fontWeight: 400,
+                          fontSize: isMobile ? "12px" : "14px",
+                          lineHeight: isMobile ? "18px" : "24.992px",
+                          textAlign: "center",
+                          marginTop: isMobile ? "-0.5rem" : "0",
+                          padding: isMobile ? "0 0.5rem" : "0",
+                          color: isDarkMode ? "#D1D5DB" : "#6A6A6A",
+                        }}
+                      >
+                        Keep an eye on your inbox. We&apos;ll email <br /> you
+                        as soon as we launch!
+                      </p>
                     </div>
 
                     <button
@@ -226,12 +270,11 @@ function PortalContent({
                       style={{
                         padding: isMobile ? "0.6rem 1.5rem" : "1rem 1.5rem",
                         borderRadius: "9999px",
-                        backgroundColor: "#111827",
-                        color: "white",
+                        backgroundColor: isDarkMode ? "#F9FAFB" : "#111827",
+                        color: isDarkMode ? "#111827" : "#ffffff",
                         fontWeight: "400",
                         cursor: "pointer",
-                        border: "none",
-                        marginTop: isMobile ? "4.5rem" : "0.2rem", 
+                        marginTop: isMobile ? "4.5rem" : "0.2rem",
                         width: isMobile ? "100%" : "auto",
                         fontSize: isMobile ? "14px" : "12px",
                       }}
@@ -258,20 +301,20 @@ function PortalContent({
                     <p
                       style={{
                         fontFamily: "'Montserrat', sans-serif",
-                        fontWeight: 550,
+                        fontWeight: 400,
                         fontSize: isMobile ? "12px" : "11.5px",
-                        lineHeight: "1.1",
-                        color: "#333333",
+                        lineHeight: "1.4",
                         textAlign: "center",
                         marginTop: isMobile ? "-0.5rem" : "0",
                         padding: isMobile ? "0 0.5rem" : "0",
-                         marginBottom: isMobile ? '1.5rem' : '-0.4rem', 
+                        marginBottom: isMobile ? "1.5rem" : "-0.4rem",
+                        color: isDarkMode ? "#D1D5DB" : "#333333",
                       }}
                     >
-                      We’re launching soon! Join the waitlist and stay ahead of others!
+                      We’re launching soon! Join the waitlist and stay ahead of
+                      others!
                     </p>
 
-                    {/* Input + Button (Mobile vs Desktop) */}
                     {isMobile ? (
                       <div
                         style={{
@@ -286,57 +329,17 @@ function PortalContent({
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="Enter your email"
-                          style={{
-                            width: "100%",
-                            height: "42px",
-                            padding: "0 1rem",
-                            border: "1px solid rgb(209, 213, 219)",
-                            borderRadius: "9999px",
-                            fontSize: "13px",
-                            outline: "none",
-                            backgroundColor: "rgb(249, 250, 251)",
-                          }}
+                          style={inputStyle}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") handleSubmit(e);
                           }}
                         />
-
                         <button
                           onClick={handleSubmit}
                           disabled={isSubmitting || !email}
-                          style={{
-                            width: "100%",
-                            height: "42px",
-                            borderRadius: "9999px",
-                            backgroundColor: "#000000",
-                            color: "white",
-                            fontWeight: "600",
-                            border: "none",
-                            cursor:
-                              isSubmitting || !email
-                                ? "not-allowed"
-                                : "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: "1rem",
-                          }}
+                          style={buttonStyle}
                         >
-                          <span
-  style={{
-    fontFamily: "'Montserrat', sans-serif",
-    fontWeight: 400,          // Medium
-    fontStyle: "normal",
-    fontSize: isMobile ? "12px" : "12px",
-    lineHeight: "100%",
-    letterSpacing: "0%",
-    textAlign: "center",
-    color: isMobile ? "#F9F9F9" : "#FFFFFF",  // optional contrast if mobile bg is light
-  }}
->
-  Join the waitlist
-</span>
-
+                          {isSubmitting ? "Submitting..." : "Join the waitlist"}
                         </button>
                       </div>
                     ) : (
@@ -345,10 +348,10 @@ function PortalContent({
                           width: "85%",
                           display: "flex",
                           alignItems: "center",
-                          border: "1px solid rgb(209, 213, 219)",
+                          border: "1px solid " + (isDarkMode ? "#4B5563" : "rgb(209,213,219)"),
                           borderRadius: "9999px",
                           overflow: "hidden",
-                          backgroundColor: "rgb(249, 250, 251)",
+                          backgroundColor: isDarkMode ? "#374151" : "rgb(249,250,251)",
                         }}
                       >
                         <input
@@ -358,28 +361,26 @@ function PortalContent({
                           placeholder="Enter your email"
                           style={{
                             flex: 1,
-                            height: isMobile ? "2.6rem" : "1.8rem",
+                            height: "1.8rem",
                             padding: "0 1rem",
                             border: "none",
                             outline: "none",
                             fontSize: "0.9rem",
                             backgroundColor: "transparent",
-                            color: "rgb(17, 24, 39)",
-                         
+                            color: isDarkMode ? "#F9FAFB" : "#111827",
                           }}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") handleSubmit(e);
                           }}
                         />
-
                         <button
                           onClick={handleSubmit}
                           disabled={isSubmitting || !email}
                           style={{
                             height: "2.8rem",
                             padding: "0 1.8rem",
-                            backgroundColor: "#000000",
-                            color: "white",
+                            backgroundColor: isDarkMode ? "#F9FAFB" : "#000000",
+                            color: isDarkMode ? "#111827" : "#ffffff",
                             border: "none",
                             fontSize: "0.8rem",
                             fontWeight: "250",
@@ -405,7 +406,8 @@ function PortalContent({
                               style={{
                                 width: "1.25rem",
                                 height: "1.25rem",
-                                border: "2px solid white",
+                                border: "2px solid",
+                                borderColor: isDarkMode ? "#111827" : "white",
                                 borderTop: "2px solid transparent",
                                 borderRadius: "50%",
                               }}
@@ -487,10 +489,7 @@ export default function WaitlistPopup({
     setError("");
 
     try {
-      const { campaignId: newCampaignId } = await addToWaitlist(
-        email,
-        campaignId
-      );
+      const { campaignId: newCampaignId } = await addToWaitlist(email, campaignId);
       const link = `${window.location.origin}/?campaignId=${newCampaignId}`;
       setReferralLink(link);
 

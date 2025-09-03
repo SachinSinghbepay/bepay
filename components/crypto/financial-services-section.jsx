@@ -13,8 +13,8 @@ const servicesData = [
     title: "Bitcoin backed loans",
     points: [
       "Get instant loans using your Bitcoin as collateral.",
-      "<strong>No credit check required.</strong>",
-      "<strong>Flexible repayment terms.</strong>",
+      "No credit check required.",
+      "Flexible repayment terms.",
     ],
     image: "/images/crypto/co1.png",
   },
@@ -22,8 +22,8 @@ const servicesData = [
     title: "Savings Products",
     points: [
       "High-yield savings on BTC, ETH, USDT, and USDC.",
-      "<strong>No minimum balance.</strong>",
-      "<strong>Instant withdrawals.</strong>",
+      "No minimum balance.",
+      "Instant withdrawals.",
     ],
     image: "/images/crypto/co2.png",
   },
@@ -31,8 +31,8 @@ const servicesData = [
     title: "Insurance Products",
     points: [
       "Protect your assets, income, and life with crypto-powered insurance solutions.",
-      "<strong>Health, Travel & Life Coverage.</strong>",
-      "<strong>Flexible Plans & Instant Claims.</strong>",
+      "Health, Travel & Life Coverage.",
+      "Flexible Plans & Instant Claims.",
     ],
     image: "/images/crypto/co3.png",
   },
@@ -40,8 +40,8 @@ const servicesData = [
     title: "Cross-Border Payments",
     points: [
       "Fast, cheap international money transfers.",
-      "<strong>Instant settlements globally.</strong>",
-      "<strong>Lowest fee guarantee.</strong>",
+      "Instant settlements globally.",
+      "Lowest fee guarantee.",
     ],
     image: "/images/crypto/co5.png",
   },
@@ -49,8 +49,8 @@ const servicesData = [
     title: "Remittance Services",
     points: [
       "Send money home to family and friends globally.",
-      "<strong>Competitive exchange rates.</strong>",
-      "<strong>Real-time tracking & Multiple payout options.</strong>",
+      "Competitive exchange rates.",
+      "Real-time tracking & Multiple payout options.",
     ],
     image: "/images/crypto/co6.png",
   },
@@ -58,8 +58,8 @@ const servicesData = [
     title: "DeFi Marketplace",
     points: [
       "Access DApps and DeFi protocols directly from your wallet.",
-      "<strong>One-Click Access to Top Protocols.</strong>",
-      "<strong>Secure & Gas-Optimized Transactions.</strong>",
+      "One-Click Access to Top Protocols.",
+      "Secure & Gas-Optimized Transactions.",
     ],
     image: "/images/crypto/co4.png",
   },
@@ -105,20 +105,14 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
 
   const y = useTransform(progress, inputRange, outputRange);
 
-  // Split into normal + bold parts
-  const normalPart = service.points
-    .slice(0, service.points.length - 2)
-    .join(" ");
-  const boldPart = service.points.slice(-2).join(" ");
-
   return (
     <motion.div
       style={{ y }}
       className="absolute inset-0 flex flex-col justify-center p-8 lg:p-12"
     >
-      {/* Container with more compact sizing */}
+      {/* Container */}
       <div className="w-full max-w-[360px] mx-auto">
-        {/* Image - larger proportion, less margin */}
+        {/* Image */}
         <div className="relative w-full aspect-[4/5] overflow-hidden mb-4 lg:mb-5 shadow-lg">
           <Image
             src={service.image || "/placeholder.svg"}
@@ -129,17 +123,24 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
           />
         </div>
 
-        {/* Text (More compact spacing) */}
+        {/* Text */}
         <div className="text-left px-1">
           <h3 className="text-lg lg:text-xl font-medium text-gray-800 mb-2">
             {service.title}
           </h3>
-          <p 
-            className="text-xs lg:text-sm text-gray-600 leading-snug"
-            dangerouslySetInnerHTML={{ __html: service.points.join(" ") }}
-          />
+          <ul className="space-y-2">
+            {service.points.map((point, idx) => (
+              <li
+                key={idx}
+                className="flex items-start gap-2 text-xs lg:text-sm text-gray-600 leading-snug"
+              >
+                {/* Grey square bullet */}
+                <span className="w-[15px] h-[15px] rounded-[4px] bg-[#6A6A6A] mt-[2px] flex-shrink-0"></span>
+                <span>{point}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-
       </div>
     </motion.div>
   );
@@ -181,7 +182,7 @@ const MobileView = () => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <motion.h2 className="text-3xl sm:text-4xl font-light leading-tight">
+          <motion.h2 className="text-3xl sm:text-4xl font-light leading-[1.7rem]">
             <span className="text-gray-400">COMPLETE</span>
             <br />
             FINANCIAL SERVICES
@@ -191,12 +192,12 @@ const MobileView = () => {
               Banking, lending, insurance, and more -
             </span>
             <span className="block">all in one comprehensive platform</span>
-
           </motion.p>
 
-          <motion.button className="flex items-center gap-2 bg-black text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full mt-4 sm:mt-6 hover:bg-gray-800 transition-colors text-xs sm:text-sm">
+          {/* Mobile Button */}
+          <motion.button className="flex items-center justify-center gap-2 bg-black text-white w-[221px] h-[56px] rounded-full mt-6 hover:bg-gray-800 transition-colors text-sm font-normal">
             Explore all features
-            <ArrowUpRight size={14} className="sm:w-4 sm:h-4" />
+            <ArrowUpRight size={16} />
           </motion.button>
         </motion.div>
 
@@ -207,10 +208,9 @@ const MobileView = () => {
             style={{ x }}
             className="flex gap-4 sm:gap-6 px-4 sm:px-6 pb-8"
           >
-
             {servicesData.map((service, i) => (
               <div key={i} className="w-[75vw] sm:w-[65vw] flex-shrink-0">
-                {/* Container for aligned content */}
+                {/* Container */}
                 <div className="px-6">
                   {/* Image */}
                   <div className="relative w-full aspect-[3/4] overflow-hidden mb-4 sm:mb-6 shadow-md">
@@ -223,20 +223,29 @@ const MobileView = () => {
                     />
                   </div>
 
-                  {/* Text - aligned to start from same position as image */}
+                  {/* Text */}
                   <div className="text-left">
-                    <h3 className="text-lg sm:text-xl font-light text-gray-500 mb-2 sm:mb-3">
-                      {service.title}
-                    </h3>
-                    <p 
-                      className="text-xs sm:text-sm text-gray-600 leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: service.points.join(" ") }}
-                    />
+                    <h3 className="font-[Montserrat] font-semibold sm:font-normal text-lg sm:text-xl lg:text-[60px] leading-[1.3] lg:leading-[52px] tracking-normal lg:tracking-[-0.06em] text-[#6A6A6A] mb-3">
+  {service.title}
+</h3>
+
+                    <ul className="space-y-2">
+                      {service.points.map((point, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-start gap-2 text-xs sm:text-sm text-gray-600 leading-relaxed"
+                        >
+                          {/* Grey square bullet */}
+                          <span className="w-[10px] h-[10px] sm:w-[15px] sm:h-[15px] rounded-[3px] sm:rounded-[4px] bg-[#6A6A6A] mt-[3px] sm:mt-[2px] flex-shrink-0"></span>
+
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </div>
             ))}
-
           </motion.div>
         </div>
       </div>
@@ -275,18 +284,17 @@ export const FinancialServicesSection = () => {
                   Banking, lending, insurance, and more -
                 </span>
                 <span className="block">all in one comprehensive platform</span>
-
               </motion.p>
 
               <WaitlistTriggerButton>
+                {/* Desktop Button */}
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="bg-black cursor-pointer whitespace-nowrap text-white
-                     w-[180px] h-[56px] rounded-full flex items-center
-                     justify-center gap-2 text-xs font-normal
-                     hover:bg-gray-800 transition-colors mt-7"
-
+                           w-[221px] h-[56px] rounded-full flex items-center
+                           justify-center gap-2 text-xs font-normal
+                           hover:bg-gray-800 transition-colors mt-7"
                 >
                   Explore all features
                   <ArrowUpRight size={18} className="w-5 h-5" />
