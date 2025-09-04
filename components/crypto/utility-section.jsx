@@ -104,19 +104,18 @@ const AnimatedText = () => {
   );
 };
 
-// Desktop Card Component (UNCHANGED)
+// Desktop Card Component
 const DesktopCardComponent = ({ cardData, index }) => {
   const isElevatedCard = index === 0 || index === 1 ||index === 2 ||index === 3 || index === 4 ||index === 5;
   const bottomPosition = isElevatedCard ? 'bottom-20' : 'bottom-8';
 
   return (
     <div className="w-[300px] h-[400px] lg:w-[380px] drop-shadow-2xl lg:h-[500px] bg-white shadow-utility-card rounded-[40px] p-8 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-      <img
+      <Image
         src={cardData.icon || "/placeholder.svg"}
         alt={cardData.title}
-        width="200"
-        height="200"
-        loading="lazy"
+        width={200}
+        height={200}
         className="opacity-100 absolute top-4 left-4 w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] z-0"
       />
       <div className={`absolute ${bottomPosition} left-8 right-8 z-10`}>
@@ -131,12 +130,14 @@ const DesktopCardComponent = ({ cardData, index }) => {
   );
 };
 
-// Mobile Card Components - Each with fixed positioning (UPDATED)
+// Mobile Card Components
 const MobileBillPaymentsCard = ({ cardData }) => (
   <div className="w-[280px] h-[360px] bg-white shadow-mobile-card-shadow rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
+    <Image
       src={cardData.icon || "/placeholder.svg"}
       alt={cardData.title}
+      width={120}
+      height={120}
       className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
     />
     <div className="absolute bottom-[30px] left-6 right-6 z-10">
@@ -152,9 +153,11 @@ const MobileBillPaymentsCard = ({ cardData }) => (
 
 const MobileTravelBookingsCard = ({ cardData }) => (
   <div className="w-[280px] h-[360px] bg-white shadow-mobile-card-shadow rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
+    <Image
       src={cardData.icon || "/placeholder.svg"}
       alt={cardData.title}
+      width={120}
+      height={120}
       className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
     />
     <div className="absolute bottom-[50px] left-6 right-6 z-10">
@@ -170,9 +173,11 @@ const MobileTravelBookingsCard = ({ cardData }) => (
 
 const MobileTrainTicketsCard = ({ cardData }) => (
   <div className="w-[280px] h-[360px] bg-white shadow-mobile-card-shadow rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
+    <Image
       src={cardData.icon || "/placeholder.svg"}
       alt={cardData.title}
+      width={120}
+      height={120}
       className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
     />
     <div className="absolute bottom-[34px] left-6 right-6 z-10">
@@ -188,9 +193,11 @@ const MobileTrainTicketsCard = ({ cardData }) => (
 
 const MobileMovieTicketsCard = ({ cardData }) => (
   <div className="w-[280px] h-[360px] bg-white shadow-mobile-card-shadow rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
+    <Image
       src={cardData.icon || "/placeholder.svg"}
       alt={cardData.title}
+      width={120}
+      height={120}
       className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
     />
     <div className="absolute bottom-[35px] left-6 right-6 z-10">
@@ -206,9 +213,11 @@ const MobileMovieTicketsCard = ({ cardData }) => (
 
 const MobileEcommerceCard = ({ cardData }) => (
   <div className="w-[280px] h-[360px] bg-white shadow-mobile-card-shadow rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
+    <Image
       src={cardData.icon || "/placeholder.svg"}
       alt={cardData.title}
+      width={120}
+      height={120}
       className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
     />
     <div className=" absolute bottom-[54px] left-6 right-6 z-10">
@@ -224,9 +233,11 @@ const MobileEcommerceCard = ({ cardData }) => (
 
 const MobileGiftCardsCard = ({ cardData }) => (
   <div className="w-[280px] h-[360px] bg-white shadow-mobile-card-shadow rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
+    <Image
       src={cardData.icon || "/placeholder.svg"}
       alt={cardData.title}
+      width={120}
+      height={120}
       className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
     />
     <div className="absolute bottom-[24px] left-6 right-6 z-10">
@@ -240,7 +251,7 @@ const MobileGiftCardsCard = ({ cardData }) => (
   </div>
 );
 
-// Mobile card renderer (UNCHANGED logic, but uses updated sub-components)
+// Mobile card renderer
 const MobileCard = ({ cardData, index }) => {
   const mobileCardComponents = [
     MobileBillPaymentsCard,
@@ -255,8 +266,8 @@ const MobileCard = ({ cardData, index }) => {
   return <CardComponent cardData={cardData} />;
 };
 
-// DESKTOP ANIMATION: Exact original animation (unchanged)
-const DesktopCard = ({ cardData, index, progress, totalCards, isLastCard }) => {
+// DESKTOP ANIMATION
+const DesktopCard = ({ cardData, index, progress, totalCards }) => {
   const segment = 1 / totalCards;
   const overlap = segment * 0.7;
   const start = Math.max(0, index * segment - overlap * 0.5);
@@ -287,7 +298,7 @@ const DesktopCard = ({ cardData, index, progress, totalCards, isLastCard }) => {
   );
 };
 
-// MOBILE VIEW: Horizontal scrolling (UNCHANGED, but renders updated MobileCard)
+// MOBILE VIEW: Horizontal scrolling
 const MobileView = () => {
   const mobileContainerRef = useRef(null);
   const cardWrapperRef = useRef(null);
@@ -305,7 +316,6 @@ const MobileView = () => {
       const scrollWidth = cardWrapper.scrollWidth;
       const containerWidth = cardWrapper.offsetWidth;
       const maxScroll = scrollWidth - containerWidth;
-      // Same smooth easing as financial services
       const easedProgress = latest * latest * (3 - 2 * latest);
       x.set(-easedProgress * maxScroll);
     });
@@ -363,7 +373,7 @@ const MobileView = () => {
       hover:bg-gray-800 transition-colors"
   >
     <Image
-      src="/utility.svg"  // make sure this file is inside public/
+      src="/utility.svg"
       alt="Utility Icon"
       width={20}
       height={20}
@@ -409,7 +419,6 @@ export const UtilitySection = () => {
                 index={index}
                 progress={scrollYProgress}
                 totalCards={totalCards}
-                isLastCard={index === totalCards - 1}
               />
             ))}
           </div>

@@ -1392,7 +1392,7 @@ const MobileView = () => {
                       alt="Wallet Mockup"
                       width={120}
                       height={200}
-                      className="object-contain p-0 mt-12 ml-3"
+                      className="object-contain p-0 mt-12 ml-0"
                     />
                   </div>
                   <div ref={mobileImg1_2Ref}>
@@ -1948,7 +1948,7 @@ const MobileView = () => {
                     alt="AI Mockup 2"
                     width={150}
                     height={120}
-                    className="rounded-xl object-contain mt-0 ml-[-10px]"
+                    className="rounded-xl object-contain mt-1.5 ml-[-4px]"
                   />
                 </div>
               </div>

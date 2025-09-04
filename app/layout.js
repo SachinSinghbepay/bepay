@@ -1,10 +1,11 @@
+import { Suspense } from 'react';
 import { Open_Sans, Montserrat } from 'next/font/google';
 import "./globals.css";
 import SmoothScroll from "@/components/smoothScroll";
 import Header from "@/components/header";
 import { AuthProvider } from "@/lib/auth";
 import ConditionalFooter from "@/components/ConditionalFooter";
-import CookieConsentProvider from "@/components/cookie-consent-provider"; 
+import CookieConsentProvider from "@/components/cookie-consent-provider";
 
 // Load Open Sans as the main font
 const openSans = Open_Sans({
@@ -21,6 +22,9 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
+  // FIX: Added metadataBase for resolving full URLs
+  metadataBase: new URL("https://www.bepay.money"),
+
   title: "bepay - Stablecoin Payment, Wallet, Merchant Payment",
   description: "A simple and secure way to pay your bills",
   openGraph: {
@@ -50,11 +54,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${montserrat.variable} antialiased`}>
+      {/* FIX: Added the openSans font variable to the body */}
+      <body className={`${openSans.variable} ${montserrat.variable} antialiased`}>
         <SmoothScroll>
           <Header />
-          {/* Render the new Client Component here */}
-          <CookieConsentProvider />
+
+          {/* FIX: Wrapped the client component in Suspense to prevent build errors */}
+          <Suspense fallback={null}>
+            <CookieConsentProvider />
+          </Suspense>
+
           <AuthProvider>{children}</AuthProvider>
           <ConditionalFooter />
         </SmoothScroll>

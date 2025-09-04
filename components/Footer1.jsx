@@ -148,7 +148,7 @@ const NewsletterModal = ({ isOpen, onClose, userEmail }) => {
     /* MODIFIED END */
   "
 >
-  We'll send updates directly to your inbox.
+  We&apos;ll send updates directly to your inbox.
 </motion.p>
 
 

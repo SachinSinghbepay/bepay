@@ -1,3 +1,4 @@
+'use client';
 import BepayFeatures from "@/components/business/bepay-features";
 import BepayComparison from "@/components/business/BepayComparison";
 import BusinessSection from "@/components/business/business-section";
@@ -16,6 +17,8 @@ import TestimonialsSection from "@/components/business/testimonials-section";
 import Header from "@/components/header";
 import TrustedBySection from "@/components/trusted-by-section";
 import React from "react";
+import { Suspense } from 'react'; // 1. Import Suspense
+
 
 const page = () => {
   return (
@@ -28,7 +31,9 @@ const page = () => {
       <BusinessSmartlySection />
       <BepayFeatures />
       <BepayComparison />
-      <GetStartedSection />
+      <Suspense fallback={<div>Loading...</div>}>
+        <GetStartedSection />
+      </Suspense>
       <ComplianceSection />
       {/* <TestimonialsSection /> */}
       <TrustedBySection />

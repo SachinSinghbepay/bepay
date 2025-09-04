@@ -1,3 +1,5 @@
+"use client";
+import { Suspense } from 'react'; // 1. Import Suspense
 import CTASection from "@/components/aboutus/cta-section";
 import ContactHeroSection from "@/components/contactus/contact-hero-section";
 import ContactForm from "@/components/contactus/ContactUsForm";
@@ -7,7 +9,12 @@ const page = () => {
   return (
     <>
       <ContactHeroSection />
-      <ContactForm />
+
+      {/* 2. Wrap the client component in Suspense */}
+      <Suspense fallback={<p>Loading form...</p>}>
+        <ContactForm />
+      </Suspense>
+      
       <CTASection />
     </>
   );

@@ -246,7 +246,7 @@ function PortalContent({
                           color: isDarkMode ? "#F9FAFB" : "#000000",
                         }}
                       >
-                        Yay! You're on the waitlist.
+                        Yay! You&apos;re on the waitlist.
                       </h2>
                       <p
                         style={{

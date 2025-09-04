@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  AnimatePresence,
-} from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { SmartphoneIcon as DeviceMobile } from "lucide-react";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
@@ -46,6 +41,31 @@ const iconsData = [
   },
 ];
 
+// A new component to handle the animation logic for each individual icon
+const AnimatedCryptoIcon = ({ icon, scrollYProgress }) => {
+  // Hooks are now correctly called at the top level of this component
+  const x = useTransform(scrollYProgress, [0, 0.6], [icon.initialX, icon.finalX]);
+  const y = useTransform(scrollYProgress, [0, 0.6], [icon.initialY, icon.finalY]);
+  const scale = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
+
+  return (
+    <motion.div
+      style={{ x, y, scale, opacity }}
+      className="absolute flex top-1/2 left-1/2 translate-x-1/2"
+    >
+      <div className="w-12 h-12 overflow-hidden">
+        <Image
+          src={icon.src || "/placeholder.svg"}
+          alt={icon.alt}
+          fill
+          className="object-cover"
+        />
+      </div>
+    </motion.div>
+  );
+};
+
 export default function CryptoHeroSection() {
   const [currentWord, setCurrentWord] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -58,20 +78,6 @@ export default function CryptoHeroSection() {
   });
 
   const mockupY = useTransform(scrollYProgress, [0, 1], [0, -700]);
-
-  // Desktop scroll transforms
-  const xTransforms = iconsData.map((icon) =>
-    useTransform(scrollYProgress, [0, 0.6], [icon.initialX, icon.finalX])
-  );
-  const yTransforms = iconsData.map((icon) =>
-    useTransform(scrollYProgress, [0, 0.6], [icon.initialY, icon.finalY])
-  );
-  const scaleTransforms = iconsData.map(() =>
-    useTransform(scrollYProgress, [0, 0.6], [1.5, 1])
-  );
-  const opacityTransforms = iconsData.map(() =>
-    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1])
-  );
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -89,7 +95,7 @@ export default function CryptoHeroSection() {
       setCurrentWord((prev) => (prev + 1) % words.length);
     }, 2000);
     return () => clearInterval(interval);
-  }, []);
+  }, [words.length]); // Added dependency to satisfy linter best practices
 
   // Button click handler
   const handleButtonClick = () => {
@@ -98,18 +104,16 @@ export default function CryptoHeroSection() {
   };
 
   return (
-    // Make the container taller to allow for scroll
     <div
       ref={containerRef}
       className="h-[160vh] lg:h-[300vh] bg-[#F9F9F9] relative"
     >
-      {/* Sticky background content */}
       <div className="sticky top-0 h-screen flex-col items-center justify-center px-4 py-8 overflow-hidden">
         {/* Background text */}
         <div className=" flex items-center justify-center z-10">
           <div className="text-center">
             {isMobile ? (
-              // Mobile Heading with decreased distance
+              // Mobile Heading
               <div className="block lg:hidden leading-none">
                 <div
                   className="text-[#C0C0C0] font-thin text-4xl sm:text-[50px] my-[-0.5rem]"
@@ -139,7 +143,7 @@ export default function CryptoHeroSection() {
                 </div>
               </div>
             ) : (
-              // Desktop Heading (unchanged)
+              // Desktop Heading
               <div className="hidden lg:block">
                 <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[64px]  font-[600] leading-[100%]">
                   SPEND
@@ -165,7 +169,6 @@ export default function CryptoHeroSection() {
 
         {/* Phone mockup with scroll animations */}
         <div className="relative z-20 max-w-7xl mx-auto w-full flex items-center justify-center mt-15 sm:mt-24 lg:-mt-10">
-
           <motion.div style={{ y: mockupY }} className="flex-shrink-0">
             <div className="relative">
               <motion.div
@@ -202,26 +205,7 @@ export default function CryptoHeroSection() {
                       for lifestyle, finance and freedom!
                     </p>
                   </div>
-
-                  {/* Animated words */}
-                  {/* <div className="mb-4 lg:mb-6 h-8 lg:h-10 flex items-center justify-center">
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={currentWord}
-                        initial={{ y: 30, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: -30, opacity: 0 }}
-                        transition={{
-                          duration: 0.5,
-                          ease: "easeInOut",
-                        }}
-                        className="text-md 3xl:text-xl font-[400] text-gray-800"
-                      >
-                        {words[currentWord]}
-                      </motion.div>
-                    </AnimatePresence>
-                  </div> */}
-
+                  
                   {/* Secondary text */}
                   <div className="mb-4 lg:mb-6">
                     <p className="text-[11px] sm:text-sm 3xl:text-sm text-gray-800 leading-relaxed max-w-[260px] sm:max-w-[320px] mx-auto">
@@ -239,70 +223,36 @@ export default function CryptoHeroSection() {
 
                   {/* Crypto icons */}
                   <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
-                    {iconsData.map((icon, index) => {
-                      if (isMobile) {
-                        // Mobile animation
-                        return (
-                          <motion.div
-                            key={index}
-                            initial={{
-                              opacity: 0,
-                              y: 100,
-                              x: index * -25,
-                            }}
-                            animate={{
-                              opacity: 1,
-                              y: -80,
-                              x: icon.finalX, // Use finalX for mobile for consistency
-                            }}
-                            transition={{
-                              duration: 0.6,
-                              delay: index * 0.2,
-                              ease: "easeOut",
-                            }}
-                            className="absolute top-[56%] lg:top-[67%] left-1/2 translate-x-[30%]
-"
-                          >
-                            <div
-                              className="w-12 h-12 rounded-full overflow-hidden"
-                              style={{
-                                boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.15)", // shadow toward right-bottom
-                              }}
-                            >
-                              <Image
-                                src={icon.src || "/placeholder.svg"}
-                                alt={icon.alt}
-                                fill
-                                className="object-cover rounded-full"
-                              />
-                            </div>
-                          </motion.div>
-                        );
-                      }
-
-                      // Desktop scroll animation
-                      const x = xTransforms[index];
-                      const y = yTransforms[index];
-                      const scale = scaleTransforms[index];
-                      const opacity = opacityTransforms[index];
-
-                      return (
+                    {iconsData.map((icon, index) =>
+                      isMobile ? (
                         <motion.div
                           key={index}
-                          style={{ x, y, scale, opacity }}
-                          className="absolute flex top-1/2 left-1/2 translate-x-1/2"
+                          initial={{ opacity: 0, y: 100, x: index * -25 }}
+                          animate={{ opacity: 1, y: -80, x: icon.finalX }}
+                          transition={{ duration: 0.6, delay: index * 0.2, ease: "easeOut" }}
+                          className="absolute top-[56%] lg:top-[67%] left-1/2 translate-x-[30%]"
                         >
-                          <div className="w-12 h-12 overflow-hidden">
+                          <div
+                            className="w-12 h-12 rounded-full overflow-hidden"
+                            style={{ boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.15)" }}
+                          >
                             <Image
                               src={icon.src || "/placeholder.svg"}
                               alt={icon.alt}
                               fill
-                              className="object-cover"
+                              className="object-cover rounded-full"
                             />
                           </div>
                         </motion.div>
-                      );
-                    })}
+                      ) : (
+                        // Use the new child component for desktop animations
+                        <AnimatedCryptoIcon
+                          key={index}
+                          icon={icon}
+                          scrollYProgress={scrollYProgress}
+                        />
+                      )
+                    )}
                   </div>
 
                   {/* Arrow */}
