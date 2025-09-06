@@ -182,7 +182,7 @@ const MobileView = () => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <motion.h2 className="text-3xl sm:text-4xl font-light leading-[1.7rem]">
+          <motion.h2 className="text-3xl sm:text-4xl fontWeight:480 leading-[1.7rem]">
             <span className="text-gray-400">COMPLETE</span>
             <br />
             FINANCIAL SERVICES
@@ -195,10 +195,10 @@ const MobileView = () => {
           </motion.p>
 
           {/* Mobile Button */}
-          <motion.button className="flex items-center justify-center gap-2 bg-black text-white w-[221px] h-[56px] rounded-full mt-6 hover:bg-gray-800 transition-colors text-sm font-normal">
-            Explore all features
-            <ArrowUpRight size={16} />
-          </motion.button>
+          <motion.button className="flex items-center justify-center gap-2 bg-black text-white px-6 h-[56px] rounded-full mt-6 hover:bg-gray-800 transition-colors text-xs font-medium">
+  <span>Explore all features</span>
+  <ArrowUpRight size={20} />
+</motion.button>
         </motion.div>
 
         {/* Services */}
@@ -226,8 +226,8 @@ const MobileView = () => {
                   {/* Text */}
                   <div className="text-left">
                     <h3 className="font-[Montserrat] font-semibold sm:font-normal text-lg sm:text-xl lg:text-[60px] leading-[1.3] lg:leading-[52px] tracking-normal lg:tracking-[-0.06em] text-[#6A6A6A] mb-3">
-  {service.title}
-</h3>
+                      {service.title}
+                    </h3>
 
                     <ul className="space-y-2">
                       {service.points.map((point, idx) => (
@@ -235,8 +235,8 @@ const MobileView = () => {
                           key={idx}
                           className="flex items-start gap-2 text-xs sm:text-sm text-gray-600 leading-relaxed"
                         >
-                          {/* Grey square bullet */}
-                          <span className="w-[10px] h-[10px] sm:w-[15px] sm:h-[15px] rounded-[3px] sm:rounded-[4px] bg-[#6A6A6A] mt-[3px] sm:mt-[2px] flex-shrink-0"></span>
+                          {/* Grey square bullet - MODIFIED */}
+                          <span className="w-[10px] h-[10px] sm:w-[15px] sm:h-[15px] rounded-[3px] sm:rounded-[4px] bg-[#6A6A6A] mt-1 flex-shrink-0"></span>
 
                           <span>{point}</span>
                         </li>
@@ -292,9 +292,9 @@ export const FinancialServicesSection = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="bg-black cursor-pointer whitespace-nowrap text-white
-                           w-[221px] h-[56px] rounded-full flex items-center
-                           justify-center gap-2 text-xs font-normal
-                           hover:bg-gray-800 transition-colors mt-7"
+                                  w-[221px] h-[56px] rounded-full flex items-center
+                                  justify-center gap-2 text-xs font-normal
+                                  hover:bg-gray-800 transition-colors mt-7"
                 >
                   Explore all features
                   <ArrowUpRight size={18} className="w-5 h-5" />

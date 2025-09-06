@@ -1,3 +1,4 @@
+'use client';
 import CookiePolicyFooter from "@/components/privacy-policy/cookie-policy-footer";
 import CookiesPolicyContent from "@/components/privacy-policy/CookiePolicy";
 import HeaderContent from "@/components/privacy-policy/HeaderContent";

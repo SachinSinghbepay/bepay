@@ -20,7 +20,7 @@ const page = () => {
         <WaitlistPopup />
         <CryptoHeroSection />
         <CryptoWalletSection />
-        <OneWallet />
+        <OneWallet /> 
         <ScrollTextAnimation />
         <ScrollTextMobile />
         <DefiYieldSection />

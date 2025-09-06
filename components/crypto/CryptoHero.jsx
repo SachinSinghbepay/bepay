@@ -109,8 +109,8 @@ export default function CryptoHeroSection() {
         <div className=" flex items-center justify-center z-10">
           <div className="text-center">
             {isMobile ? (
-              // Mobile Heading with decreased distance
-              <div className="block lg:hidden leading-none">
+              // Mobile Heading (Unchanged)
+              <div className="leading-none lg:hidden">
                 <div
                   className="text-[#C0C0C0] font-thin text-4xl sm:text-[50px] my-[-0.5rem]"
                   style={{ letterSpacing: "-0.14em" }}
@@ -139,32 +139,48 @@ export default function CryptoHeroSection() {
                 </div>
               </div>
             ) : (
-              // Desktop Heading (unchanged)
+              // Desktop Heading (Adjusted)
               <div className="hidden lg:block">
-                <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[64px]  font-[600] leading-[100%]">
-                  SPEND
-                </div>
-                <div className="text-[#6F6F6F] text-5xl lg:-mt-6 9 lg:tracking-tighter sm:text-8xl lg:text-[120px] font-semibold leading-none">
-                  CRYPTO
-                </div>
-                <div className="text-[#B7B7B7] text-6xl sm:text-8xl lg:-mt-11 2xl:-mt-11 lg:text-[200px] font-[100] leading-none">
-                  <span style={{ letterSpacing: "-0.11em" }}>L</span>
-                  <span style={{ letterSpacing: "-0.24em" }}>I</span>
-                  <span style={{ letterSpacing: "-0.12em" }}>KE</span>
-                  <span className="text-[#404040] font-semibold">
-                    <span style={{ letterSpacing: "-0.10em" }}>C</span>
-                    <span style={{ letterSpacing: "-0.10em" }}>A</span>
-                    <span style={{ letterSpacing: "-0.10em" }}>S</span>
-                    <span style={{ letterSpacing: "-0.11em" }}>H</span>
+                <div className="leading-none">
+                  <span
+                    className="text-[#D1D1D1] font-thin text-[166px]"
+                    style={{ letterSpacing: "-0.17em" }}
+                  >
+                    USE
                   </span>
+                  <span
+                    className="text-[#4F4F4F] font-[900] text-4xl sm:text-[166px] ml-2 sm:ml-4"
+                    style={{ letterSpacing: "-0.06em" }}
+                  >
+                    CRYP
+                    <span className="inline-block ml-0.5">T</span>O
+                  </span>
+                </div>
+                {/* --- MODIFIED LINE START (Tighter Spacing) --- */}
+                <div className="leading-none -mt-16">
+                  {/* --- MODIFIED LINE END --- */}
+                  <div
+                    className="text-[#B7B7B7] font-thin text-4xl sm:text-[166px] my-[-0.8rem]"
+                    style={{ letterSpacing: "-0.11em" }}
+                  >
+                    LI
+                    <span className="inline-block -ml-5">K</span>E
+                    <span
+                      className="text-[#C0C0C0] font-[900] text-[166px] sm:text-[166px] ml-2 sm:ml-4"
+                      style={{ letterSpacing: "-0.03em" }}
+                    >
+                      CASH
+                    </span>
+                  </div>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Phone mockup with scroll animations */}
-        <div className="relative z-20 max-w-7xl mx-auto w-full flex items-center justify-center mt-15 sm:mt-24 lg:-mt-10">
+        {/* --- MODIFIED LINE START (Moved Up) --- */}
+        <div className="relative z-20 max-w-7xl mx-auto w-full flex items-center justify-center mt-15 sm:mt-24 lg:mt-2">
+          {/* --- MODIFIED LINE END --- */}
 
           <motion.div style={{ y: mockupY }} className="flex-shrink-0">
             <div className="relative">
@@ -202,25 +218,6 @@ export default function CryptoHeroSection() {
                       for lifestyle, finance and freedom!
                     </p>
                   </div>
-
-                  {/* Animated words */}
-                  {/* <div className="mb-4 lg:mb-6 h-8 lg:h-10 flex items-center justify-center">
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={currentWord}
-                        initial={{ y: 30, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: -30, opacity: 0 }}
-                        transition={{
-                          duration: 0.5,
-                          ease: "easeInOut",
-                        }}
-                        className="text-md 3xl:text-xl font-[400] text-gray-800"
-                      >
-                        {words[currentWord]}
-                      </motion.div>
-                    </AnimatePresence>
-                  </div> */}
 
                   {/* Secondary text */}
                   <div className="mb-4 lg:mb-6">
@@ -260,8 +257,7 @@ export default function CryptoHeroSection() {
                               delay: index * 0.2,
                               ease: "easeOut",
                             }}
-                            className="absolute top-[56%] lg:top-[67%] left-1/2 translate-x-[30%]
-"
+                            className="absolute top-[56%] lg:top-[67%] left-1/2 translate-x-[30%]"
                           >
                             <div
                               className="w-12 h-12 rounded-full overflow-hidden"
@@ -305,8 +301,10 @@ export default function CryptoHeroSection() {
                     })}
                   </div>
 
+                  {/* --- MODIFICATION START --- */}
                   {/* Arrow */}
-                  <div className="relative z-30 flex justify-center mt-20">
+                  <div className="relative z-30 flex justify-center mt-20 lg:mt-48">
+                  {/* --- MODIFICATION END --- */}
                     <Image
                       src={"/images/crypto/line.png"}
                       height={100}
@@ -315,9 +313,11 @@ export default function CryptoHeroSection() {
                       className="object-contain h-16 w-auto"
                     />
                   </div>
-
+                  
+                  {/* --- MODIFICATION START --- */}
                   {/* Button */}
-                  <div className="relative z-50 pointer-events-auto mt-10">
+                  <div className="relative z-50 pointer-events-auto mt-10 lg:mt-12">
+                  {/* --- MODIFICATION END --- */}
                     <WaitlistTriggerButton>
                       <motion.button
                         whileHover={{ scale: 1.05 }}

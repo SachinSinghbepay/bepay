@@ -4,7 +4,7 @@ import SmoothScroll from "@/components/smoothScroll";
 import Header from "@/components/header";
 import { AuthProvider } from "@/lib/auth";
 import ConditionalFooter from "@/components/ConditionalFooter";
-import CookieConsentProvider from "@/components/cookie-consent-provider"; 
+import CookieConsentProvider from "@/components/cookie-consent-provider";
 
 // Load Open Sans as the main font
 const openSans = Open_Sans({
@@ -21,6 +21,9 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
+  // FIX 1: Added metadataBase for resolving full URLs
+  metadataBase: new URL("https://www.bepay.money"),
+
   title: "bepay - Stablecoin Payment, Wallet, Merchant Payment",
   description: "A simple and secure way to pay your bills",
   openGraph: {
@@ -50,10 +53,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${montserrat.variable} antialiased`}>
+      {/* FIX 2: Added the openSans font variable to the body */}
+      <body className={`${openSans.variable} ${montserrat.variable} antialiased`}>
         <SmoothScroll>
           <Header />
-          {/* Render the new Client Component here */}
           <CookieConsentProvider />
           <AuthProvider>{children}</AuthProvider>
           <ConditionalFooter />

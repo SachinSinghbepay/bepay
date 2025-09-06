@@ -64,7 +64,7 @@ const AnimatedText = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true, amount: 0.3 }}
-        className="text-4xl font-[400] tracking-tight text-left px-4"
+        className="text-6xl font-[400] tracking-tight text-left px-4"
       >
         <div>
           <span className="text-[#333333] tracking-[-0.05em]">Crypto </span>
@@ -104,22 +104,18 @@ const AnimatedText = () => {
   );
 };
 
-// Desktop Card Component (UNCHANGED)
-const DesktopCardComponent = ({ cardData, index }) => {
-  const isElevatedCard = index === 0 || index === 1 ||index === 2 ||index === 3 || index === 4 ||index === 5;
-  const bottomPosition = isElevatedCard ? 'bottom-20' : 'bottom-8';
-
+// Desktop Card Component
+const DesktopCardComponent = ({ cardData }) => {
   return (
     <div className="w-[300px] h-[400px] lg:w-[380px] drop-shadow-2xl lg:h-[500px] bg-white shadow-utility-card rounded-[40px] p-8 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-      <img
+      <Image
         src={cardData.icon || "/placeholder.svg"}
         alt={cardData.title}
-        width="200"
-        height="200"
-        loading="lazy"
+        width={200}
+        height={200}
         className="opacity-100 absolute top-4 left-4 w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] z-0"
       />
-      <div className={`absolute ${bottomPosition} left-8 right-8 z-10`}>
+      <div className="absolute bottom-20 left-8 right-8 z-10">
         <h3 className="text-xl lg:text-[32px] font-[500] text-[#6A6A6A] leading-[38px] tracking-[-0.06em] text-start">
           {cardData.title}
         </h3>
@@ -131,132 +127,37 @@ const DesktopCardComponent = ({ cardData, index }) => {
   );
 };
 
-// Mobile Card Components - Each with fixed positioning (UPDATED)
-const MobileBillPaymentsCard = ({ cardData }) => (
-  <div className="w-[280px] h-[360px] bg-white shadow-mobile-card-shadow rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
+
+// REFACTORED & RESPONSIVE MOBILE CARD WITH UPDATED SHADOW
+const MobileCard = ({ cardData }) => (
+  <div
+    className="h-[50vh] min-h-[380px] w-[75vw] max-w-[320px] bg-white rounded-[40px] p-6 flex flex-col justify-end relative overflow-hidden flex-shrink-0"
+    style={{
+      // Modified shadow for more presence and interaction with adjacent cards
+      boxShadow: "0px 10px 40px rgba(0, 0, 0, 0.1), -10px 0px 30px rgba(0, 0, 0, 0.05)",
+    }}
+  >
+    <Image
       src={cardData.icon || "/placeholder.svg"}
       alt={cardData.title}
-      className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
+      width={120}
+      height={120}
+      className="absolute top-8 left-4 w-[120px] h-[120px] z-0"
     />
-    <div className="absolute bottom-[30px] left-6 right-6 z-10">
-      <h3 className="text-xl font-semibold leading-[24px] tracking-[-0.06em] text-[#333333] text-start">
+    <div className="z-10">
+      <h3 className="text-xl font-semibold text-[#080808] tracking-[-0.04em] text-start">
         {cardData.title}
       </h3>
-      <p className="text-gray-600 mt-2 text-start text-xs leading-[16px]">
+      <p className="text-gray-600 mt-2 text-start text-sm font-medium leading-snug tracking-[-0.02em]">
         {cardData.description}
       </p>
     </div>
   </div>
 );
 
-const MobileTravelBookingsCard = ({ cardData }) => (
-  <div className="w-[280px] h-[360px] bg-white shadow-mobile-card-shadow rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
-      src={cardData.icon || "/placeholder.svg"}
-      alt={cardData.title}
-      className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
-    />
-    <div className="absolute bottom-[50px] left-6 right-6 z-10">
-      <h3 className="text-xl font-semibold leading-[24px] tracking-[-0.06em] text-[#333333] text-start">
-        {cardData.title}
-      </h3>
-      <p className="text-gray-600 mt-2 text-start text-xs leading-[16px]">
-        {cardData.description}
-      </p>
-    </div>
-  </div>
-);
 
-const MobileTrainTicketsCard = ({ cardData }) => (
-  <div className="w-[280px] h-[360px] bg-white shadow-mobile-card-shadow rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
-      src={cardData.icon || "/placeholder.svg"}
-      alt={cardData.title}
-      className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
-    />
-    <div className="absolute bottom-[34px] left-6 right-6 z-10">
-      <h3 className="text-xl font-semibold leading-[24px] tracking-[-0.06em] text-[#333333] text-start">
-        {cardData.title}
-      </h3>
-      <p className="text-gray-600 mt-2 text-start text-xs leading-[16px]">
-        {cardData.description}
-      </p>
-    </div>
-  </div>
-);
-
-const MobileMovieTicketsCard = ({ cardData }) => (
-  <div className="w-[280px] h-[360px] bg-white shadow-mobile-card-shadow rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
-      src={cardData.icon || "/placeholder.svg"}
-      alt={cardData.title}
-      className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
-    />
-    <div className="absolute bottom-[35px] left-6 right-6 z-10">
-      <h3 className="text-xl font-semibold leading-[24px] tracking-[-0.06em] text-[#333333] text-start">
-        {cardData.title}
-      </h3>
-      <p className="text-gray-600 mt-2 text-start text-xs leading-[16px]">
-        {cardData.description}
-      </p>
-    </div>
-  </div>
-);
-
-const MobileEcommerceCard = ({ cardData }) => (
-  <div className="w-[280px] h-[360px] bg-white shadow-mobile-card-shadow rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
-      src={cardData.icon || "/placeholder.svg"}
-      alt={cardData.title}
-      className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
-    />
-    <div className=" absolute bottom-[54px] left-6 right-6 z-10">
-      <h3 className=" text-xl font-semibold leading-[24px] tracking-[-0.06em] text-[#333333] text-start">
-        {cardData.title}
-      </h3>
-      <p className="text-gray-600 mt-2 text-start text-xs leading-[16px]">
-        {cardData.description}
-      </p>
-    </div>
-  </div>
-);
-
-const MobileGiftCardsCard = ({ cardData }) => (
-  <div className="w-[280px] h-[360px] bg-white shadow-mobile-card-shadow rounded-[40px] p-6 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-    <img
-      src={cardData.icon || "/placeholder.svg"}
-      alt={cardData.title}
-      className="opacity-100 absolute top-8 left-4 w-[120px] h-[120px] z-0"
-    />
-    <div className="absolute bottom-[24px] left-6 right-6 z-10">
-      <h3 className="text-xl font-semibold leading-[24px] tracking-[-0.06em] text-[#333333] text-start">
-        {cardData.title}
-      </h3>
-      <p className="text-gray-600 mt-2 text-start text-xs leading-[16px]">
-        {cardData.description}
-      </p>
-    </div>
-  </div>
-);
-
-// Mobile card renderer (UNCHANGED logic, but uses updated sub-components)
-const MobileCard = ({ cardData, index }) => {
-  const mobileCardComponents = [
-    MobileBillPaymentsCard,
-    MobileTravelBookingsCard,
-    MobileTrainTicketsCard,
-    MobileMovieTicketsCard,
-    MobileEcommerceCard,
-    MobileGiftCardsCard,
-  ];
-
-  const CardComponent = mobileCardComponents[index];
-  return <CardComponent cardData={cardData} />;
-};
-
-// DESKTOP ANIMATION: Exact original animation (unchanged)
-const DesktopCard = ({ cardData, index, progress, totalCards, isLastCard }) => {
+// DESKTOP ANIMATION
+const DesktopCard = ({ cardData, index, progress, totalCards }) => {
   const segment = 1 / totalCards;
   const overlap = segment * 0.7;
   const start = Math.max(0, index * segment - overlap * 0.5);
@@ -280,14 +181,14 @@ const DesktopCard = ({ cardData, index, progress, totalCards, isLastCard }) => {
             isEven ? "md:absolute md:top-0 md:left-0" : "md:absolute md:bottom-0 md:right-0"
           } relative`}
         >
-          <DesktopCardComponent cardData={cardData} index={index} />
+          <DesktopCardComponent cardData={cardData} />
         </div>
       </div>
     </motion.div>
   );
 };
 
-// MOBILE VIEW: Horizontal scrolling (UNCHANGED, but renders updated MobileCard)
+// REVISED MOBILE VIEW with responsive vertical layout
 const MobileView = () => {
   const mobileContainerRef = useRef(null);
   const cardWrapperRef = useRef(null);
@@ -298,84 +199,86 @@ const MobileView = () => {
     offset: ["start start", "end end"],
   });
 
+  const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3);
+
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
       const cardWrapper = cardWrapperRef.current;
-      if (!cardWrapper) return;
+      const container = mobileContainerRef.current;
+      if (!cardWrapper || !container) return;
+
       const scrollWidth = cardWrapper.scrollWidth;
-      const containerWidth = cardWrapper.offsetWidth;
+      const containerWidth = container.offsetWidth;
       const maxScroll = scrollWidth - containerWidth;
-      // Same smooth easing as financial services
-      const easedProgress = latest * latest * (3 - 2 * latest);
+      const easedProgress = easeOutCubic(latest);
       x.set(-easedProgress * maxScroll);
     });
     return () => unsubscribe();
   }, [scrollYProgress, x]);
 
   return (
-    <div
-      ref={mobileContainerRef}
-      className="md:hidden relative h-[300vh] bg-[#f9f9f9] py-8 sm:py-12"
-    >
-      <div className="sticky top-0 h-[100vh] overflow-hidden">
-        {/* Header */}
-        <motion.div
-          className="px-4 sm:px-6 pt-8 sm:pt-12"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          <h2 className="text-4xl font-[400] tracking-tight text-left">
-            <div>
-              <span className="text-[#333333] tracking-[-0.05em]">Crypto </span>
-              <span className="text-[#C0C0C0] tracking-[-0.07em]">meets</span>
-            </div>
-            <div>
-              <span className="text-[#333333] tracking-[-0.09em]">daily utility</span>
-            </div>
-          </h2>
-        </motion.div>
-
-        {/* Cards - Horizontal scrolling */}
-        <div className="mt-8 sm:mt-12 w-full">
-          <motion.div
-            ref={cardWrapperRef}
-            style={{ x }}
-            className="flex gap-4 sm:gap-6 px-4 sm:px-6 pb-8"
-          >
-            {utilityData.map((cardData, i) => (
-              <div key={i} className="flex-shrink-0">
-                <MobileCard cardData={cardData} index={i} />
+    <div ref={mobileContainerRef} className="md:hidden relative h-[300vh] bg-[#f9f9f9]">
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <div className="flex flex-col h-full justify-start pt-[5vh] sm:pt-[6vh] pb-[10vh] sm:pb-[12vh]">
+          {/* Heading with smaller font & tighter spacing */}
+          <div className="px-4 sm:px-6 mb-4">
+            <motion.h2
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              viewport={{ once: true, amount: 0.3 }}
+              className="text-4xl sm:text-5xl font-[400] tracking-tight text-left px-4 leading-[1.1]"
+            >
+              <div>
+                <span className="text-[#333333] tracking-[-0.04em]">Crypto </span>
+                <span className="text-[#C0C0C0] tracking-[-0.06em]">meets</span>
               </div>
-            
-            ))}
-            <div className="flex-shrink-0 w-3 sm:w-16" />
-          </motion.div>
-        </div>
+              <div>
+                <span className="text-[#333333] tracking-[-0.07em]">daily utility</span>
+              </div>
+            </motion.h2>
+          </div>
 
-        {/* Button at bottom */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
-  <button
-    className="bg-black cursor-pointer whitespace-nowrap text-white
-      w-[221px] h-[56px] rounded-full flex items-center
-      justify-center gap-2 text-xs font-normal
-      hover:bg-gray-800 transition-colors"
-  >
-    <Image
-      src="/utility.svg"  // make sure this file is inside public/
-      alt="Utility Icon"
-      width={20}
-      height={20}
-      className="w-5 h-5"
-    />
-    Start paying with crypto
-  </button>
-</div>
+          {/* Cards with proper horizontal scroll */}
+          <div className="w-full flex-1 flex items-center">
+            <motion.div
+              ref={cardWrapperRef}
+              style={{ x }}
+              className="flex gap-4 sm:gap-6 px-4 sm:px-6"
+            >
+              {utilityData.map((cardData, i) => (
+                <div key={i}>
+                  <MobileCard cardData={cardData} />
+                </div>
+              ))}
+              <div className="flex-shrink-0 w-3 sm:w-16" />
+            </motion.div>
+          </div>
+
+          {/* Button */}
+          <div className="flex items-center justify-center mt-6">
+            <button
+              className="bg-black cursor-pointer whitespace-nowrap text-white
+                px-6 h-[56px] rounded-full flex items-center
+                justify-center gap-2 text-xs font-medium
+                hover:bg-gray-800 transition-colors"
+            >
+              <Image
+                src="/utility.svg"
+                alt="Utility Icon"
+                width={20}
+                height={20}
+                className="w-5 h-5"
+              />
+              <span>Start paying with crypto</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
+
 
 export const UtilitySection = () => {
   const containerRef = useRef(null);
@@ -409,7 +312,6 @@ export const UtilitySection = () => {
                 index={index}
                 progress={scrollYProgress}
                 totalCards={totalCards}
-                isLastCard={index === totalCards - 1}
               />
             ))}
           </div>
@@ -429,20 +331,13 @@ export const UtilitySection = () => {
               justify-center gap-2 text-xs font-normal
               hover:bg-gray-800 transition-colors"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            <Image
+              src="/utility.svg"
+              alt="Utility Icon"
+              width={20}
+              height={20}
               className="w-5 h-5"
-            >
-              <path d="M12 2v20M2 12h20" />
-            </svg>
+            />
             Start paying with crypto
           </motion.button>
         </div>

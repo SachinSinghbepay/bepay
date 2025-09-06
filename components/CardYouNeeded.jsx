@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 const CardYouNeeded = () => {
   return (
     <section className="mt-[42vw] max-w-[1500px] relative w-full flex flex-col items-start bg-white pl-8">
@@ -7,7 +8,7 @@ const CardYouNeeded = () => {
         <span className="text-black tracking-[-0.3em]">card</span>
         <span className="text-[#C0C0C0] tracking-[-0.3em]">
           {" "}
-          you'll
+          you&apos;ll
           <br />
           ever need!
         </span>
