@@ -74,7 +74,7 @@ export default function InvestmentSuite() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex flex-col md:flex-row items-start md:items-center justify-start lg:justify-items-center-safe md:gap-24 mb-4"
           >
-            <h2 className="text-4xl sm:text-5xl  lg:text-[100px] font-[400] text-white mb-4 sm:mb-4">
+            <h2 className="text-4xl sm:text-5xl lg:text-[100px] font-bold text-white mb-4 sm:mb-4">
               Investment suite
             </h2>
             <motion.p
@@ -101,12 +101,9 @@ export default function InvestmentSuite() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="flex items-center justify-center gap-2 -mt-10 md:mt-0 self-start
-
-                    px-6 h-[56px] cursor-pointer whitespace-nowrap
-
-                    bg-white text-black rounded-full text-xs font-medium
-
-                    hover:bg-gray-100 transition-colors"
+                      px-6 h-[56px] cursor-pointer whitespace-nowrap
+                      bg-white text-black rounded-full text-xs font-medium
+                      hover:bg-gray-100 transition-colors"
               >
                 <svg
                   width="20"
@@ -204,10 +201,11 @@ export default function InvestmentSuite() {
                   <div className="lg:p-9">
                     <div className="space-y-4 max-w-[327px] ">
                       <div className="flex items-center gap-2">
-                        <span className="text-[#6A6A6A] text-lg">
+                        {/* FINAL MODIFICATION: Added font-semibold */}
+                        <span className="text-[#6A6A6A] text-lg font-semibold">
                           Tokenized
                         </span>
-                        <span className="text-white font-medium ">
+                        <span className="text-white font-extrabold md:font-bold">
                           {item.category}
                         </span>
                       </div>

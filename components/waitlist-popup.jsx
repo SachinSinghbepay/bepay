@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
@@ -246,7 +246,7 @@ function PortalContent({
                           color: isDarkMode ? "#F9FAFB" : "#000000",
                         }}
                       >
-                        Yay! You&apos;re on the waitlist.
+                        Yay! You're on the waitlist.
                       </h2>
                       <p
                         style={{
@@ -444,8 +444,7 @@ function PortalContent({
   );
 }
 
-// Component that uses useSearchParams - needs to be wrapped in Suspense
-function WaitlistPopupContent({
+export default function WaitlistPopup({
   isOpen: externalIsOpen,
   onClose: externalOnClose,
   onSubmit: externalOnSubmit,
@@ -525,14 +524,5 @@ function WaitlistPopupContent({
       referralLink={referralLink}
     />,
     document.body
-  );
-}
-
-// Main export component wrapped in Suspense
-export default function WaitlistPopup(props) {
-  return (
-    <Suspense fallback={null}>
-      <WaitlistPopupContent {...props} />
-    </Suspense>
   );
 }
