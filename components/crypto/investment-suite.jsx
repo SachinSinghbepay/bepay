@@ -1,6 +1,7 @@
 "use client";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { HandCoins, Search } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -9,10 +10,8 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
 import Image from "next/image";
-import { useIsMobile } from "@/hooks/use-is-mobile"; // 👈 Import the new hook
 
 const investmentData = [
-  // ... (your investmentData array remains unchanged)
   {
     id: 1,
     image: "/images/crypto/invest1.png",
@@ -57,95 +56,35 @@ const investmentData = [
   },
 ];
 
-// Reusable Card Component to avoid code duplication
-const InvestmentCard = ({ item, isInView, index }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 100 }}
-    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 100 }}
-    transition={{
-      duration: 0.8,
-      delay: 0.5 + index * 0.2,
-      ease: "easeOut",
-    }}
-    className="flex flex-col justify-between bg-[#0E0E0E] rounded-3xl p-4 group cursor-pointer h-full"
-    style={{
-      boxShadow: "120px 120px 120px 0px rgba(0, 0, 0, 0.05)",
-      minHeight: "568px",
-    }}
-  >
-    {/* Card Image */}
-    <div className="relative overflow-hidden rounded-2xl mb-6">
-      <Image
-        src={item.image || "/placeholder.svg"}
-        alt={item.title}
-        width={400}
-        loading="lazy"
-        height={400}
-        className="w-full h-[268px] object-cover transition-transform duration-500 group-hover:scale-105"
-      />
-    </div>
-
-    {/* Card Content */}
-    <div className="lg:p-9">
-      <div className="space-y-4 max-w-[327px] ">
-        <div className="flex items-center gap-2">
-          <span className="text-[#6A6A6A] text-lg font-semibold">
-            Tokenized
-          </span>
-          <span className="text-white font-bold">{item.category}</span>
-        </div>
-        <p className="text-[#6A6A6A] text-[16px] leading-relaxed">
-          {item.description}
-        </p>
-        <p className="text-[#6A6A6A] text-[16px]">{item.details}</p>
-      </div>
-    </div>
-  </motion.div>
-);
-
 export default function InvestmentSuite() {
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-
-  // 👇 Hook to check for mobile view (e.g., screen width < 768px)
-  const isMobile = useIsMobile();
-
-  // 👇 Ref for the mobile horizontal scroll container
-  const scrollContainerRef = useRef(null);
-
-  // 👇 Framer Motion hooks for the horizontal scroll effect
-  const { scrollYProgress } = useScroll({
-    target: scrollContainerRef,
-  });
-
-  // This will map the vertical scroll (0 to 1) to a horizontal translation.
-  // We move it left by the width of 4 cards (since 1 is visible by default).
-  // "0%" means no translation, "-360%" means translated left by 4 * 90% = 360%
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-360%"]);
-
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={sectionRef} className="bg-black py-20 overflow-hidden">
+    <section
+      ref={ref}
+      className="bg-black py-20 px-4 sm:px-6 lg:px-0 overflow-hidden"
+    >
       <div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header (remains the same) */}
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex flex-col md:flex-row items-start md:items-center justify-start lg:justify-items-center-safe md:gap-24 mb-4"
           >
-            <h2 className="text-4xl sm:text-5xl lg:text-[100px] font-[440] text-white mb-4 sm:mb-4">
+            <h2 className="text-4xl sm:text-5xl  lg:text-[100px] font-[400] text-white mb-4 sm:mb-4">
               Investment suite
             </h2>
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-[#C0C0C0] font-light md:hidden text-lg sm:text-xl mb-16 max-w-2xl"
+              className="text-[#C0C0C0] md:hidden text-lg sm:text-xl mb-16 max-w-2xl"
             >
               Diversify your portfolio with{" "}
-              <span className="text-white font-normal">
+              <span className="text-white font-medium">
                 tokenized real-world assets
               </span>{" "}
               and traditional investments
@@ -162,11 +101,14 @@ export default function InvestmentSuite() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="flex items-center justify-center gap-2 -mt-10 md:mt-0 self-start
-                   px-6 h-[56px] cursor-pointer whitespace-nowrap
-                   bg-white text-black rounded-full text-xs font-medium
-                   hover:bg-gray-100 transition-colors"
+
+                    px-6 h-[56px] cursor-pointer whitespace-nowrap
+
+                    bg-white text-black rounded-full text-xs font-medium
+
+                    hover:bg-gray-100 transition-colors"
               >
-                 <svg
+                <svg
                   width="20"
                   height="20"
                   viewBox="0 0 20 20"
@@ -180,6 +122,7 @@ export default function InvestmentSuite() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
+
                   <path
                     d="M6.85209 13.2528C5.56961 13.2526 4.31775 12.8609 3.26387 12.1301C2.21 11.3993 1.40434 10.3641 0.95462 9.1631C0.5049 7.96205 0.43255 6.65234 0.747243 5.40907C1.06194 4.16579 1.74867 3.04822 2.71564 2.20576C3.6826 1.3633 4.88371 0.836108 6.15837 0.694673C7.43303 0.553238 8.72049 0.804299 9.84861 1.41429C10.9767 2.02428 11.8918 2.96412 12.4714 4.10817C13.0509 5.25221 13.2675 6.54593 13.092 7.81635"
                     stroke="#080808"
@@ -187,6 +130,7 @@ export default function InvestmentSuite() {
                     strokeLinejoin="round"
                   />
                 </svg>
+
                 <span>Start Investing</span>
               </motion.button>
             </WaitlistTriggerButton>
@@ -207,49 +151,81 @@ export default function InvestmentSuite() {
           </motion.p>
         </div>
 
-        {/* 👇 CONDITIONAL RENDERING LOGIC */}
-        {isMobile ? (
-          // MOBILE: Horizontal scroll on vertical scroll
-          <div ref={scrollContainerRef} className="h-[300vh] relative">
-            <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-              <motion.div style={{ x }} className="flex gap-6 px-4">
-                {investmentData.map((item, index) => (
-                   // Each card needs a wrapper to define its width
-                  <div key={item.id} className="w-[90vw] flex-shrink-0">
-                     <InvestmentCard item={item} isInView={isInView} index={index} />
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        ) : (
-          // DESKTOP: Original Carousel
-          <Carousel
-            opts={{
-              align: "start",
-              loop: false,
-              dragFree: true,
-            }}
-            plugins={[
-              Autoplay({
-                delay: 4000,
-                stopOnInteraction: true,
-              }),
-            ]}
-            className="w-full"
-          >
-            <CarouselContent className="-ml-2 lg:ml-0 xl:ml-0 2xl:ml-16">
-              {investmentData.map((item, index) => (
-                <CarouselItem
-                  key={item.id}
-                  className="pl-6 basis-[90%] md:basis-[45%] lg:basis-[38%]"
+        {/* Cards Carousel */}
+        <Carousel
+          opts={{
+            align: "start",
+            loop: false,
+            dragFree: true, // Enable free dragging
+          }}
+          plugins={[
+            Autoplay({
+              delay: 4000,
+              stopOnInteraction: true,
+            }),
+          ]}
+          className="w-full "
+        >
+          <CarouselContent className="lg:ml-0 xl:ml-0 2xl:ml-16">
+            {investmentData.map((item, index) => (
+              <CarouselItem
+                key={item.id}
+                className="pl-6 basis-[90%] md:basis-[45%] lg:basis-[38%]" // Mobile: 1 card + 10%, Desktop: ~2.2 cards
+              >
+                <motion.div
+                  initial={{ opacity: 0, y: 100 }}
+                  animate={
+                    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 100 }
+                  }
+                  transition={{
+                    duration: 0.8,
+                    delay: 0.5 + index * 0.2,
+                    ease: "easeOut",
+                  }}
+                  className="flex flex-col justify-between bg-[#0E0E0E] rounded-3xl p-4 group cursor-pointer h-full"
+                  style={{
+                    boxShadow: "120px 120px 120px 0px rgba(0, 0, 0, 0.05)",
+                    minHeight: "568px",
+                  }}
                 >
-                  <InvestmentCard item={item} isInView={isInView} index={index} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-        )}
+                  {/* Card Image */}
+                  <div className="relative overflow-hidden rounded-2xl mb-6">
+                    <Image
+                      src={item.image || "/placeholder.svg"}
+                      alt={item.title}
+                      width={400}
+                      loading="lazy"
+                      height={400}
+                      className="w-full h-[268px] object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+
+                  {/* Card Content */}
+                  <div className="lg:p-9">
+                    <div className="space-y-4 max-w-[327px] ">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[#6A6A6A] text-lg">
+                          Tokenized
+                        </span>
+                        <span className="text-white font-medium ">
+                          {item.category}
+                        </span>
+                      </div>
+
+                      <p className="text-[#6A6A6A] text-[16px] leading-relaxed">
+                        {item.description}
+                      </p>
+
+                      <p className="text-[#6A6A6A] text-[16px]">
+                        {item.details}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
       </div>
     </section>
   );

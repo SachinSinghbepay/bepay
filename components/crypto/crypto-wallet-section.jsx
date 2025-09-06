@@ -7,6 +7,10 @@ import {
   AnimatePresence,
 } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
+import { Wallet, CreditCard, ScanLine, Globe, Plus } from "lucide-react";
+import { DebitCardView } from "./mocup-views/debit-card-view";
+import { BankAccountView } from "./mocup-views/bank-account-view";
+import { CryptoWalletView } from "./mocup-views/crypto-wallet-view";
 import { IconDeviceMobile } from "@tabler/icons-react";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
 
@@ -23,125 +27,57 @@ export default function CryptoWalletSection() {
   const featureData = [
     {
       id: "debit-card",
-      title: (activeView) => (
+      title: (
         <>
-          A VIRTUAL{" "}
-          <span
-            className={
-              activeView === "debit-card" ? "text-black" : "text-[#333333]"
-            }
-          >
-            CRYPTO
-          </span>
-          <br />
-          <span
-            className={
-              activeView === "debit-card" ? "text-black" : "text-[#333333]"
-            }
-          >
-            DEBIT CARD
-          </span>
+          A VIRTUAL <span className="text-[#333333]">CRYPTO DEBIT CARD</span>{" "}
         </>
       ),
-      mobileTitle: (activeView) => (
+      mobileTitle: (
         <>
-          A VIRTUAL{" "}
-          <span
-            className={
-              activeView === "debit-card" ? "text-black" : "text-[#333333]"
-            }
-          >
-            CRYPTO
-          </span>
+          VIRTUAL <span className="text-[#333333]">CRYPTO</span>
           <br />
-          <span
-            className={
-              activeView === "debit-card" ? "text-black" : "text-[#333333]"
-            }
-          >
-            DEBIT CARD
-          </span>
+          <span className="text-[#333333]">DEBIT CARD</span>
         </>
       ),
-      imageSrc: "/phone-mockup.png",
+      component: (
+        <DebitCardView
+          setActiveView={setActiveView}
+          scrollYProgress={scrollYProgress}
+        />
+      ),
     },
     {
       id: "bank-account",
-      title: (activeView) => (
+      title: (
         <>
-          A{" "}
-          <span
-            className={
-              activeView === "bank-account" ? "text-black" : "text-[#333333]"
-            }
-          >
-            SWISS BANK
-          </span>
+          A <span className="text-[#333333]">SWISS BANK</span> ACCOUNT
+        </>
+      ),
+      mobileTitle: (
+        <>
+          <span className="text-[#333333]">SWISS BANK</span>
           <br />
           ACCOUNT
         </>
       ),
-      mobileTitle: (activeView) => (
-        <>
-          A{" "}
-          <span
-            className={
-              activeView === "bank-account" ? "text-black" : "text-[#333333]"
-            }
-          >
-            SWISS BANK
-          </span>
-          <br />
-          ACCOUNT
-        </>
-      ),
-      imageSrc: "/second-image.png",
+      component: <BankAccountView setActiveView={setActiveView} />,
     },
     {
       id: "crypto-wallet",
-      title: (activeView) => (
+      title: (
         <>
-          A SECURE
-          <span
-            className={
-              activeView === "crypto-wallet" ? "text-black" : "text-[#333333]"
-            }
-          >
-            {" "}
-            SELF CUSTODY
-          </span>{" "}
-          <span
-            className={
-              activeView === "crypto-wallet" ? "text-black" : "text-[#333333]"
-            }
-          >
-            CRYPTO
-          </span>{" "}
+          A SECURE <span className="text-[#333333]">SELF CUSTODY CRYPTO</span>{" "}
           WALLET
         </>
       ),
-      mobileTitle: (activeView) => (
+      mobileTitle: (
         <>
-          A{" "}
-          <span
-            className={
-              activeView === "crypto-wallet" ? "text-black" : "text-[#333333]"
-            }
-          >
-            SECURE SELF CUSTODY
-          </span>
+          SECURE <span className="text-[#333333]">SELF CUSTODY</span>
           <br />
-          <span
-            className={
-              activeView === "crypto-wallet" ? "text-black" : "text-[#333333]"
-            }
-          >
-            CRYPTO
-          </span>{" "}
-          WALLET
+          <span className="text-[#333333]">CRYPTO</span> WALLET
         </>
       ),
-      imageSrc: "/third-image.png",
+      component: <CryptoWalletView />,
     },
   ];
 
@@ -154,15 +90,19 @@ export default function CryptoWalletSection() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Fixed: More evenly distributed scroll-based view changes
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
+      // More evenly distributed ranges with smoother transitions
       if (latest >= 0.4 && latest < 0.6) {
         setActiveView("debit-card");
       } else if (latest >= 0.6 && latest < 0.8) {
         setActiveView("bank-account");
       } else if (latest >= 0.8) {
         setActiveView("crypto-wallet");
-      } else if (latest < 0.4) {
+      }
+      // Keep debit-card as default for early scroll (0-0.4)
+      else if (latest < 0.4) {
         setActiveView("debit-card");
       }
     });
@@ -174,43 +114,37 @@ export default function CryptoWalletSection() {
     [0, 0.1, 0.15],
     [1, 1, 0]
   );
+
   const headingY = useTransform(scrollYProgress, [0, 0.15], ["0%", "-100%"]);
-  const flyingCardOpacity = useTransform(scrollYProgress, [0,1], [1, 2]);
 
-
-  const cardScale = useTransform(scrollYProgress, [0.1, 0.4], [1, 0.2]);
+  const cardScale = useTransform(scrollYProgress, [0.1, 0.4], [1, 0.20]);
   const cardRotate = useTransform(scrollYProgress, [0.1, 0.4], [0, -90]);
   const cardX = useTransform(
     scrollYProgress,
     [0.1, 0.4],
     [isMobile ? "-50%" : "-20%", isMobile ? "-50%" : "-37%"]
   );
-  // 👇 Card Y position: starts WAY LOWER on mobile, then rises
   const cardY = useTransform(
-  scrollYProgress,
-  isMobile
-    ? [0.0, 0.08, 0.18, 0.28]  // start earlier & complete sooner
-    : [0.0, 0.12, 0.3, 0.4],   // keep desktop unchanged
-  isMobile
-    ? ["66vh", "15vh", "0%", "-10%"]  // less gap, faster rise
-    : ["14vh", "10vh", "-30%", "-50%"]
-);
-
-  const cardWidth = useTransform(
     scrollYProgress,
-    [0.1, 0.3, 0.4],
-    [
-      isMobile ? "clamp(600px, 60vw, 660px)" : "clamp(700px, 80vw, 800px)",
-      isMobile ? "clamp(300px, 60vw, 360px)" : "clamp(700px, 80vw, 800px)",
-      isMobile ? "clamp(1199px, 90vw, 1050px)" : "clamp(800px, 90vw, 1300px)",
-    ]
+    [0.1, 0.4],
+    ["0%", isMobile ? "-20%" : "-65%"]
   );
+
+  const flyingCardOpacity = useTransform(scrollYProgress, [0.39, 0.4], [1, 0]);
 
   const mockupOpacity = useTransform(scrollYProgress, [0.15, 0.3], [0, 1]);
   const mockupScale = useTransform(scrollYProgress, [0.15, 0.3], [0.8, 1]);
 
   const contentOpacity = useTransform(scrollYProgress, [0.4, 0.5], [0, 1]);
   const contentY = useTransform(scrollYProgress, [0.4, 0.5], ["20px", "0px"]);
+
+  // Mobile title animations
+  const mobileTitleOpacity = useTransform(scrollYProgress, [0.15, 0.3], [0, 1]);
+  const mobileTitleY = useTransform(
+    scrollYProgress,
+    [0.15, 0.3],
+    ["20px", "0px"]
+  );
 
   const currentView = featureData.find((f) => f.id === activeView);
 
@@ -220,14 +154,10 @@ export default function CryptoWalletSection() {
         ref={sectionRef}
         className="relative mx-auto min-h-[500vh] max-w-7xl"
       >
-        <div className="sticky top-0 lg:top-0 flex h-[100vh] md:h-[110vh] w-full flex-col items-start justify-center md:justify-center overflow-hidden">
-          {/* Heading */}
+        <div className="sticky -top-36 lg:top-0 flex h-[130vh] md:h-[110vh] w-full flex-col items-center justify-start md:justify-center overflow-hidden">
           <motion.div
             style={{ opacity: headingOpacity, y: headingY }}
-            className="relative md:absolute 
-              top-auto md:top-0
-              px-4 text-start z-10 w-full
-              mt-20 md:mt-0"
+            className="absolute top-4 md:top-0 px-4 text-start z-10"
           >
             <motion.h2
               initial={{ opacity: 0, y: 50 }}
@@ -235,7 +165,6 @@ export default function CryptoWalletSection() {
               transition={{ duration: 0.3, delay: 0.1 }}
               viewport={{ once: false, amount: 0.5 }}
               className="text-4xl font-[400] text-[#C0C0C0] md:text-7xl xl:text-[120px] leading-tight md:leading-normal"
-              style={{ letterSpacing: "-0.08em" }}
             >
               The only <span className="font-normal text-black">card</span>{" "}
               you&apos;ll
@@ -246,25 +175,41 @@ export default function CryptoWalletSection() {
               transition={{ duration: 0.3, delay: 0.3 }}
               viewport={{ once: false, amount: 0.5 }}
               className="text-4xl font-[400] text-[#C0C0C0] md:text-7xl xl:text-[120px] leading-tight md:leading-normal -mt-2 lg:-mt-18"
-              style={{ letterSpacing: "-0.0em" }}
             >
               ever need!
             </motion.h2>
           </motion.div>
 
-          <div className="relative lg:mb-32 flex h-full w-full flex-col items-center md:items-start justify-center md:flex-row md:justify-start pt-0 md:pt-2">
-            {/* Left Mockup */}
+          <div className="relative lg:mb-32 flex h-full w-full flex-col items-center justify-center md:flex-row md:justify-start pt-32 md:pt-8">
             <div className="relative flex h-auto md:h-full w-full items-start md:items-center justify-center md:w-1/2 md:justify-end md:pr-8">
               <div className="flex flex-col items-center">
-                {/* Main Image Container */}
+                {/* Mobile Title - Above Mockup */}
+                <AnimatePresence mode="wait">
+                  {isMobile && (
+                    <motion.div
+                      key={activeView}
+                      style={{
+                        opacity: mobileTitleOpacity,
+                        y: mobileTitleY,
+                      }}
+                      transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+                      className="md:hidden mb-6 px-4 text-center"
+                    >
+                      <h3 className="text-xl font-semibold text-[#6A6A6A] leading-tight">
+                        {currentView?.mobileTitle}
+                      </h3>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 <motion.div
                   style={{
                     opacity: mockupOpacity,
                     scale: mockupScale,
                   }}
-                  className="z-10 -mt-25 md:mt-10 relative flex-shrink-0"
+                  className="z-10 mt-0 md:mt-10 flex h-[640px] md:h-[660px] w-[320px] md:w-[330px] flex-shrink-0 flex-col rounded-[32px] md:rounded-[40px] border-[8px] md:border-[10px] border-[#13131326] bg-white p-3 md:p-4 shadow-2xl"
                 >
-                  <div className="relative">
+                  <div className="relative h-full w-full overflow-hidden rounded-[16px] md:rounded-[20px] bg-gray-50">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={activeView}
@@ -275,56 +220,73 @@ export default function CryptoWalletSection() {
                           duration: 0.6,
                           ease: [0.25, 0.1, 0.25, 1],
                         }}
-                        className="relative"
+                        className="absolute h-full w-full"
                       >
-                        <Image
-                          src={currentView?.imageSrc || "/phone-mockup.png"}
-                          alt={`${activeView} view`}
-                          width={320}
-                          height={640}
-                          priority
-                          className="object-contain md:w-[330px] md:h-[660px] w-[320px] h-[640px]"
-                          style={{
-                            width: "320px",
-                            height: "640px",
-                            maxWidth: "330px",
-                            maxHeight: "660px",
-                          }}
-                        />
+                        {currentView?.component}
                       </motion.div>
                     </AnimatePresence>
                   </div>
+                  <div className="mt-auto flex justify-around border-t-[1px] pt-2">
+                    <BottomNavItem
+                      icon={
+                        <Wallet strokeWidth={1} size={isMobile ? 18 : 20} />
+                      }
+                      label="Wallet"
+                      active={activeView === "crypto-wallet"}
+                      onClick={() => setActiveView("crypto-wallet")}
+                    />
+                    <BottomNavItem
+                      icon={
+                        <CreditCard strokeWidth={1} size={isMobile ? 18 : 20} />
+                      }
+                      label="Card"
+                      active={activeView === "debit-card"}
+                      onClick={() => setActiveView("debit-card")}
+                    />
+                    <BottomNavItem
+                      icon={
+                        <ScanLine strokeWidth={1} size={isMobile ? 18 : 20} />
+                      }
+                      label="Scan & Pay"
+                    />
+                    <BottomNavItem
+                      icon={<Globe strokeWidth={1} size={isMobile ? 18 : 20} />}
+                      label="Explore"
+                    />
+                    <BottomNavItem
+                      icon={<Plus strokeWidth={1} size={isMobile ? 18 : 20} />}
+                      label="SWISS"
+                      active={activeView === "bank-account"}
+                      onClick={() => setActiveView("bank-account")}
+                    />
+                  </div>
                 </motion.div>
 
-                {/* Subtitle */}
+                {/* Subtitle below mockup - now visible on both mobile and desktop */}
                 <motion.div
                   style={{ opacity: mockupOpacity }}
-                  className="block mt-0.02"
+                  className="block mt-4"
                 >
-                  <p className="text-xs md:text-sm text-center">
-                    <span className="font-medium text-gray-500">
-                      FIRST OF IT&apos;S KIND
-                    </span>
-                    <span className="font-bold text-[#333333] ml-1">
-                      ON-CHAIN BANKING APP
+                  <p className="text-xs md:text-sm font-medium text-gray-500 text-center">
+                    First of it&apos;s kind{" "}
+                    <span className="font-semibold text-[#333333]">
+                      on-chain banking app
                     </span>
                   </p>
                 </motion.div>
               </div>
 
-              {/* Flying Card */}
               <AnimatePresence>
                 {activeView === "debit-card" && (
                   <motion.div
-                    className="z-50 top-[-70%] left-[50%] md:top-[33%] md:left-[43.5%] absolute "
+                    className="z-50 top-[10%] md:top-1/2 left-1/2 absolute"
                     style={{
                       rotate: cardRotate,
                       scale: cardScale,
                       x: cardX,
-                      y: cardY, // 👈 now animated lower → higher
+                      y: cardY,
                       opacity: flyingCardOpacity,
-
-                      width: cardWidth,
+                      width: "clamp(600px, 68vw, 960px)",
                       aspectRatio: "1 / 1",
                       transform: "translate(-50%, -50%)",
                       transformOrigin: "center",
@@ -334,6 +296,7 @@ export default function CryptoWalletSection() {
                       src="/cryptocard.png"
                       alt="Black Crypto Card"
                       fill
+                      
                       priority
                       className="object-contain"
                       sizes="(max-width: 768px) 90vw, 100vw"
@@ -343,12 +306,12 @@ export default function CryptoWalletSection() {
               </AnimatePresence>
             </div>
 
-            {/* Right Content Panel */}
+            {/* Desktop Content Panel */}
             <motion.div
               style={{ opacity: contentOpacity, y: contentY }}
-              className="w-full hidden md:flex flex-col items-start justify-start md:w-1/2 md:pl-16 lg:pl-20 xl:pl-24 mt-4 md:mt-0 md:pt-24"
+              className="w-full hidden md:flex flex-col items-center lg:items-start justify-start md:justify-center md:w-1/2 md:pl-8 mt-4 md:mt-0"
             >
-              <div className="flex w-full flex-col items-start justify-center space-y-6 md:space-y-15 p-4 md:p-8">
+              <div className="flex w-full flex-col items-start justify-center space-y-4 md:space-y-11 p-4 md:p-8">
                 {featureData.map((feature) => (
                   <button
                     key={feature.id}
@@ -357,34 +320,30 @@ export default function CryptoWalletSection() {
                   >
                     <div className="flex h-6 w-6 items-center justify-center">
                       <motion.div
-                        className="h-4 w-4 bg-black"
+                        className="h-2 w-2 bg-black"
                         style={{
-                          borderRadius: "20%",
-                          clipPath: "polygon(0 0, 0 100%, 100% 50%)",
+                          clipPath: "polygon(0 0, 100% 50%, 0 100%)",
                         }}
                         animate={{
                           opacity: activeView === feature.id ? 1 : 0,
-                          scale: activeView === feature.id ? 1.2 : 0.8,
-                          x: activeView === feature.id ? 3 : 0,
+                          scale: activeView === feature.id ? 1.5 : 0.5,
+                          x: activeView === feature.id ? 5 : 0,
                         }}
                         transition={{ duration: 0.4, ease: "easeOut" }}
                       />
                     </div>
                     <span
-                      className={`text-base md:text-lg lg:tracking-tighter text-[#6A6A6A] font-semibold max-w-[400px] lg:text-[32px] leading-tight transition-all duration-500 ${
+                      className={`text-base md:text-lg lg:tracking-tighter text-[#6A6A6A] font-semibold max-w-[400px] lg:text-[32px] transition-all duration-500 ${
                         activeView === feature.id ? "opacity-100" : "opacity-40"
                       }`}
-                      style={{ lineHeight: "1.1" }}
                     >
-                      {typeof feature.title === "function"
-                        ? feature.title(activeView)
-                        : feature.title}
+                      {feature.title}
                     </span>
                   </button>
                 ))}
               </div>
               <WaitlistTriggerButton>
-                <button className="flex drop-shadow-2xl items-center lg:ml-16 gap-2 lg:h-[56px] text-[12px] whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100 mt-8 md:mt-6">
+                <button className="flex drop-shadow-2xl items-center lg:ml-16 gap-2 lg:h-[56px] text-[12px] whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100 mt-4 md:mt-0">
                   <IconDeviceMobile className="h-5 w-5" />
                   <span>Download App & Get Bitcoin Reward</span>
                 </button>

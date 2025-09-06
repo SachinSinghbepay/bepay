@@ -519,24 +519,42 @@ const DefiYieldSection = () => {
                   <p className="text-xs md:text-sm italic text-gray-800 leading-relaxed w-full md:w-[70%]">
                     Monetize your hardware resources
                   </p>
-                  <div className="flex items-center justify-center mt-6">
-                    <WaitlistTriggerButton>
-  <motion.button
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-    className="bg-black cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
-  >
-    <Image
-      src="/start.svg" // place start.svg inside public/ folder
-      alt="Start Icon"
-      width={20}
-      height={20}
-      className="w-5 h-5"
-    />
-    <span>Start earning</span>
-  </motion.button>
-</WaitlistTriggerButton>
-                  </div>
+                  <WaitlistTriggerButton>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="bg-black cursor-pointer whitespace-nowrap text-white w-[160px] h-[44px] md:w-[221px] md:h-[56px] rounded-full flex items-center justify-center gap-2 text-xs md:text-sm font-normal hover:bg-gray-800 transition-colors"
+                    >
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 md:w-5 md:h-5"
+                      >
+                        <path
+                          d="M9.87318 9.47184L13.5646 4.21036C13.8717 3.77265 14.4754 3.66657 14.9133 3.97337L18.2824 6.33367C18.7203 6.64045 18.8268 7.24401 18.5203 7.68214L17.5578 9.05838C17.3765 9.3175 17.0802 9.47184 16.764 9.47184H9.87318ZM9.87318 9.47184H6.69107C5.90694 9.47184 5.44778 8.58874 5.89817 7.94686L8.5197 4.21079C8.82695 3.77291 9.43098 3.66699 9.86888 3.9742L11.6632 5.23294C12.101 5.54014 12.207 6.14414 11.8999 6.58207L9.87318 9.47184Z"
+                          stroke="#F9F9F9"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M20.0825 9.46875H3.9385C3.38155 9.46875 2.92969 9.92061 2.92969 10.4776V20.5677C2.92969 21.1246 3.38155 21.5765 3.9385 21.5765H20.0825C20.6394 21.5765 21.0913 21.1246 21.0913 20.5677V10.4776C21.0913 9.92061 20.6394 9.46875 20.0825 9.46875Z"
+                          stroke="#F9F9F9"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <circle
+                          cx="17.0482"
+                          cy="15.4779"
+                          r="0.4935"
+                          fill="#F9F9F9"
+                        />
+                      </svg>
+                      Start earning
+                    </motion.button>
+                  </WaitlistTriggerButton>
                 </motion.div>
               </div>
             </motion.div>
