@@ -519,22 +519,24 @@ const DefiYieldSection = () => {
                   <p className="text-xs md:text-sm italic text-gray-800 leading-relaxed w-full md:w-[70%]">
                     Monetize your hardware resources
                   </p>
-                  <WaitlistTriggerButton>
+                  <div className="flex items-center justify-center mt-6">
+                    <WaitlistTriggerButton>
   <motion.button
     whileHover={{ scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
-    className="bg-black cursor-pointer whitespace-nowrap text-white w-[160px] h-[44px] md:w-[221px] md:h-[56px] rounded-full flex items-center justify-center gap-2 text-xs md:text-sm font-normal hover:bg-gray-800 transition-colors"
+    className="bg-black cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
   >
     <Image
       src="/start.svg" // place start.svg inside public/ folder
       alt="Start Icon"
       width={20}
       height={20}
-      className="w-4 h-4 md:w-5 md:h-5"
+      className="w-5 h-5"
     />
-    Start earning
+    <span>Start earning</span>
   </motion.button>
 </WaitlistTriggerButton>
+                  </div>
                 </motion.div>
               </div>
             </motion.div>

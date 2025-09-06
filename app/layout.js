@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { Open_Sans, Montserrat } from 'next/font/google';
 import "./globals.css";
 import SmoothScroll from "@/components/smoothScroll";
@@ -22,7 +21,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
-  // FIX: Added metadataBase for resolving full URLs
+  // FIX 1: Added metadataBase for resolving full URLs
   metadataBase: new URL("https://www.bepay.money"),
 
   title: "bepay - Stablecoin Payment, Wallet, Merchant Payment",
@@ -54,16 +53,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      {/* FIX: Added the openSans font variable to the body */}
+      {/* FIX 2: Added the openSans font variable to the body */}
       <body className={`${openSans.variable} ${montserrat.variable} antialiased`}>
         <SmoothScroll>
           <Header />
-
-          {/* FIX: Wrapped the client component in Suspense to prevent build errors */}
-          <Suspense fallback={null}>
-            <CookieConsentProvider />
-          </Suspense>
-
+          <CookieConsentProvider />
           <AuthProvider>{children}</AuthProvider>
           <ConditionalFooter />
         </SmoothScroll>

@@ -176,11 +176,11 @@ export default function CryptoScrollSection() {
     return (
       <div ref={containerRef} className="relative" style={{ height: "300vh" }}>
         {/* Mobile Sticky content */}
-        <div className="sticky top-0 h-screen flex items-center justify-center bg-gray-50 overflow-hidden">
+        <div className="sticky top-0 h-screen flex items-start justify-center pt-8 bg-gray-50 overflow-hidden">
           <div className="w-full max-w-sm mx-auto px-4">
             {/* Mobile Header */}
             <motion.div
-              className="flex items-center justify-between mb-8"
+              className="flex flex-col items-start text-left mb-8"
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
               transition={{
@@ -189,39 +189,37 @@ export default function CryptoScrollSection() {
                 delay: 0.2,
               }}
             >
-              <div>
-                <motion.h2
-                  className="text-2xl font-[400] text-gray-400 mb-2"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={
-                    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
-                  }
-                  transition={{
-                    duration: 0.8,
-                    ease: [0.25, 0.1, 0.25, 1],
-                    delay: 0.3,
-                  }}
-                >
-                  Get <span className="text-black font-normal">started</span>
-                </motion.h2>
-                <motion.p
-                  className="text-xs text-[#6A6A6A] mt-1"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={
-                    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
-                  }
-                  transition={{
-                    duration: 0.8,
-                    ease: [0.25, 0.1, 0.25, 1],
-                    delay: 0.4,
-                  }}
-                >
-                  Start your journey with <br/> bepay money in 3 simple <br/> steps!
-                </motion.p>
-              </div>
+              <motion.h2
+                className="text-3xl font-medium text-gray-400 mb-2"
+                initial={{ opacity: 0, y: 30 }}
+                animate={
+                  isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
+                }
+                transition={{
+                  duration: 0.8,
+                  ease: [0.25, 0.1, 0.25, 1],
+                  delay: 0.3,
+                }}
+              >
+                Get <span className="text-black font-medium">started</span>
+              </motion.h2>
+              <motion.p
+                className="text-base text-[#6A6A6A] mt-1"
+                initial={{ opacity: 0, y: 20 }}
+                animate={
+                  isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+                }
+                transition={{
+                  duration: 0.8,
+                  ease: [0.25, 0.1, 0.25, 1],
+                  delay: 0.4,
+                }}
+              >
+                Start your journey with bepay money in 3 simple steps!
+              </motion.p>
 
-              {/* REPLACED THE BUTTON WITH A CLICKABLE IMAGE */}
               <motion.div
+                className="mt-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={
                   isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
@@ -233,18 +231,18 @@ export default function CryptoScrollSection() {
                 }}
               >
                 <WaitlistTriggerButton>
-                  <div className="cursor-pointer">
+                  <button className="bg-black cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
                     <Image
-                      src="/cta.png"
-                      alt="Get started CTA"
-                      width={125}  // Adjust width as needed
-                      height={45}   // Adjust height as needed
-                      className="object-contain"
+                      src="/vector.svg"
+                      alt="Get Started Icon"
+                      width={20}
+                      height={20}
+                      className="w-5 h-5"
                     />
-                  </div>
+                    <span>Get Started</span>
+                  </button>
                 </WaitlistTriggerButton>
               </motion.div>
-
             </motion.div>
 
             {/* Mobile Content Card */}
@@ -311,7 +309,7 @@ export default function CryptoScrollSection() {
                           }}
                         >
                           <motion.h3
-                            className="text-lg font-bold text-black mb-4"
+                            className="text-xl font-bold text-black mb-4"
                             style={{
                               transform: `translateY(${
                                 step.headingOffsetMobile || 0
@@ -328,7 +326,7 @@ export default function CryptoScrollSection() {
                           </motion.h3>
 
                           <motion.p
-                            className="text-xs font-medium text-[#6A6A6A] leading-relaxed mb-6"
+                            className="text-sm font-medium text-[#6A6A6A] leading-relaxed mb-6"
                             initial={{ opacity: 0, y: 50 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{
@@ -633,9 +631,7 @@ export default function CryptoScrollSection() {
                                   delay: isInView ? 0.4 : 1.5,
                                 }}
                               >
-                                <button
-                                  className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-10 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95"
-                                >
+                                <button className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-10 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95">
                                   <span>Get started</span>
                                   <svg
                                     className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"

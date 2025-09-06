@@ -121,10 +121,10 @@ export const SecuritySection = () => {
         variants={containerVariants}
       >
         <motion.h2
-          className="text-3xl md:text-4xl lg:text-[40px] text-[#C0C0C0] font-medium text-center"
+          className="text-2xl md:text-4xl lg:text-[40px] text-[#C0C0C0] font-medium text-center"
           variants={textVariants}
         >
-          Bank-Grade Security & Compliance
+          Bank-Grade Security <br/> & Compliance
         </motion.h2>
         <motion.p
           className="text-[#C0C0C0] text-center text-[16px] max-w-7xl mx-auto mt-4 mb-16"

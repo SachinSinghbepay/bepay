@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const ScrollTextMobile = () => {
   return (
-    <div className="h-auto md:hidden bg-[#f9f9f9] flex flex-col justify-center items-center px-6 py-12">
+    <div className="h-auto md:hidden bg-[#f9f9f9] overflow-hidden flex flex-col justify-center items-center px-6 py-12">
       <div className="max-w-md w-full text-center space-y-8">
         {/* Sequential text animation */}
         <div className="space-y-4">
