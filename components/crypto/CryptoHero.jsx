@@ -59,32 +59,19 @@ export default function CryptoHeroSection() {
 
   const mockupY = useTransform(scrollYProgress, [0, 1], [0, -700]);
 
-  // Desktop scroll transforms - individual hooks for each icon
-  const xTransform0 = useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialX, iconsData[0].finalX]);
-  const yTransform0 = useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialY, iconsData[0].finalY]);
-  const scaleTransform0 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
-  const opacityTransform0 = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
-
-  const xTransform1 = useTransform(scrollYProgress, [0, 0.6], [iconsData[1].initialX, iconsData[1].finalX]);
-  const yTransform1 = useTransform(scrollYProgress, [0, 0.6], [iconsData[1].initialY, iconsData[1].finalY]);
-  const scaleTransform1 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
-  const opacityTransform1 = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
-
-  const xTransform2 = useTransform(scrollYProgress, [0, 0.6], [iconsData[2].initialX, iconsData[2].finalX]);
-  const yTransform2 = useTransform(scrollYProgress, [0, 0.6], [iconsData[2].initialY, iconsData[2].finalY]);
-  const scaleTransform2 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
-  const opacityTransform2 = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
-
-  const xTransform3 = useTransform(scrollYProgress, [0, 0.6], [iconsData[3].initialX, iconsData[3].finalX]);
-  const yTransform3 = useTransform(scrollYProgress, [0, 0.6], [iconsData[3].initialY, iconsData[3].finalY]);
-  const scaleTransform3 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
-  const opacityTransform3 = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
-
-  // Group transforms for easier access
-  const xTransforms = [xTransform0, xTransform1, xTransform2, xTransform3];
-  const yTransforms = [yTransform0, yTransform1, yTransform2, yTransform3];
-  const scaleTransforms = [scaleTransform0, scaleTransform1, scaleTransform2, scaleTransform3];
-  const opacityTransforms = [opacityTransform0, opacityTransform1, opacityTransform2, opacityTransform3];
+  // Desktop scroll transforms
+  const xTransforms = iconsData.map((icon) =>
+    useTransform(scrollYProgress, [0, 0.6], [icon.initialX, icon.finalX])
+  );
+  const yTransforms = iconsData.map((icon) =>
+    useTransform(scrollYProgress, [0, 0.6], [icon.initialY, icon.finalY])
+  );
+  const scaleTransforms = iconsData.map(() =>
+    useTransform(scrollYProgress, [0, 0.6], [1.5, 1])
+  );
+  const opacityTransforms = iconsData.map(() =>
+    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1])
+  );
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -102,7 +89,7 @@ export default function CryptoHeroSection() {
       setCurrentWord((prev) => (prev + 1) % words.length);
     }, 2000);
     return () => clearInterval(interval);
-  }, [words.length]);
+  }, []);
 
   // Button click handler
   const handleButtonClick = () => {
