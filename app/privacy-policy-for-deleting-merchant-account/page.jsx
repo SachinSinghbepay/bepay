@@ -1,3 +1,5 @@
+"use client";
+import { Suspense } from 'react'; // 1. Import Suspense
 import HeaderContent from "@/components/privacy-policy/HeaderContent";
 import MerchantUrlDeletionPolicyContent from "@/components/privacy-policy/MerchantUrlDeletionPolicyContent";
 import React from "react";
@@ -10,7 +12,12 @@ const page = () => {
           heading={"Privacy Policy"}
           subheading={"(For deleting merchant URL content)"}
         />
-        <MerchantUrlDeletionPolicyContent />
+
+        {/* 2. Wrap the client component in Suspense */}
+        <Suspense fallback={<p>Loading policy...</p>}>
+          <MerchantUrlDeletionPolicyContent />
+        </Suspense>
+        
       </div>
     </section>
   );

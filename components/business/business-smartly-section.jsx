@@ -1,30 +1,27 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { CheckCircle } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay"; // Import Autoplay plugin for automatic sliding
+import Autoplay from "embla-carousel-autoplay";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
 
-// FeatureCard component
+// FeatureCard component (no changes needed here)
 function FeatureCard({ title, image, features }) {
   return (
     <div className="flex-col w-full max-w-[670px] h-full md:h-[607px] bg-white rounded-[30px] shadow-lg border border-gray-100">
       <div className="relative w-full h-[225px] overflow-hidden rounded-[30px]">
-        {" "}
-        {/* Removed 'p' typo */}
         <Image
           src={image || "/placeholder.svg"}
           alt={title}
           width={650}
           height={225}
-          className="object-cover p-2 rounded-[30px] w-full h-full" // Ensures image fills the rounded container without internal padding
+          className="object-cover p-2 rounded-[30px] w-full h-full"
         />
       </div>
       <div className="p-8 flex flex-col justify-between h-[calc(100%-225px)]">
@@ -38,8 +35,7 @@ function FeatureCard({ title, image, features }) {
                 key={index}
                 className="flex items-start gap-3 text-[14px] md:text-[16px] font-[500] text-gray-700"
               >
-                <IconCircleCheckFilled className="w-5 h-5 text-[#0D8D37] flex-shrink-0 mt-0.5" />{" "}
-                {/* Changed to CheckCircle */}
+                <IconCircleCheckFilled className="w-5 h-5 text-[#0D8D37] flex-shrink-0 mt-0.5" />
                 <span>{feature}</span>
               </li>
             ))}
@@ -52,30 +48,15 @@ function FeatureCard({ title, image, features }) {
 
 export default function BusinessSmartlySection() {
   const ref = useRef(null);
-  // Trigger when 50% of the element is in view, and re-trigger on scroll back
-  const isInView = useInView(ref, { once: false, amount: 0.5 });
+  const { scrollYProgress } = useScroll({ 
+    target: ref,
+    offset: ["start end", "end start"]
+  });
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2, // Stagger animation for each line
-      },
-    },
-  };
-  const itemVariants = {
-    hidden: { y: 100, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 20,
-      },
-    },
-  };
+  // Single unified transform for the entire heading
+  const headingY = useTransform(scrollYProgress, [0, 0.5, 1], [30, 0, -30]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.6, 1, 1, 0.8]);
+
 
   const cardsData = [
     {
@@ -124,49 +105,50 @@ export default function BusinessSmartlySection() {
 
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 bg-[#F9F9F9] overflow-hidden dark:bg-gray-950">
-      <div>
-        <div className="max-w-[1200px] mx-auto px-4 md:px-6">
+      <div className="container mx-auto px-4">
+
+        <div
+          ref={ref}
+          className="flex flex-col items-center justify-center text-center mb-12 md:mb-16 lg:mb-20"
+        >
           <motion.div
-            ref={ref}
-            className="flex flex-col items-center justify-center space-y-4 text-center mb-12 "
-            variants={containerVariants}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
+            className="max-w-6xl mx-auto"
+            style={{ 
+              y: headingY,
+              opacity: opacity
+            }}
           >
-            <motion.h2
-              className="text-4xl sm:text-5xl md:text-6xl 3xl:text-[90px] font-[400] tracking-tight leading-tight text-[#C0C0C0] dark:text-[#333333]"
-              variants={itemVariants}
-            >
-              Everything you need
-            </motion.h2>
-            <motion.h2
-              className="text-4xl sm:text-5xl -mt-4 md:text-6xl 3xl:text-[90px] font-[400] leading-tight tracking-tight text-black dark:text-white"
-              variants={itemVariants}
-            >
-              to run business smartly
-            </motion.h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-[400] tracking-tight leading-[1.1] md:leading-[1.05]">
+              <span className="block text-[#C0C0C0] dark:text-[#333333] mb-2 md:mb-4">
+                Everything you need
+              </span>
+              <span className="block text-black dark:text-white">
+                to run your business smartly
+              </span>
+            </h2>
           </motion.div>
         </div>
+      </div>
+      
+      <div className="w-full">
         <Carousel
           opts={{
             align: "start",
-            loop: false, // Enable looping for continuous scroll
+            loop: false,
           }}
           plugins={[
             Autoplay({
-              delay: 3000, // Autoplay every 3 seconds
-              stopOnInteraction: true, // Stop autoplay on user interaction
+              delay: 3000,
+              stopOnInteraction: true,
             }),
           ]}
-          className="w-full "
+          className="w-full"
         >
-          <CarouselContent className="lg:ml-20">
-            {" "}
-            {/* Adjust negative margin for gap */}
+          <CarouselContent className="ml-4 md:ml-8 lg:ml-20">
             {cardsData.map((card) => (
               <CarouselItem
                 key={card.id}
-                className="pb-5 basis-[95%] md:basis-1/2 lg:basis-[35.6%]" /* Responsive basis: 1 card (95%) on mobile, 2 on tablet, 2.1 on desktop */
+                className="pb-5 basis-[90%] sm:basis-[80%] md:basis-1/2 lg:basis-[35.6%] xl:basis-[33%]"
               >
                 <FeatureCard {...card} />
               </CarouselItem>
@@ -174,6 +156,7 @@ export default function BusinessSmartlySection() {
           </CarouselContent>
         </Carousel>
       </div>
+
     </section>
   );
 }

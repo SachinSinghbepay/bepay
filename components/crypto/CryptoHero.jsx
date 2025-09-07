@@ -13,31 +13,31 @@ import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 const iconsData = [
   {
-    src: "/eth.png",
+    src: "/usdt_n.png",
     alt: "ETH",
-    initialX: "-800vw",
+    initialX: "-950vw",
     initialY: "-500vh",
-    finalX: "-0px",
+    finalX: "11.5px",
     finalY: "-20px",
   },
   {
-    src: "/usdt.png",
+    src: "/dollar_n.png",
     alt: "USDT",
     initialX: "800vw",
     initialY: "-500vh",
-    finalX: "-25px",
+    finalX: "-20px",
     finalY: "-20px",
   },
   {
-    src: "/doller.png",
-    alt: "Doller",
+    src: "/eth_n.png",
+    alt: "Dollar",
     initialX: "-800vw",
     initialY: "500vh",
-    finalX: "-55px",
+    finalX: "-52px",
     finalY: "-20px",
   },
   {
-    src: "/bitcoin.png",
+    src: "/bitcoin_n.png",
     alt: "Bitcoin",
     initialX: "800vw",
     initialY: "500vh",
@@ -59,36 +59,32 @@ export default function CryptoHeroSection() {
 
   const mockupY = useTransform(scrollYProgress, [0, 1], [0, -700]);
 
-  // ✅ CORRECTED: Moved hook calls out of the map function
-  // These hooks are now called at the top level of the component.
-  const xTransforms = [
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialX, iconsData[0].finalX]),
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[1].initialX, iconsData[1].finalX]),
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[2].initialX, iconsData[2].finalX]),
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[3].initialX, iconsData[3].finalX]),
-  ];
+  // Desktop scroll transforms - individual hooks for each icon
+  const xTransform0 = useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialX, iconsData[0].finalX]);
+  const yTransform0 = useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialY, iconsData[0].finalY]);
+  const scaleTransform0 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
+  const opacityTransform0 = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
 
-  const yTransforms = [
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialY, iconsData[0].finalY]),
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[1].initialY, iconsData[1].finalY]),
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[2].initialY, iconsData[2].finalY]),
-    useTransform(scrollYProgress, [0, 0.6], [iconsData[3].initialY, iconsData[3].finalY]),
-  ];
+  const xTransform1 = useTransform(scrollYProgress, [0, 0.6], [iconsData[1].initialX, iconsData[1].finalX]);
+  const yTransform1 = useTransform(scrollYProgress, [0, 0.6], [iconsData[1].initialY, iconsData[1].finalY]);
+  const scaleTransform1 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
+  const opacityTransform1 = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
 
-  const scaleTransforms = [
-    useTransform(scrollYProgress, [0, 0.6], [1.5, 1]),
-    useTransform(scrollYProgress, [0, 0.6], [1.5, 1]),
-    useTransform(scrollYProgress, [0, 0.6], [1.5, 1]),
-    useTransform(scrollYProgress, [0, 0.6], [1.5, 1]),
-  ];
-  
-  const opacityTransforms = [
-    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]),
-    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]),
-    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]),
-    useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]),
-  ];
+  const xTransform2 = useTransform(scrollYProgress, [0, 0.6], [iconsData[2].initialX, iconsData[2].finalX]);
+  const yTransform2 = useTransform(scrollYProgress, [0, 0.6], [iconsData[2].initialY, iconsData[2].finalY]);
+  const scaleTransform2 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
+  const opacityTransform2 = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
 
+  const xTransform3 = useTransform(scrollYProgress, [0, 0.6], [iconsData[3].initialX, iconsData[3].finalX]);
+  const yTransform3 = useTransform(scrollYProgress, [0, 0.6], [iconsData[3].initialY, iconsData[3].finalY]);
+  const scaleTransform3 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
+  const opacityTransform3 = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
+
+  // Group transforms for easier access
+  const xTransforms = [xTransform0, xTransform1, xTransform2, xTransform3];
+  const yTransforms = [yTransform0, yTransform1, yTransform2, yTransform3];
+  const scaleTransforms = [scaleTransform0, scaleTransform1, scaleTransform2, scaleTransform3];
+  const opacityTransforms = [opacityTransform0, opacityTransform1, opacityTransform2, opacityTransform3];
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -101,7 +97,6 @@ export default function CryptoHeroSection() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // ✅ CORRECTED: Added `words.length` to the dependency array
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentWord((prev) => (prev + 1) % words.length);
@@ -113,7 +108,6 @@ export default function CryptoHeroSection() {
   const handleButtonClick = () => {
     console.log("Button clicked!");
     // Add your click logic here
-    // For example: navigate to download page, open modal, etc.
   };
 
   return (
@@ -124,34 +118,83 @@ export default function CryptoHeroSection() {
     >
       {/* Sticky background content */}
       <div className="sticky top-0 h-screen flex-col items-center justify-center px-4 py-8 overflow-hidden">
-        {/* Background text that stays sticky - positioned absolutely to stay in place */}
+        {/* Background text */}
         <div className=" flex items-center justify-center z-10">
           <div className="text-center">
-            <div>
-              <div className="text-[#B7B7B7] text-4xl lg:-tracking-[7px] sm:text-6xl lg:text-[64px]  font-[600] leading-[100%]">
-                USE
+            {isMobile ? (
+              // Mobile Heading (Unchanged)
+              <div className="leading-none lg:hidden">
+                <div
+                  className="text-[#C0C0C0] font-thin text-4xl sm:text-[50px] my-[-0.5rem]"
+                  style={{ letterSpacing: "-0.14em" }}
+                >
+                  USE
+                  <span
+                    className="text-[#4F4F4F] font-[900] text-4xl sm:text-[50px] ml-2 sm:ml-4"
+                    style={{ letterSpacing: "-0.06em" }}
+                  >
+                    CRYP
+                    <span className="inline-block ml-0.5">T</span>O
+                  </span>
+                </div>
+                <div
+                  className="text-[#B7B7B7] font-thin text-4xl sm:text-[50px] my-[-0.8rem]"
+                  style={{ letterSpacing: "-0.11em" }}
+                >
+                  LI
+                  <span className="inline-block -ml-1">K</span>E
+                  <span
+                    className="text-[#C0C0C0] font-[900] text-4xl sm:text-[50px] ml-2 sm:ml-4"
+                    style={{ letterSpacing: "-0.03em" }}
+                  >
+                    CASH
+                  </span>
+                </div>
               </div>
-              <div className="text-[#6F6F6F] text-5xl lg:-mt-6 9 lg:tracking-tighter sm:text-8xl lg:text-[120px] font-semibold leading-none">
-                CRYPTO
+            ) : (
+              // Desktop Heading (Adjusted)
+              <div className="hidden lg:block">
+                <div className="leading-none">
+                  <span
+                    className="text-[#D1D1D1] font-thin text-[166px]"
+                    style={{ letterSpacing: "-0.17em" }}
+                  >
+                    USE
+                  </span>
+                  <span
+                    className="text-[#4F4F4F] font-[900] text-4xl sm:text-[166px] ml-2 sm:ml-4"
+                    style={{ letterSpacing: "-0.06em" }}
+                  >
+                    CRYP
+                    <span className="inline-block ml-0.5">T</span>O
+                  </span>
+                </div>
+                {/* --- MODIFIED LINE START (Tighter Spacing) --- */}
+                <div className="leading-none -mt-16">
+                  {/* --- MODIFIED LINE END --- */}
+                  <div
+                    className="text-[#B7B7B7] font-thin text-4xl sm:text-[166px] my-[-0.8rem]"
+                    style={{ letterSpacing: "-0.11em" }}
+                  >
+                    LI
+                    <span className="inline-block -ml-5">K</span>E
+                    <span
+                      className="text-[#C0C0C0] font-[900] text-[166px] sm:text-[166px] ml-2 sm:ml-4"
+                      style={{ letterSpacing: "-0.03em" }}
+                    >
+                      CASH
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className="text-[#B7B7B7] text-6xl sm:text-8xl lg:-mt-9 2xl:-mt-11 lg:text-[200px] font-[100] leading-none">
-                <span style={{ letterSpacing: "-0.11em" }}>L</span>
-                <span style={{ letterSpacing: "-0.24em" }}>I</span>
-                <span style={{ letterSpacing: "-0.12em" }}>KE</span>
-                {/* <span style={{ letterSpacing: "-0.07em" }}></span> */}
-                <span className="text-[#404040] font-semibold">
-                  <span style={{ letterSpacing: "-0.10em" }}>C</span>
-                  <span style={{ letterSpacing: "-0.10em" }}>A</span>
-                  <span style={{ letterSpacing: "-0.10em" }}>S</span>
-                  <span style={{ letterSpacing: "-0.11em" }}>H</span>
-                </span>
-              </div>
-            </div>
+            )}
           </div>
         </div>
 
-        {/* Phone mockup with scroll animations - higher z-index to appear above text */}
-        <div className="relative z-20 max-w-7xl lg:-mt-10 mx-auto w-full flex items-center justify-center">
+        {/* --- MODIFIED LINE START (Moved Up) --- */}
+        <div className="relative z-20 max-w-7xl mx-auto w-full flex items-center justify-center mt-15 sm:mt-24 lg:mt-2">
+          {/* --- MODIFIED LINE END --- */}
+
           <motion.div style={{ y: mockupY }} className="flex-shrink-0">
             <div className="relative">
               <motion.div
@@ -166,6 +209,7 @@ export default function CryptoHeroSection() {
                 }}
               >
                 <div className="w-full h-full bg-gradient-to-t from-white via-white to-[#F9F9F966] rounded-[32px] lg:rounded-[52px] flex flex-col items-center justify-start p-6 lg:p-16 relative">
+                  {/* Logo */}
                   <div className="mb-6">
                     <Image
                       src="/bepayiconlogo.png"
@@ -176,6 +220,8 @@ export default function CryptoHeroSection() {
                       priority
                     />
                   </div>
+
+                  {/* Text */}
                   <div className="text-center mb-6 lg:mb-4">
                     <p className="text-xs 3xl:text-sm text-gray-800 leading-relaxed max-w-[200px] lg:max-w-[280px]">
                       <span className="font-semibold text-black">
@@ -185,72 +231,65 @@ export default function CryptoHeroSection() {
                       for lifestyle, finance and freedom!
                     </p>
                   </div>
-                  <div className="mb-8 lg:mb-4 h-8 lg:h-10 flex items-center justify-center">
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={currentWord}
-                        initial={{ y: 30, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: -30, opacity: 0 }}
-                        transition={{
-                          duration: 0.5,
-                          ease: "easeInOut",
-                        }}
-                        className="text-md 3xl:text-xl font-[400] text-gray-800"
-                      >
-                        {words[currentWord]}
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
-                  <div>
-                    <p className="text-xs 3xl:text-sm text-center text-gray-800 leading-relaxed max-w-[200px] lg:max-w-[280px]">
-                      Take control of your financial future with{" "}
-                      <span className="text-black font-semibold">
-                        self-custody wallets, earning opportunities, and
-                        seamless spending solutions.
+
+                  {/* Secondary text */}
+                  <div className="mb-4 lg:mb-6">
+                    <p className="text-[11px] sm:text-sm 3xl:text-sm text-gray-800 leading-relaxed max-w-[260px] sm:max-w-[320px] mx-auto">
+                      <span className="block text-left whitespace-nowrap">
+                        Take control of your financial future with
+                      </span>
+                      <span className="block text-center text-black font-semibold text-[10px] sm:text-sm whitespace-nowrap">
+                        self-custody wallets, earning opportunities,
+                      </span>
+                      <span className="block text-center text-black font-semibold">
+                        and seamless spending solutions.
                       </span>
                     </p>
                   </div>
 
-                  {/* Crypto icons with conditional animations - lowered z-index */}
+                  {/* Crypto icons */}
                   <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
                     {iconsData.map((icon, index) => {
-                      // Mobile: Simple bottom-up animation with delays
                       if (isMobile) {
+                        // Mobile animation
                         return (
                           <motion.div
                             key={index}
                             initial={{
                               opacity: 0,
                               y: 100,
-                              x: index * -25, // Stagger horizontally
+                              x: index * -25,
                             }}
                             animate={{
                               opacity: 1,
-                              y: -20,
-                              x: index * -25,
+                              y: -80,
+                              x: icon.finalX, // Use finalX for mobile for consistency
                             }}
                             transition={{
                               duration: 0.6,
-                              delay: index * 0.2, // Stagger the animations
+                              delay: index * 0.2,
                               ease: "easeOut",
                             }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: false, amount: 0.5 }}
-                            className="absolute top-[56%] lg:top-[67%] left-1/2 translate-x-1/2"
+                            className="absolute top-[56%] lg:top-[67%] left-1/2 translate-x-[30%]"
                           >
-                            <Image
-                              src={icon.src || "/placeholder.svg"}
-                              alt={icon.alt}
-                              width={80}
-                              height={80}
-                              className="w-10 h-10"
-                            />
+                            <div
+                              className="w-12 h-12 rounded-full overflow-hidden"
+                              style={{
+                                boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.15)", // shadow toward right-bottom
+                              }}
+                            >
+                              <Image
+                                src={icon.src || "/placeholder.svg"}
+                                alt={icon.alt}
+                                fill
+                                className="object-cover rounded-full"
+                              />
+                            </div>
                           </motion.div>
                         );
                       }
 
-                      // Desktop: Original scroll-based animation
+                      // Desktop scroll animation
                       const x = xTransforms[index];
                       const y = yTransforms[index];
                       const scale = scaleTransforms[index];
@@ -262,19 +301,23 @@ export default function CryptoHeroSection() {
                           style={{ x, y, scale, opacity }}
                           className="absolute flex top-1/2 left-1/2 translate-x-1/2"
                         >
-                          <Image
-                            src={icon.src || "/placeholder.svg"}
-                            alt={icon.alt}
-                            width={80}
-                            height={80}
-                            className="w-10 h-10"
-                          />
+                          <div className="w-12 h-12 overflow-hidden">
+                            <Image
+                              src={icon.src || "/placeholder.svg"}
+                              alt={icon.alt}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
                         </motion.div>
                       );
                     })}
                   </div>
 
-                  <div className="my-4 mt-10 lg:mt-32 relative z-10">
+                  {/* --- MODIFICATION START --- */}
+                  {/* Arrow */}
+                  <div className="relative z-30 flex justify-center mt-20 lg:mt-48">
+                  {/* --- MODIFICATION END --- */}
                     <Image
                       src={"/images/crypto/line.png"}
                       height={100}
@@ -283,9 +326,11 @@ export default function CryptoHeroSection() {
                       className="object-contain h-16 w-auto"
                     />
                   </div>
-
-                  {/* Fixed clickable button with proper z-index and pointer events */}
-                  <div className="relative z-50 pointer-events-auto">
+                  
+                  {/* --- MODIFICATION START --- */}
+                  {/* Button */}
+                  <div className="relative z-50 pointer-events-auto mt-10 lg:mt-12">
+                  {/* --- MODIFICATION END --- */}
                     <WaitlistTriggerButton>
                       <motion.button
                         whileHover={{ scale: 1.05 }}

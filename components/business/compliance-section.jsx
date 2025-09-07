@@ -12,7 +12,7 @@ const complianceData = [
   {
     icon: FileText,
     title: "Licensed",
-    badges: ["MSB (USA)", "VASP (EU)", "FIU (India)", "MiCA (EU)"],
+    badges: ["MSB (USA)", "VASP (EU)", "MiCA (EU)"],
   },
 
   {
