@@ -28,7 +28,9 @@ export default function Header() {
   const getLinkClasses = (path, baseClasses) => {
     const isActive = isActivePage(path);
     return `${baseClasses} ${
-      isActive ? "text-black" : "text-gray-600 hover:text-black"
+      isActive
+        ? "text-black font-[700]" // Active → bold black
+        : "text-[#6A6A6A] hover:text-black font-[400]" // Inactive → thin gray
     } transition-colors duration-200`;
   };
 
@@ -39,7 +41,7 @@ export default function Header() {
 
   return (
     <header className={headerClasses}>
-      <div className="  px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href={"/"}>
@@ -61,7 +63,7 @@ export default function Header() {
               href="/"
               className={getLinkClasses(
                 "/",
-                "text-sm lg:text-[14px] font-[700]"
+                "text-sm lg:text-[14px] tracking-wide uppercase"
               )}
             >
               PERSONAL
@@ -70,7 +72,7 @@ export default function Header() {
               href="/business"
               className={getLinkClasses(
                 "/business",
-                "text-sm lg:text-[14px] font-[700]"
+                "text-sm lg:text-[14px] tracking-wide uppercase"
               )}
             >
               BUSINESS
@@ -99,38 +101,38 @@ export default function Header() {
             aria-label="Toggle mobile menu"
           >
             <div className="w-6 h-6 relative flex flex-col justify-center items-center">
-              {/* Top bar - longer line */}
+              {/* Top bar */}
               <motion.span
                 className="absolute h-0.5 bg-black rounded-full"
                 initial={{ width: 24 }}
                 animate={{
                   rotate: isMobileMenuOpen ? 45 : 0,
                   y: isMobileMenuOpen ? 0 : -6,
-                  width: isMobileMenuOpen ? 24 : 24,
+                  width: 24,
                 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               />
 
-              {/* Middle bar - shorter line, positioned to the right */}
+              {/* Middle bar */}
               <motion.span
                 className="absolute h-0.5 bg-black rounded-full"
                 initial={{ width: 16, x: 4 }}
                 animate={{
                   opacity: isMobileMenuOpen ? 0 : 1,
                   x: isMobileMenuOpen ? -10 : 4,
-                  width: isMobileMenuOpen ? 16 : 16,
+                  width: 16,
                 }}
                 transition={{ duration: 0.2, ease: "easeInOut" }}
               />
 
-              {/* Bottom bar - longer line */}
+              {/* Bottom bar */}
               <motion.span
                 className="absolute h-0.5 bg-black rounded-full"
                 initial={{ width: 24 }}
                 animate={{
                   rotate: isMobileMenuOpen ? -45 : 0,
                   y: isMobileMenuOpen ? 0 : 6,
-                  width: isMobileMenuOpen ? 24 : 24,
+                  width: 24,
                 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               />
@@ -138,7 +140,7 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile Navigation Menu with slide animation */}
+        {/* Mobile Navigation Menu */}
         <motion.div
           initial={false}
           animate={{
@@ -158,9 +160,7 @@ export default function Header() {
           <motion.nav
             className="flex flex-col p-4 space-y-4"
             initial={false}
-            animate={{
-              y: isMobileMenuOpen ? 0 : -10,
-            }}
+            animate={{ y: isMobileMenuOpen ? 0 : -10 }}
             transition={{
               duration: 0.3,
               ease: "easeInOut",
@@ -169,14 +169,20 @@ export default function Header() {
           >
             <Link
               href="/"
-              className={getLinkClasses("/", "text-sm font-[700] py-2")}
+              className={getLinkClasses(
+                "/",
+                "text-sm uppercase tracking-wide py-2"
+              )}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               PERSONAL
             </Link>
             <Link
               href="/business"
-              className={getLinkClasses("/business", "text-sm font-[700] py-2")}
+              className={getLinkClasses(
+                "/business",
+                "text-sm uppercase tracking-wide py-2"
+              )}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               BUSINESS

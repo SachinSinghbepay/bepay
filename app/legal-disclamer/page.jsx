@@ -1,3 +1,4 @@
+import { Suspense } from 'react'; // 1. Import Suspense
 import DisclaimerContent from "@/components/privacy-policy/DisclaimerContent";
 import HeaderContent from "@/components/privacy-policy/HeaderContent";
 import React from "react";
@@ -10,7 +11,12 @@ const page = () => {
           heading={"Legal disclaimer"}
           subheading={"(For bepay.money)"}
         />
-        <DisclaimerContent />
+        
+        {/* 2. Wrap the client component in Suspense */}
+        <Suspense fallback={<p>Loading content...</p>}>
+          <DisclaimerContent />
+        </Suspense>
+
       </div>
     </section>
   );

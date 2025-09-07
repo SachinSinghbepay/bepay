@@ -65,23 +65,80 @@ export default function InvestmentSuite() {
       ref={ref}
       className="bg-black py-20 px-4 sm:px-6 lg:px-0 overflow-hidden"
     >
-      <div >
+      <div>
         <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex flex-col md:flex-row items-start md:items-center justify-start lg:justify-items-center-safe md:gap-24 mb-4"
-        >
-          <h2 className="text-4xl sm:text-5xl  lg:text-[100px] font-[400] text-white mb-4 sm:mb-4">
-            Investment suite
-          </h2>
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex flex-col md:flex-row items-start md:items-center justify-start lg:justify-items-center-safe md:gap-24 mb-4"
+          >
+            <h2 className="text-4xl sm:text-5xl lg:text-[100px] font-bold text-white mb-4 sm:mb-4">
+              Investment suite
+            </h2>
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="text-[#C0C0C0] md:hidden text-lg sm:text-xl mb-16 max-w-2xl"
+            >
+              Diversify your portfolio with{" "}
+              <span className="text-white font-medium">
+                tokenized real-world assets
+              </span>{" "}
+              and traditional investments
+            </motion.p>
+            <WaitlistTriggerButton>
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={
+                  isInView
+                    ? { opacity: 1, scale: 1 }
+                    : { opacity: 0, scale: 0.8 }
+                }
+                transition={{ duration: 0.6, delay: 0.2 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center justify-center gap-2 -mt-10 md:mt-0 self-start
+                      px-6 h-[56px] cursor-pointer whitespace-nowrap
+                      bg-white text-black rounded-full text-xs font-medium
+                      hover:bg-gray-100 transition-colors"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5"
+                >
+                  <path
+                    d="M8.62591 5.09984C8.53039 4.82843 8.353 4.59336 8.11822 4.42705C7.88343 4.26073 7.60283 4.17137 7.3151 4.17129H6.23782C5.93221 4.17215 5.63766 4.28571 5.41058 4.49024C5.1835 4.69477 5.03984 4.97588 5.00713 5.27973C4.97442 5.58359 5.05496 5.88883 5.23331 6.137C5.41166 6.38517 5.67529 6.55883 5.97372 6.62471L7.61118 6.98334C7.94624 7.05647 8.24243 7.25087 8.44282 7.52918C8.64321 7.80749 8.73365 8.15005 8.69674 8.491C8.65983 8.83195 8.49819 9.14722 8.24289 9.3762C7.98759 9.60518 7.65666 9.73171 7.31371 9.73145H6.38656C6.09917 9.73157 5.81881 9.64261 5.58407 9.47682C5.34932 9.31103 5.17174 9.07656 5.07575 8.80568M6.85222 4.17129V2.78125M6.85222 11.1215V9.73145M9.50303 18.7208V11.4231C9.50303 10.9623 9.68609 10.5203 10.0119 10.1945C10.3378 9.86864 10.7797 9.68557 11.2406 9.68557C11.7014 9.68557 12.1434 9.86864 12.4692 10.1945C12.7951 10.5203 12.9781 10.9623 12.9781 11.4231V15.2457H15.7582C16.4955 15.2457 17.2026 15.5386 17.724 16.06C18.2454 16.5814 18.5383 17.2885 18.5383 18.0258V18.7208"
+                    stroke="#080808"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+
+                  <path
+                    d="M6.85209 13.2528C5.56961 13.2526 4.31775 12.8609 3.26387 12.1301C2.21 11.3993 1.40434 10.3641 0.95462 9.1631C0.5049 7.96205 0.43255 6.65234 0.747243 5.40907C1.06194 4.16579 1.74867 3.04822 2.71564 2.20576C3.6826 1.3633 4.88371 0.836108 6.15837 0.694673C7.43303 0.553238 8.72049 0.804299 9.84861 1.41429C10.9767 2.02428 11.8918 2.96412 12.4714 4.10817C13.0509 5.25221 13.2675 6.54593 13.092 7.81635"
+                    stroke="#080808"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+
+                <span>Start Investing</span>
+              </motion.button>
+            </WaitlistTriggerButton>
+          </motion.div>
+
+          {/* Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-[#C0C0C0] md:hidden text-lg sm:text-xl mb-16 max-w-2xl"
+            className="text-[#C0C0C0] hidden md:block text-[16px] mb-16 max-w-5xl"
           >
             Diversify your portfolio with{" "}
             <span className="text-white font-medium">
@@ -89,52 +146,6 @@ export default function InvestmentSuite() {
             </span>{" "}
             and traditional investments
           </motion.p>
-          <WaitlistTriggerButton>
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={
-                isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }
-              }
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex items-center gap-2 -mt-6 md:mt-0 bg-white text-black px-6 py-2 rounded-full font-medium hover:bg-gray-100 transition-colors self-start"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M8.62591 5.09984C8.53039 4.82843 8.353 4.59336 8.11822 4.42705C7.88343 4.26073 7.60283 4.17137 7.3151 4.17129H6.23782C5.93221 4.17215 5.63766 4.28571 5.41058 4.49024C5.1835 4.69477 5.03984 4.97588 5.00713 5.27973C4.97442 5.58359 5.05496 5.88883 5.23331 6.137C5.41166 6.38517 5.67529 6.55883 5.97372 6.62471L7.61118 6.98334C7.94624 7.05647 8.24243 7.25087 8.44282 7.52918C8.64321 7.80749 8.73365 8.15005 8.69674 8.491C8.65983 8.83195 8.49819 9.14722 8.24289 9.3762C7.98759 9.60518 7.65666 9.73171 7.31371 9.73145H6.38656C6.09917 9.73157 5.81881 9.64261 5.58407 9.47682C5.34932 9.31103 5.17174 9.07656 5.07575 8.80568M6.85222 4.17129V2.78125M6.85222 11.1215V9.73145M9.50303 18.7208V11.4231C9.50303 10.9623 9.68609 10.5203 10.0119 10.1945C10.3378 9.86864 10.7797 9.68557 11.2406 9.68557C11.7014 9.68557 12.1434 9.86864 12.4692 10.1945C12.7951 10.5203 12.9781 10.9623 12.9781 11.4231V15.2457H15.7582C16.4955 15.2457 17.2026 15.5386 17.724 16.06C18.2454 16.5814 18.5383 17.2885 18.5383 18.0258V18.7208"
-                  stroke="#080808"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M6.85209 13.2528C5.56961 13.2526 4.31775 12.8609 3.26387 12.1301C2.21 11.3993 1.40434 10.3641 0.95462 9.1631C0.5049 7.96205 0.43255 6.65234 0.747243 5.40907C1.06194 4.16579 1.74867 3.04822 2.71564 2.20576C3.6826 1.3633 4.88371 0.836108 6.15837 0.694673C7.43303 0.553238 8.72049 0.804299 9.84861 1.41429C10.9767 2.02428 11.8918 2.96412 12.4714 4.10817C13.0509 5.25221 13.2675 6.54593 13.092 7.81635"
-                  stroke="#080808"
-                  strokeLinecap="round"
-                />
-              </svg>
-              Start Investing
-            </motion.button>
-          </WaitlistTriggerButton>
-        </motion.div>
-
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="text-[#C0C0C0] hidden md:block text-[16px] mb-16 max-w-5xl"
-        >
-          Diversify your portfolio with{" "}
-          <span className="text-white font-medium">
-            tokenized real-world assets
-          </span>{" "}
-          and traditional investments
-        </motion.p>
         </div>
 
         {/* Cards Carousel */}
@@ -188,20 +199,25 @@ export default function InvestmentSuite() {
 
                   {/* Card Content */}
                   <div className="lg:p-9">
-                  <div className="space-y-4 max-w-[327px] ">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[#6A6A6A] text-lg">Tokenized</span>
-                      <span className="text-white font-medium ">
-                        {item.category}
-                      </span>
+                    <div className="space-y-4 max-w-[327px] ">
+                      <div className="flex items-center gap-2">
+                        {/* FINAL MODIFICATION: Added font-semibold */}
+                        <span className="text-[#6A6A6A] text-lg font-semibold">
+                          Tokenized
+                        </span>
+                        <span className="text-white font-extrabold md:font-bold">
+                          {item.category}
+                        </span>
+                      </div>
+
+                      <p className="text-[#6A6A6A] text-[16px] leading-relaxed">
+                        {item.description}
+                      </p>
+
+                      <p className="text-[#6A6A6A] text-[16px]">
+                        {item.details}
+                      </p>
                     </div>
-
-                    <p className="text-[#6A6A6A] text-[16px] leading-relaxed">
-                      {item.description}
-                    </p>
-
-                    <p className="text-[#6A6A6A] text-[16px]">{item.details}</p>
-                  </div>
                   </div>
                 </motion.div>
               </CarouselItem>

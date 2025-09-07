@@ -9,10 +9,9 @@ const securityData = {
     title: "Security Certifications",
     items: [
       "ISO 27001 Information Security Management",
-   
       "GDPR Privacy Protection Compliance",
       "ISO 9001 Quality Management Systems (QMS)",
-      "ISO 20022 Global Financial Messaging Standard"
+      "ISO 20022 Global Financial Messaging Standard",
     ],
   },
   monitoring: {
@@ -23,19 +22,17 @@ const securityData = {
   mfa: {
     icon: "/images/crypto/icon2.png",
     title: "Multi-Factor Authentication",
-    description:
-      "Biometric login, SMS codes, and hardware security keys",
+    description: "Biometric login, SMS codes, and hardware security keys",
   },
   compliance: {
     icon: "/images/crypto/icon4.png",
     title: "Regulatory Compliance",
-    description: "Licensed by FCA (UK), VASP (EU), MiCA (EU), DORA (EU), MSME (India) and MSB (USA)",
+    description: "Licensed by VASP (EU), MiCA (EU), DORA (EU), MSME (India) and MSB (USA)",
   },
   encryption: {
     // icon: "/images/crypto/icon5.png",
     title: "End-to-End Encryption",
-    description:
-      "All data is encrypted with AES-256 encryption, both at rest and in transit",
+    description: "All data is encrypted with AES-256 encryption, both at rest and in transit",
   },
 };
 
@@ -67,26 +64,27 @@ const SecurityCard = ({ icon, title, description, items, className = "" }) => {
       <div className="relative z-10 mt-3 lg:mt-8  flex flex-col h-full">
         <h3 className="text-xl font-medium text-white mb-4">{title}</h3>
         {description && (
-          <div className="flex gap-1 items-start">
-            {" "}
-            <span className="block w-[2px] h-10 bg-green-400 mr-3 mt-0.5 shrink-0 rounded-full" />
-            <p className="text-[#6A6A6A] text-[14px] lg:text-[16px]">
-              {description}
-            </p>
-          </div>
-        )}
-        {items && (
-          <ul className="space-y-3 md:space-y-7 mt-2">
-            {items.map((item) => (
-              <li key={item} className="flex items-start">
-                <span className="block w-[1px] h-6 bg-green-400 mr-3 mt-0.5 shrink-0 rounded-full" />
-                <span className="text-[#6A6A6A]  text-[14px] lg:text-[16px]">
-                  {item}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
+  <div className="flex gap-1 items-stretch">
+    <span className="block w-[2px] bg-green-400 mr-3 shrink-0 rounded-full self-stretch" />
+    <p className="text-[#6A6A6A] text-[14px] lg:text-[16px]">
+      {description}
+    </p>
+  </div>
+)}
+
+{items && (
+  <ul className="space-y-3 md:space-y-7 mt-2">
+    {items.map((item) => (
+      <li key={item} className="flex items-stretch">
+        <span className="block w-[2px] bg-green-400 mr-3 mt-0.5 shrink-0 rounded-full" />
+        <span className="text-[#6A6A6A] text-[14px] lg:text-[16px]">
+          {item}
+        </span>
+      </li>
+    ))}
+  </ul>
+)}
+
       </div>
     </motion.div>
   );
@@ -123,13 +121,13 @@ export const SecuritySection = () => {
         variants={containerVariants}
       >
         <motion.h2
-          className="text-3xl md:text-4xl lg:text-[40px] text-[#C0C0C0] font-medium text-center"
+          className="text-2xl md:text-4xl lg:text-[40px] text-[#C0C0C0] font-medium text-center"
           variants={textVariants}
         >
-          Bank-Grade Security & Compliance
+          Bank-Grade Security <br/> & Compliance
         </motion.h2>
         <motion.p
-        className="text-[#C0C0C0] text-center text-[16px] max-w-7xl mx-auto mt-4 mb-16"
+          className="text-[#C0C0C0] text-center text-[16px] max-w-7xl mx-auto mt-4 mb-16"
           variants={textVariants}
         >
           Your security is our priority. We employ the highest standards of
