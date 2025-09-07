@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
@@ -246,7 +246,7 @@ function PortalContent({
                           color: isDarkMode ? "#F9FAFB" : "#000000",
                         }}
                       >
-                        Yay! You're on the waitlist.
+                        Yay! You&apos;re on the waitlist.
                       </h2>
                       <p
                         style={{
@@ -445,6 +445,22 @@ function PortalContent({
 }
 
 export default function WaitlistPopup({
+  isOpen: externalIsOpen,
+  onClose: externalOnClose,
+  onSubmit: externalOnSubmit,
+}) {
+  return (
+    <Suspense fallback={<div></div>}>
+      <WaitlistPopupContent
+        isOpen={externalIsOpen}
+        onClose={externalOnClose}
+        onSubmit={externalOnSubmit}
+      />
+    </Suspense>
+  );
+}
+
+function WaitlistPopupContent({
   isOpen: externalIsOpen,
   onClose: externalOnClose,
   onSubmit: externalOnSubmit,
