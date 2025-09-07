@@ -444,7 +444,22 @@ function PortalContent({
   );
 }
 
-// Component that uses useSearchParams - needs to be wrapped in Suspense
+export default function WaitlistPopup({
+  isOpen: externalIsOpen,
+  onClose: externalOnClose,
+  onSubmit: externalOnSubmit,
+}) {
+  return (
+    <Suspense fallback={<div></div>}>
+      <WaitlistPopupContent
+        isOpen={externalIsOpen}
+        onClose={externalOnClose}
+        onSubmit={externalOnSubmit}
+      />
+    </Suspense>
+  );
+}
+
 function WaitlistPopupContent({
   isOpen: externalIsOpen,
   onClose: externalOnClose,
@@ -525,14 +540,5 @@ function WaitlistPopupContent({
       referralLink={referralLink}
     />,
     document.body
-  );
-}
-
-// Main export component wrapped in Suspense
-export default function WaitlistPopup(props) {
-  return (
-    <Suspense fallback={null}>
-      <WaitlistPopupContent {...props} />
-    </Suspense>
   );
 }
