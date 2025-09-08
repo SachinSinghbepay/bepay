@@ -127,14 +127,18 @@ const DesktopCardComponent = ({ cardData }) => {
   );
 };
 
-
-// REFACTORED & RESPONSIVE MOBILE CARD WITH UPDATED SHADOW
+// ENHANCED MOBILE CARD WITH STRONGER RIGHT-SIDE SHADOW
 const MobileCard = ({ cardData }) => (
   <div
     className="h-[50vh] min-h-[380px] w-[75vw] max-w-[320px] bg-white rounded-[40px] p-6 flex flex-col justify-end relative overflow-hidden flex-shrink-0"
     style={{
-      // Modified shadow for more presence and interaction with adjacent cards
-      boxShadow: "0px 10px 40px rgba(0, 0, 0, 0.1), -10px 0px 30px rgba(0, 0, 0, 0.05)",
+      // Enhanced right-side shadow with multiple layers for more depth
+      boxShadow: `
+        0px 10px 25px rgba(0, 0, 0, 0.017),
+        120px 0px 100px -30px rgba(0, 0, 0, 0.05),
+        80px 0px 60px -20px rgba(0, 0, 0, 0.01),
+        40px 0px 30px -10px rgba(0, 0, 0, 0.017)
+      `,
     }}
   >
     <Image
@@ -154,7 +158,6 @@ const MobileCard = ({ cardData }) => (
     </div>
   </div>
 );
-
 
 // DESKTOP ANIMATION
 const DesktopCard = ({ cardData, index, progress, totalCards }) => {
@@ -199,7 +202,7 @@ const MobileView = () => {
     offset: ["start start", "end end"],
   });
 
-  const easeOutCubic = (x) => 1 - Math.pow(1 - x, 3);
+  const easeOutCubic = (val) => 1 - Math.pow(1 - val, 3);
 
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
@@ -243,12 +246,17 @@ const MobileView = () => {
           <div className="w-full flex-1 flex items-center">
             <motion.div
               ref={cardWrapperRef}
-              style={{ x }}
+              
               className="flex gap-4 sm:gap-6 px-4 sm:px-6"
+              style={{ 
+                x,
+                // Ensure the container allows shadows to overflow
+                overflow: 'visible'
+              }}
             >
               {utilityData.map((cardData, i) => (
-                <div key={i}>
-                  <MobileCard cardData={cardData} />
+                <div key={i} className="relative" style={{ zIndex: utilityData.length - i }}>
+                  <MobileCard cardData={cardData} index={i} />
                 </div>
               ))}
               <div className="flex-shrink-0 w-3 sm:w-16" />
@@ -278,7 +286,6 @@ const MobileView = () => {
     </div>
   );
 };
-
 
 export const UtilitySection = () => {
   const containerRef = useRef(null);
