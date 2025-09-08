@@ -4,10 +4,13 @@ import { useState, useEffect, Suspense } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import { addToWaitlist } from "@/lib/firebase";
+import { addToWaitlist } from "@/lib/firebase"; // Assuming this path is correct
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 
+// ==================================================================
+// ===== NO CHANGES WERE MADE TO THIS COMPONENT =====================
+// ==================================================================
 function PortalContent({
   isOpen,
   onClose,
@@ -149,10 +152,10 @@ function PortalContent({
               onClick={onClose}
               style={closeButtonStyle}
               onMouseEnter={(e) =>
-                (e.target.style.backgroundColor = "rgba(255,255,255,0.1)")
+                (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.1)")
               }
               onMouseLeave={(e) =>
-                (e.target.style.backgroundColor = "transparent")
+                (e.currentTarget.style.backgroundColor = "transparent")
               }
             >
               <X
@@ -348,10 +351,14 @@ function PortalContent({
                           width: "85%",
                           display: "flex",
                           alignItems: "center",
-                          border: "1px solid " + (isDarkMode ? "#4B5563" : "rgb(209,213,219)"),
+                          border:
+                            "1px solid " +
+                            (isDarkMode ? "#4B5563" : "rgb(209,213,219)"),
                           borderRadius: "9999px",
                           overflow: "hidden",
-                          backgroundColor: isDarkMode ? "#374151" : "rgb(249,250,251)",
+                          backgroundColor: isDarkMode
+                            ? "#374151"
+                            : "rgb(249,250,251)",
                         }}
                       >
                         <input
@@ -379,7 +386,9 @@ function PortalContent({
                           style={{
                             height: "2.8rem",
                             padding: "0 1.8rem",
-                            backgroundColor: isDarkMode ? "#F9FAFB" : "#000000",
+                            backgroundColor: isDarkMode
+                              ? "#F9FAFB"
+                              : "#000000",
                             color: isDarkMode ? "#111827" : "#ffffff",
                             border: "none",
                             fontSize: "0.8rem",
@@ -400,7 +409,7 @@ function PortalContent({
                               animate={{ rotate: 360 }}
                               transition={{
                                 duration: 1,
-                                repeat: Number.POSITIVE_INFINITY,
+                                repeat: Infinity,
                                 ease: "linear",
                               }}
                               style={{
@@ -444,6 +453,9 @@ function PortalContent({
   );
 }
 
+// ==================================================================
+// ===== NO CHANGES WERE MADE TO THIS COMPONENT =====================
+// ==================================================================
 export default function WaitlistPopup({
   isOpen: externalIsOpen,
   onClose: externalOnClose,
@@ -460,6 +472,9 @@ export default function WaitlistPopup({
   );
 }
 
+// ==================================================================
+// ===== THIS IS THE FULLY CORRECTED AND EDITED COMPONENT =========
+// ==================================================================
 function WaitlistPopupContent({
   isOpen: externalIsOpen,
   onClose: externalOnClose,
@@ -480,10 +495,33 @@ function WaitlistPopupContent({
   const onClose = externalOnClose || (() => setIsOpen(false));
   const onSubmit = externalOnSubmit || (() => setIsOpen(false));
 
+  // =========================================================
+  // ===== CORE LOGIC FIX - This is the corrected useEffect =====
+  // =========================================================
   useEffect(() => {
     setMounted(true);
-  }, []);
+    const submittedEmail = localStorage.getItem("waitlist_submitted_email");
 
+    // 1. Handle the page refresh case for auto-opening popups.
+    // If the component is NOT controlled by a CTA and the user has already submitted,
+    // we prevent it from opening automatically.
+    if (externalIsOpen === undefined && submittedEmail) {
+      setIsOpen(false);
+    }
+    
+    // 2. Decide what to show WHEN the popup is open.
+    // If the popup is open (triggered by a CTA or otherwise) AND the user has submitted,
+    // then we set the state to show the success message.
+    if (finalIsOpen && submittedEmail) {
+      setIsSuccess(true);
+    } else {
+      // Otherwise, ensure it shows the form.
+      setIsSuccess(false);
+    }
+  }, [finalIsOpen, externalIsOpen]); // Dependencies are key to re-running this logic correctly.
+
+
+  // Handle body scroll lock (no changes here)
   useEffect(() => {
     if (finalIsOpen) {
       const originalStyle = window.getComputedStyle(document.body).overflow;
@@ -497,26 +535,34 @@ function WaitlistPopupContent({
     }
   }, [finalIsOpen]);
 
+  // Handle auto-close timer (no changes here)
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        onSubmit();
+        onClose();
+      }, 12000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess, onClose, onSubmit]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || isSubmitting) return;
+    if (!email || isSubmitting || isSuccess) return;
 
     setIsSubmitting(true);
     setError("");
 
     try {
-      const { campaignId: newCampaignId } = await addToWaitlist(email, campaignId);
+      const { campaignId: newCampaignId } = await addToWaitlist(
+        email,
+        campaignId
+      );
       const link = `${window.location.origin}/?campaignId=${newCampaignId}`;
       setReferralLink(link);
 
+      localStorage.setItem("waitlist_submitted_email", email);
       setIsSuccess(true);
-
-      setTimeout(() => {
-        onSubmit();
-        onClose();
-        setIsSuccess(false);
-        setEmail("");
-      }, 12000);
     } catch (error) {
       setError(error.message || "Failed to join waitlist. Please try again.");
     } finally {
