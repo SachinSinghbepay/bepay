@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 export default function ScrollTextAnimation() {
   const containerRef = useRef(null);
@@ -9,6 +10,11 @@ export default function ScrollTextAnimation() {
   const maximizeYourRef = useRef(null);
   const earningPotentialRef = useRef(null);
   const subDescriptionRef = useRef(null);
+
+  // ANALYTICS: Track when the user views this section
+  useEffect(() => {
+    AnalyticsService.sendEvent("Scroll text animation viewed");
+  }, []); // Empty array ensures this runs only once when the component mounts
 
   useEffect(() => {
     // Check if fonts are loaded

@@ -1,6 +1,6 @@
 "use client";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect } from "react"; // ANALYTICS: Added useEffect
 import { HandCoins, Search } from "lucide-react";
 import {
   Carousel,
@@ -10,6 +10,7 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
 import Image from "next/image";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 const investmentData = [
   {
@@ -60,6 +61,18 @@ export default function InvestmentSuite() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
+  // ANALYTICS: Track when the section is viewed
+  useEffect(() => {
+    if (isInView) {
+      AnalyticsService.sendEvent("Investment Suite section viewed");
+    }
+  }, [isInView]);
+
+  // ANALYTICS: Handler for the "Start investing" button click
+  const handleStartInvestingClick = () => {
+    AnalyticsService.sendEvent("'Start investing' button clicked");
+  };
+
   return (
     <section
       ref={ref}
@@ -100,10 +113,11 @@ export default function InvestmentSuite() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={handleStartInvestingClick} // ANALYTICS: Added onClick handler
                 className="flex items-center justify-center gap-2 -mt-10 md:mt-0 self-start
-                      px-6 h-[56px] cursor-pointer whitespace-nowrap
-                      bg-white text-black rounded-full text-xs font-medium
-                      hover:bg-gray-100 transition-colors"
+                                  px-6 h-[56px] cursor-pointer whitespace-nowrap
+                                  bg-white text-black rounded-full text-xs font-medium
+                                  hover:bg-gray-100 transition-colors"
               >
                 <svg
                   width="20"
@@ -153,7 +167,7 @@ export default function InvestmentSuite() {
           opts={{
             align: "start",
             loop: false,
-            dragFree: true, // Enable free dragging
+            dragFree: true,
           }}
           plugins={[
             Autoplay({
@@ -167,7 +181,7 @@ export default function InvestmentSuite() {
             {investmentData.map((item, index) => (
               <CarouselItem
                 key={item.id}
-                className="pl-6 basis-[90%] md:basis-[45%] lg:basis-[38%]" // Mobile: 1 card + 10%, Desktop: ~2.2 cards
+                className="pl-6 basis-[90%] md:basis-[45%] lg:basis-[38%]"
               >
                 <motion.div
                   initial={{ opacity: 0, y: 100 }}
@@ -185,7 +199,6 @@ export default function InvestmentSuite() {
                     minHeight: "568px",
                   }}
                 >
-                  {/* Card Image */}
                   <div className="relative overflow-hidden rounded-2xl mb-6">
                     <Image
                       src={item.image || "/placeholder.svg"}
@@ -197,11 +210,9 @@ export default function InvestmentSuite() {
                     />
                   </div>
 
-                  {/* Card Content */}
                   <div className="lg:p-9">
                     <div className="space-y-4 max-w-[327px] ">
                       <div className="flex items-center gap-2">
-                        {/* FINAL MODIFICATION: Added font-semibold */}
                         <span className="text-[#6A6A6A] text-lg font-semibold">
                           Tokenized
                         </span>
@@ -209,11 +220,9 @@ export default function InvestmentSuite() {
                           {item.category}
                         </span>
                       </div>
-
                       <p className="text-[#6A6A6A] text-[16px] leading-relaxed">
                         {item.description}
                       </p>
-
                       <p className="text-[#6A6A6A] text-[16px]">
                         {item.details}
                       </p>

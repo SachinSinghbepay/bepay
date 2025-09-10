@@ -1,3 +1,4 @@
+// src/app/layout.js
 import { Open_Sans, Montserrat } from 'next/font/google';
 import "./globals.css";
 import SmoothScroll from "@/components/smoothScroll";
@@ -5,6 +6,7 @@ import Header from "@/components/header";
 import { AuthProvider } from "@/lib/auth";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import CookieConsentProvider from "@/components/cookie-consent-provider";
+import MixpanelProvider from '@/components/MixpanelProvider';
 
 // Load Open Sans as the main font
 const openSans = Open_Sans({
@@ -21,9 +23,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
-  // FIX 1: Added metadataBase for resolving full URLs
   metadataBase: new URL("https://www.bepay.money"),
-
   title: "bepay - Stablecoin Payment, Wallet, Merchant Payment",
   description: "A simple and secure way to pay your bills",
   openGraph: {
@@ -53,14 +53,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      {/* FIX 2: Added the openSans font variable to the body */}
       <body className={`${openSans.variable} ${montserrat.variable} antialiased`}>
-        <SmoothScroll>
-          <Header />
-          <CookieConsentProvider />
-          <AuthProvider>{children}</AuthProvider>
-          <ConditionalFooter />
-        </SmoothScroll>
+        <MixpanelProvider>
+          <SmoothScroll>
+            <Header />
+            <CookieConsentProvider />
+            <AuthProvider>{children}</AuthProvider>
+            <ConditionalFooter />
+          </SmoothScroll>
+        </MixpanelProvider>
       </body>
     </html>
   );

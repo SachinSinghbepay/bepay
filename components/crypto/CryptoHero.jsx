@@ -10,6 +10,7 @@ import {
 import Image from "next/image";
 import { SmartphoneIcon as DeviceMobile } from "lucide-react";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 const iconsData = [
   {
@@ -52,6 +53,11 @@ export default function CryptoHeroSection() {
   const words = ["Save", "Send", "Earn", "Grow"];
   const containerRef = useRef(null);
 
+  // ANALYTICS: Track when the hero section is viewed for the first time
+  useEffect(() => {
+    AnalyticsService.sendEvent("Hero Section Viewed");
+  }, []); // Empty dependency array means this runs only once when the component mounts
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
@@ -59,7 +65,7 @@ export default function CryptoHeroSection() {
 
   const mockupY = useTransform(scrollYProgress, [0, 1], [0, -700]);
 
-  // Desktop scroll transforms - individual hooks for each icon
+  // Desktop scroll transforms
   const xTransform0 = useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialX, iconsData[0].finalX]);
   const yTransform0 = useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialY, iconsData[0].finalY]);
   const scaleTransform0 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
@@ -80,18 +86,15 @@ export default function CryptoHeroSection() {
   const scaleTransform3 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
   const opacityTransform3 = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
 
-  // Group transforms for easier access
   const xTransforms = [xTransform0, xTransform1, xTransform2, xTransform3];
   const yTransforms = [yTransform0, yTransform1, yTransform2, yTransform3];
   const scaleTransforms = [scaleTransform0, scaleTransform1, scaleTransform2, scaleTransform3];
   const opacityTransforms = [opacityTransform0, opacityTransform1, opacityTransform2, opacityTransform3];
 
-  // Check if mobile on mount and resize
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024); // lg breakpoint
     };
-
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
@@ -104,25 +107,31 @@ export default function CryptoHeroSection() {
     return () => clearInterval(interval);
   }, [words.length]);
 
-  // Button click handler
+  // ANALYTICS: Handler for the main hero section download button
   const handleButtonClick = () => {
-    console.log("Button clicked!");
-    // Add your click logic here
+    AnalyticsService.sendEvent("Main hero download button clicked", {
+      button_location: "main_hero_section",
+    });
+    console.log("Main hero button clicked!");
+  };
+
+  // ANALYTICS: Handler for the bepay icon click
+  const handleBepayIconClick = () => {
+    AnalyticsService.sendEvent("bepay icon clicked", {
+      bepay_icon: "icon",
+    });
+    console.log("Bepay icon clicked!");
   };
 
   return (
-    // Make the container taller to allow for scroll
     <div
       ref={containerRef}
       className="h-[160vh] lg:h-[300vh] bg-[#F9F9F9] relative"
     >
-      {/* Sticky background content */}
       <div className="sticky top-0 h-screen flex-col items-center justify-center px-4 py-8 overflow-hidden">
-        {/* Background text */}
         <div className=" flex items-center justify-center z-10">
           <div className="text-center">
             {isMobile ? (
-              // Mobile Heading (Unchanged)
               <div className="leading-none lg:hidden">
                 <div
                   className="text-[#C0C0C0] font-thin text-4xl sm:text-[50px] my-[-0.5rem]"
@@ -152,7 +161,6 @@ export default function CryptoHeroSection() {
                 </div>
               </div>
             ) : (
-              // Desktop Heading (Adjusted)
               <div className="hidden lg:block">
                 <div className="leading-none">
                   <span
@@ -169,9 +177,7 @@ export default function CryptoHeroSection() {
                     <span className="inline-block ml-0.5">T</span>O
                   </span>
                 </div>
-                {/* --- MODIFIED LINE START (Tighter Spacing) --- */}
                 <div className="leading-none -mt-16">
-                  {/* --- MODIFIED LINE END --- */}
                   <div
                     className="text-[#B7B7B7] font-thin text-4xl sm:text-[166px] my-[-0.8rem]"
                     style={{ letterSpacing: "-0.11em" }}
@@ -191,10 +197,7 @@ export default function CryptoHeroSection() {
           </div>
         </div>
 
-        {/* --- MODIFIED LINE START (Moved Up) --- */}
         <div className="relative z-20 max-w-7xl mx-auto w-full flex items-center justify-center mt-15 sm:mt-24 lg:mt-2">
-          {/* --- MODIFIED LINE END --- */}
-
           <motion.div style={{ y: mockupY }} className="flex-shrink-0">
             <div className="relative">
               <motion.div
@@ -210,7 +213,8 @@ export default function CryptoHeroSection() {
               >
                 <div className="w-full h-full bg-gradient-to-t from-white via-white to-[#F9F9F966] rounded-[32px] lg:rounded-[52px] flex flex-col items-center justify-start p-6 lg:p-16 relative">
                   {/* Logo */}
-                  <div className="mb-6">
+                  {/* ANALYTICS: Added onClick handler to this clickable div wrapping the icon */}
+                  <div className="mb-6 cursor-pointer" onClick={handleBepayIconClick}>
                     <Image
                       src="/bepayiconlogo.png"
                       alt="BePay Logo"
@@ -221,7 +225,6 @@ export default function CryptoHeroSection() {
                     />
                   </div>
 
-                  {/* Text */}
                   <div className="text-center mb-6 lg:mb-4">
                     <p className="text-xs 3xl:text-sm text-gray-800 leading-relaxed max-w-[200px] lg:max-w-[280px]">
                       <span className="font-semibold text-black">
@@ -232,7 +235,6 @@ export default function CryptoHeroSection() {
                     </p>
                   </div>
 
-                  {/* Secondary text */}
                   <div className="mb-4 lg:mb-6">
                     <p className="text-[11px] sm:text-sm 3xl:text-sm text-gray-800 leading-relaxed max-w-[260px] sm:max-w-[320px] mx-auto">
                       <span className="block text-left whitespace-nowrap">
@@ -247,11 +249,9 @@ export default function CryptoHeroSection() {
                     </p>
                   </div>
 
-                  {/* Crypto icons */}
                   <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
                     {iconsData.map((icon, index) => {
                       if (isMobile) {
-                        // Mobile animation
                         return (
                           <motion.div
                             key={index}
@@ -263,7 +263,7 @@ export default function CryptoHeroSection() {
                             animate={{
                               opacity: 1,
                               y: -80,
-                              x: icon.finalX, // Use finalX for mobile for consistency
+                              x: icon.finalX,
                             }}
                             transition={{
                               duration: 0.6,
@@ -275,7 +275,7 @@ export default function CryptoHeroSection() {
                             <div
                               className="w-12 h-12 rounded-full overflow-hidden"
                               style={{
-                                boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.15)", // shadow toward right-bottom
+                                boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.15)",
                               }}
                             >
                               <Image
@@ -289,7 +289,6 @@ export default function CryptoHeroSection() {
                         );
                       }
 
-                      // Desktop scroll animation
                       const x = xTransforms[index];
                       const y = yTransforms[index];
                       const scale = scaleTransforms[index];
@@ -314,10 +313,7 @@ export default function CryptoHeroSection() {
                     })}
                   </div>
 
-                  {/* --- MODIFICATION START --- */}
-                  {/* Arrow */}
                   <div className="relative z-30 flex justify-center mt-20 lg:mt-48">
-                  {/* --- MODIFICATION END --- */}
                     <Image
                       src={"/images/crypto/line.png"}
                       height={100}
@@ -327,10 +323,7 @@ export default function CryptoHeroSection() {
                     />
                   </div>
                   
-                  {/* --- MODIFICATION START --- */}
-                  {/* Button */}
                   <div className="relative z-50 pointer-events-auto mt-10 lg:mt-12">
-                  {/* --- MODIFICATION END --- */}
                     <WaitlistTriggerButton>
                       <motion.button
                         whileHover={{ scale: 1.05 }}
@@ -339,7 +332,7 @@ export default function CryptoHeroSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: 0.3 }}
                         viewport={{ once: false, amount: 0.5 }}
-                        onClick={handleButtonClick}
+                        onClick={handleButtonClick} // ANALYTICS: This handler now tracks the click
                         className="bg-black cursor-pointer h-[56px] whitespace-nowrap text-white px-4 py-2 lg:px-6 lg:py-3 rounded-full flex items-center justify-center gap-2 text-[12px] font-medium hover:bg-black/90 transition-colors active:scale-95 select-none"
                         style={{ pointerEvents: "auto" }}
                       >
