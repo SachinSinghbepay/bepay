@@ -26,11 +26,27 @@ export default function CryptoWalletSection() {
 
   const [isMobile, setIsMobile] = useState(false);
   const [activeView, setActiveView] = useState("debit-card");
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
 
-  // ANALYTICS: Track when the section is first viewed
+  // ANALYTICS: Track when the section is actually viewed (not just mounted)
   useEffect(() => {
-    AnalyticsService.sendEvent("CryptoWalletSection Viewed");
-  }, []);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("CryptoWalletSection Viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
+        }
+      },
+      { threshold: 0.3 } // Trigger when 30% of the component is visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
 
   const featureData = [
     {

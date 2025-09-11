@@ -237,7 +237,7 @@ function PortalContent({
                           color: isDarkMode ? "#F9FAFB" : "#000000",
                         }}
                       >
-                        Yay! You're on the waitlist.
+                        Yay! You&apos;re on the waitlist.
                       </h2>{" "}
                       <p
                         style={{
@@ -252,7 +252,7 @@ function PortalContent({
                         }}
                       >
                         {" "}
-                        Keep an eye on your inbox. We'll email <br /> you as
+                        Keep an eye on your inbox. We&apos;ll email <br /> you as
                         soon as we launch!{" "}
                       </p>{" "}
                     </div>

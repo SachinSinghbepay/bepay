@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
@@ -128,6 +128,8 @@ const Footer = () => {
   const [showModal, setShowModal] = useState(false);
   const [subscribedEmail, setSubscribedEmail] = useState("");
   const [isMobile, setIsMobile] = useState(false);
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
+  const footerRef = useRef(null); // For intersection observer
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 767);
@@ -135,6 +137,26 @@ const Footer = () => {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // ANALYTICS: Track when footer is actually viewed
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Footer section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
+        }
+      },
+      { threshold: 0.3 } // Trigger when 30% of the component is visible
+    );
+
+    if (footerRef.current) {
+      observer.observe(footerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
 
   // --- ANALYTICS: Handlers for all footer events ---
   const handleAppStoreClick = () => AnalyticsService.sendEvent("Download on the App Store button clicked");
@@ -190,12 +212,11 @@ const Footer = () => {
 
   return (
     <>
-      <footer className="w-full bg-black text-white relative overflow-hidden pt-20 px-4 sm:px-6 lg:px-8">
+      <footer ref={footerRef} className="w-full bg-black text-white relative overflow-hidden pt-20 px-4 sm:px-6 lg:px-8">
         <motion.div
           className="max-w-7xl mx-auto flex flex-col items-center gap-16 relative z-10"
           initial="hidden"
           whileInView="visible"
-          onViewportEnter={() => AnalyticsService.sendEvent("Footer section viewed")} // ANALYTICS: Track when footer is viewed
           viewport={{ once: true, amount: 0.1 }}
           variants={containerVariants}
         >

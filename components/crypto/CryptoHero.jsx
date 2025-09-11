@@ -50,13 +50,30 @@ const iconsData = [
 export default function CryptoHeroSection() {
   const [currentWord, setCurrentWord] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
   const words = ["Save", "Send", "Earn", "Grow"];
   const containerRef = useRef(null);
+  const heroSectionRef = useRef(null); // For intersection observer
 
-  // ANALYTICS: Track when the hero section is viewed for the first time
+  // ANALYTICS: Track when the hero section is actually viewed
   useEffect(() => {
-    AnalyticsService.sendEvent("Hero Section Viewed");
-  }, []); // Empty dependency array means this runs only once when the component mounts
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Hero Section Viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
+        }
+      },
+      { threshold: 0.3 } // Trigger when 30% of the component is visible
+    );
+
+    if (heroSectionRef.current) {
+      observer.observe(heroSectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]); // Empty dependency array means this runs only once when the component mounts
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -128,7 +145,7 @@ export default function CryptoHeroSection() {
       ref={containerRef}
       className="h-[160vh] lg:h-[300vh] bg-[#F9F9F9] relative"
     >
-      <div className="sticky top-0 h-screen flex-col items-center justify-center px-4 py-8 overflow-hidden">
+      <div ref={heroSectionRef} className="sticky top-0 h-screen flex-col items-center justify-center px-4 py-8 overflow-hidden">
         <div className=" flex items-center justify-center z-10">
           <div className="text-center">
             {isMobile ? (

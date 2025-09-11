@@ -10,11 +10,28 @@ export default function ScrollTextAnimation() {
   const maximizeYourRef = useRef(null);
   const earningPotentialRef = useRef(null);
   const subDescriptionRef = useRef(null);
+  const sectionRef = useRef(null); // For intersection observer
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
 
-  // ANALYTICS: Track when the user views this section
+  // ANALYTICS: Track when the user actually views this section
   useEffect(() => {
-    AnalyticsService.sendEvent("Scroll text animation viewed");
-  }, []); // Empty array ensures this runs only once when the component mounts
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Scroll text animation viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
+        }
+      },
+      { threshold: 0.3 } // Trigger when 30% of the component is visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]); // Empty array ensures this runs only once when the component mounts
 
   useEffect(() => {
     // Check if fonts are loaded
@@ -140,7 +157,7 @@ export default function ScrollTextAnimation() {
   }, [fontsLoaded]);
 
   return (
-    <div className="bg-gray-50 hidden md:block">
+    <div ref={sectionRef} className="bg-gray-50 hidden md:block">
       <div ref={containerRef} className="relative h-[200vh] md:h-[400vh] overflow-hidden">
         <div className="min-h-screen sticky inset-0" style={{ opacity: fontsLoaded ? 1 : 0, transition: 'opacity 0.3s ease-in-out' }}>
           {/* Maximize Your */}

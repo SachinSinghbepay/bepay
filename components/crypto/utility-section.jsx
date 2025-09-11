@@ -187,6 +187,9 @@ const MobileView = () => {
 
 export const UtilitySection = () => {
   const containerRef = useRef(null);
+  const sectionRef = useRef(null); // For intersection observer
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
+  
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
@@ -196,10 +199,25 @@ export const UtilitySection = () => {
   const buttonOpacity = useTransform(scrollYProgress, [0.85, 0.95], [0, 1]);
   const buttonY = useTransform(scrollYProgress, [0.85, 0.95], [50, 0]);
 
-  // ANALYTICS: Track when the section is first viewed
+  // ANALYTICS: Track when the section is actually viewed
   useEffect(() => {
-    AnalyticsService.sendEvent("Utility section viewed");
-  }, []);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Utility section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
+        }
+      },
+      { threshold: 0.3 } // Trigger when 30% of the component is visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
 
   // ANALYTICS: Handler for the desktop button click
   const handleStartPayingClick = () => {
@@ -207,7 +225,7 @@ export const UtilitySection = () => {
   };
 
   return (
-    <section>
+    <section ref={sectionRef}>
       {/* Desktop View */}
       <div ref={containerRef} className="hidden md:block relative bg-[#f9f9f9] h-[400vh]">
         <div className="sticky top-0 h-screen overflow-hidden">

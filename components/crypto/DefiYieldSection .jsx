@@ -9,6 +9,7 @@ import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Im
 const DefiYieldSection = () => {
   const sectionRef = useRef(null);
   const depinCardViewedRef = useRef(false); // ANALYTICS: Ref to track if the card has been viewed
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -17,10 +18,25 @@ const DefiYieldSection = () => {
 
   const [isMobile, setIsMobile] = useState(false);
 
-  // ANALYTICS: Track when the main DeFi Yield section is viewed
+  // ANALYTICS: Track when the main DeFi Yield section is actually viewed
   useEffect(() => {
-    AnalyticsService.sendEvent("DeFi Yield section viewed");
-  }, []);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("DeFi Yield section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
+        }
+      },
+      { threshold: 0.3 } // Trigger when 30% of the component is visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
 
   useEffect(() => {
     const handleResize = () => {
