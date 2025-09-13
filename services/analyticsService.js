@@ -1,20 +1,20 @@
 // src/services/analyticsService.js
-import mixpanel from 'mixpanel-browser';
+import mixpanel from "mixpanel-browser";
 
 export class AnalyticsService {
-  static isInitialized = false; // <-- 1. NEW: Add a flag to track initialization
+  static isInitialized = false;
   static currentPage = "";
   static previousPage = "";
 
   static init(mixpanelToken) {
-    if (!mixpanelToken || this.isInitialized) {
-      return;
-    }
+    if (!mixpanelToken || this.isInitialized) return;
+
     mixpanel.init(mixpanelToken, {
-      debug: process.env.NODE_ENV !== 'production',
-      persistence: 'localStorage',
+      debug: process.env.NODE_ENV !== "production",
+      persistence: "localStorage",
     });
-    this.isInitialized = true; // <-- 2. UPDATED: Set the flag to true after init
+
+    this.isInitialized = true;
     console.log("Mixpanel Initialized");
   }
 
@@ -24,7 +24,6 @@ export class AnalyticsService {
   }
 
   static sendEvent(eventName, params = {}) {
-    // <-- 3. NEW: Add a check to prevent sending events before initialization
     if (!this.isInitialized) {
       console.warn("Analytics not initialized yet. Event dropped:", eventName);
       return;
@@ -37,5 +36,11 @@ export class AnalyticsService {
     };
     console.log(`[Analytics Event]: ${eventName}`, eventProperties);
     mixpanel.track(eventName, eventProperties);
+  }
+
+  // ✅ Reset when user logs out (optional)
+  static resetSessionEvents() {
+    this.firedEvents.clear();
+    sessionStorage.removeItem("firedEvents");
   }
 }

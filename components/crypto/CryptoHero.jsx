@@ -181,7 +181,7 @@ export default function CryptoHeroSection() {
               <div className="hidden lg:block">
                 <div className="leading-none">
                   <span
-                    className="text-[#D1D1D1] font-thin text-[166px]"
+                    className="text-[#C0C0C0] font-thin text-[166px]"
                     style={{ letterSpacing: "-0.17em" }}
                   >
                     USE
@@ -194,7 +194,7 @@ export default function CryptoHeroSection() {
                     <span className="inline-block ml-0.5">T</span>O
                   </span>
                 </div>
-                <div className="leading-none -mt-16">
+                <div className="leading-none -mt-15">
                   <div
                     className="text-[#B7B7B7] font-thin text-4xl sm:text-[166px] my-[-0.8rem]"
                     style={{ letterSpacing: "-0.11em" }}
@@ -252,19 +252,20 @@ export default function CryptoHeroSection() {
                     </p>
                   </div>
 
-                  <div className="mb-4 lg:mb-6">
-                    <p className="text-[11px] sm:text-sm 3xl:text-sm text-gray-800 leading-relaxed max-w-[260px] sm:max-w-[320px] mx-auto">
-                      <span className="block text-left whitespace-nowrap">
-                        Take control of your financial future with
-                      </span>
-                      <span className="block text-center text-black font-semibold text-[10px] sm:text-sm whitespace-nowrap">
-                        self-custody wallets, earning opportunities,
-                      </span>
-                      <span className="block text-center text-black font-semibold">
-                        and seamless spending solutions.
-                      </span>
-                    </p>
-                  </div>
+                  <div className="mb-4 lg:mb-6 lg:mt-6">
+  <p className="text-[11px] sm:text-sm 3xl:text-sm text-gray-800 leading-relaxed max-w-[260px] sm:max-w-[320px] mx-auto">
+    <span className="block text-left lg:text-center whitespace-nowrap">
+      Take control of your financial future with
+    </span>
+    <span className="block text-center text-black font-semibold text-[10px] sm:text-sm whitespace-nowrap">
+      self-custody wallets, earning opportunities,
+    </span>
+    <span className="block text-center text-black font-semibold">
+      and seamless spending solutions.
+    </span>
+  </p>
+</div>
+
 
                   <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
                     {iconsData.map((icon, index) => {
@@ -330,7 +331,7 @@ export default function CryptoHeroSection() {
                     })}
                   </div>
 
-                  <div className="relative z-30 flex justify-center mt-20 lg:mt-48">
+                  <div className="relative z-30 flex justify-center mt-20 lg:mt-35 lg:left-[15px]">
                     <Image
                       src={"/images/crypto/line.png"}
                       height={100}

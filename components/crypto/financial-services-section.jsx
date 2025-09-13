@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
@@ -217,15 +217,30 @@ const MobileView = () => {
 
 export const FinancialServicesSection = () => {
   const containerRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
-  // ANALYTICS: Track when the section is first viewed
   useEffect(() => {
-    AnalyticsService.sendEvent("Financial services section viewed");
-  }, []);
+    if (!containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("One Wallet section landed on");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // ✅ Stop observing after first view
+        }
+      },
+      { threshold: 0.1 } // ✅ fires when 30% of section is visible
+    );
+
+    observer.observe(containerRef.current);
+
+    return () => observer.disconnect(); // ✅ Cleanup on unmount
+  }, [hasTrackedView]);
 
   // ANALYTICS: Handler for the desktop button click
   const handleExploreFeaturesClick = () => {

@@ -2,9 +2,13 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 export const PaymentProofSection = () => {
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+
   const notificationVariants = {
     hidden: { opacity: 0, y: 20, scale: 0.95 },
     visible: {
@@ -19,21 +23,40 @@ export const PaymentProofSection = () => {
     },
   };
 
+  // ANALYTICS: Track when section comes into view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Payment proof section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first trigger
+        }
+      },
+      { threshold: 0.1 } // Trigger when 30% of the section is visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
+
   return (
-    <motion.section // ANALYTICS: Changed from <section> to <motion.section>
+    <motion.section
+      ref={sectionRef}
       className="relative w-full h-[60vh] sm:h-[80vh] md:h-[760px] flex items-center justify-center overflow-hidden"
-      // ANALYTICS: Added props to track when the section is viewed
       initial="hidden"
       whileInView="visible"
-      onViewportEnter={() => AnalyticsService.sendEvent("Payment proof section viewed")}
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: false, amount: 0.2 }} // keep animations independent of analytics
     >
       {/* Background Image */}
       <Image
         src="/images/crypto/bgimg.png"
         alt="Two women looking at a smartphone"
-        layout="fill"
-        objectFit="cover"
+        fill
+        style={{ objectFit: "cover" }}
         loading="lazy"
         className="z-0"
       />
@@ -42,8 +65,8 @@ export const PaymentProofSection = () => {
       <Image
         src="/images/crypto/subset.png"
         alt="Geometric overlay"
-        layout="fill"
-        objectFit="cover"
+        fill
+        style={{ objectFit: "cover" }}
         loading="lazy"
         className="z-10"
       />
@@ -58,7 +81,9 @@ export const PaymentProofSection = () => {
         variants={notificationVariants}
       >
         <div className="rounded-t-2xl rounded-br-2xl p-2 sm:p-3 shadow-lg bg-white/30 backdrop-blur-xl border border-white/20 transform -translate-x-3 translate-y-2">
-          <p className="text-[10px] font-semibold text-gray-700 mb-1">Paid for groceries!</p>
+          <p className="text-[10px] font-semibold text-gray-700 mb-1">
+            Paid for groceries!
+          </p>
           <div className="flex items-center gap-1 sm:gap-2">
             <Image
               src={"/bitcoin.png"}
@@ -70,7 +95,9 @@ export const PaymentProofSection = () => {
             />
             <p className="font-semibold text-[12px] sm:text-sm text-black">
               0.0012 BTC{" "}
-              <span className="font-semibold text-gray-600 text-[10px]">($102)</span>
+              <span className="font-semibold text-gray-600 text-[10px]">
+                ($102)
+              </span>
             </p>
           </div>
         </div>

@@ -28,7 +28,7 @@ const DefiYieldSection = () => {
           observer.unobserve(entry.target); // Stop observing after first view
         }
       },
-      { threshold: 0.3 } // Trigger when 30% of the component is visible
+      { threshold: 0.1 } // Trigger when 30% of the component is visible
     );
 
     if (sectionRef.current) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import {
@@ -10,8 +10,9 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
-// FeatureCard component (no changes needed here)
+// FeatureCard component
 function FeatureCard({ title, image, features }) {
   return (
     <div className="flex-col w-full max-w-[670px] h-full md:h-[607px] bg-white rounded-[30px] shadow-lg border border-gray-100">
@@ -47,16 +48,41 @@ function FeatureCard({ title, image, features }) {
 }
 
 export default function BusinessSmartlySection() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ 
-    target: ref,
-    offset: ["start end", "end start"]
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+
+  // ANALYTICS: track view once
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("business smartly section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
+
+  // Scroll animations
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
   });
 
-  // Single unified transform for the entire heading
   const headingY = useTransform(scrollYProgress, [0, 0.5, 1], [30, 0, -30]);
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.6, 1, 1, 0.8]);
-
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.7, 1],
+    [0.6, 1, 1, 0.8]
+  );
 
   const cardsData = [
     {
@@ -104,18 +130,17 @@ export default function BusinessSmartlySection() {
   ];
 
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-[#F9F9F9] overflow-hidden dark:bg-gray-950">
+    <section
+      ref={sectionRef}
+      className="w-full py-12 md:py-24 lg:py-32 bg-[#F9F9F9] overflow-hidden dark:bg-gray-950"
+    >
       <div className="container mx-auto px-4">
-
-        <div
-          ref={ref}
-          className="flex flex-col items-center justify-center text-center mb-12 md:mb-16 lg:mb-20"
-        >
+        <div className="flex flex-col items-center justify-center text-center mb-12 md:mb-16 lg:mb-20">
           <motion.div
             className="max-w-6xl mx-auto"
-            style={{ 
+            style={{
               y: headingY,
-              opacity: opacity
+              opacity: opacity,
             }}
           >
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-[400] tracking-tight leading-[1.1] md:leading-[1.05]">
@@ -129,7 +154,7 @@ export default function BusinessSmartlySection() {
           </motion.div>
         </div>
       </div>
-      
+
       <div className="w-full">
         <Carousel
           opts={{
@@ -156,7 +181,6 @@ export default function BusinessSmartlySection() {
           </CarouselContent>
         </Carousel>
       </div>
-
     </section>
   );
 }

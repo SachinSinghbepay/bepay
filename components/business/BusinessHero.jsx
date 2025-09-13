@@ -9,17 +9,18 @@ import {
   Globe,
   Layers,
   Plug,
-  Phone,
   Clock,
   CheckCircle,
 } from "lucide-react";
 import { addToWaitlist } from "@/lib/firebase";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 const BusinessHero = () => {
   const containerRef = useRef(null);
   const [showContent, setShowContent] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [screenWidth, setScreenWidth] = useState(0);
+  const [hasTrackedView, setHasTrackedView] = useState(false); // ANALYTICS: State for view tracking
 
   // Motion values that will be updated based on screen width
   const mobileXValue = useMotionValue(0);
@@ -29,6 +30,32 @@ const BusinessHero = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
+
+  // ANALYTICS: Track when the Business Page is viewed
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("business_page_viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 } // Fire when 10% of the component is visible
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
+
+  // ANALYTICS: Handler for the logo click event
+  const handleLogoClick = () => {
+    AnalyticsService.sendEvent("on_bepay_logo_clicked");
+    // You might want to add navigation logic here, e.g., router.push('/')
+  };
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
@@ -251,7 +278,10 @@ const BusinessHero = () => {
                     }}
                   >
                     {/* Logo at top */}
-                    <div className="absolute top-4 md:top-9 left-1/2 -translate-x-1/2 z-10">
+                    <div
+                      onClick={handleLogoClick}
+                      className="absolute top-4 md:top-9 left-1/2 -translate-x-1/2 z-10 cursor-pointer"
+                    >
                       <Image
                         src="/bepaybusiness.svg"
                         alt="Bepay Logo"

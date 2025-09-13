@@ -1,29 +1,53 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { AnalyticsService } from "@/services/analyticsService";
 
 const ScrollTextMobile = () => {
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+
+  // ANALYTICS: Track when user sees this mobile section
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Scroll text mobile viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
+
   return (
-    <div className="h-auto md:hidden bg-[#f9f9f9] flex flex-col overflow-hidden justify-center items-center px-6 py-12">
+    <div
+      ref={sectionRef}
+      className="h-auto md:hidden bg-[#f9f9f9] flex flex-col overflow-hidden justify-center items-center px-6 py-12"
+    >
       <div className="max-w-md w-full text-center space-y-8">
         {/* Sequential text animation */}
-        <div className="space-y-2"> {/* Reduced vertical spacing */}
+        <div className="space-y-2">
           {/* First line - "maximize your" */}
           <motion.h1
-            className="text-4xl md:text-5xl font-[400] leading-[0.5em]" // Added leading-tight
+            className="text-4xl md:text-5xl font-normal leading-[0.5em]"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: false, amount: 0.2 }}
           >
-            <span className="block text-[#999999]">
-              Maximize Your
-            </span>
+            <span className="block text-[#999999]">Maximize Your</span>
           </motion.h1>
 
           {/* Second line - "earning potential" */}
           <motion.h1
-            className="text-4xl md:text-5xl font-[400] leading-tight" // Added leading-tight
+            className="text-4xl md:text-5xl font-normal leading-tight"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
@@ -42,7 +66,6 @@ const ScrollTextMobile = () => {
           transition={{ duration: 0.8, delay: 0.7 }}
           viewport={{ once: false, amount: 0.2 }}
         >
-          {/* Using arbitrary values for precise 1px size reduction */}
           <p className="text-[17px] sm:text-[19px] md:text-[23px] text-[#999999] font-normal leading-normal">
             Multiple ways to grow your wealth with{" "}
             <motion.span

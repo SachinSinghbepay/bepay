@@ -27,6 +27,8 @@ export default function CryptoWalletSection() {
   const [isMobile, setIsMobile] = useState(false);
   const [activeView, setActiveView] = useState("debit-card");
   const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
+  const hasTrackedViewForSwissBank = useRef(false); // Track if we've already sent the view event
+  const hasTrackedViewForSecureWallet = useRef(false); // Track if we've already sent the view event
 
   // ANALYTICS: Track when the section is actually viewed (not just mounted)
   useEffect(() => {
@@ -37,8 +39,7 @@ export default function CryptoWalletSection() {
           setHasTrackedView(true);
           observer.unobserve(entry.target); // Stop observing after first view
         }
-      },
-      { threshold: 0.3 } // Trigger when 30% of the component is visible
+      }   // Trigger when 30% of the component is visible
     );
 
     if (sectionRef.current) {
@@ -92,14 +93,20 @@ export default function CryptoWalletSection() {
       if (newActiveView !== trackedViewRef.current) {
         switch (newActiveView) {
           case "bank-account":
-            AnalyticsService.sendEvent("Swiss bank account card viewed", {
-              card_name: "Swiss_bank_account_card",
-            });
+            if (!hasTrackedViewForSwissBank.current) {
+                AnalyticsService.sendEvent("Swiss bank account card viewed", {
+                    card_name: "Swiss_bank_account_card",
+                });
+                hasTrackedViewForSwissBank.current = true;
+            }
             break;
           case "crypto-wallet":
-            AnalyticsService.sendEvent("secure self custody wallet viewed", {
-              card_name: "secure_self_custody_wallet",
-            });
+            if (!hasTrackedViewForSecureWallet.current) {
+                AnalyticsService.sendEvent("secure self custody wallet viewed", {
+                    card_name: "secure_self_custody_wallet",
+                });
+                hasTrackedViewForSecureWallet.current = true;
+            }
             break;
         }
         trackedViewRef.current = newActiveView;

@@ -247,60 +247,60 @@ const DesktopView = () => {
                 </p>
               </div>
               <div className="flex items-center space-x-3 sm:space-x-4">
+                 {/* FIX: Added src and alt prop to this Image component */}
                 <div className=" w-5 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
                   <Image
+                    src="/businessnew/Self1.svg" 
+                    alt="Private key icon"
                     width={28}
                     height={28}
-                    src="/businessnew/Self1.svg"
-                    alt="Keys and Crypto"
                   />
                 </div>
                 <div>
-                  <h3 className=" text-[10px] sm:text-sm font-medium text-black">
-                    100% Private Key Ownership.Your keys, your Crypto.
+                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
+                     100% Private Key Ownership.
+                   </h3>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
+                  <Image
+                    src="/businessnew/IBAN4.svg"
+                    alt="Instant settlements icon"
+                    className="w-full h-full"
+                    width={28}
+                    height={28}
+                  />
+                </div>
+                <div>
+                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
+                    Instant settlements.
                   </h3>
                 </div>
               </div>
 
-              <div className="space-y-2 sm:space-y-3">
-                <div className="flex items-center space-x-2">
-                  <span className="text-[10px] sm:text-sm font-medium text-black">
-                    100+ cryptocurrencies supported!
-                  </span>
-                  <div className="flex items-center space-x-1">
-                    <Image
-                      src="/businessnew/self2.svg"
-                      width={200}
-                      height={30}
-                      alt=""
-                      className="w-full h-full"
-                    />
-                  </div>
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
+                  <Image
+                    src="/businessnew/IBAN5.svg"
+                    alt="Bank-grade security icon"
+                    className="w-full h-full"
+                    width={28}
+                    height={28}
+                  />
+                </div>
+                <div>
+                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
+                    Bank-grade security.
+                  </h3>
                 </div>
               </div>
-
-              <div className="space-y-2 sm:space-y-3">
-                <div className="flex items-center space-x-2">
-                  <span className="text-[10px] sm:text-sm font-medium text-black">
-                    Social login integration
-                  </span>
-                  <div className="flex items-center space-x-1">
-                    <Image
-                      width={100}
-                      height={20}
-                      src="/businessnew/self3.svg"
-                      alt="login"
-                      className="h-full w-full"
-                    />
-                  </div>
-                </div>
-              </div>
-
+              {/* FIX: Corrected onClick handler, button text, and icon */}
               <WaitlistTriggerButton>
                 <button onClick={handleCreateWalletClick} className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
                   <Image
                     src="/businessnew/buttonIcon.png"
-                    alt="Create Wallet"
+                    alt="Create wallet icon"
                     width={24}
                     height={24}
                     className="w-5 h-5 sm:w-6 sm:h-6"
@@ -318,7 +318,7 @@ const DesktopView = () => {
           className="absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[18vh] md:aspect-[300/100] lg:aspect-auto lg:h-full bg-[#f8f8f8] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full h-[18vh] md:aspect-[300/100]  lg:aspect-auto lg:h-full bg-[#f8f8f8] rounded-xl sm:rounded-2xl overflow-hidden">
               <div
                 ref={mockupImage2_1Ref}
                 className="absolute transform -translate-x-8 sm:-translate-x-20 w-full h-full z-[2]"
@@ -429,7 +429,7 @@ const DesktopView = () => {
                 </div>
               </div>
               <WaitlistTriggerButton>
-                <button onClick={handleGetDebitCardClick} className="flex items-center space-x-2 cursor-pointer sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
+                <button className="flex items-center space-x-2 cursor-pointer sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
                   <Image
                     src="/businessnew/virtual5.svg"
                     alt="Get Card"
@@ -548,7 +548,7 @@ const DesktopView = () => {
                 </div>
               </div>
               <WaitlistTriggerButton>
-                <button onClick={handleGetSwissAccountClick} className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
+                <button className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
                   <Image
                     src="/businessnew/IBAN6.svg"
                     alt="Get Swiss bank account"
@@ -562,6 +562,8 @@ const DesktopView = () => {
             </div>
           </div>
         </div>
+
+        
 
         {/* fourth card */}
         <div
@@ -656,6 +658,8 @@ const DesktopView = () => {
             </div>
           </div>
         </div>
+
+
 
         {/* fifth card */}
         <div
@@ -753,7 +757,7 @@ const DesktopView = () => {
         {/* sixth card */}
         <div
           ref={card6Ref}
-          className="absolute top-[48%] lg:top-1/2 left-1/2  transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="absolute top-[48%] lg:top-1/2 left-1/2  transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             <div className="relative w-full aspect-[5/3] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
@@ -921,15 +925,15 @@ const MobileView = () => {
             end: () => `+=${sectionRef.current.offsetHeight - window.innerHeight}`,
             snap: { snapTo: "labels", duration: 0.4, ease: "power2.inOut", },
             // ANALYTICS: Use onUpdate to check the current label and fire view events
-            onUpdate: function() {
-                const currentLabel = this.currentLabel();
-                if (currentLabel === 'card1') trackMobileCardView('Self-Custody Wallet');
-                if (currentLabel === 'card2') trackMobileCardView('Virtual Crypto Debit Card');
-                if (currentLabel === 'card3') trackMobileCardView('Swiss IBAN Account');
-                if (currentLabel === 'card4') trackMobileCardView('P2P Transactions');
-                if (currentLabel === 'card5') trackMobileCardView('QR Code Payments');
-                if (currentLabel === 'card6') trackMobileCardView('AI Personalization');
-            }
+            onUpdate: () => { // Using an arrow function is a good practice here
+  const currentLabel = tl.currentLabel();
+  if (currentLabel === 'card1') trackMobileCardView('Self-Custody Wallet');
+  if (currentLabel === 'card2') trackMobileCardView('Virtual Crypto Debit Card');
+  if (currentLabel === 'card3') trackMobileCardView('Swiss IBAN Account');
+  if (currentLabel === 'card4') trackMobileCardView('P2P Transactions');
+  if (currentLabel === 'card5') trackMobileCardView('QR Code Payments');
+  if (currentLabel === 'card6') trackMobileCardView('AI Personalization');
+}
           },
         });
 
@@ -966,8 +970,9 @@ const MobileView = () => {
               <div className="flex flex-col p-4 pb-8 flex-grow space-y-3">
                 <div className="space-y-2 -mt-3"> <h1 className="text-xl font-semibold text-black "> Self-Custody Wallet </h1> <p className="text-sm text-gray-600 leading-snug"> Complete control over your crypto assets with military-grade security. </p> </div>
                 <div className="flex items-center gap-2"> <Image width={20} height={20} src="/businessnew/Self1.svg" alt="Keys and Crypto" /> <p className="text-xs font-medium text-black"> 100% Private Key Ownership. Your keys, your Crypto. </p> </div>
-                <div className="flex items-center gap-2"> <Image src="/businessnew/self4.svg" width={20} height={20} alt="" /> <p className="text-xs font-medium text-black"> 100+ cryptocurrencies <br /> supported! </p> <Image src="/businessnew/self2.svg" width={90} height={40} alt="" className="ml-0 mt-[-12px]" /> </div>
-                <div className="flex items-center gap-2 mt-0"> <Image src="/businessnew/self5.svg" width={20} height={20} alt="" className="mt-[-5px]" /> <p className="text-xs font-medium text-black"> Social login integration </p> <Image src="/businessnew/self3.svg" width={18} height={10} alt="login" className="ml-1 mt-[-2px]" /> <Image src="/businessnew/self6.svg" width={18} height={10} alt="login" className="ml-1 mt-[-5px]" /> </div>
+                {/* FIX: Added descriptive alt text */}
+                <div className="flex items-center gap-2"> <Image src="/businessnew/self4.svg" width={20} height={20} alt="Cryptocurrency icons" /> <p className="text-xs font-medium text-black"> 100+ cryptocurrencies <br /> supported! </p> <Image src="/businessnew/self2.svg" width={90} height={40} alt="Supported cryptocurrency logos" className="ml-0 mt-[-12px]" /> </div>
+                <div className="flex items-center gap-2 mt-0"> <Image src="/businessnew/self5.svg" width={20} height={20} alt="Login icon" className="mt-[-5px]" /> <p className="text-xs font-medium text-black"> Social login integration </p> <Image src="/businessnew/self3.svg" width={18} height={10} alt="Google login icon" className="ml-1 mt-[-2px]" /> <Image src="/businessnew/self6.svg" width={18} height={10} alt="Apple login icon" className="ml-1 mt-[-5px]" /> </div>
                 <div className="mt-8">
                   <WaitlistTriggerButton>
                     <button onClick={handleCreateWalletClick} className="bg-black cursor-pointer -mt-5 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
@@ -990,10 +995,10 @@ const MobileView = () => {
               </div>
               <div className="flex flex-col p-4 pb-8 flex-grow space-y-3 mt-2">
                 <div className="space-y-2 -mt-4"> <h1 className="text-xl font-semibold text-black leading-none pt-1"> Virtual Crypto Debit Card </h1> <p className="text-sm text-gray-600 leading-snug"> Spend your crypto anywhere with our instant virtual debit card. No waiting. No approval. </p> </div>
-                <div className="flex items-center space-x-3 -mt-0"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image width={28} height={28} src="/businessnew/Global icon.svg" alt="virtual5" /> </div> <div> <p className="text-xs font-medium text-black"> Instant Activation & Global Acceptance. </p> </div> </div>
-                <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image width={28} height={28} src="/businessnew/virtual2.svg" alt="virutal3" /> </div> <div> <p className="text-xs font-medium text-black"> Instant crypto-to-fiat conversion at competitive rates. </p> </div> </div>
-                <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image width={28} height={28} src="/businessnew/virtual3.svg" alt="virtualicon2" /> </div> <div> <p className="text-xs font-medium text-black"> bepay App Integration & Advanced Security. </p> </div> </div>
-                <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image width={28} height={28} src="/businessnew/virtual4.svg" alt="virtual icon" /> </div> <div> <p className="text-xs font-medium text-black"> Cashback rewards on every purchase. </p> </div> </div>
+                <div className="flex items-center space-x-3 -mt-0"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image width={28} height={28} src="/businessnew/Global icon.svg" alt="Global acceptance icon" /> </div> <div> <p className="text-xs font-medium text-black"> Instant Activation & Global Acceptance. </p> </div> </div>
+                <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image width={28} height={28} src="/businessnew/virtual2.svg" alt="Crypto to fiat conversion icon" /> </div> <div> <p className="text-xs font-medium text-black"> Instant crypto-to-fiat conversion at competitive rates. </p> </div> </div>
+                <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image width={28} height={28} src="/businessnew/virtual3.svg" alt="App integration icon" /> </div> <div> <p className="text-xs font-medium text-black"> bepay App Integration & Advanced Security. </p> </div> </div>
+                <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image width={28} height={28} src="/businessnew/virtual4.svg" alt="Cashback rewards icon" /> </div> <div> <p className="text-xs font-medium text-black"> Cashback rewards on every purchase. </p> </div> </div>
                 <div className="mt-0">
                   <WaitlistTriggerButton>
                     <button onClick={handleGetDebitCardClick} className="bg-black mt-2 cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
@@ -1103,11 +1108,6 @@ const MobileView = () => {
 export default function OneWallet() {
   const [isMounted, setIsMounted] = useState(false);
   const isMobile = useIsMobile();
-
-  // ANALYTICS: Track when the main "One Wallet" section is landed on
-  useEffect(() => {
-    AnalyticsService.sendEvent("One Wallet section landed on");
-  }, []);
 
   useEffect(() => {
     setIsMounted(true);

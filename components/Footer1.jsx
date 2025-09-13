@@ -239,22 +239,22 @@ const Footer = () => {
               onClick={handleAppStoreClick}
               iconSrc="/apple.png"
               iconAlt="Apple Store"
-              line1="Download on the"
-              line2="App Store!"
+              line1="Download on the "
+              line2=" App Store!"
             />
             <AppStoreButton
               onClick={handleGooglePlayClick}
               iconSrc="/playstore.png"
               iconAlt="Google Play"
-              line1="Get the App on"
+              line1="Get the App on "
               line2="Google Play!"
             />
             <AppStoreButton
               onClick={handleAppGalleryClick}
               iconSrc="/huawei.png"
               iconAlt="Huawei App Gallery"
-              line1="Get it on the App"
-              line2="Gallery!"
+              line1="Get it on the App "
+              line2=" Gallery!"
             />
           </motion.div>
 

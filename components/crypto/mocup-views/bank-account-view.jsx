@@ -50,12 +50,16 @@ export function BankAccountView({ setActiveView }) {
         {accounts.map((account) => (
           <div
             key={account.name}
-          className="flex items-center justify-between rounded-lg bg-[#C0C0C01F] p-3"
+            className="flex items-center justify-between rounded-lg bg-[#C0C0C01F] p-3"
           >
             <div className="flex items-center gap-3">
               <Image
                 src={`https://flagcdn.com/w40/${account.code}.png`}
                 alt={`${account.name} flag`}
+                // --- THIS IS THE FIX ---
+                width={24}
+                height={24}
+                // ---------------------
                 className="w-6 h-6 rounded-full object-cover"
               />
               <p className="font-medium text-[14px] text-[#080808]">{account.name}</p>

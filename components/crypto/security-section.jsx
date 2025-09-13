@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 const securityData = {
@@ -28,12 +29,13 @@ const securityData = {
   compliance: {
     icon: "/images/crypto/icon4.png",
     title: "Regulatory Compliance",
-    description: "Licensed by VASP (EU), MiCA (EU), DORA (EU), MSME (India) and MSB (USA)",
+    description:
+      "Licensed by VASP (EU), MiCA (EU), DORA (EU), MSME (India) and MSB (USA)",
   },
   encryption: {
-    // icon: "/images/crypto/icon5.png",
     title: "End-to-End Encryption",
-    description: "All data is encrypted with AES-256 encryption, both at rest and in transit",
+    description:
+      "All data is encrypted with AES-256 encryption, both at rest and in transit",
   },
 };
 
@@ -58,11 +60,11 @@ const SecurityCard = ({ icon, title, description, items, className = "" }) => {
           alt=""
           width={128}
           height={128}
-          className=" w-28 h-28"
+          className="w-28 h-28"
         />
       )}
 
-      <div className="relative z-10 mt-3 lg:mt-8  flex flex-col h-full">
+      <div className="relative z-10 mt-3 lg:mt-8 flex flex-col h-full">
         <h3 className="text-xl font-medium text-white mb-4">{title}</h3>
         {description && (
           <div className="flex gap-1 items-stretch">
@@ -91,6 +93,9 @@ const SecurityCard = ({ icon, title, description, items, className = "" }) => {
 };
 
 export const SecuritySection = () => {
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -111,15 +116,36 @@ export const SecuritySection = () => {
     },
   };
 
+  // ANALYTICS: Track when section enters viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Security section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.2 } // Trigger when 20% visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
+
   return (
-    <section className="bg-black text-white py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
+    <section
+      ref={sectionRef}
+      className="bg-black text-white py-20 sm:py-28 px-4 sm:px-6 lg:px-8"
+    >
       <motion.div
         className="max-w-7xl mx-auto"
         initial="hidden"
         whileInView="visible"
-        // ANALYTICS: Added props to track when the section is viewed
-        onViewportEnter={() => AnalyticsService.sendEvent("Security section viewed")}
-        viewport={{ once: true, amount: 0.1 }}
+        viewport={{ once: true, amount: 0.1 }} // animation only
         variants={containerVariants}
       >
         <motion.h2
