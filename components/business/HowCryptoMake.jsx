@@ -399,7 +399,7 @@ const HowCryptoMake = () => {
                           </motion.div>
                         </div>
 
-                        <WaitlistTriggerButton>
+                        <WaitlistTriggerButton triggerSource="'How crypto make section' button">
                           <motion.button
                           onClick={handleStartEarningClick} // ANALYTICS: Added onClick handler
                             className="w-full bg-black rounded-full text-white py-3 px-4 text-sm font-medium hover:bg-black/90 cursor-pointer transition-colors mt-4"
@@ -516,7 +516,7 @@ const HowCryptoMake = () => {
                     <p className="text-sm text-gray-600 font-medium mb-8">
                       {contentData[3].text}
                     </p>
-                    <WaitlistTriggerButton>
+                    <WaitlistTriggerButton triggerSource="'how crypto make section' button">
                       <div className="space-y-3">
                         <motion.button
                         onClick={handleStartEarningClick} // ANALYTICS: Added onClick handler

@@ -102,7 +102,7 @@ export default function InvestmentSuite() {
               </span>{" "}
               and traditional investments
             </motion.p>
-            <WaitlistTriggerButton>
+            <WaitlistTriggerButton triggerSource="'Investment suite section' button">
               <motion.button
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={

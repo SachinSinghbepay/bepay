@@ -260,7 +260,7 @@ export default function CryptoScrollSection() {
                   delay: 0.5,
                 }}
               >
-                <WaitlistTriggerButton>
+                <WaitlistTriggerButton triggerSource="'Crypto scroll section' button">
                   <button onClick={handleStartEarningClick}  className="bg-black cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
                     <Image
                       src="/vector.svg"
@@ -649,7 +649,7 @@ export default function CryptoScrollSection() {
                           </div>
 
                           {step.hasCTA && (
-                            <WaitlistTriggerButton>
+                            <WaitlistTriggerButton triggerSource="'Crypto scroll section' button">
                               <motion.div
                                 initial={{
                                   opacity: isInView ? 0 : 0,
@@ -661,7 +661,9 @@ export default function CryptoScrollSection() {
                                   delay: isInView ? 0.4 : 1.5,
                                 }}
                               >
-                                <button className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-10 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95">
+                                <button  
+                                onClick={handleStartEarningClick} 
+                                className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-10 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95">
                                   <span>Get started</span>
                                   <svg
                                     className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"

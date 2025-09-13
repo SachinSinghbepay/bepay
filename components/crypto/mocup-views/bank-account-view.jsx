@@ -3,6 +3,8 @@
 import WaitlistTriggerButton from "@/components/waitlist-trigger-button";
 import { ChevronDown, GripVertical } from "lucide-react";
 import Image from "next/image";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+
 
 const accounts = [
   { name: "USD", code: "us", balance: "$1190", sub: "$1190" },
@@ -10,6 +12,9 @@ const accounts = [
   { name: "CHF", code: "ch", balance: "₣49", sub: "$60" },
   { name: "YUAN", code: "cn", balance: "¥49", sub: "$60" },
 ];
+const handleButtonClick = () => {
+        AnalyticsService.sendEvent("Get a free swiss bank account Clicked");
+      }
 
 export function BankAccountView({ setActiveView }) {
   return (
@@ -73,8 +78,8 @@ export function BankAccountView({ setActiveView }) {
       </div>
 
       {/* CTA */}
-      <WaitlistTriggerButton>
-        <button className="mt-auto mx-auto flex items-center justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white">
+      <WaitlistTriggerButton triggerSource="'Swiss bank account view' button">
+        <button onClick={handleButtonClick} className="mt-auto mx-auto flex items-center justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white">
           Get a free swiss bank account
         </button>
       </WaitlistTriggerButton>

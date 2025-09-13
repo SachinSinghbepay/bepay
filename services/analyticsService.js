@@ -12,6 +12,9 @@ export class AnalyticsService {
     mixpanel.init(mixpanelToken, {
       debug: process.env.NODE_ENV !== "production",
       persistence: "localStorage",
+      debug: false,
+      autotrack: false,   // turn off auto events
+      batch_requests: false,
     });
 
     this.isInitialized = true;

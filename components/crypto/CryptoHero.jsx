@@ -331,7 +331,7 @@ export default function CryptoHeroSection() {
                     })}
                   </div>
 
-                  <div className="relative z-30 flex justify-center mt-20 lg:mt-35 lg:left-[15px]">
+                  <div className="relative z-30 flex justify-center mt-20 lg:mt-35 lg:left-[15spx]">
                     <Image
                       src={"/images/crypto/line.png"}
                       height={100}
@@ -342,7 +342,7 @@ export default function CryptoHeroSection() {
                   </div>
                   
                   <div className="relative z-50 pointer-events-auto mt-10 lg:mt-12">
-                    <WaitlistTriggerButton>
+                    <WaitlistTriggerButton triggerSource="'Download app and start earning' button">
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}

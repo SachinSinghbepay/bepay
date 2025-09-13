@@ -57,27 +57,50 @@ const BusinessHero = () => {
     // You might want to add navigation logic here, e.g., router.push('/')
   };
 
+  const [hasFocusedEmail, setHasFocusedEmail] = useState(false);
+
+const handleEmailFocus = () => {
+  if (!hasFocusedEmail) {
+    AnalyticsService.sendEvent("on_email_field_focused");
+    setHasFocusedEmail(true); // mark as triggered
+  }
+};
+
+  const handleEmailButtonSubmit = () => {
+    AnalyticsService.sendEvent("on_join_waitlist_clicked");
+  }
+
   const handleEmailSubmit = async (e) => {
-    e.preventDefault();
-    if (!email || isSubmitting) return;
+  e.preventDefault();
+  if (!email || isSubmitting) return;
 
-    setIsSubmitting(true);
-    setSubmitMessage("");
+  setIsSubmitting(true);
+  setSubmitMessage("");
 
-    try {
-      await addToWaitlist(email);
-      setIsSubmitted(true);
-      setSubmitMessage(
-        "You're now on our exclusive waitlist. We'll notify you when we're ready!"
-      );
-      setEmail("");
-    } catch (error) {
-      setSubmitMessage("Email already exists!");
-      setTimeout(() => setSubmitMessage(""), 3000);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  try {
+    await addToWaitlist(email);
+    setIsSubmitted(true);
+    setSubmitMessage(
+      "You're now on our exclusive waitlist. We'll notify you when we're ready!"
+    );
+    setEmail("");
+
+    // ✅ Track successful submission
+    AnalyticsService.sendEvent("waitlist_submission_success", { email });
+  } catch (error) {
+    setSubmitMessage("Email already exists!");
+    setTimeout(() => setSubmitMessage(""), 3000);
+
+    // ✅ Track failed submission
+    AnalyticsService.sendEvent("waitlist_submission_failed", {
+      email,
+      error: error.message || "Email already exists",
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   // Check if mobile and get screen width
   useEffect(() => {
@@ -357,6 +380,7 @@ const BusinessHero = () => {
                                   type="email"
                                   value={email}
                                   onChange={(e) => setEmail(e.target.value)}
+                                  onFocus={handleEmailFocus}
                                   placeholder="Enter your email"
                                   className=" w-[130px] sm:w-[180px] px-2 md:px-4 py-3 lg:w-[200px] flex justify-center placeholder:text-[10px] text-black font-semibold items-center rounded-full border border-gray-300 text-[12px] md:text-[12px] focus:outline-none focus:border-gray-500"
                                   required
@@ -369,6 +393,7 @@ const BusinessHero = () => {
                               </div>
                               <motion.button
                                 type="submit"
+                                
                                 disabled={isSubmitting}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}

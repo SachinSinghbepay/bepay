@@ -110,25 +110,33 @@ export default function FAQSection() {
 
   // ANALYTICS: Handler for tracking clicks
   const toggleItem = (faq) => {
-    const questionIsCurrentlyOpen = openItems.includes(faq.id);
-    const formattedQuestion = formatQuestionForEvent(faq.question);
-    
-    if (questionIsCurrentlyOpen) {
-      // It's being closed
-      AnalyticsService.sendEvent("on_faq_close_button_clicked", {
-        question_closed: formattedQuestion,
-      });
-    } else {
-      // It's being opened
-      const eventName = `on_faq_${formattedQuestion}_clicked`;
-      AnalyticsService.sendEvent(eventName);
-    }
-    
-    // Update the state to toggle the view
-    setOpenItems((prev) =>
-      prev.includes(faq.id) ? prev.filter((item) => item !== faq.id) : [...prev, faq.id]
-    );
-  };
+  const questionIsCurrentlyOpen = openItems.includes(faq.id);
+  const formattedQuestion = formatQuestionForEvent(faq.question);
+
+  if (questionIsCurrentlyOpen) {
+    // It's being closed
+    const eventName = `on_faq_${formattedQuestion}_closed`;
+    AnalyticsService.sendEvent(eventName, {
+      faq_id: faq.id,
+      question: faq.question,
+    });
+  } else {
+    // It's being opened
+    const eventName = `on_faq_${formattedQuestion}_opened`;
+    AnalyticsService.sendEvent(eventName, {
+      faq_id: faq.id,
+      question: faq.question,
+    });
+  }
+
+  // Update the state to toggle the view
+  setOpenItems((prev) =>
+    prev.includes(faq.id)
+      ? prev.filter((item) => item !== faq.id)
+      : [...prev, faq.id]
+  );
+};
+
 
   return (
     // ANALYTICS: Attach the ref to the section

@@ -55,21 +55,46 @@ const DesktopView = () => {
   const mockupImage6_1Ref = useRef(null);
   const mockupImage6_2Ref = useRef(null);
 
-  // ANALYTICS: Setup for tracking card views
-  const viewedCardsRef = useRef(new Set());
-  const trackCardView = (cardName) => {
-    if (!viewedCardsRef.current.has(cardName)) {
-      AnalyticsService.sendEvent(`${cardName} viewed`);
-      viewedCardsRef.current.add(cardName);
+  useEffect(() => {
+  const refs = [
+    { ref: cardRef, id: "card1", eventNamme: "Self-Custody Wallet" },
+    { ref: card2Ref, id: "card2", eventNamme: "Virtual Crypto Debit Card" },
+    { ref: card3Ref, id: "card3", eventNamme: "Swiss IBAN Account" },
+    { ref: card4Ref, id: "card4", eventNamme: "P2P Transactions" },
+    { ref: card5Ref, id: "card5", eventNamme: "QR Code Payments" },
+    { ref: card6Ref, id: "card6", eventNamme: "AI Personalization" },
+  ];
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const cardId = entry.target.getAttribute("data-card-id");
+          AnalyticsService.sendEvent( refs.find(obj => obj.id == cardId)?.eventNamme );
+          observer.unobserve(entry.target); // ✅ stop observing after first trigger
+        }
+      });
+    },
+    { threshold: 0.3 } // triggers when 30% of card is visible
+  );
+
+  refs.forEach(({ ref, id }) => {
+    if (ref.current) {
+      ref.current.setAttribute("data-card-id", id);
+      observer.observe(ref.current);
     }
-  };
+  });
+
+  return () => observer.disconnect(); // cleanup on unmount
+}, []);
+
 
   // ANALYTICS: Handlers for button clicks
   const handleCreateWalletClick = () => AnalyticsService.sendEvent("Create your wallet button clicked");
   const handleGetDebitCardClick = () => AnalyticsService.sendEvent("Get your crypto debit card now button clicked");
+  const handleGetSwissAccountClick = () => AnalyticsService.sendEvent("Get a Swiss bank account button clicked");
   const handleStartPayingClick = () => AnalyticsService.sendEvent("Start paying with crypto button clicked");
   const handleStartSpendingClick = () => AnalyticsService.sendEvent("Start spending your crypto button clicked");
-  const handleGetSwissAccountClick = () => AnalyticsService.sendEvent("Get a Swiss bank account button clicked");
   const handleDownloadAndStartClick = () => AnalyticsService.sendEvent("Download app and get started button clicked");
 
   useEffect(() => {
@@ -153,12 +178,12 @@ const DesktopView = () => {
         tl.to(textLine1Ref.current, { y: 0, opacity: 1, duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }) .to( textLine2Ref.current, { y: 0, opacity: 1, duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.5" ) .to( textLine3Ref.current, { y: 0, opacity: 1, duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.5" ) .to( textLine4Ref.current, { y: 0, opacity: 1, duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.5" ) .to(cardRef.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }) .to( mockupImageRef.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( cardRef.current, { scale: 0, duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card2Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage2_1Ref.current, { y: getResponsiveValue("7%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( mockupImage2_2Ref.current, { y: getResponsiveValue("17%", "17.5%", "20%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( mockupImage2_3Ref.current, { y: getResponsiveValue("27%", "27.5%", "30%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card2Ref.current, { scale: 0, duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card3Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage3Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card3Ref.current, { scale: 0, duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card4Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage4Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card4Ref.current, { scale: 0, duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card5Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage5Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card5Ref.current, { scale: 0, duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card6Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage6_1Ref.current, { y: getResponsiveValue("7%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( mockupImage6_2Ref.current, { y: getResponsiveValue("17%", "17.5%", "20%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" );
 
         // ANALYTICS: Create separate ScrollTriggers just for tracking views
-        ScrollTrigger.create({ trigger: cardRef.current, start: "top center", onEnter: () => trackCardView("Self-Custody Wallet"), once: true });
-        ScrollTrigger.create({ trigger: card2Ref.current, start: "top center", onEnter: () => trackCardView("Virtual Crypto Debit Card"), once: true });
-        ScrollTrigger.create({ trigger: card3Ref.current, start: "top center", onEnter: () => trackCardView("Swiss IBAN Account"), once: true });
-        ScrollTrigger.create({ trigger: card4Ref.current, start: "top center", onEnter: () => trackCardView("P2P Transactions"), once: true });
-        ScrollTrigger.create({ trigger: card5Ref.current, start: "top center", onEnter: () => trackCardView("QR Code Payments"), once: true });
-        ScrollTrigger.create({ trigger: card6Ref.current, start: "top center", onEnter: () => trackCardView("AI Personalization"), once: true });
+        // ScrollTrigger.create({ trigger: cardRef.current, start: "top center", onEnter: () => trackCardView("Self-Custody Wallet"), once: true });
+        // ScrollTrigger.create({ trigger: card2Ref.current, start: "top center", onEnter: () => trackCardView("Virtual Crypto Debit Card"), once: true });
+        // ScrollTrigger.create({ trigger: card3Ref.current, start: "top center", onEnter: () => trackCardView("Swiss IBAN Account"), once: true });
+        // ScrollTrigger.create({ trigger: card4Ref.current, start: "top center", onEnter: () => trackCardView("P2P Transactions"), once: true });
+        // ScrollTrigger.create({ trigger: card5Ref.current, start: "top center", onEnter: () => trackCardView("QR Code Payments"), once: true });
+        // ScrollTrigger.create({ trigger: card6Ref.current, start: "top center", onEnter: () => trackCardView("AI Personalization"), once: true });
       };
 
       updateAnimations();
@@ -247,19 +272,18 @@ const DesktopView = () => {
                 </p>
               </div>
               <div className="flex items-center space-x-3 sm:space-x-4">
-                 {/* FIX: Added src and alt prop to this Image component */}
                 <div className=" w-5 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
                   <Image
-                    src="/businessnew/Self1.svg" 
+                    src="/businessnew/Self1.svg"
                     alt="Private key icon"
                     width={28}
                     height={28}
                   />
                 </div>
                 <div>
-                   <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                     100% Private Key Ownership.
-                   </h3>
+                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
+                    100% Private Key Ownership.
+                  </h3>
                 </div>
               </div>
               <div className="flex items-center space-x-3 sm:space-x-4">
@@ -295,8 +319,7 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              {/* FIX: Corrected onClick handler, button text, and icon */}
-              <WaitlistTriggerButton>
+              <WaitlistTriggerButton triggerSource="' self custody wallet' button">
                 <button onClick={handleCreateWalletClick} className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
                   <Image
                     src="/businessnew/buttonIcon.png"
@@ -428,8 +451,9 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton>
-                <button className="flex items-center space-x-2 cursor-pointer sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
+              <WaitlistTriggerButton triggerSource="'virtual crypto debit card' button">
+                {/* FIX: onClick handler added */}
+                <button onClick={handleGetDebitCardClick} className="flex items-center space-x-2 cursor-pointer sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
                   <Image
                     src="/businessnew/virtual5.svg"
                     alt="Get Card"
@@ -547,8 +571,9 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton>
-                <button className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
+              <WaitlistTriggerButton triggerSource="'Swiss IBAN account' button">
+                 {/* FIX: onClick handler added */}
+                <button onClick={handleGetSwissAccountClick} className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
                   <Image
                     src="/businessnew/IBAN6.svg"
                     alt="Get Swiss bank account"
@@ -562,8 +587,6 @@ const DesktopView = () => {
             </div>
           </div>
         </div>
-
-        
 
         {/* fourth card */}
         <div
@@ -643,7 +666,7 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton>
+              <WaitlistTriggerButton triggerSource="'P2P transaction' button">
                 <button onClick={handleStartPayingClick} className="flex items-center space-x-2 cursor-pointer sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
                   <Image
                     src="/businessnew/buttonIcon.png"
@@ -738,7 +761,7 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton>
+              <WaitlistTriggerButton triggerSource="'QR code payments' button">
                 <button onClick={handleStartSpendingClick} className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
                   <Image
                     src="/businessnew/qr5.svg"
@@ -757,7 +780,7 @@ const DesktopView = () => {
         {/* sixth card */}
         <div
           ref={card6Ref}
-          className="absolute top-[48%] lg:top-1/2 left-1/2  transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="absolute top-[48%] lg:top-1/2 left-1/2  transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
             <div className="relative w-full aspect-[5/3] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
@@ -847,7 +870,7 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton>
+              <WaitlistTriggerButton triggerSource="'AI personalization' button">
                 <button onClick={handleDownloadAndStartClick} className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4">
                   <Image
                     src="/businessnew/ai5.svg"
@@ -887,9 +910,9 @@ const MobileView = () => {
   // ANALYTICS: Handlers for button clicks in mobile view
   const handleCreateWalletClick = () => AnalyticsService.sendEvent("Create your wallet button clicked");
   const handleGetDebitCardClick = () => AnalyticsService.sendEvent("Get your crypto debit card now button clicked");
+  const handleGetSwissAccountClick = () => AnalyticsService.sendEvent("Get a Swiss bank account button clicked");
   const handleStartPayingClick = () => AnalyticsService.sendEvent("Start paying with crypto button clicked");
   const handleStartSpendingClick = () => AnalyticsService.sendEvent("Start spending your crypto button clicked");
-  const handleGetSwissAccountClick = () => AnalyticsService.sendEvent("Get a Swiss bank account button clicked");
   const handleDownloadAndStartClick = () => AnalyticsService.sendEvent("Download app and get started button clicked");
 
   useEffect(() => {
@@ -925,15 +948,15 @@ const MobileView = () => {
             end: () => `+=${sectionRef.current.offsetHeight - window.innerHeight}`,
             snap: { snapTo: "labels", duration: 0.4, ease: "power2.inOut", },
             // ANALYTICS: Use onUpdate to check the current label and fire view events
-            onUpdate: () => { // Using an arrow function is a good practice here
-  const currentLabel = tl.currentLabel();
-  if (currentLabel === 'card1') trackMobileCardView('Self-Custody Wallet');
-  if (currentLabel === 'card2') trackMobileCardView('Virtual Crypto Debit Card');
-  if (currentLabel === 'card3') trackMobileCardView('Swiss IBAN Account');
-  if (currentLabel === 'card4') trackMobileCardView('P2P Transactions');
-  if (currentLabel === 'card5') trackMobileCardView('QR Code Payments');
-  if (currentLabel === 'card6') trackMobileCardView('AI Personalization');
-}
+            onUpdate: () => {
+              const currentLabel = tl.currentLabel();
+              if (currentLabel === 'card1') trackMobileCardView('Self-Custody Wallet');
+              if (currentLabel === 'card2') trackMobileCardView('Virtual Crypto Debit Card');
+              if (currentLabel === 'card3') trackMobileCardView('Swiss IBAN Account');
+              if (currentLabel === 'card4') trackMobileCardView('P2P Transactions');
+              if (currentLabel === 'card5') trackMobileCardView('QR Code Payments');
+              if (currentLabel === 'card6') trackMobileCardView('AI Personalization');
+            }
           },
         });
 
@@ -970,11 +993,10 @@ const MobileView = () => {
               <div className="flex flex-col p-4 pb-8 flex-grow space-y-3">
                 <div className="space-y-2 -mt-3"> <h1 className="text-xl font-semibold text-black "> Self-Custody Wallet </h1> <p className="text-sm text-gray-600 leading-snug"> Complete control over your crypto assets with military-grade security. </p> </div>
                 <div className="flex items-center gap-2"> <Image width={20} height={20} src="/businessnew/Self1.svg" alt="Keys and Crypto" /> <p className="text-xs font-medium text-black"> 100% Private Key Ownership. Your keys, your Crypto. </p> </div>
-                {/* FIX: Added descriptive alt text */}
                 <div className="flex items-center gap-2"> <Image src="/businessnew/self4.svg" width={20} height={20} alt="Cryptocurrency icons" /> <p className="text-xs font-medium text-black"> 100+ cryptocurrencies <br /> supported! </p> <Image src="/businessnew/self2.svg" width={90} height={40} alt="Supported cryptocurrency logos" className="ml-0 mt-[-12px]" /> </div>
                 <div className="flex items-center gap-2 mt-0"> <Image src="/businessnew/self5.svg" width={20} height={20} alt="Login icon" className="mt-[-5px]" /> <p className="text-xs font-medium text-black"> Social login integration </p> <Image src="/businessnew/self3.svg" width={18} height={10} alt="Google login icon" className="ml-1 mt-[-2px]" /> <Image src="/businessnew/self6.svg" width={18} height={10} alt="Apple login icon" className="ml-1 mt-[-5px]" /> </div>
                 <div className="mt-8">
-                  <WaitlistTriggerButton>
+                  <WaitlistTriggerButton triggerSource="'create your wallet' button">
                     <button onClick={handleCreateWalletClick} className="bg-black cursor-pointer -mt-5 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
                       <Image src="/businessnew/buttonIcon.png" alt="Create Wallet" width={20} height={20} className="w-5 h-5" />
                       <span>Create your wallet</span>
@@ -1000,7 +1022,7 @@ const MobileView = () => {
                 <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image width={28} height={28} src="/businessnew/virtual3.svg" alt="App integration icon" /> </div> <div> <p className="text-xs font-medium text-black"> bepay App Integration & Advanced Security. </p> </div> </div>
                 <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image width={28} height={28} src="/businessnew/virtual4.svg" alt="Cashback rewards icon" /> </div> <div> <p className="text-xs font-medium text-black"> Cashback rewards on every purchase. </p> </div> </div>
                 <div className="mt-0">
-                  <WaitlistTriggerButton>
+                  <WaitlistTriggerButton triggerSource="'virtual cryto debit card' button">
                     <button onClick={handleGetDebitCardClick} className="bg-black mt-2 cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
                       <Image src="/businessnew/virtual5.svg" alt="Get Card" width={20} height={20} className="w-5 h-5" />
                       <span>Get your crypto debit card</span>
@@ -1022,7 +1044,7 @@ const MobileView = () => {
                 <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image src="/businessnew/IBAN4.svg" alt="settlements icon" className="w-full h-full" width={28} height={28} /> </div> <div> <p className="text-xs font-medium text-black"> Instant settlements. </p> </div> </div>
                 <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image src="/businessnew/IBAN5.svg" alt="security icon" className="w-full h-full" width={28} height={28} /> </div> <div> <p className="text-xs font-medium text-black"> Bank-grade security. </p> </div> </div>
                 <div className="mt-8">
-                  <WaitlistTriggerButton>
+                  <WaitlistTriggerButton triggerSource="'swiss IBAN account' button">
                     <button onClick={handleGetSwissAccountClick} className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
                       <Image src="/businessnew/IBAN6.svg" alt="Get account" width={20} height={20} className="w-5 h-5" />
                       <span>Get a Swiss bank account</span>
@@ -1043,7 +1065,7 @@ const MobileView = () => {
                     <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image src="/businessnew/p2p3.svg" alt="qr icon" className="w-full h-full" width={28} height={28} /> </div> <div> <p className="text-xs font-medium text-black"> QR code payments. </p> </div> </div>
                     <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image src="/businessnew/p2p4.svg" alt="split icon" className="w-full h-full" width={28} height={28} /> </div> <div> <p className="text-xs font-medium text-black"> Split payment options. </p> </div> </div>
                     <div className="mt-8">
-                        <WaitlistTriggerButton>
+                        <WaitlistTriggerButton triggerSource="'P2P transactions' button">
                             <button onClick={handleStartPayingClick} className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
                                 <Image src="/businessnew/buttonIcon.png" alt="Start paying" width={20} height={20} className="w-5 h-5" />
                                 <span>Start paying with crypto</span>
@@ -1064,7 +1086,7 @@ const MobileView = () => {
                     <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image src="/businessnew/qr3.svg" alt="offline icon" className="w-full h-full" width={28} height={28} /> </div> <div> <p className="text-xs font-medium text-black"> Offline payment capability. </p> </div> </div>
                     <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image src="/businessnew/qr4.svg" alt="merchant icon" width={28} height={28} className="w-full h-full" /> </div> <div> <p className="text-xs font-medium text-black"> Merchant integration. </p> </div> </div>
                     <div className="mt-8">
-                        <WaitlistTriggerButton>
+                        <WaitlistTriggerButton triggerSource="'QR code payments' button">
                             <button onClick={handleStartSpendingClick} className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
                                 <Image src="/businessnew/qr5.svg" alt="Start spending" width={20} height={20} className="w-5 h-5" />
                                 <span>Start spending your crypto</span>
@@ -1088,7 +1110,7 @@ const MobileView = () => {
                     <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image src="/businessnew/ai4.svg" alt="advice icon" className="w-full h-full" width={28} height={28} /> </div> <div> <p className="text-xs font-medium text-black"> Personalized investment advice. </p> </div> </div>
                     <div className="flex items-center space-x-3"> <div className="w-6 h-6 rounded-full flex-shrink-0"> <Image src="/businessnew/ai6.svg" alt="agent icon" width={28} height={28} className="w-full h-full object-contain" /> </div> <div> <p className="text-xs font-medium text-black"> AI agent assistance. </p> </div> </div>
                     <div className="mt-8">
-                        <WaitlistTriggerButton>
+                        <WaitlistTriggerButton triggerSource="'AI personalization' button">
                             <button onClick={handleDownloadAndStartClick} className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
                                 <Image src="/businessnew/ai5.svg" alt="Download app" width={20} height={20} className="w-5 h-5" />
                                 <span>Download app and get started</span>

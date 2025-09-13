@@ -209,7 +209,7 @@ export default function CryptoWalletSection() {
                   </button>
                 ))}
               </div>
-              <WaitlistTriggerButton>
+              <WaitlistTriggerButton triggerSource="'Crypto wallet section' button">
                 <button 
                   onClick={handleDownloadRewardClick} // ANALYTICS: Added onClick handler
                   className="flex drop-shadow-2xl items-center lg:ml-16 gap-2 lg:h-[56px] text-[12px] whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100 mt-4 md:mt-0">

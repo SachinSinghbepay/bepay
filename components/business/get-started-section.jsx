@@ -34,7 +34,7 @@ const steps = [
     rightTitle: "Go Live",
     rightSubtitle: "Accept your first crypto payment in minutes",
     rightButtons: (
-         <WaitlistTriggerButton>
+         <WaitlistTriggerButton triggerSource="'get started business section' button">
       <div className="flex flex-col gap-4 mt-8 w-full justify-center mx-auto max-w-[260px]">
         <button
          onClick={handleStartEarningClick} // ANALYTICS: Added onClick handler

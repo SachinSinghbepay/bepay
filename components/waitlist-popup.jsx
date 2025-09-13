@@ -177,10 +177,9 @@ function PortalContent({
                   style={{
                     margin: "0 auto",
                     borderRadius: "0.75rem",
-                    backgroundColor: isDarkMode
-                      ? "rgba(255,255,255,0.1)"
-                      : "rgba(255, 255, 255, 0.1)",
+                    backgroundColor:  "transparent",
                     padding: "0.4rem",
+                    filter: isDarkMode ? "invert(1) brightness(200%)" : "none", // make it white
                   }}
                 />
               </motion.div>
@@ -448,6 +447,7 @@ export default function WaitlistPopup({
   isOpen: externalIsOpen,
   onClose: externalOnClose,
   onSubmit: externalOnSubmit,
+  triggerSource: triggerSource,
 }) {
   return (
     <Suspense fallback={<div></div>}>
@@ -455,6 +455,7 @@ export default function WaitlistPopup({
         isOpen={externalIsOpen}
         onClose={externalOnClose}
         onSubmit={externalOnSubmit}
+        triggerSource={triggerSource}
       />
     </Suspense>
   );
@@ -464,6 +465,7 @@ function WaitlistPopupContent({
   isOpen: externalIsOpen,
   onClose: externalOnClose,
   onSubmit: externalOnSubmit,
+  triggerSource: triggerSource = "",
 }) {
   const [isOpen, setIsOpen] = useState(true);
   const [email, setEmail] = useState("");
@@ -477,12 +479,16 @@ function WaitlistPopupContent({
   const finalIsOpen = externalIsOpen !== undefined ? externalIsOpen : isOpen;
 
   useEffect(() => {
-    if (finalIsOpen) {
-      AnalyticsService.sendEvent("waitlist_popup_viewed", {
-        screen_name: "waitlist_popup",
-      });
-    }
-  }, [finalIsOpen]);
+  const submittedEmail = localStorage.getItem("waitlist_submitted_email");
+  if (finalIsOpen && !submittedEmail) {
+    AnalyticsService.sendEvent("waitlist_popup_viewed", {
+      screen_name: "waitlist_popup",
+      triggerSource, // always include trigger source
+    });
+  }
+}, [finalIsOpen, triggerSource]);
+
+
 
   const handleOverlayClose = () => {
     AnalyticsService.sendEvent("waitlist_popup_closed");
@@ -502,9 +508,15 @@ function WaitlistPopupContent({
     }
   };
 
-  const handleEmailFocus = () => {
+const [hasFocusedEmail, setHasFocusedEmail] = useState(false);
+
+const handleEmailFocus = () => {
+  if (!hasFocusedEmail) {
     AnalyticsService.sendEvent("on_email_field_focused");
-  };
+    setHasFocusedEmail(true); // mark as triggered
+  }
+};
+
 
   const onSubmit = externalOnSubmit || (() => setIsOpen(false));
 
@@ -545,33 +557,38 @@ function WaitlistPopupContent({
   }, [isSuccess, externalOnClose, onSubmit]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    AnalyticsService.sendEvent("on_join_the_waitlist_button_clicked");
-    if (!email || isSubmitting || isSuccess) return;
-    setIsSubmitting(true);
-    setError("");
-    try {
-      const { campaignId: newCampaignId } = await addToWaitlist(
-        email,
-        campaignId
-      );
-      const link = `${window.location.origin}/?campaignId=${newCampaignId}`;
-      setReferralLink(link);
-      localStorage.setItem("waitlist_submitted_email", email);
-      setIsSuccess(true);
-      AnalyticsService.sendEvent("waitlist_submission_successful", {
-        status: "success",
-      });
-    } catch (error) {
-      setError(error.message || "Failed to join waitlist. Please try again.");
-      AnalyticsService.sendEvent("waitlist_submission_failed", {
-        status: "failure",
-        error_reason: error.message || "Unknown error",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  e.preventDefault();
+  AnalyticsService.sendEvent("on_join_the_waitlist_button_clicked", {
+    triggerSource, // ✅ include trigger source
+  });
+
+  if (!email || isSubmitting || isSuccess) return;
+  setIsSubmitting(true);
+  setError("");
+
+  try {
+    const { campaignId: newCampaignId } = await addToWaitlist(email, campaignId);
+    const link = `${window.location.origin}/?campaignId=${newCampaignId}`;
+    setReferralLink(link);
+    localStorage.setItem("waitlist_submitted_email", email);
+    setIsSuccess(true);
+
+    AnalyticsService.sendEvent("pop-up_waitlist_submission_successful", {
+      status: "success",
+      triggerSource, // ✅ include trigger source
+    });
+  } catch (error) {
+    setError(error.message || "Failed to join waitlist. Please try again.");
+    AnalyticsService.sendEvent("waitlist_submission_failed", {
+      status: "failure",
+      error_reason: error.message || "Unknown error",
+      triggerSource, // ✅ include trigger source
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   if (!mounted) return null;
 

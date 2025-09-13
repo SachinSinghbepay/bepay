@@ -229,7 +229,7 @@ export const FinancialServicesSection = () => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasTrackedView) {
-          AnalyticsService.sendEvent("One Wallet section landed on");
+          AnalyticsService.sendEvent("financial services section landed on");
           setHasTrackedView(true);
           observer.unobserve(entry.target); // ✅ Stop observing after first view
         }
@@ -273,7 +273,7 @@ export const FinancialServicesSection = () => {
                 <span className="block">all in one comprehensive platform</span>
               </motion.p>
 
-              <WaitlistTriggerButton>
+              <WaitlistTriggerButton triggerSource="'financial service section' button">
                 <motion.button
                   onClick={handleExploreFeaturesClick} // ANALYTICS: Added onClick handler
                   whileHover={{ scale: 1.05 }}

@@ -327,7 +327,7 @@ export default function AnimatedCardsSection() {
                           global customers, boost your revenue, and manage your
                           store — all in one powerful dashboard.
                         </p>
-                        <WaitlistTriggerButton>
+                        <WaitlistTriggerButton triggerSource="'Ready-to-start section' button">
                           <button 
                           onClick={handleStartEarningClick} // ANALYTICS: Added onClick handler
                           className="bg-black cursor-pointer text-[12px]  whitespace-nowrap text-white px-4 md:px-6 py-2 md:py-3 rounded-full font-medium text-xs  lg:text-[12px] hover:bg-black/90 transition-colors duration-300 flex items-center gap-2 mx-auto">

@@ -172,7 +172,7 @@ const DefiYieldSection = () => {
                   <p className="text-xs md:text-sm text-gray-600 leading-relaxed w-full md:w-[70%]"> Earn by sharing your unused storage and computing power. </p>
                   <p className="text-xs md:text-sm italic text-gray-800 leading-relaxed w-full md:w-[70%]"> Monetize your hardware resources </p>
                   <div className="flex items-center justify-center mt-6">
-                    <WaitlistTriggerButton>
+                    <WaitlistTriggerButton triggerSource="' Defi Yield Start earning' button">
                       <motion.button
                         onClick={handleStartEarningClick} // ANALYTICS: Added onClick handler
                         whileHover={{ scale: 1.05 }}
