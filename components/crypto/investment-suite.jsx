@@ -87,7 +87,7 @@ export default function InvestmentSuite() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex flex-col md:flex-row items-start md:items-center justify-start lg:justify-items-center-safe md:gap-24 mb-4"
           >
-            <h2 className="text-4xl sm:text-5xl lg:text-[100px] font-bold text-white mb-4 sm:mb-4">
+            <h2 className="text-4xl sm:text-5xl lg:text-[100px] font-medium text-white mb-4 sm:mb-4">
               Investment suite
             </h2>
             <motion.p
@@ -223,7 +223,7 @@ export default function InvestmentSuite() {
                       <p className="text-[#6A6A6A] text-[16px] leading-relaxed">
                         {item.description}
                       </p>
-                      <p className="text-[#6A6A6A] text-[16px]">
+                      <p className="text-[#6A6A6A] text-[16px] italic">
                         {item.details}
                       </p>
                     </div>

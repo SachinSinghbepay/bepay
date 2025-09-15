@@ -29,14 +29,14 @@ const ScrollTextMobile = () => {
   return (
     <div
       ref={sectionRef}
-      className="h-auto md:hidden bg-[#f9f9f9] flex flex-col overflow-hidden justify-center items-center px-6 py-12"
+      className="mt-16 h-auto md:hidden bg-[#f9f9f9] flex overflow-hidden flex-col justify-center items-center px-6 py-24"
     >
-      <div className="max-w-md w-full text-center space-y-8">
+      <div className="max-w-md w-full text-center space-y-4">
         {/* Sequential text animation */}
         <div className="space-y-2">
           {/* First line - "maximize your" */}
           <motion.h1
-            className="text-4xl md:text-5xl font-normal leading-[0.5em]"
+            className="text-4xl md:text-5xl font-normal  leading-[0.5em]" 
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -47,7 +47,7 @@ const ScrollTextMobile = () => {
 
           {/* Second line - "earning potential" */}
           <motion.h1
-            className="text-4xl md:text-5xl font-normal leading-tight"
+            className="text-4xl md:text-5xl font-[400] leading-tight" // Added leading-tight
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}

@@ -101,6 +101,7 @@ export class AnalyticsService {
         sessionId: sessionId,
         sessionDuration_seconds: durationInSeconds,
       };
+      
 
       // Use `sendBeacon` for reliability when the page is closing.
       mixpanel.track("Session End", eventProperties, { transport: 'sendBeacon' });

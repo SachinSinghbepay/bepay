@@ -74,19 +74,19 @@ const DefiYieldSection = () => {
   const containerOpacity = useTransform(scrollYProgress, [animationStart, animationEnd], [1, 1]);
   const image1Y = useTransform(scrollYProgress, [imageStart, imageStart + intervalSize], ["0%", "-200%"]);
   const image1Rotate = useTransform(scrollYProgress, [imageStart, imageStart + intervalSize], [0, 15]);
-  const image1Opacity = useTransform(scrollYProgress, [imageStart, imageStart + intervalSize * 0.5], [1, 0]);
+  // const image1Opacity = useTransform(scrollYProgress, [imageStart, imageStart + intervalSize * 0.5], [1, 0]);
   const image2Y = useTransform(scrollYProgress, [imageStart + intervalSize, imageStart + intervalSize * 2], ["0%", "-200%"]);
   const image2Rotate = useTransform(scrollYProgress, [imageStart + intervalSize, imageStart + intervalSize * 2], [0, 15]);
-  const image2Opacity = useTransform(scrollYProgress, [imageStart + intervalSize, imageStart + intervalSize + intervalSize * 0.5], [1, 0]);
+  // const image2Opacity = useTransform(scrollYProgress, [imageStart + intervalSize, imageStart + intervalSize + intervalSize * 0.5], [1, 0]);
   const image3Y = useTransform(scrollYProgress, [imageStart + intervalSize * 2, imageStart + intervalSize * 3], ["0%", "-200%"]);
   const image3Rotate = useTransform(scrollYProgress, [imageStart + intervalSize * 2, imageStart + intervalSize * 3], [0, 15]);
-  const image3Opacity = useTransform(scrollYProgress, [imageStart + intervalSize * 2, imageStart + intervalSize * 2 + intervalSize * 0.5], [1, 0]);
+  // const image3Opacity = useTransform(scrollYProgress, [imageStart + intervalSize * 2, imageStart + intervalSize * 2 + intervalSize * 0.5], [1, 0]);
   const image4Y = useTransform(scrollYProgress, [imageStart + intervalSize * 3, imageStart + intervalSize * 4], ["0%", "-200%"]);
   const image4Rotate = useTransform(scrollYProgress, [imageStart + intervalSize * 3, imageStart + intervalSize * 4], [0, 15]);
-  const image4Opacity = useTransform(scrollYProgress, [imageStart + intervalSize * 3, imageStart + intervalSize * 3 + intervalSize * 0.5], [1, 0]);
+  // const image4Opacity = useTransform(scrollYProgress, [imageStart + intervalSize * 3, imageStart + intervalSize * 3 + intervalSize * 0.5], [1, 0]);
   const image5Y = useTransform(scrollYProgress, [imageStart + intervalSize * 4, imageStart + intervalSize * 5], ["0%", "-200%"]);
   const image5Rotate = useTransform(scrollYProgress, [imageStart + intervalSize * 4, imageStart + intervalSize * 5], [0, 15]);
-  const image5Opacity = useTransform(scrollYProgress, [imageStart + intervalSize * 4, imageStart + intervalSize * 4 + intervalSize * 0.5], [1, 0]);
+  // const image5Opacity = useTransform(scrollYProgress, [imageStart + intervalSize * 4, imageStart + intervalSize * 4 + intervalSize * 0.5], [1, 0]);
   const image6Y = useTransform(scrollYProgress, [imageStart + intervalSize * 5, imageStart + intervalSize * 6], ["0%", "-50%"]);
   const image6Scale = useTransform(scrollYProgress, [imageStart + intervalSize * 5, imageStart + intervalSize * 6], [1, 1.1]);
   const content1Y = useTransform(scrollYProgress, [imageStart, imageStart + intervalSize], ["0%", "-100%"]);
@@ -118,19 +118,19 @@ const DefiYieldSection = () => {
             >
               <div className="relative w-full max-w-[642px] h-[250px] md:h-[300px] lg:h-[350px]">
                 <div className="relative w-full h-full">
-                  <motion.div style={{ y: image1Y, rotate: image1Rotate, opacity: image1Opacity, zIndex: 6 }} className="absolute inset-0 rounded-full overflow-hidden">
+                  <motion.div style={{ y: image1Y, rotate: image1Rotate, zIndex: 6 }} className="absolute inset-0 rounded-full overflow-hidden">
                     <Image src="/images/crypto/earning1.png" fill priority alt="Woman looking at phone with excitement" className="object-cover object-center rounded-full" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 642px" />
                   </motion.div>
-                  <motion.div style={{ y: image2Y, rotate: image2Rotate, opacity: image2Opacity, zIndex: 5 }} className="absolute inset-0 rounded-full overflow-hidden transform ">
+                  <motion.div style={{ y: image2Y, rotate: image2Rotate,  zIndex: 5 }} className="absolute inset-0 rounded-full overflow-hidden transform ">
                     <Image src="/images/crypto/earning5.png" fill priority alt="Woman looking at phone with excitement" className="object-cover object-center rounded-full" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 642px" />
                   </motion.div>
-                  <motion.div style={{ y: image3Y, rotate: image3Rotate, opacity: image3Opacity, zIndex: 4 }} className="absolute inset-0 rounded-full overflow-hidden transform ">
+                  <motion.div style={{ y: image3Y, rotate: image3Rotate,  zIndex: 4 }} className="absolute inset-0 rounded-full overflow-hidden transform ">
                     <Image src="/images/crypto/earning2.png" fill priority alt="Woman looking at phone with excitement" className="object-cover object-center rounded-full" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 642px" />
                   </motion.div>
-                  <motion.div style={{ y: image4Y, rotate: image4Rotate, opacity: image4Opacity, zIndex: 3 }} className="absolute inset-0 rounded-full overflow-hidden transform ">
+                  <motion.div style={{ y: image4Y, rotate: image4Rotate, zIndex: 3 }} className="absolute inset-0 rounded-full overflow-hidden transform ">
                     <Image src="/images/crypto/earning3.png" fill priority alt="Woman looking at phone with excitement" className="object-cover object-center rounded-full" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 642px" />
                   </motion.div>
-                  <motion.div style={{ y: image5Y, rotate: image5Rotate, opacity: image5Opacity, zIndex: 2 }} className="absolute inset-0 rounded-full overflow-hidden transform ">
+                  <motion.div style={{ y: image5Y, rotate: image5Rotate,  zIndex: 2 }} className="absolute inset-0 rounded-full overflow-hidden transform ">
                     <Image src="/images/crypto/earning4.png" fill priority alt="Woman looking at phone with excitement" className="object-cover object-center rounded-full" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 642px" />
                   </motion.div>
                   <motion.div style={{ y: image6Y, scale: image6Scale, zIndex: 1 }} className="absolute inset-0 rounded-full overflow-hidden transform ">
