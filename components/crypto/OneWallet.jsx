@@ -35,6 +35,7 @@ const useIsMobile = () => {
 // Component for the original Desktop/Tablet animation
 const DesktopView = () => {
   const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
   const textLine1Ref = useRef(null);
   const textLine2Ref = useRef(null);
   const textLine3Ref = useRef(null);
@@ -55,6 +56,28 @@ const DesktopView = () => {
   const mockupImage6_1Ref = useRef(null);
   const mockupImage6_2Ref = useRef(null);
 
+
+
+  // ANALYTICS: Track when the main section is actually viewed
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !hasTrackedView) {
+            AnalyticsService.sendEvent("One wallet section viewed");
+            setHasTrackedView(true);
+            observer.unobserve(entry.target); // Stop observing after first view
+          }
+        },
+        { threshold: 0.1 } // Trigger when 30% of the component is visible
+      );
+  
+      if (sectionRef.current) {
+        observer.observe(sectionRef.current);
+      }
+  
+      return () => observer.disconnect();
+    }, [hasTrackedView]);
+    
   useEffect(() => {
   const refs = [
     { ref: cardRef, id: "card1", eventNamme: "Self-Custody Wallet" },
@@ -893,6 +916,8 @@ const DesktopView = () => {
 // Component for the new Mobile horizontal scroll animation
 const MobileView = () => {
   const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
+
   const stickyContainerRef = useRef(null);
   const headerRef = useRef(null);
   const cardsWrapperRef = useRef(null);
@@ -924,6 +949,26 @@ const MobileView = () => {
             viewedCardsRef.add(cardName);
         }
     };
+
+    // ANALYTICS: Track when the main section is actually viewed
+      useEffect(() => {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting && !hasTrackedView) {
+              AnalyticsService.sendEvent("One wallet section viewed");
+              setHasTrackedView(true);
+              observer.unobserve(entry.target); // Stop observing after first view
+            }
+          },
+          { threshold: 0.1 } // Trigger when 30% of the component is visible
+        );
+    
+        if (sectionRef.current) {
+          observer.observe(sectionRef.current);
+        }
+    
+        return () => observer.disconnect();
+      }, [hasTrackedView]);
 
     const timer = setTimeout(() => {
       const cards = gsap.utils.toArray(".mobile-card");

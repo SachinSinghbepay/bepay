@@ -20,7 +20,6 @@ function PortalContent({
   isSubmitting,
   isSuccess,
   error,
-  referralLink,
 }) {
   const [isMobile, setIsMobile] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -465,7 +464,8 @@ function WaitlistPopupContent({
   isOpen: externalIsOpen,
   onClose: externalOnClose,
   onSubmit: externalOnSubmit,
-  triggerSource: triggerSource = "",
+  triggerSource = "auto_waitlist_popup", // 👈 set default
+  
 }) {
   const [isOpen, setIsOpen] = useState(true);
   const [email, setEmail] = useState("");
@@ -473,17 +473,14 @@ function WaitlistPopupContent({
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
-  const [referralLink, setReferralLink] = useState("");
-  const searchParams = useSearchParams();
-  const campaignId = searchParams.get("campaignId");
   const finalIsOpen = externalIsOpen !== undefined ? externalIsOpen : isOpen;
 
   useEffect(() => {
   const submittedEmail = localStorage.getItem("waitlist_submitted_email");
   if (finalIsOpen && !submittedEmail) {
-    AnalyticsService.sendEvent("waitlist_popup_viewed", {
+    AnalyticsService.sendEvent(triggerSource == 'auto_waitlist_popup' ? "auto_waitlist_popup_viewed" : "waitlist_popup_viewed", {
       screen_name: "waitlist_popup",
-      triggerSource, // always include trigger source
+      triggerSource, // always include trigger source      
     });
   }
 }, [finalIsOpen, triggerSource]);
@@ -491,7 +488,7 @@ function WaitlistPopupContent({
 
 
   const handleOverlayClose = () => {
-    AnalyticsService.sendEvent("waitlist_popup_closed");
+    AnalyticsService.sendEvent("user_clicked_on_screen_to_close_popup");
     if (externalOnClose) {
       externalOnClose();
     } else {
@@ -533,6 +530,19 @@ const handleEmailFocus = () => {
     }
   }, [finalIsOpen, externalIsOpen]);
 
+  const [hasViewedSuccessPopup, setHasViewedSuccessPopup] = useState(false);
+
+useEffect(() => {
+  if (isSuccess && !hasViewedSuccessPopup) {
+    AnalyticsService.sendEvent("joined_waitlist_popup_viewed", {
+      triggerSource,
+      email,
+    });
+    setHasViewedSuccessPopup(true); // ensure it fires only once
+  }
+}, [isSuccess, hasViewedSuccessPopup, triggerSource, email]);
+
+
   useEffect(() => {
     if (finalIsOpen) {
       const originalStyle = window.getComputedStyle(document.body).overflow;
@@ -567,22 +577,24 @@ const handleEmailFocus = () => {
   setError("");
 
   try {
-    const { campaignId: newCampaignId } = await addToWaitlist(email, campaignId);
-    const link = `${window.location.origin}/?campaignId=${newCampaignId}`;
-    setReferralLink(link);
+    const { campaignId: newCampaignId } = await addToWaitlist(email);
+    // update or add campaignId
+    localStorage.setItem("campaignId", newCampaignId);
+    
     localStorage.setItem("waitlist_submitted_email", email);
     setIsSuccess(true);
 
     AnalyticsService.sendEvent("pop-up_waitlist_submission_successful", {
       status: "success",
       triggerSource, // ✅ include trigger source
+      email,
     });
   } catch (error) {
     setError(error.message || "Failed to join waitlist. Please try again.");
     AnalyticsService.sendEvent("waitlist_submission_failed", {
       status: "failure",
       error_reason: error.message || "Unknown error",
-      triggerSource, // ✅ include trigger source
+      triggerSource, // ✅ include trigger source      
     });
   } finally {
     setIsSubmitting(false);
@@ -605,7 +617,6 @@ const handleEmailFocus = () => {
       isSuccess={isSuccess}
       error={error}
       handleSubmit={handleSubmit}
-      referralLink={referralLink}
     />,
     document.body
   );

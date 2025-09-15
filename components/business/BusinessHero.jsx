@@ -392,6 +392,7 @@ const handleEmailFocus = () => {
                                 )}
                               </div>
                               <motion.button
+                                onClick={handleEmailButtonSubmit}
                                 type="submit"
                                 
                                 disabled={isSubmitting}
