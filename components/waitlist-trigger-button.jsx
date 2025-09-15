@@ -12,6 +12,7 @@ export default function WaitlistTriggerButton({
   size = "default",
   children,
   className = "",
+  triggerSource = "",
 }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -23,6 +24,7 @@ export default function WaitlistTriggerButton({
 
       <WaitlistPopup
         isOpen={isPopupOpen}
+        triggerSource={triggerSource}
         onClose={() => setIsPopupOpen(false)}
         onSubmit={() => setIsPopupOpen(false)}
       />

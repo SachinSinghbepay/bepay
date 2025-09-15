@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 export default function ScrollTextAnimation() {
   const containerRef = useRef(null);
@@ -9,22 +10,40 @@ export default function ScrollTextAnimation() {
   const maximizeYourRef = useRef(null);
   const earningPotentialRef = useRef(null);
   const subDescriptionRef = useRef(null);
+  const sectionRef = useRef(null); // For intersection observer
+  const [hasTrackedView, setHasTrackedView] = useState(false);
 
+  // ANALYTICS: Track when the user actually views this section
   useEffect(() => {
-    // Check if fonts are loaded
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Scroll text animation viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
+
+  // Wait until fonts are loaded
+  useEffect(() => {
     if (document.fonts) {
-      document.fonts.ready.then(() => {
-        setFontsLoaded(true);
-      });
+      document.fonts.ready.then(() => setFontsLoaded(true));
     } else {
-      // Fallback for browsers that don't support document.fonts
       setTimeout(() => setFontsLoaded(true), 100);
     }
   }, []);
 
+  // Scroll animation
   useEffect(() => {
     if (!fontsLoaded) return;
-    
     let animationFrameId;
 
     const handleScroll = () => {
@@ -83,7 +102,7 @@ export default function ScrollTextAnimation() {
           } else if (progress < 0.32) {
             style = { transform: "translate(60%,60%)", opacity: 0 };
           } else if (progress < 0.45) {
-            const phaseProgress = (progress - 0.32) / 0.13; // Faster entry (1 scroll)
+            const phaseProgress = (progress - 0.32) / 0.13;
             const smoothProgress = 1 - Math.pow(1 - phaseProgress, 3);
             const x = 60 - smoothProgress * 60;
             const y = 60 - smoothProgress * 60;
@@ -108,7 +127,6 @@ export default function ScrollTextAnimation() {
               opacity: Math.max(0, 1 - exitProgress * 2),
             };
           } else if (progress < 0.55) {
-            // Appear a little earlier (after earning potential settles)
             style = { transform: "translateY(30px)", opacity: 0 };
           } else {
             const subProgress = (progress - 0.55) / 0.2;
@@ -134,15 +152,24 @@ export default function ScrollTextAnimation() {
   }, [fontsLoaded]);
 
   return (
-    <div className="bg-gray-50 hidden md:block">
-      <div ref={containerRef} className="relative h-[200vh] md:h-[400vh] overflow-hidden">
-        <div className="min-h-screen sticky inset-0" style={{ opacity: fontsLoaded ? 1 : 0, transition: 'opacity 0.3s ease-in-out' }}>
+    <div ref={sectionRef} className="bg-gray-50 hidden md:block">
+      <div
+        ref={containerRef}
+        className="relative h-[200vh] md:h-[400vh] overflow-hidden"
+      >
+        <div
+          className="min-h-screen sticky inset-0"
+          style={{
+            opacity: fontsLoaded ? 1 : 0,
+            transition: "opacity 0.3s ease-in-out",
+          }}
+        >
           {/* Maximize Your */}
           <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-10">
             <span
               ref={maximizeYourRef}
-              className="tracking-[-0.09em] text-4xl sm:text-6xl md:text-8xl whitespace-nowrap lg:text-[180px] font-[400] text-[#C0C0C0]"
-              style={{ visibility: fontsLoaded ? 'visible' : 'hidden' }}
+              className="tracking-[-0.09em] text-4xl sm:text-6xl md:text-8xl whitespace-nowrap lg:text-[180px] font-normal text-[#C0C0C0]"
+              style={{ visibility: fontsLoaded ? "visible" : "hidden" }}
             >
               Maximize Your
             </span>
@@ -152,8 +179,8 @@ export default function ScrollTextAnimation() {
           <div className="fixed inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
             <span
               ref={earningPotentialRef}
-              className="tracking-[-0.09em] text-4xl sm:text-6xl pb-5 md:text-8xl lg:text-[160px] font-500 bg-gradient-to-r from-[#333333] via-[#999999] to-[#333333] bg-clip-text text-transparent mb-8"
-              style={{ visibility: fontsLoaded ? 'visible' : 'hidden' }}
+              className="tracking-[-0.09em] text-4xl sm:text-6xl pb-5 md:text-8xl lg:text-[160px] font-medium bg-gradient-to-r from-[#333333] via-[#999999] to-[#333333] bg-clip-text text-transparent mb-8"
+              style={{ visibility: fontsLoaded ? "visible" : "hidden" }}
             >
               earning potential
             </span>
@@ -161,13 +188,13 @@ export default function ScrollTextAnimation() {
             {/* Sub-description */}
             <p
               ref={subDescriptionRef}
-              className="max-w-7xl text-center px-4 text-lg sm:text-xl md:text-[20px] font-[500] text-[#666666] leading-relaxed"
-              style={{ visibility: fontsLoaded ? 'visible' : 'hidden' }}
+              className="max-w-7xl text-center px-4 text-lg sm:text-xl md:text-[20px] font-medium text-[#666666] leading-relaxed"
+              style={{ visibility: fontsLoaded ? "visible" : "hidden" }}
             >
               Multiple ways to grow your wealth with{" "}
-              <span className=" text-[#333333]">industry-leading returns</span>{" "}
+              <span className="text-[#333333]">industry-leading returns</span>{" "}
               and{" "}
-              <span className=" text-[#333333]">
+              <span className="text-[#333333]">
                 innovative earning opportunities
               </span>
             </p>

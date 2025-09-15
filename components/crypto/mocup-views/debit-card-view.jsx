@@ -12,6 +12,7 @@ import { ActionButton } from "../action-button";
 import { motion, useTransform } from "framer-motion";
 import Image from "next/image";
 import WaitlistTriggerButton from "@/components/waitlist-trigger-button";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 import { IconClockHour12 } from "@tabler/icons-react";
 
 export function DebitCardView({ setActiveView, scrollYProgress }) {
@@ -21,6 +22,9 @@ export function DebitCardView({ setActiveView, scrollYProgress }) {
     [0.5, 1.7]
   );
   const innerCardOpacity = useTransform(scrollYProgress, [0.38, 0.42], [0, 1]);
+  const handleButtonClick = () => {
+        AnalyticsService.sendEvent("Get your virtual crypto debit card Clicked");
+      }
 
   return (
     <div className="flex h-full flex-col bg-white p-4">
@@ -85,8 +89,8 @@ export function DebitCardView({ setActiveView, scrollYProgress }) {
         <p className="mt-2 text-[10px] text-gray-400">No transactions to see</p>
       </div>
 
-      <WaitlistTriggerButton>
-        <button className="mt-auto mx-auto items-center flex justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white">
+      <WaitlistTriggerButton triggerSource="'Get your virtual crypto debit card' button">
+        <button onClick={handleButtonClick} className="mt-auto mx-auto items-center flex justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white">
           Get your virtual crypto debit card
         </button>
       </WaitlistTriggerButton>

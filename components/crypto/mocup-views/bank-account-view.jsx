@@ -3,6 +3,8 @@
 import WaitlistTriggerButton from "@/components/waitlist-trigger-button";
 import { ChevronDown, GripVertical } from "lucide-react";
 import Image from "next/image";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+
 
 const accounts = [
   { name: "USD", code: "us", balance: "$1190", sub: "$1190" },
@@ -10,6 +12,9 @@ const accounts = [
   { name: "CHF", code: "ch", balance: "₣49", sub: "$60" },
   { name: "YUAN", code: "cn", balance: "¥49", sub: "$60" },
 ];
+const handleButtonClick = () => {
+        AnalyticsService.sendEvent("Get a free swiss bank account Clicked");
+      }
 
 export function BankAccountView({ setActiveView }) {
   return (
@@ -50,12 +55,16 @@ export function BankAccountView({ setActiveView }) {
         {accounts.map((account) => (
           <div
             key={account.name}
-          className="flex items-center justify-between rounded-lg bg-[#C0C0C01F] p-3"
+            className="flex items-center justify-between rounded-lg bg-[#C0C0C01F] p-3"
           >
             <div className="flex items-center gap-3">
               <Image
                 src={`https://flagcdn.com/w40/${account.code}.png`}
                 alt={`${account.name} flag`}
+                // --- THIS IS THE FIX ---
+                width={24}
+                height={24}
+                // ---------------------
                 className="w-6 h-6 rounded-full object-cover"
               />
               <p className="font-medium text-[14px] text-[#080808]">{account.name}</p>
@@ -69,8 +78,8 @@ export function BankAccountView({ setActiveView }) {
       </div>
 
       {/* CTA */}
-      <WaitlistTriggerButton>
-        <button className="mt-auto mx-auto flex items-center justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white">
+      <WaitlistTriggerButton triggerSource="'Swiss bank account view' button">
+        <button onClick={handleButtonClick} className="mt-auto mx-auto flex items-center justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white">
           Get a free swiss bank account
         </button>
       </WaitlistTriggerButton>

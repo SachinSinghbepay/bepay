@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+
 
 const steps = [
   {
@@ -69,7 +71,33 @@ export default function CryptoScrollSection() {
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
   const prevActiveStepRef = useRef(0);
+  //const cryptoScrollSectionViewedRef = useRef(false); // ANALYTICS: Ref to track if the section has been viewed
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Crypto Scroll section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
+        }
+      },
+      { threshold: 0.1 } // Trigger when 30% of the component is visible
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
+
+  const handleStartEarningClick = () => {
+    AnalyticsService.sendEvent("'Get Started' button clicked");
+  };
+
+  
   useEffect(() => {
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -84,6 +112,8 @@ export default function CryptoScrollSection() {
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
+
+    
 
       const container = containerRef.current;
       const rect = container.getBoundingClientRect();
@@ -230,8 +260,8 @@ export default function CryptoScrollSection() {
                   delay: 0.5,
                 }}
               >
-                <WaitlistTriggerButton>
-                  <button className="bg-black cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
+                <WaitlistTriggerButton triggerSource="'Crypto scroll section' button">
+                  <button onClick={handleStartEarningClick}  className="bg-black cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
                     <Image
                       src="/vector.svg"
                       alt="Get Started Icon"
@@ -619,7 +649,7 @@ export default function CryptoScrollSection() {
                           </div>
 
                           {step.hasCTA && (
-                            <WaitlistTriggerButton>
+                            <WaitlistTriggerButton triggerSource="'Crypto scroll section' button">
                               <motion.div
                                 initial={{
                                   opacity: isInView ? 0 : 0,
@@ -631,7 +661,9 @@ export default function CryptoScrollSection() {
                                   delay: isInView ? 0.4 : 1.5,
                                 }}
                               >
-                                <button className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-10 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95">
+                                <button  
+                                onClick={handleStartEarningClick} 
+                                className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-10 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95">
                                   <span>Get started</span>
                                   <svg
                                     className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
