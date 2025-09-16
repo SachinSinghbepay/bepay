@@ -549,7 +549,7 @@ export default function CryptoScrollSection() {
             </motion.div>
 
             <motion.div
-              className="relative order-1 lg:order-2 min-h-[400px]"
+              className="relative order-1 lg:order-2 min-h-[400px] flex items-center justify-center"
               initial={{ opacity: 0, x: 100 }}
               animate={
                 isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 100 }
@@ -596,7 +596,7 @@ export default function CryptoScrollSection() {
                 </AnimatePresence>
               </div>
 
-              <div className="relative z-10 max-w-lg pt-4">
+              <div className="relative z-10 max-w-lg">
                 <AnimatePresence mode="wait">
                   {steps.map(
                     (step, index) =>

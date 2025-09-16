@@ -467,13 +467,23 @@ function WaitlistPopupContent({
   triggerSource = "auto_waitlist_popup", // 👈 set default
   
 }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
   const finalIsOpen = externalIsOpen !== undefined ? externalIsOpen : isOpen;
+
+ // ⏳ Delay popup open by 4–5 seconds
+ useEffect(() => {
+    if (externalIsOpen === undefined) { 
+     const timer = setTimeout(() => {
+       setIsOpen(true);
+     }, 2200); 
+     return () => clearTimeout(timer);
+    }
+  }, [externalIsOpen]);
 
   useEffect(() => {
   const submittedEmail = localStorage.getItem("waitlist_submitted_email");
@@ -494,15 +504,20 @@ function WaitlistPopupContent({
     } else {
       setIsOpen(false);
     }
+    
   };
 
   const handleCloseButtonClick = () => {
-    AnalyticsService.sendEvent("on_waitlist_close_button_clicked");
+    AnalyticsService.sendEvent("on_waitlist_close_button_clicked", {
+    triggerSource,
+
+     });
     if (externalOnClose) {
       externalOnClose();
     } else {
       setIsOpen(false);
     }
+    
   };
 
 const [hasFocusedEmail, setHasFocusedEmail] = useState(false);

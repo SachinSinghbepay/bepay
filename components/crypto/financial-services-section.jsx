@@ -108,8 +108,8 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
           </h3>
           <ul className="space-y-2">
             {service.points.map((point, idx) => (
-              <li key={idx} className="flex items-start gap-2 text-xs lg:text-sm text-gray-600 leading-snug">
-                <span className="w-[15px] h-[15px] rounded-[4px] bg-[#6A6A6A] mt-[2px] flex-shrink-0"></span>
+              <li key={idx} className="flex items-start gap-1.5 text-xs lg:text-sm text-gray-600 leading-snug">
+                <span className="w-3 h-3 rounded-[3px] bg-[#6A6A6A] mt-0.5 flex-shrink-0"></span>
                 <span>{point}</span>
               </li>
             ))}
