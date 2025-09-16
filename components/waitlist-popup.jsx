@@ -4,29 +4,26 @@ import { useState, useEffect, Suspense } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import { addToWaitlist } from "@/lib/firebase"; // Assuming this path is correct
+import { addToWaitlist } from "@/lib/firebase";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
+import { AnalyticsService } from "@/services/analyticsService";
 
-// ==================================================================
-// ===== NO CHANGES WERE MADE TO THIS COMPONENT =====================
-// ==================================================================
 function PortalContent({
   isOpen,
   onClose,
-  onSubmit,
+  onCloseButtonClick,
+  onEmailFocus,
+  handleSubmit,
   email,
   setEmail,
   isSubmitting,
   isSuccess,
   error,
-  handleSubmit,
-  referralLink,
 }) {
   const [isMobile, setIsMobile] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // Detect mobile
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 640);
     checkMobile();
@@ -34,12 +31,9 @@ function PortalContent({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Detect dark mode
   useEffect(() => {
     const darkCheck = () =>
-      setIsDarkMode(
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-      );
+      setIsDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
     darkCheck();
     const listener = (e) => setIsDarkMode(e.matches);
     window
@@ -66,7 +60,6 @@ function PortalContent({
     WebkitBackdropFilter: "blur(8px)",
     isolation: "isolate",
   };
-
   const modalStyle = {
     position: "relative",
     width: "100%",
@@ -85,7 +78,6 @@ function PortalContent({
     paddingBottom: isMobile ? "0.5rem" : "0",
     color: isDarkMode ? "#F9FAFB" : "#111827",
   };
-
   const closeButtonStyle = {
     position: "absolute",
     top: isMobile ? "1rem" : "1.6rem",
@@ -101,7 +93,6 @@ function PortalContent({
     justifyContent: "center",
     transition: "background-color 0.2s",
   };
-
   const inputStyle = {
     width: "100%",
     height: "42px",
@@ -110,10 +101,9 @@ function PortalContent({
     borderRadius: "9999px",
     fontSize: "13px",
     outline: "none",
-    backgroundColor: isDarkMode ? "#374151" : "rgb(249,250,251)",
+    backgroundColor: isDarkMode ? "#374151" : "rgb(249,250,211)",
     color: isDarkMode ? "#F9FAFB" : "#111827",
   };
-
   const buttonStyle = {
     width: "100%",
     height: "42px",
@@ -147,12 +137,12 @@ function PortalContent({
             style={modalStyle}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close Button */}
             <button
-              onClick={onClose}
+              onClick={onCloseButtonClick}
               style={closeButtonStyle}
               onMouseEnter={(e) =>
-                (e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.1)")
+                (e.currentTarget.style.backgroundColor =
+                  "rgba(255,255,255,0.1)")
               }
               onMouseLeave={(e) =>
                 (e.currentTarget.style.backgroundColor = "transparent")
@@ -166,8 +156,6 @@ function PortalContent({
                 }}
               />
             </button>
-
-            {/* Header with Logo */}
             <div
               style={{
                 padding: isMobile ? "1.5rem 1rem 1rem" : "2rem 2rem 1.5rem",
@@ -188,20 +176,19 @@ function PortalContent({
                   style={{
                     margin: "0 auto",
                     borderRadius: "0.75rem",
-                    backgroundColor: isDarkMode
-                      ? "rgba(255,255,255,0.1)"
-                      : "rgba(255, 255, 255, 0.1)",
+                    backgroundColor:  "transparent",
                     padding: "0.4rem",
+                    filter: isDarkMode ? "invert(1) brightness(200%)" : "none", // make it white
                   }}
                 />
               </motion.div>
-
               {!isSuccess && (
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
+                  {" "}
                   <h2
                     style={{
                       fontFamily: "'Montserrat', sans-serif",
@@ -215,12 +202,10 @@ function PortalContent({
                     }}
                   >
                     Be the first to experience the future of payments.
-                  </h2>
+                  </h2>{" "}
                 </motion.div>
               )}
             </div>
-
-            {/* Form Content */}
             <div
               style={{
                 padding: isMobile ? "0 1rem 1rem" : "0 2rem 2rem",
@@ -241,6 +226,7 @@ function PortalContent({
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className={isMobile ? "-mt-6 mb-4" : "-mt-9 mb-6"}>
+                      {" "}
                       <h2
                         style={{
                           fontSize: isMobile ? "1rem" : "1.5rem",
@@ -250,7 +236,7 @@ function PortalContent({
                         }}
                       >
                         Yay! You&apos;re on the waitlist.
-                      </h2>
+                      </h2>{" "}
                       <p
                         style={{
                           fontFamily: "'Montserrat', sans-serif",
@@ -263,11 +249,11 @@ function PortalContent({
                           color: isDarkMode ? "#D1D5DB" : "#6A6A6A",
                         }}
                       >
-                        Keep an eye on your inbox. We&apos;ll email <br /> you
-                        as soon as we launch!
-                      </p>
+                        {" "}
+                        Keep an eye on your inbox. We&apos;ll email <br /> you as
+                        soon as we launch!{" "}
+                      </p>{" "}
                     </div>
-
                     <button
                       onClick={onClose}
                       style={{
@@ -282,7 +268,8 @@ function PortalContent({
                         fontSize: isMobile ? "14px" : "12px",
                       }}
                     >
-                      Awesome!
+                      {" "}
+                      Awesome!{" "}
                     </button>
                   </motion.div>
                 ) : (
@@ -317,7 +304,6 @@ function PortalContent({
                       We’re launching soon! Join the waitlist and stay ahead of
                       others!
                     </p>
-
                     {isMobile ? (
                       <div
                         style={{
@@ -333,6 +319,7 @@ function PortalContent({
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="Enter your email"
                           style={inputStyle}
+                          onFocus={onEmailFocus}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") handleSubmit(e);
                           }}
@@ -342,7 +329,10 @@ function PortalContent({
                           disabled={isSubmitting || !email}
                           style={buttonStyle}
                         >
-                          {isSubmitting ? "Submitting..." : "Join the waitlist"}
+                          {" "}
+                          {isSubmitting
+                            ? "Submitting..."
+                            : "Join the waitlist"}{" "}
                         </button>
                       </div>
                     ) : (
@@ -376,6 +366,7 @@ function PortalContent({
                             backgroundColor: "transparent",
                             color: isDarkMode ? "#F9FAFB" : "#111827",
                           }}
+                          onFocus={onEmailFocus}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") handleSubmit(e);
                           }}
@@ -386,9 +377,7 @@ function PortalContent({
                           style={{
                             height: "2.8rem",
                             padding: "0 1.8rem",
-                            backgroundColor: isDarkMode
-                              ? "#F9FAFB"
-                              : "#000000",
+                            backgroundColor: isDarkMode ? "#F9FAFB" : "#000000",
                             color: isDarkMode ? "#111827" : "#ffffff",
                             border: "none",
                             fontSize: "0.8rem",
@@ -427,7 +416,6 @@ function PortalContent({
                         </button>
                       </div>
                     )}
-
                     {error && (
                       <motion.p
                         initial={{ opacity: 0, y: -10 }}
@@ -439,7 +427,8 @@ function PortalContent({
                           textAlign: "center",
                         }}
                       >
-                        {error}
+                        {" "}
+                        {error}{" "}
                       </motion.p>
                     )}
                   </motion.div>
@@ -453,13 +442,11 @@ function PortalContent({
   );
 }
 
-// ==================================================================
-// ===== NO CHANGES WERE MADE TO THIS COMPONENT =====================
-// ==================================================================
 export default function WaitlistPopup({
   isOpen: externalIsOpen,
   onClose: externalOnClose,
   onSubmit: externalOnSubmit,
+  triggerSource: triggerSource,
 }) {
   return (
     <Suspense fallback={<div></div>}>
@@ -467,18 +454,18 @@ export default function WaitlistPopup({
         isOpen={externalIsOpen}
         onClose={externalOnClose}
         onSubmit={externalOnSubmit}
+        triggerSource={triggerSource}
       />
     </Suspense>
   );
 }
 
-// ==================================================================
-// ===== THIS IS THE FULLY CORRECTED AND EDITED COMPONENT =========
-// ==================================================================
 function WaitlistPopupContent({
   isOpen: externalIsOpen,
   onClose: externalOnClose,
   onSubmit: externalOnSubmit,
+  triggerSource = "auto_waitlist_popup", // 👈 set default
+  
 }) {
   const [isOpen, setIsOpen] = useState(true);
   const [email, setEmail] = useState("");
@@ -486,48 +473,81 @@ function WaitlistPopupContent({
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
-  const [referralLink, setReferralLink] = useState("");
-
-  const searchParams = useSearchParams();
-  const campaignId = searchParams.get("campaignId");
-
   const finalIsOpen = externalIsOpen !== undefined ? externalIsOpen : isOpen;
-  const onClose = externalOnClose || (() => setIsOpen(false));
+
+  useEffect(() => {
+  const submittedEmail = localStorage.getItem("waitlist_submitted_email");
+  if (finalIsOpen && !submittedEmail) {
+    AnalyticsService.sendEvent(triggerSource == 'auto_waitlist_popup' ? "auto_waitlist_popup_viewed" : "waitlist_popup_viewed", {
+      screen_name: "waitlist_popup",
+      triggerSource, // always include trigger source      
+    });
+  }
+}, [finalIsOpen, triggerSource]);
+
+
+
+  const handleOverlayClose = () => {
+    AnalyticsService.sendEvent("user_clicked_on_screen_to_close_popup");
+    if (externalOnClose) {
+      externalOnClose();
+    } else {
+      setIsOpen(false);
+    }
+  };
+
+  const handleCloseButtonClick = () => {
+    AnalyticsService.sendEvent("on_waitlist_close_button_clicked");
+    if (externalOnClose) {
+      externalOnClose();
+    } else {
+      setIsOpen(false);
+    }
+  };
+
+const [hasFocusedEmail, setHasFocusedEmail] = useState(false);
+
+const handleEmailFocus = () => {
+  if (!hasFocusedEmail) {
+    AnalyticsService.sendEvent("on_email_field_focused");
+    setHasFocusedEmail(true); // mark as triggered
+  }
+};
+
+
   const onSubmit = externalOnSubmit || (() => setIsOpen(false));
 
-  // =========================================================
-  // ===== CORE LOGIC FIX - This is the corrected useEffect =====
-  // =========================================================
   useEffect(() => {
     setMounted(true);
     const submittedEmail = localStorage.getItem("waitlist_submitted_email");
-
-    // 1. Handle the page refresh case for auto-opening popups.
-    // If the component is NOT controlled by a CTA and the user has already submitted,
-    // we prevent it from opening automatically.
     if (externalIsOpen === undefined && submittedEmail) {
       setIsOpen(false);
     }
-    
-    // 2. Decide what to show WHEN the popup is open.
-    // If the popup is open (triggered by a CTA or otherwise) AND the user has submitted,
-    // then we set the state to show the success message.
     if (finalIsOpen && submittedEmail) {
       setIsSuccess(true);
     } else {
-      // Otherwise, ensure it shows the form.
       setIsSuccess(false);
     }
-  }, [finalIsOpen, externalIsOpen]); // Dependencies are key to re-running this logic correctly.
+  }, [finalIsOpen, externalIsOpen]);
+
+  const [hasViewedSuccessPopup, setHasViewedSuccessPopup] = useState(false);
+
+useEffect(() => {
+  if (isSuccess && !hasViewedSuccessPopup) {
+    AnalyticsService.sendEvent("joined_waitlist_popup_viewed", {
+      triggerSource,
+      email,
+    });
+    setHasViewedSuccessPopup(true); // ensure it fires only once
+  }
+}, [isSuccess, hasViewedSuccessPopup, triggerSource, email]);
 
 
-  // Handle body scroll lock (no changes here)
   useEffect(() => {
     if (finalIsOpen) {
       const originalStyle = window.getComputedStyle(document.body).overflow;
       document.body.style.overflow = "hidden";
       document.documentElement.style.overflow = "hidden";
-
       return () => {
         document.body.style.overflow = originalStyle;
         document.documentElement.style.overflow = "unset";
@@ -535,47 +555,61 @@ function WaitlistPopupContent({
     }
   }, [finalIsOpen]);
 
-  // Handle auto-close timer (no changes here)
   useEffect(() => {
     if (isSuccess) {
       const timer = setTimeout(() => {
         onSubmit();
-        onClose();
+        if (externalOnClose) externalOnClose();
+        else setIsOpen(false);
       }, 12000);
       return () => clearTimeout(timer);
     }
-  }, [isSuccess, onClose, onSubmit]);
+  }, [isSuccess, externalOnClose, onSubmit]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!email || isSubmitting || isSuccess) return;
+  e.preventDefault();
+  AnalyticsService.sendEvent("on_join_the_waitlist_button_clicked", {
+    triggerSource, // ✅ include trigger source
+  });
 
-    setIsSubmitting(true);
-    setError("");
+  if (!email || isSubmitting || isSuccess) return;
+  setIsSubmitting(true);
+  setError("");
 
-    try {
-      const { campaignId: newCampaignId } = await addToWaitlist(
-        email,
-        campaignId
-      );
-      const link = `${window.location.origin}/?campaignId=${newCampaignId}`;
-      setReferralLink(link);
+  try {
+    const { campaignId: newCampaignId } = await addToWaitlist(email);
+    // update or add campaignId
+    localStorage.setItem("campaignId", newCampaignId);
+    
+    localStorage.setItem("waitlist_submitted_email", email);
+    setIsSuccess(true);
 
-      localStorage.setItem("waitlist_submitted_email", email);
-      setIsSuccess(true);
-    } catch (error) {
-      setError(error.message || "Failed to join waitlist. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    AnalyticsService.sendEvent("pop-up_waitlist_submission_successful", {
+      status: "success",
+      triggerSource, // ✅ include trigger source
+      email,
+    });
+  } catch (error) {
+    setError(error.message || "Failed to join waitlist. Please try again.");
+    AnalyticsService.sendEvent("waitlist_submission_failed", {
+      status: "failure",
+      error_reason: error.message || "Unknown error",
+      triggerSource, // ✅ include trigger source      
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   if (!mounted) return null;
 
   return createPortal(
     <PortalContent
       isOpen={finalIsOpen}
-      onClose={onClose}
+      onClose={handleOverlayClose}
+      onCloseButtonClick={handleCloseButtonClick}
+      onEmailFocus={handleEmailFocus}
       onSubmit={onSubmit}
       email={email}
       setEmail={setEmail}
@@ -583,9 +617,8 @@ function WaitlistPopupContent({
       isSuccess={isSuccess}
       error={error}
       handleSubmit={handleSubmit}
-      referralLink={referralLink}
     />,
     document.body
   );
 }
-//this is a comment
+

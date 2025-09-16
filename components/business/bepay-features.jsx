@@ -2,6 +2,8 @@
 import Image from "next/image"
 import { motion, useInView, useScroll, useTransform } from "framer-motion"
 import { useRef, useState, useEffect } from "react"
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+
 
 // Data for the three feature cards
 const cardData = [
@@ -24,6 +26,7 @@ const cardData = [
 
 export default function BepayFeatures() {
   const ref = useRef(null)
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
   const [isMobile, setIsMobile] = useState(false)
   const [animationStep, setAnimationStep] = useState(0)
   const { scrollYProgress } = useScroll({
@@ -37,6 +40,24 @@ export default function BepayFeatures() {
   const scrollY3 = useTransform(scrollYProgress, [0, 1], [120, -120])
 
   const scrollYTransforms = [scrollY1, scrollY2, scrollY3]
+  useEffect(() => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !hasTrackedView) {
+            AnalyticsService.sendEvent("bepay features section viewed");
+            setHasTrackedView(true);
+            observer.unobserve(entry.target); // Stop observing after first view
+          }
+        },
+        { threshold: 0.1 } // Trigger when 30% of the component is visible
+      );
+  
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+  
+      return () => observer.disconnect();
+    }, [hasTrackedView]);
 
   // Check if device is mobile
   useEffect(() => {

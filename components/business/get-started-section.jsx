@@ -5,7 +5,11 @@ import { motion, useScroll, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Phone } from "lucide-react";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
+const handleStartEarningClick = () => {
+    AnalyticsService.sendEvent("'Become a merchant on bepay' button clicked");
+  };
 const steps = [
   {
     id: 1,
@@ -30,9 +34,11 @@ const steps = [
     rightTitle: "Go Live",
     rightSubtitle: "Accept your first crypto payment in minutes",
     rightButtons: (
-         <WaitlistTriggerButton>
+         <WaitlistTriggerButton triggerSource="'get started business section' button">
       <div className="flex flex-col gap-4 mt-8 w-full justify-center mx-auto max-w-[260px]">
-        <button className="bg-black cursor-pointer whitespace-nowrap text-white hover:bg-black/90 transition-colors duration-200 px-8 py-4 rounded-full font-medium text-[12px]">
+        <button
+         onClick={handleStartEarningClick} // ANALYTICS: Added onClick handler
+        className="bg-black cursor-pointer whitespace-nowrap text-white hover:bg-black/90 transition-colors duration-200 px-8 py-4 rounded-full font-medium text-[12px]">
           Become a merchant on bepay ↗
         </button>
         {/* <button className="border-2 items-center flex gap-2 cursor-pointer border-gray-300 text-gray-700 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 px-8 py-4 rounded-full font-medium text-[12px] bg-transparent">
@@ -46,14 +52,34 @@ const steps = [
 
 export default function GetStartedSection() {
   const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
-
+  
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const prevScrollYProgress = useRef(0);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("get started business section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
+        }
+      },
+      { threshold: 0.1 } // Trigger when 30% of the component is visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
 
   useEffect(() => {
     const unsubscribe = scrollYProgress.onChange((latest) => {

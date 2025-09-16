@@ -3,6 +3,8 @@ import { useRef, useEffect, useState } from "react";
 import { DollarSign, Clock, Headphones, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+
 
 const features = [
   {
@@ -32,6 +34,7 @@ export default function AnimatedCardsSection() {
   const [showNewContent, setShowNewContent] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
 
   useEffect(() => {
     const checkMobile = () => {
@@ -41,6 +44,30 @@ export default function AnimatedCardsSection() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  const handleStartEarningClick = () => {
+    AnalyticsService.sendEvent("'Become a merchant on bepay' button clicked");
+  };
+
+  // ANALYTICS: Track when the main DeFi Yield section is actually viewed
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Ready to start section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
+        }
+      },
+      { threshold: 0.1 } // Trigger when 30% of the component is visible
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -300,8 +327,10 @@ export default function AnimatedCardsSection() {
                           global customers, boost your revenue, and manage your
                           store — all in one powerful dashboard.
                         </p>
-                        <WaitlistTriggerButton>
-                          <button className="bg-black cursor-pointer text-[12px]  whitespace-nowrap text-white px-4 md:px-6 py-2 md:py-3 rounded-full font-medium text-xs  lg:text-[12px] hover:bg-black/90 transition-colors duration-300 flex items-center gap-2 mx-auto">
+                        <WaitlistTriggerButton triggerSource="'Ready-to-start section' button">
+                          <button 
+                          onClick={handleStartEarningClick} // ANALYTICS: Added onClick handler
+                          className="bg-black cursor-pointer text-[12px]  whitespace-nowrap text-white px-4 md:px-6 py-2 md:py-3 rounded-full font-medium text-xs  lg:text-[12px] hover:bg-black/90 transition-colors duration-300 flex items-center gap-2 mx-auto">
                             Become a merchant on bepay
                             <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
                           </button>

@@ -1,11 +1,32 @@
 "use client"
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 const BepayComparison = () => {
   const [hoveredItem, setHoveredItem] = useState(null)
+  const sectionRef = useRef(null); // ✅ FIX: consistent ref name
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
+  // ANALYTICS: Track when the section is actually viewed
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Bepay comparison section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
+        }
+      },
+      { threshold: 0.1 } // Trigger when at least 10% is visible
+    );
 
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
   const comparisonData = [
     {
       id: "transaction-fees",
@@ -40,7 +61,9 @@ const BepayComparison = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-[#F9F9F9] flex items-center justify-center p-4 md:p-8 pb-16">
+
+    <div ref={sectionRef}
+    className="min-h-screen bg-[#F9F9F9] flex items-center justify-center p-4 md:p-8 pb-16">
       <div className="w-full mx-auto max-w-7xl">
         {/* Title */}
         <div className="text-center mb-8 md:mb-16">

@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useRef, useState, useEffect } from "react"; // ANALYTICS: Import hooks
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 const logos = [
   { id: 1, src: "/images/business/l1.png", alt: "Barry's" },
@@ -60,8 +62,37 @@ const logoVariants = {
 };
 
 export default function TrustedBySection() {
+  // ANALYTICS: Add ref and state for tracking
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+
+  // ANALYTICS: useEffect to handle the IntersectionObserver
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("TrustedBy section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 } // Fire when 10% of the section is visible
+    );
+
+    const currentSectionRef = sectionRef.current;
+    if (currentSectionRef) {
+      observer.observe(currentSectionRef);
+    }
+
+    return () => {
+      if (currentSectionRef) {
+        observer.unobserve(currentSectionRef);
+      }
+    };
+  }, [hasTrackedView]);
+
   return (
-    <section className="bg-[#333333] drop-shadow-2xl py-16 lg:py-20">
+    <section ref={sectionRef} className="bg-[#333333] drop-shadow-2xl py-16 lg:py-20">
       <div className="max-w-7xl mx-auto px-4">
         {/* Title with decorative lines */}
         <div className="flex items-center justify-center mb-12 lg:mb-16">
