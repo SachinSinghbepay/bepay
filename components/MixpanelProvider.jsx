@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { AnalyticsService } from '../services/analyticsService';
 
 // ❗ Replace with your actual Mixpanel token
-const MIXPANEL_TOKEN = "b04da96f35b5d2e2afaa9c364a366590";
+const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIX_PANEL_TOKEN;
 
 export default function MixpanelProvider({ children }) {
   const pathname = usePathname();
