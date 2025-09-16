@@ -365,8 +365,7 @@ const Footer = () => {
             </div>
             <div className="space-y-4">
               <div className="space-y-4 lg:space-y-6">
-                <a href="/about-us" onClick={() => handleLinkClick("About Us")} className="block text-[#6A6A6A] hover:text-gray-400 transition-colors">ABOUT US</a>
-                {/* <Link href="/about-us" onClick={() => handleLinkClick("About Us")} className="block text-[#6A6A6A] hover:text-gray-400 transition-colors">ABOUT US</Link> */}
+                <Link href="/about-us" onClick={() => handleLinkClick("About Us")} className="block text-[#6A6A6A] hover:text-gray-400 transition-colors">ABOUT US</Link>
                 <Link href="/contact-us" onClick={() => handleLinkClick("Contact Us")} className="block text-[#6A6A6A] hover:text-gray-400 transition-colors">CONTACT US</Link>
                 <Link href="/privacy-policy" onClick={() => handleLinkClick("Privacy Policy")} className="block text-[#6A6A6A] hover:text-gray-400 transition-colors">PRIVACY POLICY</Link>
               </div>

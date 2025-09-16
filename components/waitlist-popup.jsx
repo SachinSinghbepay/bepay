@@ -480,7 +480,7 @@ function WaitlistPopupContent({
     if (externalIsOpen === undefined) { 
      const timer = setTimeout(() => {
        setIsOpen(true);
-     }, 2200); 
+     }, 2000); 
      return () => clearTimeout(timer);
     }
   }, [externalIsOpen]);
@@ -547,15 +547,16 @@ const handleEmailFocus = () => {
 
   const [hasViewedSuccessPopup, setHasViewedSuccessPopup] = useState(false);
 
-useEffect(() => {
-  if (isSuccess && !hasViewedSuccessPopup) {
-    AnalyticsService.sendEvent("joined_waitlist_popup_viewed", {
-      triggerSource,
-      email,
-    });
-    setHasViewedSuccessPopup(true); // ensure it fires only once
-  }
-}, [isSuccess, hasViewedSuccessPopup, triggerSource, email]);
+  useEffect(() => {
+    if (finalIsOpen && isSuccess && !hasViewedSuccessPopup) {
+      AnalyticsService.sendEvent("joined_waitlist_popup_viewed", {
+        triggerSource,
+        email,
+      });
+      setHasViewedSuccessPopup(true);
+    }
+  }, [finalIsOpen, isSuccess, hasViewedSuccessPopup, triggerSource, email]);
+
 
 
   useEffect(() => {
