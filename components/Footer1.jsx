@@ -279,7 +279,7 @@ const Footer = () => {
                         value={email}
                         onFocus={handleEmailFocus}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="bg-transparent px-4 py-3 text-#6A6A6A placeholder-gray-500 focus:outline-none border border-[#C6C6C626] rounded-full w-full text-sm"
+                        className="bg-transparent px-4 py-3 text-#6A6A6A placeholder:[#888888] focus:outline-none border border-[#C6C6C626] rounded-full w-full text-sm"
                         aria-label="Email for newsletter"
                         disabled={isSubmitting}
                       />
@@ -298,7 +298,7 @@ const Footer = () => {
                         value={email}
                         onFocus={handleEmailFocus}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="bg-transparent px-4 py-2 text-white placeholder-gray-500 focus:outline-none w-full text-sm"
+                        className="bg-transparent px-4 py-2 text-white placeholder:[#888888] focus:outline-none w-full text-sm"
                         aria-label="Email for newsletter"
                         disabled={isSubmitting}
                       />

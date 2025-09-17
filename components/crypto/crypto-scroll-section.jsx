@@ -472,7 +472,7 @@ export default function CryptoScrollSection() {
               Get <span className="text-black font-normal">started</span>
             </motion.h2>
             <motion.p
-              className="text-sm sm:text-base text-[#6A6A6A] max-w-4xl mx-auto"
+              className="text-sm sm:text-base text-[#000000] max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{
@@ -549,7 +549,7 @@ export default function CryptoScrollSection() {
             </motion.div>
 
             <motion.div
-              className="relative order-1 lg:order-2 min-h-[400px]"
+              className="relative order-1 lg:order-2 min-h-[400px] flex items-center justify-center"
               initial={{ opacity: 0, x: 100 }}
               animate={
                 isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 100 }
@@ -596,7 +596,7 @@ export default function CryptoScrollSection() {
                 </AnimatePresence>
               </div>
 
-              <div className="relative z-10 max-w-lg pt-4">
+              <div className="relative z-10 max-w-lg">
                 <AnimatePresence mode="wait">
                   {steps.map(
                     (step, index) =>
@@ -649,39 +649,51 @@ export default function CryptoScrollSection() {
                           </div>
 
                           {step.hasCTA && (
-                            <WaitlistTriggerButton triggerSource="'Crypto scroll section' button">
-                              <motion.div
-                                initial={{
-                                  opacity: isInView ? 0 : 0,
-                                  y: isInView ? 20 : 40,
-                                }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{
-                                  duration: isInView ? 0.6 : 0.8,
-                                  delay: isInView ? 0.4 : 1.5,
-                                }}
-                              >
-                                <button  
+                                                      <WaitlistTriggerButton triggerSource="'Crypto scroll section' button">
+                            <motion.div
+                              initial={{
+                                opacity: isInView ? 0 : 0,
+                                y: isInView ? 20 : 40,
+                              }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{
+                                duration: isInView ? 0.6 : 0.8,
+                                delay: isInView ? 0.4 : 1.5,
+                              }}
+                            >
+                              <button  
                                 onClick={handleStartEarningClick} 
-                                className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-10 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95">
-                                  <span>Get started</span>
-                                  <svg
-                                    className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      d="M7 17L17 7M17 7H7M17 7V17"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                  </svg>
-                                </button>
-                              </motion.div>
-                            </WaitlistTriggerButton>
+                                className="
+                                  group relative inline-flex items-center justify-center
+                                  cursor-pointer text-white bg-black font-semibold 
+                                  transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95
+                                  rounded-[100px]
+
+                                  w-[170px] h-[56px] 
+                                  px-6 py-4 gap-[10px]
+                                  text-sm
+                                "
+                              >
+                                <span>Get started</span>
+                                <svg
+                                  className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M7 17L17 7M17 7H7M17 7V17"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </button>
+                            </motion.div>
+                          </WaitlistTriggerButton>
+
+
                           )}
                         </motion.div>
                       )

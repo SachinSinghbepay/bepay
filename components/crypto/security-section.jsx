@@ -149,13 +149,17 @@ export const SecuritySection = () => {
         variants={containerVariants}
       >
         <motion.h2
-          className="text-2xl md:text-4xl lg:text-[40px] text-[#C0C0C0] font-medium text-center"
+          className="text-2xl md:text-4xl lg:text-[40px] text-[#C0C0C0] font-medium text-center md:relative md:-top-10 "
           variants={textVariants}
         >
-          Bank-Grade Security <br /> & Compliance
+          Bank-Grade Security
+          <span className="md:hidden">
+            <br />
+          </span>
+          & Compliance
         </motion.h2>
         <motion.p
-          className="text-[#C0C0C0] text-center text-[16px] max-w-7xl mx-auto mt-4 mb-16"
+          className="text-[#C0C0C0] text-center text-[16px] max-w-7xl mx-auto mt-4 mb-16 md:relative md:-top-6"
           variants={textVariants}
         >
           Your security is our priority. We employ the highest standards of
@@ -179,7 +183,10 @@ export const SecuritySection = () => {
             className="flex flex-col gap-2"
             variants={containerVariants}
           >
-            <SecurityCard {...securityData.monitoring} className="md:h-[300px]" />
+            <SecurityCard
+              {...securityData.monitoring}
+              className="md:h-[300px]"
+            />
             <SecurityCard {...securityData.mfa} className="md:h-[300px]" />
           </motion.div>
 
@@ -188,8 +195,14 @@ export const SecuritySection = () => {
             className="flex flex-col gap-2"
             variants={containerVariants}
           >
-            <SecurityCard {...securityData.compliance} className="md:h-[400px]" />
-            <SecurityCard {...securityData.encryption} className="md:h-[200px]" />
+            <SecurityCard
+              {...securityData.compliance}
+              className="md:h-[400px]"
+            />
+            <SecurityCard
+              {...securityData.encryption}
+              className="md:h-[200px]"
+            />
           </motion.div>
         </motion.div>
       </motion.div>
