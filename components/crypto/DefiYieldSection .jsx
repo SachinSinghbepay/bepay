@@ -172,23 +172,39 @@ const DefiYieldSection = () => {
                   <p className="text-xs md:text-sm text-gray-600 leading-relaxed w-full md:w-[70%]"> Earn by sharing your unused storage and computing power. </p>
                   <p className="text-xs md:text-sm italic text-gray-800 leading-relaxed w-full md:w-[70%]"> Monetize your hardware resources </p>
                   <div className="flex items-center justify-center mt-6">
-                    <WaitlistTriggerButton triggerSource="' Defi Yield Start earning' button">
-                      <motion.button
-                        onClick={handleStartEarningClick} // ANALYTICS: Added onClick handler
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="bg-black cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
-                      >
-                        <Image
-                          src="/start.svg"
-                          alt="Start Icon"
-                          width={20}
-                          height={20}
-                          className="w-5 h-5"
-                        />
-                        <span>Start earning</span>
-                      </motion.button>
-                    </WaitlistTriggerButton>
+                                      <WaitlistTriggerButton triggerSource="' Defi Yield Start earning' button">
+                    <motion.button
+                      onClick={handleStartEarningClick}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="
+                        bg-black cursor-pointer text-white 
+                        flex items-center justify-center 
+                        rounded-full font-medium transition-colors 
+                        whitespace-nowrap
+                        hover:bg-gray-800
+
+                        /* Mobile (default) */
+                        h-[56px] px-6 gap-2 text-xs w-auto 
+
+                        /* Desktop overrides */
+                        md:w-[180px] md:h-[56px] 
+                        md:px-1 md:py-1
+                        md:gap-[10px] 
+                        md:text-sm md:rounded-[100px]
+                      "
+                    >
+                      <Image
+                        src="/start.svg"
+                        alt="Start Icon"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5"
+                      />
+                      <span>Start earning</span>
+                    </motion.button>
+                  </WaitlistTriggerButton>
+
                   </div>
                 </motion.div>
               </div>

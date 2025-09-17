@@ -100,15 +100,36 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
     >
       <div className="w-full max-w-[360px] mx-auto">
         <div className="relative w-full aspect-[4/5] overflow-hidden mb-4 lg:mb-5 shadow-lg">
-          <Image src={service.image || "/placeholder.svg"} alt={service.title} fill className="object-cover" loading="lazy" />
+          <Image
+            src={service.image || "/placeholder.svg"}
+            alt={service.title}
+            fill
+            className="object-cover"
+            loading="lazy"
+          />
         </div>
         <div className="text-left px-1">
-          <h3 className="text-lg lg:text-xl font-medium text-gray-800 mb-2">
+          <h3
+            className={`
+              font-[Montserrat] 
+              font-normal 
+              text-lg sm:text-xl 
+              lg:text-[40px] 
+              lg:leading-[52px] 
+              lg:tracking-[-0.06em] 
+              text-[#6A6A6A] 
+              mb-3
+              ${service.title === "Savings Products" || service.title === "Insurance Products" || service.title ==="DeFi Marketplace" || service.title ==="Remittance Services"? "whitespace-nowrap" : ""}
+            `}
+          >
             {service.title}
           </h3>
           <ul className="space-y-2">
             {service.points.map((point, idx) => (
-              <li key={idx} className="flex items-start gap-1.5 text-xs lg:text-sm text-gray-600 leading-snug">
+              <li
+                key={idx}
+                className="flex items-start gap-1.5 text-xs lg:text-sm text-gray-600 leading-snug"
+              >
                 <span className="w-3 h-3 rounded-[3px] bg-[#6A6A6A] mt-0.5 flex-shrink-0"></span>
                 <span>{point}</span>
               </li>
@@ -259,7 +280,7 @@ export const FinancialServicesSection = () => {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <motion.h2 className="text-4xl lg:text-5xl xl:text-6xl font-[400] leading-none">
+              <motion.h2 className="text-[80px] lg:text-5xl xl:text-6xl font-[400]"style={{ lineHeight: "0.9" }}>
                 <span className="text-gray-400">COMPLETE</span>
                 <br />
                 FINANCIAL
@@ -274,16 +295,30 @@ export const FinancialServicesSection = () => {
               </motion.p>
 
               <WaitlistTriggerButton triggerSource="'financial service section' button">
-                <motion.button
-                  onClick={handleExploreFeaturesClick} // ANALYTICS: Added onClick handler
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-black cursor-pointer whitespace-nowrap text-white w-[221px] h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-normal hover:bg-gray-800 transition-colors mt-7"
-                >
-                  Explore all features
-                  <ArrowUpRight size={18} className="w-5 h-5" />
-                </motion.button>
-              </WaitlistTriggerButton>
+  <motion.button
+    onClick={handleExploreFeaturesClick} // ANALYTICS: Added onClick handler
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="
+      bg-black cursor-pointer whitespace-nowrap text-white 
+      flex items-center justify-center transition-colors 
+      hover:bg-gray-800 rounded-full mt-7
+
+      /* Mobile (default) */
+      w-[221px] h-[56px] gap-2 text-xs font-normal
+
+      /* Desktop overrides */
+      md:w-[210px] md:h-[56px] 
+      md:gap-[10px] 
+      md:text-sm md:font-medium 
+      md:rounded-[100px]
+    "
+  >
+    Explore all features
+    <ArrowUpRight size={18} className="w-5 h-5 md:w-6 md:h-6" />
+  </motion.button>
+</WaitlistTriggerButton>
+
             </motion.div>
           </div>
           <div className="bg-[#F9F9F9] relative overflow-hidden">

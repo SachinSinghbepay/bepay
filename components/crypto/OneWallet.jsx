@@ -77,12 +77,12 @@ const DesktopView = () => {
 
   useEffect(() => {
     const refs = [
-      { ref: cardRef, id: "card1", eventName: "Self-Custody Wallet" },
-      { ref: card2Ref, id: "card2", eventName: "Virtual Crypto Debit Card" },
-      { ref: card3Ref, id: "card3", eventName: "Swiss IBAN Account" },
-      { ref: card4Ref, id: "card4", eventName: "P2P Transactions" },
-      { ref: card5Ref, id: "card5", eventName: "QR Code Payments" },
-      { ref: card6Ref, id: "card6", eventName: "AI Personalization" },
+      // { ref: cardRef, id: "card1", eventName: "Self-Custody Wallet" },
+      // { ref: card2Ref, id: "card2", eventName: "Virtual Crypto Debit Card" },
+      // { ref: card3Ref, id: "card3", eventName: "Swiss IBAN Account" },
+      // { ref: card4Ref, id: "card4", eventName: "P2P Transactions" },
+      // { ref: card5Ref, id: "card5", eventName: "QR Code Payments" },
+      // { ref: card6Ref, id: "card6", eventName: "AI Personalization" },
     ];
 
     const observer = new IntersectionObserver(

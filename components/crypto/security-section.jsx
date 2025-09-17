@@ -149,7 +149,7 @@ export const SecuritySection = () => {
         variants={containerVariants}
       >
         <motion.h2
-          className="text-2xl md:text-4xl lg:text-[40px] text-[#C0C0C0] font-medium text-center md:-mt-12"
+          className="text-2xl md:text-4xl lg:text-[40px] text-[#C0C0C0] font-medium text-center md:relative md:-top-10 "
           variants={textVariants}
         >
           Bank-Grade Security
@@ -159,7 +159,7 @@ export const SecuritySection = () => {
           & Compliance
         </motion.h2>
         <motion.p
-          className="text-[#C0C0C0] text-center text-[16px] max-w-7xl mx-auto mt-4 mb-16"
+          className="text-[#C0C0C0] text-center text-[16px] max-w-7xl mx-auto mt-4 mb-16 md:relative md:-top-6"
           variants={textVariants}
         >
           Your security is our priority. We employ the highest standards of

@@ -4,10 +4,11 @@ import Lenis from "@studio-freight/lenis";
 
 const SmoothScroll = ({ children }) => {
   useEffect(() => {
-    // // 🚫 Prevent browser auto-restoring scroll
-    // if ("scrollRestoration" in history) {
-    //   history.scrollRestoration = "manual";
-    // }
+    // 🚫 Prevent browser auto-restoring scroll
+    if ("scrollRestoration" in history) {
+      console.log('called ______________________________________')
+      history.scrollRestoration = "manual";
+    }
 
     const lenis = new Lenis({
       duration: 1.2,

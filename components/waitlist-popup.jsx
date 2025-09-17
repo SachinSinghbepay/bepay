@@ -477,6 +477,7 @@ function WaitlistPopupContent({
 
  // ⏳ Delay popup open by 4–5 seconds
  useEffect(() => {
+    history.scrollRestoration = "manual";
     if (externalIsOpen === undefined) { 
      const timer = setTimeout(() => {
        setIsOpen(true);
