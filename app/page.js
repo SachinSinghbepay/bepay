@@ -1,5 +1,4 @@
 import ScrollTextAnimation from "@/components/crypto/scroll-text-animation";
-import React from "react";
 import CryptoHeroSection from "@/components/crypto/CryptoHero";
 import CryptoWalletSection from "@/components/crypto/crypto-wallet-section";
 import OneWallet from "@/components/crypto/OneWallet";
