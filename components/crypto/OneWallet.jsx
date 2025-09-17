@@ -77,12 +77,12 @@ const DesktopView = () => {
 
   useEffect(() => {
     const refs = [
-      { ref: cardRef, id: "card1", eventName: "Self-Custody Wallet" },
-      { ref: card2Ref, id: "card2", eventName: "Virtual Crypto Debit Card" },
-      { ref: card3Ref, id: "card3", eventName: "Swiss IBAN Account" },
-      { ref: card4Ref, id: "card4", eventName: "P2P Transactions" },
-      { ref: card5Ref, id: "card5", eventName: "QR Code Payments" },
-      { ref: card6Ref, id: "card6", eventName: "AI Personalization" },
+      // { ref: cardRef, id: "card1", eventName: "Self-Custody Wallet" },
+      // { ref: card2Ref, id: "card2", eventName: "Virtual Crypto Debit Card" },
+      // { ref: card3Ref, id: "card3", eventName: "Swiss IBAN Account" },
+      // { ref: card4Ref, id: "card4", eventName: "P2P Transactions" },
+      // { ref: card5Ref, id: "card5", eventName: "QR Code Payments" },
+      // { ref: card6Ref, id: "card6", eventName: "AI Personalization" },
     ];
 
     const observer = new IntersectionObserver(
@@ -97,7 +97,7 @@ const DesktopView = () => {
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.1}
     );
 
     refs.forEach(({ ref, id }) => {
@@ -159,8 +159,8 @@ const DesktopView = () => {
             card6Ref.current,
           ],
           {
-            x: getResponsiveValue("150%", "0", "0"),
-            y: getResponsiveValue("0", "100vh", "100vh"),
+            x: getResponsiveValue("150%", "100vw", "100vw"),
+            y: getResponsiveValue("0", "0", "0"),
           }
         );
 
@@ -201,7 +201,7 @@ const DesktopView = () => {
           },
         });
 
-        tl.to(textLine1Ref.current, { y: 0, opacity: 1, duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }) .to( textLine2Ref.current, { y: 0, opacity: 1, duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.5" ) .to( textLine3Ref.current, { y: 0, opacity: 1, duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.5" ) .to( textLine4Ref.current, { y: 0, opacity: 1, duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.5" ) .to(cardRef.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }) .to( mockupImageRef.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( cardRef.current, { scale: 0, duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card2Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage2_1Ref.current, { y: getResponsiveValue("7%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( mockupImage2_2Ref.current, { y: getResponsiveValue("17%", "17.5%", "20%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( mockupImage2_3Ref.current, { y: getResponsiveValue("27%", "27.5%", "30%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card2Ref.current, { scale: 0, duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card3Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage3Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card3Ref.current, { scale: 0, duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card4Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage4Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card4Ref.current, { scale: 0, duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card5Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage5Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card5Ref.current, { scale: 0, duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card6Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage6_1Ref.current, { y: getResponsiveValue("7%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( mockupImage6_2Ref.current, { y: getResponsiveValue("17%", "17.5%", "20%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" );
+        tl.to(textLine1Ref.current, { y: 0, opacity: 1, duration: getResponsiveValue(0.6, 0.6, 1), ease: "power3.out", }) .to( textLine2Ref.current, { y: 0, opacity: 1, duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.5" ) .to( textLine3Ref.current, { y: 0, opacity: 1, duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.5" ) .to( textLine4Ref.current, { y: 0, opacity: 1, duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.5" ) .to(cardRef.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }) .to( mockupImageRef.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( cardRef.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card2Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage2_1Ref.current, { y: getResponsiveValue("7%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( mockupImage2_2Ref.current, { y: getResponsiveValue("17%", "17.5%", "20%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( mockupImage2_3Ref.current, { y: getResponsiveValue("27%", "27.5%", "30%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card2Ref.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card3Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage3Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card3Ref.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card4Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage4Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card4Ref.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card5Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage5Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card5Ref.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card6Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage6_1Ref.current, { y: getResponsiveValue("7%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( mockupImage6_2Ref.current, { y: getResponsiveValue("17%", "17.5%", "20%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" );
       };
 
       updateAnimations();
@@ -223,34 +223,21 @@ const DesktopView = () => {
     >
       <div className="relative w-full lg:max-w-[1229px] pb-8 sm:pb-12 lg:pb-16 mx-auto">
         <div className="text-center mb-8 sm:mb-12 lg:mb-16 max-w-[95vw] sm:max-w-[90vw] mx-auto ">
-          <div className="flex flex-col items-center justify-center min-h-[100vh]">
+          <div className="flex flex-col items-center justify-start min-h-[100vh] pt-8">
+            
+            {/* ///- START: MODIFIED HEADING -/// */}
             <h2
               ref={textLine1Ref}
-              className="text-[11vw] sm:text-[9vw] md:text-[8vw] lg:text-[9vw] xl:text-[140px] font-montserrat font-normal leading-[0.9] tracking-tight mb-2 sm:mb-3"
+              className="font-montserrat font-normal text-[60px] leading-tight tracking-[-0.08em] whitespace-nowrap mb-4"
             >
-              <span className="text-[#9e9e9e] tracking-[-0.05em]">
-                Everything
-              </span>
+              <span className="text-[#9e9e9e]">Everything you need in </span>
+              <span className="text-black">one platform</span>
             </h2>
-            <h2
-              ref={textLine2Ref}
-              className="text-[11vw] sm:text-[9vw] md:text-[8vw] lg:text-[9vw] xl:text-[140px] font-montserrat font-normal leading-[0.9] tracking-tight mb-2 sm:mb-3"
-            >
-              <span className="text-[#9e9e9e] tracking-[-0.08em]">
-                you need in
-              </span>
-            </h2>
-            <h2
-              ref={textLine3Ref}
-              className="text-[11vw] sm:text-[9vw] md:text-[8vw] lg:text-[9vw]xl:text-[140px] font-montserrat font-normal leading-[0.9] tracking-tight"
-            >
-              <span className="text-black tracking-[-0.07em]">
-                one platform
-              </span>
-            </h2>
+            {/* ///- END: MODIFIED HEADING -/// */}
+
             <p
               ref={textLine4Ref}
-              className="text-black text-[3vw] w-[70%] mt-8 sm:text-[1vw] md:text-[1vw] lg:text-[1vw] xl:text-[20px] font-montserrat font-normal "
+              className="font-montserrat font-normal text-[20px] leading-[26px] tracking-normal text-black w-[70%]"
             >
               <span className="text-[#9e9e9e]">
                 From earning opportunities to seamless payments,
@@ -262,10 +249,10 @@ const DesktopView = () => {
         </div>
         <div
           ref={cardRef}
-          className="absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[65vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden h-h-[75vh] lg:h-[600px]"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[20vh] md:aspect-[300/100] lg:aspect-auto lg:h-full bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
               <div ref={mockupImageRef} className="relative w-full h-full">
                 <Image
                   src="/businessnew/mockupImage.png"
@@ -352,10 +339,10 @@ const DesktopView = () => {
         </div>
         <div
           ref={card2Ref}
-          className="absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className=" h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[18vh] md:aspect-[300/100]  lg:aspect-auto lg:h-full bg-[#f8f8f8] rounded-xl sm:rounded-2xl overflow-hidden">
+           <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
               <div
                 ref={mockupImage2_1Ref}
                 className="absolute transform -translate-x-8 sm:-translate-x-20 w-full h-full z-[2]"
@@ -480,16 +467,16 @@ const DesktopView = () => {
         </div>
         <div
           ref={card3Ref}
-          className="absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className=" h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[22vh] md:aspect-[300/100]  lg:aspect-auto lg:h-full bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
               <div ref={mockupImage3Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/IBAN0.svg"
                   alt="Swiss IBAN Account Mockup"
                   fill
-                  className="object-contain p-4 sm:p-5 lg:p-6"
+                  className="object-contain p-4 sm:p-5 lg:p-6 mt-5"
                 />
               </div>
             </div>
@@ -596,16 +583,16 @@ const DesktopView = () => {
         </div>
         <div
           ref={card4Ref}
-          className="absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[30vh] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
               <div ref={mockupImage4Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/p2p1.svg"
                   alt="P2P Transactions Mockup"
                   fill
-                  className="object-contain p-4 sm:p-5 lg:p-6"
+                  className="object-contain p-4 sm:p-5 lg:p-6 mt-5"
                 />
               </div>
             </div>
@@ -687,16 +674,16 @@ const DesktopView = () => {
         </div>
         <div
           ref={card5Ref}
-          className="absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[29vh] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
               <div ref={mockupImage5Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/qr1.svg"
                   alt="P2P Transactions Mockup"
                   fill
-                  className="object-contain p-4 sm:p-5 lg:p-6"
+                  className="object-contain p-4 sm:p-5 lg:p-6 mt-5"
                 />
               </div>
             </div>
@@ -777,10 +764,10 @@ const DesktopView = () => {
         </div>
         <div
           ref={card6Ref}
-          className="absolute top-[48%] lg:top-1/2 left-1/2  transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2  transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full aspect-[5/3] md:aspect-[300/100] lg:aspect-auto lg:h-[500px] bg-[#f2f2f2] rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
               <div
                 ref={mockupImage6_1Ref}
                 className="absolute -top-[5%] left-[2.5%] w-[55%] h-[55%] z-[2]"
