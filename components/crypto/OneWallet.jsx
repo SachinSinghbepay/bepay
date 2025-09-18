@@ -226,7 +226,6 @@ const DesktopView = () => {
       <div className="relative w-full lg:max-w-[1229px] pb-8 sm:pb-12 lg:pb-16 mx-auto">
         <div className="text-center mb-8 sm:mb-12 lg:mb-16 max-w-[95vw] sm:max-w-[90vw] mx-auto ">
           <div className="flex flex-col items-center justify-start min-h-[100vh] pt-8">
-            
             {/* ///- START: MODIFIED HEADING -/// */}
             <h2
               ref={textLine1Ref}
@@ -251,10 +250,10 @@ const DesktopView = () => {
         </div>
         <div
           ref={cardRef}
-          className="absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden h-h-[75vh] lg:h-[600px]"
+          className="absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden h-h-[75vh] lg:h-[58.6vh]"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
+            <div className="relative mt-0 w-full h-[56.6vh] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
               <div ref={mockupImageRef} className="relative w-full h-full">
                 <Image
                   src="/businessnew/mockupImage.png"
@@ -324,14 +323,20 @@ const DesktopView = () => {
               <WaitlistTriggerButton triggerSource="' self custody wallet' button">
                 <button
                   onClick={handleCreateWalletClick}
-                  className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4"
+                  className="flex items-center justify-center cursor-pointer 
+               bg-black text-white 
+               w-[220px] h-[56px] 
+               rounded-full gap-[10px] 
+               text-[14px] font-medium 
+               px-6 
+               hover:bg-black/90 transition-colors"
                 >
                   <Image
                     src="/businessnew/buttonIcon.png"
                     alt="Create wallet icon"
                     width={24}
                     height={24}
-                    className="w-5 h-5 sm:w-6 sm:h-6"
+                    className="w-6 h-6"
                   />
                   <span>Create your wallet</span>
                 </button>
@@ -341,10 +346,10 @@ const DesktopView = () => {
         </div>
         <div
           ref={card2Ref}
-          className=" h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className=" h-[75vh] lg:h-[58.6vh] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-           <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
+            <div className="relative mt-0 w-full h-[56.6vh] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
               <div
                 ref={mockupImage2_1Ref}
                 className="absolute transform -translate-x-8 sm:-translate-x-20 w-full h-full z-[2]"
@@ -353,7 +358,7 @@ const DesktopView = () => {
                   src="/businessnew/cardImage_single.png"
                   alt="Card Mockup"
                   fill
-                  className="object-contain p-4 sm:p-5 lg:p-6"
+                  className="object-contain p-4 sm:p-5 lg:p-6 ml-[-18]"
                 />
               </div>
               <div
@@ -364,7 +369,7 @@ const DesktopView = () => {
                   src="/businessnew/cardImage_single.png"
                   alt="Card Mockup"
                   fill
-                  className="object-contain p-4 sm:p-5 lg:p-6"
+                  className="object-contain p-4 sm:p-5 lg:p-6 ml-[-15]"
                 />
               </div>
               <div
@@ -375,7 +380,7 @@ const DesktopView = () => {
                   src="/businessnew/cardImage_single.png"
                   alt="Card Mockup"
                   fill
-                  className="object-contain p-4 sm:p-5 lg:p-6"
+                  className="object-contain p-4 sm:p-5 lg:p-6 ml-[-13]"
                 />
               </div>
             </div>
@@ -452,14 +457,20 @@ const DesktopView = () => {
               <WaitlistTriggerButton triggerSource="'virtual crypto debit card' button">
                 <button
                   onClick={handleGetDebitCardClick}
-                  className="flex items-center space-x-2 cursor-pointer sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4"
+                  className="flex items-center justify-center cursor-pointer 
+               bg-black text-white 
+               w-[308px] h-[56px] 
+               rounded-full gap-[10px] 
+               text-[14px] font-medium 
+               px-6 
+               hover:bg-black/90 transition-colors"
                 >
                   <Image
                     src="/businessnew/virtual5.svg"
                     alt="Get Card"
                     width={24}
                     height={24}
-                    className="w-5 h-5 sm:w-6 sm:h-6 "
+                    className="w-6 h-6"
                   />
                   <span>Get your crypto debit card now</span>
                 </button>
@@ -469,10 +480,10 @@ const DesktopView = () => {
         </div>
         <div
           ref={card3Ref}
-          className=" h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className=" h-[75vh] lg:h-[58.6vh] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
+            <div className="relative mt-0 w-full h-[56.6vh] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
               <div ref={mockupImage3Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/IBAN0.svg"
@@ -568,14 +579,20 @@ const DesktopView = () => {
               <WaitlistTriggerButton triggerSource="'Swiss IBAN account' button">
                 <button
                   onClick={handleGetSwissAccountClick}
-                  className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4"
+                  className="flex items-center justify-center cursor-pointer 
+               bg-black text-white 
+               w-[268px] h-[56px] 
+               rounded-full gap-[10px] 
+               text-[14px] font-medium 
+               px-6 
+               hover:bg-black/90 transition-colors"
                 >
                   <Image
                     src="/businessnew/IBAN6.svg"
                     alt="Get Swiss bank account"
                     width={24}
                     height={24}
-                    className="w-5 h-5 sm:w-6 sm:h-6"
+                    className="w-6 h-6"
                   />
                   <span>Get a Swiss bank account</span>
                 </button>
@@ -585,10 +602,10 @@ const DesktopView = () => {
         </div>
         <div
           ref={card4Ref}
-          className="h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="h-[75vh] lg:h-[58.6vh] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
+            <div className="relative mt-0 w-full h-[56.6vh] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
               <div ref={mockupImage4Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/p2p1.svg"
@@ -659,14 +676,20 @@ const DesktopView = () => {
               <WaitlistTriggerButton triggerSource="'P2P transaction' button">
                 <button
                   onClick={handleStartPayingClick}
-                  className="flex items-center space-x-2 cursor-pointer sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4"
+                  className="flex items-center justify-center cursor-pointer 
+               bg-black text-white 
+               w-[260px] h-[56px] 
+               rounded-full gap-[10px] 
+               text-[14px] font-medium 
+               px-6 
+               hover:bg-black/90 transition-colors"
                 >
                   <Image
                     src="/businessnew/buttonIcon.png"
-                    alt="Get Swiss bank account"
+                    alt="Start paying with crypto"
                     width={24}
                     height={24}
-                    className="w-5 h-5 sm:w-6 sm:h-6"
+                    className="w-6 h-6"
                   />
                   <span>Start paying with crypto</span>
                 </button>
@@ -676,10 +699,10 @@ const DesktopView = () => {
         </div>
         <div
           ref={card5Ref}
-          className="h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="h-[75vh] lg:h-[58.6vh] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
+            <div className="relative mt-0 w-full h-[56.6vh] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
               <div ref={mockupImage5Ref} className="relative w-full h-full">
                 <Image
                   src="/businessnew/qr1.svg"
@@ -749,14 +772,20 @@ const DesktopView = () => {
               <WaitlistTriggerButton triggerSource="'QR code payments' button">
                 <button
                   onClick={handleStartSpendingClick}
-                  className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4"
+                  className="flex items-center justify-center cursor-pointer 
+               bg-black text-white 
+               w-[278px] h-[56px] 
+               rounded-full gap-[10px] 
+               text-[14px] font-medium 
+               px-6 
+               hover:bg-black/90 transition-colors"
                 >
                   <Image
                     src="/businessnew/qr5.svg"
-                    alt="Get Swiss bank account"
+                    alt="Start spending your crypto"
                     width={24}
                     height={24}
-                    className="w-5 h-5 sm:w-6 sm:h-6"
+                    className="w-6 h-6"
                   />
                   <span>Start spending your crypto</span>
                 </button>
@@ -766,20 +795,20 @@ const DesktopView = () => {
         </div>
         <div
           ref={card6Ref}
-          className="h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2  transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="h-[75vh] lg:h-[58.6vh] absolute top-[48%] lg:top-1/2 left-1/2  transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
+            <div className="relative mt-0 w-full h-[56.6vh] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
               <div
                 ref={mockupImage6_1Ref}
-                className="absolute -top-[5%] left-[2.5%] w-[55%] h-[55%] z-[2]"
+                className="absolute -top-[5%] left-[2.5%] w-[55%] h-[55%] z-[2] mt-[-15]"
               >
                 <Image
                   src="/businessnew/ai1.png"
                   alt="Card Mockup"
                   fill
                   quality={100}
-                  className="rounded-xl object-contain"
+                  className="rounded-xl object-contain mt-1"
                 />
               </div>
               <div
@@ -855,14 +884,20 @@ const DesktopView = () => {
               <WaitlistTriggerButton triggerSource="'AI personalization' button">
                 <button
                   onClick={handleDownloadAndStartClick}
-                  className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4"
+                  className="flex items-center justify-center cursor-pointer 
+               bg-black text-white 
+               w-[310px] h-[56px] 
+               rounded-full gap-[10px] 
+               text-[14px] font-medium 
+               px-6 
+               hover:bg-black/90 transition-colors"
                 >
                   <Image
                     src="/businessnew/ai5.svg"
-                    alt="Get Swiss bank account"
+                    alt="Download app and get started"
                     width={24}
                     height={24}
-                    className="w-5 h-5 sm:w-6 sm:h-6"
+                    className="w-6 h-6"
                   />
                   <span>Download app and get started</span>
                 </button>

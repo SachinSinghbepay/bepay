@@ -46,16 +46,44 @@ export class AnalyticsService {
     return { sessionId, sessionStartTime };
   }
 
+  static getDistinctId() {
+    try {
+      const distinctId = mixpanel.get_distinct_id();
+      return distinctId;
+    } catch (err) {
+      console.error("err", err);
+      return null;
+    }
+  }
+  static createWaitlistUser(email, extraData = {}) {
+  const distinctId = mixpanel.get_distinct_id() || email; // fallback to email if no ID
+
+  // 1. Identify this user with distinct_id
+  mixpanel.identify(distinctId);
+
+  // 2. Create / update their Mixpanel People profile (Users tab)
+  mixpanel.people.set({
+    $email: email,                        // reserved property
+    created_at: new Date().toISOString(), // join timestamp
+    source: "waitlist",                       
+  });
+
+  console.log(`[Analytics] Waitlist user created: ${email}, distinctId: ${distinctId}`);
+}
+
+
   /**
    * Tracks an event and automatically includes the sessionId.
    * @param {string} eventName - The name of the event.
    * @param {object} params - Additional properties for the event.
    */
-  static sendEvent(eventName, params = {}) {
+  static async sendEvent(eventName, params = {}) {
     if (!this.isInitialized) {
       console.warn("Analytics not initialized yet. Event dropped:", eventName);
       return;
     }
+
+    var distinctId = await mixpanel?.get_distinct_id();
 
     const { sessionId } = this.getSessionData();
     const eventProperties = {
@@ -84,6 +112,8 @@ export class AnalyticsService {
       }
     }
   }
+
+  
 
   /**
    * Ends the current session, calculating duration and sending a final event.

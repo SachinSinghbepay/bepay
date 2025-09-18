@@ -536,6 +536,7 @@ const handleEmailFocus = () => {
   useEffect(() => {
     setMounted(true);
     const submittedEmail = localStorage.getItem("waitlist_submitted_email");
+    
     if (externalIsOpen === undefined && submittedEmail) {
       setIsOpen(false);
     }
@@ -554,6 +555,7 @@ const handleEmailFocus = () => {
         triggerSource,
         email,
       });
+      
       setHasViewedSuccessPopup(true);
     }
   }, [finalIsOpen, isSuccess, hasViewedSuccessPopup, triggerSource, email]);
@@ -599,6 +601,11 @@ const handleEmailFocus = () => {
     localStorage.setItem("campaignId", newCampaignId);
     
     localStorage.setItem("waitlist_submitted_email", email);
+    AnalyticsService.createWaitlistUser(email, {
+      triggerSource,
+      joined_via: "waitlist_form",
+    });
+
     setIsSuccess(true);
 
     AnalyticsService.sendEvent("pop-up_waitlist_submission_successful", {

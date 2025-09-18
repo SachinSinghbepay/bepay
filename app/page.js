@@ -20,7 +20,7 @@ const page = () => {
         <CryptoHeroSection />
         <CryptoWalletSection />
         <OneWallet /> 
-        <ScrollTextAnimation />
+        {/* <ScrollTextAnimation /> */}
         <ScrollTextMobile />
         <DefiYieldSection />
         <InvestmentSuite />

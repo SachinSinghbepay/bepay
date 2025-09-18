@@ -98,8 +98,8 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
       style={{ y }}
       className="absolute inset-0 flex flex-col justify-center p-8 lg:p-12"
     >
-      <div className="w-full max-w-[360px] mx-auto">
-        <div className="relative w-full aspect-[4/5] overflow-hidden mb-4 lg:mb-5 shadow-lg">
+      <div className="w-full max-w-[420px] mx-auto">
+        <div className="relative w-full aspect-[4/5] overflow-hidden mb-4 lg:mb-6 shadow-lg">
           <Image
             src={service.image || "/placeholder.svg"}
             alt={service.title}
@@ -114,23 +114,23 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
               font-[Montserrat] 
               font-normal 
               text-lg sm:text-xl 
-              lg:text-[40px] 
-              lg:leading-[52px] 
+              lg:text-[48px] 
+              lg:leading-[1.2] 
               lg:tracking-[-0.06em] 
               text-[#6A6A6A] 
-              mb-3
+              mb-4
               ${service.title === "Savings Products" || service.title === "Insurance Products" || service.title ==="DeFi Marketplace" || service.title ==="Remittance Services"? "whitespace-nowrap" : ""}
             `}
           >
             {service.title}
           </h3>
-          <ul className="space-y-2">
+          <ul className="space-y-2.5">
             {service.points.map((point, idx) => (
               <li
                 key={idx}
-                className="flex items-start gap-1.5 text-xs lg:text-sm text-gray-600 leading-snug"
+                className="flex items-start gap-2 text-xs+ lg:text-base text-gray-600 leading-snug"
               >
-                <span className="w-3 h-3 rounded-[3px] bg-[#6A6A6A] mt-0.5 flex-shrink-0"></span>
+                <span className="w-3.5 h-3.5 rounded-[3px] bg-[#6A6A6A] mt-1 flex-shrink-0"></span>
                 <span>{point}</span>
               </li>
             ))}
@@ -164,7 +164,6 @@ const MobileView = () => {
     return () => unsubscribe();
   }, [scrollYProgress, x]);
 
-  // ANALYTICS: Handler for the mobile button click
   const handleExploreFeaturesClick = () => {
     AnalyticsService.sendEvent("'Explore all features' button clicked");
   };
@@ -194,7 +193,7 @@ const MobileView = () => {
           </motion.p>
 
           <motion.button 
-            onClick={handleExploreFeaturesClick} // ANALYTICS: Added onClick handler
+            onClick={handleExploreFeaturesClick}
             className="flex items-center justify-center gap-2 bg-black text-white px-6 h-[56px] rounded-full mt-6 hover:bg-gray-800 transition-colors text-xs font-medium">
             <span>Explore all features</span>
             <ArrowUpRight size={20} />
@@ -252,18 +251,17 @@ export const FinancialServicesSection = () => {
         if (entry.isIntersecting && !hasTrackedView) {
           AnalyticsService.sendEvent("financial services section landed on");
           setHasTrackedView(true);
-          observer.unobserve(entry.target); // ✅ Stop observing after first view
+          observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.1 } // ✅ fires when 30% of section is visible
+      { threshold: 0.1 }
     );
 
     observer.observe(containerRef.current);
 
-    return () => observer.disconnect(); // ✅ Cleanup on unmount
+    return () => observer.disconnect();
   }, [hasTrackedView]);
 
-  // ANALYTICS: Handler for the desktop button click
   const handleExploreFeaturesClick = () => {
     AnalyticsService.sendEvent("'Explore all features' button clicked");
   };
@@ -280,14 +278,18 @@ export const FinancialServicesSection = () => {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <motion.h2 className="text-[80px] lg:text-5xl xl:text-6xl font-[400]"style={{ lineHeight: "0.9" }}>
+              {/* MODIFIED: Added tracking-tighter to reduce letter spacing */}
+              <motion.h2
+                className="text-[80px] lg:text-5xl xl:text-7xl leading-tighter font-[400] tracking-tighter"
+                style={{ lineHeight: "1" }}
+              >
                 <span className="text-gray-400">COMPLETE</span>
                 <br />
                 FINANCIAL
                 <br />
                 SERVICES
               </motion.h2>
-              <motion.p className="text-[#333333] mt-4 font-medium lg:mt-6 text-sm lg:text-base leading-relaxed">
+              <motion.p className="text-[#333333] mt-4 font-medium lg:mt-6 text-sm lg:text-lg leading-relaxed">
                 <span className="font-semibold block">
                   Banking, lending, insurance, and more -
                 </span>
@@ -295,30 +297,25 @@ export const FinancialServicesSection = () => {
               </motion.p>
 
               <WaitlistTriggerButton triggerSource="'financial service section' button">
-  <motion.button
-    onClick={handleExploreFeaturesClick} // ANALYTICS: Added onClick handler
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-    className="
-      bg-black cursor-pointer whitespace-nowrap text-white 
-      flex items-center justify-center transition-colors 
-      hover:bg-gray-800 rounded-full mt-7
-
-      /* Mobile (default) */
-      w-[221px] h-[56px] gap-2 text-xs font-normal
-
-      /* Desktop overrides */
-      md:w-[210px] md:h-[56px] 
-      md:gap-[10px] 
-      md:text-sm md:font-medium 
-      md:rounded-[100px]
-    "
-  >
-    Explore all features
-    <ArrowUpRight size={18} className="w-5 h-5 md:w-6 md:h-6" />
-  </motion.button>
-</WaitlistTriggerButton>
-
+                <motion.button
+                  onClick={handleExploreFeaturesClick}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="
+                    bg-black cursor-pointer whitespace-nowrap text-white 
+                    flex items-center justify-center transition-colors 
+                    hover:bg-gray-800 rounded-full mt-7
+                    w-[221px] h-[56px] gap-2 text-xs font-normal
+                    md:w-[210px] md:h-[56px] 
+                    md:gap-[10px] 
+                    md:text-sm md:font-medium 
+                    md:rounded-[100px]
+                  "
+                >
+                  Explore all features
+                  <ArrowUpRight size={18} className="w-5 h-5 md:w-6 md:h-6" />
+                </motion.button>
+              </WaitlistTriggerButton>
             </motion.div>
           </div>
           <div className="bg-[#F9F9F9] relative overflow-hidden">
