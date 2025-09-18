@@ -34,10 +34,10 @@ const ScrollTextMobile = () => {
       <div className="max-w-md w-full text-center space-y-8">
 
         {/* Sequential text animation */}
-        <div className="space-y-2">
+        <div>
           {/* First line - "maximize your" */}
           <motion.h1
-            className="text-4xl md:text-5xl font-normal  leading-[0.5em]" 
+            className="text-4xl md:text-5xl font-normal  leading-tight" 
             initial={{ opacity: 0, y: 50 }}
 
             whileInView={{ opacity: 1, y: 0 }}

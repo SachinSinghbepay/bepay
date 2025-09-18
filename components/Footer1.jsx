@@ -212,7 +212,10 @@ const Footer = () => {
 
   return (
     <>
-      <footer ref={footerRef} className="w-full bg-black text-white relative overflow-hidden pt-20 px-4 sm:px-6 lg:px-8">
+      <footer
+        ref={footerRef}
+        className="w-full bg-black text-white relative overflow-hidden pt-20 px-4 sm:px-6 lg:px-8"
+      >
         <motion.div
           className="max-w-7xl mx-auto flex flex-col items-center gap-16 relative z-10"
           initial="hidden"
@@ -279,7 +282,7 @@ const Footer = () => {
                         value={email}
                         onFocus={handleEmailFocus}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="bg-transparent px-4 py-3 text-#6A6A6A placeholder-gray-500 focus:outline-none border border-[#C6C6C626] rounded-full w-full text-sm"
+                        className="bg-transparent px-4 py-3 text-#6A6A6A placeholder:[#888888] focus:outline-none border border-[#C6C6C626] rounded-full w-full text-sm"
                         aria-label="Email for newsletter"
                         disabled={isSubmitting}
                       />
@@ -298,7 +301,7 @@ const Footer = () => {
                         value={email}
                         onFocus={handleEmailFocus}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="bg-transparent px-4 py-2 text-white placeholder-gray-500 focus:outline-none w-full text-sm"
+                        className="bg-transparent px-4 py-2 text-white placeholder:[#888888] focus:outline-none w-full text-sm"
                         aria-label="Email for newsletter"
                         disabled={isSubmitting}
                       />
@@ -334,18 +337,118 @@ const Footer = () => {
                 )}
                 <div className="flex gap-3 lg:mt-7">
                   {/* ANALYTICS: Added onClick handlers for social media links */}
-                  <Link href="https://www.linkedin.com/company/bepaymoney/" onClick={() =>
-    AnalyticsService.sendEvent("Social media link clicked: LinkedIn")
-  } target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-10 h-10 border p-[10px] border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"> <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg"> <path fillRule="evenodd" clipRule="evenodd" d="M7.93279 7.197H11.5081V8.97791C12.0231 7.95365 13.3439 7.03335 15.3279 7.03335C19.1313 7.03335 20.0343 9.07225 20.0343 12.8131V19.7413H16.1837V13.6651C16.1837 11.5347 15.6687 10.3333 14.3575 10.3333C12.5391 10.3333 11.7834 11.6281 11.7834 13.6641V19.7413H7.93279V7.197ZM1.32996 19.5777H5.18057V7.03335H1.32996V19.5777ZM5.73217 2.94304C5.73231 3.2658 5.6683 3.58536 5.54386 3.88316C5.41942 4.18096 5.23703 4.45105 5.00729 4.67774C4.77687 4.90697 4.50354 5.08854 4.20292 5.21209C3.9023 5.33564 3.58028 5.39875 3.25526 5.39781C2.60028 5.39633 1.97197 5.13816 1.50516 4.6787C1.27634 4.45118 1.09462 4.18077 0.970407 3.88295C0.846191 3.58512 0.781913 3.26573 0.78125 2.94304C0.78125 2.29133 1.04117 1.66753 1.50613 1.20738C1.97176 0.746159 2.60083 0.48768 3.25623 0.488282C3.91276 0.488282 4.54233 0.747236 5.00729 1.20738C5.47225 1.66753 5.73217 2.29133 5.73217 2.94304Z" fill="#C0C0C0" /> </svg> </Link>
-                  <Link href="https://x.com/bepaymoney" onClick={() =>
-    AnalyticsService.sendEvent("Social media link clicked: Twitter")
-  } target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="w-10 h-10 border p-[10px] border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"> <svg width="21" height="19" viewBox="0 0 21 19" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M16.1562 0.0546875H19.2234L12.5234 7.73183L20.4062 18.1804H14.2348L9.39768 11.8447L3.86911 18.1804H0.799107L7.96482 9.96611L0.40625 0.0561161H6.73482L11.1005 5.84612L16.1562 0.0546875ZM15.0777 16.3404H16.7777L5.80625 1.79897H3.98339L15.0777 16.3404Z" fill="#C0C0C0" /> </svg> </Link>
-                  <Link href="https://www.facebook.com/bepaymoney/" onClick={() =>
-    AnalyticsService.sendEvent("Social media link clicked: Facebook")
-  } target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-10 h-10 border p-[10px] border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"> <svg width="11" height="20" viewBox="0 0 11 20" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M7.11656 11.586H9.56054L10.5381 7.67567H7.11656V5.72049C7.11656 4.71357 7.11656 3.76531 9.07174 3.76531H10.5381V0.480613C10.2194 0.438576 9.01602 0.34375 7.74515 0.34375C5.091 0.34375 3.20621 1.96362 3.20621 4.93842V7.67567H0.273438V11.586H3.20621V19.8955H7.11656V11.586Z" fill="#C0C0C0" /> </svg> </Link>
-                  <Link href="https://t.me/officialbepaymoney" onClick={() =>
-    AnalyticsService.sendEvent("Social media link clicked: telegram")
-  } target="_blank" rel="noopener noreferrer" aria-label="Telegram" className="w-10 h-10 p-[10px] border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"> <svg width="21" height="18" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg"> <path fillRule="evenodd" clipRule="evenodd" d="M18.0371 1.00318C18.2739 0.903518 18.533 0.869146 18.7876 0.903639C19.0422 0.938133 19.2829 1.04023 19.4846 1.19931C19.6864 1.35838 19.8418 1.56862 19.9347 1.80814C20.0276 2.04766 20.0546 2.3077 20.0129 2.5612L17.8397 15.7431C17.6289 17.0146 16.2338 17.7438 15.0676 17.1104C14.0922 16.5805 12.6434 15.7641 11.3403 14.9123C10.6887 14.4859 8.69279 13.1205 8.93809 12.1489C9.14889 11.3181 12.5026 8.19633 14.419 6.34031C15.1711 5.61113 14.8281 5.19048 13.9399 5.86122C11.7341 7.52656 8.19262 10.0591 7.02171 10.772C5.98877 11.4005 5.45027 11.5078 4.80636 11.4005C3.63162 11.2051 2.54215 10.9023 1.65295 10.5334C0.451377 10.0351 0.509827 8.38318 1.65199 7.90217L18.0371 1.00318Z" fill="#C0C0C0" /> </svg> </Link>
+                  <Link
+                    href="https://www.linkedin.com/company/bepaymoney/"
+                    onClick={() =>
+                      AnalyticsService.sendEvent(
+                        "Social media link clicked: LinkedIn"
+                      )
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                    className="w-10 h-10 border p-[10px] border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                  >
+                    {" "}
+                    <svg
+                      width="21"
+                      height="20"
+                      viewBox="0 0 21 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      {" "}
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M7.93279 7.197H11.5081V8.97791C12.0231 7.95365 13.3439 7.03335 15.3279 7.03335C19.1313 7.03335 20.0343 9.07225 20.0343 12.8131V19.7413H16.1837V13.6651C16.1837 11.5347 15.6687 10.3333 14.3575 10.3333C12.5391 10.3333 11.7834 11.6281 11.7834 13.6641V19.7413H7.93279V7.197ZM1.32996 19.5777H5.18057V7.03335H1.32996V19.5777ZM5.73217 2.94304C5.73231 3.2658 5.6683 3.58536 5.54386 3.88316C5.41942 4.18096 5.23703 4.45105 5.00729 4.67774C4.77687 4.90697 4.50354 5.08854 4.20292 5.21209C3.9023 5.33564 3.58028 5.39875 3.25526 5.39781C2.60028 5.39633 1.97197 5.13816 1.50516 4.6787C1.27634 4.45118 1.09462 4.18077 0.970407 3.88295C0.846191 3.58512 0.781913 3.26573 0.78125 2.94304C0.78125 2.29133 1.04117 1.66753 1.50613 1.20738C1.97176 0.746159 2.60083 0.48768 3.25623 0.488282C3.91276 0.488282 4.54233 0.747236 5.00729 1.20738C5.47225 1.66753 5.73217 2.29133 5.73217 2.94304Z"
+                        fill="#C0C0C0"
+                      />{" "}
+                    </svg>{" "}
+                  </Link>
+                  <Link
+                    href="https://x.com/bepaymoney"
+                    onClick={() =>
+                      AnalyticsService.sendEvent(
+                        "Social media link clicked: Twitter"
+                      )
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Twitter"
+                    className="w-10 h-10 border p-[10px] border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                  >
+                    {" "}
+                    <svg
+                      width="21"
+                      height="19"
+                      viewBox="0 0 21 19"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      {" "}
+                      <path
+                        d="M16.1562 0.0546875H19.2234L12.5234 7.73183L20.4062 18.1804H14.2348L9.39768 11.8447L3.86911 18.1804H0.799107L7.96482 9.96611L0.40625 0.0561161H6.73482L11.1005 5.84612L16.1562 0.0546875ZM15.0777 16.3404H16.7777L5.80625 1.79897H3.98339L15.0777 16.3404Z"
+                        fill="#C0C0C0"
+                      />{" "}
+                    </svg>{" "}
+                  </Link>
+                  <Link
+                    href="https://www.facebook.com/bepaymoney/"
+                    onClick={() =>
+                      AnalyticsService.sendEvent(
+                        "Social media link clicked: Facebook"
+                      )
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook"
+                    className="w-10 h-10 border p-[10px] border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                  >
+                    {" "}
+                    <svg
+                      width="11"
+                      height="20"
+                      viewBox="0 0 11 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      {" "}
+                      <path
+                        d="M7.11656 11.586H9.56054L10.5381 7.67567H7.11656V5.72049C7.11656 4.71357 7.11656 3.76531 9.07174 3.76531H10.5381V0.480613C10.2194 0.438576 9.01602 0.34375 7.74515 0.34375C5.091 0.34375 3.20621 1.96362 3.20621 4.93842V7.67567H0.273438V11.586H3.20621V19.8955H7.11656V11.586Z"
+                        fill="#C0C0C0"
+                      />{" "}
+                    </svg>{" "}
+                  </Link>
+                  <Link
+                    href="https://t.me/officialbepaymoney"
+                    onClick={() =>
+                      AnalyticsService.sendEvent(
+                        "Social media link clicked: telegram"
+                      )
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Telegram"
+                    className="w-10 h-10 p-[10px] border border-[#191919] rounded-[10px] flex items-center justify-center hover:bg-white/10 transition-colors hover:border-white/40"
+                  >
+                    {" "}
+                    <svg
+                      width="21"
+                      height="18"
+                      viewBox="0 0 21 18"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      {" "}
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d="M18.0371 1.00318C18.2739 0.903518 18.533 0.869146 18.7876 0.903639C19.0422 0.938133 19.2829 1.04023 19.4846 1.19931C19.6864 1.35838 19.8418 1.56862 19.9347 1.80814C20.0276 2.04766 20.0546 2.3077 20.0129 2.5612L17.8397 15.7431C17.6289 17.0146 16.2338 17.7438 15.0676 17.1104C14.0922 16.5805 12.6434 15.7641 11.3403 14.9123C10.6887 14.4859 8.69279 13.1205 8.93809 12.1489C9.14889 11.3181 12.5026 8.19633 14.419 6.34031C15.1711 5.61113 14.8281 5.19048 13.9399 5.86122C11.7341 7.52656 8.19262 10.0591 7.02171 10.772C5.98877 11.4005 5.45027 11.5078 4.80636 11.4005C3.63162 11.2051 2.54215 10.9023 1.65295 10.5334C0.451377 10.0351 0.509827 8.38318 1.65199 7.90217L18.0371 1.00318Z"
+                        fill="#C0C0C0"
+                      />{" "}
+                    </svg>{" "}
+                  </Link>
                 </div>
               </div>
             </>
@@ -358,30 +461,104 @@ const Footer = () => {
             {/* ANALYTICS: Added onClick handlers for all navigation and legal links */}
             <div className="space-y-4">
               <div className="space-y-4 lg:space-y-6">
-                <Link href="/" onClick={() => handleLinkClick("Personal")} className="block text-[#6A6A6A] hover:text-gray-400 transition-colors">PERSONAL</Link>
-                <Link href="/business" onClick={() => handleLinkClick("Business")} className="block text-[#6A6A6A] hover:text-gray-400 transition-colors">BUSINESS</Link>
-                <Link href="/bepay-foundations" onClick={() => handleLinkClick("Bepay Foundations")} className="block text-[#6A6A6A] hover:text-gray-400 transition-colors">BEPAY FOUNDATIONS</Link>
+                <Link
+                  href="/"
+                  onClick={() => handleLinkClick("Personal")}
+                  className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
+                >
+                  PERSONAL
+                </Link>
+                <Link
+                  href="/business"
+                  onClick={() => handleLinkClick("Business")}
+                  className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
+                >
+                  BUSINESS
+                </Link>
+                <Link
+                  href="/bepay-foundations"
+                  onClick={() => handleLinkClick("Bepay Foundations")}
+                  className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
+                >
+                  BEPAY FOUNDATIONS
+                </Link>
               </div>
             </div>
             <div className="space-y-4">
               <div className="space-y-4 lg:space-y-6">
-                <Link href="/about-us" onClick={() => handleLinkClick("About Us")} className="block text-[#6A6A6A] hover:text-gray-400 transition-colors">ABOUT US</Link>
-                <Link href="/contact-us" onClick={() => handleLinkClick("Contact Us")} className="block text-[#6A6A6A] hover:text-gray-400 transition-colors">CONTACT US</Link>
-                <Link href="/privacy-policy" onClick={() => handleLinkClick("Privacy Policy")} className="block text-[#6A6A6A] hover:text-gray-400 transition-colors">PRIVACY POLICY</Link>
+                <Link
+                  href="/about-us"
+                  onClick={() => handleLinkClick("About Us")}
+                  className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
+                >
+                  ABOUT US
+                </Link>
+                <Link
+                  href="/contact-us"
+                  onClick={() => handleLinkClick("Contact Us")}
+                  className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
+                >
+                  CONTACT US
+                </Link>
+                <Link
+                  href="/privacy-policy"
+                  onClick={() => handleLinkClick("Privacy Policy")}
+                  className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
+                >
+                  PRIVACY POLICY
+                </Link>
               </div>
             </div>
             <div className="space-y-4">
               <div className="space-y-6 lg:space-y-6">
-                <Link href="/delete-account" onClick={() => handleLinkClick("Account Deletion Form")} className="block text-[#6A6A6A] hover:text-gray-400 transition-colors">ACCOUNT DELETION FORM</Link>
-                <Link href="/privacy-policy-for-deleting-user-account" onClick={() => handleLinkClick("For Deleting User Account")} className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors">for deleting user account</Link>
-                <Link href="/privacy-policy-for-deleting-merchant-account" onClick={() => handleLinkClick("For Deleting Merchant Account")} className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors ">for deleting merchant account</Link>
+                <Link
+                  href="/delete-account"
+                  onClick={() => handleLinkClick("Account Deletion Form")}
+                  className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
+                >
+                  ACCOUNT DELETION FORM
+                </Link>
+                <Link
+                  href="/privacy-policy-for-deleting-user-account"
+                  onClick={() => handleLinkClick("For Deleting User Account")}
+                  className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors"
+                >
+                  for deleting user account
+                </Link>
+                <Link
+                  href="/privacy-policy-for-deleting-merchant-account"
+                  onClick={() =>
+                    handleLinkClick("For Deleting Merchant Account")
+                  }
+                  className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors "
+                >
+                  for deleting merchant account
+                </Link>
               </div>
             </div>
             <div className="space-y-4">
               <div className="space-y-5 lg:space-y-6">
-                <Link href="/terms-and-conditions" onClick={() => handleLinkClick("Terms & Conditions")} className="block text-[#6A6A6A] hover:text-gray-400 transition-colors">TERMS & CONDITIONS</Link>
-                <Link href="/legal-disclamer" onClick={() => handleLinkClick("Legal Disclaimer")} className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors">Legal disclaimer</Link>
-                <Link href="/cookie-policy" onClick={() => handleLinkClick("Cookie Policy")} className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors">Cookie Policy</Link>
+                <Link
+                  href="/terms-and-conditions"
+                  onClick={() => handleLinkClick("Terms & Conditions")}
+                  className="block text-[#6A6A6A] hover:text-gray-400 transition-colors"
+                >
+                  TERMS & CONDITIONS
+                </Link>
+                <Link
+                  href="/legal-disclamer"
+                  onClick={() => handleLinkClick("Legal Disclaimer")}
+                  className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors"
+                >
+                  Legal disclaimer
+                </Link>
+                <Link
+                  href="/cookie-policy"
+                  onClick={() => handleLinkClick("Cookie Policy")}
+                  className="block uppercase text-[#6A6A6A] hover:text-gray-400 transition-colors"
+                >
+                  Cookie Policy
+                </Link>
               </div>
             </div>
           </motion.div>
@@ -407,27 +584,30 @@ const Footer = () => {
             </div>
           </motion.div>
         </motion.div>
-        
+
         <p className="text-[8px] font-[400] lg:tracking-[2%] lg:leading-[20px] max-w-[1359px] mx-auto lg:text-[10px] text-[#6A6A6A]">
-          The information and services presented on this website are provided for
-          informational purposes only and do not constitute financial, investment,
-          or legal advice. The group operates under the brand name bepay through
-          its legal entity, Bepay money fintech UAB, registered in the European
-          Union (Company Registration No. 306999867). bepay does not operate as a
-          bank, financial institution, or digital asset exchange. All wallet and
-          payment-related services are offered in a non-custodial capacity,
-          leveraging public distributed ledger technologies and open-source data
-          from integrated platforms and partners. Cryptocurrency trading is highly
-          volatile, and users may lose their entire investment; all activities are
-          undertaken at your own risk. bepay holds ISO 9001, 20022, and 27001
-          certifications across India, UAE, USA, and the EU
+          bepay operates under the brand name bepay through its legal entities
+          registered across multiple jurisdictions worldwide: Bepay Fintech
+          Products Holding LTD, British Virgin Islands (Registration No:
+          2185015); Bepay Money Europe S.R.L, Romania (Registration No:
+          52474864); Bepay Money Fintech UAB, Lithuania, European Union
+          (Registration No: 306999867); and Bepay Fintech Inc, United States
+          (Registration No: 31000294520372). The information and services
+          presented on this website are provided for informational purposes only
+          and do not constitute financial, investment, or legal advice. bepay
+          does not operate as a bank, financial institution, or digital asset
+          exchange. All wallet and payment-related services are provided in a
+          non-custodial capacity, leveraging public distributed ledger
+          technologies and open-source data from integrated platforms and
+          partners. Cryptocurrency trading is highly volatile, and users may
+          lose their entire investment; all activities are undertaken at your
+          own risk. bepay holds ISO 9001, ISO 20022, and ISO 27001
+          certifications, and is licensed/registered under applicable frameworks
+          including MSB, DORA, MiCA, VASP, and DPDP
         </p>
       </footer>
 
-      <NewsletterModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-      />
+      <NewsletterModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </>
   );
 };

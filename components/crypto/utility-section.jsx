@@ -106,7 +106,7 @@ const DesktopCard = ({ cardData, index, progress, totalCards }) => {
   const peak = index * segment + segment * 0.5;
   const end = Math.min(1, (index + 1) * segment + overlap * 0.5);
   const y = useTransform(progress, [start, peak, end], ["40%", "0%", "-40%"]);
-  const opacity = useTransform(progress, [start, peak, end], [0, 1, 0]);
+  const opacity = useTransform(progress, [start, peak, end], [0, 5, 0]);
   const isEven = index % 2 === 0;
   return (
     <motion.div style={{ y, opacity }} transition={{ ease: "easeInOut", duration: 0.6 }} className="absolute inset-0 flex items-center justify-center">
@@ -244,25 +244,30 @@ export const UtilitySection = () => {
             ))}
           </div>
           <motion.button
-            onClick={handleStartPayingClick} // ANALYTICS: Added onClick handler
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            style={{
-              opacity: buttonOpacity,
-              y: buttonY,
-            }}
-            transition={{ ease: "easeOut", duration: 0.6 }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 bg-black cursor-pointer whitespace-nowrap text-white w-[221px] h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-normal hover:bg-gray-800 transition-colors"
-          >
-            <Image
-              src="/utility.svg"
-              alt="Utility Icon"
-              width={20}
-              height={20}
-              className="w-5 h-5"
-            />
-            Start paying with crypto
+          onClick={handleStartPayingClick} // ANALYTICS: Added onClick handler
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          style={{
+            opacity: buttonOpacity,
+            y: buttonY,
+          }}
+          transition={{ ease: "easeOut", duration: 0.6 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 
+                    bg-black cursor-pointer whitespace-nowrap text-white 
+                    w-[250px] h-[56px] rounded-full flex items-center justify-center gap-2 
+                    text-[14px] font-medium px-6 py-4
+                    hover:bg-gray-800 transition-colors"
+        >
+          <Image
+            src="/utility.svg"
+            alt="Utility Icon"
+            width={24}
+            height={24}
+            className="w-6 h-6"
+          />
+          Start paying with crypto
           </motion.button>
+
         </div>
       </div>
 

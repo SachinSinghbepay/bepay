@@ -394,7 +394,8 @@ export default function CryptoHeroSection() {
                     })}
                   </div>
 
-                  <div className="relative z-30 flex justify-center mt-20 lg:mt-35 lg:left-[13px]">
+                  <div className="relative z-30 flex justify-center mt-20 lg:mt-35 lg:left-[15px]">
+
                     <Image
                       src={"/images/crypto/line.png"}
                       height={100}
