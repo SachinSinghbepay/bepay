@@ -288,7 +288,19 @@ const DefiYieldSection = () => {
               {/* === RIGHT COLUMN: EXISTING ANIMATION === */}
               <div className="w-full flex flex-col items-center justify-center gap-10 lg:gap-1 lg:-mt-28">
                 {/* Image Container - Modified to allow images to exit completely */}
-                <div className="lg:ml-50 relative w-full h-[250px] md:h-[250px] lg:h-[350px] flex flex-col items-center justify-center text-lg md:text-xl font-medium text-gray-700 bg-gray-50 p-6 rounded-full">
+              <div
+                className="
+                  mx-auto
+                  w-[350px]           /* mobile width */
+                  sm:w-[380px]        /* slightly bigger on small screens */
+                  md:w-full           /* full width on tablets and larger */
+                  lg:w-full lg:ml-25 -ml-4  /* full + margin on large screens */
+                  h-[280px] md:h-[250px] lg:h-[350px]
+                  flex flex-col items-center justify-center
+                  text-lg md:text-xl font-medium text-gray-700
+                  bg-gray-50 p-6 rounded-full 
+                "
+              >
                   {/* Wrapper div to contain overflow and create exit space */}
                   <div className="relative w-full h-full overflow-visible">
                     <motion.div
