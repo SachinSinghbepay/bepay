@@ -74,18 +74,31 @@ const AnimatedText = () => {
   );
 };
 
-// DesktopCardComponent (unchanged)
+// MODIFIED: DesktopCardComponent to align content left and vertically
 const DesktopCardComponent = ({ cardData }) => {
   return (
-    <div className="w-[300px] h-[400px] lg:w-[380px] drop-shadow-2xl lg:h-[500px] bg-white shadow-utility-card rounded-[40px] p-8 flex flex-col items-start relative overflow-hidden flex-shrink-0 border-0">
-      <Image src={cardData.icon || "/placeholder.svg"} alt={cardData.title} width={200} height={200} className="opacity-100 absolute top-4 left-4 w-[150px] h-[150px] lg:w-[200px] lg:h-[200px] z-0" />
-      <div className="absolute bottom-20 left-8 right-8 z-10">
-        <h3 className="text-xl lg:text-[32px] font-[500] text-[#6A6A6A] leading-[38px] tracking-[-0.06em] text-start"> {cardData.title} </h3>
-        <p className="text-gray-600 mt-2 text-start text-sm"> {cardData.description} </p>
+    <div className="w-[300px] h-[400px] lg:w-[380px] lg:h-[500px] drop-shadow-2xl bg-white shadow-utility-card rounded-[40px] p-8 flex flex-col justify-between items-start flex-shrink-0 border-0">
+      
+      {/* Icon - Now always on the left, positioned by flexbox */}
+      <Image
+        src={cardData.icon || "/placeholder.svg"}
+        alt={cardData.title}
+        width={200}
+        height={200}
+        className="opacity-100 w-[150px] h-[150px] lg:w-[200px] lg:h-[200px]"
+      />
+
+      {/* Text - Now always on the left, positioned by flexbox */}
+      <div className="max-w-full">
+        <h3 className="text-xl lg:text-[32px] font-[500] text-[#6A6A6A] leading-[38px] tracking-[-0.06em]">
+          {cardData.title}
+        </h3>
+        <p className="text-gray-600 mt-2 text-sm">{cardData.description}</p>
       </div>
     </div>
   );
 };
+
 
 // MobileCard component (unchanged)
 const MobileCard = ({ cardData }) => (
@@ -252,11 +265,11 @@ export const UtilitySection = () => {
             y: buttonY,
           }}
           transition={{ ease: "easeOut", duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 
-                    bg-black cursor-pointer whitespace-nowrap text-white 
-                    w-[250px] h-[56px] rounded-full flex items-center justify-center gap-2 
-                    text-[14px] font-medium px-6 py-4
-                    hover:bg-gray-800 transition-colors"
+          className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 
+                       bg-black cursor-pointer whitespace-nowrap text-white 
+                       w-[250px] h-[56px] rounded-full flex items-center justify-center gap-2 
+                       text-[14px] font-medium px-6 py-4
+                       hover:bg-gray-800 transition-colors"
         >
           <Image
             src="/utility.svg"

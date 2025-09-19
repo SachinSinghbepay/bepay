@@ -83,30 +83,88 @@ export default function CryptoHeroSection() {
   const mockupY = useTransform(scrollYProgress, [0, 1], [0, -700]);
 
   // Desktop scroll transforms
-  const xTransform0 = useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialX, iconsData[0].finalX]);
-  const yTransform0 = useTransform(scrollYProgress, [0, 0.6], [iconsData[0].initialY, iconsData[0].finalY]);
+  const xTransform0 = useTransform(
+    scrollYProgress,
+    [0, 0.6],
+    [iconsData[0].initialX, iconsData[0].finalX]
+  );
+  const yTransform0 = useTransform(
+    scrollYProgress,
+    [0, 0.6],
+    [iconsData[0].initialY, iconsData[0].finalY]
+  );
   const scaleTransform0 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
-  const opacityTransform0 = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
+  const opacityTransform0 = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.6],
+    [0, 1, 1]
+  );
 
-  const xTransform1 = useTransform(scrollYProgress, [0, 0.6], [iconsData[1].initialX, iconsData[1].finalX]);
-  const yTransform1 = useTransform(scrollYProgress, [0, 0.6], [iconsData[1].initialY, iconsData[1].finalY]);
+  const xTransform1 = useTransform(
+    scrollYProgress,
+    [0, 0.6],
+    [iconsData[1].initialX, iconsData[1].finalX]
+  );
+  const yTransform1 = useTransform(
+    scrollYProgress,
+    [0, 0.6],
+    [iconsData[1].initialY, iconsData[1].finalY]
+  );
   const scaleTransform1 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
-  const opacityTransform1 = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
+  const opacityTransform1 = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.6],
+    [0, 1, 1]
+  );
 
-  const xTransform2 = useTransform(scrollYProgress, [0, 0.6], [iconsData[2].initialX, iconsData[2].finalX]);
-  const yTransform2 = useTransform(scrollYProgress, [0, 0.6], [iconsData[2].initialY, iconsData[2].finalY]);
+  const xTransform2 = useTransform(
+    scrollYProgress,
+    [0, 0.6],
+    [iconsData[2].initialX, iconsData[2].finalX]
+  );
+  const yTransform2 = useTransform(
+    scrollYProgress,
+    [0, 0.6],
+    [iconsData[2].initialY, iconsData[2].finalY]
+  );
   const scaleTransform2 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
-  const opacityTransform2 = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
+  const opacityTransform2 = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.6],
+    [0, 1, 1]
+  );
 
-  const xTransform3 = useTransform(scrollYProgress, [0, 0.6], [iconsData[3].initialX, iconsData[3].finalX]);
-  const yTransform3 = useTransform(scrollYProgress, [0, 0.6], [iconsData[3].initialY, iconsData[3].finalY]);
+  const xTransform3 = useTransform(
+    scrollYProgress,
+    [0, 0.6],
+    [iconsData[3].initialX, iconsData[3].finalX]
+  );
+  const yTransform3 = useTransform(
+    scrollYProgress,
+    [0, 0.6],
+    [iconsData[3].initialY, iconsData[3].finalY]
+  );
   const scaleTransform3 = useTransform(scrollYProgress, [0, 0.6], [1.5, 1]);
-  const opacityTransform3 = useTransform(scrollYProgress, [0, 0.3, 0.6], [0, 1, 1]);
+  const opacityTransform3 = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.6],
+    [0, 1, 1]
+  );
 
   const xTransforms = [xTransform0, xTransform1, xTransform2, xTransform3];
   const yTransforms = [yTransform0, yTransform1, yTransform2, yTransform3];
-  const scaleTransforms = [scaleTransform0, scaleTransform1, scaleTransform2, scaleTransform3];
-  const opacityTransforms = [opacityTransform0, opacityTransform1, opacityTransform2, opacityTransform3];
+  const scaleTransforms = [
+    scaleTransform0,
+    scaleTransform1,
+    scaleTransform2,
+    scaleTransform3,
+  ];
+  const opacityTransforms = [
+    opacityTransform0,
+    opacityTransform1,
+    opacityTransform2,
+    opacityTransform3,
+  ];
 
   useEffect(() => {
     const checkMobile = () => {
@@ -145,7 +203,10 @@ export default function CryptoHeroSection() {
       ref={containerRef}
       className="h-[160vh] lg:h-[300vh] bg-[#F9F9F9] relative"
     >
-      <div ref={heroSectionRef} className="sticky top-0 h-screen flex-col items-center justify-center px-4 py-8 overflow-hidden">
+      <div
+        ref={heroSectionRef}
+        className="sticky top-0 h-screen flex-col items-center justify-center px-4 py-8 overflow-hidden"
+      >
         <div className=" flex items-center justify-center z-10">
           <div className="text-center">
             {isMobile ? (
@@ -181,7 +242,7 @@ export default function CryptoHeroSection() {
               <div className="hidden lg:block">
                 <div className="leading-none">
                   <span
-                    className="text-[#C0C0C0] font-thin text-[166px]"
+                    className="text-[#B7B7B7] font-thin text-[166px]"
                     style={{ letterSpacing: "-0.17em" }}
                   >
                     USE
@@ -231,7 +292,10 @@ export default function CryptoHeroSection() {
                 <div className="w-full h-full bg-gradient-to-t from-white via-white to-[#F9F9F966] rounded-[32px] lg:rounded-[52px] flex flex-col items-center justify-start p-6 lg:p-16 relative">
                   {/* Logo */}
                   {/* ANALYTICS: Added onClick handler to this clickable div wrapping the icon */}
-                  <div className="mb-6 cursor-pointer" onClick={handleBepayIconClick}>
+                  <div
+                    className="mb-6 cursor-pointer"
+                    onClick={handleBepayIconClick}
+                  >
                     <Image
                       src="/bepayiconlogo.png"
                       alt="BePay Logo"
@@ -242,7 +306,7 @@ export default function CryptoHeroSection() {
                     />
                   </div>
 
-                  <div className="text-center mb-6 lg:mb-4">
+                  <div className="text-center mb-6 lg:mb-4 ">
                     <p className="text-xs 3xl:text-sm text-gray-800 leading-relaxed max-w-[200px] lg:max-w-[280px]">
                       <span className="font-semibold text-black">
                         Web3 Powered Super App
@@ -252,20 +316,19 @@ export default function CryptoHeroSection() {
                     </p>
                   </div>
 
-                  <div className="mb-4 lg:mb-6 lg:mt-6">
-  <p className="text-[11px] sm:text-sm 3xl:text-sm text-gray-800 leading-relaxed max-w-[260px] sm:max-w-[320px] mx-auto">
-    <span className="block text-left lg:text-center whitespace-nowrap">
-      Take control of your financial future with
-    </span>
-    <span className="block text-center text-black font-semibold text-[10px] sm:text-sm whitespace-nowrap">
-      self-custody wallets, earning opportunities,
-    </span>
-    <span className="block text-center text-black font-semibold">
-      and seamless spending solutions.
-    </span>
-  </p>
-</div>
-
+                  <div className="mb-4 lg:mb-6 lg:mt-10">
+                    <p className="text-[11px] sm:text-sm 3xl:text-sm text-gray-800 leading-relaxed max-w-[260px] sm:max-w-[320px] mx-auto">
+                      <span className="block text-left lg:text-center whitespace-nowrap">
+                        Take control of your financial future with
+                      </span>
+                      <span className="block text-center text-black font-semibold text-[10px] sm:text-sm whitespace-nowrap">
+                        self-custody wallets, earning opportunities,
+                      </span>
+                      <span className="block text-center text-black font-semibold">
+                        and seamless spending solutions.
+                      </span>
+                    </p>
+                  </div>
 
                   <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
                     {iconsData.map((icon, index) => {
@@ -332,6 +395,7 @@ export default function CryptoHeroSection() {
                   </div>
 
                   <div className="relative z-30 flex justify-center mt-20 lg:mt-35 lg:left-[15px]">
+
                     <Image
                       src={"/images/crypto/line.png"}
                       height={100}
@@ -340,7 +404,7 @@ export default function CryptoHeroSection() {
                       className="object-contain h-16 w-auto"
                     />
                   </div>
-                  
+
                   <div className="relative z-50 pointer-events-auto mt-10 lg:mt-12">
                     <WaitlistTriggerButton triggerSource="'Download app and start earning' button">
                       <motion.button
@@ -351,7 +415,7 @@ export default function CryptoHeroSection() {
                         transition={{ duration: 0.3, delay: 0.3 }}
                         viewport={{ once: false, amount: 0.5 }}
                         onClick={handleButtonClick} // ANALYTICS: This handler now tracks the click
-                        className="bg-black cursor-pointer h-[56px] whitespace-nowrap text-white px-4 py-2 lg:px-6 lg:py-3 rounded-full flex items-center justify-center gap-2 text-[12px] font-medium hover:bg-black/90 transition-colors active:scale-95 select-none"
+                        className="bg-black cursor-pointer h-[56px] whitespace-nowrap text-white rounded-full flex items-center justify-center gap-2 px-4 py-2 text-[12px] font-medium select-none hover:bg-black/90 transition-colors active:scale-95 font-montserrat lg:w-[298px] lg:h-[56px] lg:gap-[10px] lg:px-6 lg:py-4 lg:text-[14px] lg:font-medium lg:leading-[100%]"
                         style={{ pointerEvents: "auto" }}
                       >
                         <DeviceMobile className="w-3 h-3 -mt-[1px] lg:w-4 lg:h-4" />

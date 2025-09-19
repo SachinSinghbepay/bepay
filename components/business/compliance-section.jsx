@@ -20,7 +20,7 @@ const complianceData = [
   {
     icon: FileText,
     title: "Compliant",
-    badges: ["GDPR", "DORA", "AML/KYC automation", "CFT"],
+    badges: ["GDPR", "DORA","DPDP", "AML/KYC automation", "CFT"],
   },
   {
     icon: Shield,

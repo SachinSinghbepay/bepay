@@ -223,38 +223,38 @@ const DesktopView = () => {
       ref={sectionRef}
       className="w-full min-h-screen bg-[#f9f9f9] font-montserrat overflow-hidden"
     >
-      <div className="relative w-full lg:max-w-[1229px] pb-8 sm:pb-12 lg:pb-16 mx-auto">
+      <div className="relative w-full pb-8 sm:pb-12 lg:pb-16 mx-auto">
         <div className="text-center mb-8 sm:mb-12 lg:mb-16 max-w-[95vw] sm:max-w-[90vw] mx-auto ">
-          <div className="flex flex-col items-center justify-start min-h-[100vh] pt-8">
-            
-            {/* ///- START: MODIFIED HEADING -/// */}
+          {/* ///- MODIFICATION: Removed top padding (pt-5) to move heading up significantly -/// */}
+          <div className="flex flex-col items-center justify-start min-h-[100vh]">
             <h2
               ref={textLine1Ref}
-              className="font-montserrat font-normal text-[60px] leading-tight tracking-[-0.08em] whitespace-nowrap mb-4"
+              className="font-montserrat font-normal text-4xl sm:text-5xl lg:text-[60px] leading-tight tracking-[-0.08em] text-center mb-4"
             >
               <span className="text-[#9e9e9e]">Everything you need in </span>
               <span className="text-black">one platform</span>
             </h2>
-            {/* ///- END: MODIFIED HEADING -/// */}
 
             <p
               ref={textLine4Ref}
-              className="font-montserrat font-normal text-[20px] leading-[26px] tracking-normal text-black w-[70%]"
+              className="font-montserrat font-normal text-lg sm:text-xl leading-relaxed tracking-normal text-black max-w-3xl"
             >
               <span className="text-[#9e9e9e]">
                 From earning opportunities to seamless payments,
-              </span>
+              </span>{' '}
               bepay provides all the tools you need to manage your crypto
               finances.
             </p>
           </div>
         </div>
+
+        {/* Card 1: Self-Custody Wallet */}
         <div
           ref={cardRef}
-          className="absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden h-h-[75vh] lg:h-[600px]"
+          className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden h-[75vh] lg:h-[58.6vh]"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2 h-full">
+            <div className="relative w-full h-full bg-[#f2f2f2] rounded-[26px] overflow-hidden">
               <div ref={mockupImageRef} className="relative w-full h-full">
                 <Image
                   src="/businessnew/mockupImage.png"
@@ -264,612 +264,337 @@ const DesktopView = () => {
                 />
               </div>
             </div>
-            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-10">
-              <div className="space-y-3 sm:space-y-4">
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-black">
+            <div className="flex flex-col justify-center gap-5 p-4 sm:p-6 lg:p-8">
+              <div className="space-y-3">
+                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl -mt-10 font-semibold text-black">
                   Self-Custody Wallet
                 </h1>
-                <p className="text-sm sm:text-base md:text-sm text-gray-600 leading-relaxed">
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
                   Complete control over your crypto assets with military-grade
                   security and multi-signature protection.
                 </p>
               </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className=" w-5 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/Self1.svg"
-                    alt="Private key icon"
-                    width={28}
-                    height={28}
-                  />
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/Self1.svg" alt="Private key icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">100% Private Key Ownership.</h3>
                 </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    100% Private Key Ownership.
-                  </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/IBAN4.svg" alt="Instant settlements icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Instant settlements.</h3>
                 </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/IBAN4.svg"
-                    alt="Instant settlements icon"
-                    className="w-full h-full"
-                    width={28}
-                    height={28}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Instant settlements.
-                  </h3>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/IBAN5.svg"
-                    alt="Bank-grade security icon"
-                    className="w-full h-full"
-                    width={28}
-                    height={28}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Bank-grade security.
-                  </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/IBAN5.svg" alt="Bank-grade security icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Bank-grade security.</h3>
                 </div>
               </div>
               <WaitlistTriggerButton triggerSource="' self custody wallet' button">
                 <button
                   onClick={handleCreateWalletClick}
-                  className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4"
+                  className="flex items-center justify-center cursor-pointer bg-black text-white w-[220px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
                 >
-                  <Image
-                    src="/businessnew/buttonIcon.png"
-                    alt="Create wallet icon"
-                    width={24}
-                    height={24}
-                    className="w-5 h-5 sm:w-6 sm:h-6"
-                  />
+                  <Image src="/businessnew/buttonIcon.png" alt="Create wallet icon" width={24} height={24}/>
                   <span>Create your wallet</span>
                 </button>
               </WaitlistTriggerButton>
             </div>
           </div>
         </div>
+
+        {/* Card 2: Virtual Crypto Debit Card */}
         <div
           ref={card2Ref}
-          className=" h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="h-[75vh] lg:h-[58.6vh] absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-           <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
-              <div
-                ref={mockupImage2_1Ref}
-                className="absolute transform -translate-x-8 sm:-translate-x-20 w-full h-full z-[2]"
-              >
-                <Image
-                  src="/businessnew/cardImage_single.png"
-                  alt="Card Mockup"
-                  fill
-                  className="object-contain p-4 sm:p-5 lg:p-6"
-                />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2 h-full">
+            <div className="relative w-full h-full bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
+              <div ref={mockupImage2_1Ref} className="absolute transform -translate-x-8 sm:-translate-x-20 w-full h-full z-[2]">
+                <Image src="/businessnew/cardImage_single.png" alt="Card Mockup" fill className="object-contain p-4 sm:p-5 lg:p-6" />
               </div>
-              <div
-                ref={mockupImage2_2Ref}
-                className="absolute w-full h-full z-[1]"
-              >
-                <Image
-                  src="/businessnew/cardImage_single.png"
-                  alt="Card Mockup"
-                  fill
-                  className="object-contain p-4 sm:p-5 lg:p-6"
-                />
+              <div ref={mockupImage2_2Ref} className="absolute w-full h-full z-[1] -ml-3">
+                <Image src="/businessnew/cardImage_single.png" alt="Card Mockup" fill className="object-contain p-1 sm:p-5 lg:p-6" />
               </div>
-              <div
-                ref={mockupImage2_3Ref}
-                className="absolute transform translate-x-8 sm:translate-x-20 w-full h-full z-[0]"
-              >
-                <Image
-                  src="/businessnew/cardImage_single.png"
-                  alt="Card Mockup"
-                  fill
-                  className="object-contain p-4 sm:p-5 lg:p-6"
-                />
+              <div ref={mockupImage2_3Ref} className="-ml-6 absolute transform translate-x-8 sm:translate-x-20 w-full h-full z-[0]">
+                <Image src="/businessnew/cardImage_single.png" alt="Card Mockup" fill className="object-contain  p-4 sm:p-5 lg:p-6" />
               </div>
             </div>
-            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-2 sm:p-6 md:p-8 lg:p-10">
-              <div className="space-y-3 sm:space-y-4">
-                <h1 className="text-xl sm:text-2xl lg:whitespace-nowrap md:text-3xl lg:text-4xl font-semibold text-black">
+            <div className="flex flex-col justify-center gap-5 p-4 sm:p-6 lg:p-8">
+              <div className="space-y-3">
+                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl -mt-5 font-semibold text-black">
                   Virtual Crypto Debit Card
                 </h1>
-                <p className="text-sm sm:text-base md:text-sm text-gray-600 leading-relaxed">
-                  Spend your crypto anywhere with our instant virtual debit
-                  card. No waiting. No approvals.
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                  Spend your crypto anywhere with our instant virtual debit card. No waiting. No approvals.
                 </p>
               </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    width={28}
-                    height={28}
-                    src="/businessnew/Global icon.svg"
-                    alt="virtual5"
-                  />
+              <div className="space-y-3">
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image width={28} height={28} src="/businessnew/Global icon.svg" alt="Global icon"/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Instant Activation & Global Acceptance.</h3>
                 </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Instant Activation & Global Acceptance.
-                  </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image width={28} height={28} src="/businessnew/virtual2.svg" alt="Conversion icon"/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Instant crypto-to-fiat conversion at competitive rates.</h3>
                 </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    width={28}
-                    height={28}
-                    src="/businessnew/virtual2.svg"
-                    alt="virutal3"
-                  />
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image width={28} height={28} src="/businessnew/virtual3.svg" alt="Security icon"/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">bepay App Integration & Advanced Security.</h3>
                 </div>
-                <div>
-                  <h3 className="text-[10px] lg:whitespace-nowrap sm:text-sm font-medium text-black">
-                    Instant crypto-to-fiat conversion at competitive rates.
-                  </h3>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    width={28}
-                    height={28}
-                    src="/businessnew/virtual3.svg"
-                    alt="virtualicon2"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    bepay App Integration & Advanced Security.
-                  </h3>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    width={28}
-                    height={28}
-                    src="/businessnew/virtual4.svg"
-                    alt="virtual icon"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Cashback rewards on every purchase.
-                  </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image width={28} height={28} src="/businessnew/virtual4.svg" alt="Cashback icon"/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Cashback rewards on every purchase.</h3>
                 </div>
               </div>
               <WaitlistTriggerButton triggerSource="'virtual crypto debit card' button">
                 <button
                   onClick={handleGetDebitCardClick}
-                  className="flex items-center space-x-2 cursor-pointer sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4"
+                  className="flex items-center justify-center cursor-pointer bg-black text-white w-full max-w-[308px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0 mt-2"
                 >
-                  <Image
-                    src="/businessnew/virtual5.svg"
-                    alt="Get Card"
-                    width={24}
-                    height={24}
-                    className="w-5 h-5 sm:w-6 sm:h-6 "
-                  />
+                  <Image src="/businessnew/virtual5.svg" alt="Get Card icon" width={24} height={24}/>
                   <span>Get your crypto debit card now</span>
                 </button>
               </WaitlistTriggerButton>
             </div>
           </div>
         </div>
+        
+        {/* Card 3: Swiss IBAN Account */}
         <div
           ref={card3Ref}
-          className=" h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="h-[75vh] lg:h-[58.6vh] absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
-              <div ref={mockupImage3Ref} className="relative w-full h-full">
-                <Image
-                  src="/businessnew/IBAN0.svg"
-                  alt="Swiss IBAN Account Mockup"
-                  fill
-                  className="object-contain p-4 sm:p-5 lg:p-6 mt-5"
-                />
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2 h-full">
+            <div className="relative w-full h-full bg-[#f2f2f2] rounded-[26px] overflow-hidden">
+                <div ref={mockupImage3Ref} className="relative w-full h-full flex items-center mt-30 justify-center">
+                    <Image src="/businessnew/IBAN0.svg" alt="Swiss IBAN Account Mockup" width={280} height={200} className="object-contain p-4"/>
+                </div>
             </div>
-            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-10">
-              <div className="space-y-3 sm:space-y-4">
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-black">
+            <div className="flex flex-col justify-center gap-5 p-4 sm:p-6 lg:p-8">
+              <div className="space-y-3">
+                <h1 className="text-lg sm:text-xl md:text-2xl -mt-5 lg:text-3xl font-semibold text-black">
                   Swiss IBAN Account
                 </h1>
-                <p className="text-sm sm:text-base md:text-sm text-gray-600 leading-relaxed">
-                  Multi-currency on-chain banking for seamless cross-border
-                  transfers.
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                  Multi-currency on-chain banking for seamless cross-border transfers.
                 </p>
               </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/IBAN1.svg"
-                    alt="No transfer fee icon"
-                    className="w-full h-full"
-                    width={28}
-                    height={28}
-                  />
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <div className="w-auto h-7 flex items-center space-x-2" >
+                    <Image src="/businessnew/IBAN1.svg" alt="Currency icon" width={28} height={28}/>
+                    <Image src="/businessnew/IBAN2.svg" alt="Currency icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">CHF, EUR, USD, CNY & more.</h3>
                 </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    CHF, EUR, USD, CNY & more.
-                  </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/IBAN3.svg" alt="No fee icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">No transfer fee.</h3>
                 </div>
-                <div className="h-6 sm:h-5 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/IBAN2.svg"
-                    alt="No transfer fee icon"
-                    className="w-full h-full"
-                    width={28}
-                    height={28}
-                  />
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/IBAN4.svg" alt="Instant settlements icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Instant settlements.</h3>
                 </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/IBAN3.svg"
-                    alt="No transfer fee icon"
-                    className="w-full h-full"
-                    width={28}
-                    height={28}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    No transfer fee.
-                  </h3>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/IBAN4.svg"
-                    alt="Instant settlements icon"
-                    className="w-full h-full"
-                    width={28}
-                    height={28}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Instant settlements.
-                  </h3>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/IBAN5.svg"
-                    alt="Bank-grade security icon"
-                    className="w-full h-full"
-                    width={28}
-                    height={28}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Bank-grade security.
-                  </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/IBAN5.svg" alt="Bank-grade security icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Bank-grade security.</h3>
                 </div>
               </div>
               <WaitlistTriggerButton triggerSource="'Swiss IBAN account' button">
                 <button
                   onClick={handleGetSwissAccountClick}
-                  className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4"
+                  className="flex items-center justify-center cursor-pointer bg-black text-white w-[268px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
                 >
-                  <Image
-                    src="/businessnew/IBAN6.svg"
-                    alt="Get Swiss bank account"
-                    width={24}
-                    height={24}
-                    className="w-5 h-5 sm:w-6 sm:h-6"
-                  />
+                  <Image src="/businessnew/IBAN6.svg" alt="Get account icon" width={24} height={24}/>
                   <span>Get a Swiss bank account</span>
                 </button>
               </WaitlistTriggerButton>
             </div>
           </div>
         </div>
+
+        {/* Card 4: P2P Transactions */}
         <div
           ref={card4Ref}
-          className="h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="h-[75vh] lg:h-[58.6vh] absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
-              <div ref={mockupImage4Ref} className="relative w-full h-full">
-                <Image
-                  src="/businessnew/p2p1.svg"
-                  alt="P2P Transactions Mockup"
-                  fill
-                  className="object-contain p-4 sm:p-5 lg:p-6 mt-5"
-                />
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2 h-full">
+            <div className="relative w-full h-full bg-[#f2f2f2] rounded-[26px] overflow-hidden">
+                <div ref={mockupImage4Ref} className="mt-30 relative w-full h-full flex items-center justify-center">
+                    <Image src="/businessnew/p2p1.svg" alt="P2P Transactions Mockup" width={280} height={200} className="object-contain p-4"/>
+                </div>
             </div>
-            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-10">
-              <div className="space-y-3 sm:space-y-4">
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-black">
+            <div className="flex flex-col justify-center gap-5 p-4 sm:p-6 lg:p-8">
+              <div className="space-y-3">
+                <h1 className="text-lg sm:text-xl -mt-10 md:text-2xl lg:text-3xl font-semibold text-black">
                   P2P Transactions
                 </h1>
-                <p className="text-sm sm:text-base md:text-sm text-gray-600 leading-relaxed">
-                  Send and receive money instantly with friends and family
-                  worldwide
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                  Send and receive money instantly with friends and family worldwide.
                 </p>
               </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/p2p2.svg"
-                    alt="No transfer fee icon"
-                    className="w-full h-full"
-                    width={28}
-                    height={28}
-                  />
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/p2p2.svg" alt="Instant transfer icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Instant P2P transfers.</h3>
                 </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Instant P2P transfers.
-                  </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/p2p3.svg" alt="QR code icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">QR code payments.</h3>
                 </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/p2p3.svg"
-                    alt="Instant settlements icon"
-                    className="w-full h-full"
-                    width={28}
-                    height={28}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    QR code payments.
-                  </h3>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/p2p4.svg"
-                    alt="Bank-grade security icon"
-                    className="w-full h-full"
-                    width={28}
-                    height={28}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Split payment options.
-                  </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/p2p4.svg" alt="Split payment icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Split payment options.</h3>
                 </div>
               </div>
               <WaitlistTriggerButton triggerSource="'P2P transaction' button">
                 <button
                   onClick={handleStartPayingClick}
-                  className="flex items-center space-x-2 cursor-pointer sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4"
+                  className="flex items-center justify-center cursor-pointer bg-black text-white w-[260px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
                 >
-                  <Image
-                    src="/businessnew/buttonIcon.png"
-                    alt="Get Swiss bank account"
-                    width={24}
-                    height={24}
-                    className="w-5 h-5 sm:w-6 sm:h-6"
-                  />
+                  <Image src="/businessnew/buttonIcon.png" alt="Start paying icon" width={24} height={24}/>
                   <span>Start paying with crypto</span>
                 </button>
               </WaitlistTriggerButton>
             </div>
           </div>
         </div>
+
+        {/* Card 5: QR Code Payments */}
         <div
           ref={card5Ref}
-          className="h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="h-[75vh] lg:h-[58.6vh] absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
-              <div ref={mockupImage5Ref} className="relative w-full h-full">
-                <Image
-                  src="/businessnew/qr1.svg"
-                  alt="P2P Transactions Mockup"
-                  fill
-                  className="object-contain p-4 sm:p-5 lg:p-6 mt-5"
-                />
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2 h-full">
+            <div className="relative w-full h-full bg-[#f2f2f2] rounded-[26px] overflow-hidden">
+                <div ref={mockupImage5Ref} className="relative mt-30 w-full h-full flex items-center justify-center">
+                    <Image src="/businessnew/qr1.svg" alt="QR Code Mockup" width={300} height={90} className="object-contain p-4"/>
+                </div>
             </div>
-            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-10">
-              <div className="space-y-3 sm:space-y-4">
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-black">
+            <div className="flex flex-col justify-center gap-5 p-4 sm:p-6 lg:p-8">
+              <div className="space-y-3">
+                <h1 className="text-lg sm:text-xl md:text-2xl -mt-10 lg:text-3xl font-semibold text-black">
                   QR Code Payments
                 </h1>
-                <p className="text-sm sm:text-base md:text-sm text-gray-600 leading-relaxed">
-                  Pay with crypto or fiat using simple QR codes at any merchant
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                  Pay with crypto or fiat using simple QR codes at any merchant.
                 </p>
               </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/qr2.svg"
-                    alt="No transfer fee icon"
-                    className="w-full h-full"
-                    width={28}
-                    height={28}
-                  />
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/qr2.svg" alt="Fiat & crypto icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Fiat & crypto QR codes.</h3>
                 </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Fiat & crypto QR codes.
-                  </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/qr3.svg" alt="Offline capability icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Offline payment capability.</h3>
                 </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/qr3.svg"
-                    alt="Instant settlements icon"
-                    className="w-full h-full"
-                    width={28}
-                    height={28}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Offline payment capability.
-                  </h3>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/qr4.svg"
-                    alt="Bank-grade security icon"
-                    width={28}
-                    height={28}
-                    className="w-full h-full"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Merchant integration.
-                  </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/qr4.svg" alt="Merchant integration icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Merchant integration.</h3>
                 </div>
               </div>
               <WaitlistTriggerButton triggerSource="'QR code payments' button">
                 <button
                   onClick={handleStartSpendingClick}
-                  className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4"
+                  className="flex items-center justify-center cursor-pointer bg-black text-white w-[278px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
                 >
-                  <Image
-                    src="/businessnew/qr5.svg"
-                    alt="Get Swiss bank account"
-                    width={24}
-                    height={24}
-                    className="w-5 h-5 sm:w-6 sm:h-6"
-                  />
+                  <Image src="/businessnew/qr5.svg" alt="Start spending icon" width={24} height={24}/>
                   <span>Start spending your crypto</span>
                 </button>
               </WaitlistTriggerButton>
             </div>
           </div>
         </div>
+        
+        {/* Card 6: AI Personalization */}
         <div
           ref={card6Ref}
-          className="h-[75vh] lg:h-[600px] absolute top-[48%] lg:top-1/2 left-1/2  transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
+          className="h-[75vh] lg:h-[58.6vh] absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2">
-            <div className="relative w-full h-[580px] bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
-              <div
-                ref={mockupImage6_1Ref}
-                className="absolute -top-[5%] left-[2.5%] w-[55%] h-[55%] z-[2]"
-              >
-                <Image
-                  src="/businessnew/ai1.png"
-                  alt="Card Mockup"
-                  fill
-                  quality={100}
-                  className="rounded-xl object-contain"
-                />
-              </div>
-              <div
-                ref={mockupImage6_2Ref}
-                className="absolute bottom-[12%] right-[2%] w-[55%] h-[55%] z-[1]"
-              >
-                <Image
-                  src="/businessnew/ai2.png"
-                  alt="Card Mockup"
-                  fill
-                  quality={100}
-                  className="rounded-xl object-contain"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col justify-center space-y-4 sm:space-y-5 lg:space-y-6 p-4 sm:p-6 md:p-8 lg:p-10">
-              <div className="space-y-3 sm:space-y-4">
-                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-black">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2 h-full">
+            <div className="relative w-full h-full bg-[#f2f2f2] rounded-[26px] p-4 overflow-hidden">
+  {/* ///- MODIFICATION: Symmetrical positioning and equal sizing for both images -/// */}
+  <div ref={mockupImage6_1Ref} className="absolute top-[0%] left-[5%] w-[50%] h-[50%] z-[1]">
+    <Image src="/businessnew/ai1.png" alt="AI feature 1" fill quality={100} className="object-contain"/>
+  </div>
+  <div ref={mockupImage6_2Ref} className="absolute bottom-[35%] right-[0%] w-[60%] h-[50%] z-[2]">
+    <Image src="/businessnew/ai2.png" alt="AI feature 2" fill quality={100} className="object-contain"/>
+  </div>
+</div>
+            <div className="flex flex-col justify-center gap-5 p-4 sm:p-6 lg:p-8">
+              <div className="space-y-3">
+                <h1 className="text-lg sm:text-xl -mt-10 md:text-2xl lg:text-3xl font-semibold text-black">
                   AI Personalization
                 </h1>
-                <p className="text-sm sm:text-base md:text-sm text-gray-600 leading-relaxed">
-                  AI-powered insights and personalized financial recommendations
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                  AI-powered insights and personalized financial recommendations.
                 </p>
               </div>
-              <div className="flex items-center space-x-3 sm:space-y-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/ai3.svg"
-                    alt="No transfer fee icon"
-                    width={28}
-                    height={28}
-                    className="w-full h-full"
-                  />
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/ai3.svg" alt="Spending insights icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Smart spending insights.</h3>
                 </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Smart spending insights.
-                  </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/ai4.svg" alt="Investment advice icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">Personalized investment advice.</h3>
                 </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/ai4.svg"
-                    alt="Instant settlements icon"
-                    className="w-full h-full"
-                    width={28}
-                    height={28}
-                  />
-                </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    Personalized investment advice.
-                  </h3>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex-shrink-0">
-                  <Image
-                    src="/businessnew/ai6.svg"
-                    alt="Bank-grade security icon"
-                    width={28}
-                    height={28}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-[10px] sm:text-sm font-medium text-black">
-                    AI agent assistance.
-                  </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image src="/businessnew/ai6.svg" alt="AI agent icon" width={28} height={28}/>
+                  </div>
+                  <h3 className="text-sm font-medium text-black">AI agent assistance.</h3>
                 </div>
               </div>
               <WaitlistTriggerButton triggerSource="'AI personalization' button">
                 <button
                   onClick={handleDownloadAndStartClick}
-                  className="flex items-center cursor-pointer space-x-2 sm:space-x-3 bg-black text-white px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 md:py-3 rounded-full text-xs sm:text-sm md:text-sm font-medium hover:bg-black/90 transition-colors w-fit mt-2 sm:mt-4"
+                  className="flex items-center justify-center cursor-pointer bg-black text-white w-[310px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
                 >
-                  <Image
-                    src="/businessnew/ai5.svg"
-                    alt="Get Swiss bank account"
-                    width={24}
-                    height={24}
-                    className="w-5 h-5 sm:w-6 sm:h-6"
-                  />
+                  <Image src="/businessnew/ai5.svg" alt="Download app icon" width={24} height={24}/>
                   <span>Download app and get started</span>
                 </button>
               </WaitlistTriggerButton>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );
