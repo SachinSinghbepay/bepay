@@ -306,7 +306,7 @@ export default function CryptoHeroSection() {
                     />
                   </div>
 
-                  <div className="text-center mb-6 lg:mb-4">
+                  <div className="text-center mb-6 lg:mb-4 ">
                     <p className="text-xs 3xl:text-sm text-gray-800 leading-relaxed max-w-[200px] lg:max-w-[280px]">
                       <span className="font-semibold text-black">
                         Web3 Powered Super App
@@ -316,7 +316,7 @@ export default function CryptoHeroSection() {
                     </p>
                   </div>
 
-                  <div className="mb-4 lg:mb-6 lg:mt-6">
+                  <div className="mb-4 lg:mb-6 lg:mt-10">
                     <p className="text-[11px] sm:text-sm 3xl:text-sm text-gray-800 leading-relaxed max-w-[260px] sm:max-w-[320px] mx-auto">
                       <span className="block text-left lg:text-center whitespace-nowrap">
                         Take control of your financial future with
