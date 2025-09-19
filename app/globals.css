@@ -144,6 +144,7 @@
 body {
   font-family: var(--font-montserrat);
   overscroll-behavior: none;
+  
 }
 
 /* Smooth scrolling and animation optimizations */
