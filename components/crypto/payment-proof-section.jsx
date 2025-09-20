@@ -7,9 +7,7 @@ import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Im
 
 export const PaymentProofSection = () => {
   const sectionRef = useRef(null);
-  const videoRef = useRef(null);
   const [hasTrackedView, setHasTrackedView] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
 
   const notificationVariants = {
     hidden: { opacity: 0, y: 20, scale: 0.95 },
@@ -35,7 +33,7 @@ export const PaymentProofSection = () => {
           observer.unobserve(entry.target); // Stop observing after first trigger
         }
       },
-      { threshold: 0.1 } // Trigger when 10% of the section is visible
+      { threshold: 0.1 } // Trigger when 30% of the section is visible
     );
 
     if (sectionRef.current) {
@@ -45,27 +43,6 @@ export const PaymentProofSection = () => {
     return () => observer.disconnect();
   }, [hasTrackedView]);
 
-  // Handle video events
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    const handleCanPlayThrough = () => {
-      setVideoLoaded(true);
-    };
-
-    const handleLoadedData = () => {
-      // Ensure video starts from the beginning
-      video.currentTime = 0;
-    };
-
-    
-    return () => {
-      video.removeEventListener('canplaythrough', handleCanPlayThrough);
-      video.removeEventListener('loadeddata', handleLoadedData);
-    };
-  }, []);
-
   return (
     <motion.section
       ref={sectionRef}
@@ -74,32 +51,17 @@ export const PaymentProofSection = () => {
       whileInView="visible"
       viewport={{ once: false, amount: 0.2 }} // keep animations independent of analytics
     >
-      {/* Static Background Image - shown while video loads */}
+      {/* Background Image */}
       <Image
         src="/images/crypto/bgimg.png"
         alt="Two women looking at a smartphone"
         fill
         style={{ objectFit: "cover" }}
         loading="lazy"
-        className={`z-0 transition-opacity duration-500 ${videoLoaded ? 'opacity-0' : 'opacity-100'}`}
+        className="z-0"
       />
 
-      {/* Background Video */}
-      <video
-        ref={videoRef}
-        className={`absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        poster="/images/crypto/bgimg.png"
-      >
-        <source src="/videos/crypto/background-video.mp4" type="video/mp4" />
-        <source src="/videos/crypto/background-video.webm" type="video/webm" />
-      </video>
-
-      {/* Overlay Image - This will still mask/overlay the video */}
+      {/* Overlay Image */}
       <Image
         src="/images/crypto/subset.png"
         alt="Geometric overlay"
