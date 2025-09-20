@@ -7,6 +7,7 @@ import { AuthProvider } from "@/lib/auth";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import CookieConsentProvider from "@/components/cookie-consent-provider";
 import MixpanelProvider from '@/components/MixpanelProvider';
+import CampaignTracker from '@/components/campaignTracker';
 
 // Load Open Sans as the main font
 const openSans = Open_Sans({
@@ -58,6 +59,7 @@ export default function RootLayout({ children }) {
           <SmoothScroll>
             <Header />
             <CookieConsentProvider />
+            <CampaignTracker /> {/* 👈 Add here */}
             <AuthProvider>{children}</AuthProvider>
             <ConditionalFooter />
           </SmoothScroll>
