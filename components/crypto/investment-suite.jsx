@@ -8,7 +8,8 @@ import { AnalyticsService } from "@/services/analyticsService";
 const investmentData = [
   {
     id: 1,
-    image: "/images/crypto/invest1.png",
+    media: "/videos/crypto/invest1.mp4", // Changed to video
+    mediaType: "video",
     title: "Tokenized Real Estate",
     description:
       "Invest in premium real estate properties with fractional ownership using crypto",
@@ -17,7 +18,8 @@ const investmentData = [
   },
   {
     id: 2,
-    image: "/images/crypto/invest2.png",
+    media: "/images/crypto/invest2.png", // Keep as image
+    mediaType: "image",
     title: "Tokenized Gold",
     description: "Own physical gold through blockchain-backed tokens",
     details: "Backed by physical gold reserves",
@@ -25,7 +27,8 @@ const investmentData = [
   },
   {
     id: 3,
-    image: "/images/crypto/invest3.png",
+    media: "/videos/crypto/invest3.mp4", // Changed to video
+    mediaType: "video",
     title: "Tokenized Equity",
     description: "Invest in company shares through tokenized equity platforms",
     details: "Access to global equity markets",
@@ -33,7 +36,8 @@ const investmentData = [
   },
   {
     id: 4,
-    image: "/images/crypto/invest4.png",
+    media: "/videos/crypto/invest4.mp4", // Changed to video
+    mediaType: "video",
     title: "Tokenized Bonds",
     description:
       "Diversify with government and corporate bonds as digital tokens",
@@ -42,13 +46,44 @@ const investmentData = [
   },
   {
     id: 5,
-    image: "/images/crypto/invest5.png",
+    media: "/videos/crypto/invest5.mp4", // Changed to video
+    mediaType: "video",
     title: "Tokenized Energy",
     description: "Invest in renewable energy projects and green initiatives",
     details: "Sustainable investment options",
     category: "Energy",
   },
 ];
+
+// Media component to handle both images and videos
+const MediaComponent = ({ item }) => {
+  if (item.mediaType === "video") {
+    return (
+      <video
+        src={item.media}
+        alt={item.title}
+        width={400}
+        height={220}
+        className="w-full h-[220px] md:h-[200px] lg:h-[220px] object-cover transition-transform duration-500 group-hover:scale-105"
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
+    );
+  } else {
+    return (
+      <Image
+        src={item.media || "/placeholder.svg"}
+        alt={item.title}
+        width={400}
+        loading="lazy"
+        height={220}
+        className="w-full h-[220px] md:h-[200px] lg:h-[220px] object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+    );
+  }
+};
 
 export default function InvestmentSuite() {
   const targetRef = useRef(null);
@@ -164,14 +199,7 @@ export default function InvestmentSuite() {
                 }}
               >
                 <div className="relative overflow-hidden rounded-2xl mb-6">
-                  <Image
-                    src={item.image || "/placeholder.svg"}
-                    alt={item.title}
-                    width={400}
-                    loading="lazy"
-                    height={220}
-                    className="w-full h-[220px] md:h-[200px] lg:h-[220px] object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+                  <MediaComponent item={item} />
                 </div>
 
                 <div className="lg:p-9">
@@ -219,14 +247,7 @@ export default function InvestmentSuite() {
                 }}
               >
                 <div className="relative overflow-hidden rounded-2xl mb-6">
-                  <Image
-                    src={item.image || "/placeholder.svg"}
-                    alt={item.title}
-                    width={400}
-                    loading="lazy"
-                    height={220}
-                    className="w-full h-[220px] md:h-[200px] lg:h-[220px] object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+                  <MediaComponent item={item} />
                 </div>
 
                 <div className="lg:p-9">
