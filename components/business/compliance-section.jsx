@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { CheckCircle, FileText, Shield } from "lucide-react";
+import { AnalyticsService } from "@/services/analyticsService";
+import { useRef, useState, useEffect } from "react";
 
 const complianceData = [
   {
@@ -12,13 +14,13 @@ const complianceData = [
   {
     icon: FileText,
     title: "Licensed",
-    badges: ["MSB (USA)", "VASP (EU)", "MiCA (EU)"],
+    badges: ["MSB (USA)", "VASP (EU)", "FIU (India)", "MiCA (EU)"],
   },
 
   {
     icon: FileText,
     title: "Compliant",
-    badges: ["GDPR", "DORA", "AML/KYC automation", "CFT"],
+    badges: ["GDPR", "DORA","DPDP", "AML/KYC automation", "CFT"],
   },
   {
     icon: Shield,
@@ -54,9 +56,37 @@ const cardVariants = {
   },
 };
 
+// FIX: Combined everything into a single, valid component
 export default function ComplianceSection() {
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+
+  // ANALYTICS: Track when the section is viewed
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Compliance section viewed"); // Renamed event for clarity
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentSectionRef = sectionRef.current;
+    if (currentSectionRef) {
+      observer.observe(currentSectionRef);
+    }
+
+    return () => {
+      if (currentSectionRef) {
+        observer.unobserve(currentSectionRef);
+      }
+    };
+  }, [hasTrackedView]);
   return (
-    <section className="py-16 px-4 bg-gray-50">
+    <section  ref={sectionRef} className="py-16 px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8"

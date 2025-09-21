@@ -2,54 +2,96 @@
 import { motion } from "framer-motion";
 import { Linkedin, Twitter, Facebook, Send } from "lucide-react";
 import Image from "next/image";
+import { useRef, useEffect, useState } from "react";
+import { AnalyticsService } from "@/services/analyticsService";
 
 const Footer = () => {
-  // Animation variants
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0 },
+  const footerRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+
+  // Track footer view
+  useEffect(() => {
+    const currentFooterRef = footerRef.current; // Store ref value at effect start
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("footer_page_viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (currentFooterRef) observer.observe(currentFooterRef);
+    return () => {
+      if (currentFooterRef) observer.unobserve(currentFooterRef);
+      observer.disconnect();
+    };
+  }, [hasTrackedView]);
+
+  // Click Handlers
+  const handleDownloadClick = (store) => {
+    AnalyticsService.sendEvent(`on_${store}_button_clicked`);
   };
 
-  const fadeInScale = {
-    hidden: { opacity: 0, y: 40, scale: 0.95 },
-    visible: { opacity: 1, y: 0, scale: 1 },
+  const handleNewsletterFocus = () => {
+    AnalyticsService.sendEvent("on_newsletter_email_field_focused");
   };
 
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault();
+    AnalyticsService.sendEvent("on_newsletter_submit_button_clicked"); // FIXED event name
+    // Actual submit logic here
+  };
+
+  const handleSocialClick = (platform) => {
+    AnalyticsService.sendEvent("on_social_media_link_clicked", { platform });
+  };
+
+  const handleLogoClick = () => {
+    AnalyticsService.sendEvent("on_bepay_foundations_link_clicked");
+  };
+
+  // Map footer links to event names based on sheet
+  const footerEventMap = {
+    "Personal": "on_personal_link_clicked",
+    "Business": "on_business_link_clicked",
+    "Bepay Foundations": "on_bepay_foundations_link_clicked",
+    "About Us": "on_about_us_link_clicked",
+    "Contact Us": "on_contact_us_link_clicked",
+    "Privacy Policy": "on_privacy_policy_link_clicked",
+    "Account Deletion Form": "on_account_deletion_form_link_clicked",
+    "For Deleting User Account": "on_deleting_user_account_link_clicked",
+    "For Deleting Merchant Account": "on_deleting_merchant_account_link_clicked",
+    "Terms & Conditions": "on_terms_and_conditions_link_clicked",
+    "Legal Disclaimer": "on_legal_disclaimer_link_clicked",
+    "Cookie Policy": "on_cookie_policy_link_clicked",
+  };
+
+  const handleFooterLinkClick = (linkName) => {
+    const eventName =
+      footerEventMap[linkName] ||
+      `on_${linkName.toLowerCase().replace(/ \& /g, "_").replace(/\s+/g, "_").replace(/[^a-z0-9_]/g, '')}_link_clicked`;
+    AnalyticsService.sendEvent(eventName);
+  };
+
+  // Animation Variants
+  const fadeInUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } };
+  const fadeInScale = { hidden: { opacity: 0, y: 40, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1 } };
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1,
-      },
-    },
+    visible: { opacity: 1, transition: { staggerChildren: 0.2, delayChildren: 0.1 } },
   };
 
   const footerLinks = {
-    PRODUCTS: [
-      "Crypto Gateway",
-      "Merchant Dashboard",
-      "API Integration",
-      "Mobile POS",
-    ],
-    RESOURCES: [
-      "Docs",
-      "Integration Guides",
-      "Blog",
-      "Case Studies",
-      "Help Center",
-    ],
-    COMPANY: [
-      "Security & Compliance",
-      "Careers",
-      "Privacy Policy",
-      "Terms & Conditions",
-    ],
+    PRODUCTS: ["Crypto Gateway", "Merchant Dashboard", "API Integration", "Mobile POS"],
+    RESOURCES: ["Docs", "Integration Guides", "Blog", "Case Studies", "Help Center"],
+    COMPANY: ["Personal", "Business", "About Us", "Contact Us", "Privacy Policy", "Terms & Conditions", "Legal Disclaimer", "Cookie Policy"],
   };
 
   return (
-    <footer className="w-full bg-black text-white relative overflow-hidden">
+    <footer ref={footerRef} className="w-full bg-black text-white relative overflow-hidden">
       {/* Hero Section */}
       <div className="w-full flex flex-col items-center py-20 px-4">
         <motion.div
@@ -80,7 +122,7 @@ const Footer = () => {
           viewport={{ once: true, amount: 0.3 }}
         >
           <motion.button
-            
+            onClick={() => handleDownloadClick("app_store")}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -88,13 +130,9 @@ const Footer = () => {
             whileTap={{ scale: 0.95 }}
           >
             <Image src="/apple.png" alt="Download on the App Store" width={100} height={30} className="h-5 lg:h-10" />
-            {/* <div className="text-left">
-              <div>Download on the</div>
-              <div>App Store</div>
-            </div> */}
           </motion.button>
           <motion.button
-          
+            onClick={() => handleDownloadClick("google_play")}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -102,13 +140,9 @@ const Footer = () => {
             whileTap={{ scale: 0.95 }}
           >
             <Image src="/playstore.png" alt="Get the App on Google Play" width={100} height={30} className="h-5 lg:h-10" />
-            {/* <div className="text-left">
-              <div>Get the App on</div>
-              <div>Google Play</div>
-            </div> */}
           </motion.button>
           <motion.button
-          
+            onClick={() => handleDownloadClick("app_gallery")}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
@@ -116,10 +150,6 @@ const Footer = () => {
             whileTap={{ scale: 0.95 }}
           >
             <Image src="/huawei.png" alt="Get it on the App Gallery" width={100} height={30} className="h-5 lg:h-10" />
-            {/* <div className="text-left">
-              <div>Get it on the App</div>
-              <div>Gallery!</div>
-            </div> */}
           </motion.button>
         </motion.div>
 
@@ -135,10 +165,11 @@ const Footer = () => {
             Sign-up to our newsletter for exclusive updates!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-              <form className="flex items-center gap-2 border border-white/20 rounded-full p-1 pr-2">
+              <form onSubmit={handleNewsletterSubmit} className="flex items-center gap-2 border border-white/20 rounded-full p-1 pr-2">
               <input
                 type="email"
                 placeholder="Enter your email"
+                onFocus={handleNewsletterFocus}
                 className="bg-transparent px-4 py-1 text-white placeholder-gray-500 focus:outline-none w-48"
                 aria-label="Email for newsletter"
               />
@@ -162,6 +193,7 @@ const Footer = () => {
         >
           <motion.a
             href="#"
+            onClick={() => handleSocialClick("linkedin")}
             className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -172,6 +204,7 @@ const Footer = () => {
           </motion.a>
           <motion.a
             href="#"
+            onClick={() => handleSocialClick("twitter")}
             className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -182,6 +215,7 @@ const Footer = () => {
           </motion.a>
           <motion.a
             href="#"
+            onClick={() => handleSocialClick("facebook")}
             className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -192,6 +226,7 @@ const Footer = () => {
           </motion.a>
           <motion.a
             href="#"
+            onClick={() => handleSocialClick("telegram")}
             className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -238,6 +273,7 @@ const Footer = () => {
                     >
                       <a
                         href="#"
+                        onClick={() => handleFooterLinkClick(link)}
                         className="text-gray-300 hover:text-white transition-colors text-sm"
                       >
                         {link}
@@ -250,7 +286,8 @@ const Footer = () => {
           )}
         </motion.div>
       </div>
-
+      
+      {/* Animated SVG Logo */}
       <motion.div
         className="relative w-full flex justify-center mt-[3rem] ml-0 mr-0"
         variants={fadeInScale}
@@ -266,7 +303,7 @@ const Footer = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: false, amount: 0.5 }}
         >
-          <div className="flex items-center justify-center ">
+          <div className="flex items-center justify-center " onClick={handleLogoClick}>
             <svg
               width="1402"
               height="452"
@@ -275,7 +312,8 @@ const Footer = () => {
               xmlns="http://www.w3.org/2000/svg"
               className="hover-logo transition-all duration-300 cursor-pointer"
             >
-              <style jsx>{`
+              {/* ... SVG content ... */}
+               <style jsx>{`
                 .hover-logo:hover #paint0_linear_2175_15792 stop:first-child {
                   stop-color: #3d3d3d;
                 }

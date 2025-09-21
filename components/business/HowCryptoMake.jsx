@@ -4,10 +4,32 @@ import { Phone } from "lucide-react";
 import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 const HowCryptoMake = () => {
   const containerRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
   const [isMobile, setIsMobile] = useState(false);
+
+  // ANALYTICS: Track when the main DeFi Yield section is actually viewed
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("How crypto payments work section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
+        }
+      },
+      { threshold: 0.1 } // Trigger when 30% of the component is visible
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,6 +52,12 @@ const HowCryptoMake = () => {
     target: containerRef,
     offset: ["start start", "end start"],
   });
+
+  const handleStartEarningClick = () => {
+      AnalyticsService.sendEvent("'Become a merchant on bepay' button clicked");
+    };
+
+  
 
   // Desktop transform values
   const desktopMockup1Y = useTransform(scrollYProgress, [0, 0.25], [0, -1200]);
@@ -371,8 +399,9 @@ const HowCryptoMake = () => {
                           </motion.div>
                         </div>
 
-                        <WaitlistTriggerButton>
+                        <WaitlistTriggerButton triggerSource="'How crypto make section' button">
                           <motion.button
+                          onClick={handleStartEarningClick} // ANALYTICS: Added onClick handler
                             className="w-full bg-black rounded-full text-white py-3 px-4 text-sm font-medium hover:bg-black/90 cursor-pointer transition-colors mt-4"
                             style={{
                               opacity: mobileFloatingOpacity,
@@ -487,9 +516,10 @@ const HowCryptoMake = () => {
                     <p className="text-sm text-gray-600 font-medium mb-8">
                       {contentData[3].text}
                     </p>
-                    <WaitlistTriggerButton>
+                    <WaitlistTriggerButton triggerSource="'how crypto make section' button">
                       <div className="space-y-3">
                         <motion.button
+                        onClick={handleStartEarningClick} // ANALYTICS: Added onClick handler
                           className="w-full bg-black text-white py-4 px-6 rounded-full text-sm font-medium hover:bg-black/90 cursor-pointer transition-colors"
                           initial={{ opacity: 0, y: 30 }}
                           animate={{ opacity: 1, y: 0 }}

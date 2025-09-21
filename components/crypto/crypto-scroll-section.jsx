@@ -4,6 +4,8 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+
 
 const steps = [
   {
@@ -69,7 +71,33 @@ export default function CryptoScrollSection() {
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
   const prevActiveStepRef = useRef(0);
+  //const cryptoScrollSectionViewedRef = useRef(false); // ANALYTICS: Ref to track if the section has been viewed
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Crypto Scroll section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
+        }
+      },
+      { threshold: 0.1 } // Trigger when 30% of the component is visible
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
+
+  const handleStartEarningClick = () => {
+    AnalyticsService.sendEvent("'Get Started' button clicked");
+  };
+
+  
   useEffect(() => {
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -84,6 +112,8 @@ export default function CryptoScrollSection() {
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
+
+    
 
       const container = containerRef.current;
       const rect = container.getBoundingClientRect();
@@ -230,8 +260,8 @@ export default function CryptoScrollSection() {
                   delay: 0.5,
                 }}
               >
-                <WaitlistTriggerButton>
-                  <button className="bg-black cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
+                <WaitlistTriggerButton triggerSource="'Crypto scroll section' button">
+                  <button onClick={handleStartEarningClick}  className="bg-black cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors">
                     <Image
                       src="/vector.svg"
                       alt="Get Started Icon"
@@ -442,7 +472,7 @@ export default function CryptoScrollSection() {
               Get <span className="text-black font-normal">started</span>
             </motion.h2>
             <motion.p
-              className="text-sm sm:text-base text-[#6A6A6A] max-w-4xl mx-auto"
+              className="text-sm sm:text-base text-[#000000] max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{
@@ -519,7 +549,7 @@ export default function CryptoScrollSection() {
             </motion.div>
 
             <motion.div
-              className="relative order-1 lg:order-2 min-h-[400px]"
+              className="relative order-1 lg:order-2 min-h-[400px] flex items-center justify-center"
               initial={{ opacity: 0, x: 100 }}
               animate={
                 isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 100 }
@@ -566,7 +596,7 @@ export default function CryptoScrollSection() {
                 </AnimatePresence>
               </div>
 
-              <div className="relative z-10 max-w-lg pt-4">
+              <div className="relative z-10 max-w-lg">
                 <AnimatePresence mode="wait">
                   {steps.map(
                     (step, index) =>
@@ -619,37 +649,51 @@ export default function CryptoScrollSection() {
                           </div>
 
                           {step.hasCTA && (
-                            <WaitlistTriggerButton>
-                              <motion.div
-                                initial={{
-                                  opacity: isInView ? 0 : 0,
-                                  y: isInView ? 20 : 40,
-                                }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{
-                                  duration: isInView ? 0.6 : 0.8,
-                                  delay: isInView ? 0.4 : 1.5,
-                                }}
+                                                      <WaitlistTriggerButton triggerSource="'Crypto scroll section' button">
+                            <motion.div
+                              initial={{
+                                opacity: isInView ? 0 : 0,
+                                y: isInView ? 20 : 40,
+                              }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{
+                                duration: isInView ? 0.6 : 0.8,
+                                delay: isInView ? 0.4 : 1.5,
+                              }}
+                            >
+                              <button  
+                                onClick={handleStartEarningClick} 
+                                className="
+                                  group relative inline-flex items-center justify-center
+                                  cursor-pointer text-white bg-black font-semibold 
+                                  transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95
+                                  rounded-[100px]
+
+                                  w-[170px] h-[56px] 
+                                  px-6 py-4 gap-[10px]
+                                  text-sm
+                                "
                               >
-                                <button className="group relative inline-flex items-center cursor-pointer text-[12px] gap-2 bg-black text-white px-10 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95">
-                                  <span>Get started</span>
-                                  <svg
-                                    className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      d="M7 17L17 7M17 7H7M17 7V17"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                  </svg>
-                                </button>
-                              </motion.div>
-                            </WaitlistTriggerButton>
+                                <span>Get started</span>
+                                <svg
+                                  className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M7 17L17 7M17 7H7M17 7V17"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </button>
+                            </motion.div>
+                          </WaitlistTriggerButton>
+
+
                           )}
                         </motion.div>
                       )

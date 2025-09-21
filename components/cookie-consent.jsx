@@ -1,18 +1,23 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { X } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+
 
 export default function CookiePolicyBanner({
+  
   currentPreferences,
   onAcceptAll,
   onRejectNonEssentials,
   onSaveCustom,
   onDismiss,
 }) {
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
   const [essentialCookies, setEssentialCookies] = useState(true); // Always true and disabled
   const [trackingCookies, setTrackingCookies] = useState(
@@ -35,16 +40,71 @@ export default function CookiePolicyBanner({
     }
   }, [currentPreferences]);
 
+  // const handleManagePreferencesClick = () => {
+  //   setShowPreferences(!showPreferences);
+  // };
+
+  const handleToggleChange = (name, value, setter) => {
+  setter(value); // update state
+  AnalyticsService.sendEvent(`Cookie preference toggled`, {
+    toggle: name,
+    value: value ? "enabled" : "disabled",
+  });
+};
+
+  // ANALYTICS: Track when section comes into view
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting && !hasTrackedView) {
+              AnalyticsService.sendEvent("cookie section viewed");
+              setHasTrackedView(true);
+              observer.unobserve(entry.target); // Stop observing after first trigger
+            }
+          },
+          { threshold: 0.1 } // Trigger when 30% of the section is visible
+        );
+    
+        if (sectionRef.current) {
+          observer.observe(sectionRef.current);
+        }
+    
+        return () => observer.disconnect();
+      }, [hasTrackedView]);
+
+   // ✅ wrap props safely
+const handleRejectNonEssentials = (e) => {
+  AnalyticsService.sendEvent("Reject non-essential cookies clicked");
+  onRejectNonEssentials?.(e); // call the prop if provided
+};
+
+const handleAcceptAll = (e) => {
+  AnalyticsService.sendEvent("Accept all cookies clicked");
+  onAcceptAll?.(e);
+};
+
+const handleDismiss = (e) => {
+  AnalyticsService.sendEvent("Cookies popup close button clicked");
+  onDismiss?.(e); // correctly call the prop, not onAcceptAll
+};
+
+
   const handleManagePreferencesClick = () => {
-    setShowPreferences(!showPreferences);
-  };
+  AnalyticsService.sendEvent("Manage cookie preferences clicked");
+  setShowPreferences((prev) => !prev);
+};
+
+
+
+
 
   return (
-    <div className="fixed bottom-0 md:right-10 z-50 bg-black text-white p-4 md:p-6 shadow-lg rounded-3xl md:max-w-[610px] md:mx-auto md:bottom-4">
+    <div ref={sectionRef} className="fixed bottom-0 md:right-10 z-50 bg-black text-white p-4 md:p-6 shadow-lg rounded-3xl md:max-w-[610px] md:mx-auto md:bottom-4">
       <div className="relative">
         <button
+          
           className="absolute top-0 right-0 text-gray-400 hover:text-white transition-colors"
-          onClick={onDismiss}
+          onClick={handleDismiss}
           aria-label="Close cookie policy"
         >
           <X className="h-5 w-5" />
@@ -58,17 +118,17 @@ export default function CookiePolicyBanner({
         </p>
         <div className="flex flex-col md:flex-row items-center gap-3 mb-6">
           <Button
-            className="w-full md:w-auto text-[12px] border rounded-xl cursor-pointer bg-transparent text-[#F9F9F9] border-[#333333]"
-            onClick={onRejectNonEssentials}
-          >
-            Reject non-essentials
-          </Button>
+  onClick={handleRejectNonEssentials}
+  className="w-full md:w-auto text-[12px] border rounded-xl cursor-pointer bg-transparent text-[#F9F9F9] border-[#333333]"
+>
+  Reject non-essentials
+</Button>
           <Button
-            className="w-full md:w-auto bg-white rounded-xl cursor-pointer text-[12px] text-black hover:bg-gray-100"
-            onClick={onAcceptAll}
-          >
-            Accept all cookies
-          </Button>
+  onClick={handleAcceptAll}
+  className="w-full md:w-auto bg-white rounded-xl cursor-pointer text-[12px] text-black hover:bg-gray-100"
+>
+  Accept all cookies
+</Button>
           <Button
             variant="link"
             className={cn(
@@ -90,41 +150,46 @@ export default function CookiePolicyBanner({
               className="grid grid-cols-2 md:grid-cols-4 gap-4"
             >
               <div className="flex flex-col items-start gap-2">
-                <span className="text-[11px] font-medium">Essential cookies</span>
-                <Switch
-                  checked={essentialCookies}
-                  onCheckedChange={setEssentialCookies}
-                  disabled={true} // Always disabled
-                  className="data-[state=checked]:bg-transparent border border-[#333333] data-[state=unchecked]:bg-transparent"
-                />
-              </div>
-              <div className="flex flex-col items-start gap-2">
-                <span className="text-[11px] font-medium">Tracking cookies</span>
-                <Switch
-                  checked={trackingCookies}
-                  onCheckedChange={setTrackingCookies}
-                  disabled={!showPreferences}
-                  className="data-[state=checked]:bg-transparent border border-[#333333] data-[state=unchecked]:bg-transparent"
-                />
-              </div>
-              <div className="flex flex-col items-start gap-2">
-                <span className="text-[11px] font-medium">Functionality cookies</span>
-                <Switch
-                  checked={functionalityCookies}
-                  onCheckedChange={setFunctionalityCookies}
-                  disabled={!showPreferences}
-                  className="data-[state=checked]:bg-transparent border border-[#333333] data-[state=unchecked]:bg-transparent"
-                />
-              </div>
-              <div className="flex flex-col items-start gap-2">
-                <span className="text-[11px] font-medium">Marketing cookies</span>
-                <Switch
-                  checked={marketingCookies}
-                  onCheckedChange={setMarketingCookies}
-                  disabled={!showPreferences}
-                  className="data-[state=checked]:bg-transparent border border-[#333333] data-[state=unchecked]:bg-transparent"
-                />
-              </div>
+  <span className="text-[11px] font-medium">Essential cookies</span>
+  <Switch
+    checked={essentialCookies}
+    onCheckedChange={(val) => handleToggleChange("Essential cookies", val, setEssentialCookies)}
+    disabled={!showPreferences} // keep same behavior as other toggles
+    className="data-[state=checked]:bg-transparent border border-[#333333] data-[state=unchecked]:bg-transparent"
+  />
+</div>
+
+
+<div className="flex flex-col items-start gap-2">
+  <span className="text-[11px] font-medium">Tracking cookies</span>
+  <Switch
+    checked={trackingCookies}
+    onCheckedChange={(val) => handleToggleChange("Tracking cookies", val, setTrackingCookies)}
+    disabled={!showPreferences}
+    className="data-[state=checked]:bg-transparent border border-[#333333] data-[state=unchecked]:bg-transparent"
+  />
+</div>
+
+<div className="flex flex-col items-start gap-2">
+  <span className="text-[11px] font-medium">Functionality cookies</span>
+  <Switch
+    checked={functionalityCookies}
+    onCheckedChange={(val) => handleToggleChange("Functionality cookies", val, setFunctionalityCookies)}
+    disabled={!showPreferences}
+    className="data-[state=checked]:bg-transparent border border-[#333333] data-[state=unchecked]:bg-transparent"
+  />
+</div>
+
+<div className="flex flex-col items-start gap-2">
+  <span className="text-[11px] font-medium">Marketing cookies</span>
+  <Switch
+    checked={marketingCookies}
+    onCheckedChange={(val) => handleToggleChange("Marketing cookies", val, setMarketingCookies)}
+    disabled={!showPreferences}
+    className="data-[state=checked]:bg-transparent border border-[#333333] data-[state=unchecked]:bg-transparent"
+  />
+</div>
+
             </motion.div>
           )}
         </AnimatePresence>

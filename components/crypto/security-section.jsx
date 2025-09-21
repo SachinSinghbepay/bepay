@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 const securityData = {
   certifications: {
@@ -27,12 +29,13 @@ const securityData = {
   compliance: {
     icon: "/images/crypto/icon4.png",
     title: "Regulatory Compliance",
-    description: "Licensed by VASP (EU), MiCA (EU), DORA (EU), MSME (India) and MSB (USA)",
+    description:
+      "Licensed by VASP (EU), MiCA (EU), DORA (EU), MSME (India) and MSB (USA)",
   },
   encryption: {
-    // icon: "/images/crypto/icon5.png",
     title: "End-to-End Encryption",
-    description: "All data is encrypted with AES-256 encryption, both at rest and in transit",
+    description:
+      "All data is encrypted with AES-256 encryption, both at rest and in transit",
   },
 };
 
@@ -57,40 +60,42 @@ const SecurityCard = ({ icon, title, description, items, className = "" }) => {
           alt=""
           width={128}
           height={128}
-          className=" w-28 h-28"
+          className="w-28 h-28"
         />
       )}
 
-      <div className="relative z-10 mt-3 lg:mt-8  flex flex-col h-full">
+      <div className="relative z-10 mt-3 lg:mt-8 flex flex-col h-full">
         <h3 className="text-xl font-medium text-white mb-4">{title}</h3>
         {description && (
-  <div className="flex gap-1 items-stretch">
-    <span className="block w-[2px] bg-green-400 mr-3 shrink-0 rounded-full self-stretch" />
-    <p className="text-[#6A6A6A] text-[14px] lg:text-[16px]">
-      {description}
-    </p>
-  </div>
-)}
+          <div className="flex gap-1 items-stretch">
+            <span className="block w-[2px] bg-green-400 mr-3 shrink-0 rounded-full self-stretch" />
+            <p className="text-[#6A6A6A] text-[14px] lg:text-[16px]">
+              {description}
+            </p>
+          </div>
+        )}
 
-{items && (
-  <ul className="space-y-3 md:space-y-7 mt-2">
-    {items.map((item) => (
-      <li key={item} className="flex items-stretch">
-        <span className="block w-[2px] bg-green-400 mr-3 mt-0.5 shrink-0 rounded-full" />
-        <span className="text-[#6A6A6A] text-[14px] lg:text-[16px]">
-          {item}
-        </span>
-      </li>
-    ))}
-  </ul>
-)}
-
+        {items && (
+          <ul className="space-y-3 md:space-y-7 mt-2">
+            {items.map((item) => (
+              <li key={item} className="flex items-stretch">
+                <span className="block w-[2px] bg-green-400 mr-3 mt-0.5 shrink-0 rounded-full" />
+                <span className="text-[#6A6A6A] text-[14px] lg:text-[16px]">
+                  {item}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </motion.div>
   );
 };
 
 export const SecuritySection = () => {
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -111,23 +116,50 @@ export const SecuritySection = () => {
     },
   };
 
+  // ANALYTICS: Track when section enters viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Security section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.2 } // Trigger when 20% visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
+
   return (
-    <section className="bg-black text-white py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
+    <section
+      ref={sectionRef}
+      className="bg-black text-white py-20 sm:py-28 px-4 sm:px-6 lg:px-8"
+    >
       <motion.div
         className="max-w-7xl mx-auto"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.1 }}
+        viewport={{ once: true, amount: 0.1 }} // animation only
         variants={containerVariants}
       >
         <motion.h2
-          className="text-2xl md:text-4xl lg:text-[40px] text-[#C0C0C0] font-medium text-center"
+          className="text-2xl md:text-4xl lg:text-[40px] text-[#C0C0C0] font-medium text-center md:relative md:-top-10 "
           variants={textVariants}
         >
-          Bank-Grade Security <br/> & Compliance
+          Bank-Grade Security
+          <span className="md:hidden">
+            <br />
+          </span>
+          & Compliance
         </motion.h2>
         <motion.p
-          className="text-[#C0C0C0] text-center text-[16px] max-w-7xl mx-auto mt-4 mb-16"
+          className="text-[#C0C0C0] text-center text-[16px] max-w-7xl mx-auto mt-4 mb-16 md:relative md:-top-6"
           variants={textVariants}
         >
           Your security is our priority. We employ the highest standards of
@@ -151,7 +183,10 @@ export const SecuritySection = () => {
             className="flex flex-col gap-2"
             variants={containerVariants}
           >
-            <SecurityCard {...securityData.monitoring} className="md:h-[300px]" />
+            <SecurityCard
+              {...securityData.monitoring}
+              className="md:h-[300px]"
+            />
             <SecurityCard {...securityData.mfa} className="md:h-[300px]" />
           </motion.div>
 
@@ -160,8 +195,14 @@ export const SecuritySection = () => {
             className="flex flex-col gap-2"
             variants={containerVariants}
           >
-            <SecurityCard {...securityData.compliance} className="md:h-[400px]" />
-            <SecurityCard {...securityData.encryption} className="md:h-[200px]" />
+            <SecurityCard
+              {...securityData.compliance}
+              className="md:h-[400px]"
+            />
+            <SecurityCard
+              {...securityData.encryption}
+              className="md:h-[200px]"
+            />
           </motion.div>
         </motion.div>
       </motion.div>

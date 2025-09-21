@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 // Mock WaitlistTriggerButton component
 const WaitlistTriggerButton = ({ children }) => children;
@@ -80,26 +81,13 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
   const isLast = index === totalServices - 1;
 
   if (isFirst) {
-    inputRange = [
-      0,
-      end - segmentDuration * fixedTransformDistance,
-      end + segmentDuration * fixedTransformDistance,
-    ];
+    inputRange = [ 0, end - segmentDuration * fixedTransformDistance, end + segmentDuration * fixedTransformDistance, ];
     outputRange = [0, 0, -travelDistance];
   } else if (isLast) {
-    inputRange = [
-      start - segmentDuration * fixedTransformDistance,
-      start + segmentDuration * fixedTransformDistance,
-      1,
-    ];
+    inputRange = [ start - segmentDuration * fixedTransformDistance, start + segmentDuration * fixedTransformDistance, 1, ];
     outputRange = [travelDistance, 0, 0];
   } else {
-    inputRange = [
-      start - segmentDuration * fixedTransformDistance,
-      start + segmentDuration * fixedTransformDistance,
-      end - segmentDuration * fixedTransformDistance,
-      end + segmentDuration * fixedTransformDistance,
-    ];
+    inputRange = [ start - segmentDuration * fixedTransformDistance, start + segmentDuration * fixedTransformDistance, end - segmentDuration * fixedTransformDistance, end + segmentDuration * fixedTransformDistance, ];
     outputRange = [travelDistance, 0, 0, -travelDistance];
   }
 
@@ -110,9 +98,7 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
       style={{ y }}
       className="absolute inset-0 flex flex-col justify-center p-8 lg:p-12"
     >
-      {/* Container */}
       <div className="w-full max-w-[360px] mx-auto">
-        {/* Image */}
         <div className="relative w-full aspect-[4/5] overflow-hidden mb-4 lg:mb-5 shadow-lg">
           <Image
             src={service.image || "/placeholder.svg"}
@@ -122,20 +108,29 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
             loading="lazy"
           />
         </div>
-
-        {/* Text */}
         <div className="text-left px-1">
-          <h3 className="text-lg lg:text-xl font-medium text-gray-800 mb-2">
+          <h3
+            className={`
+              font-[Montserrat] 
+              font-normal 
+              text-lg sm:text-xl 
+              lg:text-[40px] 
+              lg:leading-[52px] 
+              lg:tracking-[-0.06em] 
+              text-[#6A6A6A] 
+              mb-3
+              ${service.title === "Savings Products" || service.title === "Insurance Products" || service.title ==="DeFi Marketplace" || service.title ==="Remittance Services"? "whitespace-nowrap" : ""}
+            `}
+          >
             {service.title}
           </h3>
           <ul className="space-y-2">
             {service.points.map((point, idx) => (
               <li
                 key={idx}
-                className="flex items-start gap-2 text-xs lg:text-sm text-gray-600 leading-snug"
+                className="flex items-start gap-1.5 text-xs lg:text-sm text-gray-600 leading-snug"
               >
-                {/* Grey square bullet */}
-                <span className="w-[15px] h-[15px] rounded-[4px] bg-[#6A6A6A] mt-[2px] flex-shrink-0"></span>
+                <span className="w-3 h-3 rounded-[3px] bg-[#6A6A6A] mt-0.5 flex-shrink-0"></span>
                 <span>{point}</span>
               </li>
             ))}
@@ -169,13 +164,17 @@ const MobileView = () => {
     return () => unsubscribe();
   }, [scrollYProgress, x]);
 
+  // ANALYTICS: Handler for the mobile button click
+  const handleExploreFeaturesClick = () => {
+    AnalyticsService.sendEvent("'Explore all features' button clicked");
+  };
+
   return (
     <div
       ref={mobileContainerRef}
       className="md:hidden relative h-[300vh] bg-white py-8 sm:py-12"
     >
       <div className="sticky top-0 h-[100vh] overflow-hidden">
-        {/* Header */}
         <motion.div
           className="px-4 sm:px-6 pt-8 sm:pt-12"
           initial="hidden"
@@ -194,14 +193,14 @@ const MobileView = () => {
             <span className="block">all in one comprehensive platform</span>
           </motion.p>
 
-          {/* Mobile Button */}
-          <motion.button className="flex items-center justify-center gap-2 bg-black text-white px-6 h-[56px] rounded-full mt-6 hover:bg-gray-800 transition-colors text-xs font-medium">
-  <span>Explore all features</span>
-  <ArrowUpRight size={20} />
-</motion.button>
+          <motion.button 
+            onClick={handleExploreFeaturesClick} // ANALYTICS: Added onClick handler
+            className="flex items-center justify-center gap-2 bg-black text-white px-6 h-[56px] rounded-full mt-6 hover:bg-gray-800 transition-colors text-xs font-medium">
+            <span>Explore all features</span>
+            <ArrowUpRight size={20} />
+          </motion.button>
         </motion.div>
 
-        {/* Services */}
         <div className="mt-8 sm:mt-12 w-full">
           <motion.div
             ref={cardWrapperRef}
@@ -210,34 +209,18 @@ const MobileView = () => {
           >
             {servicesData.map((service, i) => (
               <div key={i} className="w-[75vw] sm:w-[65vw] flex-shrink-0">
-                {/* Container */}
                 <div className="px-6">
-                  {/* Image */}
                   <div className="relative w-full aspect-[3/4] overflow-hidden mb-4 sm:mb-6 shadow-md">
-                    <Image
-                      src={service.image || "/placeholder.svg"}
-                      alt={service.title}
-                      fill
-                      className="object-cover"
-                      loading="lazy"
-                    />
+                    <Image src={service.image || "/placeholder.svg"} alt={service.title} fill className="object-cover" loading="lazy" />
                   </div>
-
-                  {/* Text */}
                   <div className="text-left">
                     <h3 className="font-[Montserrat] font-semibold sm:font-normal text-lg sm:text-xl lg:text-[60px] leading-[1.3] lg:leading-[52px] tracking-normal lg:tracking-[-0.06em] text-[#6A6A6A] mb-3">
                       {service.title}
                     </h3>
-
                     <ul className="space-y-2">
                       {service.points.map((point, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-start gap-2 text-xs sm:text-sm text-gray-600 leading-relaxed"
-                        >
-                          {/* Grey square bullet - MODIFIED */}
+                        <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-gray-600 leading-relaxed">
                           <span className="w-[10px] h-[10px] sm:w-[15px] sm:h-[15px] rounded-[3px] sm:rounded-[4px] bg-[#6A6A6A] mt-1 flex-shrink-0"></span>
-
                           <span>{point}</span>
                         </li>
                       ))}
@@ -255,10 +238,35 @@ const MobileView = () => {
 
 export const FinancialServicesSection = () => {
   const containerRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("financial services section landed on");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // ✅ Stop observing after first view
+        }
+      },
+      { threshold: 0.1 } // ✅ fires when 30% of section is visible
+    );
+
+    observer.observe(containerRef.current);
+
+    return () => observer.disconnect(); // ✅ Cleanup on unmount
+  }, [hasTrackedView]);
+
+  // ANALYTICS: Handler for the desktop button click
+  const handleExploreFeaturesClick = () => {
+    AnalyticsService.sendEvent("'Explore all features' button clicked");
+  };
 
   return (
     <section>
@@ -272,7 +280,7 @@ export const FinancialServicesSection = () => {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <motion.h2 className="text-4xl lg:text-5xl xl:text-6xl font-[400] leading-none">
+              <motion.h2 className="text-[80px] lg:text-5xl xl:text-6xl font-[400]"style={{ lineHeight: "0.9" }}>
                 <span className="text-gray-400">COMPLETE</span>
                 <br />
                 FINANCIAL
@@ -286,20 +294,31 @@ export const FinancialServicesSection = () => {
                 <span className="block">all in one comprehensive platform</span>
               </motion.p>
 
-              <WaitlistTriggerButton>
-                {/* Desktop Button */}
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-black cursor-pointer whitespace-nowrap text-white
-                                  w-[221px] h-[56px] rounded-full flex items-center
-                                  justify-center gap-2 text-xs font-normal
-                                  hover:bg-gray-800 transition-colors mt-7"
-                >
-                  Explore all features
-                  <ArrowUpRight size={18} className="w-5 h-5" />
-                </motion.button>
-              </WaitlistTriggerButton>
+              <WaitlistTriggerButton triggerSource="'financial service section' button">
+  <motion.button
+    onClick={handleExploreFeaturesClick} // ANALYTICS: Added onClick handler
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="
+      bg-black cursor-pointer whitespace-nowrap text-white 
+      flex items-center justify-center transition-colors 
+      hover:bg-gray-800 rounded-full mt-7
+
+      /* Mobile (default) */
+      w-[221px] h-[56px] gap-2 text-xs font-normal
+
+      /* Desktop overrides */
+      md:w-[210px] md:h-[56px] 
+      md:gap-[10px] 
+      md:text-sm md:font-medium 
+      md:rounded-[100px]
+    "
+  >
+    Explore all features
+    <ArrowUpRight size={18} className="w-5 h-5 md:w-6 md:h-6" />
+  </motion.button>
+</WaitlistTriggerButton>
+
             </motion.div>
           </div>
           <div className="bg-[#F9F9F9] relative overflow-hidden">

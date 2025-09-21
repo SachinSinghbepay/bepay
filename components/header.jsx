@@ -8,6 +8,8 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import WaitlistTriggerButton from "./waitlist-trigger-button";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -34,6 +36,13 @@ export default function Header() {
     } transition-colors duration-200`;
   };
 
+  const handleDownloadAppClick = () => {
+    AnalyticsService.sendEvent("Download App Clicked");
+  }
+
+  const handlebepaymoneylogoclicked = () => {
+    AnalyticsService.sendEvent("bepaymoney logo Clicked");
+  }
   // Conditional header classes
   const headerClasses = isContactPage
     ? "w-full absolute top-0 left-0 right-0 bg-transparent z-50"
@@ -44,7 +53,8 @@ export default function Header() {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href={"/"}>
+          <Link href={"/"} onClick={handlebepaymoneylogoclicked}>
+
             <div className="flex-shrink-0">
               <Image
                 src="/bepaymoney.svg"
@@ -65,6 +75,9 @@ export default function Header() {
                 "/",
                 "text-sm lg:text-[14px] tracking-wide uppercase"
               )}
+              onClick={() => {
+    AnalyticsService.sendEvent("personal_nav_clicked");
+  }}
             >
               PERSONAL
             </Link>
@@ -80,8 +93,9 @@ export default function Header() {
           </nav>
 
           {/* Download Button - Hidden on small screens */}
-          <WaitlistTriggerButton>
+          <WaitlistTriggerButton triggerSource="'Download bepay app' button">
             <Button
+              onClick={handleDownloadAppClick }
               variant="outline"
               className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
             >
@@ -189,11 +203,12 @@ export default function Header() {
             </Link>
 
             {/* Mobile Download Button */}
-            <WaitlistTriggerButton>
+            <WaitlistTriggerButton triggerSource="'download bepay app' button">
               <Button
+              
                 variant="outline"
                 className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2 border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={handleDownloadAppClick}
               >
                 <Smartphone className="w-4 h-4" />
                 <span className="font-semibold text-xs">

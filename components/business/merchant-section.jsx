@@ -1,11 +1,16 @@
 "use client";
+import { useRef, useState, useEffect } from "react"; // ✅ Add this
 
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+
 
 export default function MerchantSection() {
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -28,9 +33,33 @@ export default function MerchantSection() {
       },
     },
   };
+  
+  
+  // ANALYTICS: Track when section comes into view
+  useEffect(() => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !hasTrackedView) {
+            AnalyticsService.sendEvent("Merchant section viewed");
+            setHasTrackedView(true);
+            observer.unobserve(entry.target); // Stop observing after first trigger
+          }
+        },
+        { threshold: 0.1 } // Trigger when 30% of the section is visible
+      );
+  
+      if (sectionRef.current) {
+        observer.observe(sectionRef.current);
+      }
+  
+      return () => observer.disconnect();
+    }, [hasTrackedView]);
 
+  const handleButtonClick = () => {
+      AnalyticsService.sendEvent("Become a merchant on bepay Clicked");
+    }
   return (
-    <section className="w-full min-h-screen bg-[#F9F9F9] py-12 md:py-20 lg:py-32">
+    <section ref={sectionRef} className="w-full min-h-screen bg-[#F9F9F9] py-12 md:py-20 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <motion.div
           className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center"
@@ -65,12 +94,13 @@ export default function MerchantSection() {
                 for your business!
               </p>
             </motion.div>
-            <WaitlistTriggerButton>
+            <WaitlistTriggerButton triggerSource="'Merchant section' button">
               <motion.div
                 variants={itemVariants}
                 className="flex flex-col max-w-[300px] gap-4"
               >
-                <button className="bg-black cursor-pointer whitespace-nowrap text-white px-8 py-4 rounded-full text-[12px] font-medium hover:bg-black/90 transition-colors duration-200 flex items-center justify-center gap-2">
+                <button onClick={handleButtonClick}
+                 className="bg-black cursor-pointer whitespace-nowrap text-white px-8 py-4 rounded-full text-[12px] font-medium hover:bg-black/90 transition-colors duration-200 flex items-center justify-center gap-2">
                   Become a merchant
                   <ArrowUpRight size={18} />
                 </button>
