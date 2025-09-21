@@ -39,7 +39,8 @@ export default function CryptoWalletSection() {
           setHasTrackedView(true);
           observer.unobserve(entry.target); // Stop observing after first view
         }
-      }   // Trigger when 30% of the component is visible
+      },
+      { threshold: 0.3 } // Trigger when 30% of the component is visible
     );
 
     if (sectionRef.current) {
@@ -185,7 +186,7 @@ export default function CryptoWalletSection() {
                   </div>
                 </motion.div>
                 <motion.div style={{ opacity: mockupOpacity }} className="block mt-4">
-                  <p className="text-xs md:text-sm font-medium text-gray-500 text-center"> First of it&apos;s kind{" "} <span className="font-semibold text-[#333333]"> on-chain banking app </span> </p>
+                  <p className="text-xs md:text-sm font-medium text-gray-500 text-center"> First of its kind{" "} <span className="font-semibold text-[#333333]"> on-chain banking app </span> </p>
                 </motion.div>
               </div>
               <AnimatePresence>

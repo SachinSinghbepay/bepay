@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
@@ -537,8 +537,9 @@ const handleEmailFocus = () => {
   }
 };
 
-
-  const onSubmit = externalOnSubmit || (() => setIsOpen(false));
+  const onSubmit = useMemo(() => {
+    return externalOnSubmit || (() => setIsOpen(false));
+  }, [externalOnSubmit]);
 
   useEffect(() => {
     setMounted(true);
@@ -552,7 +553,7 @@ const handleEmailFocus = () => {
     } else {
       setIsSuccess(false);
     }
-  }, [finalIsOpen, externalIsOpen]);
+  }, [finalIsOpen, externalIsOpen, pathname]);
 
   const [hasViewedSuccessPopup, setHasViewedSuccessPopup] = useState(false);
 

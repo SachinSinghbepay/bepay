@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function CampaignTracker() {
+function CampaignTrackerContent() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -15,4 +15,12 @@ export default function CampaignTracker() {
   }, [searchParams]);
 
   return null; // no UI, just runs logic
+}
+
+export default function CampaignTracker() {
+  return (
+    <Suspense fallback={null}>
+      <CampaignTrackerContent />
+    </Suspense>
+  );
 }

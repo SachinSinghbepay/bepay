@@ -65,7 +65,7 @@ const DefiYieldSection = () => {
       }
     });
     return () => unsubscribe();
-  }, [scrollYProgress]);
+  }, [scrollYProgress, imageStart]);
 
   // ANALYTICS: Handler for the "Start earning" button click
   const handleStartEarningClick = () => {

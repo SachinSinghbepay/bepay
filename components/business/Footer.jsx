@@ -11,6 +11,7 @@ const Footer = () => {
 
   // Track footer view
   useEffect(() => {
+    const currentFooterRef = footerRef.current; // Store ref value at effect start
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasTrackedView) {
@@ -22,8 +23,11 @@ const Footer = () => {
       { threshold: 0.1 }
     );
 
-    if (footerRef.current) observer.observe(footerRef.current);
-    return () => footerRef.current && observer.unobserve(footerRef.current);
+    if (currentFooterRef) observer.observe(currentFooterRef);
+    return () => {
+      if (currentFooterRef) observer.unobserve(currentFooterRef);
+      observer.disconnect();
+    };
   }, [hasTrackedView]);
 
   // Click Handlers
