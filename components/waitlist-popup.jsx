@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
@@ -472,13 +472,36 @@ function WaitlistPopupContent({
 
   useEffect(() => {
   const submittedEmail = localStorage.getItem("waitlist_submitted_email" + pathname);
+
   if (finalIsOpen && !submittedEmail) {
-    AnalyticsService.sendEvent(triggerSource == 'auto_waitlist_popup' ? "auto_waitlist_popup_viewed" : "waitlist_popup_viewed", {
+    let popupType;
+
+    if (triggerSource === "auto_waitlist_popup") {
+      if (pathname === "/") {
+        popupType = "auto_waitlist_popup_viewed_personal";
+      } else if (pathname === "/business") {
+        popupType = "auto_waitlist_popup_viewed_business";
+      } else {
+        popupType = "auto_waitlist_popup_viewed_other";
+      }
+    } else {
+      if (pathname === "/") {
+        popupType = "waitlist_popup_viewed_personal";
+      } else if (pathname === "/business") {
+        popupType = "waitlist_popup_viewed_business";
+      } else {
+        popupType = "waitlist_popup_viewed_other";
+      }
+    }
+
+    AnalyticsService.sendEvent(popupType, {
       screen_name: "waitlist_popup",
-      triggerSource, // always include trigger source      
+      triggerSource,
+      pathname,
     });
   }
-}, [finalIsOpen, triggerSource]);
+}, [finalIsOpen, triggerSource, pathname]);
+
 
 
 
@@ -514,8 +537,9 @@ const handleEmailFocus = () => {
   }
 };
 
-
-  const onSubmit = externalOnSubmit || (() => setIsOpen(false));
+  const onSubmit = useMemo(() => {
+    return externalOnSubmit || (() => setIsOpen(false));
+  }, [externalOnSubmit]);
 
   useEffect(() => {
     setMounted(true);
@@ -529,13 +553,13 @@ const handleEmailFocus = () => {
     } else {
       setIsSuccess(false);
     }
-  }, [finalIsOpen, externalIsOpen]);
+  }, [finalIsOpen, externalIsOpen, pathname]);
 
   const [hasViewedSuccessPopup, setHasViewedSuccessPopup] = useState(false);
 
   useEffect(() => {
     if (finalIsOpen && isSuccess && !hasViewedSuccessPopup) {
-      AnalyticsService.sendEvent("joined_waitlist_popup_viewed", {
+      AnalyticsService.sendEvent("joined_waitlist_popup_viewed" , {
         triggerSource,
         email,
       });
@@ -570,44 +594,55 @@ const handleEmailFocus = () => {
   }, [isSuccess, externalOnClose, onSubmit]);
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  AnalyticsService.sendEvent("on_join_the_waitlist_button_clicked", {
-    triggerSource, // ✅ include trigger source
-  });
+    e.preventDefault();
+    if (!email || isSubmitting || isSuccess) return;
 
-  if (!email || isSubmitting || isSuccess) return;
-  setIsSubmitting(true);
-  setError("");
+    // check valid email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
 
-  try {
-    const { campaignId: newCampaignId } = await addToWaitlist(email,pathname);
-    // update or add campaignId
-    localStorage.setItem("campaignId", newCampaignId);
-    
-    localStorage.setItem("waitlist_submitted_email" + pathname, email);
-    AnalyticsService.createWaitlistUser(email, {
-      triggerSource,
-      joined_via: "waitlist_form",
+    AnalyticsService.sendEvent("on_join_the_waitlist_button_clicked", {
+      triggerSource, // ✅ include trigger source
     });
 
-    setIsSuccess(true);
+    setIsSubmitting(true);
+    setError("");
 
-    AnalyticsService.sendEvent("pop-up_waitlist_submission_successful", {
-      status: "success",
-      triggerSource,
-      email,
-    });
-  } catch (error) {
-    setError(error.message || "Failed to join waitlist. Please try again.");
-    AnalyticsService.sendEvent("waitlist_submission_failed", {
-      status: "failure",
-      error_reason: error.message || "Unknown error",
-      triggerSource,   
-    });
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+    try {
+      const { campaignId: newCampaignId } = await addToWaitlist(
+        email,
+        pathname
+      );
+      // update or add campaignId
+      localStorage.setItem("campaignId", newCampaignId);
+
+      localStorage.setItem("waitlist_submitted_email" + pathname, email);
+      AnalyticsService.createWaitlistUser(email, {
+        triggerSource,
+        joined_via: "waitlist_form",
+      });
+
+      setIsSuccess(true);
+
+      AnalyticsService.sendEvent("pop-up_waitlist_submission_successful", {
+        status: "success",
+        triggerSource,
+        email,
+      });
+    } catch (error) {
+      setError(error.message || "Failed to join waitlist. Please try again.");
+      AnalyticsService.sendEvent("waitlist_submission_failed", {
+        status: "failure",
+        error_reason: error.message || "Unknown error",
+        triggerSource,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
 
   if (!mounted) return null;
