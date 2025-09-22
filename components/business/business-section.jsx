@@ -1,7 +1,6 @@
 "use client"
 
 import { motion } from "framer-motion"
-import Image from "next/image"
 
 export default function BusinessSection() {
   return (
@@ -16,7 +15,17 @@ export default function BusinessSection() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={{ once: true, amount: 0.3 }}
           >
-            <Image src="/images/business/i1.png" alt="Customer making payment" fill className="object-cover" />
+            {/* Background Video */}
+            <video
+              src="/videos/crypto/i1.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+
+            {/* Overlay animation */}
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -32,11 +41,9 @@ export default function BusinessSection() {
               viewport={{ once: true }}
               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
             >
-              <Image
+              <img
                 src="/images/business/ia1.png"
                 alt="Payment sent notification"
-                width={400}
-                height={400}
                 className="w-[250px] h-auto lg:w-[300px]"
               />
             </motion.div>
@@ -50,7 +57,17 @@ export default function BusinessSection() {
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             viewport={{ once: true, amount: 0.3 }}
           >
-            <Image src="/images/business/i2.png" alt="Business owner receiving payment" fill className="object-cover" />
+            {/* Background Video */}
+            <video
+              src="/videos/crypto/i2.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+
+            {/* Overlay animation */}
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -66,11 +83,9 @@ export default function BusinessSection() {
               viewport={{ once: true }}
               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
             >
-              <Image
+              <img
                 src="/images/business/ia2.png"
                 alt="Payment received notification"
-                width={400}
-                height={400}
                 className="w-[250px] h-auto lg:w-[300px]"
               />
             </motion.div>
