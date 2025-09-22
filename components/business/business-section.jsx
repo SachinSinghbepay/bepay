@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import { motion } from "framer-motion"
 
 export default function BusinessSection() {
@@ -15,7 +15,6 @@ export default function BusinessSection() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={{ once: true, amount: 0.3 }}
           >
-            {/* Background Video */}
             <video
               src="/videos/crypto/i1.mp4"
               autoPlay
@@ -25,10 +24,12 @@ export default function BusinessSection() {
               className="absolute inset-0 w-full h-full object-cover"
             />
 
-            {/* Overlay animation */}
+            {/* Overlay animation for the Image */}
             <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              // This line makes the image START as invisible
+              initial={{ opacity: 0, x: 0, y: 20, scale: 0.9 }}
+              // This line animates the image to be FULLY OPAQUE (opacity: 1)
+              whileInView={{ opacity: 1, x: -30, y: 240, scale: 1 }}
               transition={{
                 duration: 0.6,
                 delay: 0.5,
@@ -41,10 +42,12 @@ export default function BusinessSection() {
               viewport={{ once: true }}
               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
             >
-              <img
-                src="/images/business/ia1.png"
+              <Image
+                src="/images/business/bs_1.svg"
                 alt="Payment sent notification"
-                className="w-[250px] h-auto lg:w-[300px]"
+                width={100}
+                height={450}
+                className="w-[180px] h-auto lg:w-[220px] -mt-25"
               />
             </motion.div>
           </motion.div>
@@ -57,7 +60,6 @@ export default function BusinessSection() {
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             viewport={{ once: true, amount: 0.3 }}
           >
-            {/* Background Video */}
             <video
               src="/videos/crypto/i2.mp4"
               autoPlay
@@ -67,9 +69,11 @@ export default function BusinessSection() {
               className="absolute inset-0 w-full h-full object-cover"
             />
 
-            {/* Overlay animation */}
+            {/* Overlay animation for the Image */}
             <motion.div
+              // This line makes the image START as invisible
               initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              // This line animates the image to be FULLY OPAQUE (opacity: 1)
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               transition={{
                 duration: 0.6,
@@ -81,12 +85,14 @@ export default function BusinessSection() {
                 transition: { duration: 0.2 },
               }}
               viewport={{ once: true }}
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[68px]"
             >
-              <img
-                src="/images/business/ia2.png"
+              <Image
+                src="/images/business/ia2.svg"
                 alt="Payment received notification"
-                className="w-[250px] h-auto lg:w-[300px]"
+                width={200}
+                height={450}
+                className="w-[180px] h-auto lg:w-[220px]"
               />
             </motion.div>
           </motion.div>
