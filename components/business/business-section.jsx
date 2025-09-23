@@ -1,5 +1,5 @@
 "use client"
-
+import Image from "next/image"
 import { motion } from "framer-motion"
 
 export default function BusinessSection() {
@@ -27,8 +27,10 @@ export default function BusinessSection() {
 
             {/* Overlay animation */}
             <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              // MODIFIED: Added x: 0 for a smooth horizontal animation
+              initial={{ opacity: 0, x: 0, y: 20, scale: 0.9 }}
+              // MODIFIED: Increased 'y' and added 'x' for leftward push
+              whileInView={{ opacity: 1, x: -30, y: 240, scale: 1 }}
               transition={{
                 duration: 0.6,
                 delay: 0.5,
@@ -41,15 +43,18 @@ export default function BusinessSection() {
               viewport={{ once: true }}
               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
             >
-              <img
-                src="/images/business/ia1.png"
+              {/* Smaller + pushed down */}
+              <Image
+                src="/images/business/bs_1.svg"
                 alt="Payment sent notification"
-                className="w-[250px] h-auto lg:w-[300px]"
+                width={100}
+                height={450}
+                className="w-[180px] h-auto lg:w-[270px]"
               />
             </motion.div>
           </motion.div>
 
-          {/* Right Side */}
+          {/* Right Side (Unchanged) */}
           <motion.div
             className="relative h-[50vh] lg:h-screen"
             initial={{ opacity: 0, y: 100 }}
@@ -81,12 +86,15 @@ export default function BusinessSection() {
                 transition: { duration: 0.2 },
               }}
               viewport={{ once: true }}
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[68px]"
             >
-              <img
-                src="/images/business/ia2.png"
+              {/* Smaller + pushed down */}
+              <Image
+                src="/images/business/ia2.svg"
                 alt="Payment received notification"
-                className="w-[250px] h-auto lg:w-[300px]"
+                width={300}
+                height={450}
+                className="w-[180px] h-auto lg:w-[270px]"
               />
             </motion.div>
           </motion.div>
