@@ -22,7 +22,9 @@ const Footer = () => {
       },
       { threshold: 0.1 }
     );
+
   if (currentFooterRef) observer.observe(currentFooterRef);
+
     return () => {
       if (currentFooterRef) observer.unobserve(currentFooterRef);
       observer.disconnect();

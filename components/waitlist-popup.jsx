@@ -538,9 +538,11 @@ const handleEmailFocus = () => {
 };
 
 
+
   const onSubmit = useMemo(() => {
     return externalOnSubmit || (() => setIsOpen(false));
   }, [externalOnSubmit])
+
 
   useEffect(() => {
     setMounted(true);
