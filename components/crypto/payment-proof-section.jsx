@@ -62,7 +62,7 @@ export const PaymentProofSection = () => {
       >
         <source src="/videos/crypto/new.mp4" type="video/mp4" />
         <source src="/videos/crypto/new.webm" type="video/webm" />
-        {/* Fallback image if video doesn't load */}
+        
         <Image
           src="/images/crypto/bgimg.png"
           alt="Two women looking at a smartphone"
@@ -72,7 +72,7 @@ export const PaymentProofSection = () => {
         />
       </video>
 
-      {/* Overlay Image - This will still mask/overlay the video */}
+      
       <Image
         src="/images/crypto/subset.png"
         alt="Geometric overlay"
