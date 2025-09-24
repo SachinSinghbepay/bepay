@@ -1,17 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import { Globe, CheckCircle } from "lucide-react"; 
 import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
-import {
-  Zap,
-  DollarSign,
-  Globe,
-  Layers,
-  Plug,
-  Clock,
-  CheckCircle,
-} from "lucide-react";
+import ZapIcon from "@/public/icons/zap.svg";
+import DollarSignIcon from "@/public/icons/dollar_sign.svg";
+import LayersIcon from "@/public/icons/layers.svg";
+import PlugIcon from "@/public/icons/plug.svg";
 import { addToWaitlist } from "@/lib/firebase";
 import { AnalyticsService } from "@/services/analyticsService";
 
@@ -172,33 +168,29 @@ const BusinessHero = () => {
 
   const contentItems = [
     {
-      icon: <Zap className="w-4 md:w-6 h-4 md:h-6" />,
+      icon: ZapIcon,
       title: "30-second",
       subtitle: "settlements",
     },
     {
-      icon: <DollarSign className="w-4 md:w-6 h-4 md:h-6" />,
+      icon: DollarSignIcon,
       title: "Low fees",
       subtitle: "(0.5 - 1.5%)",
     },
     {
       icon: <Globe className="w-4 md:w-6 h-4 md:h-6" />,
       title: "Global payments",
+      subtitle: "(180+ countries)"
     },
     {
-      icon: <Layers className="w-4 md:w-6 h-4 md:h-6" />,
+      icon: LayersIcon,
       title: "Multi-currency",
       subtitle: "support",
     },
     {
-      icon: <Plug className="w-4 md:w-6 h-4 md:h-6" />,
+      icon: PlugIcon ,
       title: "Plug & play",
       subtitle: "APIs",
-    },
-    {
-      icon: <Clock className="w-4 md:w-6 h-4 md:h-6" />,
-      title: " 5-minutes ",
-      subtitle: "setup time",
     },
   ];
 
@@ -208,22 +200,22 @@ const BusinessHero = () => {
         <section className="bg-[#F9F9F9] h-full flex flex-col justify-start ">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 sm:mb-16 max-w-[95%] mx-auto">
-              <h1 className="text-2xl sm:text-4xl lg:text-[70px] xl:text-[80px] 3xl:text-[100px] font-[300] leading-[1.1] sm:leading-none mb-6 sm:mb-8">
+              <h1 className="tracking-tighter text-2xl sm:text-4xl lg:text-[100px] xl:text-[80px] 3xl:text-[100px] font-[300] leading-[1.1] sm:leading-[0.9] mb-8 sm:mb-2">
                 <span className="text-[#C0C0C0]">THE </span>
                 <span className="text-[#333333] font-[400]">
-                  STABLECOIN PAYMENT
+                  CRYPTO PAYMENT
+
                 </span>
                 <br />
-                <span className="text-[#333333] font-[400]">
-                  INFRASTRUCTURE{" "}
-                </span>{" "}
-                <span className="text-[#C0C0C0]">FOR</span>
+                <span className="text-[#C0C0C0]"> INFRASTRUCTURE FOR</span>
                 <br />
-                <span className="text-[#C0C0C0] font-[300]">
+                <span className="text-[#333333] font-[400]">
                   MODERN BUSINESSES
                 </span>
               </h1>
-              <p className="text-[#6A6A6AE5] text-left text-base sm:text-lg md:text-[16px] max-w-[986px] mx-auto leading-relaxed px-4 sm:px-6">
+              {/* CHANGED: Added text-center for mobile and sm:text-right for larger screens */}
+              <p className="text-[#6A6A6AE5] text-center sm:text-right text-base sm:text-lg md:text-[16px] max-w-[986px] mx-auto leading-relaxed px-4 sm:px-6">
+                {" "}
                 Join{" "}
                 <span className="text-[#080808] font-semibold">
                   1,000+ businesses
@@ -258,8 +250,6 @@ const BusinessHero = () => {
                   className="relative bg-white rounded-[2.5rem]"
                   style={{
                     border: "6.62px solid rgba(8, 8, 8, 0.2)",
-                    boxShadow:
-                      "10px 10px 20px 0px rgba(0, 0, 0, 0.1), -10px -10px 20px 0px #FFFFFF",
                   }}
                 >
                   <div
@@ -279,14 +269,14 @@ const BusinessHero = () => {
                         alt="Bepay Logo"
                         width={200}
                         height={100}
-                        className="w-[40px] h-[40px] md:w-[120px] lg:h-[100px] object-contain"
+                        className="w-[60px] h-[60px] md:w-[150px] lg:h-[100px] object-contain -mt-6"
                       />
                     </div>
 
                     {/* REVERTED: Restored the original animated image */}
                     <motion.div
                       style={{ x: imageX, opacity: imageOpacity }}
-                      className="absolute inset-0 top-12 sm:top-16"
+                      className="absolute inset-0 top-12 sm:top-16 "
                     >
                       <Image
                         src="/business_s1_1.png"
@@ -297,8 +287,8 @@ const BusinessHero = () => {
                     </motion.div>
 
                     {showContent && (
-                      <div className="absolute inset-0 top-3 rotate-90 bg-white rounded-[2rem] flex flex-row gap-7 justify-center items-center p-4">
-                        <div className="flex flex-col mb-1 md:mb-6 w-full max-w-[500px]">
+                      <div className="absolute inset-0 top-3 rotate-90 bg-white rounded-[2rem] flex flex-row gap-7 justify-start items-center p-4">
+                        <div className="flex flex-col mb-1 md:mb-6 w-full max-w-[500px] -ml-20">
                           {contentItems.map((item, index) => (
                             <motion.div
                               key={index}
@@ -309,16 +299,28 @@ const BusinessHero = () => {
                                 duration: 0.4,
                                 ease: "easeOut",
                               }}
-                              className="flex items-center gap-1 md:gap-3 md:py-2"
+                              className="flex items-center gap-1 md:gap-4 md:py-3"
                             >
                               <div className="text-black hidden md:block text-[10px] md:text-[12px]">
-                                {item.icon}
+                                {/* CORRECTED: Add logic to handle both icon types */}
+                                {typeof item.icon === "function" ? (
+                                  // If it's a component from lucide-react (like Globe), render it directly
+                                  <item.icon className="w-4 md:w-6 h-4 md:h-6" />
+                                ) : (
+                                  // Otherwise, it's an SVG file, so use the Image component
+                                  <Image
+                                    src={item.icon}
+                                    alt={`${item.title} icon`}
+                                    className="w-4 md:w-6 h-4 md:h-6"
+                                  />
+                                )}
                               </div>
                               <div className="whitespace-nowrap">
-                                <span className="font-semibold text-black text-[8px] md:text-[12px]">
+                                <span className="font-semibold text-black text-[8px] md:text-[13px] ml-5">
                                   {item.title}
                                 </span>
-                                <span className="text-gray-500 text-[8px] md:text-[12px] ml-1">
+                                {/* CHANGED: Added ml-1 for a gap between title and subtitle */}
+                                <span className="text-gray-500 text-[8px] md:text-[13px] ml-1">
                                   {item.subtitle}
                                 </span>
                               </div>
@@ -333,12 +335,12 @@ const BusinessHero = () => {
                             duration: 0.4,
                             ease: "easeOut",
                           }}
-                          className="flex flex-col lg:-mt-9 md:flex-row gap-3 w-full max-w-[600px]"
+                          className="flex flex-col lg:-mt-9 md:flex-row gap-3 w-full max-w-[600px] ml-10"
                         >
                           {!isSubmitted ? (
                             <form
                               onSubmit={handleEmailSubmit}
-                              className="flex flex-col gap-3 w-full"
+                              className="flex flex-col gap-2 w-full max-w-[200px]"
                             >
                               <div className="flex-1">
                                 <input
@@ -347,7 +349,7 @@ const BusinessHero = () => {
                                   onChange={(e) => setEmail(e.target.value)}
                                   onFocus={handleEmailFocus}
                                   placeholder="Enter your email"
-                                  className=" w-[130px] sm:w-[180px] px-2 md:px-4 py-3 lg:w-[200px] flex justify-center placeholder:text-[10px] text-black font-semibold items-center rounded-full border border-gray-300 text-[12px] md:text-[12px] focus:outline-none focus:border-gray-500"
+                                  className=" w-[100px] sm:w-[180px] px-2 md:px-4 py-2 md:py-4  lg:w-[200px] flex justify-center placeholder:text-[8px] text-black font-semibold items-center rounded-full border border-gray-300 text-[12px] md:text-[14px] focus:outline-none focus:border-gray-500"
                                   required
                                 />
                                 {submitMessage && !isSubmitted && (
@@ -362,7 +364,7 @@ const BusinessHero = () => {
                                 disabled={isSubmitting}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="bg-black w-[130px] sm:w-[180px] md:w-full cursor-pointer text-white whitespace-nowrap px-2 md:px-6 py-3 rounded-full font-medium text-[10px] md:text-[12px] hover:bg-black/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                                className="bg-black w-[100px] sm:w-[180px] md:py-4 md:w-full cursor-pointer text-white whitespace-nowrap px-2 md:px-6 py-2 rounded-full font-medium text-[8px] md:text-[12px] hover:bg-black/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                               >
                                 {isSubmitting ? (
                                   <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />
@@ -416,9 +418,7 @@ const BusinessHero = () => {
                   className="relative bg-white rounded-[2.5rem]"
                   style={{
                     border: "6.62px solid rgba(8, 8, 8, 0.2)",
-                    boxShadow:
-                      "10px 10px 20px 0px rgba(0, 0, 0, 0.1), -10px -10px 20px 0px #FFFFFF",
-                  }}
+                    }}
                 >
                   <div
                     className="bg-gray-50 rounded-[2rem] overflow-hidden relative"
