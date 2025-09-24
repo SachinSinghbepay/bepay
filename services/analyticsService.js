@@ -137,6 +137,7 @@ export class AnalyticsService {
       mixpanel.track("Session End", eventProperties, { transport: 'sendBeacon' });
 
       // Clean up sessionStorage for the next visit.
+      localStorage.removeItem("campaignId");
       sessionStorage.removeItem("sessionId");
       sessionStorage.removeItem("sessionStartTime");
       console.log(`[Analytics] Session End event queued via sendBeacon. Duration: ${durationInSeconds}s`);

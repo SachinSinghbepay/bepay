@@ -204,6 +204,7 @@ const BusinessHero = () => {
                 <span className="text-[#C0C0C0]">THE </span>
                 <span className="text-[#333333] font-[400]">
                   CRYPTO PAYMENT
+
                 </span>
                 <br />
                 <span className="text-[#C0C0C0]"> INFRASTRUCTURE FOR</span>
