@@ -1,31 +1,29 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CheckCircle, FileText, Shield } from "lucide-react";
 import { AnalyticsService } from "@/services/analyticsService";
 import { useRef, useState, useEffect } from "react";
 
 const complianceData = [
   {
-    icon: CheckCircle,
+    icon: "/images/business/certified.svg",
     title: "Certified",
-    badges: ["ISO 27001", "SOC 2", "PCI DSS", " ISO 20022", "ISO 9001"],
+    badges: ["ISO 27001", "SOC 2", "PCI DSS", "ISO 20022", "ISO 9001"],
   },
   {
-    icon: FileText,
+    icon: "/images/business/licensed.svg",
     title: "Licensed",
     badges: ["MSB (USA)", "VASP (EU)", "FIU (India)", "MiCA (EU)"],
   },
-
   {
-    icon: FileText,
+    icon: "/images/business/compliant.svg",
     title: "Compliant",
-    badges: ["GDPR", "DORA","DPDP", "AML/KYC automation", "CFT"],
+    badges: ["GDPR", "DORA", "DPDP", "AML/KYC automation", "CFT"],
   },
   {
-    icon: Shield,
+    icon: "/images/business/protected.svg",
     title: "Protected",
-    badges: ["Multi-sig wallets", "fraud detection", "", ""], // Added empty badges for alignment
+    badges: ["Multi-sig wallets", "fraud detection", "", ""],
   },
 ];
 
@@ -56,37 +54,36 @@ const cardVariants = {
   },
 };
 
-// FIX: Combined everything into a single, valid component
 export default function ComplianceSection() {
-  const sectionRef = useRef(null);
-  const [hasTrackedView, setHasTrackedView] = useState(false);
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
 
-  // ANALYTICS: Track when the section is viewed
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasTrackedView) {
-          AnalyticsService.sendEvent("Compliance section viewed"); // Renamed event for clarity
-          setHasTrackedView(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1 }
-    );
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Compliance section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
 
-    const currentSectionRef = sectionRef.current;
-    if (currentSectionRef) {
-      observer.observe(currentSectionRef);
-    }
+    const currentSectionRef = sectionRef.current;
+    if (currentSectionRef) {
+      observer.observe(currentSectionRef);
+    }
 
-    return () => {
+    return () => {
       if (currentSectionRef) {
         observer.unobserve(currentSectionRef);
       }
     };
-  }, [hasTrackedView]);
+  }, [hasTrackedView]);
+
   return (
-    <section  ref={sectionRef} className="py-16 px-4 bg-gray-50">
+    <section ref={sectionRef} className="py-16 px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8"
@@ -106,12 +103,15 @@ export default function ComplianceSection() {
             >
               <div className="flex items-center gap-4 lg:gap-6 mb-8">
                 <div className="flex-shrink-0">
-                  <item.icon
-                    className="w-8 h-8 lg:w-20 lg:h-20 text-[#6A6A6A]"
-                    strokeWidth={1}
+                  {/* CHANGE 1: Icon base size increased for mobile */}
+                  <img
+                    src={item.icon}
+                    alt={`${item.title} icon`}
+                    className="w-8 h-8 lg:w-[60px] lg:h-[60px] 3xl:w-[80px] 3xl:h-[80px]"
                   />
                 </div>
-                <h3 className="text-2xl lg:text-[60px] 3xl:text-[80px] font-[500] text-[#6A6A6A] leading-tight">
+                {/* CHANGE 2: Text base size increased for mobile */}
+                <h3 className="text-3xl lg:text-[60px] 3xl:text-[80px] font-[500] text-[#6A6A6A] leading-tight">
                   {item.title}
                 </h3>
               </div>
