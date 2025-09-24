@@ -211,7 +211,7 @@ const BusinessHero = () => {
               <h1 className="text-2xl sm:text-4xl lg:text-[70px] xl:text-[80px] 3xl:text-[100px] font-[300] leading-[1.1] sm:leading-none mb-6 sm:mb-8">
                 <span className="text-[#C0C0C0]">THE </span>
                 <span className="text-[#333333] font-[400]">
-                  STABLECOIN PAYMENTbvvgbv
+                  STABLECOIN PAYMENT
                 </span>
                 <br />
                 <span className="text-[#333333] font-[400]">
