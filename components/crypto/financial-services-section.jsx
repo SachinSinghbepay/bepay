@@ -17,7 +17,7 @@ const servicesData = [
       "No credit check required.",
       "Flexible repayment terms.",
     ],
-    image: "/images/crypto/co1.png",
+    video: "/videos/crypto/co1.mp4", // Video for first 3
   },
   {
     title: "Savings Products",
@@ -26,7 +26,7 @@ const servicesData = [
       "No minimum balance.",
       "Instant withdrawals.",
     ],
-    image: "/images/crypto/co2.png",
+    video: "/videos/crypto/co2.mp4", // Video for first 3
   },
   {
     title: "Insurance Products",
@@ -35,7 +35,7 @@ const servicesData = [
       "Health, Travel & Life Coverage.",
       "Flexible Plans & Instant Claims.",
     ],
-    image: "/images/crypto/co3.png",
+    video: "/videos/crypto/co3.mp4", // Video for first 3
   },
   {
     title: "Cross-Border Payments",
@@ -44,7 +44,7 @@ const servicesData = [
       "Instant settlements globally.",
       "Lowest fee guarantee.",
     ],
-    image: "/images/crypto/co5.png",
+    image: "/images/crypto/co5.png", // Back to image for last 3
   },
   {
     title: "Remittance Services",
@@ -53,7 +53,7 @@ const servicesData = [
       "Competitive exchange rates.",
       "Real-time tracking & Multiple payout options.",
     ],
-    image: "/images/crypto/co6.png",
+    image: "/images/crypto/co6.png", // Back to image for last 3
   },
   {
     title: "DeFi Marketplace",
@@ -62,11 +62,12 @@ const servicesData = [
       "One-Click Access to Top Protocols.",
       "Secure & Gas-Optimized Transactions.",
     ],
-    image: "/images/crypto/co4.png",
+    image: "/images/crypto/co_last.png", // Back to image for last 3
   },
 ];
 
 const ServicePanel = ({ service, index, progress, totalServices }) => {
+  const videoRef = useRef(null);
   const segmentDuration = 1 / totalServices;
   const start = index * segmentDuration;
   const end = start + segmentDuration;
@@ -93,6 +94,25 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
 
   const y = useTransform(progress, inputRange, outputRange);
 
+  // Effect to handle video play/pause based on visibility (only for videos)
+  useEffect(() => {
+    if (!service.video) return; // Only run for services with videos
+
+    const unsubscribe = progress.on("change", (latest) => {
+      const isVisible = latest >= start && latest <= end;
+      
+      if (videoRef.current) {
+        if (isVisible) {
+          videoRef.current.play().catch(console.error);
+        } else {
+          videoRef.current.pause();
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [progress, start, end, service.video]);
+
   return (
     <motion.div
       style={{ y }}
@@ -100,13 +120,26 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
     >
       <div className="w-full max-w-[360px] mx-auto">
         <div className="relative w-full aspect-[4/5] overflow-hidden mb-4 lg:mb-5 shadow-lg">
-          <Image
-            src={service.image || "/placeholder.svg"}
-            alt={service.title}
-            fill
-            className="object-cover"
-            loading="lazy"
-          />
+          {service.video ? (
+            <video
+              ref={videoRef}
+              src={service.video}
+              className="w-full h-full object-cover"
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              onError={(e) => console.error('Video failed to load:', e)}
+            />
+          ) : (
+            <Image
+              src={service.image || "/placeholder.svg"}
+              alt={service.title}
+              fill
+              className="object-cover"
+              loading="lazy"
+            />
+          )}
         </div>
         <div className="text-left px-1">
           <h3
@@ -119,6 +152,7 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
               lg:tracking-[-0.06em] 
               text-[#6A6A6A] 
               mb-3
+              ${service.title === "Bitcoin backed loans" ? "leading-tight" : ""}
               ${service.title === "Savings Products" || service.title === "Insurance Products" || service.title ==="DeFi Marketplace" || service.title ==="Remittance Services"? "whitespace-nowrap" : ""}
             `}
           >
@@ -144,6 +178,7 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
 const MobileView = () => {
   const mobileContainerRef = useRef(null);
   const cardWrapperRef = useRef(null);
+  const videoRefs = useRef([]);
   const x = useMotionValue(0);
 
   const { scrollYProgress } = useScroll({
@@ -152,6 +187,9 @@ const MobileView = () => {
   });
 
   useEffect(() => {
+    // Initialize video refs array
+    videoRefs.current = new Array(servicesData.length);
+    
     const unsubscribe = scrollYProgress.on("change", (latest) => {
       const cardWrapper = cardWrapperRef.current;
       if (!cardWrapper) return;
@@ -160,6 +198,20 @@ const MobileView = () => {
       const maxScroll = scrollWidth - containerWidth;
       const easedProgress = latest * latest * (3 - 2 * latest);
       x.set(-easedProgress * maxScroll);
+
+      // Handle video play/pause for mobile (only for videos)
+      const totalCards = servicesData.length;
+      const currentCardIndex = Math.floor(latest * totalCards);
+      
+      videoRefs.current.forEach((video, index) => {
+        if (video && servicesData[index].video) { // Only control videos, not images
+          if (index === currentCardIndex) {
+            video.play().catch(console.error);
+          } else {
+            video.pause();
+          }
+        }
+      });
     });
     return () => unsubscribe();
   }, [scrollYProgress, x]);
@@ -211,7 +263,32 @@ const MobileView = () => {
               <div key={i} className="w-[75vw] sm:w-[65vw] flex-shrink-0">
                 <div className="px-6">
                   <div className="relative w-full aspect-[3/4] overflow-hidden mb-4 sm:mb-6 shadow-md">
-                    <Image src={service.image || "/placeholder.svg"} alt={service.title} fill className="object-cover" loading="lazy" />
+                    {service.video ? (
+                      <video
+                        ref={(el) => {
+                          if (el) {
+                            videoRefs.current[i] = el;
+                          }
+                        }}
+                        src={service.video}
+                        className="w-full h-full object-cover"
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        onError={(e) => console.error('Video failed to load:', service.video, e)}
+                        onLoadStart={() => console.log('Loading video:', service.video)}
+                        onCanPlay={() => console.log('Video can play:', service.video)}
+                      />
+                    ) : (
+                      <Image 
+                        src={service.image || "/placeholder.svg"} 
+                        alt={service.title} 
+                        fill 
+                        className="object-cover" 
+                        loading="lazy" 
+                      />
+                    )}
                   </div>
                   <div className="text-left">
                     <h3 className="font-[Montserrat] font-semibold sm:font-normal text-lg sm:text-xl lg:text-[60px] leading-[1.3] lg:leading-[52px] tracking-normal lg:tracking-[-0.06em] text-[#6A6A6A] mb-3">
@@ -295,29 +372,29 @@ export const FinancialServicesSection = () => {
               </motion.p>
 
               <WaitlistTriggerButton triggerSource="'financial service section' button">
-  <motion.button
-    onClick={handleExploreFeaturesClick} // ANALYTICS: Added onClick handler
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-    className="
-      bg-black cursor-pointer whitespace-nowrap text-white 
-      flex items-center justify-center transition-colors 
-      hover:bg-gray-800 rounded-full mt-7
+                <motion.button
+                  onClick={handleExploreFeaturesClick} // ANALYTICS: Added onClick handler
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="
+                    bg-black cursor-pointer whitespace-nowrap text-white 
+                    flex items-center justify-center transition-colors 
+                    hover:bg-gray-800 rounded-full mt-7
 
-      /* Mobile (default) */
-      w-[221px] h-[56px] gap-2 text-xs font-normal
+                    /* Mobile (default) */
+                    w-[221px] h-[56px] gap-2 text-xs font-normal
 
-      /* Desktop overrides */
-      md:w-[210px] md:h-[56px] 
-      md:gap-[10px] 
-      md:text-sm md:font-medium 
-      md:rounded-[100px]
-    "
-  >
-    Explore all features
-    <ArrowUpRight size={18} className="w-5 h-5 md:w-6 md:h-6" />
-  </motion.button>
-</WaitlistTriggerButton>
+                    /* Desktop overrides */
+                    md:w-[210px] md:h-[56px] 
+                    md:gap-[10px] 
+                    md:text-sm md:font-medium 
+                    md:rounded-[100px]
+                  "
+                >
+                  Explore all features
+                  <ArrowUpRight size={18} className="w-5 h-5 md:w-6 md:h-6" />
+                </motion.button>
+              </WaitlistTriggerButton>
 
             </motion.div>
           </div>

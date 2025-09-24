@@ -33,7 +33,7 @@ export const PaymentProofSection = () => {
           observer.unobserve(entry.target); // Stop observing after first trigger
         }
       },
-      { threshold: 0.1 } // Trigger when 30% of the section is visible
+      { threshold: 0.1 } // Trigger when 10% of the section is visible
     );
 
     if (sectionRef.current) {
@@ -51,17 +51,28 @@ export const PaymentProofSection = () => {
       whileInView="visible"
       viewport={{ once: false, amount: 0.2 }} // keep animations independent of analytics
     >
-      {/* Background Image */}
-      <Image
-        src="/images/crypto/bgimg.png"
-        alt="Two women looking at a smartphone"
-        fill
-        style={{ objectFit: "cover" }}
-        loading="lazy"
-        className="z-0"
-      />
+      {/* Background Video */}
+      <video
+        className="absolute inset-0 w-full h-full object-cover z-0"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+      >
+        <source src="/videos/crypto/new.mp4" type="video/mp4" />
+        <source src="/videos/crypto/new.webm" type="video/webm" />
+        
+        <Image
+          src="/images/crypto/bgimg.png"
+          alt="Two women looking at a smartphone"
+          fill
+          style={{ objectFit: "cover" }}
+          loading="lazy"
+        />
+      </video>
 
-      {/* Overlay Image */}
+      
       <Image
         src="/images/crypto/subset.png"
         alt="Geometric overlay"
