@@ -2,23 +2,23 @@
 import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import { AnalyticsService } from "@/services/analyticsService";
 
 const BepayComparison = () => {
   const [hoveredItem, setHoveredItem] = useState(null)
-  const sectionRef = useRef(null); // ✅ FIX: consistent ref name
-  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
-  // ANALYTICS: Track when the section is actually viewed
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasTrackedView) {
           AnalyticsService.sendEvent("Bepay comparison section viewed");
           setHasTrackedView(true);
-          observer.unobserve(entry.target); // Stop observing after first view
+          observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.1 } // Trigger when at least 10% is visible
+      { threshold: 0.1 }
     );
 
     if (sectionRef.current) {
@@ -27,12 +27,13 @@ const BepayComparison = () => {
 
     return () => observer.disconnect();
   }, [hasTrackedView]);
+
   const comparisonData = [
     {
       id: "transaction-fees",
       label: "Transaction fees",
       bepay: "As low as 0.5%",
-      traditional: " Higher Fees 2-5%",
+      traditional: "2-5%",
     },
     {
       id: "chargebacks",
@@ -61,16 +62,14 @@ const BepayComparison = () => {
   ]
 
   return (
-
-    <div ref={sectionRef}
-    className="min-h-screen bg-[#F9F9F9] flex items-center justify-center p-4 md:p-8 pb-16">
+    <div ref={sectionRef} className="min-h-screen bg-[#F9F9F9] flex items-center justify-center p-4 md:p-8 pb-16">
       <div className="w-full mx-auto max-w-7xl">
         {/* Title */}
         <div className="text-center mb-8 md:mb-16">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-light text-gray-800 leading-tight">
+          <h1 className="font-['Montserrat'] text-3xl md:text-[44px] font-normal text-[#6A6A6A] leading-[100%] tracking-[-0.04em]">
             How <span className="font-semibold text-black">bepay benefits</span> business owners
             <br />
-            <span className="text-gray-500">over traditional payments</span>
+            over traditional payments
           </h1>
         </div>
 
@@ -90,20 +89,25 @@ const BepayComparison = () => {
             <div className="grid grid-cols-2 gap-4">
               {/* Bepay Column */}
               <div className="text-center flex justify-center items-center">
-                <Image
-                  src="/bepaylogo1.png"
-                  height={46}
-                  width={110}
-                  alt="BePay Logo"
-                  className="object-cover h-12 w-auto"
-                  priority
-                />
+                <div className="flex items-center gap-2">
+                  <Image
+                    src="/bepaylogo1.svg"
+                    height={36}
+                    width={90}
+                    alt="BePay Logo"
+                    className="object-contain h-10 w-auto"
+                    priority
+                  />
+                  <span className="font-['Montserrat'] font-semibold text-l leading-none tracking-[-0.04em] text-gray-800">
+                    bepay business
+                  </span>
+                </div>
               </div>
               {/* Traditional Column */}
-              <div className="text-center">
-                <div className="rounded-full px-4 py-2 inline-block">
-                  <span className="font-medium text-gray-600 text-sm">Traditional payments</span>
-                </div>
+              <div className="text-center flex justify-center items-center">
+                <span className="font-['Montserrat'] font-semibold text-l leading-none tracking-[-0.04em] text-gray-600">
+                  Traditional payments
+                </span>
               </div>
             </div>
           </div>
@@ -119,9 +123,9 @@ const BepayComparison = () => {
                   whileHover={{ scale: 1.01 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {/* Item Label */}
-                  <div className="mb-4">
-                    <span className="text-gray-700 font-medium text-sm">{item.label}</span>
+                  {/* ✅ CHANGE: Item Label is now hidden in mobile view */}
+                  <div className="mb-4 hidden">
+                    <span className="text-black font-medium text-lg whitespace-nowrap">{item.label}</span>
                   </div>
                   {/* Values Grid */}
                   <div className="grid grid-cols-2 gap-4">
@@ -131,7 +135,7 @@ const BepayComparison = () => {
                         className="inline-block px-4 py-2 rounded-full text-sm font-medium transition-all duration-300"
                         animate={{
                           backgroundColor: hoveredItem === item.id ? "#000000" : "transparent",
-                          color: hoveredItem === item.id ? "#ffffff" : "#374151",
+                          color: hoveredItem === item.id ? "#ffffff" : "#333333",
                           boxShadow:
                             hoveredItem === item.id ? "0 8px 25px -5px rgba(0, 0, 0, 0.2)" : "0 0 0 0 transparent",
                         }}
@@ -146,7 +150,7 @@ const BepayComparison = () => {
                         className="inline-block px-4 py-2 rounded-full text-sm font-medium transition-all duration-300"
                         animate={{
                           backgroundColor: hoveredItem === item.id ? "#f3f4f6" : "transparent",
-                          color: "#6b7280",
+                          color: "#333333",
                         }}
                         transition={{ duration: 0.3 }}
                       >
@@ -164,10 +168,10 @@ const BepayComparison = () => {
 
         {/* Desktop Layout - Labels on Left with Two Cards */}
         <div className="hidden lg:block">
-          <div className="flex justify-center">
+          <div className="flex justify-center items-start">
             {/* Labels Column */}
-            <div className="w-96 pt-44 pr-8">
-              {comparisonData.map((item, index) => (
+            <div className="w-96 pt-40 pr-8">
+              {comparisonData.map((item) => (
                 <div key={`label-${item.id}`} className="relative">
                   <motion.div
                     className="py-6 flex items-center cursor-pointer group"
@@ -177,13 +181,15 @@ const BepayComparison = () => {
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <span className="text-gray-700 font-medium flex-1">{item.label}</span>
-                    {/* Line extending to the right */}
+                    <span className="text-black font-medium text-xl flex-1 whitespace-nowrap">{item.label}</span>
                     <div className="flex-1 ml-4">
                       <motion.div
-                        className="h-px bg-gray-200"
+                        className="h-px"
                         animate={{
-                          backgroundColor: hoveredItem === item.id ? "#000000" : "#e5e7eb",
+                          backgroundImage:
+                            hoveredItem === item.id
+                              ? "linear-gradient(to right, #000000, #000000)"
+                              : "linear-gradient(to right, #808080, white)",
                         }}
                         transition={{ duration: 0.3 }}
                       />
@@ -206,44 +212,44 @@ const BepayComparison = () => {
                 }}
               >
                 {/* BePay Header */}
-                <div className="text-center mb-8 pb-6 border-b border-gray-200">
-                  <Image
-                    src="/bepaylogo1.png"
-                    height={46}
-                    width={110}
-                    alt="BePay Logo"
-                    className="object-cover h-12 w-auto mx-auto"
-                    priority
-                  />
+                <div className="text-center mb-8 border-b border-gray-200 h-24 flex items-center justify-center">
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src="/bepaylogo1.svg"
+                      height={46}
+                      width={110}
+                      alt="BePay Logo"
+                      className="object-cover h-12 w-auto"
+                      priority
+                    />
+                    <span className="font-['Montserrat'] font-semibold text-xl leading-none tracking-[-0.04em] text-gray-800">
+                      bepay business
+                    </span>
+                  </div>
                 </div>
 
                 {/* BePay Content */}
                 <div className="space-y-0">
-                  {comparisonData.map((item, index) => (
+                  {comparisonData.map((item) => (
                     <div key={`bepay-${item.id}`} className="relative">
                       <motion.div
-                        className="py-6 cursor-pointer"
+                        className="py-6 cursor-pointer flex items-center justify-center"
                         onClick={() => setHoveredItem(hoveredItem === item.id ? null : item.id)}
                         onHoverStart={() => setHoveredItem(item.id)}
                         onHoverEnd={() => setHoveredItem(null)}
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.2 }}
                       >
-                        {/* BePay Value - Aligned to left */}
-                        <div className="text-center">
-                          <motion.div
-                            className="inline-block px-6 py-1 rounded-full transition-all duration-300"
-                            animate={{
-                              backgroundColor: hoveredItem === item.id ? "#000000" : "transparent",
-                              color: hoveredItem === item.id ? "#ffffff" : "#374151",
-                              boxShadow:
-                                hoveredItem === item.id ? "0 10px 25px -5px rgba(0, 0, 0, 0.2)" : "0 0 0 0 transparent",
-                            }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <span className="font-medium">{item.bepay}</span>
-                          </motion.div>
-                        </div>
+                        <motion.div
+                          className="inline-block px-6 py-1 rounded-full"
+                          animate={{
+                            backgroundColor: hoveredItem === item.id ? "#000000" : "transparent",
+                            color: hoveredItem === item.id ? "#ffffff" : "#080808",
+                            boxShadow: hoveredItem === item.id ? "0 10px 25px -5px rgba(0, 0, 0, 0.2)" : "0 0 0 0 transparent",
+                            scale: hoveredItem === item.id ? 1.15 : 1,
+                          }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <span className="font-medium">{item.bepay}</span>
+                        </motion.div>
                       </motion.div>
                     </div>
                   ))}
@@ -256,42 +262,37 @@ const BepayComparison = () => {
                 style={{
                   width: "400px",
                   height: "587px",
-                 
                   border: "1.16px solid #D7D7D7",
                 }}
               >
                 {/* Traditional Header */}
-                <div className="text-center mb-8 pb-6 border-b border-gray-200">
-                  <div className=" rounded-full px-6 py-3 inline-block">
-                    <span className="font-medium text-gray-600">Traditional payments</span>
-                  </div>
+                <div className="text-center mb-8 border-b border-gray-200 h-24 flex items-center justify-center">
+                  <span className="font-['Montserrat'] font-semibold text-xl leading-none tracking-[-0.04em] text-gray-600">
+                    Traditional payments
+                  </span>
                 </div>
 
                 {/* Traditional Content */}
                 <div className="space-y-0">
-                  {comparisonData.map((item, index) => (
+                  {comparisonData.map((item) => (
                     <div key={`traditional-${item.id}`} className="relative">
                       <motion.div
-                        className="py-6 cursor-pointer"
+                        className="py-6 cursor-pointer flex items-center justify-center"
                         onClick={() => setHoveredItem(hoveredItem === item.id ? null : item.id)}
                         onHoverStart={() => setHoveredItem(item.id)}
                         onHoverEnd={() => setHoveredItem(null)}
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.2 }}
                       >
-                        {/* Traditional Value - Aligned to left */}
-                        <div className="text-center">
-                          <motion.div
-                            className="inline-block px-6 py-1 rounded-full transition-all duration-300"
-                            animate={{
-                              backgroundColor: hoveredItem === item.id ? "#f3f4f6" : "transparent",
-                              color: "#6b7280",
-                            }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <span className="font-medium">{item.traditional}</span>
-                          </motion.div>
-                        </div>
+                        <motion.div
+                          className="inline-block px-6 py-1 rounded-full"
+                          animate={{
+                            backgroundColor: hoveredItem === item.id ? "#f3f4f6" : "transparent",
+                            color: "#080808",
+                            scale: hoveredItem === item.id ? 1.15 : 1,
+                          }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <span className="font-medium">{item.traditional}</span>
+                        </motion.div>
                       </motion.div>
                     </div>
                   ))}

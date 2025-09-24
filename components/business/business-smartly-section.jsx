@@ -1,39 +1,49 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import Image from "next/image";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 // FeatureCard component
-function FeatureCard({ title, image, features }) {
+// FeatureCard component
+function FeatureCard({ title, image, features, index, isInView }) {
   return (
-    <div className="flex-col w-full max-w-[670px] h-full md:h-[607px] bg-white rounded-[30px] shadow-lg border border-gray-100">
+    <motion.div
+      initial={{ opacity: 0, y: 100 }}
+      animate={
+        isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 100 }
+      }
+      transition={{
+        duration: 0.8,
+        delay: 0.5 + index * 0.2,
+        ease: "easeOut",
+      }}
+      className="flex-col w-[90vw] md:w-[50vw] lg:w-[35vw] xl:w-[32vw] h-[500px] bg-white rounded-[30px] border border-gray-100 flex-shrink-0"
+      // MODIFIED: Replaced the old shadow with the new complex box-shadow
+      style={{
+        boxShadow: `0px 10px 25px rgba(0, 0, 0, 0.017), 120px 0px 100px -30px rgba(0, 0, 0, 0.05), 80px 0px 60px -20px rgba(0, 0, 0, 0.01), 40px 0px 30px -10px rgba(0, 0, 0, 0.017)`,
+      }}
+    >
       <div className="relative w-full h-[225px] overflow-hidden rounded-[30px]">
         <Image
           src={image || "/placeholder.svg"}
           alt={title}
           width={650}
           height={225}
-          className="object-cover p-2 rounded-[30px] w-full h-full"
+          className="object-cover p-2 rounded-[30px] w-full h-full transition-transform duration-500 group-hover:scale-105"
         />
       </div>
       <div className="p-8 flex flex-col justify-between h-[calc(100%-225px)]">
         <div>
-          <h3 className="text-xl md:text-[20px] font-bold mb-6 text-black uppercase">
+          <h3 className="font-['Montserrat'] font-medium text-[20px] leading-[24px] tracking-[-0.02em] mb-6 text-black uppercase">
             {title}
           </h3>
-          <ul className="space-y-4 lg:space-y-8">
-            {features.map((feature, index) => (
+          <ul className="space-y-4 lg:space-y-4">
+            {features.map((feature, featureIndex) => (
               <li
-                key={index}
+                key={featureIndex}
                 className="flex items-start gap-3 text-[14px] md:text-[16px] font-[500] text-gray-700"
               >
                 <IconCircleCheckFilled className="w-5 h-5 text-[#0D8D37] flex-shrink-0 mt-0.5" />
@@ -43,46 +53,30 @@ function FeatureCard({ title, image, features }) {
           </ul>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
 export default function BusinessSmartlySection() {
-  const sectionRef = useRef(null);
+  const targetRef = useRef(null);
+  const isInView = useInView(targetRef, { once: true, margin: "-100px" });
   const [hasTrackedView, setHasTrackedView] = useState(false);
 
   // ANALYTICS: track view once
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasTrackedView) {
-          AnalyticsService.sendEvent("business smartly section viewed");
-          setHasTrackedView(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    if (isInView && !hasTrackedView) {
+      AnalyticsService.sendEvent("business smartly section viewed");
+      setHasTrackedView(true);
     }
+  }, [isInView, hasTrackedView]);
 
-    return () => observer.disconnect();
-  }, [hasTrackedView]);
-
-  // Scroll animations
+  // Scroll-based horizontal movement
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
+    target: targetRef,
   });
 
-  const headingY = useTransform(scrollYProgress, [0, 0.5, 1], [30, 0, -30]);
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 0.3, 0.7, 1],
-    [0.6, 1, 1, 0.8]
-  );
+  const xMobile = useTransform(scrollYProgress, [0, 1], ["0%", "-68%"]);
+  const xDesktop = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
 
   const cardsData = [
     {
@@ -130,56 +124,64 @@ export default function BusinessSmartlySection() {
   ];
 
   return (
-    <section
-      ref={sectionRef}
-      className="w-full py-12 md:py-24 lg:py-32 bg-[#F9F9F9] overflow-hidden dark:bg-gray-950"
-    >
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col items-center justify-center text-center mb-12 md:mb-16 lg:mb-20">
-          <motion.div
-            className="max-w-6xl mx-auto"
-            style={{
-              y: headingY,
-              opacity: opacity,
-            }}
+    <section ref={targetRef} className="relative h-[300vh] bg-[#F9F9F9] dark:bg-gray-950">
+      <div className="sticky top-0 flex flex-col h-screen overflow-hidden">
+        {/* Header Section */}
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-2 md:pt-4 pb-4 md:pb-8">
+          <div
+
+            className="flex flex-col items-center justify-center text-center"
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-[400] tracking-tight leading-[1.1] md:leading-[1.05]">
-              <span className="block text-[#C0C0C0] dark:text-[#333333] mb-2 md:mb-4">
-                Everything you need
-              </span>
-              <span className="block text-black dark:text-white">
-                to run your business smartly
-              </span>
-            </h2>
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-[400] tracking-[-0.05em] leading-none">
+                <span className="block text-[#C0C0C0] dark:text-[#333333]">
+                  Everything you need
+                </span>
+                <span className="text-[#C0C0C0] dark:text-[#333333]">to </span>
+                <span className="text-black dark:text-white">
+                  run your business smartly
+                </span>
+              </h2>
+            </div>
+          </div>
+        </div>
+
+        {/* Cards Section - Horizontal Scroll */}
+        <div className="flex-1 flex items-center overflow-hidden">
+          {/* Mobile Cards */}
+          <motion.div
+            style={{ x: xMobile }}
+            className="flex gap-6 pl-4 sm:pl-6 lg:pl-8 md:hidden"
+          >
+            {cardsData.map((card, index) => (
+              <FeatureCard
+                key={card.id}
+                title={card.title}
+                image={card.image}
+                features={card.features}
+                index={index}
+                isInView={isInView}
+              />
+            ))}
+          </motion.div>
+
+          {/* Desktop Cards */}
+          <motion.div
+            style={{ x: xDesktop }}
+            className="hidden md:flex gap-3 pl-4 sm:pl-6 lg:pl-8"
+          >
+            {cardsData.map((card, index) => (
+              <FeatureCard
+                key={card.id}
+                title={card.title}
+                image={card.image}
+                features={card.features}
+                index={index}
+                isInView={isInView}
+              />
+            ))}
           </motion.div>
         </div>
-      </div>
-
-      <div className="w-full">
-        <Carousel
-          opts={{
-            align: "start",
-            loop: false,
-          }}
-          plugins={[
-            Autoplay({
-              delay: 3000,
-              stopOnInteraction: true,
-            }),
-          ]}
-          className="w-full"
-        >
-          <CarouselContent className="ml-4 md:ml-8 lg:ml-20">
-            {cardsData.map((card) => (
-              <CarouselItem
-                key={card.id}
-                className="pb-5 basis-[90%] sm:basis-[80%] md:basis-1/2 lg:basis-[35.6%] xl:basis-[33%]"
-              >
-                <FeatureCard {...card} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
       </div>
     </section>
   );
