@@ -227,25 +227,25 @@ const HowCryptoMake = () => {
     <div ref={containerRef} className="relative bg-[#F9F9F9] h-[400vh]">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="py-20 relative h-full">
-          <div className="text-center relative max-w-[1000px] mx-auto mb-16 sm:mb-24 lg:mb-32">
+          <div className="text-center relative max-w-[1000px] mx-auto mb-16 sm:mb-24 lg:mb-32 lg:-mt-16">
             <motion.h2
-              className="font-[400] text-[2rem] sm:text-[3rem] md:text-[4rem] lg:text-[5.5rem] leading-[1.1] tracking-tight"
+              className="font-[400] text-[2rem] sm:text-[3rem] md:text-[4rem] lg:text-[5.5rem] leading-[1] tracking-tight"
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: false, amount: 0.3 }}
             >
               <motion.div
-                className="inline-block mb-2 sm:mb-4"
+                className="inline-block"
                 variants={lineVariants}
               >
-                <span className="text-[#C0C0C0] font-light">How </span>
+                <span className="text-[#C0C0C0]">How </span>
                 <span className="text-[#333333]">crypto </span>
-                <span className="text-[#C0C0C0] font-light">payments </span>
+                <span className="text-[#C0C0C0]">payments </span>
               </motion.div>
               <br />
               <motion.div className="inline-block" variants={lineVariants}>
-                <span className="text-[#C0C0C0] font-light">work with </span>
+                <span className="text-[#C0C0C0]">work with </span>
                 <span className="text-[#333333]">bepay</span>
               </motion.div>
             </motion.h2>
@@ -423,7 +423,8 @@ const HowCryptoMake = () => {
                   className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
                   style={{ y: desktopMockup1Y, opacity: desktopMockup1Opacity }}
                 >
-                  <div className="relative w-[400px] h-[700px] drop-shadow-2xl">
+                  {/* MODIFICATION: Reduced width and height */}
+                  <div className="relative w-[380px] h-[650px] drop-shadow-2xl">
                     <Image
                       src="/images/business/mocup1.png"
                       alt="Bepay crypto payment interface"
@@ -437,7 +438,8 @@ const HowCryptoMake = () => {
                   className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
                   style={{ y: desktopMockup2Y, opacity: desktopMockup2Opacity }}
                 >
-                  <div className="relative w-[400px] h-[700px] drop-shadow-2xl">
+                  {/* MODIFICATION: Reduced width and height */}
+                  <div className="relative w-[380px] h-[650px] drop-shadow-2xl">
                     <Image
                       src="/images/business/mocup2.png"
                       alt="Bepay QR code interface"
@@ -451,7 +453,8 @@ const HowCryptoMake = () => {
                   className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
                   style={{ y: desktopMockup3Y, opacity: desktopMockup3Opacity }}
                 >
-                  <div className="relative w-[400px] h-[700px] drop-shadow-2xl">
+                  {/* MODIFICATION: Reduced width and height */}
+                  <div className="relative w-[380px] h-[650px] drop-shadow-2xl">
                     <Image
                       src="/images/business/mocup3.png"
                       alt="Bepay payment success"
@@ -465,7 +468,8 @@ const HowCryptoMake = () => {
                   className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
                   style={{ y: desktopMockup4Y, opacity: desktopMockup4Opacity }}
                 >
-                  <div className="relative w-[400px] h-[700px] drop-shadow-2xl">
+                  {/* MODIFICATION: Reduced width and height */}
+                  <div className="relative w-[380px] h-[650px] drop-shadow-2xl">
                     <Image
                       src="/images/business/mocup4.png"
                       alt="Bepay payment confirmation"

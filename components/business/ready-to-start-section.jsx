@@ -5,7 +5,6 @@ import Image from "next/image";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
-
 const features = [
   {
     id: 1,
@@ -196,13 +195,14 @@ export default function AnimatedCardsSection() {
   };
 
   return (
-    <div ref={containerRef} className="min-h-[200vh] py-11 bg-gray-50">
+    // MODIFIED: Added font-montserrat to make it the default font for the entire section.
+    <div ref={containerRef} className="min-h-[200vh] py-11 bg-gray-50 font-montserrat">
       <section className="sticky top-0 lg:h-screen flex items-center justify-center py-16 lg:py-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 text-center">
           {/* Title - appears first */}
           <div className="mb-16">
             <h2
-              className={`text-3xl md:text-4xl  lg:text-[70px] font-[400] transition-all duration-1000 ease-out ${
+              className={`text-3xl md:text-4xl lg:text-[80px] font-[400] lg:leading-[140px] lg:tracking-[-0.1em] lg:-mb-[10px] transition-all duration-1000 ease-out ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-12"
@@ -211,9 +211,8 @@ export default function AnimatedCardsSection() {
               <span className="text-gray-400">Ready to </span>
               <span className="text-gray-900">Start?</span>
             </h2>
-            {/* Description - appears second */}
             <p
-              className={`text-base md:text-lg lg:text-xl text-[#333333] font-medium transition-all duration-1000 delay-300 ease-out ${
+              className={`text-base md:text-lg lg:text-xl text-[#333333] font-medium lg:leading-6 lg:tracking-[-0.02em] transition-all duration-1000 delay-300 ease-out ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-8"
@@ -292,8 +291,8 @@ export default function AnimatedCardsSection() {
                         {feature.title}
                       </h3>
                       <p
-                        className="text-lg md:text-xl lg:text-2xl leading-relaxed"
-                        style={{ color: "#333333" }}
+                        className="font-medium text-[32px] leading-[36px] tracking-[-.06em]"
+                        style={{ color: "#6A6A6A" }}
                       >
                         {feature.subtitle}
                       </p>
@@ -303,7 +302,7 @@ export default function AnimatedCardsSection() {
                     {((isMobile && index === 2) ||
                       (!isMobile && index === 1)) && (
                       <div
-                        className="absolute inset-0 p-4 md:p-6 lg:p-8 flex flex-col justify-center text-center z-20 transition-all duration-700 ease-in-out"
+                        className="absolute inset-0 p-4 md:p-6 lg:p-8 flex flex-col justify-center items-center text-center z-20 transition-all duration-700 ease-in-out"
                         style={{
                           opacity: getNewContentOpacity(),
                           transform: `scale(${
@@ -314,8 +313,8 @@ export default function AnimatedCardsSection() {
                         }}
                       >
                         <h3
-                          className="text-md md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4"
-                          style={{ color: "#333333" }}
+                          className="text-md md:text-l lg:text-xl font-bold mb-3 md:mb-4"
+                          style={{ color: "#080808" }}
                         >
                           The future of payments is here!
                         </h3>
@@ -328,9 +327,10 @@ export default function AnimatedCardsSection() {
                           store — all in one powerful dashboard.
                         </p>
                         <WaitlistTriggerButton triggerSource="'Ready-to-start section' button">
-                          <button 
-                          onClick={handleStartEarningClick} // ANALYTICS: Added onClick handler
-                          className="bg-black cursor-pointer text-[12px]  whitespace-nowrap text-white px-4 md:px-6 py-2 md:py-3 rounded-full font-medium text-xs  lg:text-[12px] hover:bg-black/90 transition-colors duration-300 flex items-center gap-2 mx-auto">
+                          <button
+                            onClick={handleStartEarningClick} // ANALYTICS: Added onClick handler
+                            className="flex items-center text-[12px] justify-center bg-[#080808] text-white w-[260px] h-[56px] rounded-full gap-[10px] py-4 px-6"
+                          >
                             Become a merchant on bepay
                             <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
                           </button>

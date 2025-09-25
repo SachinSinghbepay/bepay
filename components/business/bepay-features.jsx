@@ -9,17 +9,17 @@ import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Im
 const cardData = [
   {
     id: 1,
-    image: "/images/business/m1.png",
+    image: "/images/business/m4.svg",
     alt: "Crypto payment interface mockup showing various cryptocurrencies and transaction details.",
   },
   {
     id: 2,
-    image: "/images/business/m2.png",
+    image: "/images/business/m2.svg",
     alt: "Payment settlement details mockup showing received amount, order value, settlement time, and conversion fees.",
   },
   {
     id: 3,
-    image: "/images/business/m3.png",
+    image: "/images/business/m3.svg",
     alt: "Global scaling illustration mockup with abstract bar charts and currency symbols.",
   },
 ]
