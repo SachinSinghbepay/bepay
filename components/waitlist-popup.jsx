@@ -126,6 +126,7 @@ function PortalContent({
           >
             <button
               onClick={onCloseButtonClick}
+              aria-label="Close popup"
               style={closeButtonStyle}
               onMouseEnter={(e) =>
                 (e.currentTarget.style.backgroundColor =

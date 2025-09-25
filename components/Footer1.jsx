@@ -108,6 +108,7 @@ const NewsletterModal = ({ isOpen, onClose }) => {
         </motion.p>
         <button
           onClick={onClose}
+          aria-label="Close modal"
           className="
            absolute top-6 right-6 text-white/70 hover:text-white
            text-xs sm:text-2xl 
