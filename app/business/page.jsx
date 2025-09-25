@@ -36,7 +36,7 @@ const page = () => {
       </Suspense>
       <ComplianceSection />
       {/* <TestimonialsSection /> */}
-      {/* <TrustedBySection /> */}
+      <TrustedBySection />
       <ReadyToStartSection />
       <BusinessSection />
       <MerchantSection />

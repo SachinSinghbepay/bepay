@@ -72,7 +72,8 @@ export default function MerchantSection() {
           {/* Left Side - Content */}
           <div className="space-y-6 lg:space-y-8">
             <motion.div variants={itemVariants} className="space-y-4">
-              <h1 className="text-4xl md:text-5xl lg:text-[60px] font-montserrat-heading-light leading-[60px] tracking-tighter">
+              {/* ✅ CHANGE: Made the line-height responsive */}
+              <h1 className="text-4xl md:text-5xl lg:text-[60px] font-montserrat-heading-light leading-tight lg:leading-[60px] tracking-tighter">
                 <span className="text-[#C0C0C0] lg:whitespace-nowrap">
                   Become a{" "}
                 </span>
