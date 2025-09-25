@@ -1,11 +1,11 @@
-"use client"
-import { useState, useRef, useEffect } from "react"
-import { motion } from "framer-motion"
-import Image from "next/image"
+"use client";
+import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
 import { AnalyticsService } from "@/services/analyticsService";
 
 const BepayComparison = () => {
-  const [hoveredItem, setHoveredItem] = useState(null)
+  const [hoveredItem, setHoveredItem] = useState(null);
   const sectionRef = useRef(null);
   const [hasTrackedView, setHasTrackedView] = useState(false);
 
@@ -59,15 +59,19 @@ const BepayComparison = () => {
       bepay: "Borderless",
       traditional: "High forex fees",
     },
-  ]
+  ];
 
   return (
-    <div ref={sectionRef} className="min-h-screen bg-[#F9F9F9] flex items-center justify-center p-4 md:p-8 pb-16">
+    <div
+      ref={sectionRef}
+      className="min-h-screen bg-[#F9F9F9] flex items-center justify-center p-4 md:p-8 pb-16"
+    >
       <div className="w-full mx-auto max-w-7xl">
         {/* Title */}
         <div className="text-center mb-8 md:mb-16">
           <h1 className="font-['Montserrat'] text-3xl md:text-[44px] font-normal text-[#6A6A6A] leading-[100%] tracking-[-0.04em]">
-            How <span className="font-semibold text-black">bepay benefits</span> business owners
+            How <span className="font-semibold text-black">bepay benefits</span>{" "}
+            business owners
             <br />
             over traditional payments
           </h1>
@@ -117,7 +121,7 @@ const BepayComparison = () => {
             {comparisonData.map((item, index) => (
               <div key={item.id} className="relative">
                 <motion.div
-                  className="py-6 cursor-pointer relative"
+                  className="py-4 cursor-pointer relative"
                   onHoverStart={() => setHoveredItem(item.id)}
                   onHoverEnd={() => setHoveredItem(null)}
                   whileHover={{ scale: 1.01 }}
@@ -125,19 +129,26 @@ const BepayComparison = () => {
                 >
                   {/* ✅ CHANGE: Item Label is now hidden in mobile view */}
                   <div className="mb-4 hidden">
-                    <span className="text-black font-medium text-lg whitespace-nowrap">{item.label}</span>
+                    <span className="text-black font-medium text-lg whitespace-nowrap">
+                      {item.label}
+                    </span>
                   </div>
                   {/* Values Grid */}
                   <div className="grid grid-cols-2 gap-4">
                     {/* Bepay Value */}
                     <div className="text-center">
                       <motion.div
-                        className="inline-block px-4 py-2 rounded-full text-sm font-medium transition-all duration-300"
+                        className="inline-block px-6 py-3 rounded-full text-base font-medium transition-all duration-300"
                         animate={{
-                          backgroundColor: hoveredItem === item.id ? "#000000" : "transparent",
-                          color: hoveredItem === item.id ? "#ffffff" : "#333333",
+                          backgroundColor:
+                            hoveredItem === item.id ? "#000000" : "transparent",
+                          color:
+                            hoveredItem === item.id ? "#ffffff" : "#333333",
                           boxShadow:
-                            hoveredItem === item.id ? "0 8px 25px -5px rgba(0, 0, 0, 0.2)" : "0 0 0 0 transparent",
+                            hoveredItem === item.id
+                              ? "0 12px 35px -5px rgba(0, 0, 0, 0.3)"
+                              : "0 0 0 0 transparent",
+                          scale: hoveredItem === item.id ? 1.2 : 1,
                         }}
                         transition={{ duration: 0.3 }}
                       >
@@ -147,10 +158,12 @@ const BepayComparison = () => {
                     {/* Traditional Value */}
                     <div className="text-center">
                       <motion.div
-                        className="inline-block px-4 py-2 rounded-full text-sm font-medium transition-all duration-300"
+                        className="inline-block px-6 py-3 rounded-full text-base font-medium transition-all duration-300"
                         animate={{
-                          backgroundColor: hoveredItem === item.id ? "#f3f4f6" : "transparent",
+                          backgroundColor:
+                            hoveredItem === item.id ? "#f3f4f6" : "transparent",
                           color: "#333333",
+                          scale: hoveredItem === item.id ? 1.2 : 1,
                         }}
                         transition={{ duration: 0.3 }}
                       >
@@ -160,7 +173,9 @@ const BepayComparison = () => {
                   </div>
                 </motion.div>
                 {/* Separator Line */}
-                {index < comparisonData.length - 1 && <div className="h-px bg-gray-200 mx-4" />}
+                {index < comparisonData.length - 1 && (
+                  <div className="h-px bg-gray-200 mx-4" />
+                )}
               </div>
             ))}
           </div>
@@ -174,14 +189,18 @@ const BepayComparison = () => {
               {comparisonData.map((item) => (
                 <div key={`label-${item.id}`} className="relative">
                   <motion.div
-                    className="py-6 flex items-center cursor-pointer group"
-                    onClick={() => setHoveredItem(hoveredItem === item.id ? null : item.id)}
+                    className="py-6.5 flex items-center cursor-pointer group"
+                    onClick={() =>
+                      setHoveredItem(hoveredItem === item.id ? null : item.id)
+                    }
                     onHoverStart={() => setHoveredItem(item.id)}
                     onHoverEnd={() => setHoveredItem(null)}
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <span className="text-black font-medium text-xl flex-1 whitespace-nowrap">{item.label}</span>
+                    <span className="text-black font-medium text-xl flex-1 whitespace-nowrap">
+                      {item.label}
+                    </span>
                     <div className="flex-1 ml-4">
                       <motion.div
                         className="h-px"
@@ -200,7 +219,7 @@ const BepayComparison = () => {
             </div>
 
             {/* Cards Container */}
-            <div className="flex gap-5">
+            <div className="flex gap-3">
               {/* BePay Card */}
               <div
                 className="rounded-4xl p-8"
@@ -208,7 +227,8 @@ const BepayComparison = () => {
                   width: "400px",
                   height: "587px",
                   background: "#F9F9F9",
-                  boxShadow: "20px 20px 20px 0pxrgba(0, 0, 0, 0.25), -20px -20px 20px 0px #FFFFFFE5",
+                  boxShadow:
+                    "20px 20px 20px 0px #0000000D, -20px -20px 20px 0px #FFFFFFE5",
                 }}
               >
                 {/* BePay Header */}
@@ -233,22 +253,39 @@ const BepayComparison = () => {
                   {comparisonData.map((item) => (
                     <div key={`bepay-${item.id}`} className="relative">
                       <motion.div
-                        className="py-6 cursor-pointer flex items-center justify-center"
-                        onClick={() => setHoveredItem(hoveredItem === item.id ? null : item.id)}
+                        className="py-2.5 cursor-pointer flex items-center justify-center"
+                        onClick={() =>
+                          setHoveredItem(
+                            hoveredItem === item.id ? null : item.id
+                          )
+                        }
                         onHoverStart={() => setHoveredItem(item.id)}
                         onHoverEnd={() => setHoveredItem(null)}
                       >
                         <motion.div
-                          className="inline-block px-6 py-0 text-[20px] rounded-full"
+                          className="inline-flex  px-8 py-2 text-[20px] rounded-full w-[280px] items-center justify-center h-[60px]"
                           animate={{
-                            backgroundColor: hoveredItem === item.id ? "#000000" : "transparent",
-                            color: hoveredItem === item.id ? "#ffffff" : "#080808",
-                            boxShadow: hoveredItem === item.id ? "0 10px 25px -5px rgba(0, 0, 0, 0.2)" : "0 0 0 0 transparent",
-                            scale: hoveredItem === item.id ? 1.15 : 1,
+                            backgroundColor:
+                              hoveredItem === item.id
+                                ? "#000000"
+                                : "transparent",
+                            color:
+                              hoveredItem === item.id ? "#ffffff" : "#080808",
+                            boxShadow:
+                              hoveredItem === item.id
+                                ? "0 15px 40px -5px rgba(0, 0, 0, 0.3)"
+                                : "0 0 0 0 transparent",
+                            scale: hoveredItem === item.id ? 1.25 : 1,
                           }}
                           transition={{ duration: 0.3 }}
                         >
-                          <span className="font-medium">{item.bepay}</span>
+                          <motion.span
+                            animate={{
+                              scale: hoveredItem === item.id ? 1 / 1.25 : 1,
+                            }}
+                          >
+                            {item.bepay}
+                          </motion.span>
                         </motion.div>
                       </motion.div>
                     </div>
@@ -277,21 +314,34 @@ const BepayComparison = () => {
                   {comparisonData.map((item) => (
                     <div key={`traditional-${item.id}`} className="relative">
                       <motion.div
-                        className="py-6 cursor-pointer flex items-center justify-center"
-                        onClick={() => setHoveredItem(hoveredItem === item.id ? null : item.id)}
+                        className="py-2.5 cursor-pointer flex items-center justify-center"
+                        onClick={() =>
+                          setHoveredItem(
+                            hoveredItem === item.id ? null : item.id
+                          )
+                        }
                         onHoverStart={() => setHoveredItem(item.id)}
                         onHoverEnd={() => setHoveredItem(null)}
                       >
                         <motion.div
-                          className="inline-block px-6 py-0 text-[20px] rounded-full"
+                          className="inline-flex  px-8 py-2 text-[20px] rounded-full w-[280px] items-center justify-center h-[60px]"
                           animate={{
-                            backgroundColor: hoveredItem === item.id ? "#f3f4f6" : "transparent",
+                            backgroundColor:
+                              hoveredItem === item.id
+                                ? "#E0E0E0"
+                                : "transparent",
                             color: "#080808",
-                            scale: hoveredItem === item.id ? 1.15 : 1,
+                            scale: hoveredItem === item.id ? 1.25 : 1,
                           }}
                           transition={{ duration: 0.3 }}
                         >
-                          <span className="font-medium">{item.traditional}</span>
+                          <motion.span
+                            animate={{
+                              scale: hoveredItem === item.id ? 1 / 1.25 : 1,
+                            }}
+                          >
+                            {item.traditional}
+                          </motion.span>
                         </motion.div>
                       </motion.div>
                     </div>
@@ -303,7 +353,7 @@ const BepayComparison = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default BepayComparison
+export default BepayComparison;
