@@ -121,7 +121,7 @@ const NewsletterModal = ({ isOpen, onClose }) => {
   );
 };
 
-const Footer = () => {
+const Footer  = ({ heading }) => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -334,8 +334,8 @@ const Footer = () => {
           variants={containerVariants}
         >
           <motion.div className="text-center max-w-4xl" variants={itemVariants}>
-            <h2 className="text-xl md:text-2xl text-transparent bg-clip-text [background-image:linear-gradient(90deg,#F9F9F9_0%,rgba(249,249,249,0.5)_31.33%,#F9F9F9_64.79%,rgba(249,249,249,0.5)_98.29%)] lg:text-[24px] font-medium mb-6 leading-tight">
-              Ready to transform your financial future?
+          <h2 className="text-[24px] text-transparent bg-clip-text [background-image:linear-gradient(90deg,#F9F9F9_0%,rgba(249,249,249,0.5)_31.33%,#F9F9F9_64.79%,rgba(249,249,249,0.5)_98.29%)] font-medium mb-6 leading-tight">
+                {heading || "Ready to transform your financial future?"}
             </h2>
             <p className="text-[#6A6A6A] text-[13px] font-medium leading-relaxed">
               Join millions of users who trust bepay for their crypto financial
