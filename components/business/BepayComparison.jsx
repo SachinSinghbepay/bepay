@@ -200,7 +200,7 @@ const BepayComparison = () => {
             </div>
 
             {/* Cards Container */}
-            <div className="flex gap-8">
+            <div className="flex gap-5">
               {/* BePay Card */}
               <div
                 className="rounded-4xl p-8"
@@ -208,7 +208,7 @@ const BepayComparison = () => {
                   width: "400px",
                   height: "587px",
                   background: "#F9F9F9",
-                  boxShadow: "20px 20px 20px 0px #0000000D, -20px -20px 20px 0px #FFFFFFE5",
+                  boxShadow: "20px 20px 20px 0pxrgba(0, 0, 0, 0.25), -20px -20px 20px 0px #FFFFFFE5",
                 }}
               >
                 {/* BePay Header */}
@@ -239,7 +239,7 @@ const BepayComparison = () => {
                         onHoverEnd={() => setHoveredItem(null)}
                       >
                         <motion.div
-                          className="inline-block px-6 py-1 rounded-full"
+                          className="inline-block px-6 py-0 text-[20px] rounded-full"
                           animate={{
                             backgroundColor: hoveredItem === item.id ? "#000000" : "transparent",
                             color: hoveredItem === item.id ? "#ffffff" : "#080808",
@@ -283,7 +283,7 @@ const BepayComparison = () => {
                         onHoverEnd={() => setHoveredItem(null)}
                       >
                         <motion.div
-                          className="inline-block px-6 py-1 rounded-full"
+                          className="inline-block px-6 py-0 text-[20px] rounded-full"
                           animate={{
                             backgroundColor: hoveredItem === item.id ? "#f3f4f6" : "transparent",
                             color: "#080808",

@@ -7,23 +7,21 @@ import { IconCircleCheckFilled } from "@tabler/icons-react";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 // FeatureCard component
-// FeatureCard component
 function FeatureCard({ title, image, features, index, isInView }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 100 }}
-      animate={
-        isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 100 }
-      }
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 100 }}
       transition={{
         duration: 0.8,
         delay: 0.5 + index * 0.2,
         ease: "easeOut",
       }}
-      className="flex-col w-[90vw] md:w-[50vw] lg:w-[35vw] xl:w-[32vw] h-[500px] bg-white rounded-[30px] border border-gray-100 flex-shrink-0"
-      // MODIFIED: Replaced the old shadow with the new complex box-shadow
+      className="flex-col w-[90vw] md:w-[50vw] lg:w-[35vw] xl:w-[32vw] h-[550px] md:h-[500px] bg-white rounded-[30px] flex-shrink-0 relative"
+      // MODIFIED: Shadow only extends right and down, no upward shadow
       style={{
-        boxShadow: `0px 10px 25px rgba(0, 0, 0, 0.017), 120px 0px 100px -30px rgba(0, 0, 0, 0.05), 80px 0px 60px -20px rgba(0, 0, 0, 0.01), 40px 0px 30px -10px rgba(0, 0, 0, 0.017)`,
+        boxShadow: "60px 20px 30px -20px rgba(0, 0, 0, 0.15), 80px 30px 120px -90px rgba(0, 0, 0, 0.08)",
+        zIndex: 100 - index, // Higher z-index for earlier cards so their shadows appear on top
       }}
     >
       <div className="relative w-full h-[225px] overflow-hidden rounded-[30px]">
@@ -74,8 +72,8 @@ export default function BusinessSmartlySection() {
   const { scrollYProgress } = useScroll({
     target: targetRef,
   });
-
-  const xMobile = useTransform(scrollYProgress, [0, 1], ["0%", "-68%"]);
+  
+  const xMobile = useTransform(scrollYProgress, [0, 1], ["0%", "-78%"]);
   const xDesktop = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
 
   const cardsData = [
@@ -124,14 +122,14 @@ export default function BusinessSmartlySection() {
   ];
 
   return (
-    <section ref={targetRef} className="relative h-[300vh] bg-[#F9F9F9] dark:bg-gray-950">
+    <section
+      ref={targetRef}
+      className="relative h-[300vh] bg-[#F9F9F9] dark:bg-gray-950"
+    >
       <div className="sticky top-0 flex flex-col h-screen overflow-hidden">
         {/* Header Section */}
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-2 md:pt-4 pb-4 md:pb-8">
-          <div
-
-            className="flex flex-col items-center justify-center text-center"
-          >
+          <div className="flex flex-col items-center justify-center text-center">
             <div className="max-w-5xl mx-auto">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-[400] tracking-[-0.05em] leading-none">
                 <span className="block text-[#C0C0C0] dark:text-[#333333]">
@@ -168,7 +166,7 @@ export default function BusinessSmartlySection() {
           {/* Desktop Cards */}
           <motion.div
             style={{ x: xDesktop }}
-            className="hidden md:flex gap-3 pl-4 sm:pl-6 lg:pl-8"
+            className="hidden md:flex gap-6 pl-4 sm:pl-6 lg:pl-8"
           >
             {cardsData.map((card, index) => (
               <FeatureCard

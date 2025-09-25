@@ -1,12 +1,11 @@
 "use client";
-import { useRef, useState, useEffect } from "react"; // ✅ Add this
+import { useRef, useState, useEffect } from "react";
 
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
-
 
 export default function MerchantSection() {
   const sectionRef = useRef(null);
@@ -33,31 +32,30 @@ export default function MerchantSection() {
       },
     },
   };
-  
-  
+
   // ANALYTICS: Track when section comes into view
   useEffect(() => {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting && !hasTrackedView) {
-            AnalyticsService.sendEvent("Merchant section viewed");
-            setHasTrackedView(true);
-            observer.unobserve(entry.target); // Stop observing after first trigger
-          }
-        },
-        { threshold: 0.1 } // Trigger when 30% of the section is visible
-      );
-  
-      if (sectionRef.current) {
-        observer.observe(sectionRef.current);
-      }
-  
-      return () => observer.disconnect();
-    }, [hasTrackedView]);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("Merchant section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first trigger
+        }
+      },
+      { threshold: 0.1 } // Trigger when 30% of the section is visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
 
   const handleButtonClick = () => {
-      AnalyticsService.sendEvent("Become a merchant on bepay Clicked");
-    }
+    AnalyticsService.sendEvent("Become a merchant on bepay Clicked");
+  };
   return (
     <section
       ref={sectionRef}
@@ -101,19 +99,19 @@ export default function MerchantSection() {
             <WaitlistTriggerButton triggerSource="'Merchant section' button">
               <motion.div
                 variants={itemVariants}
-                className="flex flex-col max-w-[300px] gap-4"
+                className="flex flex-col sm:flex-row lg:flex-col max-w-[300px] sm:max-w-none lg:max-w-[300px] gap-4"
               >
-                {/* Button 1: "Become a merchant" */}
+                {/* MODIFIED: Updated button text, increased icon size, and removed fixed-width for flexibility */}
                 <button
                   onClick={handleButtonClick}
-                  className="bg-black cursor-pointer whitespace-nowrap text-white text-[12px] font-medium hover:bg-black/90 transition-colors duration-200 flex items-center justify-center w-[186px] h-[56px] rounded-[100px] gap-[10px] py-4 px-6"
+                  className="bg-black w-[210px] cursor-pointer whitespace-nowrap text-white text-[12px] font-medium hover:bg-black/90 transition-colors duration-200 flex items-center justify-center h-[56px] rounded-[100px] gap-[10px] py-4 px-6"
                 >
                   Become a merchant
-                  <ArrowUpRight size={18} />
+                  <ArrowUpRight className="w-7 h-7 flex-shrink-0" />
                 </button>
 
-                {/* Button 2: "Talk to us" */}
-                <button className="border-2 cursor-pointer border-gray-300 text-gray-700 text-[12px] font-medium hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center w-[186px] h-[56px] rounded-[100px] gap-[10px] py-4 px-6">
+                {/* MODIFIED: Removed fixed-width for consistency */}
+                <button className="w-[210px] border-2 cursor-pointer border-gray-300 text-gray-700 text-[12px] font-medium hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center h-[56px] rounded-[100px] gap-[10px] py-4 px-6">
                   <svg
                     className="w-4 h-4"
                     fill="none"
