@@ -15,7 +15,7 @@ const steps = [
     id: 1,
     image: "/images/business/s1.svg",
     rightTitle: "Create your account",
-    rightSubtitle: "Complete your simple KYC",
+    rightSubtitle: "Complete your KYC & business verification",
     rightButtons: null,
   },
   {
@@ -32,10 +32,12 @@ const steps = [
     rightSubtitle: "Accept your first crypto payment in minutes",
     rightButtons: (
       <WaitlistTriggerButton triggerSource="'get started business section' button">
-        <div className="flex flex-col gap-4 mt-8 w-full justify-center mx-auto max-w-[300px] lg:justify-start lg:mx-0 lg:max-w-none">
+        {/* ✅ CHANGE: Adjusted max-width for mobile CTA button */}
+        <div className="flex flex-col gap-4 mt-8 w-full justify-center mx-auto max-w-[290px] lg:justify-start lg:mx-0 lg:max-w-none">
           <button
             onClick={handleStartEarningClick}
-            className="bg-black cursor-pointer text-white hover:bg-black/90 transition-colors duration-200 w-full sm:w-[300px] h-[56px] px-6 py-4 rounded-full font-medium text-[14px] flex items-center justify-center gap-2"
+            /* ✅ CHANGE: Adjusted gap for mobile CTA button */
+            className="bg-black cursor-pointer text-white hover:bg-black/90 transition-colors duration-200 w-full sm:w-[300px] h-[56px] px-6 py-4 rounded-full font-medium text-[12px] flex items-center justify-center gap-[6px]"
           >
             <span>Become a merchant on bepay</span>
             <ArrowUpRight className="w-7 h-7 flex-shrink-0" />
@@ -49,6 +51,8 @@ const steps = [
 export default function GetStartedSection() {
   const sectionRef = useRef(null);
   const [hasTrackedView, setHasTrackedView] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
@@ -57,6 +61,15 @@ export default function GetStartedSection() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const prevScrollYProgress = useRef(0);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -94,7 +107,7 @@ export default function GetStartedSection() {
 
   const currentStepData = steps[currentStepIndex];
 
-  const leftImageVariants = {
+  const desktopImageVariants = {
     enter: { y: "100%", opacity: 0 },
     center: {
       y: "0%",
@@ -108,6 +121,41 @@ export default function GetStartedSection() {
       transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] },
     },
   };
+
+  const mobileImageVariants = {
+    enter: (direction) => ({
+      x: direction > 0 ? "100%" : "-100%",
+      opacity: 0,
+    }),
+    center: {
+      x: "0%",
+      opacity: 1,
+      transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] },
+    },
+    exit: (direction) => ({
+      x: direction < 0 ? "100%" : "-100%",
+      opacity: 0,
+      transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] },
+    }),
+  };
+
+  const mobileButtonVariants = {
+    enter: { x: 150, opacity: 0 },
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+      },
+    },
+    exit: {
+      opacity: 0,
+      transition: { duration: 0.3, ease: "easeIn" },
+    },
+  };
+
 
   const contentVariants = {
     enter: { y: 50, opacity: 0 },
@@ -142,29 +190,36 @@ export default function GetStartedSection() {
       ref={sectionRef}
       className="relative w-full h-[300vh] pt-10 bg-[#F9F9F9]"
     >
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center gap-4 md:gap-8 px-4 sm:px-6 lg:px-12 py-12 overflow-x-hidden">
-        {/* Main Title */}
+      <div
+        className={`sticky top-0 h-screen flex flex-col items-center gap-4 px-4 sm:px-6 lg:px-12 overflow-hidden ${
+          isMobile ? "justify-between pt-8" : "justify-center py-12"
+        }`}
+      >
         <div className="text-center">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[90px] font-light leading-tight tracking-tighter">
-            <span className="text-gray-400">Get started in </span>
-            <span className="text-gray-900 font-normal">3 simple steps</span>
+          <h2 className="text-2xl font-medium leading-[26px] tracking-[-0.04em] sm:text-4xl md:text-5xl lg:text-[90px] lg:font-light lg:leading-tight lg:tracking-tighter">
+            <span className="text-gray-400">Get started in</span>
+            <br className="lg:hidden" />
+            <span className="text-gray-900"> 3 simple steps</span>
           </h2>
         </div>
 
-        {/* Content for current step */}
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-20 items-center w-full max-w-7xl mt-4">
-          {/* Left Column: Mobile Phone Image */}
           <div className="relative flex justify-center lg:justify-end order-2 lg:order-1">
-            <div className="relative w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[420px] h-[50vh] sm:h-[60vh] lg:h-[75vh] max-h-[800px]">
+            {/* ✅ CHANGE: Increased height and width of mobile mockup */}
+            <div className="relative w-full max-w-[340px] sm:max-w-[380px] lg:max-w-[420px] h-[58vh] sm:h-[70vh] lg:h-[65vh] max-h-[800px]">
               <AnimatePresence initial={false} custom={direction}>
                 <motion.div
                   key={currentStepData.id}
-                  variants={leftImageVariants}
+                  variants={
+                    isMobile ? mobileImageVariants : desktopImageVariants
+                  }
                   initial="enter"
                   animate="center"
                   exit="exit"
                   custom={direction}
-                  className="absolute inset-0 flex items-center justify-center"
+                  className={`absolute inset-0 flex justify-center ${
+                    isMobile ? "items-end" : "items-center"
+                  }`}
                 >
                   <div className="relative w-full h-full">
                     <Image
@@ -172,7 +227,7 @@ export default function GetStartedSection() {
                       alt={`Step ${currentStepData.id} mockup`}
                       fill
                       className="object-contain"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                     />
                   </div>
                 </motion.div>
@@ -180,9 +235,8 @@ export default function GetStartedSection() {
             </div>
           </div>
 
-          {/* Right Column: Large Number and Content */}
           <div className="relative flex flex-col items-center lg:items-start justify-center order-1 lg:order-2">
-            <div className="relative w-full max-w-lg min-h-[150px] sm:min-h-[200px] flex flex-col justify-center text-center lg:text-left">
+            <div className="relative w-full max-w-lg min-h-[150px] sm:min-h-[200px] text-center lg:text-left">
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0">
                 <AnimatePresence initial={false} mode="wait">
                   <motion.div
@@ -208,19 +262,28 @@ export default function GetStartedSection() {
               <AnimatePresence initial={false} mode="wait">
                 <motion.div
                   key={`content-${currentStepData.id}`}
-                  variants={contentVariants}
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  className="w-full relative z-10"
+                  className="w-full z-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[40%] lg:-translate-y-1/2 flex flex-col items-center lg:items-start justify-center gap-2"
                 >
-                  <h3 className="text-4xl sm:text-5xl md:text-[60px] font-normal text-[#6A6A6A] mb-2 leading-tight">
-                    {currentStepData.rightTitle}
-                  </h3>
-                  <p className="text-base sm:text-lg md:text-[20px] text-[#6A6A6A] font-medium leading-relaxed mb-8">
-                    {currentStepData.rightSubtitle}
-                  </p>
-                  {currentStepData.rightButtons}
+                  <motion.div variants={contentVariants}>
+<h3 className="text-2xl font-medium leading-none tracking-[-0.04em] text-[#333333] sm:text-4xl md:text-5xl lg:text-[60px] lg:font-normal lg:text-[#6A6A6A] lg:leading-tight mb-6 lg:mb-0">                      {currentStepData.rightTitle}
+                    </h3>
+                    <p className="text-[15px] leading-none tracking-[-0.04em] text-[#6A6A6A] sm:text-lg md:text-[20px] lg:font-medium lg:leading-relaxed">
+                      {currentStepData.rightSubtitle}
+                    </p>
+                  </motion.div>
+
+                  {currentStepData.rightButtons && (
+                    <motion.div
+                      className="w-ful -mt-4 lg:mt-0l"
+                      variants={mobileButtonVariants}
+                      // No need for initial/animate/exit here, they are inherited from the parent
+                    >
+                      {currentStepData.rightButtons}
+                    </motion.div>
+                  )}
                 </motion.div>
               </AnimatePresence>
             </div>
