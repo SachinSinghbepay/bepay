@@ -1,15 +1,16 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
-import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import { AnalyticsService } from "@/services/analyticsService";
 
 export default function MerchantSection() {
   const sectionRef = useRef(null);
   const [hasTrackedView, setHasTrackedView] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -33,29 +34,145 @@ export default function MerchantSection() {
     },
   };
 
-  // ANALYTICS: Track when section comes into view
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // Tailwind's 'lg' breakpoint
+    };
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasTrackedView) {
           AnalyticsService.sendEvent("Merchant section viewed");
           setHasTrackedView(true);
-          observer.unobserve(entry.target); // Stop observing after first trigger
+          observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.1 } // Trigger when 30% of the section is visible
+      { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
   }, [hasTrackedView]);
 
   const handleButtonClick = () => {
     AnalyticsService.sendEvent("Become a merchant on bepay Clicked");
   };
+
+  if (isMobile) {
+    // =================================================================
+    // MOBILE VIEW - UPDATED
+    // =================================================================
+    return (
+      <section
+        ref={sectionRef}
+        className="relative w-full min-h-screen bg-[#F9F9F9] overflow-hidden flex flex-col items-center"
+      >
+        <motion.div
+          className="w-full px-4 text-center z-10 pt-12"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={containerVariants}
+        >
+          <motion.div variants={itemVariants}>
+            <h1
+              className="text-[24px] font-medium leading-[26px] tracking-[-0.04em] text-center"
+              style={{ fontFamily: "Montserrat", fontWeight: 500 }}
+            >
+              <span className="text-[#C0C0C0]">Become a merchant</span>
+              <br />
+              <span className="text-[#C0C0C0]">on </span>
+              <span className="text-[#333333] font-medium">
+                bepay business today!
+              </span>
+            </h1>
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="mt-6">
+            <p
+              className="text-[#6A6A6A] text-[12px] font-medium leading-[16px] tracking-[0%] text-center max-w-xs mx-auto"
+              style={{ fontFamily: "Montserrat", fontWeight: 500 }}
+            >
+              <span className="text-[#6A6A6A]">
+                Experience the power of receiving
+              </span>{" "}
+              <span className="font-semibold text-gray-900">
+                lightning fast global payments
+              </span>{" "}
+              <span className="text-[#6A6A6A]">for your business!</span>
+            </p>
+          </motion.div>
+
+          <WaitlistTriggerButton triggerSource="'Merchant section' button">
+            <motion.div
+              variants={itemVariants}
+              className="flex flex-col items-center mt-10"
+            >
+              <button
+                onClick={handleButtonClick}
+                className="bg-black cursor-pointer text-white hover:bg-black/90 transition-colors duration-200 flex items-center justify-center rounded-full gap-[10px]"
+                style={{
+                  width: "230px",
+                  height: "56px",
+                  paddingTop: "16px",
+                  paddingRight: "24px",
+                  paddingBottom: "16px",
+                  paddingLeft: "24px",
+                  fontFamily: "Open Sans",
+                  fontWeight: 600,
+                  fontSize: "12px",
+                  lineHeight: "100%",
+                  letterSpacing: "0%",
+                  textAlign: "center",
+                }}
+              >
+                Become a merchant now
+                <ArrowUpRight className="w-7 h-7 flex-shrink-0" />
+              </button>
+            </motion.div>
+          </WaitlistTriggerButton>
+        </motion.div>
+
+        <motion.div
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[280px] z-0"
+          initial={{ y: "40%", opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          viewport={{ once: true, amount: 0.1 }}
+        >
+        <Image
+          src="/images/business/mocup.png"
+          alt="Bepay merchant mobile app interface"
+          width={280}
+          height={650}
+          className="w-full h-auto" // Removed shadow classes from here
+          priority
+          // ✅ ADDED: A single style prop combining both drop-shadow filters
+          style={{
+            filter: "drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.1)) drop-shadow(-10px -10px 20px #FFFFFF)",
+          }}
+        />
+        </motion.div>
+      </section>
+    );
+  }
+
+  // =================================================================
+  // DESKTOP VIEW (Unchanged)
+  // =================================================================
   return (
     <section
       ref={sectionRef}
@@ -69,10 +186,8 @@ export default function MerchantSection() {
           whileInView="visible"
           viewport={{ once: false, amount: 0.3 }}
         >
-          {/* Left Side - Content */}
           <div className="space-y-6 lg:space-y-8">
             <motion.div variants={itemVariants} className="space-y-4">
-              {/* ✅ CHANGE: Made the line-height responsive */}
               <h1 className="text-4xl md:text-5xl lg:text-[60px] font-montserrat-heading-light leading-tight lg:leading-[60px] tracking-tighter">
                 <span className="text-[#C0C0C0] lg:whitespace-nowrap">
                   Become a{" "}
@@ -102,7 +217,6 @@ export default function MerchantSection() {
                 variants={itemVariants}
                 className="flex flex-col sm:flex-row lg:flex-col max-w-[300px] sm:max-w-none lg:max-w-[300px] gap-4"
               >
-                {/* MODIFIED: Updated button text, increased icon size, and removed fixed-width for flexibility */}
                 <button
                   onClick={handleButtonClick}
                   className="bg-black w-[210px] cursor-pointer whitespace-nowrap text-white text-[12px] font-medium hover:bg-black/90 transition-colors duration-200 flex items-center justify-center h-[56px] rounded-[100px] gap-[10px] py-4 px-6"
@@ -110,8 +224,6 @@ export default function MerchantSection() {
                   Become a merchant
                   <ArrowUpRight className="w-7 h-7 flex-shrink-0" />
                 </button>
-
-                {/* MODIFIED: Removed fixed-width for consistency */}
                 <button className="w-[210px] border-2 cursor-pointer border-gray-300 text-gray-700 text-[12px] font-medium hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center h-[56px] rounded-[100px] gap-[10px] py-4 px-6">
                   <svg
                     className="w-4 h-4"
@@ -132,7 +244,6 @@ export default function MerchantSection() {
             </WaitlistTriggerButton>
           </div>
 
-          {/* Right Side - Mobile Mockup */}
           <motion.div
             variants={itemVariants}
             className="flex justify-center lg:justify-end"
