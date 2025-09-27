@@ -69,47 +69,51 @@ const BepayComparison = () => {
       <div className="w-full mx-auto max-w-7xl">
         {/* Title */}
         <div className="text-center mb-8 md:mb-16">
-          <h1 className="font-['Montserrat'] text-3xl md:text-[44px] font-normal text-[#6A6A6A] leading-[100%] tracking-[-0.04em]">
-            How <span className="font-semibold text-black">bepay benefits</span>{" "}
-            business owners
-            <br />
-            over traditional payments
+          <h1 className="font-['Montserrat'] text-xl md:text-[44px] font-medium text-[#C0C0C0] leading-[26px] tracking-[-0.04em]">
+            How <span className="font-medium text-black">bepay benefits</span>{" "}
+            business <br />
+            owners over traditional payments
           </h1>
         </div>
 
         {/* Mobile Layout */}
+        {/* Mobile Layout */}
         <div
-          className="lg:hidden bg-white rounded-2xl shadow-sm border border-gray-300 overflow-hidden"
+          className="lg:hidden max-w-[353px] bg-[#F7F7F7] rounded-2xl overflow-hidden"
           style={{
             width: "100%",
-            maxWidth: "700px",
             height: "auto",
             minHeight: "587px",
             margin: "0 auto",
+            boxShadow:
+              "10px 10px 10px 0px rgba(0,0,0,0.05), -3px -3px 4px 0px #FFFFFF, -5px -5px 9px 0px #FFFFFF",
           }}
         >
           {/* Header */}
-          <div className="px-6 py-8 border-b bg-[#f9f9f9] border-gray-100">
-            <div className="grid grid-cols-2 gap-4">
+          <div className="pt-2 pb-0">
+            <div className="w-[calc(100%-10px)] h-[60px] mx-auto bg-white rounded-xl flex justify-center items-center gap-4 sm:gap-6">
+              {" "}
               {/* Bepay Column */}
               <div className="text-center flex justify-center items-center">
                 <div className="flex items-center gap-2">
                   <Image
                     src="/bepaylogo1.svg"
-                    height={36}
-                    width={90}
+                    height={25}
+                    width={25}
                     alt="BePay Logo"
-                    className="object-contain h-10 w-auto"
+                    className="w-[25px] h-[25px] object-contain"
                     priority
                   />
-                  <span className="font-['Montserrat'] font-semibold text-l leading-none tracking-[-0.04em] text-gray-800">
+                  <span className="font-['Montserrat'] font-medium whitespace-nowrap text-[14px] leading-none tracking-[-0.04em] text-[#080808]">
                     bepay business
                   </span>
                 </div>
               </div>
+              {/* Slash Separator */}
+              <div className="h-4 w-px bg-[#A6A6A6] rotate-[20deg]" />
               {/* Traditional Column */}
               <div className="text-center flex justify-center items-center">
-                <span className="font-['Montserrat'] font-semibold text-l leading-none tracking-[-0.04em] text-gray-600">
+                <span className="font-['Montserrat'] font-medium whitespace-nowrap text-[14px] leading-none tracking-[-0.04em] text-[#080808]">
                   Traditional payments
                 </span>
               </div>
@@ -121,52 +125,29 @@ const BepayComparison = () => {
             {comparisonData.map((item, index) => (
               <div key={item.id} className="relative">
                 <motion.div
-                  className="py-4 cursor-pointer relative"
+                  className="py-6 cursor-pointer relative"
                   onHoverStart={() => setHoveredItem(item.id)}
                   onHoverEnd={() => setHoveredItem(null)}
                   whileHover={{ scale: 1.01 }}
                   transition={{ duration: 0.2 }}
                 >
-                  {/* ✅ CHANGE: Item Label is now hidden in mobile view */}
-                  <div className="mb-4 hidden">
-                    <span className="text-black font-medium text-lg whitespace-nowrap">
+                  {/* Item Label - Now visible in mobile view */}
+                  <div className="mb-4 text-center px-[10px]">
+                    <span className="text-[#6A6A6A] font-medium text-[12px] whitespace-nowrap">
                       {item.label}
                     </span>
                   </div>
                   {/* Values Grid */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-[10px]">
                     {/* Bepay Value */}
-                    <div className="text-center">
-                      <motion.div
-                        className="inline-block px-6 py-3 rounded-full text-base font-medium transition-all duration-300"
-                        animate={{
-                          backgroundColor:
-                            hoveredItem === item.id ? "#000000" : "transparent",
-                          color:
-                            hoveredItem === item.id ? "#ffffff" : "#333333",
-                          boxShadow:
-                            hoveredItem === item.id
-                              ? "0 12px 35px -5px rgba(0, 0, 0, 0.3)"
-                              : "0 0 0 0 transparent",
-                          scale: hoveredItem === item.id ? 1.2 : 1,
-                        }}
-                        transition={{ duration: 0.3 }}
-                      >
+                    <div className="w-[142px] h-[40px] rounded-l-full bg-black text-white flex items-center justify-center">
+                      <motion.div className="inline-block px-6 py-3 text-[12px] text-base font-medium transition-all duration-300">
                         {item.bepay}
                       </motion.div>
                     </div>
                     {/* Traditional Value */}
-                    <div className="text-center">
-                      <motion.div
-                        className="inline-block px-6 py-3 rounded-full text-base font-medium transition-all duration-300"
-                        animate={{
-                          backgroundColor:
-                            hoveredItem === item.id ? "#f3f4f6" : "transparent",
-                          color: "#333333",
-                          scale: hoveredItem === item.id ? 1.2 : 1,
-                        }}
-                        transition={{ duration: 0.3 }}
-                      >
+                    <div className="w-[142px] h-[40px] rounded-r-full bg-[#C0C0C033] text-black flex items-center justify-center">
+                      <motion.div className="inline-block px-6 py-3 text-[12px] text-base font-medium transition-all duration-300 whitespace-nowrap">
                         {item.traditional}
                       </motion.div>
                     </div>
