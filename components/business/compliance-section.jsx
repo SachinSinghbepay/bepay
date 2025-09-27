@@ -86,7 +86,7 @@ export default function ComplianceSection() {
     <section ref={sectionRef} className="py-16 px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto">
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-8"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -96,21 +96,22 @@ export default function ComplianceSection() {
             <motion.div
               key={index}
               variants={cardVariants}
-              className="bg-white rounded-[32px] p-8 lg:p-12 h-auto  min-h-[200px] lg:min-h-[300px] 3xl:min-h-[463px] flex flex-col justify-between"
+              className=" bg-white rounded-[32px] p-8 lg:p-12 h-auto min-h-[200px] lg:min-h-[300px] 3xl:min-h-[463px] flex flex-col justify-between relative"
+               
               style={{
-                boxShadow: "50px 50px 100px 0px rgba(0, 0, 0, 0.06)",
+                // ✅ CHANGE: Increased shadow opacity from 0.06 to 0.1
+                boxShadow: "50px 50px 100px 0px rgba(0, 0, 0, 0.1)",
+                zIndex: complianceData.length - index,
               }}
             >
               <div className="flex items-center gap-4 lg:gap-6 mb-8">
                 <div className="flex-shrink-0">
-                  {/* CHANGE 1: Icon base size increased for mobile */}
                   <img
                     src={item.icon}
                     alt={`${item.title} icon`}
                     className="w-8 h-8 lg:w-[60px] lg:h-[60px] 3xl:w-[80px] 3xl:h-[80px]"
                   />
                 </div>
-                {/* CHANGE 2: Text base size increased for mobile */}
                 <h3 className="text-3xl lg:text-[60px] 3xl:text-[80px] font-[500] text-[#6A6A6A] leading-tight">
                   {item.title}
                 </h3>
@@ -120,7 +121,7 @@ export default function ComplianceSection() {
                   index === complianceData.length - 1 ? "md:-mt-8" : ""
                 }`}
               >
-                <div className={`flex flex-wrap  gap-3  `}>
+                <div className="flex flex-wrap gap-3">
                   {item.badges.map((badge, badgeIndex) => (
                     <span
                       key={badgeIndex}
