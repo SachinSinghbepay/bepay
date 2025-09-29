@@ -121,7 +121,7 @@ const NewsletterModal = ({ isOpen, onClose }) => {
   );
 };
 
-const Footer  = ({ heading }) => {
+const Footer  = ({ heading, headingSize = "text-[24px]" }) => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -334,8 +334,10 @@ const Footer  = ({ heading }) => {
           variants={containerVariants}
         >
           <motion.div className="text-center max-w-4xl" variants={itemVariants}>
-          <h2 className="text-[24px] text-transparent bg-clip-text [background-image:linear-gradient(90deg,#F9F9F9_0%,rgba(249,249,249,0.5)_31.33%,#F9F9F9_64.79%,rgba(249,249,249,0.5)_98.29%)] font-medium mb-6 leading-tight">
-                {heading || "Ready to transform your financial future?"}
+            <h2
+              className={`${headingSize} text-transparent bg-clip-text [background-image:linear-gradient(90deg,#F9F9F9_0%,rgba(249,249,249,0.5)_31.33%,#F9F9F9_64.79%,rgba(249,249,249,0.5)_98.29%)] font-medium mb-6 leading-tight`}
+            >
+              {heading || "Ready to transform your financial future?"}
             </h2>
             <p className="text-[#6A6A6A] text-[13px] font-medium leading-relaxed">
               Join millions of users who trust bepay for their crypto financial
@@ -565,113 +567,113 @@ const Footer  = ({ heading }) => {
           </motion.div>
 
           <motion.div
-    className="w-full grid grid-cols-2 md:grid-cols-4 gap-8 mt-8 text-[14px]"
-    variants={itemVariants}
->
-    {/* ANALYTICS: Added onClick handlers for all navigation and legal links */}
-    <div className="space-y-4">
-        <div className="space-y-4 lg:space-y-6">
-            <Link
-                href="/"
-                onClick={() => handleLinkClick("Personal")}
-                className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-            >
-                PERSONAL
-            </Link>
-            <Link
-                href="/business"
-                onClick={() => handleLinkClick("Business")}
-                className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-            >
-                BUSINESS
-            </Link>
-            <Link
-                href="/bepay-foundations"
-                onClick={() => handleLinkClick("Bepay Foundations")}
-                className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-            >
-                BEPAY FOUNDATIONS
-            </Link>
-        </div>
-    </div>
-    <div className="space-y-4">
-        <div className="space-y-4 lg:space-y-6">
-            <Link
-                href="/about-us"
-                onClick={() => handleLinkClick("About Us")}
-                className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-            >
-                ABOUT US
-            </Link>
-            <Link
-                href="/contact-us"
-                onClick={() => handleLinkClick("Contact Us")}
-                className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-            >
-                CONTACT US
-            </Link>
-            <Link
-                href="/privacy-policy"
-                onClick={() => handleLinkClick("Privacy Policy")}
-                className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-            >
-                PRIVACY POLICY
-            </Link>
-        </div>
-    </div>
-    <div className="space-y-4">
-        <div className="space-y-6 lg:space-y-6">
-            <Link
-                href="/delete-account"
-                onClick={() => handleLinkClick("Account Deletion Form")}
-                className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-            >
-                ACCOUNT DELETION FORM
-            </Link>
-            <Link
-                href="/privacy-policy-for-deleting-user-account"
-                onClick={() => handleLinkClick("For Deleting User Account")}
-                className="block uppercase text-[#7A7A7A] hover:text-gray-400 transition-colors"
-            >
-                for deleting user account
-            </Link>
-            <Link
-                href="/privacy-policy-for-deleting-merchant-account"
-                onClick={() =>
+            className="w-full grid grid-cols-2 md:grid-cols-4 gap-8 mt-8 text-[14px]"
+            variants={itemVariants}
+          >
+            {/* ANALYTICS: Added onClick handlers for all navigation and legal links */}
+            <div className="space-y-4">
+              <div className="space-y-4 lg:space-y-6">
+                <Link
+                  href="/"
+                  onClick={() => handleLinkClick("Personal")}
+                  className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                >
+                  PERSONAL
+                </Link>
+                <Link
+                  href="/business"
+                  onClick={() => handleLinkClick("Business")}
+                  className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                >
+                  BUSINESS
+                </Link>
+                <Link
+                  href="/bepay-foundations"
+                  onClick={() => handleLinkClick("Bepay Foundations")}
+                  className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                >
+                  BEPAY FOUNDATIONS
+                </Link>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="space-y-4 lg:space-y-6">
+                <Link
+                  href="/about-us"
+                  onClick={() => handleLinkClick("About Us")}
+                  className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                >
+                  ABOUT US
+                </Link>
+                <Link
+                  href="/contact-us"
+                  onClick={() => handleLinkClick("Contact Us")}
+                  className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                >
+                  CONTACT US
+                </Link>
+                <Link
+                  href="/privacy-policy"
+                  onClick={() => handleLinkClick("Privacy Policy")}
+                  className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                >
+                  PRIVACY POLICY
+                </Link>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="space-y-6 lg:space-y-6">
+                <Link
+                  href="/delete-account"
+                  onClick={() => handleLinkClick("Account Deletion Form")}
+                  className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                >
+                  ACCOUNT DELETION FORM
+                </Link>
+                <Link
+                  href="/privacy-policy-for-deleting-user-account"
+                  onClick={() => handleLinkClick("For Deleting User Account")}
+                  className="block uppercase text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                >
+                  for deleting user account
+                </Link>
+                <Link
+                  href="/privacy-policy-for-deleting-merchant-account"
+                  onClick={() =>
                     handleLinkClick("For Deleting Merchant Account")
-                }
-                className="block uppercase text-[#7A7A7A] hover:text-gray-400 transition-colors "
-            >
-                for deleting merchant account
-            </Link>
-        </div>
-    </div>
-    <div className="space-y-4">
-        <div className="space-y-5 lg:space-y-6">
-            <Link
-                href="/terms-and-conditions"
-                onClick={() => handleLinkClick("Terms & Conditions")}
-                className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-            >
-                TERMS & CONDITIONS
-            </Link>
-            <Link
-                href="/legal-disclamer"
-                onClick={() => handleLinkClick("Legal Disclaimer")}
-                className="block uppercase text-[#7A7A7A] hover:text-gray-400 transition-colors"
-            >
-                Legal disclaimer
-            </Link>
-            <Link
-                href="/cookie-policy"
-                onClick={() => handleLinkClick("Cookie Policy")}
-                className="block uppercase text-[#7A7A7A] hover:text-gray-400 transition-colors"
-            >
-                Cookie Policy
-            </Link>
-        </div>
-    </div>
-</motion.div>
+                  }
+                  className="block uppercase text-[#7A7A7A] hover:text-gray-400 transition-colors "
+                >
+                  for deleting merchant account
+                </Link>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="space-y-5 lg:space-y-6">
+                <Link
+                  href="/terms-and-conditions"
+                  onClick={() => handleLinkClick("Terms & Conditions")}
+                  className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                >
+                  TERMS & CONDITIONS
+                </Link>
+                <Link
+                  href="/legal-disclamer"
+                  onClick={() => handleLinkClick("Legal Disclaimer")}
+                  className="block uppercase text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                >
+                  Legal disclaimer
+                </Link>
+                <Link
+                  href="/cookie-policy"
+                  onClick={() => handleLinkClick("Cookie Policy")}
+                  className="block uppercase text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                >
+                  Cookie Policy
+                </Link>
+              </div>
+            </div>
+          </motion.div>
         </motion.div>
 
         <motion.div

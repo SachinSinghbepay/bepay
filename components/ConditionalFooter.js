@@ -14,7 +14,10 @@ export default function ConditionalFooter() {
   // NEW: Check if the path is '/business'
   if (pathname === '/business') {
     // If it is, render the Footer with a custom heading prop
-    return <Footer heading="Experience the power of receiving low-fee, lightening fast global payments for your business!" />;
+    return <Footer
+        heading="Experience the power of receiving low-fee, lightening fast global payments for your business!"
+        headingSize="text-[20px]" // ✅ ADDED: Pass the desired size here
+      />;
   }
   
   // For all other pages, render the default Footer without the special heading

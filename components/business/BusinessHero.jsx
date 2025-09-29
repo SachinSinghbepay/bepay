@@ -15,6 +15,7 @@ import {
 import { addToWaitlist } from "@/lib/firebase";
 import { usePathname } from "next/navigation";
 import { AnalyticsService } from "@/services/analyticsService";
+import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 const BusinessHero = () => {
   const containerRef = useRef(null);
@@ -208,10 +209,10 @@ const BusinessHero = () => {
             // ===================================
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col relative">
               <div className="text-center mb-6 max-w-[95%] mx-auto">
-                <h1 className="font-montserrat font-normal text-[28px] leading-[32px] tracking-[-0.07em] uppercase mb-6 text-[#333333]">
+                <h1 className="font-montserrat font-medium text-[28px] leading-[32px] tracking-[-0.07em] uppercase mb-6 text-[#333333]">
                   <>
-                    <span className="text-[#C0C0C0]">Accept</span> stablecoins.{" "}
-                    <span className="text-[#C0C0C0]">Grow</span> globally.
+                    <span className="text-[#C0C0C0] font-normal">Accept</span> stablecoins.{" "}
+                    <span className="text-[#C0C0C0] font-normal">Grow</span> globally.
                   </>
                 </h1>
                 <p className="text-[#6A6A6AE5] text-base text-left mb-6">
@@ -314,7 +315,7 @@ const BusinessHero = () => {
                             </div>
                           )}
                         </div>
-                        <motion.button
+                        <WaitlistTriggerButton 
                           onClick={handleEmailButtonSubmit}
                           type="submit"
                           disabled={isSubmitting}
@@ -327,7 +328,7 @@ const BusinessHero = () => {
                           ) : (
                             "Join the Waitlist"
                           )}
-                        </motion.button>
+                        </WaitlistTriggerButton >
                       </form>
                     ) : (
                       <motion.div

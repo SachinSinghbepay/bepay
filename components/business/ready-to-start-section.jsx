@@ -36,6 +36,7 @@ const finalCardData = {
 
 const mobileCards = [...features, finalCardData];
 
+// ✅ COMPONENT UPDATED HERE
 const MobileCard = ({ cardData }) => (
   <div
     className="h-[391px] w-[305px] bg-white rounded-[24px] p-8 flex flex-col justify-between relative overflow-hidden flex-shrink-0 border-[0.76px] border-black/5"
@@ -44,13 +45,20 @@ const MobileCard = ({ cardData }) => (
         "60px 20px 30px -20px rgba(0, 0, 0, 0.04), 80px 30px 120px -90px rgba(0, 0, 0, 0.02)",
     }}
   >
-    <div className="absolute top-0 right-0 w-48 h-48 z-0">
+    <div
+      className="absolute top-0 right-0 z-0" // ✅ Alignment reverted to top-right
+      style={{
+        width: "114.11px",
+        height: "114.11px",
+        opacity: 1,
+      }}
+    >
       <Image
         src={cardData.icon}
-        height={192}
-        width={192}
+        height={114}
+        width={114}
         alt={cardData.title}
-        className="object-contain"
+        className="object-contain w-full h-full"
       />
     </div>
     <div className="z-10 mt-auto text-left relative">
@@ -113,7 +121,7 @@ const MobileView = () => {
   return (
     <div
       ref={mobileContainerRef}
-      className="md:hidden relative h-[300vh] bg-gray-50 font-montserrat"
+      className="md:hidden relative h-[300vh] bg-[#F6F6F6] font-montserrat"
     >
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="flex flex-col h-full justify-start pt-[8vh] pb-[8vh]">
@@ -174,10 +182,17 @@ const MobileView = () => {
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 viewport={{ once: true, amount: 0.5 }}
                 onClick={handleStartEarningClick}
-                className="flex items-center text-sm font-medium justify-center bg-[#080808] text-white w-full max-w-xs h-[56px] rounded-full gap-[10px] py-4 px-6"
+                className="bg-black cursor-pointer text-white hover:bg-black/90 transition-colors duration-200 flex items-center justify-center rounded-full gap-[10px] 
+                           font-semibold text-[12px] font-600 leading-none tracking-normal"
+                style={{
+                  width: "260px",
+                  height: "56px",
+                  padding: "16px 24px",
+                  fontFamily: "Open Sans",
+                }}
               >
                 Become a merchant on bepay
-                <ArrowUpRight className="w-6 h-6" strokeWidth={1} />
+                <ArrowUpRight className="w-5 h-7" strokeWidth={1.5} />
               </motion.button>
             </WaitlistTriggerButton>
           </div>
@@ -281,7 +296,6 @@ export default function AnimatedCardsSection() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isMobile]);
 
-  // ✅ FIX: Added backticks (`) to create valid template literal strings
   const getCardTransform = (index) => {
     const startThreshold = 0.2;
     const endThreshold = 0.5;
@@ -462,10 +476,20 @@ export default function AnimatedCardsSection() {
                         <WaitlistTriggerButton triggerSource="'Ready-to-start section' button">
                           <button
                             onClick={handleStartEarningClick}
-                            className="flex items-center text-[12px] justify-center bg-[#080808] text-white w-[260px] h-[56px] rounded-full gap-[10px] py-4 px-6"
+                            className="bg-black cursor-pointer text-white hover:bg-black/90 transition-colors duration-200 flex items-center justify-center rounded-full gap-[10px] 
+                           font-semibold text-[12px] font-600 leading-none tracking-normal"
+                            style={{
+                              width: "230px",
+                              height: "56px",
+                              padding: "16px 24px",
+                              fontFamily: "Open Sans",
+                            }}
                           >
                             Become a merchant on bepay
-                            <ArrowUpRight className="w-3 h-3 md:w-4 md:h-4" />
+                            <ArrowUpRight
+                              className="w-5 h-7 flex-shrink-0"
+                              strokeWidth={1.5}
+                            />
                           </button>
                         </WaitlistTriggerButton>
                       </div>

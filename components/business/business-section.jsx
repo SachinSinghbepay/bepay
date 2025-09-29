@@ -40,26 +40,26 @@ export default function BusinessSection() {
               }}
               viewport={{ once: true }}
               className="absolute 
-                                top-[75%] right-[61%] 
-                                sm:top-[80%] sm:right-[56%]
-                                md:top-[85%] md:right-[51%]
-                                lg:top-[85%] lg:right-[56%]
-                                xl:top-[80%] xl:right-[61%]
-                                2xl:top-[75%] 2xl:right-[66%]
-                                transform translate-x-1/2 -translate-y-1/2"
+                                  top-[75%] right-[61%] 
+                                  sm:top-[80%] sm:right-[56%]
+                                  md:top-[85%] md:right-[51%]
+                                  lg:top-[85%] lg:right-[56%]
+                                  xl:top-[80%] xl:right-[61%]
+                                  2xl:top-[75%] 2xl:right-[66%]
+                                  transform translate-x-1/2 -translate-y-1/2"
             >
               <Image
                 src="/images/business/bs_1.svg"
                 alt="Payment sent notification"
                 width={100}
                 height={450}
-                className="w-[120px] h-auto 
-                                     sm:w-[140px] 
-                                     md:w-[160px] 
-                                     lg:w-[180px] 
-                                     xl:w-[220px] 
-                                     2xl:w-[270px]
-                                     drop-shadow-lg"
+                className="w-[280px] h-[185px]  /* <-- Increased again for mobile */
+                                           sm:w-[140px] sm:h-auto 
+                                           md:w-[160px] 
+                                           lg:w-[180px] 
+                                           xl:w-[220px] 
+                                           2xl:w-[270px]
+                                           drop-shadow-lg"
               />
             </motion.div>
           </motion.div>
@@ -97,26 +97,26 @@ export default function BusinessSection() {
               }}
               viewport={{ once: true }}
               className="absolute 
-                                top-[75%] left-[61%] 
-                                sm:top-[80%] sm:left-[56%]
-                                md:top-[85%] md:left-[51%]
-                                lg:top-[85%] lg:left-[56%]
-                                xl:top-[80%] xl:left-[61%]
-                                2xl:top-[75%] 2xl:left-[66%]
-                                transform -translate-x-1/2 -translate-y-1/2"
+                                  top-[75%] left-[61%] 
+                                  sm:top-[80%] sm:left-[56%]
+                                  md:top-[85%] md:left-[51%]
+                                  lg:top-[85%] lg:left-[56%]
+                                  xl:top-[80%] xl:left-[61%]
+                                  2xl:top-[75%] 2xl:left-[66%]
+                                  transform -translate-x-1/2 -translate-y-1/2"
             >
               <Image
                 src="/images/business/ia2.svg"
                 alt="Payment received notification"
                 width={300}
                 height={450}
-                className="w-[120px] h-auto 
-                  sm:w-[140px] 
-                  md:w-[160px] 
-                  lg:w-[180px] 
-                  xl:w-[220px] 
-                  2xl:w-[270px]
-                  drop-shadow-lg"
+                className="w-[280px] h-[185px]  /* <-- Increased again for mobile */
+                                           sm:w-[140px] sm:h-auto 
+                                           md:w-[160px] 
+                                           lg:w-[180px] 
+                                           xl:w-[220px] 
+                                           2xl:w-[270px]
+                                           drop-shadow-lg"
               />
             </motion.div>
           </motion.div>
