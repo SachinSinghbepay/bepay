@@ -131,7 +131,8 @@ export default function BusinessSmartlySection() {
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-2 md:pt-4 pb-4 md:pb-8">
           <div className="flex flex-col items-center justify-center text-center">
             <div className="max-w-5xl mx-auto">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-[400] tracking-[-0.05em] leading-none">
+              {/* MODIFIED LINE BELOW */}
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-[400] tracking-[-0.05em] leading-snug md:leading-none">
                 <span className="block text-[#C0C0C0] dark:text-[#333333]">
                   Everything you need
                 </span>
