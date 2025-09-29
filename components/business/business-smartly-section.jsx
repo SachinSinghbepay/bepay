@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import Image from "next/image";
 import { IconCircleCheckFilled } from "@tabler/icons-react";
-import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import { AnalyticsService } from "@/services/analyticsService";
 
 // FeatureCard component
 function FeatureCard({ title, image, features, index, isInView }) {
@@ -18,10 +18,10 @@ function FeatureCard({ title, image, features, index, isInView }) {
         ease: "easeOut",
       }}
       className="flex-col w-[90vw] md:w-[50vw] lg:w-[35vw] xl:w-[32vw] h-[550px] md:h-[500px] bg-white rounded-[30px] flex-shrink-0 relative"
-      // MODIFIED: Shadow only extends right and down, no upward shadow
       style={{
-        boxShadow: "60px 20px 30px -20px rgba(0, 0, 0, 0.15), 80px 30px 120px -90px rgba(0, 0, 0, 0.08)",
-        zIndex: 100 - index, // Higher z-index for earlier cards so their shadows appear on top
+        // Shadow opacity has been reduced
+        boxShadow: "60px 20px 30px -20px rgba(0, 0, 0, 0.07), 80px 30px 120px -90px rgba(0, 0, 0, 0.04)",
+        zIndex: 100 - index,
       }}
     >
       <div className="relative w-full h-[225px] overflow-hidden rounded-[30px]">
@@ -33,9 +33,11 @@ function FeatureCard({ title, image, features, index, isInView }) {
           className="object-cover p-2 rounded-[30px] w-full h-full transition-transform duration-500 group-hover:scale-105"
         />
       </div>
-      <div className="p-8 flex flex-col justify-between h-[calc(100%-225px)]">
+      {/* Padding adjusted for mobile */}
+      <div className="p-6 md:p-8 flex flex-col justify-between h-[calc(100%-225px)]">
         <div>
-          <h3 className="font-['Montserrat'] font-medium text-[20px] leading-[24px] tracking-[-0.02em] mb-6 text-black uppercase">
+          {/* Margin adjusted for mobile */}
+          <h3 className="font-['Montserrat'] font-medium text-[20px] leading-[24px] tracking-[-0.02em]  -mt-4 md:mt-0 mb-4 md:mb-6 text-black uppercase">
             {title}
           </h3>
           <ul className="space-y-4 lg:space-y-4">
@@ -131,7 +133,6 @@ export default function BusinessSmartlySection() {
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-2 md:pt-4 pb-4 md:pb-8">
           <div className="flex flex-col items-center justify-center text-center">
             <div className="max-w-5xl mx-auto">
-              {/* MODIFIED LINE BELOW */}
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-[400] tracking-[-0.05em] leading-snug md:leading-none">
                 <span className="block text-[#C0C0C0] dark:text-[#333333]">
                   Everything you need

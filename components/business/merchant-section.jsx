@@ -73,7 +73,7 @@ export default function MerchantSection() {
 
   if (isMobile) {
     // =================================================================
-    // MOBILE VIEW - UPDATED
+    // MOBILE VIEW
     // =================================================================
     return (
       <section
@@ -123,24 +123,21 @@ export default function MerchantSection() {
             >
               <button
                 onClick={handleButtonClick}
-                className="bg-black cursor-pointer text-white hover:bg-black/90 transition-colors duration-200 flex items-center justify-center rounded-full gap-[10px]"
+                className="bg-black cursor-pointer text-white hover:bg-black/90 transition-colors duration-200 flex items-center justify-center rounded-full gap-[10px] 
+                           font-semibold text-[12px] font-600 leading-none tracking-normal"
                 style={{
                   width: "230px",
                   height: "56px",
-                  paddingTop: "16px",
-                  paddingRight: "24px",
-                  paddingBottom: "16px",
-                  paddingLeft: "24px",
+                  padding: "16px 24px",
                   fontFamily: "Open Sans",
-                  fontWeight: 600,
-                  fontSize: "12px",
-                  lineHeight: "100%",
-                  letterSpacing: "0%",
-                  textAlign: "center",
                 }}
               >
                 Become a merchant now
-                <ArrowUpRight className="w-7 h-7 flex-shrink-0" />
+                {/* ✅ ADDED strokeWidth PROP */}
+                <ArrowUpRight
+                  className="w-5 h-7 flex-shrink-0"
+                  strokeWidth={1.5}
+                />
               </button>
             </motion.div>
           </WaitlistTriggerButton>
@@ -153,25 +150,25 @@ export default function MerchantSection() {
           transition={{ duration: 1, ease: "easeOut" }}
           viewport={{ once: true, amount: 0.1 }}
         >
-        <Image
-          src="/images/business/mocup.png"
-          alt="Bepay merchant mobile app interface"
-          width={280}
-          height={650}
-          className="w-full h-auto" // Removed shadow classes from here
-          priority
-          // ✅ ADDED: A single style prop combining both drop-shadow filters
-          style={{
-            filter: "drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.1)) drop-shadow(-10px -10px 20px #FFFFFF)",
-          }}
-        />
+          <Image
+            src="/images/business/mocup.png"
+            alt="Bepay merchant mobile app interface"
+            width={280}
+            height={650}
+            className="w-full h-auto"
+            priority
+            style={{
+              filter:
+                "drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.1)) drop-shadow(-10px -10px 20px #FFFFFF)",
+            }}
+          />
         </motion.div>
       </section>
     );
   }
 
   // =================================================================
-  // DESKTOP VIEW (Unchanged)
+  // DESKTOP VIEW
   // =================================================================
   return (
     <section
@@ -222,7 +219,11 @@ export default function MerchantSection() {
                   className="bg-black w-[210px] cursor-pointer whitespace-nowrap text-white text-[12px] font-medium hover:bg-black/90 transition-colors duration-200 flex items-center justify-center h-[56px] rounded-[100px] gap-[10px] py-4 px-6"
                 >
                   Become a merchant
-                  <ArrowUpRight className="w-7 h-7 flex-shrink-0" />
+                  {/* ✅ ADDED strokeWidth PROP */}
+                  <ArrowUpRight
+                    className="w-7 h-7 flex-shrink-0"
+                    strokeWidth={2}
+                  />
                 </button>
                 <button className="w-[210px] border-2 cursor-pointer border-gray-300 text-gray-700 text-[12px] font-medium hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center h-[56px] rounded-[100px] gap-[10px] py-4 px-6">
                   <svg

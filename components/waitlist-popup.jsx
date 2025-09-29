@@ -1,14 +1,220 @@
 "use client";
 
-import { useState, useEffect, Suspense, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { addToWaitlist } from "@/lib/firebase";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { AnalyticsService } from "@/services/analyticsService";
-import {usePathname} from "next/navigation"; 
+
+export default function WaitlistPopup({
+  isOpen: externalIsOpen,
+  onClose: externalOnClose,
+  onSubmit: externalOnSubmit,
+  triggerSource = "auto_waitlist_popup",
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const [mounted, setMounted] = useState(false);
+  const finalIsOpen = externalIsOpen !== undefined ? externalIsOpen : isOpen;
+  const pathname = usePathname();
+
+  // Delay popup open
+  useEffect(() => {
+    history.scrollRestoration = "manual";
+    if (externalIsOpen === undefined) {
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [externalIsOpen]);
+
+  useEffect(() => {
+    const submittedEmail = localStorage.getItem(
+      "waitlist_submitted_email" + pathname
+    );
+
+    if (finalIsOpen && !submittedEmail) {
+      let popupType;
+
+      if (triggerSource === "auto_waitlist_popup") {
+        popupType =
+          pathname === "/"
+            ? "auto_waitlist_popup_viewed_personal"
+            : pathname === "/business"
+            ? "auto_waitlist_popup_viewed_business"
+            : "auto_waitlist_popup_viewed_other";
+      } else {
+        popupType =
+          pathname === "/"
+            ? "waitlist_popup_viewed_personal"
+            : pathname === "/business"
+            ? "waitlist_popup_viewed_business"
+            : "waitlist_popup_viewed_other";
+      }
+
+      AnalyticsService.sendEvent(popupType, {
+        screen_name: "waitlist_popup",
+        triggerSource,
+        pathname,
+      });
+    }
+  }, [finalIsOpen, triggerSource, pathname]);
+
+  const handleOverlayClose = () => {
+    AnalyticsService.sendEvent("user_clicked_on_screen_to_close_popup");
+    if (externalOnClose) {
+      externalOnClose();
+    } else {
+      setIsOpen(false);
+    }
+  };
+
+  const handleCloseButtonClick = () => {
+    AnalyticsService.sendEvent("on_waitlist_close_button_clicked", {
+      triggerSource,
+    });
+    if (externalOnClose) {
+      externalOnClose();
+    } else {
+      setIsOpen(false);
+    }
+  };
+
+  const [hasFocusedEmail, setHasFocusedEmail] = useState(false);
+  const handleEmailFocus = () => {
+    if (!hasFocusedEmail) {
+      AnalyticsService.sendEvent("on_email_field_focused");
+      setHasFocusedEmail(true);
+    }
+  };
+
+  const onSubmit = useMemo(() => {
+    return externalOnSubmit || (() => setIsOpen(false));
+  }, [externalOnSubmit]);
+
+  useEffect(() => {
+    setMounted(true);
+    const submittedEmail = localStorage.getItem(
+      "waitlist_submitted_email" + pathname
+    );
+
+    if (externalIsOpen === undefined && submittedEmail) {
+      setIsOpen(false);
+    }
+    if (finalIsOpen && submittedEmail) {
+      setIsSuccess(true);
+    } else {
+      setIsSuccess(false);
+    }
+  }, [finalIsOpen, externalIsOpen, pathname]);
+
+  const [hasViewedSuccessPopup, setHasViewedSuccessPopup] = useState(false);
+
+  useEffect(() => {
+    if (finalIsOpen && isSuccess && !hasViewedSuccessPopup) {
+      AnalyticsService.sendEvent("joined_waitlist_popup_viewed", {
+        triggerSource,
+        email,
+      });
+      setHasViewedSuccessPopup(true);
+    }
+  }, [finalIsOpen, isSuccess, hasViewedSuccessPopup, triggerSource, email]);
+
+  useEffect(() => {
+    if (finalIsOpen) {
+      const originalStyle = window.getComputedStyle(document.body).overflow;
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalStyle;
+        document.documentElement.style.overflow = "unset";
+      };
+    }
+  }, [finalIsOpen]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        onSubmit();
+        if (externalOnClose) externalOnClose();
+        else setIsOpen(false);
+      }, 12000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess, externalOnClose, onSubmit]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email || isSubmitting || isSuccess) return;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    AnalyticsService.sendEvent("on_join_the_waitlist_button_clicked", {
+      triggerSource,
+    });
+
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const { campaignId: newCampaignId } = await addToWaitlist(
+        email,
+        pathname
+      );
+      localStorage.setItem("campaignId", newCampaignId);
+      localStorage.setItem("waitlist_submitted_email" + pathname, email);
+      AnalyticsService.createWaitlistUser(email, {
+        triggerSource,
+        joined_via: "waitlist_form",
+      });
+      setIsSuccess(true);
+      AnalyticsService.sendEvent("pop-up_waitlist_submission_successful", {
+        status: "success",
+        triggerSource,
+        email,
+      });
+    } catch (error) {
+      setError(error.message || "Failed to join waitlist. Please try again.");
+      AnalyticsService.sendEvent("waitlist_submission_failed", {
+        status: "failure",
+        error_reason: error.message || "Unknown error",
+        triggerSource,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (!mounted) return null;
+
+  return createPortal(
+    <PortalContent
+      isOpen={finalIsOpen}
+      onClose={handleOverlayClose}
+      onCloseButtonClick={handleCloseButtonClick}
+      onEmailFocus={handleEmailFocus}
+      handleSubmit={handleSubmit}
+      email={email}
+      setEmail={setEmail}
+      isSubmitting={isSubmitting}
+      isSuccess={isSuccess}
+      error={error}
+      pathname={pathname}
+    />,
+    document.body
+  );
+}
 
 function PortalContent({
   isOpen,
@@ -21,6 +227,7 @@ function PortalContent({
   isSubmitting,
   isSuccess,
   error,
+  pathname,
 }) {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -30,7 +237,6 @@ function PortalContent({
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
-
 
   const overlayStyle = {
     position: "fixed",
@@ -52,7 +258,7 @@ function PortalContent({
     width: "100%",
     maxWidth: isMobile ? "22rem" : "38rem",
     backgroundColor: "#ffffff",
-    border: "1px solid rgba(0,0,0,0.1)",
+    border: "1px solid rgba(0,0,0,0.1)",
     borderRadius: "47px",
     boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.2)",
     overflow: "hidden",
@@ -63,7 +269,7 @@ function PortalContent({
     flexDirection: "column",
     justifyContent: "flex-start",
     paddingBottom: isMobile ? "0.5rem" : "0",
-    color:  "#111827",
+    color: "#111827",
   };
   const closeButtonStyle = {
     position: "absolute",
@@ -84,19 +290,19 @@ function PortalContent({
     width: "100%",
     height: "42px",
     padding: "0 1rem",
-    border: "1px solid rgb(209,213,219)", // 👈 UPDATED
-    borderRadius: "9999px",
-    fontSize: "13px",
-    outline: "none",
-    backgroundColor: "rgb(249,250,251)", // 👈 UPDATED (Corrected from 211 to 251 for consistency)
-    color: "#111827", // 👈 UPDATED
+    border: "1px solid rgb(209,213,219)",
+    borderRadius: "9999px",
+    fontSize: "13px",
+    outline: "none",
+    backgroundColor: "rgb(249,250,251)",
+    color: "#111827",
   };
   const buttonStyle = {
     width: "100%",
     height: "42px",
     borderRadius: "9999px",
-    backgroundColor: "#000000", // 👈 UPDATED
-    color: "#ffffff", // 👈 UPDATED
+    backgroundColor: "#000000",
+    color: "#ffffff",
     fontWeight: "600",
     border: "none",
     cursor: "pointer",
@@ -129,8 +335,7 @@ function PortalContent({
               aria-label="Close popup"
               style={closeButtonStyle}
               onMouseEnter={(e) =>
-                (e.currentTarget.style.backgroundColor =
-                  "rgba(0,0,0,0.05)")
+                (e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.05)")
               }
               onMouseLeave={(e) =>
                 (e.currentTarget.style.backgroundColor = "transparent")
@@ -157,16 +362,16 @@ function PortalContent({
                 style={{ marginBottom: isMobile ? "1rem" : "1.5rem" }}
               >
                 <Image
-                  src="/bepaymoney.svg"
-                  alt="BePayMoney"
+                  src={pathname === "/business" ? "/business_logo.svg" : "/bepaymoney.svg"}
+                  alt={pathname === "/business" ? "BePayMoney Business" : "BePayMoney"}
                   width={isMobile ? 140 : 180}
                   height={isMobile ? 50 : 70}
                   style={{
                     margin: "0 auto",
                     borderRadius: "0.75rem",
-                    backgroundColor:  "transparent",
+                    backgroundColor: "transparent",
                     padding: "0.4rem",
-                    filter: "none", // make it white
+                    filter: "none",
                   }}
                 />
               </motion.div>
@@ -176,7 +381,6 @@ function PortalContent({
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
-                  {" "}
                   <h2
                     style={{
                       fontFamily: "'Montserrat', sans-serif",
@@ -186,11 +390,13 @@ function PortalContent({
                       letterSpacing: "-2%",
                       textAlign: "center",
                       marginBottom: "0.5rem",
-                      color:  "#000000",
+                      color: "#000000",
                     }}
                   >
-                    Be the first to experience the future of payments.
-                  </h2>{" "}
+                    {pathname === "/business"
+                      ? "Every business starts with a spark!"
+                      : "Be the first to experience the future of payments."}
+                  </h2>
                 </motion.div>
               )}
             </div>
@@ -214,17 +420,16 @@ function PortalContent({
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className={isMobile ? "-mt-6 mb-4" : "-mt-9 mb-6"}>
-                      {" "}
                       <h2
                         style={{
                           fontSize: isMobile ? "1rem" : "1.5rem",
                           fontWeight: 600,
                           marginBottom: isMobile ? "1.5rem" : "0.5rem",
-                          color:  "#000000",
+                          color: "#000000",
                         }}
                       >
                         Yay! You&apos;re on the waitlist.
-                      </h2>{" "}
+                      </h2>
                       <p
                         style={{
                           fontFamily: "'Montserrat', sans-serif",
@@ -237,10 +442,9 @@ function PortalContent({
                           color: "#6A6A6A",
                         }}
                       >
-                        {" "}
-                        Keep an eye on your inbox. We&apos;ll email <br /> you as
-                        soon as we launch!{" "}
-                      </p>{" "}
+                        Keep an eye on your inbox. We&apos;ll email <br /> you
+                        as soon as we launch!
+                      </p>
                     </div>
                     <button
                       onClick={onClose}
@@ -248,7 +452,7 @@ function PortalContent({
                         padding: isMobile ? "0.6rem 1.5rem" : "1rem 1.5rem",
                         borderRadius: "9999px",
                         backgroundColor: "#111827",
-                        color:"#ffffff",
+                        color: "#ffffff",
                         fontWeight: "400",
                         cursor: "pointer",
                         marginTop: isMobile ? "4.5rem" : "0.2rem",
@@ -256,8 +460,7 @@ function PortalContent({
                         fontSize: isMobile ? "14px" : "12px",
                       }}
                     >
-                      {" "}
-                      Awesome!{" "}
+                      Awesome!
                     </button>
                   </motion.div>
                 ) : (
@@ -286,7 +489,7 @@ function PortalContent({
                         marginTop: isMobile ? "-0.5rem" : "0",
                         padding: isMobile ? "0 0.5rem" : "0",
                         marginBottom: isMobile ? "1.5rem" : "-0.4rem",
-                        color:  "#333333",
+                        color: "#333333",
                       }}
                     >
                       We’re launching soon! Join the waitlist and stay ahead of
@@ -317,10 +520,9 @@ function PortalContent({
                           disabled={isSubmitting || !email}
                           style={buttonStyle}
                         >
-                          {" "}
                           {isSubmitting
                             ? "Submitting..."
-                            : "Join the waitlist"}{" "}
+                            : "Join the waitlist"}
                         </button>
                       </div>
                     ) : (
@@ -329,10 +531,10 @@ function PortalContent({
                           width: "85%",
                           display: "flex",
                           alignItems: "center",
-                          border: "1px solid rgb(209,213,219)", // 👈 UPDATED
-                          borderRadius: "9999px",
-                          overflow: "hidden",
-                          backgroundColor: "rgb(249,250,251)", // 👈 UPDATED
+                          border: "1px solid rgb(209,213,219)",
+                          borderRadius: "9999px",
+                          overflow: "hidden",
+                          backgroundColor: "rgb(249,250,251)",
                         }}
                       >
                         <input
@@ -348,7 +550,7 @@ function PortalContent({
                             outline: "none",
                             fontSize: "0.9rem",
                             backgroundColor: "transparent",
-                            color:  "#111827",
+                            color: "#111827",
                           }}
                           onFocus={onEmailFocus}
                           onKeyDown={(e) => {
@@ -362,7 +564,7 @@ function PortalContent({
                             height: "2.8rem",
                             padding: "0 1.8rem",
                             backgroundColor: "#000000",
-                            color:"#ffffff",
+                            color: "#ffffff",
                             border: "none",
                             fontSize: "0.8rem",
                             fontWeight: "250",
@@ -389,7 +591,7 @@ function PortalContent({
                                 width: "1.25rem",
                                 height: "1.25rem",
                                 border: "2px solid",
-                                borderColor:  "white",
+                                borderColor: "white",
                                 borderTop: "2px solid transparent",
                                 borderRadius: "50%",
                               }}
@@ -411,8 +613,7 @@ function PortalContent({
                           textAlign: "center",
                         }}
                       >
-                        {" "}
-                        {error}{" "}
+                        {error}
                       </motion.p>
                     )}
                   </motion.div>
@@ -425,247 +626,3 @@ function PortalContent({
     </AnimatePresence>
   );
 }
-
-export default function WaitlistPopup({
-  isOpen: externalIsOpen,
-  onClose: externalOnClose,
-  onSubmit: externalOnSubmit,
-  triggerSource: triggerSource,
-}) {
-  return (
-    <Suspense fallback={<div></div>}>
-      <WaitlistPopupContent
-        isOpen={externalIsOpen}
-        onClose={externalOnClose}
-        onSubmit={externalOnSubmit}
-        triggerSource={triggerSource}
-      />
-    </Suspense>
-  );
-}
-
-function WaitlistPopupContent({
-  isOpen: externalIsOpen,
-  onClose: externalOnClose,
-  onSubmit: externalOnSubmit,
-  triggerSource = "auto_waitlist_popup", // 👈 set default
-  
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState("");
-  const [mounted, setMounted] = useState(false);
-  const finalIsOpen = externalIsOpen !== undefined ? externalIsOpen : isOpen;
-  const pathname = usePathname();
-
- // ⏳ Delay popup open by 4–5 seconds
- useEffect(() => {
-    history.scrollRestoration = "manual";
-    if (externalIsOpen === undefined) { 
-     const timer = setTimeout(() => {
-       setIsOpen(true);
-     }, 2000); 
-     return () => clearTimeout(timer);
-    }
-  }, [externalIsOpen]);
-
-  useEffect(() => {
-  const submittedEmail = localStorage.getItem("waitlist_submitted_email" + pathname);
-
-  if (finalIsOpen && !submittedEmail) {
-    let popupType;
-
-    if (triggerSource === "auto_waitlist_popup") {
-      if (pathname === "/") {
-        popupType = "auto_waitlist_popup_viewed_personal";
-      } else if (pathname === "/business") {
-        popupType = "auto_waitlist_popup_viewed_business";
-      } else {
-        popupType = "auto_waitlist_popup_viewed_other";
-      }
-    } else {
-      if (pathname === "/") {
-        popupType = "waitlist_popup_viewed_personal";
-      } else if (pathname === "/business") {
-        popupType = "waitlist_popup_viewed_business";
-      } else {
-        popupType = "waitlist_popup_viewed_other";
-      }
-    }
-
-    AnalyticsService.sendEvent(popupType, {
-      screen_name: "waitlist_popup",
-      triggerSource,
-      pathname,
-    });
-  }
-}, [finalIsOpen, triggerSource, pathname]);
-
-
-
-
-  const handleOverlayClose = () => {
-    AnalyticsService.sendEvent("user_clicked_on_screen_to_close_popup");
-    if (externalOnClose) {
-      externalOnClose();
-    } else {
-      setIsOpen(false);
-    }
-    
-  };
-
-  const handleCloseButtonClick = () => {
-    AnalyticsService.sendEvent("on_waitlist_close_button_clicked", {
-    triggerSource,
-
-     });
-    if (externalOnClose) {
-      externalOnClose();
-    } else {
-      setIsOpen(false);
-    }
-    
-  };
-
-const [hasFocusedEmail, setHasFocusedEmail] = useState(false);
-
-const handleEmailFocus = () => {
-  if (!hasFocusedEmail) {
-    AnalyticsService.sendEvent("on_email_field_focused");
-    setHasFocusedEmail(true); // mark as triggered
-  }
-};
-
-
-
-  const onSubmit = useMemo(() => {
-    return externalOnSubmit || (() => setIsOpen(false));
-  }, [externalOnSubmit])
-
-
-  useEffect(() => {
-    setMounted(true);
-    const submittedEmail = localStorage.getItem("waitlist_submitted_email" + pathname);
-    
-    if (externalIsOpen === undefined && submittedEmail) {
-      setIsOpen(false);
-    }
-    if (finalIsOpen && submittedEmail) {
-      setIsSuccess(true);
-    } else {
-      setIsSuccess(false);
-    }
-  }, [finalIsOpen, externalIsOpen, pathname]);
-
-  const [hasViewedSuccessPopup, setHasViewedSuccessPopup] = useState(false);
-
-  useEffect(() => {
-    if (finalIsOpen && isSuccess && !hasViewedSuccessPopup) {
-      AnalyticsService.sendEvent("joined_waitlist_popup_viewed" , {
-        triggerSource,
-        email,
-      });
-      
-      setHasViewedSuccessPopup(true);
-    }
-  }, [finalIsOpen, isSuccess, hasViewedSuccessPopup, triggerSource, email]);
-
-
-
-  useEffect(() => {
-    if (finalIsOpen) {
-      const originalStyle = window.getComputedStyle(document.body).overflow;
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = originalStyle;
-        document.documentElement.style.overflow = "unset";
-      };
-    }
-  }, [finalIsOpen]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      const timer = setTimeout(() => {
-        onSubmit();
-        if (externalOnClose) externalOnClose();
-        else setIsOpen(false);
-      }, 12000);
-      return () => clearTimeout(timer);
-    }
-  }, [isSuccess, externalOnClose, onSubmit]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!email || isSubmitting || isSuccess) return;
-
-    // check valid email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-
-    AnalyticsService.sendEvent("on_join_the_waitlist_button_clicked", {
-      triggerSource, // ✅ include trigger source
-    });
-
-    setIsSubmitting(true);
-    setError("");
-
-    try {
-      const { campaignId: newCampaignId } = await addToWaitlist(
-        email,
-        pathname
-      );
-      // update or add campaignId
-      localStorage.setItem("campaignId", newCampaignId);
-
-      localStorage.setItem("waitlist_submitted_email" + pathname, email);
-      AnalyticsService.createWaitlistUser(email, {
-        triggerSource,
-        joined_via: "waitlist_form",
-      });
-
-      setIsSuccess(true);
-
-      AnalyticsService.sendEvent("pop-up_waitlist_submission_successful", {
-        status: "success",
-        triggerSource,
-        email,
-      });
-    } catch (error) {
-      setError(error.message || "Failed to join waitlist. Please try again.");
-      AnalyticsService.sendEvent("waitlist_submission_failed", {
-        status: "failure",
-        error_reason: error.message || "Unknown error",
-        triggerSource,
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-
-  if (!mounted) return null;
-
-  return createPortal(
-    <PortalContent
-      isOpen={finalIsOpen}
-      onClose={handleOverlayClose}
-      onCloseButtonClick={handleCloseButtonClick}
-      onEmailFocus={handleEmailFocus}
-      onSubmit={onSubmit}
-      email={email}
-      setEmail={setEmail}
-      isSubmitting={isSubmitting}
-      isSuccess={isSuccess}
-      error={error}
-      handleSubmit={handleSubmit}
-    />,
-    document.body
-  );
-}
-
