@@ -64,7 +64,7 @@ const BepayComparison = () => {
   return (
     <div
       ref={sectionRef}
-      className="min-h-screen bg-[#F9F9F9] flex items-center justify-center p-4 md:p-8 pb-16"
+     className="min-h-screen bg-[#F9F9F9] flex justify-center md:items-center pt-10 p-4 md:p-8 pb-16"
     >
       <div className="w-full mx-auto max-w-7xl">
         {/* Title */}
