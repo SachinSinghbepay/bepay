@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image"; // ✅ Import the Next.js Image component
 import { AnalyticsService } from "@/services/analyticsService";
 import { useRef, useState, useEffect } from "react";
 
@@ -97,18 +98,19 @@ export default function ComplianceSection() {
               key={index}
               variants={cardVariants}
               className=" bg-white rounded-[32px] p-8 lg:p-12 h-auto min-h-[200px] lg:min-h-[300px] 3xl:min-h-[463px] flex flex-col justify-between relative"
-               
               style={{
-                // ✅ CHANGE: Increased shadow opacity from 0.06 to 0.1
                 boxShadow: "50px 50px 100px 0px rgba(0, 0, 0, 0.1)",
                 zIndex: complianceData.length - index,
               }}
             >
               <div className="flex items-center gap-4 lg:gap-6 mb-8">
                 <div className="flex-shrink-0">
-                  <img
+                  {/* ✅ Replaced <img> with next/image <Image /> */}
+                  <Image
                     src={item.icon}
                     alt={`${item.title} icon`}
+                    width={80}
+                    height={80}
                     className="w-8 h-8 lg:w-[60px] lg:h-[60px] 3xl:w-[80px] 3xl:h-[80px]"
                   />
                 </div>
