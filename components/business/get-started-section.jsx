@@ -32,17 +32,14 @@ const steps = [
     rightSubtitle: "Accept your first crypto payment in minutes",
     rightButtons: (
       <WaitlistTriggerButton triggerSource="'get started business section' button">
-        {/* ✅ CHANGE: Adjusted max-width for mobile CTA button */}
-        <div className="flex flex-col gap-4 mt-8 w-full justify-center mx-auto max-w-[290px] lg:justify-start lg:mx-0 lg:max-w-none">
-          <button
-            onClick={handleStartEarningClick}
-            /* ✅ CHANGE: Adjusted gap for mobile CTA button */
-            className="bg-black cursor-pointer text-white hover:bg-black/90 transition-colors duration-200 w-full sm:w-[300px] h-[56px] px-6 py-4 rounded-full font-medium text-[12px] flex items-center justify-center gap-[6px]"
-          >
-            <span>Become a merchant on bepay</span>
-            <ArrowUpRight className="w-7 h-7 flex-shrink-0" />
-          </button>
-        </div>
+        <motion.button
+          onClick={handleStartEarningClick}
+          className="flex items-center justify-center gap-2 bg-black text-white px-6 h-[56px] rounded-full mt-8 hover:bg-gray-800 transition-colors text-xs font-medium"
+        >
+          <span>Become a merchant on bepay</span>
+          {/* The icon size and strokeWidth are now consistent */}
+          <ArrowUpRight size={20}/>
+        </motion.button>
       </WaitlistTriggerButton>
     ),
   },
@@ -196,8 +193,8 @@ export default function GetStartedSection() {
         }`}
       >
         <div className="text-center">
-          <h2 className="text-2xl font-medium leading-[26px] tracking-[-0.04em] sm:text-4xl md:text-5xl lg:text-[90px] lg:font-light lg:leading-tight lg:tracking-tighter">
-            <span className="text-gray-400">Get started in</span>
+          <h2 className="font-['Montserrat'] text-[24px] md:text-[44px] font-medium text-[#C0C0C0] leading-[26px] tracking-[-0.04em]">
+            <span>Get started in</span>
             <br className="lg:hidden" />
             <span className="text-gray-900"> 3 simple steps</span>
           </h2>

@@ -120,7 +120,6 @@ const BusinessHero = () => {
     }
   };
 
-
   useEffect(() => {
     const checkMobile = () => {
       const width = window.innerWidth;
@@ -139,8 +138,7 @@ const BusinessHero = () => {
 
   // --- DESKTOP ANIMATION VALUES ---
   const leftCardRotate = useTransform(scrollYProgress, [0, 1], [0, -90]);
-  // ✅ FIX: Updated transform values for the new centered alignment strategy
-  const leftCardX = useTransform(scrollYProgress, [0, 1], [-240,0]);
+  const leftCardX = useTransform(scrollYProgress, [0, 1], [-240, 0]);
   const leftCardY = useTransform(scrollYProgress, [0, 1], [200, -30]);
   const imageX = useTransform(scrollYProgress, [0.5, 1], [0, -200]);
   const imageOpacity = useTransform(scrollYProgress, [0.5, 1], [1, 0]);
@@ -202,20 +200,23 @@ const BusinessHero = () => {
   return (
     <div ref={containerRef} className="relative h-[200vh]">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <section className="bg-[#F9F9F9] h-full flex flex-col justify-start pt-12 md:pt-0">
+        {/* ✅ FIX: Further reduced top padding to move content up on mobile */}
+        <section className="bg-[#F9F9F9] h-full flex flex-col justify-start pt-6 md:pt-0">
           {isMobile ? (
             // ===================================
-            // MOBILE VIEW (Unaffected)
+            // MOBILE VIEW (Modified)
             // ===================================
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col relative">
-              <div className="text-center mb-6 max-w-[95%] mx-auto">
-                <h1 className="font-montserrat font-medium text-[28px] leading-[32px] tracking-[-0.07em] uppercase mb-6 text-[#333333]">
+              <div className="text-center mb-4 max-w-[95%] mx-auto">
+                <h1 className="font-montserrat font-medium text-[28px] leading-[32px] tracking-[-0.07em] uppercase mb-4 text-[#333333]">
                   <>
-                    <span className="text-[#C0C0C0] font-normal">Accept</span> stablecoins.{" "}
-                    <span className="text-[#C0C0C0] font-normal">Grow</span> globally.
+                    <span className="text-[#C0C0C0] font-normal">Accept</span>{" "}
+                    stablecoins.{" "}
+                    <span className="text-[#C0C0C0] font-normal">Grow</span>{" "}
+                    globally.
                   </>
                 </h1>
-                <p className="text-[#6A6A6AE5] text-base text-left mb-6">
+                <p className="text-[#6A6A6AE5] text-base text-left mb-4">
                   Join{" "}
                   <span className="text-[#080808] font-semibold">
                     1,000+ businesses
@@ -236,12 +237,13 @@ const BusinessHero = () => {
                   className="absolute inset-x-0 top-0 flex justify-center"
                   style={{ y: mobileMockupY }}
                 >
-                  <div className="relative w-[95vw] max-w-[450px]">
+                  {/* ✅ FIX: Further reduced width to make the image smaller */}
+                  <div className="relative w-[85vw] max-w-[380px]">
                     <Image
                       src="/images/business/video_mockup.svg"
                       alt="Bepay video mockup frame"
-                      width={450}
-                      height={250}
+                      width={380}
+                      height={211} // Adjusted height to maintain aspect ratio
                       className="w-full h-auto"
                     />
                     <div
@@ -315,20 +317,20 @@ const BusinessHero = () => {
                             </div>
                           )}
                         </div>
-                        <WaitlistTriggerButton 
+                        <WaitlistTriggerButton
                           onClick={handleEmailButtonSubmit}
                           type="submit"
                           disabled={isSubmitting}
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          className="bg-black w-full h-[56px] cursor-pointer text-white whitespace-nowrap px-6 rounded-full font-medium text-sm hover:bg-black/90 transition-colors flex items-center justify-center gap-[10px] disabled:opacity-50"
+                          className="bg-black w-full h-[56px] cursor-pointer text-white whitespace-nowrap px-6 rounded-full font-medium text-xs hover:bg-black/90 transition-colors flex items-center justify-center gap-[10px] disabled:opacity-50"
                         >
                           {isSubmitting ? (
                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                           ) : (
                             "Join the Waitlist"
                           )}
-                        </WaitlistTriggerButton >
+                        </WaitlistTriggerButton>
                       </form>
                     ) : (
                       <motion.div
@@ -348,7 +350,7 @@ const BusinessHero = () => {
             </div>
           ) : (
             // ===================================
-            // DESKTOP VIEW (Corrected)
+            // DESKTOP VIEW (Unaffected)
             // ===================================
             <div className="h-full">
               <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
@@ -385,7 +387,6 @@ const BusinessHero = () => {
                   </p>
                 </div>
 
-                {/* ✅ FIX: New "animation stage" container ensures alignment */}
                 <div
                   className="relative w-full flex justify-center items-center"
                   style={{ minHeight: "60vh" }}
@@ -405,8 +406,7 @@ const BusinessHero = () => {
                         style={{
                           width: "min(805px, 90vw)",
                           height: "min(325px, 41vw)",
-                          aspectRatio:
-                            "805.1359252929694 / 325.2563781738284",
+                          aspectRatio: "805.1359252929694 / 325.2563781738284",
                         }}
                       >
                         <video
@@ -429,7 +429,7 @@ const BusinessHero = () => {
 
                   {/* Animated portrait phone (top layer) */}
                   <motion.div
-                    className="absolute z-10" // ✅ FIX: Simplified to be positioned relative to the stage
+                    className="absolute z-10"
                     style={{
                       rotateZ: leftCardRotate,
                       x: leftCardX,
@@ -450,8 +450,7 @@ const BusinessHero = () => {
                         style={{
                           width: "min(325px, 41vw)",
                           height: "min(805px, 90vw)",
-                          aspectRatio:
-                            "325.2563781738284 / 705.1359252929694",
+                          aspectRatio: "325.2563781738284 / 705.1359252929694",
                         }}
                       >
                         <div

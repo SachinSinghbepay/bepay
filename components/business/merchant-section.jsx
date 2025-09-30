@@ -81,7 +81,7 @@ export default function MerchantSection() {
         className="relative w-full min-h-screen bg-[#F9F9F9] overflow-hidden flex flex-col items-center"
       >
         <motion.div
-          className="w-full px-4 text-center z-10 pt-12"
+          className="w-full px-4 z-10 pt-12 flex flex-col items-center" 
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
@@ -89,7 +89,7 @@ export default function MerchantSection() {
         >
           <motion.div variants={itemVariants}>
             <h1
-              className="text-[24px] font-medium leading-[26px] tracking-[-0.04em] text-center"
+              className="text-[24px] font-medium leading-[28px] tracking-[-0.04em] text-center"
               style={{ fontFamily: "Montserrat", fontWeight: 500 }}
             >
               <span className="text-[#C0C0C0]">Become a merchant</span>
@@ -103,7 +103,7 @@ export default function MerchantSection() {
 
           <motion.div variants={itemVariants} className="mt-6">
             <p
-              className="text-[#6A6A6A] text-[12px] font-medium leading-[16px] tracking-[0%] text-center max-w-xs mx-auto"
+              className="text-[#6A6A6A] text-[14px] font-medium leading-[19px] tracking-[0%] text-center max-w-xs mx-auto"
               style={{ fontFamily: "Montserrat", fontWeight: 500 }}
             >
               <span className="text-[#6A6A6A]">
@@ -117,29 +117,14 @@ export default function MerchantSection() {
           </motion.div>
 
           <WaitlistTriggerButton triggerSource="'Merchant section' button">
-            <motion.div
+            <motion.button
               variants={itemVariants}
-              className="flex flex-col items-center mt-10"
+              onClick={handleButtonClick}
+              className="flex items-center justify-center gap-2 bg-black text-white px-6 h-[56px] rounded-full mt-10 hover:bg-gray-800 transition-colors text-xs font-medium"
             >
-              <button
-                onClick={handleButtonClick}
-                className="bg-black cursor-pointer text-white hover:bg-black/90 transition-colors duration-200 flex items-center justify-center rounded-full gap-[10px] 
-                           font-semibold text-[12px] font-600 leading-none tracking-normal"
-                style={{
-                  width: "230px",
-                  height: "56px",
-                  padding: "16px 24px",
-                  fontFamily: "Open Sans",
-                }}
-              >
-                Become a merchant now
-                {/* ✅ ADDED strokeWidth PROP */}
-                <ArrowUpRight
-                  className="w-5 h-7 flex-shrink-0"
-                  strokeWidth={1.5}
-                />
-              </button>
-            </motion.div>
+              <span>Become a merchant now</span>
+              <ArrowUpRight size={20}/>
+            </motion.button>
           </WaitlistTriggerButton>
         </motion.div>
 

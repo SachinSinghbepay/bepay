@@ -64,7 +64,7 @@ const BepayComparison = () => {
   return (
     <div
       ref={sectionRef}
-     className="min-h-screen bg-[#F9F9F9] flex justify-center md:items-center pt-10 p-4 md:p-8 pb-16"
+     className="min-h-screen bg-[#F9F9F9] flex justify-center md:items-center pt-15 p-4 md:p-8 pb-16"
     >
       <div className="w-full mx-auto max-w-7xl">
         {/* Title */}
@@ -76,7 +76,6 @@ const BepayComparison = () => {
           </h1>
         </div>
 
-        {/* Mobile Layout */}
         {/* Mobile Layout */}
         <div
           className="lg:hidden max-w-[353px] bg-[#F7F7F7] rounded-2xl overflow-hidden"

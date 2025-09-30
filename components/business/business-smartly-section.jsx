@@ -19,7 +19,6 @@ function FeatureCard({ title, image, features, index, isInView }) {
       }}
       className="flex-col w-[90vw] md:w-[50vw] lg:w-[35vw] xl:w-[32vw] h-[550px] md:h-[500px] bg-white rounded-[30px] flex-shrink-0 relative"
       style={{
-        // Shadow opacity has been reduced
         boxShadow: "60px 20px 30px -20px rgba(0, 0, 0, 0.07), 80px 30px 120px -90px rgba(0, 0, 0, 0.04)",
         zIndex: 100 - index,
       }}
@@ -33,11 +32,10 @@ function FeatureCard({ title, image, features, index, isInView }) {
           className="object-cover p-2 rounded-[30px] w-full h-full transition-transform duration-500 group-hover:scale-105"
         />
       </div>
-      {/* Padding adjusted for mobile */}
       <div className="p-6 md:p-8 flex flex-col justify-between h-[calc(100%-225px)]">
         <div>
-          {/* Margin adjusted for mobile */}
-          <h3 className="font-['Montserrat'] font-medium text-[20px] leading-[24px] tracking-[-0.02em]  -mt-4 md:mt-0 mb-4 md:mb-6 text-black uppercase">
+          {/* MODIFIED: Increased font weight for mobile, kept original for md and up */}
+          <h3 className="font-['Montserrat'] font-semibold md:font-medium text-[20px] leading-[24px] tracking-[-0.02em] -mt-4 md:mt-0 mb-4 md:mb-6 text-black uppercase">
             {title}
           </h3>
           <ul className="space-y-4 lg:space-y-4">
@@ -74,7 +72,7 @@ export default function BusinessSmartlySection() {
   const { scrollYProgress } = useScroll({
     target: targetRef,
   });
-  
+
   const xMobile = useTransform(scrollYProgress, [0, 1], ["0%", "-78%"]);
   const xDesktop = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
 
@@ -133,7 +131,8 @@ export default function BusinessSmartlySection() {
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-2 md:pt-4 pb-4 md:pb-8">
           <div className="flex flex-col items-center justify-center text-center">
             <div className="max-w-5xl mx-auto">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-[400] tracking-[-0.05em] leading-snug md:leading-none">
+              {/* MODIFIED: Applied requested font styles for mobile view */}
+              <h2 className="font-['Montserrat'] text-[24px] font-medium leading-[29px] tracking-[-0.04em] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl md:font-[400] md:tracking-[-0.05em] md:leading-snug">
                 <span className="block text-[#C0C0C0] dark:text-[#333333]">
                   Everything you need
                 </span>
