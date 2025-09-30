@@ -322,13 +322,13 @@ export default function HowCryptoWorksSection() {
                 style={{ opacity: finalCtaOpacity, y: finalCtaY }}
               >
                 <WaitlistTriggerButton triggerSource="'How crypto make section' button">
-                  <button
+                  <motion.button
                     onClick={handleStartEarningClick}
-                    className="w-[258px] h-14 bg-black rounded-full text-white text-sm font-semibold hover:bg-black/90 cursor-pointer transition-colors flex items-center justify-center gap-[6px] py-4 px-6"
+                    className="flex items-center justify-center gap-2 bg-black text-white px-6 h-[56px] rounded-full hover:bg-gray-800 transition-colors text-xs font-medium"
                   >
                     <span>Become a merchant</span>
-                    <ArrowUpRight className="w-5 h-5" />
-                  </button>
+                    <ArrowUpRight size={20} />
+                  </motion.button>
                 </WaitlistTriggerButton>
               </motion.div>
             </div>

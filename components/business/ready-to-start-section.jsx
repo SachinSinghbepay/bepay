@@ -182,17 +182,10 @@ const MobileView = () => {
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 viewport={{ once: true, amount: 0.5 }}
                 onClick={handleStartEarningClick}
-                className="bg-black cursor-pointer text-white hover:bg-black/90 transition-colors duration-200 flex items-center justify-center rounded-full gap-[10px] 
-                           font-semibold text-[12px] font-600 leading-none tracking-normal"
-                style={{
-                  width: "260px",
-                  height: "56px",
-                  padding: "16px 24px",
-                  fontFamily: "Open Sans",
-                }}
+                className="flex items-center justify-center gap-2 bg-black text-white px-6 h-[56px] rounded-full hover:bg-gray-800 transition-colors text-xs font-medium"
               >
-                Become a merchant on bepay
-                <ArrowUpRight className="w-5 h-7" strokeWidth={1.5} />
+                <span>Become a merchant on bepay</span>
+                <ArrowUpRight size={20}/>
               </motion.button>
             </WaitlistTriggerButton>
           </div>

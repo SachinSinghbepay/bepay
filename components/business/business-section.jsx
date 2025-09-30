@@ -25,7 +25,7 @@ export default function BusinessSection() {
               className="absolute inset-0 w-full h-full object-cover"
             />
 
-            {/* Overlay animation - Upper image moved left */}
+            {/* Overlay animation - Upper image */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -39,27 +39,14 @@ export default function BusinessSection() {
                 transition: { duration: 0.2 },
               }}
               viewport={{ once: true }}
-              className="absolute 
-                                  top-[75%] right-[61%] 
-                                  sm:top-[80%] sm:right-[56%]
-                                  md:top-[85%] md:right-[51%]
-                                  lg:top-[85%] lg:right-[56%]
-                                  xl:top-[80%] xl:right-[61%]
-                                  2xl:top-[75%] 2xl:right-[66%]
-                                  transform translate-x-1/2 -translate-y-1/2"
+              className="absolute bottom-0 transform mb-5 ml-6 sm:mt-16 sm:ml-6 md:mt-39 md:ml-8 lg:mt-120 lg:ml-55"
             >
               <Image
                 src="/images/business/bs_1.svg"
                 alt="Payment sent notification"
                 width={100}
                 height={450}
-                className="w-[280px] h-[185px]  /* <-- Increased again for mobile */
-                                           sm:w-[140px] sm:h-auto 
-                                           md:w-[160px] 
-                                           lg:w-[180px] 
-                                           xl:w-[220px] 
-                                           2xl:w-[270px]
-                                           drop-shadow-lg"
+                className="w-[220px] h-auto drop-shadow-lg"
               />
             </motion.div>
           </motion.div>
@@ -82,7 +69,7 @@ export default function BusinessSection() {
               className="absolute inset-0 w-full h-full object-cover"
             />
 
-            {/* Overlay animation - Lower image moved right */}
+            {/* Overlay animation - Lower image */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -96,27 +83,14 @@ export default function BusinessSection() {
                 transition: { duration: 0.2 },
               }}
               viewport={{ once: true }}
-              className="absolute 
-                                  top-[75%] left-[61%] 
-                                  sm:top-[80%] sm:left-[56%]
-                                  md:top-[85%] md:left-[51%]
-                                  lg:top-[85%] lg:left-[56%]
-                                  xl:top-[80%] xl:left-[61%]
-                                  2xl:top-[75%] 2xl:left-[66%]
-                                  transform -translate-x-1/2 -translate-y-1/2"
+              className="absolute transform bottom-0 mb-5 ml-36 sm:mt-16 sm:ml-8 md:mt-24 md:ml-16 lg:mt-110 lg:ml-89"
             >
               <Image
                 src="/images/business/ia2.svg"
                 alt="Payment received notification"
                 width={300}
                 height={450}
-                className="w-[280px] h-[185px]  /* <-- Increased again for mobile */
-                                           sm:w-[140px] sm:h-auto 
-                                           md:w-[160px] 
-                                           lg:w-[180px] 
-                                           xl:w-[220px] 
-                                           2xl:w-[270px]
-                                           drop-shadow-lg"
+                className="w-[220px] h-auto drop-shadow-lg"
               />
             </motion.div>
           </motion.div>
