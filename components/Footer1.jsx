@@ -531,7 +531,7 @@ const Footer  = ({ heading }) => {
                     </svg>{" "}
                   </Link>
                   <Link
-                    href="https://t.me/officialbepaymoney"
+                    href="https://t.me/officialbepay"
                     onClick={() =>
                       AnalyticsService.sendEvent(
                         "Social media link clicked: telegram"

@@ -404,7 +404,7 @@ export default function HowCryptoWorksSection() {
               </div>
             </motion.div>
             <motion.div
-              className="absolute left-8 top-[200px] translate-y-1/2 z-20"
+              className="absolute left-[18%] top-[200px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent1Opacity, y: desktopContent1Y }}
             >
               <div className="p-4 max-w-[400px]">
@@ -414,7 +414,7 @@ export default function HowCryptoWorksSection() {
               </div>
             </motion.div>
             <motion.div
-              className="absolute -right-5 top-[400px] translate-y-1/2 z-20"
+              className="absolute -right-[0%] top-[400px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent2Opacity, y: desktopContent2Y }}
             >
               <div className="p-4 max-w-[400px] text-right">
@@ -424,7 +424,7 @@ export default function HowCryptoWorksSection() {
               </div>
             </motion.div>
             <motion.div
-              className="absolute left-0 top-[400px] translate-y-1/2 z-20"
+              className="absolute left-[13%] top-[400px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent3Opacity, y: desktopContent3Y }}
             >
               <div className="p-4 max-w-[400px]">
@@ -434,7 +434,7 @@ export default function HowCryptoWorksSection() {
               </div>
             </motion.div>
             <motion.div
-              className="absolute -right-10 top-[300px] translate-y-1/2 z-20"
+              className="absolute right-[13%] top-[300px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent4Opacity, y: desktopContent4Y }}
             >
               <div className="p-4 max-w-[400px] text-right">

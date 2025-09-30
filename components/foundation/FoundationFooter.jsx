@@ -114,7 +114,7 @@ const FoundationFooter = () => {
                 <Facebook className="w-5 h-5" />
               </Link>
               <Link
-                href="https://t.me/officialbepaymoney"
+                href="https://t.me/officialbepay"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Telegram"
