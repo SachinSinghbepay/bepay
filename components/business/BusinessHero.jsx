@@ -13,7 +13,9 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { addToWaitlist } from "@/lib/firebase";
+import { usePathname } from "next/navigation";
 import { AnalyticsService } from "@/services/analyticsService";
+import WaitlistTriggerButton from "../waitlist-trigger-button";
 
 const BusinessHero = () => {
   const containerRef = useRef(null);
@@ -24,8 +26,10 @@ const BusinessHero = () => {
 
   const mobileXValue = useMotionValue(0);
   const mobileYValue = useMotionValue(0);
-
+  const pathname = usePathname();
   const [email, setEmail] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
@@ -66,98 +70,90 @@ const BusinessHero = () => {
     AnalyticsService.sendEvent("on_join_waitlist_clicked");
   };
 
+  // Using a more robust email handler from previous versions
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
-    if (!email || isSubmitting) return;
+    if (!email || isSubmitting || isSuccess) return;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      setSubmitMessage("Please enter a valid email address.");
+      setTimeout(() => setSubmitMessage(""), 3000);
+      return;
+    }
 
     setIsSubmitting(true);
-    setSubmitMessage("");
+    setError("");
 
     try {
-      await addToWaitlist(email);
+      const { campaignId: newCampaignId } = await addToWaitlist(
+        email,
+        pathname
+      );
+      localStorage.setItem("campaignId", newCampaignId);
+      localStorage.setItem("waitlist_submitted_email" + pathname, email);
+      AnalyticsService.createWaitlistUser(email, {
+        joined_via: "waitlist_form",
+      });
+      setIsSuccess(true);
       setIsSubmitted(true);
       setSubmitMessage(
         "You're now on our exclusive waitlist. We'll notify you when we're ready!"
       );
-      setEmail("");
-      AnalyticsService.sendEvent("waitlist_submission_success", { email });
+      AnalyticsService.sendEvent("waitlist_submission_successful", {
+        status: "success",
+        email,
+      });
     } catch (error) {
-      setSubmitMessage("Email already exists!");
+      const errorMessage =
+        error.message || "Failed to join waitlist. Please try again.";
+      setError(errorMessage);
+      setSubmitMessage(errorMessage);
       setTimeout(() => setSubmitMessage(""), 3000);
       AnalyticsService.sendEvent("waitlist_submission_failed", {
-        email,
-        error: error.message || "Email already exists",
+        status: "failure",
+        error_reason: errorMessage || "Unknown error",
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+
   useEffect(() => {
     const checkMobile = () => {
       const width = window.innerWidth;
       setIsMobile(width < 1024);
       setScreenWidth(width);
-      const xValue = getMobileXValue(width);
-      const yValue = getMobileYValue(width);
-      mobileXValue.set(xValue);
-      mobileYValue.set(yValue);
     };
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
-  }, [mobileXValue, mobileYValue]);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
+  // --- DESKTOP ANIMATION VALUES ---
   const leftCardRotate = useTransform(scrollYProgress, [0, 1], [0, -90]);
-  const leftCardX = useTransform(scrollYProgress, [0, 1], [0, 445]);
-  const leftCardY = useTransform(scrollYProgress, [0, 1], [0, -200]);
-  const leftCardRotateMobile = useTransform(scrollYProgress, [0, 1], [0, -90]);
-
-  const getMobileXValue = (width) => {
-    if (width <= 320) return 0;
-    if (width <= 375) return 0;
-    if (width <= 414) return 0;
-    if (width <= 480) return 0;
-    if (width <= 640) return 0;
-    if (width <= 768) return 0;
-    if (width <= 1024) return 0;
-    if (width <= 1200) return 0;
-    if (width <= 1300) return 200;
-    return 0;
-  };
-  const getMobileYValue = (width) => {
-    if (width <= 320) return -200;
-    if (width <= 375) return -70;
-    if (width <= 414) return -100;
-    if (width <= 480) return -110;
-    if (width <= 640) return -100;
-    if (width <= 768) return -130;
-    if (width <= 1024) return -140;
-    if (width <= 1200) return -150;
-    return -100;
-  };
-
-  const leftCardXMobile = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [0, getMobileXValue(screenWidth)]
-  );
-  const leftCardYMobile = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [0, getMobileYValue(screenWidth)]
-  );
-
+  // ✅ FIX: Updated transform values for the new centered alignment strategy
+  const leftCardX = useTransform(scrollYProgress, [0, 1], [-240,0]);
+  const leftCardY = useTransform(scrollYProgress, [0, 1], [200, -30]);
   const imageX = useTransform(scrollYProgress, [0.5, 1], [0, -200]);
   const imageOpacity = useTransform(scrollYProgress, [0.5, 1], [1, 0]);
-
   const leftCardScale = useTransform(scrollYProgress, [0, 1], [1, 1]);
-  const leftCardScaleMobile = useTransform(scrollYProgress, [0, 1], [1, 1]);
+
+  // --- MOBILE ANIMATION VALUES ---
+  const mobileMockupY = useTransform(scrollYProgress, [0, 0.5], [0, -1200]);
+  const mobileContentY = useTransform(scrollYProgress, [0.4, 0.6], [50, 0]);
+  const mobileContentOpacity = useTransform(
+    scrollYProgress,
+    [0.4, 0.6],
+    [0, 1]
+  );
 
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
@@ -172,286 +168,416 @@ const BusinessHero = () => {
 
   const contentItems = [
     {
-      icon: <Zap className="w-4 md:w-6 h-4 md:h-6" />,
+      icon: <Zap className="w-5 h-5" />,
       title: "30-second",
       subtitle: "settlements",
     },
     {
-      icon: <DollarSign className="w-4 md:w-6 h-4 md:h-6" />,
+      icon: <DollarSign className="w-5 h-5" />,
       title: "Low fees",
       subtitle: "(0.5 - 1.5%)",
     },
     {
-      icon: <Globe className="w-4 md:w-6 h-4 md:h-6" />,
+      icon: <Globe className="w-5 h-5" />,
       title: "Global payments",
+      subtitle: "(180+ countries)",
     },
     {
-      icon: <Layers className="w-4 md:w-6 h-4 md:h-6" />,
+      icon: <Layers className="w-5 h-5" />,
       title: "Multi-currency",
       subtitle: "support",
     },
     {
-      icon: <Plug className="w-4 md:w-6 h-4 md:h-6" />,
+      icon: <Plug className="w-5 h-5" />,
       title: "Plug & play",
       subtitle: "APIs",
     },
     {
-      icon: <Clock className="w-4 md:w-6 h-4 md:h-6" />,
-      title: " 5-minutes ",
-      subtitle: "setup time",
+      icon: <Clock className="w-5 h-5" />,
+      title: "5 minutes",
+      subtitle: "set up",
     },
   ];
 
   return (
     <div ref={containerRef} className="relative h-[200vh]">
-      <div className="sticky top-0 h-[104vh] md:h-[120vh] lg:h-[104vh] overflow-hidden">
-        <section className="bg-[#F9F9F9] h-full flex flex-col justify-start ">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12 sm:mb-16 max-w-[95%] mx-auto">
-              <h1 className="text-2xl sm:text-4xl lg:text-[70px] xl:text-[80px] 3xl:text-[100px] font-[300] leading-[1.1] sm:leading-none mb-6 sm:mb-8">
-                <span className="text-[#C0C0C0]">THE </span>
-                <span className="text-[#333333] font-[400]">
-                  STABLECOIN PAYMENT
-                </span>
-                <br />
-                <span className="text-[#333333] font-[400]">
-                  INFRASTRUCTURE{" "}
-                </span>{" "}
-                <span className="text-[#C0C0C0]">FOR</span>
-                <br />
-                <span className="text-[#C0C0C0] font-[300]">
-                  MODERN BUSINESSES
-                </span>
-              </h1>
-              <p className="text-[#6A6A6AE5] text-left text-base sm:text-lg md:text-[16px] max-w-[986px] mx-auto leading-relaxed px-4 sm:px-6">
-                Join{" "}
-                <span className="text-[#080808] font-semibold">
-                  1,000+ businesses
-                </span>{" "}
-                using bepay to process crypto payments with{" "}
-                <span className="text-[#080808] font-semibold">
-                  30-second settlements
-                </span>{" "}
-                and up to{" "}
-                <span className="text-[#080808] font-semibold">
-                  70% lower fees
-                </span>{" "}
-                than traditional processors
-              </p>
-            </div>
-            <div className="flex flex-col xl:flex-row relative items-center justify-center gap-8 sm:gap-12 lg:gap-16 xl:gap-20 max-w-[95%] mx-auto">
-              <motion.div
-                style={{
-                  rotateZ: isMobile ? leftCardRotateMobile : leftCardRotate,
-                  x: isMobile ? leftCardXMobile : leftCardX,
-                  y: isMobile ? leftCardYMobile : leftCardY,
-                  duration: 1.8,
-                  scale: isMobile ? leftCardScaleMobile : leftCardScale,
-                }}
-                className={`absolute z-20 ${
-                  isMobile
-                    ? "left-1/2 -translate-x-1/2 top-40"
-                    : "-left-40 xl:-left-10 2xl:left-20 -top-10"
-                } flex-shrink-0`}
-              >
-                <div
-                  className="relative bg-white rounded-[2.5rem]"
-                  style={{
-                    border: "6.62px solid rgba(8, 8, 8, 0.2)",
-                    boxShadow:
-                      "10px 10px 20px 0px rgba(0, 0, 0, 0.1), -10px -10px 20px 0px #FFFFFF",
-                  }}
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <section className="bg-[#F9F9F9] h-full flex flex-col justify-start pt-12 md:pt-0">
+          {isMobile ? (
+            // ===================================
+            // MOBILE VIEW (Unaffected)
+            // ===================================
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col relative">
+              <div className="text-center mb-6 max-w-[95%] mx-auto">
+                <h1 className="font-montserrat font-medium text-[28px] leading-[32px] tracking-[-0.07em] uppercase mb-6 text-[#333333]">
+                  <>
+                    <span className="text-[#C0C0C0] font-normal">Accept</span> stablecoins.{" "}
+                    <span className="text-[#C0C0C0] font-normal">Grow</span> globally.
+                  </>
+                </h1>
+                <p className="text-[#6A6A6AE5] text-base text-left mb-6">
+                  Join{" "}
+                  <span className="text-[#080808] font-semibold">
+                    1,000+ businesses
+                  </span>{" "}
+                  using bepay to process crypto payments with{" "}
+                  <span className="text-[#080808] font-semibold">
+                    30-second settlements
+                  </span>{" "}
+                  and up to{" "}
+                  <span className="text-[#080808] font-semibold">
+                    70% lower fees
+                  </span>{" "}
+                  than traditional processors
+                </p>
+              </div>
+              <div className="relative">
+                <motion.div
+                  className="absolute inset-x-0 top-0 flex justify-center"
+                  style={{ y: mobileMockupY }}
                 >
-                  <div
-                    className="rounded-[2rem] overflow-hidden relative bg-white"
+                  <div className="relative w-[95vw] max-w-[450px]">
+                    <Image
+                      src="/images/business/video_mockup.svg"
+                      alt="Bepay video mockup frame"
+                      width={450}
+                      height={250}
+                      className="w-full h-auto"
+                    />
+                    <div
+                      className="absolute overflow-hidden shadow-lg"
+                      style={{
+                        width: "87%",
+                        aspectRatio: "16/9",
+                        borderRadius: "20px",
+                        top: "14%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                      }}
+                    >
+                      <video
+                        className="w-full h-full object-cover"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        poster="/path/to/your/horizontal_poster.jpg"
+                      >
+                        <source
+                          src="/videos/crypto/business_mockup.mp4"
+                          type="video/mp4"
+                        />
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  </div>
+                </motion.div>
+                <motion.div
+                  className="absolute inset-0 top-0 pt-0 flex flex-col items-center justify-start gap-8 z-10"
+                  style={{ y: mobileContentY, opacity: mobileContentOpacity }}
+                >
+                  <div className="flex flex-col gap-3">
+                    {contentItems.map((item, index) => (
+                      <div key={index} className="flex items-center gap-3">
+                        <div className="flex-shrink-0 w-6 h-6 flex items-center justify-center text-black">
+                          {item.icon}
+                        </div>
+                        <div className="whitespace-nowrap leading-6">
+                          <span className="font-semibold text-black text-sm">
+                            {item.title}
+                          </span>
+                          <span className="text-gray-500 text-sm ml-1.5">
+                            {item.subtitle}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="w-full max-w-[285px]">
+                    {!isSubmitted ? (
+                      <form
+                        onSubmit={handleEmailSubmit}
+                        className="flex flex-col gap-3 w-full"
+                      >
+                        <div>
+                          <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            onFocus={handleEmailFocus}
+                            placeholder="Enter your email"
+                            className="w-full h-[56px] px-6 placeholder:text-sm text-black rounded-full border border-gray-300 text-base focus:outline-none focus:border-gray-500"
+                            required
+                          />
+                          {submitMessage && !isSuccess && (
+                            <div className="text-red-500 text-xs text-center mt-2">
+                              {submitMessage}
+                            </div>
+                          )}
+                        </div>
+                        <WaitlistTriggerButton 
+                          onClick={handleEmailButtonSubmit}
+                          type="submit"
+                          disabled={isSubmitting}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="bg-black w-full h-[56px] cursor-pointer text-white whitespace-nowrap px-6 rounded-full font-medium text-sm hover:bg-black/90 transition-colors flex items-center justify-center gap-[10px] disabled:opacity-50"
+                        >
+                          {isSubmitting ? (
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          ) : (
+                            "Join the Waitlist"
+                          )}
+                        </WaitlistTriggerButton >
+                      </form>
+                    ) : (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="flex flex-col items-center gap-2 text-center"
+                      >
+                        <CheckCircle className="w-8 h-8 text-green-600" />
+                        <p className="text-green-600 text-sm leading-relaxed">
+                          {submitMessage}
+                        </p>
+                      </motion.div>
+                    )}
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          ) : (
+            // ===================================
+            // DESKTOP VIEW (Corrected)
+            // ===================================
+            <div className="h-full">
+              <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
+                <div className="text-center mb-8 max-w-[95%] mx-auto pt-15">
+                  <h1 className="text-2xl sm:text-4xl lg:text-[70px] xl:text-[80px] 3xl:text-[100px] font-[300] leading-[1.1] sm:leading-none mb-6 sm:mb-8">
+                    <span className="text-[#C0C0C0]">THE </span>
+                    <span className="text-[#333333] font-[400]">
+                      STABLECOIN PAYMENT
+                    </span>
+                    <br />
+                    <span className="text-[#333333] font-[400]">
+                      INFRASTRUCTURE{" "}
+                    </span>{" "}
+                    <span className="text-[#C0C0C0]">FOR</span>
+                    <br />
+                    <span className="text-[#C0C0C0] font-[300]">
+                      MODERN BUSINESSES
+                    </span>
+                  </h1>
+                  <p className="text-[#6A6A6AE5] text-left text-base sm:text-lg md:text-[16px] max-w-[986px] mx-auto leading-relaxed px-4 sm:px-6">
+                    Join{" "}
+                    <span className="text-[#080808] font-semibold">
+                      1,000+ businesses
+                    </span>{" "}
+                    using bepay to process crypto payments with{" "}
+                    <span className="text-[#080808] font-semibold">
+                      30-second settlements
+                    </span>{" "}
+                    and up to{" "}
+                    <span className="text-[#080808] font-semibold">
+                      70% lower fees
+                    </span>{" "}
+                    than traditional processors
+                  </p>
+                </div>
+
+                {/* ✅ FIX: New "animation stage" container ensures alignment */}
+                <div
+                  className="relative w-full flex justify-center items-center"
+                  style={{ minHeight: "60vh" }}
+                >
+                  {/* Static landscape phone (bottom layer) */}
+                  <div className="relative flex-shrink-0">
+                    <div
+                      className="relative bg-white rounded-[2.5rem]"
+                      style={{
+                        border: "6.62px solid rgba(8, 8, 8, 0.2)",
+                        boxShadow:
+                          "10px 10px 20px 0px rgba(0, 0, 0, 0.1), -10px -10px 20px 0px #FFFFFF",
+                      }}
+                    >
+                      <div
+                        className="bg-gray-50 rounded-[2rem] overflow-hidden relative"
+                        style={{
+                          width: "min(805px, 90vw)",
+                          height: "min(325px, 41vw)",
+                          aspectRatio:
+                            "805.1359252929694 / 325.2563781738284",
+                        }}
+                      >
+                        <video
+                          className="w-full h-full object-cover"
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          poster="/path/to/your/horizontal_poster.jpg"
+                        >
+                          <source
+                            src="/videos/crypto/business_mockup.mp4"
+                            type="video/mp4"
+                          />
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Animated portrait phone (top layer) */}
+                  <motion.div
+                    className="absolute z-10" // ✅ FIX: Simplified to be positioned relative to the stage
                     style={{
-                      width: "min(325px, 41vw)",
-                      height: "min(805px, 90vw)",
-                      aspectRatio: "325.2563781738284 / 705.1359252929694",
+                      rotateZ: leftCardRotate,
+                      x: leftCardX,
+                      y: leftCardY,
+                      scale: leftCardScale,
                     }}
                   >
                     <div
-                      onClick={handleLogoClick}
-                      className="absolute top-4 md:top-9 left-1/2 -translate-x-1/2 z-10 cursor-pointer"
+                      className="relative bg-white rounded-[2.5rem]"
+                      style={{
+                        border: "6.62px solid rgba(8, 8, 8, 0.2)",
+                        boxShadow:
+                          "10px 10px 20px 0px rgba(0, 0, 0, 0.1), -10px -10px 20px 0px #FFFFFF",
+                      }}
                     >
-                      <Image
-                        src="/bepaybusiness.svg"
-                        alt="Bepay Logo"
-                        width={200}
-                        height={100}
-                        className="w-[40px] h-[40px] md:w-[120px] lg:h-[100px] object-contain"
-                      />
-                    </div>
-
-                    {/* REVERTED: Restored the original animated image */}
-                    <motion.div
-                      style={{ x: imageX, opacity: imageOpacity }}
-                      className="absolute inset-0 top-12 sm:top-16"
-                    >
-                      <Image
-                        src="/business_s1_1.png"
-                        alt="Bepay Mobile Interface"
-                        fill
-                        className="object-cover object-top"
-                      />
-                    </motion.div>
-
-                    {showContent && (
-                      <div className="absolute inset-0 top-3 rotate-90 bg-white rounded-[2rem] flex flex-row gap-7 justify-center items-center p-4">
-                        <div className="flex flex-col mb-1 md:mb-6 w-full max-w-[500px]">
-                          {contentItems.map((item, index) => (
-                            <motion.div
-                              key={index}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{
-                                delay: index * 0.1,
-                                duration: 0.4,
-                                ease: "easeOut",
-                              }}
-                              className="flex items-center gap-1 md:gap-3 md:py-2"
-                            >
-                              <div className="text-black hidden md:block text-[10px] md:text-[12px]">
-                                {item.icon}
-                              </div>
-                              <div className="whitespace-nowrap">
-                                <span className="font-semibold text-black text-[8px] md:text-[12px]">
-                                  {item.title}
-                                </span>
-                                <span className="text-gray-500 text-[8px] md:text-[12px] ml-1">
-                                  {item.subtitle}
-                                </span>
-                              </div>
-                            </motion.div>
-                          ))}
-                        </div>
-                        <motion.div
-                          initial={{ opacity: 0, y: 15 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{
-                            delay: contentItems.length * 0.1 + 0.2,
-                            duration: 0.4,
-                            ease: "easeOut",
-                          }}
-                          className="flex flex-col lg:-mt-9 md:flex-row gap-3 w-full max-w-[600px]"
+                      <div
+                        className="rounded-[2rem] overflow-hidden relative bg-white"
+                        style={{
+                          width: "min(325px, 41vw)",
+                          height: "min(805px, 90vw)",
+                          aspectRatio:
+                            "325.2563781738284 / 705.1359252929694",
+                        }}
+                      >
+                        <div
+                          onClick={handleLogoClick}
+                          className="absolute top-4 md:top-9 left-1/2 -translate-x-1/2 z-10 cursor-pointer"
                         >
-                          {!isSubmitted ? (
-                            <form
-                              onSubmit={handleEmailSubmit}
-                              className="flex flex-col gap-3 w-full"
-                            >
-                              <div className="flex-1">
-                                <input
-                                  type="email"
-                                  value={email}
-                                  onChange={(e) => setEmail(e.target.value)}
-                                  onFocus={handleEmailFocus}
-                                  placeholder="Enter your email"
-                                  className=" w-[130px] sm:w-[180px] px-2 md:px-4 py-3 lg:w-[200px] flex justify-center placeholder:text-[10px] text-black font-semibold items-center rounded-full border border-gray-300 text-[12px] md:text-[12px] focus:outline-none focus:border-gray-500"
-                                  required
-                                />
-                                {submitMessage && !isSubmitted && (
-                                  <div className="text-red-500 text-[6px] md:text-[10px] mt-1">
-                                    {submitMessage}
-                                  </div>
-                                )}
-                              </div>
-                              <motion.button
-                                onClick={handleEmailButtonSubmit}
-                                type="submit"
-                                disabled={isSubmitting}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className="bg-black w-[130px] sm:w-[180px] md:w-full cursor-pointer text-white whitespace-nowrap px-2 md:px-6 py-3 rounded-full font-medium text-[10px] md:text-[12px] hover:bg-black/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-                              >
-                                {isSubmitting ? (
-                                  <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />
-                                ) : (
-                                  <>
-                                    Join the Waitlist
-                                    <svg
-                                      className="w-4 h-4"
-                                      fill="none"
-                                      stroke="currentColor"
-                                      viewBox="0 0 24 24"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                      />
-                                    </svg>
-                                  </>
-                                )}
-                              </motion.button>
-                            </form>
-                          ) : (
-                            <motion.div
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{
-                                duration: 0.5,
-                                ease: "easeOut",
-                              }}
-                              className="flex flex-row items-center gap-1 justify-center w-full"
-                            >
-                              <div>
-                                <CheckCircle className="w-4 h-4 mt-2 text-green-600 mb-2" />
-                              </div>
-                              <div className="text-green-600 lg:whitespace-nowrap text-[6px] md:text-[10px] leading-relaxed">
-                                {submitMessage}
-                              </div>
-                            </motion.div>
-                          )}
-                        </motion.div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
+                          <Image
+                            src="/bepaybusiness.svg"
+                            alt="Bepay Logo"
+                            width={200}
+                            height={100}
+                            className="w-[40px] h-[40px] md:w-[120px] lg:h-[100px] object-contain"
+                          />
+                        </div>
 
-              <div className="relative lg:ml-0 flex-shrink-0">
-                <div
-                  className="relative bg-white rounded-[2.5rem]"
-                  style={{
-                    border: "6.62px solid rgba(8, 8, 8, 0.2)",
-                    boxShadow:
-                      "10px 10px 20px 0px rgba(0, 0, 0, 0.1), -10px -10px 20px 0px #FFFFFF",
-                  }}
-                >
-                  <div
-                    className="bg-gray-50 rounded-[2rem] overflow-hidden relative"
-                    style={{
-                      width: "min(805px, 90vw)",
-                      height: "min(325px, 41vw)",
-                      aspectRatio: "805.1359252929694 / 325.2563781738284",
-                    }}
-                  >
-                    {/* CHANGED: Replaced the static image with a video */}
-                    <video
-                      className="w-full h-full object-cover"
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      poster="/path/to/your/horizontal_poster.jpg"
-                    >
-                      <source
-                        src="/videos/crypto/business_mockup.mp4"
-                        type="video/mp4"
-                      />
-                      Your browser does not support the video tag.
-                    </video>
-                  </div>
+                        <motion.div
+                          style={{ x: imageX, opacity: imageOpacity }}
+                          className="absolute inset-0 top-12 sm:top-16"
+                        >
+                          <Image
+                            src="/business_s1_1.png"
+                            alt="Bepay Mobile Interface"
+                            fill
+                            className="object-cover object-top"
+                          />
+                        </motion.div>
+
+                        {showContent && (
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.4, ease: "easeOut" }}
+                            className="absolute inset-0 top-3 rotate-90 bg-white rounded-[2rem] flex flex-row gap-16 justify-center items-center p-8"
+                          >
+                            <div className="flex flex-col">
+                              {contentItems.map((item, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-center gap-4 py-2"
+                                >
+                                  <div className="text-black">{item.icon}</div>
+                                  <div className="whitespace-nowrap">
+                                    <span className="font-semibold text-black text-sm">
+                                      {item.title}
+                                    </span>
+                                    <span className="text-gray-500 text-sm ml-1.5">
+                                      {item.subtitle}
+                                    </span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="w-full max-w-[280px]">
+                              {!isSubmitted ? (
+                                <form
+                                  onSubmit={handleEmailSubmit}
+                                  className="flex flex-col gap-4 w-full"
+                                >
+                                  <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    onFocus={handleEmailFocus}
+                                    placeholder="Enter your email"
+                                    className="w-full h-[48px] px-5 placeholder:text-sm text-black rounded-full border border-gray-300 text-base focus:outline-none focus:border-gray-500"
+                                    required
+                                  />
+                                  <motion.button
+                                    onClick={handleEmailButtonSubmit}
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="bg-black w-full h-[48px] cursor-pointer text-white whitespace-nowrap px-6 rounded-full font-medium text-sm hover:bg-black/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                                  >
+                                    {isSubmitting ? (
+                                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                    ) : (
+                                      <>
+                                        Join the Waitlist
+                                        <svg
+                                          className="w-4 h-4"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          viewBox="0 0 24 24"
+                                        >
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                          />
+                                        </svg>
+                                      </>
+                                    )}
+                                  </motion.button>
+                                  {submitMessage && !isSuccess && (
+                                    <div className="text-red-500 text-xs text-center mt-1">
+                                      {submitMessage}
+                                    </div>
+                                  )}
+                                </form>
+                              ) : (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.95 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  className="flex flex-col items-center gap-2 text-center"
+                                >
+                                  <CheckCircle className="w-8 h-8 text-green-600" />
+                                  <p className="text-green-600 text-sm leading-relaxed px-4">
+                                    {submitMessage}
+                                  </p>
+                                </motion.div>
+                              )}
+                            </div>
+                          </motion.div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </section>
       </div>
-
-      <div className="h-[40vh] lg:h-0" />
     </div>
   );
 };
