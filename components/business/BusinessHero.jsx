@@ -216,7 +216,7 @@ const BusinessHero = () => {
                     globally.
                   </>
                 </h1>
-                <p className="text-[#6A6A6AE5] text-base text-left mb-4">
+                <p className="text-[#6A6A6AE5] text-base text-left mb-4 leading-[20px]">
                   Join{" "}
                   <span className="text-[#080808] font-semibold">
                     1,000+ businesses

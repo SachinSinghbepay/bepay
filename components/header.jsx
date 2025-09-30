@@ -10,7 +10,6 @@ import { motion } from "framer-motion";
 import WaitlistTriggerButton from "./waitlist-trigger-button";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
-
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -26,6 +25,13 @@ export default function Header() {
     return pathname.startsWith(path);
   };
 
+  // ✨ 1. Determine if it's the business page
+  const isBusinessPage = isActivePage("/business");
+
+  // ✨ 2. Set the logo source and alt text conditionally
+  const logoSrc = isBusinessPage ? "/bepay_business.svg" : "/bepaymoney.svg";
+  const logoAlt = isBusinessPage ? "BePay Business Logo" : "BePay Logo";
+
   // Helper function to get link classes
   const getLinkClasses = (path, baseClasses) => {
     const isActive = isActivePage(path);
@@ -38,11 +44,11 @@ export default function Header() {
 
   const handleDownloadAppClick = () => {
     AnalyticsService.sendEvent("Download App Clicked");
-  }
+  };
 
   const handlebepaymoneylogoclicked = () => {
     AnalyticsService.sendEvent("bepaymoney logo Clicked");
-  }
+  };
   // Conditional header classes
   const headerClasses = isContactPage
     ? "w-full absolute top-0 left-0 right-0 bg-transparent z-50"
@@ -54,13 +60,13 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href={"/"} onClick={handlebepaymoneylogoclicked}>
-
             <div className="flex-shrink-0">
+              {/* ✨ 3. Use the dynamic variables here */}
               <Image
-                src="/bepaymoney.svg"
+                src={logoSrc}
                 height={46}
                 width={110}
-                alt="BePay Logo"
+                alt={logoAlt}
                 className="object-cover h-12 md:h-14 w-auto"
                 priority
               />
@@ -76,8 +82,8 @@ export default function Header() {
                 "text-sm lg:text-[14px] tracking-wide uppercase"
               )}
               onClick={() => {
-    AnalyticsService.sendEvent("personal_nav_clicked");
-  }}
+                AnalyticsService.sendEvent("personal_nav_clicked");
+              }}
             >
               PERSONAL
             </Link>
@@ -95,7 +101,7 @@ export default function Header() {
           {/* Download Button - Hidden on small screens */}
           <WaitlistTriggerButton triggerSource="'Download bepay app' button">
             <Button
-              onClick={handleDownloadAppClick }
+              onClick={handleDownloadAppClick}
               variant="outline"
               className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
             >
@@ -205,7 +211,6 @@ export default function Header() {
             {/* Mobile Download Button */}
             <WaitlistTriggerButton triggerSource="'download bepay app' button">
               <Button
-              
                 variant="outline"
                 className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2 border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
                 onClick={handleDownloadAppClick}
