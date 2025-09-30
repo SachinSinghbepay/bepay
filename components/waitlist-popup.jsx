@@ -492,9 +492,12 @@ function PortalContent({
                         color: "#333333",
                       }}
                     >
-                      We’re launching soon! Join the waitlist and stay ahead of
-                      others!
-                    </p>
+                      {pathname === "/business"
+                      ? "We’re launching soon! Join the waitlist and stay ahead of others businesses!"
+                      : "We’re launching soon! Join the waitlist and stay ahead of others!"}
+                  </p>
+                      
+                  
                     {isMobile ? (
                       <div
                         style={{
