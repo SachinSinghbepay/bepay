@@ -132,11 +132,11 @@ export default function BusinessSmartlySection() {
           <div className="flex flex-col items-center justify-center text-center">
             <div className="max-w-5xl mx-auto">
               {/* MODIFIED: Applied requested font styles for mobile view */}
-              <h2 className="font-['Montserrat'] text-[24px] font-medium leading-[29px] tracking-[-0.04em] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl md:font-[400] md:tracking-[-0.05em] md:leading-snug">
+              <h2 className="font-['Montserrat'] text-[24px] font-medium leading-[29px] tracking-[-0.04em] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl md:font-[400] md:tracking-[-0.05em] md:leading-[56px]">
                 <span className="block text-[#C0C0C0] dark:text-[#333333]">
-                  Everything you need
+                  Everything you need to
                 </span>
-                <span className="text-[#C0C0C0] dark:text-[#333333]">to </span>
+                
                 <span className="text-black dark:text-white">
                   run your business smartly
                 </span>
