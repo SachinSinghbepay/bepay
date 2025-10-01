@@ -64,19 +64,18 @@ const BepayComparison = () => {
   return (
     <div
       ref={sectionRef}
-     className="min-h-screen bg-[#F9F9F9] flex justify-center md:items-center pt-10 p-4 md:p-8 pb-16"
+     className="min-h-screen bg-[#F9F9F9] flex justify-center md:items-center pt-15 p-4 md:p-8 pb-16"
     >
       <div className="w-full mx-auto max-w-7xl">
         {/* Title */}
         <div className="text-center mb-8 md:mb-16">
-          <h1 className="font-['Montserrat'] text-xl md:text-[44px] font-medium text-[#C0C0C0] leading-[26px] tracking-[-0.04em]">
+          <h1 className="font-['Montserrat'] text-xl md:text-[44px] font-medium text-[#C0C0C0] leading-[26px] md:leading-[45px] tracking-[-0.04em]">
             How <span className="font-medium text-black">bepay benefits</span>{" "}
             business <br />
             owners over traditional payments
           </h1>
         </div>
 
-        {/* Mobile Layout */}
         {/* Mobile Layout */}
         <div
           className="lg:hidden max-w-[353px] bg-[#F7F7F7] rounded-2xl overflow-hidden"
