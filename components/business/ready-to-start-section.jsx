@@ -1,10 +1,10 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
-import { DollarSign, Clock, Headphones, ArrowRight } from "lucide-react";
+import { motion, useScroll, useMotionValue } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
-import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
-
+import { AnalyticsService } from "@/services/analyticsService";
 
 const features = [
   {
@@ -27,6 +27,174 @@ const features = [
   },
 ];
 
+const finalCardData = {
+  id: 4,
+  title: "The future of payments is here!",
+  subtitle:
+    "Start accepting crypto payments in minutes. Reach global customers, boost your revenue, and manage your store — all from one powerful dashboard.",
+};
+
+const mobileCards = [...features, finalCardData];
+
+// ✅ COMPONENT UPDATED HERE
+const MobileCard = ({ cardData }) => (
+  <div
+    className="h-[391px] w-[305px] bg-white rounded-[24px] p-8 flex flex-col justify-between relative overflow-hidden flex-shrink-0 border-[0.76px] border-black/5"
+    style={{
+      boxShadow:
+        "60px 20px 30px -20px rgba(0, 0, 0, 0.04), 80px 30px 120px -90px rgba(0, 0, 0, 0.02)",
+    }}
+  >
+    <div
+      className="absolute top-0 right-0 z-0" // ✅ Alignment reverted to top-right
+      style={{
+        width: "114.11px",
+        height: "114.11px",
+        opacity: 1,
+      }}
+    >
+      <Image
+        src={cardData.icon}
+        height={114}
+        width={114}
+        alt={cardData.title}
+        className="object-contain w-full h-full"
+      />
+    </div>
+    <div className="z-10 mt-auto text-left relative">
+      <h3 className="text-[44px] font-semibold leading-[27.52px] tracking-[-0.06em] text-[#333333] mb-2">
+        {cardData.title}
+      </h3>
+      <p className="font-medium text-2xl leading-[27.52px] tracking-[-0.02em] text-[#6A6A6A]">
+        {cardData.subtitle}
+      </p>
+    </div>
+  </div>
+);
+
+const FinalMobileCard = ({ cardData }) => (
+  <div
+    className="h-[391px] w-[305px] bg-white rounded-[24px] p-8 flex flex-col justify-center items-center text-center relative overflow-hidden flex-shrink-0 border-[0.76px] border-black/5"
+    style={{
+      boxShadow:
+        "20px 20px 40px 0px rgba(0,0,0,0.04), 40px 40px 80px 0px rgba(0,0,0,0.02)",
+    }}
+  >
+    <h3 className="text-base font-bold leading-none tracking-[-0.02em] text-[#333333] mb-4 whitespace-nowrap">
+      {cardData.title}
+    </h3>
+    <p className="text-xs font-medium leading-5 tracking-normal text-[#6A6A6A]">
+      {cardData.subtitle}
+    </p>
+  </div>
+);
+
+const MobileView = () => {
+  const mobileContainerRef = useRef(null);
+  const cardWrapperRef = useRef(null);
+  const x = useMotionValue(0);
+
+  const { scrollYProgress } = useScroll({
+    target: mobileContainerRef,
+    offset: ["start start", "end end"],
+  });
+
+  const easeOutCubic = (val) => 1 - Math.pow(1 - val, 3);
+
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
+      const cardWrapper = cardWrapperRef.current;
+      if (!cardWrapper) return;
+      const scrollWidth = cardWrapper.scrollWidth;
+      const containerWidth = cardWrapper.parentElement.offsetWidth;
+      const maxScroll = scrollWidth - containerWidth;
+      const easedProgress = easeOutCubic(latest);
+      x.set(-easedProgress * maxScroll);
+    });
+    return () => unsubscribe();
+  }, [scrollYProgress, x]);
+
+  const handleStartEarningClick = () => {
+    AnalyticsService.sendEvent("'Become a merchant on bepay' button clicked");
+  };
+
+  return (
+    <div
+      ref={mobileContainerRef}
+      className="md:hidden relative h-[300vh] bg-[#F6F6F6] font-montserrat"
+    >
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <div className="flex flex-col h-full justify-start pt-[8vh] pb-[8vh]">
+          <div className="px-6 mb-8 text-center">
+            <motion.h2
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              viewport={{ once: true, amount: 0.3 }}
+              className="text-2xl font-medium leading-[26px] tracking-[-0.04em]"
+            >
+              <span className="text-gray-400">Ready to </span>
+              <span className="text-gray-900">Start?</span>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              viewport={{ once: true, amount: 0.3 }}
+              className="text-[14px] font-medium leading-4 tracking-normal text-[#6A6A6A] mt-4"
+            >
+              Join{" "}
+              <span className="font-semibold text-gray-800">
+                1,000+ businesses
+              </span>{" "}
+              already growing with crypto payments.
+            </motion.p>
+          </div>
+
+          <div className="w-full flex-1 flex items-center">
+            <motion.div
+              ref={cardWrapperRef}
+              className="flex gap-4 px-4"
+              style={{ x }}
+            >
+              {mobileCards.map((card, i) => (
+                <div
+                  key={i}
+                  className="relative"
+                  style={{ zIndex: mobileCards.length - i }}
+                >
+                  {card.id === 4 ? (
+                    <FinalMobileCard cardData={card} />
+                  ) : (
+                    <MobileCard cardData={card} />
+                  )}
+                </div>
+              ))}
+              <div className="flex-shrink-0 w-4" />
+            </motion.div>
+          </div>
+
+          <div className="flex items-center justify-center mt-6 px-4">
+            <WaitlistTriggerButton triggerSource="'Ready-to-start section' button">
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                viewport={{ once: true, amount: 0.5 }}
+                onClick={handleStartEarningClick}
+                className="flex items-center justify-center gap-2 bg-black text-white px-6 h-[56px] rounded-full hover:bg-gray-800 transition-colors text-xs font-medium"
+              >
+                <span>Become a merchant on bepay</span>
+                <ArrowUpRight size={20}/>
+              </motion.button>
+            </WaitlistTriggerButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function AnimatedCardsSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [cardsVisible, setCardsVisible] = useState([false, false, false]);
@@ -34,7 +202,7 @@ export default function AnimatedCardsSection() {
   const [showNewContent, setShowNewContent] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
-  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
+  const [hasTrackedView, setHasTrackedView] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -49,32 +217,37 @@ export default function AnimatedCardsSection() {
     AnalyticsService.sendEvent("'Become a merchant on bepay' button clicked");
   };
 
-  // ANALYTICS: Track when the main DeFi Yield section is actually viewed
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasTrackedView) {
           AnalyticsService.sendEvent("Ready to start section viewed");
           setHasTrackedView(true);
-          observer.unobserve(entry.target); // Stop observing after first view
+          observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.1 } // Trigger when 30% of the component is visible
+      { threshold: 0.1 }
     );
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
+    const currentRef = containerRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
   }, [hasTrackedView]);
 
   useEffect(() => {
+    if (isMobile) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          // Staggered appearance: title, description, then cards
           setTimeout(() => setCardsVisible([true, false, false]), 800);
           setTimeout(() => setCardsVisible([true, true, false]), 1000);
           setTimeout(() => setCardsVisible([true, true, true]), 1200);
@@ -83,13 +256,20 @@ export default function AnimatedCardsSection() {
       { threshold: 0.2 }
     );
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
+    const currentRef = containerRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
-    return () => observer.disconnect();
-  }, []);
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [isMobile]);
 
   useEffect(() => {
+    if (isMobile) return;
+
     const handleScroll = () => {
       if (!containerRef.current) return;
 
@@ -101,15 +281,7 @@ export default function AnimatedCardsSection() {
         const progress = Math.abs(rect.top) / (sectionHeight - windowHeight);
         const clampedProgress = Math.max(0, Math.min(1, progress));
         setScrollProgress(clampedProgress);
-
-        // Different thresholds for mobile vs desktop
-        if (isMobile) {
-          // Mobile: Show new content when reaching the last card
-          setShowNewContent(clampedProgress > 0.7);
-        } else {
-          // Desktop: Show new content after cards have merged
-          setShowNewContent(clampedProgress > 0.6);
-        }
+        setShowNewContent(clampedProgress > 0.6);
       }
     };
 
@@ -118,91 +290,66 @@ export default function AnimatedCardsSection() {
   }, [isMobile]);
 
   const getCardTransform = (index) => {
-    const startThreshold = isMobile ? 0.3 : 0.2;
-    const endThreshold = isMobile ? 0.8 : 0.5;
-
+    const startThreshold = 0.2;
+    const endThreshold = 0.5;
     if (scrollProgress < startThreshold) {
       return "translateX(0) translateY(0) scale(1)";
     }
-
-    // Calculate merge progress
     const mergeProgress = Math.min(
       (scrollProgress - startThreshold) / (endThreshold - startThreshold),
       1
     );
-
-    if (isMobile) {
-      // Mobile: cards stay in place, no merging
-      return "translateX(0) translateY(0) scale(1)";
+    if (index === 0) {
+      const moveX = mergeProgress * 100;
+      return `translateX(${moveX}%) translateY(0) scale(1)`;
+    } else if (index === 2) {
+      const moveX = mergeProgress * -100;
+      return `translateX(${moveX}%) translateY(0) scale(1)`;
     } else {
-      // Desktop: cards merge to center
-      if (index === 0) {
-        // Left card moves right to center
-        const moveX = mergeProgress * 100;
-        return `translateX(${moveX}%) translateY(0) scale(1)`;
-      } else if (index === 2) {
-        // Right card moves left to center
-        const moveX = mergeProgress * -100;
-        return `translateX(${moveX}%) translateY(0) scale(1)`;
-      } else {
-        // Center card stays in place
-        return "translateX(0) translateY(0) scale(1)";
-      }
+      return "translateX(0) translateY(0) scale(1)";
     }
   };
 
   const getCardZIndex = (index) => {
-    const startThreshold = isMobile ? 0.3 : 0.2;
-    if (scrollProgress > startThreshold) {
-      // Center card on top during merge, others behind
-      if (index === 1) return 30;
-      return 10;
+    if (scrollProgress > 0.2) {
+      return index === 1 ? 30 : 10;
     }
-    return 10;
+    return 100 - index;
   };
 
   const getCardOpacity = (index) => {
-    const startThreshold = isMobile ? 0.3 : 0.2;
-    const fadeThreshold = isMobile ? 0.7 : 0.45;
-
-    if (scrollProgress < startThreshold) return 1;
-
-    if (isMobile) {
-      // Mobile: all cards stay visible
-      return 1;
-    } else {
-      // Desktop: during merge, fade out side cards but keep center card visible
-      if (scrollProgress > fadeThreshold) {
-        return index === 1 ? 1 : 0;
-      }
-      return 1;
+    if (scrollProgress > 0.45) {
+      return index === 1 ? 1 : 0;
     }
+    return 1;
   };
 
-  // Get original content opacity for center card
   const getOriginalContentOpacity = (index) => {
-    if (isMobile) {
-      // Mobile: hide original content when new content appears
-      return index === 2 && showNewContent ? 0 : 1;
-    } else {
-      // Desktop: hide center card original content when new content appears
-      return index === 1 && showNewContent ? 0 : 1;
-    }
+    return index === 1 && showNewContent ? 0 : 1;
   };
 
-  // Get new content opacity
   const getNewContentOpacity = () => {
     return showNewContent ? 1 : 0;
   };
 
+  const getCardShadow = (index) => {
+    return "60px 20px 30px -20px rgba(0, 0, 0, 0.08), 80px 30px 120px -90px rgba(0, 0, 0, 0.04)";
+  };
+
+  if (isMobile) {
+    return <MobileView />;
+  }
+
   return (
-    <div ref={containerRef} className="min-h-[200vh] py-11 bg-gray-50">
-      <section className="sticky top-0 lg:h-screen flex items-center justify-center py-16 lg:py-24 overflow-hidden">
+    <div
+      ref={containerRef}
+      className="min-h-[200vh] py-11 bg-gray-50 font-montserrat"
+    >
+      <section className="sticky top-0 h-screen flex items-center justify-center py-16 lg:py-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          {/* Title - appears first */}
           <div className="mb-16">
             <h2
-              className={`text-3xl md:text-4xl  lg:text-[70px] font-[400] transition-all duration-1000 ease-out ${
+              className={`text-3xl md:text-4xl lg:text-[80px] font-[400] lg:leading-[140px] lg:tracking-[-0.1em] lg:-mb-[10px] transition-all duration-1000 ease-out ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-12"
@@ -211,9 +358,8 @@ export default function AnimatedCardsSection() {
               <span className="text-gray-400">Ready to </span>
               <span className="text-gray-900">Start?</span>
             </h2>
-            {/* Description - appears second */}
             <p
-              className={`text-base md:text-lg lg:text-xl text-[#333333] font-medium transition-all duration-1000 delay-300 ease-out ${
+              className={`text-base md:text-lg lg:text-xl text-[#333333] font-medium lg:leading-6 lg:tracking-[-0.02em] transition-all duration-1000 delay-300 ease-out ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-8"
@@ -226,8 +372,6 @@ export default function AnimatedCardsSection() {
               already growing with crypto payments.
             </p>
           </div>
-
-          {/* Cards Container */}
           <div className="relative max-w-7xl pb-10 mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 h-full relative">
               {features.map((feature, index) => (
@@ -250,11 +394,11 @@ export default function AnimatedCardsSection() {
                   <div
                     className="w-full lg:w-[399px] max-w-[399px] h-[200px] md:h-[500px] p-4 md:p-6 lg:p-8 border border-white/10 flex flex-col justify-center mx-auto relative overflow-hidden rounded-3xl"
                     style={{
-                      boxShadow: "50px 50px 60px 0px #0000000F",
+                      boxShadow: getCardShadow(index),
                       background: "#FFFFFF",
+                      zIndex: getCardZIndex(index),
                     }}
                   >
-                    {/* Background Icon - positioned at top right */}
                     <div
                       className="absolute top-0 right-0 w-36 h-36 text-gray-300 z-0 transition-all duration-700 ease-in-out"
                       style={{
@@ -272,8 +416,6 @@ export default function AnimatedCardsSection() {
                         className="object-cover"
                       />
                     </div>
-
-                    {/* Original Content - positioned at bottom left */}
                     <div
                       className="absolute bottom-4 left-4 md:bottom-6 md:left-6 lg:bottom-8 lg:left-8 text-left z-10 transition-all duration-700 ease-in-out"
                       style={{
@@ -292,18 +434,15 @@ export default function AnimatedCardsSection() {
                         {feature.title}
                       </h3>
                       <p
-                        className="text-lg md:text-xl lg:text-2xl leading-relaxed"
-                        style={{ color: "#333333" }}
+                        className="font-medium text-[32px] leading-[36px] tracking-[-.06em]"
+                        style={{ color: "#6A6A6A" }}
                       >
                         {feature.subtitle}
                       </p>
                     </div>
-
-                    {/* New Content - Show on last card (index 2) in mobile, center card (index 1) in desktop */}
-                    {((isMobile && index === 2) ||
-                      (!isMobile && index === 1)) && (
+                    {index === 1 && (
                       <div
-                        className="absolute inset-0 p-4 md:p-6 lg:p-8 flex flex-col justify-center text-center z-20 transition-all duration-700 ease-in-out"
+                        className="absolute inset-0 p-4 md:p-6 lg:p-8 flex flex-col justify-center items-center text-center z-20 transition-all duration-700 ease-in-out"
                         style={{
                           opacity: getNewContentOpacity(),
                           transform: `scale(${
@@ -314,8 +453,8 @@ export default function AnimatedCardsSection() {
                         }}
                       >
                         <h3
-                          className="text-md md:text-2xl lg:text-3xl font-bold mb-3 md:mb-4"
-                          style={{ color: "#333333" }}
+                          className="text-md md:text-l lg:text-xl font-bold mb-3 md:mb-4"
+                          style={{ color: "#080808" }}
                         >
                           The future of payments is here!
                         </h3>
@@ -328,11 +467,22 @@ export default function AnimatedCardsSection() {
                           store — all in one powerful dashboard.
                         </p>
                         <WaitlistTriggerButton triggerSource="'Ready-to-start section' button">
-                          <button 
-                          onClick={handleStartEarningClick} // ANALYTICS: Added onClick handler
-                          className="bg-black cursor-pointer text-[12px]  whitespace-nowrap text-white px-4 md:px-6 py-2 md:py-3 rounded-full font-medium text-xs  lg:text-[12px] hover:bg-black/90 transition-colors duration-300 flex items-center gap-2 mx-auto">
+                          <button
+                            onClick={handleStartEarningClick}
+                            className="bg-black cursor-pointer text-white hover:bg-black/90 transition-colors duration-200 flex items-center justify-center rounded-full gap-[10px] 
+                           font-semibold text-[12px] font-600 leading-none tracking-normal"
+                            style={{
+                              width: "230px",
+                              height: "56px",
+                              padding: "16px 24px",
+                              fontFamily: "Open Sans",
+                            }}
+                          >
                             Become a merchant on bepay
-                            <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
+                            <ArrowUpRight
+                              className="w-5 h-7 flex-shrink-0"
+                              strokeWidth={1.5}
+                            />
                           </button>
                         </WaitlistTriggerButton>
                       </div>

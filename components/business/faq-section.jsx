@@ -1,10 +1,11 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useRef, useEffect } from "react"; // ANALYTICS: Import hooks
+import { useState, useRef, useEffect } from "react";
 import { Plus, X } from "lucide-react";
-import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import { AnalyticsService } from "@/services/analyticsService";
 
+// ... (faqData and variants remain the same)
 const faqData = [
   {
     id: 1,
@@ -38,7 +39,6 @@ const faqData = [
   },
 ];
 
-// ... (variants remain the same)
 const titleVariants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
@@ -76,11 +76,10 @@ const itemVariants = {
 
 
 export default function FAQSection() {
-  const [openItems, setOpenItems] = useState([1]); // First item open by default
-  const sectionRef = useRef(null); // ANALYTICS: Ref for the section
-  const [hasTrackedView, setHasTrackedView] = useState(false); // ANALYTICS: State to prevent duplicate view events
+  const [openItems, setOpenItems] = useState([1]);
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false); 
 
-  // ANALYTICS: Track when the section is viewed
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -90,7 +89,7 @@ export default function FAQSection() {
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.3 } // Trigger when 30% is visible
+      { threshold: 0.3 }
     );
 
     if (sectionRef.current) {
@@ -100,28 +99,24 @@ export default function FAQSection() {
     return () => observer.disconnect();
   }, [hasTrackedView]);
   
-  // ANALYTICS: Helper to format question text for event names
   const formatQuestionForEvent = (question) => {
     return question
       .toLowerCase()
-      .replace(/\s+/g, "_") // Replace spaces with underscores
-      .replace(/[?]/g, ""); // Remove question marks
+      .replace(/\s+/g, "_")
+      .replace(/[?]/g, "");
   };
 
-  // ANALYTICS: Handler for tracking clicks
   const toggleItem = (faq) => {
   const questionIsCurrentlyOpen = openItems.includes(faq.id);
   const formattedQuestion = formatQuestionForEvent(faq.question);
 
   if (questionIsCurrentlyOpen) {
-    // It's being closed
     const eventName = `on_faq_${formattedQuestion}_closed`;
     AnalyticsService.sendEvent(eventName, {
       faq_id: faq.id,
       question: faq.question,
     });
   } else {
-    // It's being opened
     const eventName = `on_faq_${formattedQuestion}_opened`;
     AnalyticsService.sendEvent(eventName, {
       faq_id: faq.id,
@@ -129,7 +124,6 @@ export default function FAQSection() {
     });
   }
 
-  // Update the state to toggle the view
   setOpenItems((prev) =>
     prev.includes(faq.id)
       ? prev.filter((item) => item !== faq.id)
@@ -139,11 +133,12 @@ export default function FAQSection() {
 
 
   return (
-    // ANALYTICS: Attach the ref to the section
     <section ref={sectionRef} className="pb-16 bg-[#F9F9F9]">
-      <div className="max-w-7xl mx-auto px-4">
+      {/* ✅ ADDED: pt-16 for mobile and md:pt-0 to reset on larger screens */}
+      <div className="max-w-7xl mx-auto px-4 pt-8 md:pt-0">
         <motion.h2
-          className="text-4xl md:text-5xl lg:text-[80px] font-[400] text-gray-900 mb-12 lg:mb-16"
+          // ✅ REMOVED: margin classes from here
+          className="text-4xl md:text-5xl lg:text-[80px] font-[400] text-gray-900 mb-8 lg:mb-16"
           variants={titleVariants}
           initial="hidden"
           whileInView="visible"
@@ -169,7 +164,6 @@ export default function FAQSection() {
                 className="border-b border-gray-200 pb-4 lg:pb-6"
               >
                 <button
-                  // ANALYTICS: Pass the entire faq object to the handler
                   onClick={() => toggleItem(faq)}
                   className="w-full flex items-center justify-between text-left group focus:outline-none"
                 >

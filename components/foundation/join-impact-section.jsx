@@ -46,10 +46,10 @@ export default function JoinImpactSection() {
       <p className="text-xl lg:text-2xl font-semibold text-gray-900">
         Reach out:{" "}
         <a
-          href="mailto:foundation@bepay.money"
+          href="mailto:info@bepay.money"
           className="text-blue-600 hover:underline"
         >
-          foundation@bepay.money
+          info@bepay.money
         </a>
       </p>
     </motion.section>

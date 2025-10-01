@@ -1,6 +1,6 @@
-"use client"
-import Image from "next/image"
-import { motion } from "framer-motion"
+"use client";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function BusinessSection() {
   return (
@@ -9,7 +9,7 @@ export default function BusinessSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
           {/* Left Side */}
           <motion.div
-            className="relative h-[50vh] lg:h-screen"
+            className="relative h-[50vh] lg:h-screen overflow-hidden"
             initial={{ opacity: 0, y: 100 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -25,12 +25,10 @@ export default function BusinessSection() {
               className="absolute inset-0 w-full h-full object-cover"
             />
 
-            {/* Overlay animation */}
+            {/* Overlay animation - Upper image */}
             <motion.div
-              // MODIFIED: Added x: 0 for a smooth horizontal animation
-              initial={{ opacity: 0, x: 0, y: 20, scale: 0.9 }}
-              // MODIFIED: Increased 'y' and added 'x' for leftward push
-              whileInView={{ opacity: 1, x: -30, y: 240, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               transition={{
                 duration: 0.6,
                 delay: 0.5,
@@ -41,22 +39,21 @@ export default function BusinessSection() {
                 transition: { duration: 0.2 },
               }}
               viewport={{ once: true }}
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              className="absolute bottom-0 transform mb-5 ml-6 sm:mt-16 sm:ml-6 md:mt-39 md:ml-8 lg:mt-120 lg:ml-55"
             >
-              {/* Smaller + pushed down */}
               <Image
                 src="/images/business/bs_1.svg"
                 alt="Payment sent notification"
                 width={100}
                 height={450}
-                className="w-[180px] h-auto lg:w-[270px]"
+                className="w-[220px] h-auto drop-shadow-lg"
               />
             </motion.div>
           </motion.div>
 
-          {/* Right Side (Unchanged) */}
+          {/* Right Side */}
           <motion.div
-            className="relative h-[50vh] lg:h-screen"
+            className="relative h-[50vh] lg:h-screen overflow-hidden"
             initial={{ opacity: 0, y: 100 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
@@ -72,10 +69,10 @@ export default function BusinessSection() {
               className="absolute inset-0 w-full h-full object-cover"
             />
 
-            {/* Overlay animation */}
+            {/* Overlay animation - Lower image */}
             <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               transition={{
                 duration: 0.6,
                 delay: 0.8,
@@ -86,20 +83,19 @@ export default function BusinessSection() {
                 transition: { duration: 0.2 },
               }}
               viewport={{ once: true }}
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[68px]"
+              className="absolute transform bottom-0 mb-5 ml-36 sm:mt-16 sm:ml-8 md:mt-24 md:ml-16 lg:mt-110 lg:ml-89"
             >
-              {/* Smaller + pushed down */}
               <Image
                 src="/images/business/ia2.svg"
                 alt="Payment received notification"
                 width={300}
                 height={450}
-                className="w-[180px] h-auto lg:w-[270px]"
+                className="w-[220px] h-auto drop-shadow-lg"
               />
             </motion.div>
           </motion.div>
         </div>
       </div>
     </section>
-  )
+  );
 }

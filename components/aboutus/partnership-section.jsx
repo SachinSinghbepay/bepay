@@ -55,10 +55,10 @@ export default function PartnershipSection() {
                 <p className="text-base md:text-lg text-[#666666] leading-relaxed">
                   Drop us an email:{" "}
                   <Link
-                    href="mailto:info@bepaymoney.com"
+                    href="mailto:info@bepay.money"
                     className="font-semibold text-black hover:text-gray-700 transition-colors duration-300"
                   >
-                    info@bepaymoney.com
+                    info@bepay.money
                   </Link>
                 </p>
               </div>
@@ -80,10 +80,10 @@ export default function PartnershipSection() {
                   <p className="text-xl text-[#666666] leading-relaxed">
                     Drop us an email:{" "}
                     <Link
-                      href="mailto:info@bepaymoney.com"
+                      href="mailto:info@bepay.money"
                       className="font-semibold text-black hover:text-gray-700 transition-colors duration-300"
                     >
-                      info@bepaymoney.com
+                      info@bepay.money
                     </Link>
                   </p>
                 </div>
