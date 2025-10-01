@@ -69,7 +69,7 @@ const BepayComparison = () => {
       <div className="w-full mx-auto max-w-7xl">
         {/* Title */}
         <div className="text-center mb-8 md:mb-16">
-          <h1 className="font-['Montserrat'] text-xl md:text-[44px] font-medium text-[#C0C0C0] leading-[26px] tracking-[-0.04em]">
+          <h1 className="font-['Montserrat'] text-xl md:text-[44px] font-medium text-[#C0C0C0] leading-[26px] md:leading-[45px] tracking-[-0.04em]">
             How <span className="font-medium text-black">bepay benefits</span>{" "}
             business <br />
             owners over traditional payments
