@@ -145,15 +145,19 @@ export default function TrustedBySection() {
             <motion.div
               key={logo.id}
               variants={logoVariants}
-              className="w-1/2 flex justify-center p-0"
+              className={`w-1/2 flex justify-center p-0 ${
+        logo.id === 3 ? "relative -top-6 -left-8" : ""
+      }`}
             >
               <Image
                 src={logo.src || "/placeholder.svg"}
                 alt={logo.alt}
                 width={280}
                 height={90}
-                className="w-full h-auto object-contain opacity-80"
-              />
+                className={`h-auto object-contain opacity-80 ${
+          logo.id === 3 ? "w-8/12" : "w-full " // <-- This line is changed
+        }`}
+      />
             </motion.div>
           ))}
         </motion.div>
