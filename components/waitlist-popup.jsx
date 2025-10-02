@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
-import { addToWaitlist } from "@/lib/firebase";
+import { addToWaitlist } from "@/lib/firebase"; // Assuming this path is correct
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnalyticsService } from "@/services/analyticsService";
@@ -339,6 +339,7 @@ function PortalContent({
               }
               onMouseLeave={(e) =>
                 (e.currentTarget.style.backgroundColor = "transparent")
+                (e.currentTarget.style.backgroundColor = "transparent")
               }
             >
               <X
@@ -587,6 +588,7 @@ function PortalContent({
                               animate={{ rotate: 360 }}
                               transition={{
                                 duration: 1,
+                                repeat: Infinity,
                                 repeat: Infinity,
                                 ease: "linear",
                               }}
