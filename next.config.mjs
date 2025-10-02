@@ -6,7 +6,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "flagcdn.com",
         port: "",
-        pathname: "/**", // Allows any image path from this domain
+        pathname: "/**",
+      },
+      // Add this new object to the array
+      {
+        protocol: "https",
+        hostname: "assets.bepay.money",
+        port: "",
+        pathname: "/**",
       },
     ],
   },
