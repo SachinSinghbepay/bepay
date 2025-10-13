@@ -14,7 +14,7 @@ import { AnalyticsService } from "@/services/analyticsService";
 const stepsData = [
   {
     id: 1,
-    image: "/images/business/mocup1.svg",
+    image: "/images/business/mocup1.png",
     alt: "Bepay crypto payment interface",
     text: "Customer selects bepay wallet at checkout",
   },
@@ -272,7 +272,6 @@ export default function HowCryptoWorksSection() {
 
                     <AnimatePresence>
                       {currentStepIndex === stepsData.length - 1 && (
-                        // ✅ MODIFIED: Added z-30 and changed bottom-[19%] to bottom-[12%]
                         <div className="absolute inset-x-0 bottom-[19%] z-30 flex justify-center pointer-events-none">
                           <motion.div
                             key="settlements-pill"
@@ -404,7 +403,7 @@ export default function HowCryptoWorksSection() {
               </div>
             </motion.div>
             <motion.div
-              className="absolute left-[18%] top-[200px] translate-y-1/2 z-20"
+              className="absolute left-[16%] top-[200px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent1Opacity, y: desktopContent1Y }}
             >
               <div className="p-4 max-w-[400px]">
@@ -414,7 +413,7 @@ export default function HowCryptoWorksSection() {
               </div>
             </motion.div>
             <motion.div
-              className="absolute -right-[0%] top-[400px] translate-y-1/2 z-20"
+              className="absolute right-[16%] top-[400px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent2Opacity, y: desktopContent2Y }}
             >
               <div className="p-4 max-w-[400px] text-right">
@@ -428,96 +427,73 @@ export default function HowCryptoWorksSection() {
               style={{ opacity: desktopContent3Opacity, y: desktopContent3Y }}
             >
               <div className="p-4 max-w-[400px]">
-                <p className="text-sm text-gray-600 font-bold">
+                <p className="text-sm text-gray-600 font-bold whitespace-nowrap">
                   {stepsData[2].text}
                 </p>
               </div>
             </motion.div>
+            {/* ✅ MODIFIED: CTA button is now back inside this block */}
             <motion.div
               className="absolute right-[13%] top-[300px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent4Opacity, y: desktopContent4Y }}
             >
               <div className="p-4 max-w-[400px] text-right">
-                <p className="text-sm text-gray-600 font-medium mb-8">
+                <p className="text-sm text-gray-600 font-bold mb-8">
                   {stepsData[3].text}
                 </p>
                 <WaitlistTriggerButton triggerSource="'how crypto make section' button">
-                  <div className="space-y-3">
-                    <motion.button
-                      onClick={handleStartEarningClick}
-                      className="w-full bg-black text-white py-4 px-6 rounded-full text-sm font-medium hover:bg-black/90 cursor-pointer transition-colors"
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.9, duration: 0.6 }}
-                    >
-                      Become a merchant on bepay →
-                    </motion.button>
-                  </div>
+                  <button
+                    onClick={handleStartEarningClick}
+                    className="h-[56px]  bg-black ml-20 text-white rounded-full flex items-center justify-center gap-2 text-xs font-medium px-4 py-4 hover:bg-gray-800 transition-colors cursor-pointer whitespace-nowrap md:w-[300px] md:text-[14px]"
+                  >
+                    <span>Become a merchant on bepay</span>
+                    <ArrowUpRight
+                      className="w-5 h-7 flex-shrink-0"
+                      strokeWidth={1.5}
+                    />
+                  </button>
                 </WaitlistTriggerButton>
               </div>
             </motion.div>
+
+            {/* ✅ MODIFIED: Floating text elements are back to their original position */}
             <motion.div
-              className="absolute left-[30%] shadow-2xl rounded-[20px] top-[250px] z-30"
+              className="absolute left-[15%] top-[300px] z-30"
               style={{
                 opacity: desktopFloatingOpacity,
                 y: desktopFloatingElement1Y,
               }}
             >
-              <div
-                className="p-4 rounded-[20px] mx-auto"
-                style={{
-                  border: "1px #ffffff1a",
-                  boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
-                  backdropFilter: "blur(20px)",
-                  background: "rgba(255, 255, 255, 255)",
-                }}
-              >
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">
-                  NO HASSLE!
-                </h3>
-              </div>
+              <h3 className="font-montserrat text-[44px] leading-[50px] tracking-[-0.04em]">
+                <span className="font-bold text-[#333333]">NO </span>
+                <span className="font-medium text-[#C0C0C0]">HASSLE!</span>
+              </h3>
             </motion.div>
+
             <motion.div
-              className="absolute left-[23%] shadow-2xl rounded-[20px] top-[450px] z-30"
+              className="absolute left-[15%] top-[340px] z-30"
               style={{
                 opacity: desktopFloatingOpacity,
                 y: desktopFloatingElement2Y,
               }}
             >
-              <div
-                className="p-4 border border-white/15 rounded-[20px]"
-                style={{
-                  border: "1px #ffffff1a",
-                  boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
-                  backdropFilter: "blur(20px)",
-                  background: "rgba(255, 255, 255, 255)",
-                }}
-              >
-                <h4 className="font-semibold text-gray-800 text-sm">
-                  NO VOLATILITY!
-                </h4>
-              </div>
+              <h4 className="font-montserrat text-[44px] leading-[50px] tracking-[-0.04em]">
+                <span className="font-bold text-[#333333]">NO </span>
+                <span className="font-medium text-[#C0C0C0]">VOLATILITY!</span>
+              </h4>
             </motion.div>
+
             <motion.div
-              className="absolute shadow-2xl rounded-[20px] left-[60%] top-[200px] z-30"
+              className="absolute left-[15%] top-[380px] z-30"
               style={{
                 opacity: desktopFloatingOpacity,
                 y: desktopFloatingElement3Y,
               }}
             >
-              <div
-                className="p-4 rounded-[20px]"
-                style={{
-                  border: "1px #ffffff1a",
-                  boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
-                  backdropFilter: "blur(20px)",
-                  background: "rgba(255, 255, 255, 255)",
-                }}
-              >
-                <h4 className="font-semibold text-gray-800 text-sm">
-                  NO DELAYS!
-                </h4>
-              </div>
+              <h4 className="font-montserrat text-[44px] leading-[50px] tracking-[-0.04em]">
+                <span className="font-bold text-[#333333]">NO </span>
+                <span className="font-medium text-[#C0C0C0]">DELAYS!</span>
+              </h4>
             </motion.div>
           </div>
         )}

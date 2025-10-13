@@ -73,12 +73,12 @@ const NewsletterModal = ({ isOpen, onClose }) => {
           width={120}
           height={50}
           className="
-           mx-auto rounded-xl p-2 
-           mb-5 -mt-6
-           sm:mb-13 sm:mt-0 
-           sm:w-[150px] sm:h-[60px] 
-           md:w-[180px] md:h-[70px]
-           lg:-mt-10 
+            mx-auto rounded-xl p-2 
+            mb-5 -mt-6
+            sm:mb-13 sm:mt-0 
+            sm:w-[150px] sm:h-[60px] 
+            md:w-[180px] md:h-[70px]
+            lg:-mt-10 
           "
         />
         <motion.h2
@@ -86,9 +86,9 @@ const NewsletterModal = ({ isOpen, onClose }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="
-           font-light leading-tight text-center mb-6
-           text-white
-           text-xs sm:text-xl md:text-2xl
+            font-light leading-tight text-center mb-6
+            text-white
+            text-xs sm:text-xl md:text-2xl
           "
         >
           Thanks for signing up to our newsletter.
@@ -98,10 +98,10 @@ const NewsletterModal = ({ isOpen, onClose }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           className="
-           text-[10px] sm:text-sm md:text-base 
-           text-[#6A6A6A] text-center max-w-xs sm:max-w-md 
-           mb-7 px-2 leading-snug
-           lg:mt-4
+            text-[10px] sm:text-sm md:text-base 
+            text-[#6A6A6A] text-center max-w-xs sm:max-w-md 
+            mb-7 px-2 leading-snug
+            lg:mt-4
           "
         >
           We&apos;ll send updates directly to your inbox.
@@ -110,8 +110,8 @@ const NewsletterModal = ({ isOpen, onClose }) => {
           onClick={onClose}
           aria-label="Close modal"
           className="
-           absolute top-6 right-6 text-white/70 hover:text-white
-           text-xs sm:text-2xl 
+            absolute top-6 right-6 text-white/70 hover:text-white
+            text-xs sm:text-2xl 
           "
         >
           ✕
@@ -121,7 +121,7 @@ const NewsletterModal = ({ isOpen, onClose }) => {
   );
 };
 
-const Footer  = ({ heading, headingSize = "text-[24px]" }) => {
+const Footer = ({ heading, headingSize = "text-[24px]" }) => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -175,21 +175,38 @@ const Footer  = ({ heading, headingSize = "text-[24px]" }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // ANALYTICS: Track the submit button click
-    AnalyticsService.sendEvent("Newsletter email submission sucessful");
-
     setError("");
-    if (!email.trim()) {
-      setError("Email is required");
+
+    if (!email.trim() || !validateEmail(email)) {
+      setError(
+        !email.trim()
+          ? "Email is required"
+          : "Please enter a valid email address"
+      );
+      // ANALYTICS: Track submission failure
+      AnalyticsService.sendEvent("Newsletter submission failed", {
+        reason: !email.trim() ? "Empty email" : "Invalid email format",
+        email_attempted: email,
+      });
       return;
     }
-    if (!validateEmail(email)) {
-      setError("Please enter a valid email address");
-      return;
-    }
+
     setIsSubmitting(true);
     try {
-      await addDoc(collection(db, "newsletter_subscribers"), { email: email.trim(), subscribedAt: new Date(), timestamp: Date.now() });
+      await addDoc(collection(db, "newsletter_subscribers"), {
+        email: email.trim(),
+        subscribedAt: new Date(),
+        timestamp: Date.now(),
+      });
+
+      // --- FIX APPLIED HERE ---
+      // 1. Event now triggers only on success.
+      // 2. Event now includes the email address.
+      AnalyticsService.sendEvent("Newsletter submission successful", {
+        email: email.trim(),
+      });
+      // --- END FIX ---
+
       setSubscribedEmail(email.trim());
       setShowModal(true);
       setEmail("");
@@ -199,6 +216,11 @@ const Footer  = ({ heading, headingSize = "text-[24px]" }) => {
     } catch (error) {
       console.error("Error adding email to newsletter:", error);
       setError("Something went wrong. Please try again.");
+       // ANALYTICS: Track submission failure due to server/network error
+       AnalyticsService.sendEvent("Newsletter submission failed", {
+        reason: "Server error",
+        error_message: error.message,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -566,10 +588,12 @@ const Footer  = ({ heading, headingSize = "text-[24px]" }) => {
             </>
           </motion.div>
 
+          {/* === MODIFICATION START === */}
           <motion.div
-            className="w-full grid grid-cols-2 md:grid-cols-4 gap-8 mt-8 text-[14px]"
+            className="w-full grid grid-cols-2 gap-8 md:flex md:justify-between mt-8 text-[14px]"
             variants={itemVariants}
           >
+          {/* === MODIFICATION END === */}
             {/* ANALYTICS: Added onClick handlers for all navigation and legal links */}
             <div className="space-y-4">
               <div className="space-y-4 lg:space-y-6">
@@ -672,7 +696,7 @@ const Footer  = ({ heading, headingSize = "text-[24px]" }) => {
                   Cookie Policy
                 </Link>
               </div>
-            </div>
+            </div>           
           </motion.div>
         </motion.div>
 
@@ -715,7 +739,7 @@ const Footer  = ({ heading, headingSize = "text-[24px]" }) => {
           lose their entire investment; all activities are undertaken at your
           own risk. bepay holds ISO 9001, ISO 20022, and ISO 27001
           certifications, and is licensed/registered under applicable frameworks
-          including MSB, DORA, MiCA, VASP, and DPDP
+          including MSB, DORA, MiCA, VASP, and DPDP
         </p>
       </footer>
 

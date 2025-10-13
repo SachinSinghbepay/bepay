@@ -144,7 +144,7 @@ export default function FAQSection() {
           whileInView="visible"
           viewport={{ once: false }}
         >
-          FAQ<span className="text-gray-400">s</span>
+          FAQ<span className="text-[#C0C0C0]">s</span>
         </motion.h2>
 
         <motion.div
