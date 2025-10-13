@@ -40,7 +40,6 @@ export default function BusinessSection() {
                 transition: { duration: 0.2 },
               }}
               viewport={{ once: true }}
-              // Further adjusted lg:ml-50 to lg:ml-36 to shift it more left
               className="absolute bottom-0 transform mb-5 ml-6 sm:mt-16 sm:ml-6 md:mt-39 md:ml-8 lg:mt-120 lg:ml-36"
             >
               <Image
@@ -85,8 +84,8 @@ export default function BusinessSection() {
                 transition: { duration: 0.2 },
               }}
               viewport={{ once: true }}
-              // Further adjusted lg:ml-85 to lg:ml-64 to shift it more left
-              className="absolute transform bottom-0 mb-5 ml-36 sm:mt-16 sm:ml-8 md:mt-24 md:ml-16 lg:mt-110 lg:ml-64"
+              // Adjusted lg:ml-64 to lg:ml-72 (right) and added lg:mb-10 (up)
+              className="absolute transform bottom-0 mb-5 ml-36 sm:mt-16 sm:ml-8 md:mt-24 md:ml-16 lg:mb-10 lg:ml-72"
             >
               <Image
                 src="/images/business/ia2.svg"

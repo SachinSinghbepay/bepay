@@ -144,6 +144,9 @@ const BusinessHero = () => {
   const imageOpacity = useTransform(scrollYProgress, [0.5, 1], [1, 0]);
   const leftCardScale = useTransform(scrollYProgress, [0, 1], [1, 1]);
 
+  // ✅ MODIFICATION: Add a new transform for scaling the image
+  const imageScale = useTransform(scrollYProgress, [0, 1], [0.9, 0.8]); // Start at 100% size, end at 80% size. Adjust 0.8 as needed.
+
   // --- MOBILE ANIMATION VALUES ---
   const mobileMockupY = useTransform(scrollYProgress, [0, 0.5], [0, -1200]);
   const mobileContentY = useTransform(scrollYProgress, [0.4, 0.6], [50, 0]);
@@ -203,7 +206,7 @@ const BusinessHero = () => {
         <section className="bg-[#F9F9F9] h-full flex flex-col justify-start pt-6 md:pt-0">
           {isMobile ? (
             // ===================================
-            // MOBILE VIEW (Modified)
+            // MOBILE VIEW (Unaffected)
             // ===================================
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col relative">
               <div className="text-center mb-4 max-w-[95%] mx-auto">
@@ -348,23 +351,23 @@ const BusinessHero = () => {
             </div>
           ) : (
             // ===================================
-            // DESKTOP VIEW (Unaffected)
+            // DESKTOP VIEW (MODIFIED)
             // ===================================
             <div className="h-full">
               <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
-                <div className="text-center mb-8 max-w-[95%] mx-auto pt-15">
-                  <h1 className="text-2xl sm:text-4xl lg:text-[70px] xl:text-[80px] 3xl:text-[100px] font-[300] leading-[1.1] sm:leading-none mb-6 sm:mb-8">
-                    <span className="font-light text-[100px] leading-[80px] tracking-[-0.1em] uppercase text-[#C0C0C0]">
+                <div className="text-center mb-4 max-w-[95%] mx-auto">
+                  <h1 className="text-l sm:text-4xl lg:text-[70px] xl:text-[80px] 3xl:text-[100px] font-[300] leading-[0.5] mb-1 -mt-14">
+                    <span className="font-light text-[90px] leading-[80px] tracking-[-0.1em] uppercase text-[#C0C0C0]">
                       ACCEPT
                     </span>
-                    <span className="font-normal text-[100px] leading-[80px] tracking-[-0.09em] ml-4 uppercase text-[#333333]">
+                    <span className="font-normal text-[90px] leading-[80px] tracking-[-0.09em] ml-4 uppercase text-[#333333]">
                       STABLECOINS.
                     </span>
                     <br />
-                    <span className="font-light text-[100px] leading-[80px] tracking-[-0.1em] uppercase text-[#C0C0C0]">
+                    <span className="font-light text-[90px] leading-[80px] tracking-[-0.1em] uppercase text-[#C0C0C0]">
                       GROW
                     </span>
-                    <span className="font-normal text-[100px] ml-4 leading-[80px] tracking-[-0.09em] uppercase text-[#333333]">
+                    <span className="font-normal text-[90px] ml-4 leading-[80px] tracking-[-0.09em] uppercase text-[#333333]">
                       GLOBALLY.
                     </span>
                   </h1>
@@ -377,7 +380,7 @@ const BusinessHero = () => {
                     <span className="text-[#080808] font-semibold">
                       30-second settlements
                     </span>{" "}
-                    and up to{" "}
+                    and up to <br />{" "}
                     <span className="text-[#080808] font-semibold">
                       70% lower fees
                     </span>{" "}
@@ -395,7 +398,6 @@ const BusinessHero = () => {
                       className="relative bg-white rounded-[2.5rem]"
                       style={{
                         border: "6.62px solid rgba(8, 8, 8, 0.2)",
-                        // ✅ FIX: Removed the white part of the shadow
                         boxShadow: "10px 10px 20px 0px rgba(0, 0, 0, 0.1)",
                       }}
                     >
@@ -440,7 +442,6 @@ const BusinessHero = () => {
                       className="relative bg-white rounded-[2.5rem]"
                       style={{
                         border: "6.62px solid rgba(8, 8, 8, 0.2)",
-                        // ✅ FIX: Removed the white part of the shadow
                         boxShadow: "10px 10px 20px 0px rgba(0, 0, 0, 0.1)",
                       }}
                     >
@@ -455,7 +456,7 @@ const BusinessHero = () => {
                       >
                         <div
                           onClick={handleLogoClick}
-                          className="absolute top-4 md:top-9 left-1/2 -translate-x-1/2 z-10 cursor-pointer"
+                          className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 cursor-pointer"
                         >
                           <Image
                             src="/bepaybusiness.svg"
@@ -466,15 +467,16 @@ const BusinessHero = () => {
                           />
                         </div>
 
+                        {/* ✅ MODIFICATION: Added imageScale to the style prop */}
                         <motion.div
-                          style={{ x: imageX, opacity: imageOpacity }}
-                          className="absolute inset-0 top-12 sm:top-16"
+                          style={{ x: imageX, opacity: imageOpacity, scale: imageScale }}
+                          className="absolute inset-0 -top-55"
                         >
                           <Image
-                            src="/business_s1_1.png"
+                            src="/s1_6.png"
                             alt="Bepay Mobile Interface"
                             fill
-                            className="object-cover object-top"
+                            className="object-contain"
                           />
                         </motion.div>
 
