@@ -133,7 +133,7 @@ export default function TrustedBySection() {
           />
         </div>
 
-        {/* --- Mobile Layout with Larger Images --- */}
+        {/* --- Mobile Layout with Larger Images (Unchanged) --- */}
         <motion.div
           className="flex flex-wrap justify-center items-center md:hidden -mr-2 ml-7 -mb-15 gap-y-0 "
           variants={containerVariants}
@@ -146,8 +146,8 @@ export default function TrustedBySection() {
               key={logo.id}
               variants={logoVariants}
               className={`w-1/2 flex justify-center p-0 ${
-        logo.id === 3 ? "relative -top-6 -left-8" : ""
-      }`}
+                logo.id === 3 ? "relative -top-6 -left-8" : ""
+              }`}
             >
               <Image
                 src={logo.src || "/placeholder.svg"}
@@ -155,36 +155,31 @@ export default function TrustedBySection() {
                 width={280}
                 height={90}
                 className={`h-auto object-contain opacity-80 ${
-          logo.id === 3 ? "w-8/12" : "w-full " // <-- This line is changed
-        }`}
-      />
+                  logo.id === 3 ? "w-8/12" : "w-full "
+                }`}
+              />
             </motion.div>
           ))}
         </motion.div>
 
-        {/* --- Desktop Logo Layout (Unchanged) --- */}
+        {/* --- Desktop Logo Layout (UPDATED to a single image) --- */}
         <motion.div
-          className="hidden md:grid md:grid-cols-4 place-items-center gap-y-5 gap-x-8 lg:gap-16"
+          className="hidden md:flex justify-center items-center"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {logos.map((logo) => (
-            <motion.div
-              key={logo.id}
-              variants={logoVariants}
-              className="flex items-center justify-center"
-            >
-              <Image
-                src={logo.src || "/placeholder.svg"}
-                alt={logo.alt}
-                width={160}
-                height={80}
-                className="h-12 md:h-14 lg:h-16 xl:h-18 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity duration-300"
-              />
-            </motion.div>
-          ))}
+          {/* 👇 THIS IS THE LINE THAT WAS CHANGED */}
+          <motion.div variants={logoVariants} className="w-full max-w-7xl">
+            <Image
+              src="/trusted.png"
+              alt="A collage of industry-leading brands supported by bepay"
+              width={1000}
+              height={100}
+              className="h-auto w-full object-contain opacity-90 -mb-15"
+            />
+          </motion.div>
         </motion.div>
       </div>
     </section>

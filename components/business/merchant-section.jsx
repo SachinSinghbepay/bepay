@@ -195,39 +195,22 @@ export default function MerchantSection() {
               </p>
             </motion.div>
             <WaitlistTriggerButton triggerSource="'Merchant section' button">
-              <motion.div
-                variants={itemVariants}
-                className="flex flex-col sm:flex-row lg:flex-col max-w-[300px] sm:max-w-none lg:max-w-[300px] gap-4"
-              >
-                <button
-                  onClick={handleButtonClick}
-                  className="bg-black w-[210px] cursor-pointer whitespace-nowrap text-white text-[12px] font-medium hover:bg-black/90 transition-colors duration-200 flex items-center justify-center h-[56px] rounded-[100px] gap-[10px] py-4 px-6"
-                >
-                  Become a merchant
-                  {/* ✅ ADDED strokeWidth PROP */}
-                  <ArrowUpRight
-                    className="w-7 h-7 flex-shrink-0"
-                    strokeWidth={2}
-                  />
-                </button>
-                <button className="w-[210px] border-2 cursor-pointer border-gray-300 text-gray-700 text-[12px] font-medium hover:border-gray-400 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center h-[56px] rounded-[100px] gap-[10px] py-4 px-6">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    />
-                  </svg>
-                  Talk to us
-                </button>
-              </motion.div>
-            </WaitlistTriggerButton>
+  <motion.div
+    variants={itemVariants}
+    className="flex flex-col sm:flex-row lg:flex-col max-w-[300px] sm:max-w-none lg:max-w-[300px] gap-4"
+  >
+    <button
+      onClick={handleButtonClick}
+      className="bg-black w-[250px] h-[56px] text-white text-[14px] font-medium rounded-full flex items-center justify-center gap-2 py-4 px-6 cursor-pointer whitespace-nowrap hover:bg-gray-800 transition-colors"
+    >
+      Become a merchant
+     <ArrowUpRight
+      className="w-5 h-7 flex-shrink-0"
+      strokeWidth={1.5}
+    />
+    </button>
+  </motion.div>
+</WaitlistTriggerButton>
           </div>
 
           <motion.div

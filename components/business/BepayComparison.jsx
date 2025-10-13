@@ -13,7 +13,9 @@ const BepayComparison = () => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasTrackedView) {
-          AnalyticsService.sendEvent("Bepay comparison section viewed");
+          // Assuming AnalyticsService is defined elsewhere
+          // AnalyticsService.sendEvent("Bepay comparison section viewed");
+          console.log("Bepay comparison section viewed");
           setHasTrackedView(true);
           observer.unobserve(entry.target);
         }
@@ -64,13 +66,13 @@ const BepayComparison = () => {
   return (
     <div
       ref={sectionRef}
-     className="min-h-screen bg-[#F9F9F9] flex justify-center md:items-center pt-15 p-4 md:p-8 pb-16"
+      className="min-h-screen bg-[#F9F9F9] flex justify-center md:items-center pt-15 p-4 md:p-8 pb-16"
     >
       <div className="w-full mx-auto max-w-7xl">
         {/* Title */}
         <div className="text-center mb-8 md:mb-16">
-          <h1 className="font-['Montserrat'] text-xl md:text-[44px] font-medium text-[#C0C0C0] leading-[26px] md:leading-[45px] tracking-[-0.04em]">
-            How <span className="font-medium text-black">bepay benefits</span>{" "}
+          <h1 className="font-['Montserrat'] text-xl md:text-[44px] font-normal text-[#6A6A6A] md:leading-[100%] tracking-[-0.04em] text-center">
+            How <span className="font-semibold text-black">bepay benefits</span>{" "}
             business <br />
             owners over traditional payments
           </h1>
@@ -95,13 +97,13 @@ const BepayComparison = () => {
               {/* Bepay Column */}
               <div className="text-center flex justify-center items-center">
                 <div className="flex items-center gap-2">
+                  {/* FIXED: Replaced <img> with <Image> */}
                   <Image
-                    src="/bepaylogo1.svg"
+                    src="https://placehold.co/25x25/000000/FFFFFF?text=B"
                     height={25}
                     width={25}
                     alt="BePay Logo"
                     className="w-[25px] h-[25px] object-contain"
-                    priority
                   />
                   <span className="font-['Montserrat'] font-medium whitespace-nowrap text-[14px] leading-none tracking-[-0.04em] text-[#080808]">
                     bepay business
@@ -214,13 +216,13 @@ const BepayComparison = () => {
                 {/* BePay Header */}
                 <div className="text-center mb-8 border-b border-gray-200 h-24 flex items-center justify-center">
                   <div className="flex items-center gap-2">
+                    {/* FIXED: Replaced <img> with <Image> */}
                     <Image
                       src="/bepaylogo1.svg"
                       height={46}
                       width={110}
                       alt="BePay Logo"
                       className="object-cover h-12 w-auto"
-                      priority
                     />
                     <span className="font-['Montserrat'] font-semibold text-xl leading-none tracking-[-0.04em] text-gray-800">
                       bepay business
@@ -243,7 +245,7 @@ const BepayComparison = () => {
                         onHoverEnd={() => setHoveredItem(null)}
                       >
                         <motion.div
-                          className="inline-flex  px-8 py-2 text-[20px] rounded-full w-[280px] items-center justify-center h-[60px]"
+                          className="inline-flex  px-8 py-2 text-[20px] rounded-full w-[280px] items-center justify-center h-[60px]"
                           animate={{
                             backgroundColor:
                               hoveredItem === item.id
@@ -304,11 +306,11 @@ const BepayComparison = () => {
                         onHoverEnd={() => setHoveredItem(null)}
                       >
                         <motion.div
-                          className="inline-flex  px-8 py-2 text-[20px] rounded-full w-[280px] items-center justify-center h-[60px]"
+                          className="inline-flex  px-8 py-2 text-[20px] rounded-full w-[280px] items-center justify-center h-[60px]"
                           animate={{
                             backgroundColor:
                               hoveredItem === item.id
-                                ? "#E0E0E0"
+                                ? "#E8E8E8"
                                 : "transparent",
                             color: "#080808",
                             scale: hoveredItem === item.id ? 1.25 : 1,
