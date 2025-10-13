@@ -14,7 +14,7 @@ import { AnalyticsService } from "@/services/analyticsService";
 const stepsData = [
   {
     id: 1,
-    image: "/images/business/mocup1.svg",
+    image: "/images/business/mocup1.png",
     alt: "Bepay crypto payment interface",
     text: "Customer selects bepay wallet at checkout",
   },
