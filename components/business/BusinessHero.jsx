@@ -139,7 +139,7 @@ const BusinessHero = () => {
   // --- DESKTOP ANIMATION VALUES ---
   const leftCardRotate = useTransform(scrollYProgress, [0, 1], [0, -90]);
   const leftCardX = useTransform(scrollYProgress, [0, 1], [-240, 0]);
-  const leftCardY = useTransform(scrollYProgress, [0, 1], [200, -30]);
+  const leftCardY = useTransform(scrollYProgress, [0, 1], [200, 0]);
   const imageX = useTransform(scrollYProgress, [0.5, 1], [0, -200]);
   const imageOpacity = useTransform(scrollYProgress, [0.5, 1], [1, 0]);
   const leftCardScale = useTransform(scrollYProgress, [0, 1], [1, 1]);
@@ -200,7 +200,6 @@ const BusinessHero = () => {
   return (
     <div ref={containerRef} className="relative h-[200vh]">
       <div className="sticky top-0 h-screen overflow-hidden">
-        {/* ✅ FIX: Further reduced top padding to move content up on mobile */}
         <section className="bg-[#F9F9F9] h-full flex flex-col justify-start pt-6 md:pt-0">
           {isMobile ? (
             // ===================================
@@ -237,13 +236,12 @@ const BusinessHero = () => {
                   className="absolute inset-x-0 top-0 flex justify-center"
                   style={{ y: mobileMockupY }}
                 >
-                  {/* ✅ FIX: Further reduced width to make the image smaller */}
                   <div className="relative w-[85vw] max-w-[380px]">
                     <Image
                       src="/images/business/video_mockup.svg"
                       alt="Bepay video mockup frame"
                       width={380}
-                      height={211} // Adjusted height to maintain aspect ratio
+                      height={211}
                       className="w-full h-auto"
                     />
                     <div
@@ -356,21 +354,21 @@ const BusinessHero = () => {
               <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
                 <div className="text-center mb-8 max-w-[95%] mx-auto pt-15">
                   <h1 className="text-2xl sm:text-4xl lg:text-[70px] xl:text-[80px] 3xl:text-[100px] font-[300] leading-[1.1] sm:leading-none mb-6 sm:mb-8">
-                    <span className="text-[#C0C0C0]">THE </span>
-                    <span className="text-[#333333] font-[400]">
-                      STABLECOIN PAYMENT
+                    <span className="font-light text-[100px] leading-[80px] tracking-[-0.1em] uppercase text-[#C0C0C0]">
+                      ACCEPT
+                    </span>
+                    <span className="font-normal text-[100px] leading-[80px] tracking-[-0.09em] ml-4 uppercase text-[#333333]">
+                      STABLECOINS.
                     </span>
                     <br />
-                    <span className="text-[#333333] font-[400]">
-                      INFRASTRUCTURE{" "}
-                    </span>{" "}
-                    <span className="text-[#C0C0C0]">FOR</span>
-                    <br />
-                    <span className="text-[#C0C0C0] font-[300]">
-                      MODERN BUSINESSES
+                    <span className="font-light text-[100px] leading-[80px] tracking-[-0.1em] uppercase text-[#C0C0C0]">
+                      GROW
+                    </span>
+                    <span className="font-normal text-[100px] ml-4 leading-[80px] tracking-[-0.09em] uppercase text-[#333333]">
+                      GLOBALLY.
                     </span>
                   </h1>
-                  <p className="text-[#6A6A6AE5] text-left text-base sm:text-lg md:text-[16px] max-w-[986px] mx-auto leading-relaxed px-4 sm:px-6">
+                  <p className="text-[#6A6A6AE5] text-center text-base sm:text-lg md:text-[16px] max-w-[986px] mx-auto leading-relaxed px-4 sm:px-6">
                     Join{" "}
                     <span className="text-[#080808] font-semibold">
                       1,000+ businesses
@@ -397,8 +395,8 @@ const BusinessHero = () => {
                       className="relative bg-white rounded-[2.5rem]"
                       style={{
                         border: "6.62px solid rgba(8, 8, 8, 0.2)",
-                        boxShadow:
-                          "10px 10px 20px 0px rgba(0, 0, 0, 0.1), -10px -10px 20px 0px #FFFFFF",
+                        // ✅ FIX: Removed the white part of the shadow
+                        boxShadow: "10px 10px 20px 0px rgba(0, 0, 0, 0.1)",
                       }}
                     >
                       <div
@@ -406,7 +404,8 @@ const BusinessHero = () => {
                         style={{
                           width: "min(805px, 90vw)",
                           height: "min(325px, 41vw)",
-                          aspectRatio: "805.1359252929694 / 325.2563781738284",
+                          aspectRatio:
+                            "805.1359252929694 / 325.2563781738284",
                         }}
                       >
                         <video
@@ -441,8 +440,8 @@ const BusinessHero = () => {
                       className="relative bg-white rounded-[2.5rem]"
                       style={{
                         border: "6.62px solid rgba(8, 8, 8, 0.2)",
-                        boxShadow:
-                          "10px 10px 20px 0px rgba(0, 0, 0, 0.1), -10px -10px 20px 0px #FFFFFF",
+                        // ✅ FIX: Removed the white part of the shadow
+                        boxShadow: "10px 10px 20px 0px rgba(0, 0, 0, 0.1)",
                       }}
                     >
                       <div
@@ -450,7 +449,8 @@ const BusinessHero = () => {
                         style={{
                           width: "min(325px, 41vw)",
                           height: "min(805px, 90vw)",
-                          aspectRatio: "325.2563781738284 / 705.1359252929694",
+                          aspectRatio:
+                            "325.2563781738284 / 705.1359252929694",
                         }}
                       >
                         <div

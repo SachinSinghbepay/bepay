@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image"; // ✅ Import the Next.js Image component
+import Image from "next/image";
 import { AnalyticsService } from "@/services/analyticsService";
 import { useRef, useState, useEffect } from "react";
 
@@ -97,7 +97,7 @@ export default function ComplianceSection() {
             <motion.div
               key={index}
               variants={cardVariants}
-              className=" bg-white rounded-[32px] p-8 lg:p-12 h-auto min-h-[200px] lg:min-h-[300px] 3xl:min-h-[463px] flex flex-col justify-between relative"
+              className="bg-white rounded-[32px] p-8 lg:p-12 h-auto min-h-[200px] lg:min-h-[55vh] flex flex-col justify-between relative"
               style={{
                 boxShadow: "50px 50px 100px 0px rgba(0, 0, 0, 0.1)",
                 zIndex: complianceData.length - index,
@@ -105,7 +105,6 @@ export default function ComplianceSection() {
             >
               <div className="flex items-center gap-4 lg:gap-6 mb-8">
                 <div className="flex-shrink-0">
-                  {/* ✅ Replaced <img> with next/image <Image /> */}
                   <Image
                     src={item.icon}
                     alt={`${item.title} icon`}
@@ -136,6 +135,17 @@ export default function ComplianceSection() {
                   ))}
                 </div>
               </div>
+
+              {/* Conditionally add the flag image to the "Licensed" card, only for desktop */}
+              {item.title === "Licensed" && (
+                <Image
+                  src="/flags.png"
+                  alt="Flag"
+                  width={70}
+                  height={63}
+                  className="absolute bottom-8 right-8 lg:bottom-12 lg:right-12 pointer-events-none hidden lg:block" // ADDED: hidden and lg:block
+                />
+              )}
             </motion.div>
           ))}
         </motion.div>

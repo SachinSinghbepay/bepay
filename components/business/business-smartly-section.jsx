@@ -17,9 +17,10 @@ function FeatureCard({ title, image, features, index, isInView }) {
         delay: 0.5 + index * 0.2,
         ease: "easeOut",
       }}
-      className="flex-col w-[90vw] md:w-[50vw] lg:w-[35vw] xl:w-[32vw] h-[550px] md:h-[500px] bg-white rounded-[30px] flex-shrink-0 relative"
+      // MODIFIED: Reduced width for desktop views
+      className="flex-col w-[90vw] md:w-[55vw] lg:w-[40vw] xl:w-[38vw] h-[550px] md:h-[500px] bg-white rounded-[30px] flex-shrink-0 relative"
       style={{
-        boxShadow: "60px 20px 30px -20px rgba(0, 0, 0, 0.07), 80px 30px 120px -90px rgba(0, 0, 0, 0.04)",
+        boxShadow: "60px 20px 30px -20px rgba(0, 0, 0, 0.05), 80px 30px 120px -90px rgba(0, 0, 0, 0.02)",
         zIndex: 100 - index,
       }}
     >
@@ -34,8 +35,7 @@ function FeatureCard({ title, image, features, index, isInView }) {
       </div>
       <div className="p-6 md:p-8 flex flex-col justify-between h-[calc(100%-225px)]">
         <div>
-          {/* MODIFIED: Increased font weight for mobile, kept original for md and up */}
-          <h3 className="font-['Montserrat'] font-semibold md:font-medium text-[20px] leading-[24px] tracking-[-0.02em] -mt-4 md:mt-0 mb-4 md:mb-6 text-black uppercase">
+          <h3 className="font-['Montserrat'] font-semibold md:font-semibold text-[20px] leading-[24px] tracking-[-0.02em] -mt-4 md:-mt-2 mb-4 md:mb-6 text-black uppercase">
             {title}
           </h3>
           <ul className="space-y-4 lg:space-y-4">
@@ -74,7 +74,8 @@ export default function BusinessSmartlySection() {
   });
 
   const xMobile = useTransform(scrollYProgress, [0, 1], ["0%", "-78%"]);
-  const xDesktop = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
+  // MODIFIED: Adjusted scroll transform to account for narrower cards
+  const xDesktop = useTransform(scrollYProgress, [0, 1], ["0%", "-38%"]);
 
   const cardsData = [
     {
@@ -131,8 +132,7 @@ export default function BusinessSmartlySection() {
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-2 md:pt-4 pb-4 md:pb-8">
           <div className="flex flex-col items-center justify-center text-center">
             <div className="max-w-5xl mx-auto">
-              {/* MODIFIED: Applied requested font styles for mobile view */}
-              <h2 className="font-['Montserrat'] text-[24px] font-medium leading-[29px] tracking-[-0.04em] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl md:font-[400] md:tracking-[-0.05em] md:leading-[56px]">
+              <h2 className="font-['Montserrat'] text-[24px] font-medium leading-[29px] tracking-[-0.04em] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl md:font-[400] md:tracking-[-0.05em] md:leading-[65px]">
                 <span className="block text-[#C0C0C0] dark:text-[#333333]">
                   Everything you need to
                 </span>
@@ -147,7 +147,7 @@ export default function BusinessSmartlySection() {
 
         {/* Cards Section - Horizontal Scroll */}
         <div className="flex-1 flex items-center overflow-hidden">
-          {/* Mobile Cards */}
+          {/* Mobile Cards (Unchanged) */}
           <motion.div
             style={{ x: xMobile }}
             className="flex gap-6 pl-4 sm:pl-6 lg:pl-8 md:hidden"
@@ -167,7 +167,7 @@ export default function BusinessSmartlySection() {
           {/* Desktop Cards */}
           <motion.div
             style={{ x: xDesktop }}
-            className="hidden md:flex gap-6 pl-4 sm:pl-6 lg:pl-8"
+            className="hidden md:flex gap-4 pl-4 sm:pl-6 lg:pl-8"
           >
             {cardsData.map((card, index) => (
               <FeatureCard
