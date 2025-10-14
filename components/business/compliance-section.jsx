@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image"; // ✅ Import the Next.js Image component
+import Image from "next/image";
 import { AnalyticsService } from "@/services/analyticsService";
 import { useRef, useState, useEffect } from "react";
 
@@ -97,15 +97,15 @@ export default function ComplianceSection() {
             <motion.div
               key={index}
               variants={cardVariants}
-              className=" bg-white rounded-[32px] p-8 lg:p-12 h-auto min-h-[200px] lg:min-h-[300px] 3xl:min-h-[463px] flex flex-col justify-between relative"
+              className="bg-white rounded-[32px] p-8 lg:p-12 h-auto min-h-[200px] lg:min-h-[55vh] flex flex-col justify-between relative"
               style={{
                 boxShadow: "50px 50px 100px 0px rgba(0, 0, 0, 0.1)",
                 zIndex: complianceData.length - index,
               }}
             >
-              <div className="flex items-center gap-4 lg:gap-6 mb-8">
+              {/* This parent div is now relative to position the mobile flag */}
+              <div className="flex items-center gap-4 lg:gap-6 mb-8 relative">
                 <div className="flex-shrink-0">
-                  {/* ✅ Replaced <img> with next/image <Image /> */}
                   <Image
                     src={item.icon}
                     alt={`${item.title} icon`}
@@ -117,6 +117,16 @@ export default function ComplianceSection() {
                 <h3 className="text-3xl lg:text-[60px] 3xl:text-[80px] font-[500] text-[#6A6A6A] leading-tight">
                   {item.title}
                 </h3>
+                {/* Mobile-only flag image */}
+                {item.title === "Licensed" && (
+                  <Image
+                    src="/flags.png"
+                    alt="Flag"
+                    width={45}
+                    height={40}
+                    className="absolute top-[29%] right-[5%] pointer-events-none lg:hidden"
+                  />
+                )}
               </div>
               <div
                 className={`${
@@ -136,6 +146,17 @@ export default function ComplianceSection() {
                   ))}
                 </div>
               </div>
+
+              {/* Desktop-only flag image */}
+              {item.title === "Licensed" && (
+                <Image
+                  src="/flags.png"
+                  alt="Flag"
+                  width={70}
+                  height={63}
+                  className="absolute bottom-8 right-8 lg:bottom-12 lg:right-12 pointer-events-none hidden lg:block"
+                />
+              )}
             </motion.div>
           ))}
         </motion.div>

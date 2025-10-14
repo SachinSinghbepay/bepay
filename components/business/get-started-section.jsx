@@ -34,11 +34,13 @@ const steps = [
       <WaitlistTriggerButton triggerSource="'get started business section' button">
         <motion.button
           onClick={handleStartEarningClick}
-          className="flex items-center justify-center gap-2 bg-black text-white px-6 h-[56px] rounded-full mt-8 hover:bg-gray-800 transition-colors text-xs font-medium"
+          className="flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 hover:bg-gray-800 transition-colors text-xs font-medium md:w-[300px] md:text-[14px]"
         >
           <span>Become a merchant on bepay</span>
-          {/* The icon size and strokeWidth are now consistent */}
-          <ArrowUpRight size={20}/>
+          <ArrowUpRight
+            className="w-5 h-7 flex-shrink-0"
+            strokeWidth={1.5}
+          />
         </motion.button>
       </WaitlistTriggerButton>
     ),
@@ -193,7 +195,7 @@ export default function GetStartedSection() {
         }`}
       >
         <div className="text-center">
-          <h2 className="font-['Montserrat'] text-[24px] md:text-[44px] font-medium text-[#C0C0C0] leading-[26px] tracking-[-0.04em]">
+          <h2 className="font-['Montserrat'] text-[24px] font-medium text-[#C0C0C0] leading-[26px] tracking-[-0.04em] lg:text-[90px] lg:font-normal lg:leading-[140px] lg:tracking-[-0.06em]">
             <span>Get started in</span>
             <br className="lg:hidden" />
             <span className="text-gray-900"> 3 simple steps</span>
@@ -201,9 +203,8 @@ export default function GetStartedSection() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-20 items-center w-full max-w-7xl mt-4">
-          <div className="relative flex justify-center lg:justify-end order-2 lg:order-1">
-            {/* ✅ CHANGE: Increased height and width of mobile mockup */}
-            <div className="relative w-full max-w-[340px] sm:max-w-[380px] lg:max-w-[420px] h-[58vh] sm:h-[70vh] lg:h-[65vh] max-h-[800px]">
+          <div className="relative flex justify-center lg:justify-end lg:mr-20 order-2 lg:order-1">
+            <div className="relative w-full max-w-[340px] sm:max-w-[380px] lg:max-w-[420px] h-[58vh] sm:h-[70vh] lg:h-[80vh] max-h-[800px]">
               <AnimatePresence initial={false} custom={direction}>
                 <motion.div
                   key={currentStepData.id}
@@ -233,6 +234,7 @@ export default function GetStartedSection() {
           </div>
 
           <div className="relative flex flex-col items-center lg:items-start justify-center order-1 lg:order-2">
+            {/* ✅ MODIFIED: Changed lg:text-center to lg:text-left */}
             <div className="relative w-full max-w-lg min-h-[150px] sm:min-h-[200px] text-center lg:text-left">
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0">
                 <AnimatePresence initial={false} mode="wait">
@@ -262,21 +264,25 @@ export default function GetStartedSection() {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  className="w-full z-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[40%] lg:-translate-y-1/2 flex flex-col items-center lg:items-start justify-center gap-2"
+                  /* ✅ MODIFIED: Changed lg:items-center to lg:items-start to left-align the title/subtitle flex items */
+                  className="w-full z-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[40%] lg:-translate-y-[30%] flex flex-col items-center lg:items-start justify-center gap-2"
                 >
                   <motion.div variants={contentVariants}>
-<h3 className="text-2xl font-medium leading-none tracking-[-0.04em] text-[#333333] sm:text-4xl md:text-5xl lg:text-[60px] lg:font-normal lg:text-[#6A6A6A] lg:leading-tight mb-6 lg:mb-0">                      {currentStepData.rightTitle}
+                    <h3 className={`text-2xl font-medium leading-none tracking-[-0.04em] text-[#333333] sm:text-4xl md:text-5xl lg:text-[44px] lg:text-[#6A6A6A] lg:leading-none mb-6 lg:mb-7 ${currentStepData.id === 1 ? 'lg:whitespace-nowrap' : ''}`}>
+                      {currentStepData.rightTitle}
                     </h3>
-                    <p className="text-[15px] leading-none tracking-[-0.04em] text-[#6A6A6A] sm:text-lg md:text-[20px] lg:font-medium lg:leading-relaxed">
+                    <p className="text-[15px] leading-none tracking-[-0.04em] text-[#6A6A6A] sm:text-lg md:text-[20px] lg:font-medium lg:leading-none">
                       {currentStepData.rightSubtitle}
                     </p>
                   </motion.div>
 
                   {currentStepData.rightButtons && (
                     <motion.div
-                      className="w-ful -mt-4 lg:mt-0l"
+                      /* ✅ MODIFIED: Changed justify-center to justify-start and removed translate-x for desktop */
+                      className={`w-full flex justify-center lg:justify-start -mt-4 lg:mt-4 ${
+                        currentStepData.id === 3 ? "lg:-translate-y-5" : ""
+                      }`}
                       variants={mobileButtonVariants}
-                      // No need for initial/animate/exit here, they are inherited from the parent
                     >
                       {currentStepData.rightButtons}
                     </motion.div>

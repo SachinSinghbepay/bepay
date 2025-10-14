@@ -185,7 +185,7 @@ const MobileView = () => {
                 className="flex items-center justify-center gap-2 bg-black text-white px-6 h-[56px] rounded-full hover:bg-gray-800 transition-colors text-xs font-medium"
               >
                 <span>Become a merchant on bepay</span>
-                <ArrowUpRight size={20}/>
+                <ArrowUpRight size={20} />
               </motion.button>
             </WaitlistTriggerButton>
           </div>
@@ -373,7 +373,8 @@ export default function AnimatedCardsSection() {
             </p>
           </div>
           <div className="relative max-w-7xl pb-10 mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 h-full relative">
+            {/* ✅ MODIFICATION: Reduced lg:gap-8 to lg:gap-4 */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-4 h-full relative">
               {features.map((feature, index) => (
                 <div
                   key={feature.id}
@@ -433,6 +434,7 @@ export default function AnimatedCardsSection() {
                       >
                         {feature.title}
                       </h3>
+                      {/* ✅ MODIFICATION: Applied requested subtitle styles */}
                       <p
                         className="font-medium text-[32px] leading-[36px] tracking-[-.06em]"
                         style={{ color: "#6A6A6A" }}
@@ -453,13 +455,13 @@ export default function AnimatedCardsSection() {
                         }}
                       >
                         <h3
-                          className="text-md md:text-l lg:text-xl font-bold mb-3 md:mb-4"
+                          className="font-semibold text-[16px] leading-none tracking-normal mb-3 md:mb-4"
                           style={{ color: "#080808" }}
                         >
                           The future of payments is here!
                         </h3>
                         <p
-                          className="text-[12px] md:text-base lg:text-lg mb-4 md:mb-6 leading-relaxed"
+                          className="font-medium text-xs leading-5 tracking-normal mb-4 md:mb-6"
                           style={{ color: "#333333" }}
                         >
                           Start accepting crypto payments in minutes. Reach
@@ -467,24 +469,17 @@ export default function AnimatedCardsSection() {
                           store — all in one powerful dashboard.
                         </p>
                         <WaitlistTriggerButton triggerSource="'Ready-to-start section' button">
-                          <button
-                            onClick={handleStartEarningClick}
-                            className="bg-black cursor-pointer text-white hover:bg-black/90 transition-colors duration-200 flex items-center justify-center rounded-full gap-[10px] 
-                           font-semibold text-[12px] font-600 leading-none tracking-normal"
-                            style={{
-                              width: "230px",
-                              height: "56px",
-                              padding: "16px 24px",
-                              fontFamily: "Open Sans",
-                            }}
-                          >
-                            Become a merchant on bepay
-                            <ArrowUpRight
-                              className="w-5 h-7 flex-shrink-0"
-                              strokeWidth={1.5}
-                            />
-                          </button>
-                        </WaitlistTriggerButton>
+  <button
+    onClick={handleStartEarningClick}
+    className="bg-black w-[285px] h-[56px] text-white text-[14px] font-medium rounded-full flex items-center justify-center gap-2 py-4 px-6 cursor-pointer whitespace-nowrap hover:bg-gray-800 transition-colors"
+  >
+    Become a merchant on bepay
+    <ArrowUpRight
+      className="w-5 h-7 flex-shrink-0"
+      strokeWidth={1.5}
+    />
+  </button>
+</WaitlistTriggerButton>
                       </div>
                     )}
                   </div>

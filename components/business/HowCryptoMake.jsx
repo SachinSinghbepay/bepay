@@ -14,25 +14,25 @@ import { AnalyticsService } from "@/services/analyticsService";
 const stepsData = [
   {
     id: 1,
-    image: "/images/business/mocup1.svg",
+    image: "/images/business/mocup1.png",
     alt: "Bepay crypto payment interface",
-    text: "Customer selects bepay wallet at checkout",
+    text: "Customer selects stablecoins/crypto at checkout",
   },
   {
     id: 2,
-    image: "/images/business/mocup2.svg",
+    image: "/images/business/mocup2.png",
     alt: "Bepay QR code interface",
-    text: "bepay generates a QR code or token address",
+    text: "bepay generates a QR code & token address",
   },
   {
     id: 3,
-    image: "/images/business/mocup3.svg",
+    image: "/images/business/mocup3.png",
     alt: "Bepay payment success",
     text: "Customer pays in stablecoin/crypto of your choice",
   },
   {
     id: 4,
-    image: "/images/business/mocup4.svg",
+    image: "/images/business/mocup4.png",
     alt: "Bepay payment confirmation",
     text: "Crypto auto-credits to your bepay business account",
   },
@@ -272,7 +272,6 @@ export default function HowCryptoWorksSection() {
 
                     <AnimatePresence>
                       {currentStepIndex === stepsData.length - 1 && (
-                        // ✅ MODIFIED: Added z-30 and changed bottom-[19%] to bottom-[12%]
                         <div className="absolute inset-x-0 bottom-[19%] z-30 flex justify-center pointer-events-none">
                           <motion.div
                             key="settlements-pill"
@@ -355,7 +354,7 @@ export default function HowCryptoWorksSection() {
               className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
               style={{ y: desktopMockup1Y }}
             >
-              <div className="relative w-[380px] h-[650px] drop-shadow-2xl">
+              <div className="relative w-[380px] h-[650px] drop-shadow-[15px_15px_15px_rgba(0,0,0,0.05)]">
                 <Image
                   src={stepsData[0].image}
                   alt={stepsData[0].alt}
@@ -368,7 +367,7 @@ export default function HowCryptoWorksSection() {
               className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
               style={{ y: desktopMockup2Y, opacity: desktopMockup2Opacity }}
             >
-              <div className="relative w-[380px] h-[650px] drop-shadow-2xl">
+              <div className="relative w-[380px] h-[650px] drop-shadow-[15px_15px_15px_rgba(0,0,0,0.05)]">
                 <Image
                   src={stepsData[1].image}
                   alt={stepsData[1].alt}
@@ -381,7 +380,7 @@ export default function HowCryptoWorksSection() {
               className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
               style={{ y: desktopMockup3Y, opacity: desktopMockup3Opacity }}
             >
-              <div className="relative w-[380px] h-[650px] drop-shadow-2xl">
+              <div className="relative w-[380px] h-[650px] drop-shadow-[15px_15px_15px_rgba(0,0,0,0.05)]">
                 <Image
                   src={stepsData[2].image}
                   alt={stepsData[2].alt}
@@ -394,7 +393,7 @@ export default function HowCryptoWorksSection() {
               className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
               style={{ y: desktopMockup4Y, opacity: desktopMockup4Opacity }}
             >
-              <div className="relative w-[380px] h-[650px] drop-shadow-2xl">
+              <div className="relative w-[380px] h-[650px] drop-shadow-[15px_15px_15px_rgba(0,0,0,0.05)]">
                 <Image
                   src={stepsData[3].image}
                   alt={stepsData[3].alt}
@@ -404,31 +403,31 @@ export default function HowCryptoWorksSection() {
               </div>
             </motion.div>
             <motion.div
-              className="absolute left-[18%] top-[200px] translate-y-1/2 z-20"
+              className="absolute left-[7%] top-[200px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent1Opacity, y: desktopContent1Y }}
             >
               <div className="p-4 max-w-[400px]">
-                <p className="text-sm text-gray-600 font-bold">
+                <p className="font-montserrat font-medium text-[20px] leading-snug tracking-[-0.04em] text-[#080808] whitespace-nowrap">
                   {stepsData[0].text}
                 </p>
               </div>
             </motion.div>
             <motion.div
-              className="absolute -right-[0%] top-[400px] translate-y-1/2 z-20"
+              className="absolute right-[13%] top-[400px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent2Opacity, y: desktopContent2Y }}
             >
               <div className="p-4 max-w-[400px] text-right">
-                <p className="text-sm text-gray-600 font-bold">
+                <p className="font-montserrat font-medium text-[20px] leading-snug tracking-[-0.04em] text-[#080808] whitespace-nowrap">
                   {stepsData[1].text}
                 </p>
               </div>
             </motion.div>
             <motion.div
-              className="absolute left-[13%] top-[400px] translate-y-1/2 z-20"
+              className="absolute left-[6%] top-[400px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent3Opacity, y: desktopContent3Y }}
             >
               <div className="p-4 max-w-[400px]">
-                <p className="text-sm text-gray-600 font-bold">
+                <p className="font-montserrat font-medium text-[20px] leading-snug whitespace-nowrap tracking-[-0.04em] text-[#080808]">
                   {stepsData[2].text}
                 </p>
               </div>
@@ -438,86 +437,61 @@ export default function HowCryptoWorksSection() {
               style={{ opacity: desktopContent4Opacity, y: desktopContent4Y }}
             >
               <div className="p-4 max-w-[400px] text-right">
-                <p className="text-sm text-gray-600 font-medium mb-8">
+                <p className="font-montserrat font-medium text-[20px] leading-snug tracking-[-0.04em] text-[#080808] mb-8 whitespace-nowrap">
                   {stepsData[3].text}
                 </p>
                 <WaitlistTriggerButton triggerSource="'how crypto make section' button">
-                  <div className="space-y-3">
-                    <motion.button
-                      onClick={handleStartEarningClick}
-                      className="w-full bg-black text-white py-4 px-6 rounded-full text-sm font-medium hover:bg-black/90 cursor-pointer transition-colors"
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.9, duration: 0.6 }}
-                    >
-                      Become a merchant on bepay →
-                    </motion.button>
-                  </div>
+                  <button
+                    onClick={handleStartEarningClick}
+                    className="h-[56px]  bg-black ml-2 text-white rounded-full flex items-center justify-center gap-2 text-xs font-medium px-4 py-4 hover:bg-gray-800 transition-colors cursor-pointer whitespace-nowrap md:w-[300px] md:text-[14px]"
+                  >
+                    <span>Become a merchant on bepay</span>
+                    <ArrowUpRight
+                      className="w-5 h-7 flex-shrink-0"
+                      strokeWidth={1.5}
+                    />
+                  </button>
                 </WaitlistTriggerButton>
               </div>
             </motion.div>
+
             <motion.div
-              className="absolute left-[30%] shadow-2xl rounded-[20px] top-[250px] z-30"
+              className="absolute left-[15%] top-[300px] z-30"
               style={{
                 opacity: desktopFloatingOpacity,
                 y: desktopFloatingElement1Y,
               }}
             >
-              <div
-                className="p-4 rounded-[20px] mx-auto"
-                style={{
-                  border: "1px #ffffff1a",
-                  boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
-                  backdropFilter: "blur(20px)",
-                  background: "rgba(255, 255, 255, 255)",
-                }}
-              >
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">
-                  NO HASSLE!
-                </h3>
-              </div>
+              <h3 className="font-montserrat text-[44px] leading-[50px] tracking-[-0.04em]">
+                <span className="font-bold text-[#333333]">NO </span>
+                <span className="font-medium text-[#C0C0C0]">HASSLE!</span>
+              </h3>
             </motion.div>
+
             <motion.div
-              className="absolute left-[23%] shadow-2xl rounded-[20px] top-[450px] z-30"
+              className="absolute left-[15%] top-[340px] z-30"
               style={{
                 opacity: desktopFloatingOpacity,
                 y: desktopFloatingElement2Y,
               }}
             >
-              <div
-                className="p-4 border border-white/15 rounded-[20px]"
-                style={{
-                  border: "1px #ffffff1a",
-                  boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
-                  backdropFilter: "blur(20px)",
-                  background: "rgba(255, 255, 255, 255)",
-                }}
-              >
-                <h4 className="font-semibold text-gray-800 text-sm">
-                  NO VOLATILITY!
-                </h4>
-              </div>
+              <h4 className="font-montserrat text-[44px] leading-[50px] tracking-[-0.04em]">
+                <span className="font-bold text-[#333333]">NO </span>
+                <span className="font-medium text-[#C0C0C0]">VOLATILITY!</span>
+              </h4>
             </motion.div>
+
             <motion.div
-              className="absolute shadow-2xl rounded-[20px] left-[60%] top-[200px] z-30"
+              className="absolute left-[15%] top-[380px] z-30"
               style={{
                 opacity: desktopFloatingOpacity,
                 y: desktopFloatingElement3Y,
               }}
             >
-              <div
-                className="p-4 rounded-[20px]"
-                style={{
-                  border: "1px #ffffff1a",
-                  boxShadow: "30px 30px 60px 0px rgba(0, 0, 0, 0.05)",
-                  backdropFilter: "blur(20px)",
-                  background: "rgba(255, 255, 255, 255)",
-                }}
-              >
-                <h4 className="font-semibold text-gray-800 text-sm">
-                  NO DELAYS!
-                </h4>
-              </div>
+              <h4 className="font-montserrat text-[44px] leading-[50px] tracking-[-0.04em]">
+                <span className="font-bold text-[#333333]">NO </span>
+                <span className="font-medium text-[#C0C0C0]">DELAYS!</span>
+              </h4>
             </motion.div>
           </div>
         )}

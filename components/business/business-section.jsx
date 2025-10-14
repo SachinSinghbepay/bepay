@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import { motion } from "framer-motion";
 
@@ -39,14 +40,14 @@ export default function BusinessSection() {
                 transition: { duration: 0.2 },
               }}
               viewport={{ once: true }}
-              className="absolute bottom-0 transform mb-5 ml-6 sm:mt-16 sm:ml-6 md:mt-39 md:ml-8 lg:mt-120 lg:ml-55"
+              className="absolute bottom-0 transform mb-5 ml-6 sm:mt-16 sm:ml-6 md:mt-39 md:ml-8 lg:mt-120 lg:ml-36"
             >
               <Image
                 src="/images/business/bs_1.svg"
                 alt="Payment sent notification"
-                width={100}
-                height={450}
-                className="w-[220px] h-auto drop-shadow-lg"
+                width={300}
+                height={1350}
+                className="w-[200px] lg:w-[350px] h-auto drop-shadow-lg"
               />
             </motion.div>
           </motion.div>
@@ -83,14 +84,15 @@ export default function BusinessSection() {
                 transition: { duration: 0.2 },
               }}
               viewport={{ once: true }}
-              className="absolute transform bottom-0 mb-5 ml-36 sm:mt-16 sm:ml-8 md:mt-24 md:ml-16 lg:mt-110 lg:ml-89"
+              // Adjusted lg:ml-64 to lg:ml-72 (right) and added lg:mb-10 (up)
+              className="absolute transform bottom-0 mb-5 ml-36 sm:mt-16 sm:ml-8 md:mt-24 md:ml-16 lg:mb-10 lg:ml-72"
             >
               <Image
                 src="/images/business/ia2.svg"
                 alt="Payment received notification"
                 width={300}
                 height={450}
-                className="w-[220px] h-auto drop-shadow-lg"
+                className="w-[200px] lg:w-[350px] h-auto drop-shadow-lg"
               />
             </motion.div>
           </motion.div>
