@@ -456,21 +456,21 @@ const BusinessHero = () => {
                       >
                         <div
                           onClick={handleLogoClick}
-                          className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 cursor-pointer"
+                          className="absolute top-1 left-1/2 -translate-x-1/2 z-10 cursor-pointer"
                         >
                           <Image
                             src="/bepaybusiness.svg"
                             alt="Bepay Logo"
                             width={200}
                             height={100}
-                            className="w-[40px] h-[40px] md:w-[120px] lg:h-[100px] object-contain"
+                            className="w-[45px] h-[45px] md:w-[140px] lg:h-[125px] object-contain"
                           />
                         </div>
 
                         {/* ✅ MODIFICATION: Added imageScale to the style prop */}
                         <motion.div
                           style={{ x: imageX, opacity: imageOpacity, scale: imageScale }}
-                          className="absolute inset-0 -top-55"
+                          className="absolute inset-0 -top-30"
                         >
                           <Image
                             src="/s1_6.png"

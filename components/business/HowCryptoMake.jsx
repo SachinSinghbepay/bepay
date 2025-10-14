@@ -16,13 +16,13 @@ const stepsData = [
     id: 1,
     image: "/images/business/mocup1.png",
     alt: "Bepay crypto payment interface",
-    text: "Customer selects bepay wallet at checkout",
+    text: "Customer selects stablecoins/crypto at checkout",
   },
   {
     id: 2,
     image: "/images/business/mocup2.png",
     alt: "Bepay QR code interface",
-    text: "bepay generates a QR code or token address",
+    text: "bepay generates a QR code & token address",
   },
   {
     id: 3,
@@ -403,7 +403,7 @@ export default function HowCryptoWorksSection() {
               </div>
             </motion.div>
             <motion.div
-              className="absolute left-[10%] top-[200px] translate-y-1/2 z-20"
+              className="absolute left-[7%] top-[200px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent1Opacity, y: desktopContent1Y }}
             >
               <div className="p-4 max-w-[400px]">

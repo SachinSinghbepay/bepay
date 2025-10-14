@@ -175,9 +175,9 @@ export default function TrustedBySection() {
             <Image
               src="/trusted.png"
               alt="A collage of industry-leading brands supported by bepay"
-              width={1000}
+              width={1100}
               height={100}
-              className="h-auto w-full object-contain opacity-90 -mb-15"
+              className="h-auto w-full object-contain opacity-90 -mb-20"
             />
           </motion.div>
         </motion.div>
