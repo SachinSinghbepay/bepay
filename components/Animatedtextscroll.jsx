@@ -1,10 +1,12 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, UserPlus } from "lucide-react";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 export default function AnimatedTextScroll() {
   const containerRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
@@ -67,6 +69,25 @@ export default function AnimatedTextScroll() {
     [mockupAppearStart, mockupAppearEnd],
     [0, 1]
   );
+
+  useEffect(() => {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting && !hasTrackedView) {
+              AnalyticsService.sendEvent("UPI animated-text-scroll-section viewed");
+              setHasTrackedView(true);
+              observer.unobserve(entry.target); // Stop observing after first view
+            }
+          },
+          { threshold: 0.1 } // Trigger when 10% of the component is visible
+        );
+    
+        if (containerRef.current) {
+          observer.observe(containerRef.current);
+        }
+    
+        return () => observer.disconnect();
+      }, [hasTrackedView]);
 
   return (
     <div ref={containerRef} className="relative h-[500vh] bg-gray-50">

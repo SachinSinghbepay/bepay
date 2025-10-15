@@ -4,14 +4,36 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 gsap.registerPlugin(ScrollTrigger);
+
 
 export default function Hero() {
   const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
   const logoRef = useRef(null);
   const frameRef = useRef(null);
   const cardSectionRef = useRef(null);
+
+  useEffect(() => {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting && !hasTrackedView) {
+              AnalyticsService.sendEvent("UPI Hero-section viewed");
+              setHasTrackedView(true);
+              observer.unobserve(entry.target); // Stop observing after first view
+            }
+          },
+          { threshold: 0.1 } // Trigger when 10% of the component is visible
+        );
+    
+        if (containerRef.current) {
+          observer.observe(containerRef.current);
+        }
+    
+        return () => observer.disconnect();
+      }, [hasTrackedView]);
 
   useEffect(() => {
     // Check if mobile
@@ -170,7 +192,7 @@ export default function Hero() {
       <section
         data-scroll-section
         ref={containerRef}
-        className=" container mx-auto max-w-full relative h-[120vh] md:h-[180vh] bg-[#F9F9F9]  "
+        className=" container mx-auto max-w-full relative h-[120vh] md:h-[180vh] bg-[#F9F9F9]  "
       >
         <div className="container mx-auto px-4 h-full flex flex-col items-center justify-center">
           <h1 className="font-bold leading-none font-montserrat tracking-[-0.1em] text-center pt-4 md:pt-10 main-title">
@@ -188,12 +210,13 @@ export default function Hero() {
           <div
             className="relative w-full h-full flex justify-center items-center "
           >
-            <div className="absolute inset-0 top-0 lg:top-40 sm:-mt-[30vh]  w-full h-full flex items-center justify-center">
+            <div className="absolute inset-0 top-0 lg:top-40 sm:-mt-[30vh]  w-full h-full flex items-center justify-center">
               <div className="relative w-full max-w-[320px] h-[600px] sm:max-w-[360px] sm:h-[700px] md:max-w-[400px] md:h-[800px] lg:max-w-[440px] lg:h-[900px] mx-auto">
-                <div className="return-box absolute z-2 top-1/2 left-[-20vw] lg:left-[-10vw] scale-[0.5] sm:scale-[1] sm:left-[-17vw] flex flex-col p-2 bg-white backdrop-blur-md  rounded-xl   rounded-br-none shadow-[0_40px_100px_rgba(0,0,0,0.15)]  border border-white/20 opacity-0">
+                <div className="return-box absolute z-2 top-1/2 left-[-20vw] lg:left-[-10vw] scale-[0.5] sm:scale-[1] sm:left-[-17vw] flex flex-col p-2 bg-white backdrop-blur-md   rounded-xl   rounded-br-none shadow-[0_40px_100px_rgba(0,0,0,0.15)]  border border-white/20 opacity-0">
                   <div className=" px-3 py-2 flex items-center gap-2 bg-[#f2f2f2] rounded-xl rounded-br-none rounded-bl-none ">
                     <div className="bg-black text-white rounded-xl">
-                      <Image src="/cash.png" alt="" className="h-16" />
+                      {/* Added width and height. Based on h-16 (4rem = 64px) */}
+                      <Image src="/cash.png" alt="" width={64} height={64} className="h-16 w-auto" />
                     </div>
                     <div className="text-xs">
                       <div className="font-semibold">9% returns</div>
@@ -202,7 +225,8 @@ export default function Hero() {
                   </div>
                   <div className=" px-3 py-2 flex items-center gap-2 bg-white">
                     <div className="bg-black text-white rounded-xl">
-                      <Image src="/wallet.png" alt="" className="h-16" />
+                      {/* Added width and height. Based on h-16 (4rem = 64px) */}
+                      <Image src="/wallet.png" alt="" width={64} height={64} className="h-16 w-auto" />
                     </div>
                     <div className="text-xs">
                       <div className="font-semibold">
@@ -212,7 +236,7 @@ export default function Hero() {
                     </div>
                   </div>
                 </div>
-                <div className="payearnrepeat absolute top-1/2 left-[72vw]  sm:left-[38vw] scale-[0.8] sm:scale-[1]  transform -translate-x-1/2 -translate-y-1/2 z-2 bg-white/30 backdrop-blur-md rounded-xl px-4 py-6 shadow-[0_40px_100px_rgba(0,0,0,0.15)]  border border-white/20 opacity-0">
+                <div className="payearnrepeat absolute top-1/2 left-[72vw]  sm:left-[38vw] scale-[0.8] sm:scale-[1]  transform -translate-x-1/2 -translate-y-1/2 z-2 bg-white/30 backdrop-blur-md rounded-xl px-4 py-6 shadow-[0_40px_100px_rgba(0,0,0,0.15)]  border border-white/20 opacity-0">
                   <p className="text-gray-600 font-medium text-3xl tracking-wide flex sm:flex-row flex-col">
                     <h1>
                       <span className="text-1xl sm:text-4xl bg-gradient-to-b from-black/80 to-white/0 text-transparent bg-clip-text">
@@ -236,14 +260,16 @@ export default function Hero() {
                 </div>
                 <div className="download absolute top-[80%] md:top-[60%] lg:top-1/2 left-[64vw] md:left-[30vw] lg:left-[30vw] scale-[0.8] sm:scale-[1] sm:left-[38.5vw] transform -translate-x-1/2 z-2 flex flex-col sm:flex-row gap-3 text-left text-[0.4rem] sm:text-[0.6rem] items-center">
                   <button className="bg-black w-[42vw] sm:w-[40vw] md:w-[40vw] lg:w-[13vw] text-white px-5 py-4 sm:px-7 sm:py-5 rounded-full flex items-center gap-2 justify-center">
-                    <Image src="apple.png" alt="" className="h-3 sm:h-5" />
+                    {/* Added width and height. Based on sm:h-5 (1.25rem = 20px) */}
+                    <Image src="/apple.png" alt="" width={20} height={20} className="h-3 sm:h-5 w-auto" />
                     <div className="text-left">
                       <div>Download on the</div>
                       <div>App Store</div>
                     </div>
                   </button>
-                  <button className="bg-black w-[42vw] sm:w-[40vw] md:w-[40vw]  lg:w-[13vw] text-white px-5 py-4 sm:px-7 sm:py-5 rounded-full flex items-center gap-2 justify-center">
-                    <Image src="playstore.png" alt="" className="h-3 sm:h-5" />
+                  <button className="bg-black w-[42vw] sm:w-[40vw] md:w-[40vw]  lg:w-[13vw] text-white px-5 py-4 sm:px-7 sm:py-5 rounded-full flex items-center gap-2 justify-center">
+                     {/* Added width and height. Based on sm:h-5 (1.25rem = 20px) */}
+                    <Image src="/playstore.png" alt="" width={20} height={20} className="h-3 sm:h-5 w-auto" />
                     <div className="text-left">
                       <div>Get the App on</div>
                       <div>Google Play</div>
@@ -259,6 +285,7 @@ export default function Hero() {
                     ref={logoRef}
                     className="relative top-24 sm:top-28 md:top-32 z-1 text-center"
                   >
+                    {/* This one was already correct! */}
                     <Image
                       src="/bepayicon.png"
                       alt="BePay Logo"
@@ -275,6 +302,7 @@ export default function Hero() {
                     ref={frameRef}
                     className="absolute inset-0 w-full h-full"
                   >
+                    {/* This one is correct because it uses the 'fill' prop */}
                     <Image
                       src="/mobileframer.png"
                       alt="App Interface"

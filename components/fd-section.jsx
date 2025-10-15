@@ -1,14 +1,16 @@
 "use client";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Wallet } from "lucide-react";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 /* ───────────────────────────────────────── */
 
 export default function FdSection() {
   /* big wrapper we pin against */
   const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
 
   /* scroll progress from 0-1 while we’re inside the section */
   const { scrollYProgress } = useScroll({
@@ -38,6 +40,25 @@ export default function FdSection() {
   const buttonYTransform = useTransform(scrollYProgress, [0.5, 0.65], [40, 0]);
   const buttonOpacity = useSpring(buttonOpacityTransform, { stiffness: 120, damping: 20 });
   const buttonY = useSpring(buttonYTransform, { stiffness: 120, damping: 20 });
+
+  useEffect(() => {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting && !hasTrackedView) {
+              AnalyticsService.sendEvent("UPI FD-section viewed");
+              setHasTrackedView(true);
+              observer.unobserve(entry.target); // Stop observing after first view
+            }
+          },
+          { threshold: 0.1 } // Trigger when 10% of the component is visible
+        );
+    
+        if (sectionRef.current) {
+          observer.observe(sectionRef.current);
+        }
+    
+        return () => observer.disconnect();
+      }, [hasTrackedView]);
 
   return (
     /* 200 vh of space so the user has room to scroll;
