@@ -7,7 +7,7 @@ import { AnalyticsService } from "@/services/analyticsService"
 const cardData = [
   {
     id: 1,
-    image: "/images/business/m4.svg",
+    image: "/images/business/m4.png",
     alt: "Crypto payment interface mockup showing various cryptocurrencies and transaction details.",
   },
   {
@@ -39,9 +39,9 @@ export default function BepayFeatures() {
     [0, 0.25, 0.4, 0.65, 0.8, 1],
     ["0vw", "0vw", "-100vw", "-100vw", "-200vw", "-200vw"]
   )
-  
+
   // For DESKTOP: Vertical parallax transforms with UNIFORM values for alignment
-  const parallaxYValue = [100, -100];
+  const parallaxYValue = [100, -100]
   const scrollY1 = useTransform(scrollYProgress, [0, 1], parallaxYValue)
   const scrollY2 = useTransform(scrollYProgress, [0, 1], parallaxYValue)
   const scrollY3 = useTransform(scrollYProgress, [0, 1], parallaxYValue)
@@ -107,7 +107,7 @@ export default function BepayFeatures() {
       className={`w-full bg-[#F9F9F9] ${
         isMobile
           ? "relative h-[300vh]"
-          : "overflow-hidden pt-8 sm:pt-12 md:pt-24 lg:pt-32 pb-8 sm:pb-12 md:pb-16" // ✅ FIX: Added overflow-hidden
+          : "overflow-hidden pt-8 sm:pt-12 md:pt-24 lg:pt-32 pb-8 sm:pb-12 md:pb-16"
       }`}
     >
       {isMobile ? (
@@ -146,14 +146,14 @@ export default function BepayFeatures() {
         // --- DESKTOP LAYOUT ---
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
          <motion.h2
-  className="font-['Montserrat'] text-center text-2xl font-[400] leading-[140px] tracking-[-0.05em] sm:text-3xl md:text-4xl lg:text-5xl xl:text-[60px] mb-8 sm:mb-12 md:mb-16 px-2"
-  variants={titleVariants}
-  initial="hidden"
-  animate={animationStep >= 1 ? "visible" : "hidden"}
->
-  <span className="text-[#C0C0C0]">Why businesses choose </span>
-  <span className="text-[#333333]">bepay</span>
-</motion.h2>
+            className="font-['Montserrat'] text-center text-2xl font-[400] leading-[140px] tracking-[-0.05em] sm:text-3xl md:text-4xl lg:text-5xl xl:text-[60px] mb-8 sm:mb-12 md:mb-16 px-2"
+            variants={titleVariants}
+            initial="hidden"
+            animate={animationStep >= 1 ? "visible" : "hidden"}
+          >
+            <span className="text-[#C0C0C0]">Why businesses choose </span>
+            <span className="text-[#333333]">bepay</span>
+          </motion.h2>
           <div className="grid gap-8 sm:gap-10 md:gap-12 lg:gap-14 grid-cols-1 md:grid-cols-3">
             {cardData.map((card, index) => (
               <motion.div
@@ -169,7 +169,7 @@ export default function BepayFeatures() {
                   {card.id}
                 </motion.div>
                 <motion.div
-                  className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[400px] h-auto rounded-lg overflow-hidden mt-auto relative z-10 shadow-lg"
+                  className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[400px] h-auto rounded-lg overflow-hidden mt-auto relative z-10" // ✅ FIX: Removed shadow-lg
                   variants={getImageVariants(index)}
                   initial="hidden"
                   animate={animationStep >= 3 ? "visible" : "hidden"}

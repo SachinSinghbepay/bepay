@@ -16,23 +16,23 @@ const stepsData = [
     id: 1,
     image: "/images/business/mocup1.png",
     alt: "Bepay crypto payment interface",
-    text: "Customer selects bepay wallet at checkout",
+    text: "Customer selects stablecoins/crypto at checkout",
   },
   {
     id: 2,
-    image: "/images/business/mocup2.svg",
+    image: "/images/business/mocup2.png",
     alt: "Bepay QR code interface",
-    text: "bepay generates a QR code or token address",
+    text: "bepay generates a QR code & token address",
   },
   {
     id: 3,
-    image: "/images/business/mocup3.svg",
+    image: "/images/business/mocup3.png",
     alt: "Bepay payment success",
     text: "Customer pays in stablecoin/crypto of your choice",
   },
   {
     id: 4,
-    image: "/images/business/mocup4.svg",
+    image: "/images/business/mocup4.png",
     alt: "Bepay payment confirmation",
     text: "Crypto auto-credits to your bepay business account",
   },
@@ -354,7 +354,7 @@ export default function HowCryptoWorksSection() {
               className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
               style={{ y: desktopMockup1Y }}
             >
-              <div className="relative w-[380px] h-[650px] drop-shadow-2xl">
+              <div className="relative w-[380px] h-[650px] drop-shadow-[15px_15px_15px_rgba(0,0,0,0.05)]">
                 <Image
                   src={stepsData[0].image}
                   alt={stepsData[0].alt}
@@ -367,7 +367,7 @@ export default function HowCryptoWorksSection() {
               className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
               style={{ y: desktopMockup2Y, opacity: desktopMockup2Opacity }}
             >
-              <div className="relative w-[380px] h-[650px] drop-shadow-2xl">
+              <div className="relative w-[380px] h-[650px] drop-shadow-[15px_15px_15px_rgba(0,0,0,0.05)]">
                 <Image
                   src={stepsData[1].image}
                   alt={stepsData[1].alt}
@@ -380,7 +380,7 @@ export default function HowCryptoWorksSection() {
               className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
               style={{ y: desktopMockup3Y, opacity: desktopMockup3Opacity }}
             >
-              <div className="relative w-[380px] h-[650px] drop-shadow-2xl">
+              <div className="relative w-[380px] h-[650px] drop-shadow-[15px_15px_15px_rgba(0,0,0,0.05)]">
                 <Image
                   src={stepsData[2].image}
                   alt={stepsData[2].alt}
@@ -393,7 +393,7 @@ export default function HowCryptoWorksSection() {
               className="absolute left-1/2 top-[540px] -translate-y-1/2 -translate-x-1/2 z-10"
               style={{ y: desktopMockup4Y, opacity: desktopMockup4Opacity }}
             >
-              <div className="relative w-[380px] h-[650px] drop-shadow-2xl">
+              <div className="relative w-[380px] h-[650px] drop-shadow-[15px_15px_15px_rgba(0,0,0,0.05)]">
                 <Image
                   src={stepsData[3].image}
                   alt={stepsData[3].alt}
@@ -403,48 +403,47 @@ export default function HowCryptoWorksSection() {
               </div>
             </motion.div>
             <motion.div
-              className="absolute left-[16%] top-[200px] translate-y-1/2 z-20"
+              className="absolute left-[7%] top-[200px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent1Opacity, y: desktopContent1Y }}
             >
               <div className="p-4 max-w-[400px]">
-                <p className="text-sm text-gray-600 font-bold">
+                <p className="font-montserrat font-medium text-[20px] leading-snug tracking-[-0.04em] text-[#080808] whitespace-nowrap">
                   {stepsData[0].text}
                 </p>
               </div>
             </motion.div>
             <motion.div
-              className="absolute right-[16%] top-[400px] translate-y-1/2 z-20"
+              className="absolute right-[13%] top-[400px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent2Opacity, y: desktopContent2Y }}
             >
               <div className="p-4 max-w-[400px] text-right">
-                <p className="text-sm text-gray-600 font-bold">
+                <p className="font-montserrat font-medium text-[20px] leading-snug tracking-[-0.04em] text-[#080808] whitespace-nowrap">
                   {stepsData[1].text}
                 </p>
               </div>
             </motion.div>
             <motion.div
-              className="absolute left-[13%] top-[400px] translate-y-1/2 z-20"
+              className="absolute left-[6%] top-[400px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent3Opacity, y: desktopContent3Y }}
             >
               <div className="p-4 max-w-[400px]">
-                <p className="text-sm text-gray-600 font-bold whitespace-nowrap">
+                <p className="font-montserrat font-medium text-[20px] leading-snug whitespace-nowrap tracking-[-0.04em] text-[#080808]">
                   {stepsData[2].text}
                 </p>
               </div>
             </motion.div>
-            {/* ✅ MODIFIED: CTA button is now back inside this block */}
             <motion.div
               className="absolute right-[13%] top-[300px] translate-y-1/2 z-20"
               style={{ opacity: desktopContent4Opacity, y: desktopContent4Y }}
             >
               <div className="p-4 max-w-[400px] text-right">
-                <p className="text-sm text-gray-600 font-bold mb-8">
+                <p className="font-montserrat font-medium text-[20px] leading-snug tracking-[-0.04em] text-[#080808] mb-8 whitespace-nowrap">
                   {stepsData[3].text}
                 </p>
                 <WaitlistTriggerButton triggerSource="'how crypto make section' button">
                   <button
                     onClick={handleStartEarningClick}
-                    className="h-[56px]  bg-black ml-20 text-white rounded-full flex items-center justify-center gap-2 text-xs font-medium px-4 py-4 hover:bg-gray-800 transition-colors cursor-pointer whitespace-nowrap md:w-[300px] md:text-[14px]"
+                    className="h-[56px]  bg-black ml-2 text-white rounded-full flex items-center justify-center gap-2 text-xs font-medium px-4 py-4 hover:bg-gray-800 transition-colors cursor-pointer whitespace-nowrap md:w-[300px] md:text-[14px]"
                   >
                     <span>Become a merchant on bepay</span>
                     <ArrowUpRight
@@ -456,7 +455,6 @@ export default function HowCryptoWorksSection() {
               </div>
             </motion.div>
 
-            {/* ✅ MODIFIED: Floating text elements are back to their original position */}
             <motion.div
               className="absolute left-[15%] top-[300px] z-30"
               style={{
