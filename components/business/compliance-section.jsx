@@ -103,7 +103,8 @@ export default function ComplianceSection() {
                 zIndex: complianceData.length - index,
               }}
             >
-              <div className="flex items-center gap-4 lg:gap-6 mb-8">
+              {/* This parent div is now relative to position the mobile flag */}
+              <div className="flex items-center gap-4 lg:gap-6 mb-8 relative">
                 <div className="flex-shrink-0">
                   <Image
                     src={item.icon}
@@ -116,6 +117,16 @@ export default function ComplianceSection() {
                 <h3 className="text-3xl lg:text-[60px] 3xl:text-[80px] font-[500] text-[#6A6A6A] leading-tight">
                   {item.title}
                 </h3>
+                {/* Mobile-only flag image */}
+                {item.title === "Licensed" && (
+                  <Image
+                    src="/flags.png"
+                    alt="Flag"
+                    width={45}
+                    height={40}
+                    className="absolute top-[29%] right-[5%] pointer-events-none lg:hidden"
+                  />
+                )}
               </div>
               <div
                 className={`${
@@ -136,14 +147,14 @@ export default function ComplianceSection() {
                 </div>
               </div>
 
-              {/* Conditionally add the flag image to the "Licensed" card, only for desktop */}
+              {/* Desktop-only flag image */}
               {item.title === "Licensed" && (
                 <Image
                   src="/flags.png"
                   alt="Flag"
                   width={70}
                   height={63}
-                  className="absolute bottom-8 right-8 lg:bottom-12 lg:right-12 pointer-events-none hidden lg:block" // ADDED: hidden and lg:block
+                  className="absolute bottom-8 right-8 lg:bottom-12 lg:right-12 pointer-events-none hidden lg:block"
                 />
               )}
             </motion.div>
