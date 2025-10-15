@@ -97,7 +97,7 @@ const BepayComparison = () => {
               {/* Bepay Column */}
               <div className="text-center flex justify-center items-center">
                 <div className="flex items-center gap-2">
-                  <img
+                  <Image
                     src="https://placehold.co/25x25/000000/FFFFFF?text=B"
                     height={25}
                     width={25}
@@ -215,7 +215,7 @@ const BepayComparison = () => {
                 {/* BePay Header */}
                 <div className="text-center mb-8 border-b border-gray-200 h-24 flex items-center justify-center">
                   <div className="flex items-center gap-2">
-                    <img
+                    <Image
                       src="/bepaylogo1.svg"
                       height={46}
                       width={110}

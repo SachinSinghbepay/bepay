@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AnalyticsService } from '../../services/analyticsService';
 import { CSSProperties } from 'react';
@@ -18,7 +18,9 @@ const Redirect = () => {
   }, []);
 
   // Only use search params when on the client side
-  const queryParams = isClient ? Object.fromEntries(new URLSearchParams(window.location.search).entries()) : {};
+  const queryParams = useMemo(() => {
+    return isClient ? Object.fromEntries(new URLSearchParams(window.location.search).entries()) : {};
+  }, [isClient]);
 
   // Track query params with Mixpanel if they exist
   useEffect(() => {
