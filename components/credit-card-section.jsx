@@ -3,15 +3,37 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { Eye, Snowflake, Clock, Settings } from "lucide-react";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 export default function CreditCardSection() {
   const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
 
   const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !hasTrackedView) {
+            AnalyticsService.sendEvent("UPI credit-card-section viewed");
+            setHasTrackedView(true);
+            observer.unobserve(entry.target); // Stop observing after first view
+          }
+        },
+        { threshold: 0.1 } // Trigger when 10% of the component is visible
+      );
+  
+      if (sectionRef.current) {
+        observer.observe(sectionRef.current);
+      }
+  
+      return () => observer.disconnect();
+    }, [hasTrackedView]);
+
 
   useEffect(() => {
     const handleResize = () => {

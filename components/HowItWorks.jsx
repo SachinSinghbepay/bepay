@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Smartphone, ScanLine, Bitcoin, MessageSquare, ShoppingBag, Smile, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 // Define the steps data
 const steps = [
@@ -42,7 +43,26 @@ export default function HowItWorksSection() {
   const [currentStep, setCurrentStep] = useState(1)
   const [totalScrollHeight, setTotalScrollHeight] = useState(0)
   const sectionRef = useRef(null) // Explicitly type useRef
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
 
+  useEffect(() => {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting && !hasTrackedView) {
+              AnalyticsService.sendEvent("UPI HowItWorks-section viewed");
+              setHasTrackedView(true);
+              observer.unobserve(entry.target); // Stop observing after first view
+            }
+          },
+          { threshold: 0.1 } // Trigger when 10% of the component is visible
+        );
+    
+        if (sectionRef.current) {
+          observer.observe(sectionRef.current);
+        }
+    
+        return () => observer.disconnect();
+      }, [hasTrackedView]);
   useEffect(() => {
     const updateScrollHeight = () => {
       // Set the total scroll height to allow for each step to be visible

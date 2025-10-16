@@ -1,12 +1,13 @@
 "use client" // This component uses client-side hooks for animation
 
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValueEvent } from "framer-motion"
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
 import { QRCodePopup } from "@/components/popups/qr-code-popup" // Import popups
 import { OSSelectionPopup } from "@/components/popups/os-selection-popup" // Import popups
 import { Button } from "@/components/ui/button" // Import Button for the new CTA
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 const STEPS = [
   { number: "1", imageSrc: "/m1.png" },
@@ -18,6 +19,7 @@ const STEPS = [
 
 const SavingSection = () => {
   const containerRef = useRef(null)
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
@@ -111,6 +113,25 @@ const SavingSection = () => {
     },
     exit: { opacity: 0, y: 50, transition: { duration: 0.3, ease: "easeIn" } },
   }
+
+  useEffect(() => {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting && !hasTrackedView) {
+              AnalyticsService.sendEvent("UPI saving-section viewed");
+              setHasTrackedView(true);
+              observer.unobserve(entry.target); // Stop observing after first view
+            }
+          },
+          { threshold: 0.1 } // Trigger when 10% of the component is visible
+        );
+    
+        if (containerRef.current) {
+          observer.observe(containerRef.current);
+        }
+    
+        return () => observer.disconnect();
+      }, [hasTrackedView]);
 
   return (
     <div ref={containerRef} className="min-h-[900vh] relative">

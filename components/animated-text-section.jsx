@@ -4,6 +4,7 @@
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { IndianRupee, Users, Landmark, ArrowUpRight, Lock } from "lucide-react";
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 // Custom hook to detect if the screen is mobile
 function useIsMobile() {
@@ -22,6 +23,8 @@ function useIsMobile() {
 export default function StickyHeroSection() {
   const containerRef = useRef(null); // Ref for the main scroll container
   const cardsRef = useRef(null); // Used to reference the cards section DOM node
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
+
 
   // Track scroll progress of the main container - this tracks the section in the viewport
   const { scrollYProgress } = useScroll({
@@ -71,6 +74,25 @@ export default function StickyHeroSection() {
   // Tailwind CSS classes for text colors (fixed, no fading)
   const lightGray = "text-gray-300";
   const darkGray = "text-gray-600";
+
+  useEffect(() => {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting && !hasTrackedView) {
+              AnalyticsService.sendEvent("UPI Trusted-tested-real-section viewed");
+              setHasTrackedView(true);
+              observer.unobserve(entry.target); // Stop observing after first view
+            }
+          },
+          { threshold: 0.1 } // Trigger when 10% of the component is visible
+        );
+    
+        if (containerRef.current) {
+          observer.observe(containerRef.current);
+        }
+    
+        return () => observer.disconnect();
+      }, [hasTrackedView]);
 
   return (
     <div

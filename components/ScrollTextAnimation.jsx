@@ -4,12 +4,14 @@ import { useEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Image from "next/image"
+import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger)
 
 const ScrollTextAnimation = () => {
   const containerRef = useRef(null)
+  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
   const firstLineRef = useRef(null)
   const secondLineRef = useRef(null)
   const thirdLineRef = useRef(null)
@@ -133,6 +135,25 @@ const ScrollTextAnimation = () => {
       },
     },
   ]
+
+   useEffect(() => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !hasTrackedView) {
+            AnalyticsService.sendEvent("UPI scroll-text-animation-section viewed");
+            setHasTrackedView(true);
+            observer.unobserve(entry.target); // Stop observing after first view
+          }
+        },
+        { threshold: 0.1 } // Trigger when 10% of the component is visible
+      );
+  
+      if (containerRef.current) {
+        observer.observe(containerRef.current);
+      }
+  
+      return () => observer.disconnect();
+    }, [hasTrackedView]);
 
   useEffect(() => {
     const handleResize = () => {
