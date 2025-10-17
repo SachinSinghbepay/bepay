@@ -3,6 +3,8 @@ import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, UserPlus } from "lucide-react";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import WaitlistTriggerButton from "./waitlist-trigger-button";
+
 
 export default function AnimatedTextScroll() {
   const containerRef = useRef(null);
@@ -89,6 +91,10 @@ export default function AnimatedTextScroll() {
         return () => observer.disconnect();
       }, [hasTrackedView]);
 
+  const handleCTAClick = () => {
+    AnalyticsService.sendEvent("UPI Invite now button clicked");
+  };
+
   return (
     <div ref={containerRef} className="relative h-[500vh] bg-gray-50">
       {/* Sticky container */}
@@ -97,7 +103,7 @@ export default function AnimatedTextScroll() {
         <div className="absolute inset-0 flex items-center justify-center">
           {/* "Maximise" */}
           <motion.span
-            className="absolute text-gray-300 font-[400] leading-none text-[50px] sm:text-[80px] md:text-[120px] lg:text-[180px] xl:text-[250px] whitespace-nowrap will-change-transform"
+            className="absolute text-gray-300 tracking-[-0.08em] font-[400] leading-none text-[50px] sm:text-[80px] md:text-[120px] lg:text-[180px] xl:text-[250px] whitespace-nowrap will-change-transform"
             style={{
               opacity: maximiseOpacity,
               x: maximiseX,
@@ -184,7 +190,9 @@ export default function AnimatedTextScroll() {
                   <ArrowDown className="w-6 h-6" />
                 </motion.div>
                 {/* Button */}
-                <motion.button
+                <WaitlistTriggerButton triggerSource="invite now button UPI page">
+                  <motion.button
+                  onClick={handleCTAClick} 
                   className="inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium bg-black text-white hover:bg-gray-800 transition-all duration-200 h-10 px-6 py-2"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -195,6 +203,8 @@ export default function AnimatedTextScroll() {
                   <UserPlus className="mr-2 w-4 h-4" />
                   Invite now!
                 </motion.button>
+                </WaitlistTriggerButton>
+                
               </div>
             </div>
           </div>

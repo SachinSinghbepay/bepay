@@ -8,6 +8,8 @@ import { QRCodePopup } from "@/components/popups/qr-code-popup" // Import popups
 import { OSSelectionPopup } from "@/components/popups/os-selection-popup" // Import popups
 import { Button } from "@/components/ui/button" // Import Button for the new CTA
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import WaitlistTriggerButton from "./waitlist-trigger-button";
+
 
 const STEPS = [
   { number: "1", imageSrc: "/m1.png" },
@@ -115,23 +117,27 @@ const SavingSection = () => {
   }
 
   useEffect(() => {
-        const observer = new IntersectionObserver(
-          ([entry]) => {
-            if (entry.isIntersecting && !hasTrackedView) {
-              AnalyticsService.sendEvent("UPI saving-section viewed");
-              setHasTrackedView(true);
-              observer.unobserve(entry.target); // Stop observing after first view
-            }
-          },
-          { threshold: 0.1 } // Trigger when 10% of the component is visible
-        );
-    
-        if (containerRef.current) {
-          observer.observe(containerRef.current);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("UPI saving-section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
         }
-    
-        return () => observer.disconnect();
-      }, [hasTrackedView]);
+      },
+      { threshold: 0.1 } // Trigger when 10% of the component is visible
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
+
+  const handleStartClick = () => {
+    AnalyticsService.sendEvent("HowItWorks CTA Clicked: Join 50,000+");
+  };
 
   return (
     <div ref={containerRef} className="min-h-[900vh] relative">
@@ -146,29 +152,29 @@ const SavingSection = () => {
         >
           <div className="space-y-3 sm:space-y-4">
             <motion.h1
-              className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-gray-400 leading-tight"
+              className="text-[100px] font-[400] text-[#C0C0C0] tracking-[-0.08em] leading-[10px]"
               variants={textLineVariants}
             >
-              Real <span className="text-gray-800 font-normal">use.</span>
+              Real <span className="text-[#333333] font-normal">use.</span>
             </motion.h1>
             <motion.h2
-              className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-gray-400 leading-tight"
+              className="text-[100px] font-[400] text-[#C0C0C0] tracking-[-0.08em]"
               variants={textLineVariants}
             >
-              Real <span className="text-gray-800 font-normal">savings.</span>
+              Real <span className="text-[#333333] font-normal">savings.</span>
             </motion.h2>
             <motion.div className="pt-4 sm:pt-6 space-y-1 sm:space-y-2" variants={leftContentContainerVariants}>
               <motion.p
-                className="text-sm sm:text-lg md:text-xl lg:text-2xl text-gray-600 font-medium"
+                className="text-[32px] tracking-[-0.02em] text-[#6A6A6A] font-regular font-[400] leading-[10px]"
                 variants={textLineVariants}
               >
                 Your Life Already Costs Money.
               </motion.p>
               <motion.p
-                className="text-sm sm:text-lg md:text-xl lg:text-2xl text-gray-800 font-medium"
+                className="text-[32px] tracking-[-0.02em] text-[#6A6A6A] font-regular font-[400]"
                 variants={textLineVariants}
               >
-                We Just <span className="font-semibold">Pay You Back.</span>
+                We Just <span className="font-semibold text-[#333333]">Pay You Back.</span>
               </motion.p>
             </motion.div>
             {/* "Start your savings journey" Button */}
@@ -181,9 +187,11 @@ const SavingSection = () => {
                   exit="exit"
                   variants={ctaButtonVariants}
                 >
-                  <Button
+
+                   <WaitlistTriggerButton triggerSource="UPI Saving section button">
+                       <Button
                     className="bg-black cursor-pointer text-white rounded-full px-5 py-8 text-base font-medium flex items-center gap-2 hover:bg-black/90 transition-colors"
-                    onClick={handleOpenOSPopup}
+                    onClick={handleStartClick}
                   >
                     <Image
                       src="/wal.png" // Placeholder for the icon
@@ -194,6 +202,8 @@ const SavingSection = () => {
                     />
                     Start your savings journey
                   </Button>
+                   </WaitlistTriggerButton>
+                 
                 </motion.div>
               )}
             </AnimatePresence>
@@ -204,7 +214,9 @@ const SavingSection = () => {
         <div
           className={cn(
             "relative h-full lg:col-span-2 order-1 lg:order-2 overflow-hidden",
-            currentStepIndex % 2 === 0 ? "bg-white" : "bg-[#F4F4F4]",
+            // --- CHANGE IS HERE ---
+            // This now specifically checks for the 2nd (index 1) and 4th (index 3) steps
+            currentStepIndex === 1 || currentStepIndex === 3 ? "bg-[#F4F4F4]" : "bg-white",
           )}
         >
           <AnimatePresence mode="wait">
