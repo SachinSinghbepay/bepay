@@ -240,19 +240,21 @@ export default function Hero() {
 
             <div className="absolute top-[65%] left-1/2 -translate-x-1/2 w-full flex items-center justify-center">
               <div className="relative w-full max-w-[320px] h-[600px] sm:max-w-[360px] sm:h-[700px] md:max-w-[400px] md:h-[800px] lg:max-w-[400px] lg:h-[820px] mx-auto">
+                {/* EDITED: Changed vw to % for consistent positioning */}
                 <Image
                   src="/floating_1.png"
                   width={450}
                   height={350}
-                  alt="Description of your new image"
-                  className="absolute z-2 top-1/2  scale-[0.5] sm:scale-[1] left-[-17vw] -mt-59 "
+                  alt="Floating UI element 1"
+                  className="absolute z-2 top-1/2 scale-[0.5] sm:scale-[1] right-[65%] -mt-59 "
                 />
+                {/* EDITED: Changed vw to % for consistent positioning */}
                 <Image
-                  src="/floating_2.png" // 👈 CHANGE THIS to your image's path
-                  width={450} // 👈 CHANGE THIS to your image's width
-                  height={350} // 👈 CHANGE THIS to your image's height
-                  alt="Description of your new image" // 👈 CHANGE THIS for accessibility
-                  className=" absolute z-2 top-[22vh] left-[22vw]  scale-[0.5] sm:scale-[1] "
+                  src="/floating_2.png"
+                  width={450}
+                  height={350}
+                  alt="Floating UI element 2"
+                  className="absolute z-2 top-[22vh] left-[85%] scale-[0.5] sm:scale-[1] "
                 />
                 <div className="download absolute top-[38vh] left-[36vw] scale-[0.8] sm:scale-[1] transform -translate-x-1/2 z-2 flex flex-col sm:flex-row gap-3 text-left text-[0.4rem] sm:text-[0.6rem] items-center">
                   <button className="bg-black w-[42vw] sm:w-[40vw] md:w-[40vw] lg:w-[13vw] text-white px-5 py-4 sm:px-7 sm:py-5 rounded-full flex items-center gap-2 justify-center">

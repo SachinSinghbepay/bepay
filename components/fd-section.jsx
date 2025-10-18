@@ -68,7 +68,7 @@ export default function FdSection() {
 
   return (
     /* 200 vh of space so the user has room to scroll;
-         the sticky child stays fixed during that time           */
+         the sticky child stays fixed during that time         */
     <section ref={sectionRef} className="relative min-h-[300vh]">
       {/* sticky “card” that sits in the viewport while the user scrolls */}
       <motion.div
@@ -80,9 +80,12 @@ export default function FdSection() {
         {/* ─────────── Top text block ─────────── */}
         <div className="max-w-7xl grid grid-cols-1 lg:grid-cols-2 lg:gap-40 gap-8 mb-14">
           <div className="text-center lg:text-left">
-            <p className="text-[14px] text-semibold font-[600] text-[#6A6A6A] mb-7">
-              Your FD Just Got Upgraded
-            </p>
+            <div className="flex items-center gap-6 mb-7">
+              <p className="text-[14px] text-semibold font-[600] text-[#6A6A6A] whitespace-nowrap">
+                Your FD Just Got upgraded
+              </p>
+              <div className="hidden lg:block h-[1px] w-full bg-gradient-to-r from-[#E1E1E1] to-transparent" />
+            </div>
             <h1 className="text-4xl md:text-5xl lg:text-7xl font-[400] leading-[60px]">
               <span className="text-[#333333] tracking-[-0.08em]">FDs</span>{" "}
               <span className="text-[#C0C0C0] tracking-[-0.08em]">that actually</span>
@@ -165,8 +168,8 @@ export default function FdSection() {
             >
               Just for <span className="font-bold text-[#333333]">parking your money</span>
             </motion.p>
-             <WaitlistTriggerButton triggerSource="UPI FD section">
-                   <motion.button
+              <WaitlistTriggerButton triggerSource="UPI FD section">
+                      <motion.button
               onClick={handleCTAClick} // ANALYTICS: Added onClick handler
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -179,8 +182,8 @@ export default function FdSection() {
               <Wallet className="w-4 h-4" />
               Start earning 9%* today
             </motion.button>
-             </WaitlistTriggerButton>
-           
+              </WaitlistTriggerButton>
+            
           </motion.div>
         </div>
       </motion.div>
