@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Wallet } from "lucide-react";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import WaitlistTriggerButton from "./waitlist-trigger-button";
 
 /* ───────────────────────────────────────── */
 
@@ -42,27 +43,32 @@ export default function FdSection() {
   const buttonY = useSpring(buttonYTransform, { stiffness: 120, damping: 20 });
 
   useEffect(() => {
-        const observer = new IntersectionObserver(
-          ([entry]) => {
-            if (entry.isIntersecting && !hasTrackedView) {
-              AnalyticsService.sendEvent("UPI FD-section viewed");
-              setHasTrackedView(true);
-              observer.unobserve(entry.target); // Stop observing after first view
-            }
-          },
-          { threshold: 0.1 } // Trigger when 10% of the component is visible
-        );
-    
-        if (sectionRef.current) {
-          observer.observe(sectionRef.current);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("UPI FD-section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target); // Stop observing after first view
         }
-    
-        return () => observer.disconnect();
-      }, [hasTrackedView]);
+      },
+      { threshold: 0.1 } // Trigger when 10% of the component is visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
+
+  // ANALYTICS: Handler for the CTA button click
+  const handleCTAClick = () => {
+    AnalyticsService.sendEvent("UPI FD-section CTA clicked");
+  };
 
   return (
     /* 200 vh of space so the user has room to scroll;
-        the sticky child stays fixed during that time              */
+         the sticky child stays fixed during that time         */
     <section ref={sectionRef} className="relative min-h-[300vh]">
       {/* sticky “card” that sits in the viewport while the user scrolls */}
       <motion.div
@@ -74,27 +80,30 @@ export default function FdSection() {
         {/* ─────────── Top text block ─────────── */}
         <div className="max-w-7xl grid grid-cols-1 lg:grid-cols-2 lg:gap-40 gap-8 mb-14">
           <div className="text-center lg:text-left">
-            <p className="text-sm text-gray-500 mb-2">
-              Your FD Just Got Upgraded
-            </p>
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-[400] leading-tight">
-              <span className="text-gray-800">FDs</span>{" "}
-              <span className="text-gray-400">that actually</span>
+            <div className="flex items-center gap-6 mb-7">
+              <p className="text-[14px] text-semibold font-[600] text-[#6A6A6A] whitespace-nowrap">
+                Your FD Just Got upgraded
+              </p>
+              <div className="hidden lg:block h-[1px] w-full bg-gradient-to-r from-[#E1E1E1] to-transparent" />
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-[400] leading-[60px]">
+              <span className="text-[#333333] tracking-[-0.08em]">FDs</span>{" "}
+              <span className="text-[#C0C0C0] tracking-[-0.08em]">that actually</span>
               <br />
-              <span className="text-gray-400">pay</span>
+              <span className="text-[#C0C0C0] tracking-[-0.08em]">pay</span>
             </h1>
           </div>
-          <div className="text-center lg:text-left text-gray-700 leading-relaxed lg:mt-16">
-            While others offer 4‑6%, we give you{" "}
-            <span className="font-bold text-gray-800">9%*</span>
+          <div className="text-center lg:text-left text-[#6A6A6A] text-[20px] leading-relaxed lg:mt-12">
+            While others offer 4‑6%,{" "}
+            <span className="font-bold text-[#333333]"> we give you 9%*</span>
             <br />
             Just{" "}
-            <span className="font-bold text-gray-800">
-              safe&secure
+            <span className="font-bold text-[#333333]">
+              safe & secure
             </span>{" "}
             returns.
             <br />
-            <span className="font-bold text-gray-800">
+            <span className="font-bold text-[#333333]">
               Compound interest
             </span>{" "}
             that grows monthly.
@@ -125,7 +134,7 @@ export default function FdSection() {
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative w-full max-w-[642px] h-[250px] md:h-[300px] lg:h-[350px] flex flex-col items-center justify-center text-lg md:text-xl font-medium text-gray-700 bg-gray-50 p-6 rounded-full"
+            className="relative w-full max-w-[642px] h-[250px] md:h-[300px] lg:h-[350px] flex flex-col items-center justify-center text-lg md:text-xl font-medium text-[#6A6A6A] bg-gray-50 p-6 rounded-full"
             style={{
               boxShadow:
                 "inset 10px 10px 20px 0px #0000001A, inset -10px -10px 30px 0px #FFFFFF",
@@ -135,7 +144,7 @@ export default function FdSection() {
             }}
           >
             <p className="mb-2">
-              Invest <span className="font-bold"> ₹1,00,000 today</span>{" "}
+              Invest <span className="font-bold text-[#333333]"> ₹1,00,000 today</span>{" "}
             </p>
 
             {/* sequential reveals driven by scroll progress */}
@@ -143,30 +152,38 @@ export default function FdSection() {
               className="mb-2"
               style={{ opacity: item2Opacity, y: item2Y }}
             >
-              Earn <span className="font-bold">₹9,000</span> annually
+              Earn <span className="font-bold text-[#333333]">₹9,000</span> annually
             </motion.p>
 
             <motion.p
               className="mb-2"
               style={{ opacity: item3Opacity, y: item3Y }}
             >
-              That&apos;s <span className="font-bold">₹750</span> extra every month!
+              That&apos;s <span className="font-bold text-[#333333]">₹750</span> extra every month!
             </motion.p>
 
             <motion.p
               className="mb-4"
               style={{ opacity: item4Opacity, y: item4Y }}
             >
-              Just for parking your money
+              Just for <span className="font-bold text-[#333333]">parking your money</span>
             </motion.p>
-
-            <motion.button
-              style={{ opacity: buttonOpacity, y: buttonY }}
-              className="inline-flex items-center rounded-full px-4 py-2 h-10 bg-black text-white text-sm font-medium hover:bg-black/90 transition-colors"
+              <WaitlistTriggerButton triggerSource="UPI FD section">
+                      <motion.button
+              onClick={handleCTAClick} // ANALYTICS: Added onClick handler
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              style={{
+                opacity: buttonOpacity,
+                y: buttonY,
+              }}
+              className="flex items-center justify-center gap-2 w-[250px] h-[56px] rounded-full bg-black text-white text-[14px] font-medium px-6 py-4 hover:bg-black/90 transition-colors"
             >
-              <Wallet className="w-4 h-4 mr-2" />
+              <Wallet className="w-4 h-4" />
               Start earning 9%* today
             </motion.button>
+              </WaitlistTriggerButton>
+            
           </motion.div>
         </div>
       </motion.div>
