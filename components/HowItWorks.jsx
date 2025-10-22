@@ -113,12 +113,13 @@ export default function HowItWorksSection() {
   }
 
   const bepayGradientStyle = {
-    background: "linear-gradient(90deg, #333333 30.99%, rgba(51, 51, 51, 0.2) 100%)",
-    WebkitBackgroundClip: "text",
-    backgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    color: "transparent",
-  }
+    // UPDATED: Gradient now fades smoothly from left to right
+ background: "linear-gradient(90deg, #333333, rgba(51, 51, 51, 0.2))",
+ WebkitBackgroundClip: "text",
+ backgroundClip: "text",
+ WebkitTextFillColor: "transparent",
+ color: "transparent",
+ }
 
   return (
     <section
@@ -132,7 +133,7 @@ export default function HowItWorksSection() {
           <h1 className="text-5xl md:text-[140px] font-[400] tracking-[-0.08em] mb-10">
             <span style={{ color: "#C0C0C0" }}>How </span>
             <span style={bepayGradientStyle}>bepay</span>
-            <span style={{ color: "#C0C0C0" }}> works</span>
+            <span style={bepayGradientStyle}> works</span>
           </h1>
           <p className="text-[20px] tracking-[0.01%] font-medium" style={{ color: "#6A6A6A" }}>
             Start in 30 Seconds. Earn Forever.

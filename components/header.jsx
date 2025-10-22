@@ -99,6 +99,15 @@ export default function Header() {
             >
               BUSINESS
             </Link>
+            <Link
+              href="/upi"
+              className={getLinkClasses(
+                "/upi",
+                "text-sm lg:text-[14px] tracking-wide uppercase"
+              )}
+            >
+              CRYPTO CARD
+            </Link>
           </nav>
 
           {/* Download Button - Hidden on small screens */}
@@ -209,6 +218,17 @@ export default function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               BUSINESS
+            </Link>
+
+            <Link
+              href="/upi"
+              className={getLinkClasses(
+                "/upi",
+                "text-sm uppercase tracking-wide py-2"
+              )}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              CRYPTO CARD
             </Link>
 
             {/* Mobile Download Button */}

@@ -2,7 +2,7 @@
 
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { IndianRupee, Users, Landmark, ArrowUpRight, Lock } from "lucide-react";
+import Image from "next/image";
 import { AnalyticsService } from "@/services/analyticsService";
 
 function useIsMobile() {
@@ -48,7 +48,6 @@ export default function StickyHeroSection() {
   const card5Y = useTransform(scrollYProgress, [0.5, 0.6], [150, 0]);
   const stage3_X = useTransform(scrollYProgress, [0.5, 0.6], [-150, 0]);
 
-
   const lightGray = "text-[#C0C0C0]";
   const darkGray = "text-[#6A6A6A]";
 
@@ -92,33 +91,63 @@ export default function StickyHeroSection() {
             </div>
           </div>
 
-          {/* ✨ FIX: Increased size and reduced gap */}
+          {/* Card 1 - Stays at top-[30%] */}
           <motion.div className="absolute border-[2px] border-[#EFEFEF] flex h-[400px] w-full max-w-sm flex-col items-start justify-end overflow-hidden rounded-3xl bg-white p-6 shadow-lg md:h-[580px] md:w-[450px] md:max-w-none md:left-[18%] md:top-[10%] md:-translate-y-8" style={{ opacity: stage1_Opacity, y: isMobile ? 0 : card1Y, x: isMobile ? stage1_X : 0, }}>
-            <IndianRupee className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-gray-200 opacity-50" size={300} strokeWidth={2} />
+            <Image
+              src="/icons/rupee.png"
+              alt="Indian Rupee"
+              width={160}
+              height={180}
+              className="absolute top-[30%] left-6 -translate-y-1/2 opacity-50 object-contain"
+            />
             <p className="relative z-10 text-[40px]  font-regular text-[#6A6A6A] tracking-[-0.04em] "><span className="font-medium text-[#333333]">₹2.06 Cr</span> paid back<br />to users this month</p>
           </motion.div>
 
-          {/* ✨ FIX: Increased size and reduced gap */}
+          {/* Card 2 - Moved to top-[25%] */}
           <motion.div className="absolute border-[2px] border-[#EFEFEF] flex h-[400px] w-full max-w-sm flex-col items-start justify-end overflow-hidden rounded-3xl bg-white p-6 shadow-lg md:h-[580px] md:w-[450px] md:max-w-none md:right-[18%] md:top-[10%] md:translate-y-8" style={{ opacity: stage1_Opacity, y: isMobile ? 0 : card2Y, x: isMobile ? stage1_X : 0, }}>
-            <Users className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-gray-200 opacity-50" size={300} strokeWidth={2} />
+            <Image
+              src="/icons/users.png"
+              alt="Users"
+              width={160}
+              height={180}
+              className="absolute top-[25%] left-6 -translate-y-1/2 opacity-50 object-contain"
+            />
             <p className="relative z-10 text-[40px]  font-regular text-[#6A6A6A] tracking-[-0.04em] "><span className="font-medium text-[#333333]">50,000+</span> daily<br />active earners</p>
           </motion.div>
 
-          {/* ✨ FIX: Increased size and reduced gap */}
+          {/* Card 3 - Moved to top-[25%] */}
           <motion.div className="absolute border-[2px] border-[#EFEFEF] flex h-[400px] w-full max-w-sm flex-col items-start justify-end overflow-hidden rounded-3xl bg-white p-6 shadow-lg md:h-[580px] md:w-[450px] md:max-w-none md:left-[18%] md:top-[10%] md:-translate-y-8" style={{ opacity: stage2_Opacity, y: isMobile ? 0 : card3Y, x: isMobile ? stage2_X : 0, }}>
-            <Landmark className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-gray-200 opacity-50" size={300} strokeWidth={2} />
+            <Image
+              src="/icons/landmark.png"
+              alt="Bank"
+              width={160}
+              height={180}
+              className="absolute top-[25%] left-6 -translate-y-1/2 opacity-50 object-contain"
+            />
             <p className="relative z-10 text-[40px]  font-regular text-[#6A6A6A] tracking-[-0.04em]"><span className="font-medium text-[#333333]">Backed by</span> Federal<br />& RBL</p>
           </motion.div>
 
-          {/* ✨ FIX: Increased size and reduced gap */}
+          {/* Card 4 - Moved to top-[25%] */}
           <motion.div className="absolute border-[2px] border-[#EFEFEF] flex h-[400px] w-full max-w-sm flex-col items-start justify-end overflow-hidden rounded-3xl bg-white p-6 shadow-lg md:h-[580px] md:w-[450px] md:max-w-none md:right-[18%] md:top-[10%] md:translate-y-8" style={{ opacity: stage2_Opacity, y: isMobile ? 0 : card4Y, x: isMobile ? stage2_X : 0, }}>
-            <ArrowUpRight className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-gray-200 opacity-50" size={300} strokeWidth={2} />
+            <Image
+              src="/icons/arrow.png"
+              alt="Arrow Up Right"
+              width={160}
+              height={180}
+              className="absolute top-[25%] left-6 -translate-y-1/2 opacity-50 object-contain"
+            />
             <p className="relative z-10 text-[40px]  font-regular text-[#6A6A6A] tracking-[-0.04em] "><span className="font-medium text-[#333333]">Powered by</span><br />Razorpay/JustPay</p>
           </motion.div>
 
-          {/* ✨ FIX: Increased size */}
+          {/* Card 5 - Moved to top-[25%] */}
           <motion.div className="absolute border-[2px] border-[#EFEFEF] flex h-[400px] w-full max-w-sm flex-col items-start justify-end overflow-hidden rounded-3xl bg-white p-6 shadow-lg md:h-[580px] md:w-[450px] md:max-w-none md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2" style={{ opacity: stage3_Opacity, y: isMobile ? 0 : card5Y, x: isMobile ? stage3_X : 0, }}>
-            <Lock className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-gray-200 opacity-50" size={300} strokeWidth={2} />
+            <Image
+              src="/icons/lock.png"
+              alt="Lock"
+              width={160}
+              height={180}
+              className="absolute top-[25%] left-6 -translate-y-1/2 opacity-50 object-contain"
+            />
             <p className="relative z-10 text-[40px] font-regular text-[#6A6A6A] tracking-[-0.04em]"><span className="font-medium text-[#333333]">Fully encrypted</span> &<br />RBI-compliant</p>
           </motion.div>
         </div>
