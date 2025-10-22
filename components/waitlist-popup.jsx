@@ -345,7 +345,7 @@ function PortalContent({
                     {pathname === "/business"
                       ? "Every business starts with a spark!"
                       : pathname === "/upi"
-                      ? "Instant UPI payments are on the way." // Added text for UPI path
+                      ? "Be the first to experience smarter UPI payments." // Added text for UPI path
                       : "Be the first to experience the future of payments."}
                     {/* --- MODIFICATION END --- */}
                   </h2>
@@ -448,7 +448,7 @@ function PortalContent({
                       {pathname === "/business"
                         ? "We’re launching soon! Join the waitlist and stay ahead of others businesses!"
                         : pathname === "/upi"
-                        ? "Get ready for seamless UPI transactions. Join the waitlist for early access!" // Added text for UPI path
+                        ? "Join the waitlist and get early access to our upcoming UPI app." // Added text for UPI path
                         : "We’re launching soon! Join the waitlist and stay ahead of others!"}
                       {/* --- MODIFICATION END --- */}
                     </p>

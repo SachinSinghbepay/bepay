@@ -208,6 +208,20 @@ export default function CreditCardSection() {
                       style={{ objectFit: "contain" }} 
                     />
                   </motion.div>
+                   <motion.div 
+                    style={{ scale: card5Scale, zIndex: 1 }} 
+                    className="absolute inset-0 transform"
+                  >
+                    <Image 
+                      src="/cardupi6.png" 
+                      alt="Card 6" 
+                      fill 
+                      priority 
+                      sizes="400px" 
+                      style={{ objectFit: "contain" }} 
+                    />
+                  </motion.div>
+                  
                 </div>
                 
                 {/* FIXED: CTA is now properly visible */}
@@ -220,7 +234,7 @@ export default function CreditCardSection() {
                       className="bg-black cursor-pointer text-white rounded-full px-5 py-8 text-base font-medium flex items-center gap-2 hover:bg-black/90 transition-colors"
                       onClick={handleStartClick}
                     >
-                      <Image src="/wal.png" alt="Wallet icon" width={20} height={20} />
+                      <Image src="/wal2.png" alt="Wallet icon" width={20} height={20} />
                       Get your bepay card now
                     </Button>
                   </WaitlistTriggerButton>

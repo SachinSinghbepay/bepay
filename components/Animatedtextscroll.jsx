@@ -97,13 +97,13 @@ export default function AnimatedTextScroll() {
           {/* LEFT SIDE: Animated Text */}
           <motion.h1
             variants={containerVariants}
-            className="text-left text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-[400] tracking-tighter w-full lg:w-1/2"
+            className="text-left text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-[400] tracking-[-0.08em] w-full lg:w-1/2"
           >
             {sentence.map((item, index) => (
               <motion.span
                 key={index}
                 variants={wordVariants}
-                className={`inline-block mr-3 md:mr-4 ${item.isBrand ? "text-gray-800" : "text-gray-400"}`}
+                className={`inline-block mr-3 md:mr-4 ${item.isBrand ? "text-[#333333]" : "text-[#C0C0C0]"}`}
               >
                 {item.word}
               </motion.span>
@@ -140,7 +140,7 @@ export default function AnimatedTextScroll() {
                       Unlimited Bitcoin bonuses by<br />inviting friends and family
                     </motion.p>
                     <motion.div>
-                      <ArrowDown className="w-6 h-6" />
+                      <ArrowDown className="w-6 h-6 mb-4 mt-2" />
                     </motion.div>
                     <WaitlistTriggerButton triggerSource="invite now button UPI page">
                       <motion.button
