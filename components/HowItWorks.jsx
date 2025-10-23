@@ -112,15 +112,6 @@ export default function HowItWorksSection() {
       "10px 10px 20px 0px #0000001A inset, -10px -10px 30px 0px #FFFFFF inset, -10px -10px 15px 0px #FFFFFF inset",
   }
 
-  const bepayGradientStyle = {
-    // UPDATED: Gradient now fades smoothly from left to right
- background: "linear-gradient(90deg, #333333, rgba(51, 51, 51, 0.2))",
- WebkitBackgroundClip: "text",
- backgroundClip: "text",
- WebkitTextFillColor: "transparent",
- color: "transparent",
- }
-
   return (
     <section
       ref={sectionRef}
@@ -130,10 +121,10 @@ export default function HowItWorksSection() {
       <div className="sticky top-0 flex flex-col items-center justify-center h-screen px-4 py-12">
         <div className="text-center mb-8">
           {/* === FIX APPLIED HERE: Removed 'leading-tight' class === */}
-          <h1 className="text-5xl md:text-[140px] font-[400] tracking-[-0.08em] mb-10">
+            <h1 className="text-5xl md:text-[140px] font-[400] tracking-[-0.08em] mb-10 leading-[1.2]">
             <span style={{ color: "#C0C0C0" }}>How </span>
-            <span style={bepayGradientStyle}>bepay</span>
-            <span style={bepayGradientStyle}> works</span>
+            <span >bepay</span>
+            <span > works</span>
           </h1>
           <p className="text-[20px] tracking-[0.01%] font-medium" style={{ color: "#6A6A6A" }}>
             Start in 30 Seconds. Earn Forever.

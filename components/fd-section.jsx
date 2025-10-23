@@ -13,34 +13,37 @@ export default function FdSection() {
   const sectionRef = useRef(null);
   const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
 
-  /* scroll progress from 0-1 while we’re inside the section */
+  /* scroll progress from 0-1 while we're inside the section */
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     /* the section is 200 vh tall and its content is sticky,
-           so progress runs while the user scrolls through that space */
+            so progress runs while the user scrolls through that space */
     offset: ["start start", "end start"],
   });
 
   // ✅ CORRECTED: Remove the 'spring' helper function and call useSpring directly
   const item2OpacityTransform = useTransform(scrollYProgress, [0.05, 0.2], [0, 1]);
-  const item2YTransform = useTransform(scrollYProgress, [0.05, 0.2], [40, 0]);
   const item2Opacity = useSpring(item2OpacityTransform, { stiffness: 120, damping: 20 });
-  const item2Y = useSpring(item2YTransform, { stiffness: 120, damping: 20 });
 
   const item3OpacityTransform = useTransform(scrollYProgress, [0.2, 0.35], [0, 1]);
-  const item3YTransform = useTransform(scrollYProgress, [0.2, 0.35], [40, 0]);
   const item3Opacity = useSpring(item3OpacityTransform, { stiffness: 120, damping: 20 });
-  const item3Y = useSpring(item3YTransform, { stiffness: 120, damping: 20 });
 
   const item4OpacityTransform = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
-  const item4YTransform = useTransform(scrollYProgress, [0.35, 0.5], [40, 0]);
   const item4Opacity = useSpring(item4OpacityTransform, { stiffness: 120, damping: 20 });
-  const item4Y = useSpring(item4YTransform, { stiffness: 120, damping: 20 });
 
   const buttonOpacityTransform = useTransform(scrollYProgress, [0.5, 0.65], [0, 1]);
-  const buttonYTransform = useTransform(scrollYProgress, [0.5, 0.65], [40, 0]);
   const buttonOpacity = useSpring(buttonOpacityTransform, { stiffness: 120, damping: 20 });
-  const buttonY = useSpring(buttonYTransform, { stiffness: 120, damping: 20 });
+
+  // Container upward movement as content appears
+  /* ▼▼▼ CHANGED THIS ▼▼▼ */
+  const containerYTransform = useTransform(
+    scrollYProgress,
+    [0, 0.2, 0.35, 0.5, 0.65],
+    // Start even lower (80px below center) and move up to 0 (center)
+    [80, 60, 40, 20, 0]
+  );
+  /* ▲▲▲ CHANGED THIS ▲▲▲ */
+  const containerY = useSpring(containerYTransform, { stiffness: 120, damping: 20 });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -68,9 +71,9 @@ export default function FdSection() {
 
   return (
     /* 200 vh of space so the user has room to scroll;
-         the sticky child stays fixed during that time         */
+        the sticky child stays fixed during that time        */
     <section ref={sectionRef} className="relative min-h-[300vh]">
-      {/* sticky “card” that sits in the viewport while the user scrolls */}
+      {/* sticky "card" that sits in the viewport while the user scrolls */}
       <motion.div
         className="sticky top-0 flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6 md:p-10"
         initial={{ opacity: 0, y: 50 }}
@@ -134,7 +137,7 @@ export default function FdSection() {
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative w-full max-w-[642px] h-[250px] md:h-[300px] lg:h-[350px] flex flex-col items-center justify-center text-lg md:text-xl font-medium text-[#6A6A6A] bg-gray-50 p-6 rounded-full"
+            className="relative w-full max-w-[642px] h-[250px] md:h-[300px] lg:h-[350px] flex flex-col items-center justify-center text-lg md:text-xl font-medium text-[#6A6A6A] bg-gray-50 p-6 rounded-full overflow-hidden"
             style={{
               boxShadow:
                 "inset 10px 10px 20px 0px #0000001A, inset -10px -10px 30px 0px #FFFFFF",
@@ -143,47 +146,52 @@ export default function FdSection() {
                 "linear-gradient(135deg, rgba(255,255,255,0.8) 0%, #F5F5F5 100%) 1",
             }}
           >
-            <p className="mb-2">
-              Invest <span className="font-bold text-[#333333]"> ₹1,00,000 today</span>{" "}
-            </p>
-
-            {/* sequential reveals driven by scroll progress */}
-            <motion.p
-              className="mb-2"
-              style={{ opacity: item2Opacity, y: item2Y }}
-            >
-              Earn <span className="font-bold text-[#333333]">₹9,000</span> annually
-            </motion.p>
-
-            <motion.p
-              className="mb-2"
-              style={{ opacity: item3Opacity, y: item3Y }}
-            >
-              That&apos;s <span className="font-bold text-[#333333]">₹750</span> extra every month!
-            </motion.p>
-
-            <motion.p
-              className="mb-4"
-              style={{ opacity: item4Opacity, y: item4Y }}
-            >
-              Just for <span className="font-bold text-[#333333]">parking your money</span>
-            </motion.p>
-              <WaitlistTriggerButton triggerSource="UPI FD section">
-                      <motion.button
-              onClick={handleCTAClick} // ANALYTICS: Added onClick handler
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <motion.div
+              className="flex flex-col items-center"
               style={{
-                opacity: buttonOpacity,
-                y: buttonY,
+                y: containerY,
               }}
-              className="flex items-center justify-center gap-2 w-[250px] h-[56px] rounded-full bg-black text-white text-[14px] font-medium px-6 py-4 hover:bg-black/90 transition-colors"
             >
-              <Wallet className="w-4 h-4" />
-              Start earning 9%* today
-            </motion.button>
+              <p className="mb-2"> {/* Removed mt-50, added mb-2 */}
+                Invest <span className="font-bold text-[#333333]"> ₹1,00,000 today</span>{" "}
+              </p>
+
+              {/* sequential reveals driven by scroll progress */}
+              <motion.p
+                className="mb-2"
+                style={{ opacity: item2Opacity }}
+              >
+                Earn <span className="font-bold text-[#333333]">₹9,000</span> annually
+              </motion.p>
+
+              <motion.p
+                className="mb-2"
+                style={{ opacity: item3Opacity }}
+              >
+                That&apos;s <span className="font-bold text-[#333333]">₹750</span> extra every month!
+              </motion.p>
+
+              <motion.p
+                className="mb-4"
+                style={{ opacity: item4Opacity }}
+              >
+                Just for <span className="font-bold text-[#333333]">parking your money</span>
+              </motion.p>
+              <WaitlistTriggerButton triggerSource="UPI FD section">
+                <motion.button
+                  onClick={handleCTAClick}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  style={{
+                    opacity: buttonOpacity,
+                  }}
+                  className="flex items-center justify-center gap-2 w-[250px] h-[56px] rounded-full bg-black text-white text-[14px] font-medium px-6 py-4 hover:bg-black/90 transition-colors"
+                >
+                  <Wallet className="w-4 h-4" />
+                  Start earning 9%* today
+                </motion.button>
               </WaitlistTriggerButton>
-            
+            </motion.div>
           </motion.div>
         </div>
       </motion.div>
