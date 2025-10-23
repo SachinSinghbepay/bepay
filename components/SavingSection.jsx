@@ -28,16 +28,19 @@ const SavingSection = () => {
   })
 
   // --- Main Content Steps Logic ---
-  // The main content steps will occupy the full scroll height
   const inputRange = STEPS.map((_, i) => i / (STEPS.length - 1))
   const outputRange = STEPS.map((_, i) => i)
   const stepIndexMotionValue = useTransform(scrollYProgress, inputRange, outputRange)
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
+  // Add state to track scroll direction
+  const [direction, setDirection] = useState(0) // 0: initial, 1: down, -1: up
 
   useMotionValueEvent(stepIndexMotionValue, "change", (latest) => {
     const newIndex = Math.round(latest)
     if (newIndex !== currentStepIndex) {
+      // Set direction based on index change
+      setDirection(newIndex > currentStepIndex ? 1 : -1)
       setCurrentStepIndex(newIndex)
     }
   })
@@ -65,23 +68,54 @@ const SavingSection = () => {
     setShowQrPopup(false)
   }
 
-  // Variants for the number and image *within* the right section
-  const contentItemVariants = {
-    enter: { opacity: 0, y: 100 }, // Start slightly below, invisible
-    center: (customDelay) => ({
+  // --- New variants for directional sliding ---
+  const numberVariants = {
+    // 'direction' is passed via the 'custom' prop
+    enter: (direction) => ({ // Removed ': number'
+      y: direction > 0 ? "100%" : "-100%", // Enter from bottom (scroll down) or top (scroll up)
+      opacity: 0,
+      zIndex: 1, // Entering item on top
+    }),
+    center: {
+      y: "0%",
       opacity: 1,
-      y: 0,
+      zIndex: 1,
       transition: {
         duration: 0.5,
         ease: "easeOut",
-        delay: customDelay, // Use custom delay passed from component
+        delay: 0, // No delay for number
       },
-    }),
-    exit: {
+    },
+    exit: (direction) => ({ // Removed ': number'
+      y: direction > 0 ? "-100%" : "100%", // Exit to top (scroll down) or bottom (scroll up)
       opacity: 0,
-      y: -20,
+      zIndex: 0, // Exiting item behind
       transition: { duration: 0.5, ease: "easeIn" },
-    }, // Exit slightly above, invisible
+    }),
+  }
+
+  const imageVariants = {
+    enter: (direction) => ({ // Removed ': number'
+      y: direction > 0 ? "100%" : "-100%",
+      opacity: 0,
+      zIndex: 1,
+    }),
+    center: {
+      y: "0%",
+      opacity: 1,
+      zIndex: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+        delay: 0.2, // 0.2s delay for image
+      },
+    },
+    exit: (direction) => ({ // Removed ': number'
+      y: direction > 0 ? "-100%" : "100%",
+      opacity: 0,
+      zIndex: 0,
+      transition: { duration: 0.5, ease: "easeIn" },
+    }),
   }
 
   // Variants for the left content's text lines
@@ -187,48 +221,52 @@ const SavingSection = () => {
                   exit="exit"
                   variants={ctaButtonVariants}
                 >
+                  <WaitlistTriggerButton triggerSource="UPI Saving section button">
+                    <Button
+                      className="bg-black cursor-pointer text-white rounded-full px-5 py-8 text-base font-medium flex items-center gap-2 hover:bg-black/90 transition-colors"
+                      onClick={handleStartClick}
+                    >
+                      <Image
+                        src="/wal.png" // Placeholder for the icon
+                        alt="Savings icon"
+                        width={20}
+                        height={20}
+                        className=""
+                      />
+                      Start your savings journey
+                    </Button>
+                  </WaitlistTriggerButton>
 
-                   <WaitlistTriggerButton triggerSource="UPI Saving section button">
-                       <Button
-                    className="bg-black cursor-pointer text-white rounded-full px-5 py-8 text-base font-medium flex items-center gap-2 hover:bg-black/90 transition-colors"
-                    onClick={handleStartClick}
-                  >
-                    <Image
-                      src="/wal.png" // Placeholder for the icon
-                      alt="Savings icon"
-                      width={20}
-                      height={20}
-                      className=""
-                    />
-                    Start your savings journey
-                  </Button>
-                   </WaitlistTriggerButton>
-                 
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
         </motion.div>
         {/* Right Content - Dynamic with Animations */}
-        {/* MODIFIED: This outer div is now a regular div, not a motion.div with AnimatePresence */}
         <div
           className={cn(
             "relative h-full lg:col-span-2 order-1 lg:order-2 overflow-hidden",
-            // --- CHANGE IS HERE ---
             // This now specifically checks for the 2nd (index 1) and 4th (index 3) steps
             currentStepIndex === 1 || currentStepIndex === 3 ? "bg-[#F4F4F4]" : "bg-white",
           )}
         >
-          <AnimatePresence mode="wait">
+          {/* Removed mode="wait", added custom={direction} */}
+          <AnimatePresence custom={direction}>
             {/* Dynamic Number */}
             <motion.div
               key={currentStep.number + "-number"} // Key changes to trigger animation
-              className="absolute -top-2/3 inset-0 flex items-center justify-center pointer-events-none"
-              variants={contentItemVariants}
+              
+              // --- THIS IS THE FIX ---
+              // Removed "-top-2/3" and added padding-bottom to push the text up
+              // without changing the container's 100% height.
+              className="absolute inset-0 flex items-center justify-center pointer-events-none pb-[60vh] sm:pb-[50vh]"
+              
+              // Use new variants and pass custom prop
+              variants={numberVariants}
               initial="enter"
               animate="center"
               exit="exit"
-              custom={0} // Custom prop for contentItemVariants to indicate no delay for number
+              custom={direction}
             >
               <span
                 className="font-[400] bg-gradient-to-b from-gray-300 to-gray-100 text-transparent bg-clip-text select-none leading-none"
@@ -240,16 +278,18 @@ const SavingSection = () => {
               </span>
             </motion.div>
           </AnimatePresence>
-          <AnimatePresence mode="wait">
+          {/* Removed mode="wait", added custom={direction} */}
+          <AnimatePresence custom={direction}>
             {/* Dynamic Phone Mockup */}
             <motion.div
               key={currentStep.imageSrc + "-image"} // Key changes to trigger animation
               className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4/5 sm:w-3/4 md:w-2/3 lg:w-2/3 h-auto z-10"
-              variants={contentItemVariants}
+              // Use new variants and pass custom prop
+              variants={imageVariants}
               initial="enter"
               animate="center"
               exit="exit"
-              custom={0.2} // Custom prop for contentItemVariants to indicate 0.2 second delay for mockup
+              custom={direction}
             >
               <div className="relative w-full h-full">
                 <Image

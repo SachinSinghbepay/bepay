@@ -61,58 +61,76 @@ const VideoCard = ({ item, isInView, index }) => {
   const [playError, setPlayError] = useState(false);
   const videoRef = useRef(null);
 
+  // 1. Create a ref for the card itself
+  const cardRef = useRef(null);
+
+  // 2. Use a new useInView hook to track the card's visibility
+  const isCardInView = useInView(cardRef, {
+    margin: "0px 100px -50px 100px",
+  });
+
   const handleVideoLoad = () => {
     setVideoLoaded(true);
     console.log(`Video ${item.id} loaded successfully`);
   };
 
   const handleVideoError = (e) => {
-    console.error(`Video ${item.id} error:`, e);
-    console.error(`Video ${item.id} error details:`, e.target?.error);
+    console.error(`Video ${item.id} error:`, e.target?.error);
     setVideoError(true);
   };
 
-  const handleCanPlay = () => {
-    if (videoRef.current && !playError) {
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            console.log(`Video ${item.id} started playing`);
-          })
-          .catch((error) => {
-            console.error(`Video ${item.id} play failed:`, error);
-            setPlayError(true);
-          });
-      }
-    }
-  };
+  // 3. This useEffect now controls playback based on visibility
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !item.video || videoError || playError) return;
 
+    if (isCardInView) {
+      // Card is in view, attempt to play
+      console.log(`Video ${item.id} is in view, attempting to play.`);
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          if (error.name !== "AbortError") {
+            console.error(`Video ${item.id} play failed:`, error);
+            setPlayError(true); // Prevent further attempts
+          }
+        });
+      }
+    } else {
+      // Card is out of view, pause
+      console.log(`Video ${item.id} is out of view, pausing.`);
+      video.pause();
+    }
+  }, [isCardInView, item.video, videoError, playError]);
+
+  // Debugging useEffect (optional)
   useEffect(() => {
     const video = videoRef.current;
     if (video && item.video) {
-      // Add event listeners for debugging
-      const handleLoadStart = () => console.log(`Video ${item.id} started loading`);
-      const handleLoadedData = () => console.log(`Video ${item.id} data loaded`);
+      const handleLoadStart = () =>
+        console.log(`Video ${item.id} started loading`);
+      const handleLoadedData = () =>
+        console.log(`Video ${item.id} data loaded`);
       const handlePlay = () => console.log(`Video ${item.id} started playing`);
       const handlePause = () => console.log(`Video ${item.id} paused`);
 
-      video.addEventListener('loadstart', handleLoadStart);
-      video.addEventListener('loadeddata', handleLoadedData);
-      video.addEventListener('play', handlePlay);
-      video.addEventListener('pause', handlePause);
+      video.addEventListener("loadstart", handleLoadStart);
+      video.addEventListener("loadeddata", handleLoadedData);
+      video.addEventListener("play", handlePlay);
+      video.addEventListener("pause", handlePause);
 
       return () => {
-        video.removeEventListener('loadstart', handleLoadStart);
-        video.removeEventListener('loadeddata', handleLoadedData);
-        video.removeEventListener('play', handlePlay);
-        video.removeEventListener('pause', handlePause);
+        video.removeEventListener("loadstart", handleLoadStart);
+        video.removeEventListener("loadeddata", handleLoadedData);
+        video.removeEventListener("play", handlePlay);
+        video.removeEventListener("pause", handlePause);
       };
     }
   }, [item.id, item.video]);
 
   return (
     <motion.div
+      ref={cardRef} // 4. Attach the ref to the motion.div
       initial={{ opacity: 0, y: 100 }}
       animate={
         isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 100 }
@@ -141,12 +159,15 @@ const VideoCard = ({ item, isInView, index }) => {
               playsInline
               preload="metadata"
               onLoadedData={handleVideoLoad}
-              onCanPlay={handleCanPlay}
+              // 5. Removed the problematic onCanPlay handler
               onError={handleVideoError}
-              style={{ display: videoError ? 'none' : 'block' }}
+              style={{ display: videoError ? "none" : "block" }}
             >
               <source src={item.video} type="video/mp4" />
-              <source src={item.video.replace('.mp4', '.webm')} type="video/webm" />
+              <source
+                src={item.video.replace(".mp4", ".webm")}
+                type="video/webm"
+              />
               Your browser does not support the video tag.
             </video>
             {/* Fallback image if video fails */}
@@ -218,11 +239,14 @@ export default function InvestmentSuite() {
 
   // Debug: Log video paths
   useEffect(() => {
-    console.log("Investment data with videos:", investmentData.map(item => ({
-      id: item.id,
-      video: item.video,
-      hasVideo: !!item.video
-    })));
+    console.log(
+      "Investment data with videos:",
+      investmentData.map((item) => ({
+        id: item.id,
+        video: item.video,
+        hasVideo: !!item.video,
+      }))
+    );
   }, []);
 
   return (
@@ -296,8 +320,8 @@ export default function InvestmentSuite() {
         {/* Cards Section */}
         <div className="flex-1 flex items-center overflow-hidden">
           {/* Mobile Cards */}
-          <motion.div 
-            style={{ x: xMobile }} 
+          <motion.div
+            style={{ x: xMobile }}
             className="flex gap-8 pl-4 sm:pl-6 lg:pl-8 md:hidden"
           >
             {investmentData.map((item, index) => (
@@ -311,8 +335,8 @@ export default function InvestmentSuite() {
           </motion.div>
 
           {/* Desktop Cards */}
-          <motion.div 
-            style={{ x: xDesktop }} 
+          <motion.div
+            style={{ x: xDesktop }}
             className="hidden md:flex gap-8 pl-4 sm:pl-6 lg:pl-8"
           >
             {investmentData.map((item, index) => (

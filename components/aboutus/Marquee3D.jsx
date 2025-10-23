@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 import { cn } from "@/lib/utils";
 import { Marquee } from "@/components/magicui/marquee";
+import Image from "next/image"; // 1. Import next/image
 
 const reviews = [
   {
@@ -20,10 +20,21 @@ const reviews = [
 const firstRow = reviews.slice(0, reviews.length / 2);
 const secondRow = reviews.slice(reviews.length / 2);
 
+// 2. Define thirdRow and fourthRow to fix the error
+// (Here, just re-using the same data for demonstration)
+const thirdRow = reviews.slice(0, reviews.length / 2);
+const fourthRow = reviews.slice(reviews.length / 2);
 
+// 3. Update ReviewCard to use next/Image
 const ReviewCard = ({ img }) => {
   return (
-    <img className="rounded-full" width="32" height="32" alt="" src={img} />
+    <Image
+      className="rounded-full"
+      width={32} // Pass width as a number
+      height={32} // Pass height as a number
+      alt=""
+      src={img}
+    />
   );
 };
 
