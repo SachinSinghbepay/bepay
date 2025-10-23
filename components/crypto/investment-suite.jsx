@@ -101,7 +101,7 @@ const VideoCard = ({ item, isInView, index }) => {
       console.log(`Video ${item.id} is out of view, pausing.`);
       video.pause();
     }
-  }, [isCardInView, item.video, videoError, playError]);
+  }, [isCardInView, item.video, videoError, playError, item.id]);
 
   // Debugging useEffect (optional)
   useEffect(() => {
