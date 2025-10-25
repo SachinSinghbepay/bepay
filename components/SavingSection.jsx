@@ -81,7 +81,7 @@ const SavingSection = () => {
       opacity: 1,
       zIndex: 1,
       transition: {
-        duration: 0.5,
+        duration: 0.4,
         ease: "easeOut",
         delay: 0, // No delay for number
       },
@@ -90,7 +90,7 @@ const SavingSection = () => {
       y: direction > 0 ? "-100%" : "100%", // Exit to top (scroll down) or bottom (scroll up)
       opacity: 0,
       zIndex: 0, // Exiting item behind
-      transition: { duration: 0.5, ease: "easeIn" },
+      transition: { duration: 0.4, ease: "easeIn" },
     }),
   }
 
@@ -105,16 +105,16 @@ const SavingSection = () => {
       opacity: 1,
       zIndex: 1,
       transition: {
-        duration: 0.5,
+        duration: 0.4,
         ease: "easeOut",
-        delay: 0.2, // 0.2s delay for image
+        delay: 0.15, // 0.15s delay for image
       },
     },
     exit: (direction) => ({ // Removed ': number'
       y: direction > 0 ? "-100%" : "100%",
       opacity: 0,
       zIndex: 0,
-      transition: { duration: 0.5, ease: "easeIn" },
+      transition: { duration: 0.4, ease: "easeIn" },
     }),
   }
 
@@ -145,7 +145,7 @@ const SavingSection = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: "easeOut", delay: 0.5 }, // Appear smoothly
+      transition: { duration: 0.6, ease: "easeOut", delay: 0.4 }, // Appear smoothly
     },
     exit: { opacity: 0, y: 50, transition: { duration: 0.3, ease: "easeIn" } },
   }
@@ -170,7 +170,7 @@ const SavingSection = () => {
   }, [hasTrackedView]);
 
   const handleStartClick = () => {
-    AnalyticsService.sendEvent("HowItWorks CTA Clicked: Join 50,000+");
+    AnalyticsService.sendEvent("start_your_saving_journey_button_clicked");
   };
 
   return (
@@ -212,7 +212,7 @@ const SavingSection = () => {
               </motion.p>
             </motion.div>
             {/* "Start your savings journey" Button */}
-            <AnimatePresence>
+            <AnimatePresence >
               {currentStepIndex === STEPS.length - 1 && ( // Show button only on the "Total" step
                 <motion.div
                   className="pt-8"
@@ -221,7 +221,7 @@ const SavingSection = () => {
                   exit="exit"
                   variants={ctaButtonVariants}
                 >
-                  <WaitlistTriggerButton triggerSource="UPI Saving section button">
+                  <WaitlistTriggerButton triggerSource=" “Start Your Saving Journey” button" buttonLocation="saving_section">
                     <Button
                       className="bg-black cursor-pointer text-white rounded-full px-5 py-8 text-base font-medium flex items-center gap-2 hover:bg-black/90 transition-colors"
                       onClick={handleStartClick}
@@ -251,7 +251,7 @@ const SavingSection = () => {
           )}
         >
           {/* Removed mode="wait", added custom={direction} */}
-          <AnimatePresence custom={direction}>
+          <AnimatePresence mode="popLayout" custom={direction} >
             {/* Dynamic Number */}
             <motion.div
               key={currentStep.number + "-number"} // Key changes to trigger animation
@@ -279,7 +279,7 @@ const SavingSection = () => {
             </motion.div>
           </AnimatePresence>
           {/* Removed mode="wait", added custom={direction} */}
-          <AnimatePresence custom={direction}>
+          <AnimatePresence mode="popLayout" custom={direction} >
             {/* Dynamic Phone Mockup */}
             <motion.div
               key={currentStep.imageSrc + "-image"} // Key changes to trigger animation
@@ -298,7 +298,7 @@ const SavingSection = () => {
                   width={400}
                   height={600}
                   className="w-full h-auto object-top object-contain"
-                  priority={currentStepIndex === 0} // Only prioritize the first image for initial load
+                  
                 />
               </div>
             </motion.div>

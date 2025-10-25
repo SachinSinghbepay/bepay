@@ -47,14 +47,14 @@ export default function HowItWorksSection() {
 
   // ANALYTICS: Handler for the CTA button click
   const handleJoinUsersClick = () => {
-    AnalyticsService.sendEvent("HowItWorks CTA Clicked: Join 50,000+");
+    AnalyticsService.sendEvent("join_smart_earners_button_clicked");
   };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasTrackedView) {
-          AnalyticsService.sendEvent("UPI HowItWorks-section viewed");
+          AnalyticsService.sendEvent("UPI - How BePay Works section viewed");
           setHasTrackedView(true);
           observer.unobserve(entry.target);
         }
@@ -189,7 +189,7 @@ export default function HowItWorksSection() {
           </AnimatePresence>
           <AnimatePresence>
             {currentStep === 6 && (
-              <WaitlistTriggerButton triggerSource="' Defi Yield Start earning' button">
+              <WaitlistTriggerButton triggerSource="“Join Smart Earners” button" buttonLocation="how_it_works_section">
                 <motion.button
                   onClick={handleJoinUsersClick}
                   initial={{ opacity: 0, y: 50 }}

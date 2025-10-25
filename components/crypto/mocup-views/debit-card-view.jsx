@@ -23,7 +23,7 @@ export function DebitCardView({ setActiveView, scrollYProgress }) {
   );
   const innerCardOpacity = useTransform(scrollYProgress, [0.38, 0.42], [0, 1]);
   const handleButtonClick = () => {
-        AnalyticsService.sendEvent("Get your virtual crypto debit card Clicked");
+        AnalyticsService.sendEvent("Get your virtual crypto debit card button Clicked");
       }
 
   return (
@@ -89,7 +89,7 @@ export function DebitCardView({ setActiveView, scrollYProgress }) {
         <p className="mt-2 text-[10px] text-gray-400">No transactions to see</p>
       </div>
 
-      <WaitlistTriggerButton triggerSource="'Get your virtual crypto debit card' button">
+      <WaitlistTriggerButton triggerSource="'Get your virtual crypto debit card' button clicked" buttonLocation="Crypto Debit Card View">
         <button onClick={handleButtonClick} className="mt-auto mx-auto items-center flex justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white">
           Get your virtual crypto debit card
         </button>

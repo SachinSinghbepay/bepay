@@ -142,7 +142,7 @@ const ScrollTextAnimation = () => {
       ([entry]) => {
         if (entry.isIntersecting && !hasTrackedView) {
           AnalyticsService.sendEvent(
-            "UPI scroll-text-animation-section viewed"
+            "UPI - Super App and Scroll Animation section viewed"
           );
           setHasTrackedView(true);
           observer.unobserve(entry.target);
@@ -383,7 +383,7 @@ const ScrollTextAnimation = () => {
               className="font-[600] tracking-[0%]"
               style={{
                 fontFamily:
-                  "'Open Sans', sans-serif', fontWeight: 600, lineHeight: '30px'",
+                  "'Open Sans', sans-Vsans-serif', fontWeight: 600, lineHeight: '30px'",
               }}
             >
               earn you up to ₹3,500 back
@@ -410,7 +410,7 @@ const ScrollTextAnimation = () => {
                   {/* Left Card - Text Content */}
                   <div
                     ref={index === 7 ? lastCardLeftRef : null}
-                    className="relative h-full max-w-[600px] w-full min-h-[350px] sm:min-h-[400px] lg:min-h-[450px] p-6 sm:p-8 lg:p-12 rounded-2xl lg:rounded-3xl bg-white mx-auto"
+                    className="relative h-full max-w-[600px] w-full min-h-[350px] sm:min-h-[400px] lg:min-h-[450px] p-6 sm:p-8 lg:p-12 rounded-2xl lg:rounded-3xl bg-white shadow-[140px_140px_140px_0px_rgba(0,0,0,0.05)] mx-auto" // Updated shadow here
                     style={{ zIndex: index === 7 ? 10 : "auto" }}
                   >
                     <div

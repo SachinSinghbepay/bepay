@@ -20,7 +20,7 @@ export default function CreditCardSection() {
   const [isMobile, setIsMobile] = useState(false);
 
   const handleStartClick = () => {
-    console.log("CTA button clicked!");
+     AnalyticsService.sendEvent("get_your_bepay_card_button_clicked");
   };
 
   useEffect(() => {
@@ -274,7 +274,7 @@ export default function CreditCardSection() {
                   style={{ opacity: ctaOpacity, scale: ctaScale }}
                   className="mt-8"
                 >
-                  <WaitlistTriggerButton triggerSource="UPI Saving section button">
+                  <WaitlistTriggerButton triggerSource="'Get Your BePay Card' button" buttonLocation="UPI_credit_card_section">
                     <Button
                       className="bg-black cursor-pointer text-white rounded-full px-5 py-8 text-base font-medium flex items-center gap-2 hover:bg-black/90 transition-colors"
                       onClick={handleStartClick}

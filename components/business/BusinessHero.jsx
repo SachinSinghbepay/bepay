@@ -320,6 +320,8 @@ const BusinessHero = () => {
                         </div>
                         <WaitlistTriggerButton
                           onClick={handleEmailButtonSubmit}
+                          triggerSource="business_hero"
+                          buttonLocation="business_hero_waitlist_button"
                           type="submit"
                           disabled={isSubmitting}
                           whileHover={{ scale: 1.02 }}

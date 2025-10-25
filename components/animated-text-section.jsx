@@ -37,19 +37,19 @@ export default function StickyHeroSection() {
 
   // --- Stage 1 ---
   const stage1_Opacity = useTransform(scrollYProgress, [0, 0.05, 0.26, 0.30], [0, 1, 1, 0]);
-  const card1Y = useTransform(scrollYProgress, [0, 0.12, 0.30], [800, 0, -800], { ease: easeOut });
-  const card2Y = useTransform(scrollYProgress, [0, 0.12, 0.30], [800, 0, -800], { ease: easeOut });
+  const card1Y = useTransform(scrollYProgress, [0, 0.12, 0.30], [500, 0, -500], { ease: easeOut });
+  const card2Y = useTransform(scrollYProgress, [0, 0.12, 0.30], [500, 0, -500], { ease: easeOut });
   const stage1_X = useTransform(scrollYProgress, [0, 0.30], [-150, 150], { ease: easeOut });
 
   // --- Stage 2 ---
   const stage2_Opacity = useTransform(scrollYProgress, [0.26, 0.30, 0.56, 0.60], [0, 1, 1, 0]);
-  const card3Y = useTransform(scrollYProgress, [0.30, 0.42, 0.60], [800, 0, -800], { ease: easeOut });
-  const card4Y = useTransform(scrollYProgress, [0.30, 0.42, 0.60], [800, 0, -800], { ease: easeOut });
+  const card3Y = useTransform(scrollYProgress, [0.30, 0.42, 0.60], [500, 0, -500], { ease: easeOut });
+  const card4Y = useTransform(scrollYProgress, [0.30, 0.42, 0.60], [500, 0, -500], { ease: easeOut });
   const stage2_X = useTransform(scrollYProgress, [0.30, 0.60], [-150, 150], { ease: easeOut });
 
   // --- Stage 3 (Smoothed) ---
   const stage3_Opacity = useTransform(scrollYProgress, [0.56, 0.60], [0, 1]);
-  const card5Y = useTransform(scrollYProgress, [0.60, 0.75, 0.80], [800, 0, 0], { ease: easeOut });
+  const card5Y = useTransform(scrollYProgress, [0.60, 0.75, 0.80], [500, 0, 0], { ease: easeOut });
   const stage3_X = useTransform(scrollYProgress, [0.60, 0.80], [-150, 0], { ease: easeOut });
 
   const lightGray = "text-[#C0C0C0]";
@@ -59,7 +59,7 @@ export default function StickyHeroSection() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasTrackedView) {
-          // AnalyticsService.sendEvent("UPI Trusted-tested-real-section viewed");
+          AnalyticsService.sendEvent("UPI - Trusted-Tested-Real section viewed");
           // NOTE: I've commented this out just in case it was the source 
           // of the original 'a is not defined' error. You can uncomment it.
           setHasTrackedView(true);

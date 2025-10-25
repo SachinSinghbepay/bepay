@@ -13,6 +13,7 @@ export default function WaitlistPopup({
   isOpen: externalIsOpen,
   onClose: externalOnClose,
   onSubmit: externalOnSubmit,
+  buttonLocation = "auto_waitlist_popup",
   triggerSource = "auto_waitlist_popup",
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,10 +58,11 @@ export default function WaitlistPopup({
       AnalyticsService.sendEvent(popupType, {
         screen_name: "waitlist_popup",
         triggerSource,
+        buttonLocation,
         pathname,
       });
     }
-  }, [finalIsOpen, triggerSource, pathname]);
+  }, [finalIsOpen, triggerSource, buttonLocation,pathname]);
 
   const handleOverlayClose = () => {
     AnalyticsService.sendEvent("user_clicked_on_screen_to_close_popup");
@@ -74,6 +76,7 @@ export default function WaitlistPopup({
   const handleCloseButtonClick = () => {
     AnalyticsService.sendEvent("on_waitlist_close_button_clicked", {
       triggerSource,
+      buttonLocation,
     });
     if (externalOnClose) {
       externalOnClose();
@@ -116,11 +119,12 @@ export default function WaitlistPopup({
     if (finalIsOpen && isSuccess && !hasViewedSuccessPopup) {
       AnalyticsService.sendEvent("joined_waitlist_popup_viewed", {
         triggerSource,
+        buttonLocation,
         email,
       });
       setHasViewedSuccessPopup(true);
     }
-  }, [finalIsOpen, isSuccess, hasViewedSuccessPopup, triggerSource, email]);
+  }, [finalIsOpen, isSuccess, hasViewedSuccessPopup, triggerSource, buttonLocation, email]);
 
   useEffect(() => {
     if (finalIsOpen) {
@@ -157,6 +161,7 @@ export default function WaitlistPopup({
 
     AnalyticsService.sendEvent("on_join_the_waitlist_button_clicked", {
       triggerSource,
+      buttonLocation,
     });
 
     setIsSubmitting(true);
@@ -171,12 +176,14 @@ export default function WaitlistPopup({
       localStorage.setItem("waitlist_submitted_email" + pathname, email);
       AnalyticsService.createWaitlistUser(email, {
         triggerSource,
+        buttonLocation,
         joined_via: "waitlist_form",
       });
       setIsSuccess(true);
       AnalyticsService.sendEvent("pop-up_waitlist_submission_successful", {
         status: "success",
         triggerSource,
+        buttonLocation,
         email,
       });
     } catch (error) {
@@ -185,6 +192,7 @@ export default function WaitlistPopup({
         status: "failure",
         error_reason: error.message || "Unknown error",
         triggerSource,
+        buttonLocation,
       });
     } finally {
       setIsSubmitting(false);
