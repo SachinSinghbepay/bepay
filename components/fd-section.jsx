@@ -66,7 +66,7 @@ export default function FdSection() {
 
   // ANALYTICS: Handler for the CTA button click
   const handleCTAClick = () => {
-    AnalyticsService.sendEvent("UPI FD-section CTA clicked");
+    AnalyticsService.sendEvent("start_earining_button_clicked");
   };
 
   return (
@@ -126,7 +126,7 @@ export default function FdSection() {
             <Image
               src="/fdimg.png"
               fill
-              priority
+              loading="lazy"
               alt="Woman looking at phone with excitement"
               className="object-cover object-center rounded-[50px]"
             />
@@ -177,7 +177,7 @@ export default function FdSection() {
               >
                 Just for <span className="font-bold text-[#333333]">parking your money</span>
               </motion.p>
-              <WaitlistTriggerButton triggerSource="UPI FD section">
+              <WaitlistTriggerButton triggerSource=" “Start Earning” button clicked" buttonLocation="fd_section">
                 <motion.button
                   onClick={handleCTAClick}
                   whileHover={{ scale: 1.05 }}

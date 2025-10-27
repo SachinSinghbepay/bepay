@@ -19,7 +19,7 @@ export default function Hero() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasTrackedView) {
-          AnalyticsService.sendEvent("UPI Hero-section viewed");
+          AnalyticsService.sendEvent("UPI - Hero section viewed");
           setHasTrackedView(true);
           observer.unobserve(entry.target); // Stop observing after first view
         }

@@ -67,7 +67,7 @@ export default function AnimatedTextScroll() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasTrackedView) {
-          AnalyticsService.sendEvent("UPI animated-text-scroll-section viewed");
+          AnalyticsService.sendEvent("UPI - Maximize your earning (BePay) section viewed");
           setHasTrackedView(true);
           observer.unobserve(entry.target);
         }
@@ -80,10 +80,6 @@ export default function AnimatedTextScroll() {
       if (currentRef) observer.unobserve(currentRef);
     };
   }, [hasTrackedView]);
-
-  const handleCTAClick = () => {
-    AnalyticsService.sendEvent("UPI Invite now button clicked");
-  };
 
   return (
     <div ref={containerRef} className="relative h-screen bg-gray-50 flex items-center justify-center">
@@ -126,7 +122,7 @@ export default function AnimatedTextScroll() {
                 alt="Phone Mockup"
                 fill={true}
                 className="object-contain"
-                priority
+                loading="lazy"
               />
 
               {/* CTA positioned absolutely on top of the image */}

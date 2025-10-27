@@ -371,7 +371,7 @@ export const FinancialServicesSection = () => {
                 <span className="block">all in one comprehensive platform</span>
               </motion.p>
 
-              <WaitlistTriggerButton triggerSource="'financial service section' button">
+              <WaitlistTriggerButton triggerSource="'financial service section' button clicked" buttonLocation="Crypto Financial Services Section">
                 <motion.button
                   onClick={handleExploreFeaturesClick} // ANALYTICS: Added onClick handler
                   whileHover={{ scale: 1.05 }}

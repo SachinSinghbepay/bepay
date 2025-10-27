@@ -175,7 +175,7 @@ const MobileView = () => {
           </div>
 
           <div className="flex items-center justify-center mt-6 px-4">
-            <WaitlistTriggerButton triggerSource="'Ready-to-start section' button">
+            <WaitlistTriggerButton triggerSource="become a merchant on bepay button" buttonLocation="ready_to_start_business_section">
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -468,7 +468,7 @@ export default function AnimatedCardsSection() {
                           global customers, boost your revenue, and manage your
                           store — all in one powerful dashboard.
                         </p>
-                        <WaitlistTriggerButton triggerSource="'Ready-to-start section' button">
+                        <WaitlistTriggerButton triggerSource="become a merchant on bepay button" buttonLocation="ready_to_start_business_section">
   <button
     onClick={handleStartEarningClick}
     className="bg-black w-[285px] h-[56px] text-white text-[14px] font-medium rounded-full flex items-center justify-center gap-2 py-4 px-6 cursor-pointer whitespace-nowrap hover:bg-gray-800 transition-colors"

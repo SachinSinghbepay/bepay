@@ -273,7 +273,7 @@ export default function InvestmentSuite() {
                 and traditional investments
               </p>
             </div>
-            <WaitlistTriggerButton triggerSource="'Investment suite section' button">
+            <WaitlistTriggerButton triggerSource="'start investing' button clicked" buttonLocation="Crypto Investment Suite Section">
               <motion.button
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={
