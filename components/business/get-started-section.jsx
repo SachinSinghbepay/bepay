@@ -31,7 +31,7 @@ const steps = [
     rightTitle: "Go Live",
     rightSubtitle: "Accept your first crypto payment in minutes",
     rightButtons: (
-      <WaitlistTriggerButton triggerSource="'get started business section' button" buttonLocation="get_started_business_section">
+      <WaitlistTriggerButton triggerSource="become a merchant on bepay button" buttonLocation="get_started_business_section">
         <motion.button
           onClick={handleStartEarningClick}
           className="flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 hover:bg-gray-800 transition-colors text-xs font-medium md:w-[300px] md:text-[14px]"

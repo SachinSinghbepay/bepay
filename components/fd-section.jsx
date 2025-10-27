@@ -177,7 +177,7 @@ export default function FdSection() {
               >
                 Just for <span className="font-bold text-[#333333]">parking your money</span>
               </motion.p>
-              <WaitlistTriggerButton triggerSource=" “Start Earning” button" buttonLocation="fd_section">
+              <WaitlistTriggerButton triggerSource=" “Start Earning” button clicked" buttonLocation="fd_section">
                 <motion.button
                   onClick={handleCTAClick}
                   whileHover={{ scale: 1.05 }}

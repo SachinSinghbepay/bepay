@@ -96,6 +96,9 @@ export default function Header() {
                 "/business",
                 "text-sm lg:text-[14px] tracking-wide uppercase"
               )}
+               onClick={() => {
+                AnalyticsService.sendEvent("business_nav_clicked");
+              }}
             >
               BUSINESS
             </Link>
@@ -105,13 +108,16 @@ export default function Header() {
                 "/upi",
                 "text-sm lg:text-[14px] tracking-wide uppercase"
               )}
+               onClick={() => {
+                AnalyticsService.sendEvent("upi_nav_clicked");
+              }}
             >
               CRYPTO CARD
             </Link>
           </nav>
 
           {/* Download Button - Hidden on small screens */}
-          <WaitlistTriggerButton triggerSource="'Download bepay app' button">
+          <WaitlistTriggerButton triggerSource="'Download bepay app' button" buttonLocation="header_download_bepay_app">
             <Button
               onClick={() => handleDownloadAppClick(pathname)}
               variant="outline"

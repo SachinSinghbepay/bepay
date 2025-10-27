@@ -498,7 +498,7 @@ const DefiYieldSection = () => {
                       Monetize your hardware resources{" "}
                     </p>
                     <div className="flex items-center justify-center mt-6">
-                      <WaitlistTriggerButton triggerSource="' Defi Yield Start earning' button clicked" buttonLocation="Crypto Defi Yield Section">
+                      <WaitlistTriggerButton triggerSource="'Start earning' button clicked" buttonLocation="Crypto Defi Yield Section">
                         <motion.button
                           onClick={handleStartEarningClick}
                           whileHover={{ scale: 1.05 }}

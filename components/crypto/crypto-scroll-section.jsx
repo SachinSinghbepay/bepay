@@ -257,7 +257,7 @@ export default function CryptoScrollSection() {
                 }}
               >
                 <WaitlistTriggerButton
-                  triggerSource="'Crypto scroll section' button clicked"
+                  triggerSource="'get started' button clicked"
                   buttonLocation="Crypto Get Started Section Mobile"
                 >
                   <button
@@ -649,7 +649,7 @@ export default function CryptoScrollSection() {
 
                           {step.hasCTA && (
                             <WaitlistTriggerButton
-                              triggerSource="'Crypto scroll section' button"
+                              triggerSource="'get started' button clicked"
                               buttonLocation="Crypto Get Started Section Mobile"
                             >
                               <motion.div

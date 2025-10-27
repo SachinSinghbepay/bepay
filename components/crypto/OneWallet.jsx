@@ -463,7 +463,7 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton triggerSource="'virtual crypto debit card' button clicked" buttonLocation="Crypto One Wallet Section">
+              <WaitlistTriggerButton triggerSource="Get your crypto debit card now button clicked" buttonLocation="Crypto One Wallet Section">
                 <button
                   onClick={handleGetDebitCardClick}
                   className="flex items-center justify-center cursor-pointer bg-black text-white w-full max-w-[308px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0 mt-2"
@@ -571,7 +571,7 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton triggerSource="'Swiss IBAN account' button clicked" buttonLocation="Crypto One Wallet Section">
+              <WaitlistTriggerButton triggerSource="Get a Swiss bank account button clicked" buttonLocation="Crypto One Wallet Section">
                 <button
                   onClick={handleGetSwissAccountClick}
                   className="flex items-center justify-center cursor-pointer bg-black text-white w-[268px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
@@ -660,7 +660,7 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton triggerSource="'P2P transaction' button clicked" buttonLocation="Crypto One Wallet Section">
+              <WaitlistTriggerButton triggerSource="Start paying with crypto button clicked" buttonLocation="Crypto One Wallet Section">
                 <button
                   onClick={handleStartPayingClick}
                   className="flex items-center justify-center cursor-pointer bg-black text-white w-[260px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
@@ -748,7 +748,7 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton triggerSource="'QR code payments' button clicked" buttonLocation="Crypto One Wallet Section">
+              <WaitlistTriggerButton triggerSource="Start spending your crypto button clicked" buttonLocation="Crypto One Wallet Section">
                 <button
                   onClick={handleStartSpendingClick}
                   className="flex items-center justify-center cursor-pointer bg-black text-white w-[278px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
@@ -857,7 +857,7 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton triggerSource="'AI personalization' button clicked " buttonLocation="Crypto One Wallet Section">
+              <WaitlistTriggerButton triggerSource="Download app and get started button clicked " buttonLocation="Crypto One Wallet Section">
                 <button
                   onClick={handleDownloadAndStartClick}
                   className="flex items-center justify-center cursor-pointer bg-black text-white w-[310px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
@@ -1695,7 +1695,7 @@ const MobileView = () => {
                   </div>
                 </div>
                 <div className="mt-8">
-                  <WaitlistTriggerButton triggerSource="'swiss IBAN account' button clicked" buttonLocation="Crypto One Wallet Section">
+                  <WaitlistTriggerButton triggerSource="Get a Swiss bank account button clicked" buttonLocation="Crypto One Wallet Section">
                     <button
                       onClick={handleGetSwissAccountClick}
                       className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
@@ -1803,7 +1803,7 @@ const MobileView = () => {
                   </div>
                 </div>
                 <div className="mt-8">
-                  <WaitlistTriggerButton triggerSource="'P2P transactions' button clicked" buttonLocation="Crypto One Wallet Section">
+                  <WaitlistTriggerButton triggerSource="Start paying with crypto button clicked" buttonLocation="Crypto One Wallet Section">
                     <button
                       onClick={handleStartPayingClick}
                       className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
@@ -1911,7 +1911,7 @@ const MobileView = () => {
                   </div>
                 </div>
                 <div className="mt-8">
-                  <WaitlistTriggerButton triggerSource="'QR code payments' button clicked" buttonLocation="Crypto One Wallet Section">
+                  <WaitlistTriggerButton triggerSource="Start spending your crypto button clicked" buttonLocation="Crypto One Wallet Section">
                     <button
                       onClick={handleStartSpendingClick}
                       className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
@@ -2034,7 +2034,7 @@ const MobileView = () => {
                   </div>
                 </div>
                 <div className="mt-8">
-                  <WaitlistTriggerButton triggerSource="'AI personalization' button clicked" buttonLocation="Crypto One Wallet Section">
+                  <WaitlistTriggerButton triggerSource="Download app and get started button clicked" buttonLocation="Crypto One Wallet Section">
                     <button
                       onClick={handleDownloadAndStartClick}
                       className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"

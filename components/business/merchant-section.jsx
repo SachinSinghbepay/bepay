@@ -116,7 +116,7 @@ export default function MerchantSection() {
             </p>
           </motion.div>
 
-          <WaitlistTriggerButton triggerSource="'Merchant section' button" buttonLocation="merchant_section_business">
+          <WaitlistTriggerButton triggerSource="become a merchant on bepay button" buttonLocation="merchant_section_business">
             <motion.button
               variants={itemVariants}
               onClick={handleButtonClick}
@@ -194,7 +194,7 @@ export default function MerchantSection() {
                 </span>{" "}
               </p>
             </motion.div>
-            <WaitlistTriggerButton triggerSource="'Merchant section' button" buttonLocation="merchant_section_business">
+            <WaitlistTriggerButton triggerSource="become a merchant on bepay button" buttonLocation="merchant_section_business">
   <motion.div
     variants={itemVariants}
     className="flex flex-col sm:flex-row lg:flex-col max-w-[300px] sm:max-w-none lg:max-w-[300px] gap-4"
