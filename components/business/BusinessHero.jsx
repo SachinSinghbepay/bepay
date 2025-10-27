@@ -66,8 +66,12 @@ const BusinessHero = () => {
     }
   };
 
+  // ✅ MODIFIED: Added properties to the analytics event
   const handleEmailButtonSubmit = () => {
-    AnalyticsService.sendEvent("on_join_waitlist_clicked");
+    AnalyticsService.sendEvent("on_join_waitlist_clicked", {
+      trigger_source: "business_hero",
+      button_location: "business_hero",
+    });
   };
 
   // Using a more robust email handler from previous versions
@@ -101,9 +105,12 @@ const BusinessHero = () => {
       setSubmitMessage(
         "You're now on our exclusive waitlist. We'll notify you when we're ready!"
       );
+      // ✅ MODIFIED: Added properties to the success event
       AnalyticsService.sendEvent("waitlist_submission_successful", {
         status: "success",
         email,
+        trigger_source: "business_hero",
+        button_location: "business_hero",
       });
     } catch (error) {
       const errorMessage =
@@ -111,9 +118,12 @@ const BusinessHero = () => {
       setError(errorMessage);
       setSubmitMessage(errorMessage);
       setTimeout(() => setSubmitMessage(""), 3000);
+      // ✅ MODIFIED: Added properties to the failure event
       AnalyticsService.sendEvent("waitlist_submission_failed", {
         status: "failure",
         error_reason: errorMessage || "Unknown error",
+        trigger_source: "business_hero",
+        button_location: "business_hero_waitlist_button",
       });
     } finally {
       setIsSubmitting(false);
@@ -143,9 +153,7 @@ const BusinessHero = () => {
   const imageX = useTransform(scrollYProgress, [0.5, 1], [0, -200]);
   const imageOpacity = useTransform(scrollYProgress, [0.5, 1], [1, 0]);
   const leftCardScale = useTransform(scrollYProgress, [0, 1], [1, 1]);
-
-  // ✅ MODIFICATION: Add a new transform for scaling the image
-  const imageScale = useTransform(scrollYProgress, [0, 1], [0.9, 0.8]); // Start at 100% size, end at 80% size. Adjust 0.8 as needed.
+  const imageScale = useTransform(scrollYProgress, [0, 1], [0.9, 0.8]);
 
   // --- MOBILE ANIMATION VALUES ---
   const mobileMockupY = useTransform(scrollYProgress, [0, 0.5], [0, -1200]);
@@ -206,7 +214,7 @@ const BusinessHero = () => {
         <section className="bg-[#F9F9F9] h-full flex flex-col justify-start pt-6 md:pt-0">
           {isMobile ? (
             // ===================================
-            // MOBILE VIEW (Unaffected)
+            // MOBILE VIEW
             // ===================================
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col relative">
               <div className="text-center mb-4 max-w-[95%] mx-auto">
@@ -353,7 +361,7 @@ const BusinessHero = () => {
             </div>
           ) : (
             // ===================================
-            // DESKTOP VIEW (MODIFIED)
+            // DESKTOP VIEW
             // ===================================
             <div className="h-full">
               <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
@@ -469,9 +477,12 @@ const BusinessHero = () => {
                           />
                         </div>
 
-                        {/* ✅ MODIFICATION: Added imageScale to the style prop */}
                         <motion.div
-                          style={{ x: imageX, opacity: imageOpacity, scale: imageScale }}
+                          style={{
+                            x: imageX,
+                            opacity: imageOpacity,
+                            scale: imageScale,
+                          }}
                           className="absolute inset-0 -top-30"
                         >
                           <Image
@@ -522,8 +533,11 @@ const BusinessHero = () => {
                                     className="w-full h-[48px] px-5 placeholder:text-sm text-black rounded-full border border-gray-300 text-base focus:outline-none focus:border-gray-500"
                                     required
                                   />
-                                  <motion.button
+                                  {/* ✅ MODIFIED: Replaced <motion.button> with <WaitlistTriggerButton> */}
+                                  <WaitlistTriggerButton
                                     onClick={handleEmailButtonSubmit}
+                                    triggerSource="business_hero"
+                                    buttonLocation="business_hero_waitlist_button"
                                     type="submit"
                                     disabled={isSubmitting}
                                     whileHover={{ scale: 1.02 }}
@@ -550,7 +564,7 @@ const BusinessHero = () => {
                                         </svg>
                                       </>
                                     )}
-                                  </motion.button>
+                                  </WaitlistTriggerButton>
                                   {submitMessage && !isSuccess && (
                                     <div className="text-red-500 text-xs text-center mt-1">
                                       {submitMessage}
