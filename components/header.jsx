@@ -51,7 +51,7 @@ export default function Header() {
   const handlebepaymoneylogoclicked = () => {
     AnalyticsService.sendEvent("bepaymoney logo Clicked");
   };
-  
+
   // Conditional header classes
   const headerClasses = isContactPage
     ? "w-full absolute top-0 left-0 right-0 bg-transparent z-50"
@@ -96,7 +96,7 @@ export default function Header() {
                 "/business",
                 "text-sm lg:text-[14px] tracking-wide uppercase"
               )}
-               onClick={() => {
+              onClick={() => {
                 AnalyticsService.sendEvent("business_nav_clicked");
               }}
             >
@@ -108,7 +108,7 @@ export default function Header() {
                 "/upi",
                 "text-sm lg:text-[14px] tracking-wide uppercase"
               )}
-               onClick={() => {
+              onClick={() => {
                 AnalyticsService.sendEvent("upi_nav_clicked");
               }}
             >
@@ -117,7 +117,11 @@ export default function Header() {
           </nav>
 
           {/* Download Button - Hidden on small screens */}
-          <WaitlistTriggerButton triggerSource="'Download bepay app' button" buttonLocation="header_download_bepay_app">
+          {/* UPDATED: buttonLocation is now dynamic */}
+          <WaitlistTriggerButton
+            triggerSource="'Download bepay app' button"
+            buttonLocation={pathname}
+          >
             <Button
               onClick={() => handleDownloadAppClick(pathname)}
               variant="outline"
@@ -238,7 +242,11 @@ export default function Header() {
             </Link>
 
             {/* Mobile Download Button */}
-            <WaitlistTriggerButton triggerSource="'download bepay app' button">
+            {/* UPDATED: buttonLocation is now dynamic */}
+            <WaitlistTriggerButton
+              triggerSource="'download bepay app' button"
+              buttonLocation={pathname}
+            >
               <Button
                 variant="outline"
                 className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2 border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
