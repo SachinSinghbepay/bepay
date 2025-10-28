@@ -1,0 +1,24 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "ZYY7TKPHNX.com.bepay.money",
+        "paths": [
+          "/transactions-screen/*",
+          "/explore-screen/*",
+          "/app/*",
+          "/"
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "ZYY7TKPHNX.com.bepay.money"
+    ]
+  },
+  "appclips": {
+    "apps": []
+  }
+}
