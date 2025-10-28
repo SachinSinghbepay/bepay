@@ -380,7 +380,7 @@ const ScrollTextAnimation = () => {
           >
             Your ₹50,000 monthly spend could{" "}
             <span
-              className="font-[600] tracking-[0%]"
+              className="font-[600] tracking-['0%']"
               style={{
                 fontFamily:
                   "'Open Sans', sans-Vsans-serif', fontWeight: 600, lineHeight: '30px'",
@@ -405,12 +405,12 @@ const ScrollTextAnimation = () => {
               key={cardSet.id}
               className="flex-shrink-0 w-screen h-full flex items-center justify-center"
             >
-              <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 h-full items-center">
+              <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-3">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-0 h-full items-center">
                   {/* Left Card - Text Content */}
                   <div
                     ref={index === 7 ? lastCardLeftRef : null}
-                    className="relative h-full max-w-[600px] w-full min-h-[350px] sm:min-h-[400px] lg:min-h-[450px] p-6 sm:p-8 lg:p-12 rounded-2xl lg:rounded-3xl bg-white shadow-[140px_140px_140px_0px_rgba(0,0,0,0.05)] mx-auto" // Updated shadow here
+                    className="relative h-full max-w-[600px] w-full min-h-[350px] sm:min-h-[400px] lg:min-h-[450px] p-6 sm:p-8 lg:p-12 rounded-2xl lg:rounded-3xl bg-white shadow-[140px_140px_140px_0px_rgba(0,0,0,0.05)] mx-auto"
                     style={{ zIndex: index === 7 ? 10 : "auto" }}
                   >
                     <div
@@ -520,15 +520,17 @@ const ScrollTextAnimation = () => {
                         className="absolute inset-0 w-full h-full object-cover rounded-2xl lg:rounded-3xl"
                       />
                     ) : (
-                      <Image
-                        src={cardSet.rightCard.image || "/placeholder.svg"}
-                        alt={cardSet.rightCard.alt}
-                        fill
-                        className={`${
-                          index === 0 ? "object-contain" : "object-cover"
-                        } w-full h-full rounded-2xl lg:rounded-3xl`}
-                        priority={index === 0}
-                      />
+                      <div className={`${index === 0 ? "w-[90%] h-[90%] mb-0" : "w-full h-full"} relative`}>
+                        <Image
+                          src={cardSet.rightCard.image || "/placeholder.svg"}
+                          alt={cardSet.rightCard.alt}
+                          fill
+                          className={`${
+                            index === 0 ? "object-contain" : "object-cover"
+                          } w-full h-full rounded-2xl lg:rounded-3xl`}
+                          priority={index === 0}
+                        />
+                      </div>
                     )}
                   </div>
                 </div>

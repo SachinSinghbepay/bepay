@@ -246,7 +246,10 @@ export default function Hero() {
                   width={450}
                   height={350}
                   alt="Floating UI element 1"
-                  className="absolute z-2 top-1/2 scale-[0.5] sm:scale-[1] right-[65%] -mt-59 "
+                  style={{
+                    filter: 'drop-shadow(60px 60px 70px rgba(0, 0, 0, 0.1))'
+                  }}
+                  className="absolute z-2 top-1/2 scale-[0.5] sm:scale-[1] right-[90%] -mt-59"
                 />
                 {/* EDITED: Changed vw to % for consistent positioning */}
                 <Image
@@ -254,7 +257,10 @@ export default function Hero() {
                   width={450}
                   height={350}
                   alt="Floating UI element 2"
-                  className="absolute z-2 top-[22vh] left-[85%] scale-[0.5] sm:scale-[1] "
+                  style={{
+                    filter: 'drop-shadow(60px 60px 70px rgba(0, 0, 0, 0.1))'
+                  }}
+                  className="absolute z-2 top-[22vh] left-[85%] scale-[0.5] sm:scale-[1]"
                 />
                 <div className="download absolute top-[38vh] left-[36vw] scale-[0.8] sm:scale-[1] transform -translate-x-1/2 z-2 flex flex-col sm:flex-row gap-3 text-left text-[0.4rem] sm:text-[0.6rem] items-center">
                   <button className="bg-black w-[42vw] sm:w-[40vw] md:w-[40vw] lg:w-[13vw] text-white px-5 py-4 sm:px-7 sm:py-5 rounded-full flex items-center gap-2 justify-center">
