@@ -20,7 +20,7 @@ export default function CreditCardSection() {
   const [isMobile, setIsMobile] = useState(false);
 
   const handleStartClick = () => {
-     AnalyticsService.sendEvent("get_your_bepay_card_button_clicked");
+    AnalyticsService.sendEvent("get_your_bepay_card_button_clicked");
   };
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function CreditCardSection() {
     [0.1, 0.5],
     [isMobile ? "-100%" : "0%", "41%"]
   );
-  const cardY = useTransform(scrollYProgress, [0.1, 0.5], ["0%", "-45%"]);
+  const cardY = useTransform(scrollYProgress, [0.1, 0.5], ["0%", "-35%"]);
   const mockupOpacity = useTransform(scrollYProgress, [0.2, 0.6], [0, 1]);
   const mockupY = useTransform(scrollYProgress, [0.2, 0.6], ["-100%", "0%"]);
   const mockupX = useTransform(
@@ -163,9 +163,10 @@ export default function CreditCardSection() {
               </motion.p>
 
               {/* Container for both Cards and CTA */}
+              {/* 👇 UPDATED: Changed md:-mt-24 to md:-mt-32 to move the stack up */}
               <motion.div
                 style={{ opacity: stackOpacity }}
-                className="absolute inset-0 flex flex-col items-center justify-center md:-mt-24"
+                className="absolute inset-0 flex flex-col items-center justify-center md:-mt-32"
               >
                 {/* Card Stack */}
                 <div className="relative w-full max-w-[400px] aspect-square">
@@ -298,8 +299,7 @@ export default function CreditCardSection() {
                 style={{ opacity: mockupOpacity, y: mockupY, x: mockupX }}
                 className="max-w-[360px] w-full h-[660px] border-[7px] border-gray-200 rounded-[40px] bg-white shadow-xl flex flex-col items-center p-4 overflow-hidden"
               >
-                {/* UPDATED: Styled to match the image with border and equal width */}
-                <div className="flex max-w-[250px] w-full border-2 border-gray-200 rounded-full p-1 mb-4 items-center bg-white">
+                <div className="flex max-w-[250px] w-full border-2 border-gray-200 rounded-full p-0.5 mb-6 items-center bg-white mt-12">
                   <div className="w-1/2 bg-black text-white rounded-full text-center py-3  text-[12px] font-medium cursor-pointer">
                     Card
                   </div>
@@ -308,10 +308,9 @@ export default function CreditCardSection() {
                   </div>
                 </div>
 
-                <div className="relative w-full h-[180px] bg-white rounded-xl"></div>
+                <div className="relative w-full h-[180px] bg-white rounded-xl mt-4"></div>
 
-                {/* Action buttons */}
-                <div className="flex items-start justify-between w-full mt-6 px-2">
+                <div className="flex items-start justify-between w-full mt-4 px-2">
                   {/* Item 1: View */}
                   <div className="flex flex-col items-center text-gray-500 text-xs space-y-1">
                     <div className="p-3 rounded-xl bg-gray-100">
@@ -349,7 +348,7 @@ export default function CreditCardSection() {
                   <button className="w-full py-3 bg-gray-100 rounded-full text-gray-800 font-medium">
                     Apply virtual card
                   </button>
-                  <button className="w-full py-3 bg-gray-100 rounded-full text-gray-800 font-medium">
+                  <button className="w-full py-3 bg-white rounded-full border-2 border-gray-200 text-gray-800 font-medium">
                     Apply physical card
                   </button>
                 </div>

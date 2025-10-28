@@ -1,40 +1,42 @@
 "use client"
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Smartphone, ScanLine, Bitcoin, MessageSquare, ShoppingBag, Smile, Users } from "lucide-react"
+// CHANGED: Removed unused icons and imported Image
+import { Smartphone, Bitcoin, Users } from "lucide-react"
+import Image from "next/image"
 import WaitlistTriggerButton from "./waitlist-trigger-button";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
-// Define the steps data
+// CHANGED: Updated the steps data structure
 const steps = [
   {
     number: 1,
-    icon: Smartphone,
+    icon: Smartphone, // Kept as icon
     text: "Download bepay App",
   },
   {
     number: 2,
-    icon: ScanLine,
+    imageSrc: "/icons/solar.png", // CHANGED: Replaced icon with imageSrc
     text: "Quick KYC, instant approval",
   },
   {
     number: 3,
-    icon: Bitcoin,
+    icon: Bitcoin, // Kept as icon
     text: "Receive Bitcoin",
   },
   {
     number: 4,
-    icon: MessageSquare,
+    imageSrc: "/icons/card.png", // CHANGED: Replaced icon with imageSrc
     text: "Make your first payment — rent, groceries, anything",
   },
   {
     number: 5,
-    icon: ShoppingBag,
+    imageSrc: "/icons/shopping.png", // CHANGED: Replaced icon with imageSrc
     text: "Earn up to 7% instant cashback & rewards",
   },
   {
     number: 6,
-    icon: Smile,
+    imageSrc: "/icons/face.png", // CHANGED: Replaced icon with imageSrc
     text: "Unlock financial freedom while you live your life",
   },
 ]
@@ -103,7 +105,10 @@ export default function HowItWorksSection() {
   }, [currentStep])
 
   const activeStepContent = steps.find((step) => step.number === currentStep) || steps[0]
+  
+  // CHANGED: Get both icon and imageSrc from the active step
   const IconComponent = activeStepContent.icon
+  const imageSrc = activeStepContent.imageSrc
 
   const contentBoxStyle = {
     border: "1px #ffffff transparent",
@@ -123,8 +128,8 @@ export default function HowItWorksSection() {
           {/* === FIX APPLIED HERE: Removed 'leading-tight' class === */}
             <h1 className="text-5xl md:text-[140px] font-[400] tracking-[-0.08em] mb-10 leading-[1.2]">
             <span style={{ color: "#C0C0C0" }}>How </span>
-            <span >bepay</span>
-            <span > works</span>
+            <span className="text-[#6A6A6A]">bepay</span>
+            <span className="text-[#6A6A6A]"> works</span>
           </h1>
           <p className="text-[20px] tracking-[0.01%] font-medium" style={{ color: "#6A6A6A" }}>
             Start in 30 Seconds. Earn Forever.
@@ -153,7 +158,8 @@ export default function HowItWorksSection() {
           <AnimatePresence mode="wait">
             <div
               key={currentStep + "-content-box"}
-              className="relative flex items-center justify-center p-6 md:p-10 rounded-full w-full max-w-7xl mx-auto"
+             // AFTER:
+className="relative flex items-center justify-center px-6 md:px-10 py-4 md:py-6 rounded-full w-full max-w-7xl mx-auto text-center"
               style={contentBoxStyle}
             >
               <AnimatePresence mode="wait">
@@ -165,11 +171,25 @@ export default function HowItWorksSection() {
                   transition={{ duration: 0.3, delay: 0.1 }}
                   className="flex items-center justify-center"
                 >
-                  <IconComponent
-                    className="w-8 h-8 md:w-10 md:h-10 mr-4"
-                    style={{ color: "#333333" }}
-                    aria-hidden="true"
-                  />
+                  {/* CHANGED: Conditionally render Icon or Image */}
+                  {IconComponent ? (
+                    <IconComponent
+                      className="w-8 h-8 md:w-10 md:h-10 mr-4"
+                      style={{ color: "#333333" }}
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    imageSrc && (
+                      <Image
+                        src={imageSrc}
+                        alt={activeStepContent.text} // Use text for alt
+                        width={40} // Corresponds to md:w-10 (10 * 4 = 40px)
+                        height={40} // Corresponds to md:h-10
+                        className="w-8 h-8 md:w-10 md:h-10 mr-4" // Keep classes for sizing
+                        aria-hidden="true"
+                      />
+                    )
+                  )}
                   <span
                     style={{
                       fontFamily: "Montserrat, sans-serif",

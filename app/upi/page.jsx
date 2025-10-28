@@ -23,6 +23,7 @@ const page = () => {
       <FdSection/>
       <HowItWorksSection/>
       <StickyHeroSection/>
+      
       {/* <Footer /> */}
     </>
   );
