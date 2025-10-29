@@ -21,11 +21,30 @@ const STEPS = [
 
 const SavingSection = () => {
   const containerRef = useRef(null)
-  const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Check for mobile view
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   })
+
+  // Mobile horizontal scroll transform
+  const mobileX = useTransform(
+    scrollYProgress,
+    [0, 0.2, 0.4, 0.6, 0.8, 1],
+    ["0%", "-100%", "-200%", "-300%", "-400%", "-400%"]
+  )
 
   // --- Main Content Steps Logic ---
   const inputRange = STEPS.map((_, i) => i / (STEPS.length - 1))
@@ -175,7 +194,35 @@ const SavingSection = () => {
 
   return (
     <div ref={containerRef} className="min-h-[900vh] relative">
-      <div className="sticky top-0 grid grid-cols-1 lg:grid-cols-5 items-center w-full h-screen">
+      {isMobile ? (
+        // Mobile View with Horizontal Scroll
+        <div className="sticky top-0 h-screen overflow-hidden">
+          <motion.div 
+            style={{ x: mobileX }}
+            className="flex h-full"
+          >
+            {STEPS.map((step, index) => (
+              <div key={index} className="flex-shrink-0 w-screen h-full flex flex-col items-center justify-center p-4">
+                <div className="text-center mb-8">
+                  <span className="text-8xl font-[400] text-gray-300">{step.number}</span>
+                </div>
+                <div className="relative w-4/5 h-auto">
+                  <Image
+                    src={step.imageSrc}
+                    alt={`Step ${step.number}`}
+                    width={400}
+                    height={600}
+                    className="w-full h-auto object-contain"
+                  />
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      ) : (
+        // Desktop View (unchanged)
+        <div className="sticky top-0 grid grid-cols-1 lg:grid-cols-5 items-center w-full h-screen">
+      )}
         {/* Left Content - Animates on scroll */}
         <motion.div
           className="bg-[#F4F4F4] flex justify-center items-center lg:col-span-3 h-full p-6 sm:p-8 md:p-12 lg:p-16 order-2 lg:order-1"
