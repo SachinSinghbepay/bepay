@@ -30,6 +30,7 @@ export function middleware(request) {
       const deepLinkUrl = `bepay://${pathname}${search}`;
       
 // Create a response that includes meta tags for app linking
+// --- FIX: Removed backslashes (\) from all template variables ${...} ---
 const html = `
   <!DOCTYPE html>
   <html lang="en">
@@ -117,15 +118,15 @@ const html = `
         <div class="spinner"></div>
         <h1>Opening BePay Money...</h1>
         <p>If the app doesn’t open automatically, you can download it below.</p>
-        <a href="\${isAndroid ? PLAY_STORE_URL : APP_STORE_URL}" class="store-button" id="storeLink">
-          Open \${isAndroid ? 'Play Store' : 'App Store'}
+        <a href="${isAndroid ? PLAY_STORE_URL : APP_STORE_URL}" class="store-button" id="storeLink">
+          Open ${isAndroid ? 'Play Store' : 'App Store'}
         </a>
         <footer>© 2025 BePay Money</footer>
       </div>
 
       <script>
-        const deepLink = '\${deepLinkUrl}';
-        const storeUrl = '\${isAndroid ? PLAY_STORE_URL : APP_STORE_URL}';
+        const deepLink = '${deepLinkUrl}';
+        const storeUrl = '${isAndroid ? PLAY_STORE_URL : APP_STORE_URL}';
         const startTime = Date.now();
 
         // Try to open the app
