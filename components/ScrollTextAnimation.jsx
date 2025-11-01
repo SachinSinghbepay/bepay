@@ -23,10 +23,13 @@ const ScrollTextAnimation = () => {
   const lastCardRightRef = useRef(null);
   const lastCardContentRef = useRef(null);
   const lastCardNumberRef = useRef(null);
+  const downloadButtonsContainerRef = useRef(null);
   const downloadButton1Ref = useRef(null);
   const downloadButton2Ref = useRef(null);
   const downloadButton3Ref = useRef(null);
+
   const [windowWidth, setWindowWidth] = useState(0);
+  const isMobile = windowWidth < 1024; // Check for desktop breakpoint (Tailwind 'lg')
 
   // Card data
   const cardSets = [
@@ -137,6 +140,7 @@ const ScrollTextAnimation = () => {
     },
   ];
 
+  // Analytics Tracking
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -158,6 +162,7 @@ const ScrollTextAnimation = () => {
     return () => observer.disconnect();
   }, [hasTrackedView]);
 
+  // Window Width
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -167,6 +172,7 @@ const ScrollTextAnimation = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // GSAP Animation useEffect - Desktop only
   useEffect(() => {
     const container = containerRef.current;
     const firstLine = firstLineRef.current;
@@ -180,6 +186,7 @@ const ScrollTextAnimation = () => {
     const lastCardRight = lastCardRightRef.current;
     const lastCardContent = lastCardContentRef.current;
     const lastCardNumber = lastCardNumberRef.current;
+    const downloadButtonsContainer = downloadButtonsContainerRef.current;
     const downloadButton1 = downloadButton1Ref.current;
     const downloadButton2 = downloadButton2Ref.current;
     const downloadButton3 = downloadButton3Ref.current;
@@ -197,6 +204,7 @@ const ScrollTextAnimation = () => {
       !lastCardRight ||
       !lastCardContent ||
       !lastCardNumber ||
+      !downloadButtonsContainer ||
       !downloadButton1 ||
       !downloadButton2 ||
       !downloadButton3 ||
@@ -204,342 +212,464 @@ const ScrollTextAnimation = () => {
     )
       return;
 
+    // Revert existing GSAP context before creating a new one
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    gsap.killTweensOf("*");
+
     const ctx = gsap.context(() => {
-      gsap.set(cardSection, { opacity: 0, y: 100 });
-      gsap.set([thirdLine, fourthLine, fifthLine], { opacity: 0, y: 50 });
-      gsap.set([firstLine, secondLine], { opacity: 0, y: 100 });
-      gsap.set(cardsContainer, { x: 0 });
-      gsap.set([downloadButton1, downloadButton2, downloadButton3], {
-        opacity: 0,
-        y: 30,
-      });
+      // Apply GSAP logic only for desktop view (windowWidth >= 1024)
+      if (!isMobile) {
+        // Initial GSAP setup for desktop
+        gsap.set(cardSection, { opacity: 0, y: 100 });
+        gsap.set([thirdLine, fourthLine, fifthLine], { opacity: 0, y: 50 });
+        gsap.set([firstLine, secondLine], { opacity: 0, y: 100 });
+        gsap.set(cardsContainer, { x: 0 });
+        gsap.set(downloadButtonsContainer, { opacity: 0, y: 50 });
+        gsap.set([downloadButton1, downloadButton2, downloadButton3], {
+          opacity: 0,
+          y: 30,
+        });
 
-      const mainTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: container,
-          start: "top top",
-          end: "+=1000%",
-          pin: true,
-          scrub: 1,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
+        const mainTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: container,
+            start: "top top",
+            end: "+=1200%", // Increased from 1000% to give more scroll space
+            pin: true,
+            scrub: 1,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
 
-      mainTl
-        .to([firstLine, secondLine], {
-          opacity: 1,
-          y: 0,
-          duration: 0.5,
-          stagger: 0.2,
-          ease: "power2.out",
-        })
-        .to(thirdLine, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "+=0.3")
-        .to(fourthLine, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "+=0.3")
-        .to(fifthLine, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "+=0.3")
-        .to({}, { duration: 0.8 }, "+=0.5")
-        .to(
-          [thirdLine, fourthLine, fifthLine],
-          {
-            opacity: 0,
-            y: 100,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: "power2.inOut",
-          },
-          "+=0.2"
-        )
-        .to(
-          cardSection,
-          { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-          "-=0.2"
-        )
-        .to(
-          cardsContainer,
-          {
-            x: () => -(cardSets.length - 1) * windowWidth,
-            duration: 12,
-            ease: "none",
-          },
-          "+=0.5"
-        )
-        .to({}, { duration: 1.5 }, "lastCardHold")
-        .to(
-          lastCardLeft,
-          {
-            x: () => {
-              if (windowWidth < 1024) {
-                return 0;
-              }
-              const leftRect = lastCardLeft.getBoundingClientRect();
-              const viewportCenter = window.innerWidth / 2;
-              const cardCenter = leftRect.left + leftRect.width / 2;
-              return viewportCenter - cardCenter;
+        mainTl
+          .to([firstLine, secondLine], {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.2,
+            ease: "power2.out",
+          })
+          .to(thirdLine, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "+=0.3")
+          .to(fourthLine, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "+=0.3")
+          .to(fifthLine, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "+=0.3")
+          .to({}, { duration: 0.8 }, "+=0.5")
+          .to(
+            [thirdLine, fourthLine, fifthLine],
+            {
+              opacity: 0,
+              y: 100,
+              duration: 0.6,
+              stagger: 0.1,
+              ease: "power2.inOut",
             },
-            zIndex: 10,
-            duration: 1.5,
-            ease: "power2.inOut",
-          },
-          "lastCardHold+=0.3"
-        )
-        .to(
-          lastCardRight,
-          {
-            x: () => {
-              if (windowWidth < 1024) {
-                return 0;
-              }
-              const rightRect = lastCardRight.getBoundingClientRect();
-              const viewportCenter = window.innerWidth / 2;
-              const cardCenter = rightRect.left + rightRect.width / 2;
-              return viewportCenter - cardCenter;
+            "+=0.2"
+          )
+          .to(
+            cardSection,
+            { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
+            "-=0.2"
+          )
+          .to(
+            cardsContainer,
+            {
+              x: () => -(cardSets.length - 1) * windowWidth,
+              duration: 12,
+              ease: "none",
             },
-            zIndex: 1,
-            duration: 1.5,
-            ease: "power2.inOut",
-          },
-          "lastCardHold+=0.3"
-        )
-        .to(
-          [lastCardContent, lastCardNumber],
-          { y: -100, opacity: 0, duration: 0.8, ease: "power2.inOut" },
-          "lastCardHold+=1.0"
-        )
-        .to(
-          downloadButton1,
-          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-          "lastCardHold+=1.5"
-        )
-        .to(
-          downloadButton2,
-          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-          "+=0.3"
-        )
-        .to(
-          downloadButton3,
-          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-          "+=0.3"
-        )
-        .to({}, { duration: 3 }, "+=0.5");
+            "+=0.5"
+          )
+          .to({}, { duration: 2 }, "lastCardHold") // Increased hold duration
+          .to(
+            lastCardRight,
+            {
+              x: () => {
+                if (windowWidth < 1024) {
+                  return 0;
+                }
+                return "-56%";
+              },
+              y: 0,
+              opacity: 1,
+              zIndex: 1,
+              duration: 1.5,
+              ease: "power2.inOut",
+            },
+            "lastCardHold+=0.3"
+          )
+          .to(
+            lastCardLeft,
+            {
+              x: () => {
+                if (windowWidth < 1024) {
+                  return 0;
+                }
+                return "50%";
+              },
+              y: 0,
+              zIndex: 10,
+              duration: 1.5,
+              ease: "power2.inOut",
+            },
+            "lastCardHold+=0.3"
+          )
+          .to(
+            [lastCardContent, lastCardNumber],
+            { y: -100, opacity: 0, duration: 0.8, ease: "power2.inOut" },
+            "lastCardHold+=1.0"
+          )
+          .to(
+            downloadButtonsContainer,
+            { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
+            "lastCardHold+=1.6" // Adjusted timing
+          )
+          .to(
+            downloadButton1,
+            { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+            "lastCardHold+=1.8"
+          )
+          .to(
+            downloadButton2,
+            { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+            "lastCardHold+=2.1"
+          )
+          .to(
+            downloadButton3,
+            { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+            "lastCardHold+=2.4"
+          )
+          .to({}, { duration: 3 }, "+=0.5"); // Extended final hold
+      }
     }, container);
     
     return () => ctx.revert();
-  }, [windowWidth, cardSets.length]);
+  }, [windowWidth, cardSets.length, isMobile]);
+
+  // Helper component for the download buttons
+  const DownloadButtons = ({ buttonRef, id, src, alt, text }) => {
+    return (
+      <button
+        ref={buttonRef}
+        className={`rounded-[61px] bg-[#080808] text-white flex items-center gap-[10px] ${isMobile ? "opacity-100 justify-center" : "opacity-0 justify-start"}`}
+        style={{ 
+          borderRadius: '61px',
+          width: isMobile ? '250px' : '260px',
+          height: isMobile ? '80px' : '90px',
+          paddingTop: isMobile ? '20px' : '30px',
+          paddingRight: isMobile ? '60px' : '50px',
+          paddingBottom: isMobile ? '20px' : '30px',
+          paddingLeft: isMobile ? '60px' : '40px',
+        }}
+      >
+        <span>
+          <Image
+            src={src}
+            width={20}
+            height={20}
+            className="object-cover"
+            alt={alt}
+          />
+        </span>
+        <span
+          className="font-semibold text-sm leading-5 tracking-[0.02em] text-left"
+          style={{ fontFamily: "'Open Sans', sans-serif" }}
+        >
+          {text}
+        </span>
+      </button>
+    );
+  };
 
   return (
-    <div
-      ref={containerRef}
-      className="relative bg-[#F9F9F9] z-20 w-full min-h-screen overflow-hidden"
-    >
-      {/* Text Content */}
-      <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
-        <div ref={firstLineRef} className="-mb-17">
-          <span className="text-[140px] font-[400] tracking-[-0.08em] text-[#C0C0C0]">
-            One{" "}
-          </span>
-          <span className="text-[140px] font-[400] tracking-[-0.08em] text-[#080808]">
-            SuperApp.
-          </span>
-        </div>
-        <div ref={secondLineRef} className="mb-8 lg:mb-12">
-          <span className="text-[140px] font-[400] tracking-[-0.08em] text-[#C0C0C0]">
-            Full Control.
-          </span>
-        </div>
-        <div ref={thirdLineRef} className="mb-6 lg:-mb-5">
-          <span
-            className="text-[48px] font-[400] text-[#080808] leading-[100%] tracking-[-0.02em]"
-            style={{ fontFamily: "'Open Sans', sans-serif" }}
-          >
-            Send. Spend. Earn.
-          </span>
-        </div>
-        <div ref={fourthLineRef} className="mb-6 lg:mb-2">
-          <span
-            className="text-[48px] font-[400] leading-[100px] tracking-[-0.02em] bg-clip-text text-transparent"
-            style={{
-              fontFamily: "'Open Sans', sans-serif",
-              backgroundImage:
-                "linear-gradient(90deg, #222222 0%, #666666 40%, #999999 100%)",
-            }}
-          >
-            Crypto or UPI — it just works.
-          </span>
-        </div>
-        <div ref={fifthLineRef} className="space-y-1">
-          <p
-            className="text-center font-[400] text-[16px] leading-[20px] text-[#080808] tracking-[0%]"
-            style={{ fontFamily: "'Open Sans', sans-serif" }}
-          >
-            Stop losing money to hidden fees and wasted rewards.
-          </p>
+    <>
+      {/* Hide the horizontal scrollbar on mobile */}
+      {isMobile && (
+        <style jsx global>{`
+          .mobile-scroll-hide-bar::-webkit-scrollbar {
+            display: none;
+          }
+          .mobile-scroll-hide-bar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}</style>
+      )}
 
-          <p
-            className="text-center font-[400] text-[16px] leading-[30px] tracking-[0%] text-[#080808]"
-            style={{ fontFamily: "'Open Sans', sans-serif" }}
-          >
-            Your ₹50,000 monthly spend could{" "}
+      <div
+        ref={containerRef}
+        className={`relative bg-[#F9F9F9] z-20 w-full overflow-hidden ${isMobile ? "min-h-auto" : "min-h-screen"}`}
+      >
+        {/* Text Content */}
+        <div className={`absolute inset-0 flex flex-col items-center text-center px-4 ${isMobile ? "relative justify-start pt-10" : "justify-center"}`}>
+          
+          {/* Main Heading: One SuperApp. Full Control. */}
+          <div ref={firstLineRef} className="lg:mb-2 lg:mt-30">
             <span
-              className="font-[600] tracking-['0%']"
+              className="text-[40px] leading-[34.54px] tracking-[-0.08em] text-[#C0C0C0] lg:text-4xl md:text-6xl lg:text-8xl xl:text-[140px] lg:font-[400] "
+              style={{ fontFamily: 'Montserrat, sans-serif' }}
+            >
+              One{" "}
+            </span>
+            <span
+              className="text-[40px] leading-[34.54px] tracking-[-0.08em] text-[#080808] lg:text-4xl md:text-6xl lg:text-8xl xl:text-[140px] lg:font-[400] lg:text-black"
+              style={{ fontFamily: 'Montserrat, sans-serif' }}
+            >
+              SuperApp.
+            </span>
+          </div>
+          <div ref={secondLineRef} className="mb-8 lg:mb-32">
+            <span
+              className="text-[40px] leading-[34.54px] tracking-[-0.08em] lg:leading-[100px] text-[#C0C0C0] lg:text-4xl md:text-6xl lg:text-8xl xl:text-[140px] lg:font-[400] lg:text-[#C0C0C0]"
+              style={{ fontFamily: 'Montserrat, sans-serif' }}
+            >
+              Full Control.
+            </span>
+          </div>
+
+          {/* Subheading: Send. Spend. Earn. */}
+          <div ref={thirdLineRef} className="mb-6 lg:mb-2">
+            <span
+              className="
+                text-[#333333]
+                font-[400]
+                leading-[100%]
+                tracking-[-0.02em]
+                text-[20px]
+                font-montserrat
+                lg:text-[48px]
+                lg:font-open-sans
+              "
               style={{
                 fontFamily:
-                  "'Open Sans', sans-Vsans-serif', fontWeight: 600, lineHeight: '30px'",
+                  'var(--font-montserrat, Montserrat, sans-serif)',
               }}
             >
-              earn you up to ₹3,500 back
-            </span>{" "}
-            — automatically.
-          </p>
-        </div>
-      </div>
-
-      {/* Cards Section */}
-      <div ref={cardSectionRef} className="absolute inset-0 opacity-0">
-        <div
-          ref={cardsContainerRef}
-          className="flex h-full"
-          style={{ width: `${cardSets.length * 100}vw` }}
-        >
-          {cardSets.map((cardSet, index) => (
-            <div
-              key={cardSet.id}
-              className="flex-shrink-0 w-screen h-full flex items-center justify-center"
+              Send. Spend. Earn.
+            </span>
+          </div>
+          
+          {/* Subheading: Crypto or UPI — it just works. */}
+          <div ref={fourthLineRef} className="mb-6 lg:mb-2">
+            <span
+              className={`font-[400] tracking-[-0.02em] lg:text-lg sm:text-xl md:text-2xl lg:text-3xl lg:text-gray-400 ${isMobile ? "hidden" : "block"}`}
+              style={{ fontFamily: 'Montserrat, sans-serif' }}
             >
-              <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-3">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-0 h-full items-center">
-                  {/* Left Card - Text Content */}
-                  <div
-                    ref={index === 7 ? lastCardLeftRef : null}
-                    className="relative h-full max-w-[600px] w-full min-h-[350px] sm:min-h-[400px] lg:min-h-[450px] p-6 sm:p-8 lg:p-12 rounded-2xl lg:rounded-3xl bg-white shadow-[140px_140px_140px_0px_rgba(0,0,0,0.05)] mx-auto"
-                    style={{ zIndex: index === 7 ? 10 : "auto" }}
-                  >
+              Crypto or UPI — it just works.
+            </span>
+          </div>
+
+          {/* Subheading paragraphs */}
+          <div ref={fifthLineRef} className="space-y-1 lg:space-y-1">
+            <p
+              className="
+                text-center
+                font-[400]
+                text-[#080808]
+                tracking-[0]
+                text-[12px]
+                leading-[13.11px]
+                font-montserrat
+                lg:text-[16px]
+                lg:leading-[20px]
+                lg:font-open-sans
+              "
+              style={{
+                fontFamily: 'var(--font-montserrat, Montserrat, sans-serif)',
+              }}
+            >
+              Stop losing money to hidden fees and wasted rewards.
+            </p>
+
+            <p
+              className="
+                text-center
+                text-[#080808]
+                font-[400]
+                text-[12px]
+                leading-[13.11px]
+                tracking-[0]
+                font-montserrat
+                lg:text-[16px]
+                lg:leading-[30px]
+                lg:font-open-sans
+              "
+            >
+              Your ₹50,000 monthly spend could{" "}
+              <span
+                className="
+                  font-[600]
+                  tracking-[0]
+                  font-montserrat
+                  text-[12px]
+                  leading-[13.11px]
+                  lg:font-open-sans
+                  lg:text-[16px]
+                  lg:leading-[30px]
+                "
+              >
+                earn you up to ₹3,500 back
+              </span>{" "}
+              — automatically.
+            </p>
+          </div>
+        </div>
+
+        {/* Cards Section */}
+        <div 
+          ref={cardSectionRef} 
+          className={`${isMobile ? "relative opacity-100 mt-10 pb-12" : "absolute inset-0 opacity-0"}`}
+        >
+          <div
+            ref={cardsContainerRef}
+            className={`flex h-full ${isMobile ? "overflow-x-scroll whitespace-nowrap pt-12 mobile-scroll-hide-bar" : ""}`}
+            style={
+              isMobile
+                ? {
+                    width: "100%", 
+                    transform: "none",
+                    paddingLeft: "5vw",
+                  }
+                : { width: `${cardSets.length * 100}vw` }
+            }
+          >
+            {cardSets.map((cardSet, index) => (
+              <div
+                key={cardSet.id}
+                className={`flex-shrink-0 h-full flex items-center ${isMobile ? "w-[90vw] mr-[5vw] justify-start" : "w-screen justify-center"}`}
+                style={isMobile && index === cardSets.length - 1 ? { marginRight: "10vw" } : {}}
+              >
+                <div className={`w-full mx-auto ${isMobile ? "px-0" : "max-w-7xl px-4 sm:px-6 lg:px-8"}`}>
+                  <div className={`grid h-full items-center ${isMobile ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8"}`}>
+                    
+                    {/* Left Card - Text Content */}
                     <div
-                      ref={index === 7 ? lastCardNumberRef : null}
-                      className="absolute top-4 z-30 sm:top-6 lg:top-8 right-4 sm:right-6 lg:right-8"
+                      ref={index === 7 ? lastCardLeftRef : null}
+                      className={`relative h-full max-w-[600px] w-full min-h-[350px] sm:min-h-[400px] lg:min-h-[450px] p-6 sm:p-8 lg:p-12 rounded-2xl lg:rounded-3xl bg-white mx-auto ${isMobile ? "shadow-none" : "shadow-xl border border-gray-200"}`}
+                      style={{ zIndex: index === 7 && !isMobile ? 10 : "auto" }}
                     >
-                      <span className="text-6xl sm:text-8xl lg:text-[120px] xl:text-[140px] font-[500] bg-gradient-to-b from-[#EDEDED] to-[#EDEDED1A] text-transparent bg-clip-text">
-                        {cardSet.leftCard.number}
-                      </span>
-                    </div>
-                    <div
-                      ref={index === 7 ? lastCardContentRef : null}
-                      className="absolute bottom-4 z-10 text-left left-6 sm:left-8 lg:left-12 right-6 sm:right-8 lg:right-12"
-                    >
-                      <p
-                        className="text-base sm:text-lg max-w-[400px] text-[#6A6A6A] mb-3 lg:text-[40px] lg:font-normal lg:leading-[48px] lg:tracking-[-0.04em]"
-                        style={{ fontFamily: "'Montserrat', sans-serif" }}
+                      <div
+                        ref={index === 7 ? lastCardNumberRef : null}
+                        className="absolute top-4 z-30 sm:top-6 lg:top-8 right-4 sm:right-6 lg:right-8"
                       >
-                        {cardSet.leftCard.title}
-                        <span className="text-black font-semibold">
-                          {" "}
-                          {cardSet.leftCard.highlight}
+                        <span className="text-6xl sm:text-8xl lg:text-[120px] xl:text-[140px] font-[500] bg-gradient-to-b from-[#EDEDED] to-[#EDEDED1A] text-transparent bg-clip-text">
+                          {cardSet.leftCard.number}
                         </span>
-                        {cardSet.leftCard.description}
-                      </p>
+                      </div>
+                      <div
+                        ref={index === 7 ? lastCardContentRef : null}
+                        className="absolute bottom-4 z-10 text-left left-6 sm:left-8 lg:left-12 right-6 lg:right-12"
+                      >
+                        <p
+                          className={`text-xl whitespace-normal mb-3 ${isMobile ? "text-[#6A6A6A]" : "text-base sm:text-lg max-w-[400px] lg:text-2xl text-gray-600"}`}
+                          style={{ fontFamily: "'Montserrat', sans-serif" }}
+                        >
+                          {cardSet.leftCard.title}
+                          <span className="text-black font-semibold">
+                            {" "}
+                            {cardSet.leftCard.highlight}
+                          </span>
+                          {cardSet.leftCard.description}
+                        </p>
+                      </div>
+                      {/* Download Buttons - Only for last card on desktop */}
+                      {index === 7 && !isMobile && (
+                        <div 
+                          ref={downloadButtonsContainerRef}
+                          className="absolute bottom-12 left-12 space-y-3 z-50"
+                          style={{ opacity: 0 }}
+                        >
+                          <DownloadButtons 
+                            buttonRef={downloadButton1Ref}
+                            id="downloadButton1"
+                            src="/apple.png"
+                            alt="apple logo"
+                            text="Download on the App Store"
+                          />
+                          <DownloadButtons 
+                            buttonRef={downloadButton2Ref}
+                            id="downloadButton2"
+                            src="/playstore.png"
+                            alt="playstore logo"
+                            text="Get the App on Google Play!"
+                          />
+                          <DownloadButtons 
+                            buttonRef={downloadButton3Ref}
+                            id="downloadButton3"
+                            src="/gal.png"
+                            alt="gallery logo"
+                            text="Get it on the App Gallery!"
+                          />
+                        </div>
+                      )}
                     </div>
-                    {index === 7 && (
-                      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex flex-col items-center space-y-3 px-6">
-                        <button
-                          ref={downloadButton1Ref}
-                          className="w-full lg:w-[260px] lg:h-[90px] bg-[#080808] text-white rounded-full lg:rounded-[61px] flex items-center justify-start gap-[10px] opacity-0 px-4 lg:pl-[40px] lg:pr-[50px] py-3 lg:py-[30px]"
-                        >
-                          <span>
-                            <Image
-                              src={"/apple.png"}
-                              width={20}
-                              height={20}
-                              className="object-cover"
-                              alt="apple logo"
-                            />
-                          </span>
-                          <span
-                            className="font-semibold text-sm leading-5 tracking-[0.02em] text-left"
-                            style={{ fontFamily: "'Open Sans', sans-serif" }}
-                          >
-                            Download on the App Store
-                          </span>
-                        </button>
-                        <button
-                          ref={downloadButton2Ref}
-                          className="w-full lg:w-[260px] lg:h-[90px] bg-[#080808] text-white rounded-full lg:rounded-[61px] flex items-center justify-start gap-[10px] opacity-0 px-4 lg:pl-[40px] lg:pr-[50px] py-3 lg:py-[30px]"
-                        >
-                          <span>
-                            <Image
-                              src={"/playstore.png"}
-                              width={20}
-                              height={20}
-                              className="object-cover"
-                              alt="playstore logo"
-                            />
-                          </span>
-                          <span
-                            className="font-semibold text-sm leading-5 tracking-[0.02em] text-left"
-                            style={{ fontFamily: "'Open Sans', sans-serif" }}
-                          >
-                            Get the App on Google Play!
-                          </span>
-                        </button>
-                        <button
-                          ref={downloadButton3Ref}
-                          className="w-full lg:w-[260px] lg:h-[90px] bg-[#080808] text-white rounded-full lg:rounded-[61px] flex items-center justify-start gap-[10px] opacity-0 px-4 lg:pl-[40px] lg:pr-[50px] py-3 lg:py-[30px]"
-                        >
-                          <span>
-                            <Image
-                              src={"/gal.png"}
-                              width={20}
-                              height={20}
-                              className="object-cover"
-                              alt="gallery logo"
-                            />
-                          </span>
-                          <span
-                            className="font-semibold text-sm leading-5 tracking-[0.02em] text-left"
-                            style={{ fontFamily: "'Open Sans', sans-serif" }}
-                          >
-                            Get it on the App Gallery!
-                          </span>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  {/* Right Card - Image / Video */}
-                  <div
-                    ref={index === 7 ? lastCardRightRef : null}
-                    className="relative bg-[#D1D1D1] h-[350px] sm:h-[450px] max-w-[600px] mx-auto w-full lg:h-[500px] rounded-2xl lg:rounded-3xl flex items-end justify-center overflow-hidden"
-                    style={{
-                      zIndex: index === 7 ? 1 : "auto",
-                    }}
-                  >
-                    {cardSet.rightCard.video ? (
-                      <video
-                        src={cardSet.rightCard.video}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="absolute inset-0 w-full h-full object-cover rounded-2xl lg:rounded-3xl"
-                      />
-                    ) : (
-                      <div className={`${index === 0 ? "w-[90%] h-[90%] mb-0" : "w-full h-full"} relative`}>
-                        <Image
-                          src={cardSet.rightCard.image || "/placeholder.svg"}
-                          alt={cardSet.rightCard.alt}
-                          fill
-                          className={`${
-                            index === 0 ? "object-contain" : "object-cover"
-                          } w-full h-full rounded-2xl lg:rounded-3xl`}
-                          priority={index === 0}
+
+                    {/* Right Card - Image / Video (Hidden on Mobile) */}
+                    <div
+                      ref={index === 7 ? lastCardRightRef : null}
+                      className={`relative bg-[#D1D1D1] h-[350px] sm:h-[450px] max-w-[600px] mx-auto w-full lg:h-[500px] rounded-2xl lg:rounded-3xl items-end justify-center overflow-hidden ${isMobile ? "hidden" : "flex shadow-xl"}`}
+                      style={{
+                        border: isMobile ? "none" : "1px solid rgba(255,255,255,0.2)",
+                        zIndex: index === 7 && !isMobile ? 1 : "auto",
+                      }}
+                    >
+                      {cardSet.rightCard.video ? (
+                        <video
+                          src={cardSet.rightCard.video}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          className="absolute inset-0 w-full h-full object-cover rounded-2xl lg:rounded-3xl"
                         />
-                      </div>
-                    )}
+                      ) : (
+                        <div className={`${index === 0 ? "w-[90%] h-[90%] mb-0" : "w-full h-full"} relative`}>
+                          <Image
+                            src={cardSet.rightCard.image || "/placeholder.svg"}
+                            alt={cardSet.rightCard.alt}
+                            fill
+                            className={`${
+                              index === 0 ? "object-contain" : "object-cover"
+                            } w-full h-full rounded-2xl lg:rounded-3xl`}
+                            priority={index === 0}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+      
+      {/* Download Buttons Section - Mobile Only */}
+      {isMobile && (
+        <div className="bg-[#F9F9F9] flex flex-col items-center space-y-3 px-4 w-full mt-0 pb-12">
+          <DownloadButtons 
+            buttonRef={downloadButton1Ref}
+            id="downloadButton1-mobile"
+            src="/apple.png"
+            alt="apple logo"
+            text="Download on the App Store"
+          />
+          <DownloadButtons 
+            buttonRef={downloadButton2Ref}
+            id="downloadButton2-mobile"
+            src="/playstore.png"
+            alt="playstore logo"
+            text="Get the App on Google Play!"
+          />
+          <DownloadButtons 
+            buttonRef={downloadButton3Ref}
+            id="downloadButton3-mobile"
+            src="/gal.png"
+            alt="gallery logo"
+            text="Get it on the App Gallery!"
+          />
+        </div>
+      )}
+    </>
   );
 };
 

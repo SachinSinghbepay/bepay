@@ -111,7 +111,7 @@ export default function NotFound() {
           Oops! Page Not Found
         </h1>
         <p className="text-gray-600 mb-8">
-          The page you're looking for doesn't exist, but our app has everything you need!
+          The page you&apos;re looking for doesn&apos;t exist, but our app has everything you need!
         </p>
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
           Download Bepay Money
