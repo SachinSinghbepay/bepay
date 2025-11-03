@@ -112,7 +112,7 @@ export default function Header() {
                 AnalyticsService.sendEvent("upi_nav_clicked");
               }}
             >
-              CRYPTO CARD
+              UPI
             </Link>
           </nav>
 
@@ -238,7 +238,7 @@ export default function Header() {
               )}
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              CRYPTO CARD
+              UPI
             </Link>
 
             {/* Mobile Download Button */}

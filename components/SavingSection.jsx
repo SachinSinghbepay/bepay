@@ -236,13 +236,14 @@ const SavingSection = () => {
                   Real <span className="text-[#333333] font-normal">use.</span>
                 </motion.h1>
                 <motion.h2
-                  // MODIFIED: Added leading-none to reduce space after the line
-                  className="text-6xl font-[400] text-[#C0C0C0] tracking-tighter leading-[20px]"
-                  variants={textLineVariants}
-                >
-                  Real{" "}
-                  <span className="text-[#333333] font-normal">savings.</span>
-                </motion.h2>
+  className="text-6xl font-[400] text-[#C0C0C0] tracking-tighter leading-[20px]"
+  variants={textLineVariants}
+>
+  <span className="whitespace-nowrap">
+    Real{" "}
+    <span className="text-[#333333] font-normal">savings.</span>
+  </span>
+</motion.h2>
                 <motion.div
                   className="pt-7 space-y-0" // Kept pt-7 for gap to subtext
                   variants={leftContentContainerVariants}
@@ -362,24 +363,28 @@ const SavingSection = () => {
                     exit="exit"
                     variants={ctaButtonVariants}
                   >
-                    <WaitlistTriggerButton
-                      triggerSource="Start Your Saving Journey button"
-                      buttonLocation="saving_section"
-                    >
-                      <Button
-                        className="bg-black cursor-pointer text-white rounded-full px-5 py-8 text-base font-medium flex items-center gap-2 hover:bg-black/90 transition-colors"
-                        onClick={handleStartClick}
-                      >
-                        <Image
-                          src="/wal.png"
-                          alt="Savings icon"
-                          width={20}
-                          height={20}
-                          className=""
-                        />
-                        Start your savings journey
-                      </Button>
-                    </WaitlistTriggerButton>
+                   <WaitlistTriggerButton
+  triggerSource="Start Your Saving Journey button"
+  buttonLocation="saving_section"
+>
+  <Button
+    onClick={handleStartClick}
+    className="relative z-20 bg-black cursor-pointer whitespace-nowrap text-white 
+               w-[250px] h-[56px] rounded-full flex items-center justify-center gap-2 
+               text-[14px] font-medium px-6 py-4 
+               hover:bg-gray-800 transition-colors"
+  >
+    <Image
+      src="/wal.png"
+      alt="Savings icon"
+      width={24}
+      height={24}
+      className="w-6 h-6"
+    />
+    Start your savings journey
+  </Button>
+</WaitlistTriggerButton>
+
                   </motion.div>
                 )}
               </AnimatePresence>

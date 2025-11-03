@@ -19,10 +19,13 @@ const ScrollTextAnimation = () => {
   const fifthLineRef = useRef(null);
   const cardSectionRef = useRef(null);
   const cardsContainerRef = useRef(null);
+  
+  // Refs for the new last card (Card 7)
   const lastCardLeftRef = useRef(null);
   const lastCardRightRef = useRef(null);
   const lastCardContentRef = useRef(null);
   const lastCardNumberRef = useRef(null);
+  
   const downloadButtonsContainerRef = useRef(null);
   const downloadButton1Ref = useRef(null);
   const downloadButton2Ref = useRef(null);
@@ -91,7 +94,7 @@ const ScrollTextAnimation = () => {
       leftCard: {
         number: "5",
         title: "",
-        highlight: "Crypto UPI – ",
+        highlight: "UPI – ",
         description: "send via QR, phone, email, or bepay ID",
       },
       rightCard: {
@@ -99,23 +102,11 @@ const ScrollTextAnimation = () => {
         alt: "Digital Banking",
       },
     },
+    // Card 6 is removed
     {
-      id: 6,
+      id: 7, // This is the new "last card" for the animation logic
       leftCard: {
-        number: "6",
-        title: "Get instant ",
-        highlight: "Bitcoin backed loans",
-        description: "",
-      },
-      rightCard: {
-        video: "/videos/crypto/co1.mp4",
-        alt: "Digital Banking",
-      },
-    },
-    {
-      id: 7,
-      leftCard: {
-        number: "7",
+        number: "6", // Renumbered to 6 for sequential display
         title: "Insurance that covers your ",
         highlight: "life, health, car, home & more",
         description: "",
@@ -125,20 +116,11 @@ const ScrollTextAnimation = () => {
         alt: "Digital Banking",
       },
     },
-    {
-      id: 8,
-      leftCard: {
-        number: "8",
-        title: "",
-        highlight: " DeFi Marketplace ",
-        description: " — Swap. Stake. Earn. All in one app.",
-      },
-      rightCard: {
-        video: "/videos/crypto/last.mp4",
-        alt: "Digital Banking",
-      },
-    },
+    // Card 8 is removed
   ];
+
+  // We are directly using the filtered card set since cardSets now only has the required cards (1-5, 7)
+  const finalCardSets = cardSets; 
 
   // Analytics Tracking
   useEffect(() => {
@@ -182,10 +164,13 @@ const ScrollTextAnimation = () => {
     const fifthLine = fifthLineRef.current;
     const cardSection = cardSectionRef.current;
     const cardsContainer = cardsContainerRef.current;
+    
+    // Refs for the new last card (Card 7)
     const lastCardLeft = lastCardLeftRef.current;
     const lastCardRight = lastCardRightRef.current;
     const lastCardContent = lastCardContentRef.current;
     const lastCardNumber = lastCardNumberRef.current;
+    
     const downloadButtonsContainer = downloadButtonsContainerRef.current;
     const downloadButton1 = downloadButton1Ref.current;
     const downloadButton2 = downloadButton2Ref.current;
@@ -229,12 +214,15 @@ const ScrollTextAnimation = () => {
           opacity: 0,
           y: 30,
         });
-
+        
+        // **UPDATED: The end value is now based on the new total of 6 cards**
         const mainTl = gsap.timeline({
           scrollTrigger: {
             trigger: container,
             start: "top top",
-            end: "+=1200%", // Increased from 1000% to give more scroll space
+            // The duration is reduced because we have fewer cards (8 -> 6)
+            // Original: 1200% for 8 cards. New: 900% for 6 cards (approx 150% per card).
+            end: "+=900%", 
             pin: true,
             scrub: 1,
             anticipatePin: 1,
@@ -273,8 +261,9 @@ const ScrollTextAnimation = () => {
           .to(
             cardsContainer,
             {
-              x: () => -(cardSets.length - 1) * windowWidth,
-              duration: 12,
+              // **UPDATED: Use finalCardSets.length (which is 6)**
+              x: () => -(finalCardSets.length - 1) * windowWidth,
+              duration: 8, // Reduced duration for horizontal scroll
               ease: "none",
             },
             "+=0.5"
@@ -343,7 +332,7 @@ const ScrollTextAnimation = () => {
     }, container);
     
     return () => ctx.revert();
-  }, [windowWidth, cardSets.length, isMobile]);
+  }, [windowWidth, finalCardSets.length, isMobile]);
 
   // Helper component for the download buttons
   const DownloadButtons = ({ buttonRef, id, src, alt, text }) => {
@@ -353,20 +342,20 @@ const ScrollTextAnimation = () => {
         className={`rounded-[61px] bg-[#080808] text-white flex items-center gap-[10px] ${isMobile ? "opacity-100 justify-center" : "opacity-0 justify-start"}`}
         style={{ 
           borderRadius: '61px',
-          width: isMobile ? '250px' : '260px',
-          height: isMobile ? '80px' : '90px',
+          width: isMobile ? '265px' : '260px',
+          height: isMobile ? '83px' : '90px',
           paddingTop: isMobile ? '20px' : '30px',
-          paddingRight: isMobile ? '60px' : '50px',
+          paddingRight: isMobile ? '55px' : '50px',
           paddingBottom: isMobile ? '20px' : '30px',
-          paddingLeft: isMobile ? '60px' : '40px',
+          paddingLeft: isMobile ? '55px' : '40px',
         }}
       >
         <span>
           <Image
             src={src}
-            width={20}
-            height={20}
-            className="object-cover"
+            width={22}
+            height={22}
+            className="h-6 w-7"
             alt={alt}
           />
         </span>
@@ -427,7 +416,7 @@ const ScrollTextAnimation = () => {
           </div>
 
           {/* Subheading: Send. Spend. Earn. */}
-          <div ref={thirdLineRef} className="mb-6 lg:mb-2">
+          <div ref={thirdLineRef} className="mb-0 lg:mb-2">
             <span
               className="
                 text-[#333333]
@@ -454,7 +443,7 @@ const ScrollTextAnimation = () => {
               className={`font-[400] tracking-[-0.02em] lg:text-lg sm:text-xl md:text-2xl lg:text-3xl lg:text-gray-400 ${isMobile ? "hidden" : "block"}`}
               style={{ fontFamily: 'Montserrat, sans-serif' }}
             >
-              Crypto or UPI — it just works.
+              UPI — it just works.
             </span>
           </div>
 
@@ -467,7 +456,7 @@ const ScrollTextAnimation = () => {
                 text-[#080808]
                 tracking-[0]
                 text-[12px]
-                leading-[13.11px]
+                leading-[32px]
                 font-montserrat
                 lg:text-[16px]
                 lg:leading-[20px]
@@ -501,15 +490,15 @@ const ScrollTextAnimation = () => {
                   tracking-[0]
                   font-montserrat
                   text-[12px]
-                  leading-[13.11px]
+                  leading-[5.11px]
                   lg:font-open-sans
                   lg:text-[16px]
                   lg:leading-[30px]
                 "
               >
-                earn you up to ₹3,500 back
+                earn you up to ₹3,500 back — automatically.
               </span>{" "}
-              — automatically.
+              
             </p>
           </div>
         </div>
@@ -517,10 +506,11 @@ const ScrollTextAnimation = () => {
         {/* Cards Section */}
         <div 
           ref={cardSectionRef} 
-          className={`${isMobile ? "relative opacity-100 mt-10 pb-12" : "absolute inset-0 opacity-0"}`}
+          className={`${isMobile ? "relative opacity-100 mt-0 pb-12" : "absolute inset-0 opacity-0"}`}
         >
           <div
             ref={cardsContainerRef}
+            // Use finalCardSets.length for the width calculation
             className={`flex h-full ${isMobile ? "overflow-x-scroll whitespace-nowrap pt-12 mobile-scroll-hide-bar" : ""}`}
             style={
               isMobile
@@ -529,38 +519,44 @@ const ScrollTextAnimation = () => {
                     transform: "none",
                     paddingLeft: "5vw",
                   }
-                : { width: `${cardSets.length * 100}vw` }
+                : { width: `${finalCardSets.length * 100}vw` }
             }
           >
-            {cardSets.map((cardSet, index) => (
+            {finalCardSets.map((cardSet, index) => (
               <div
                 key={cardSet.id}
                 className={`flex-shrink-0 h-full flex items-center ${isMobile ? "w-[90vw] mr-[5vw] justify-start" : "w-screen justify-center"}`}
-                style={isMobile && index === cardSets.length - 1 ? { marginRight: "10vw" } : {}}
+                style={isMobile && index === finalCardSets.length - 1 ? { marginRight: "10vw" } : {}}
               >
                 <div className={`w-full mx-auto ${isMobile ? "px-0" : "max-w-7xl px-4 sm:px-6 lg:px-8"}`}>
                   <div className={`grid h-full items-center ${isMobile ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8"}`}>
                     
                     {/* Left Card - Text Content */}
                     <div
-                      ref={index === 7 ? lastCardLeftRef : null}
+                      // **UPDATED: The last card ID is now 7**
+                      ref={cardSet.id === 7 ? lastCardLeftRef : null}
                       className={`relative h-full max-w-[600px] w-full min-h-[350px] sm:min-h-[400px] lg:min-h-[450px] p-6 sm:p-8 lg:p-12 rounded-2xl lg:rounded-3xl bg-white mx-auto ${isMobile ? "shadow-none" : "shadow-xl border border-gray-200"}`}
-                      style={{ zIndex: index === 7 && !isMobile ? 10 : "auto" }}
+                      style={{ zIndex: cardSet.id === 7 && !isMobile ? 10 : "auto" }}
                     >
                       <div
-                        ref={index === 7 ? lastCardNumberRef : null}
+                        // **UPDATED: The last card ID is now 7**
+                        ref={cardSet.id === 7 ? lastCardNumberRef : null}
                         className="absolute top-4 z-30 sm:top-6 lg:top-8 right-4 sm:right-6 lg:right-8"
                       >
-                        <span className="text-6xl sm:text-8xl lg:text-[120px] xl:text-[140px] font-[500] bg-gradient-to-b from-[#EDEDED] to-[#EDEDED1A] text-transparent bg-clip-text">
-                          {cardSet.leftCard.number}
-                        </span>
+                        <span 
+  className="text-6xl sm:text-8xl lg:text-[120px] xl:text-[140px] font-[500] bg-gradient-to-b from-[#EDEDED] to-[#EDEDED1A] text-transparent bg-clip-text"
+  style={isMobile ? { fontFamily: "'Open Sans', sans-serif" } : { fontFamily: 'Montserrat, sans-serif' }}
+>
+  {cardSet.leftCard.number}  {/* <-- CORRECT: Placed as the child content */}
+</span>
                       </div>
                       <div
-                        ref={index === 7 ? lastCardContentRef : null}
+                        // **UPDATED: The last card ID is now 7**
+                        ref={cardSet.id === 7 ? lastCardContentRef : null}
                         className="absolute bottom-4 z-10 text-left left-6 sm:left-8 lg:left-12 right-6 lg:right-12"
                       >
                         <p
-                          className={`text-xl whitespace-normal mb-3 ${isMobile ? "text-[#6A6A6A]" : "text-base sm:text-lg max-w-[400px] lg:text-2xl text-gray-600"}`}
+                          className={`text-[20px] whitespace-normal mb-3 ${isMobile ? "text-[#6A6A6A]" : "text-base sm:text-lg max-w-[400px] lg:text-2xl text-gray-600"}`}
                           style={{ fontFamily: "'Montserrat', sans-serif" }}
                         >
                           {cardSet.leftCard.title}
@@ -571,11 +567,11 @@ const ScrollTextAnimation = () => {
                           {cardSet.leftCard.description}
                         </p>
                       </div>
-                      {/* Download Buttons - Only for last card on desktop */}
-                      {index === 7 && !isMobile && (
+                      {/* Download Buttons - Only for the new last card (ID 7) on desktop */}
+                      {cardSet.id === 7 && !isMobile && (
                         <div 
                           ref={downloadButtonsContainerRef}
-                          className="absolute bottom-12 left-12 space-y-3 z-50"
+                          className="absolute  bottom-12 left-8 space-y-3 z-50"
                           style={{ opacity: 0 }}
                         >
                           <DownloadButtons 
@@ -605,11 +601,12 @@ const ScrollTextAnimation = () => {
 
                     {/* Right Card - Image / Video (Hidden on Mobile) */}
                     <div
-                      ref={index === 7 ? lastCardRightRef : null}
+                      // **UPDATED: The last card ID is now 7**
+                      ref={cardSet.id === 7 ? lastCardRightRef : null}
                       className={`relative bg-[#D1D1D1] h-[350px] sm:h-[450px] max-w-[600px] mx-auto w-full lg:h-[500px] rounded-2xl lg:rounded-3xl items-end justify-center overflow-hidden ${isMobile ? "hidden" : "flex shadow-xl"}`}
                       style={{
                         border: isMobile ? "none" : "1px solid rgba(255,255,255,0.2)",
-                        zIndex: index === 7 && !isMobile ? 1 : "auto",
+                        zIndex: cardSet.id === 7 && !isMobile ? 1 : "auto",
                       }}
                     >
                       {cardSet.rightCard.video ? (

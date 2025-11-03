@@ -9,10 +9,9 @@ import {
   useMotionValue,
 } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-// 1. Import the Image component
 import Image from "next/image";
 
-// Mock AnalyticsService
+// Mock AnalyticsService (unchanged)
 const AnalyticsService = {
   sendEvent: (eventName) => {
     console.log(`Analytics Event: ${eventName}`);
@@ -30,13 +29,13 @@ function useIsMobile() {
   return isMobile;
 }
 
-// Card data (kept for completeness)
+// Card data (unchanged)
 const cardsData = [
   {
     imageSrc: "/icons/rupee.png",
     imageAlt: "Indian Rupee",
-    imageWidth: 140, // Original desktop width
-    imageHeight: 150, // Original desktop height
+    imageWidth: 140, 
+    imageHeight: 150,
     title: "₹2.06 Cr",
     subtitle: "paid back",
     description: "to users this month",
@@ -84,7 +83,9 @@ export default function StickyHeroSection() {
   const cardsRef = useRef(null);
   const cardWrapperRef = useRef(null);
   const [hasTrackedView, setHasTrackedView] = useState(false);
-  const x = useMotionValue(0);
+  
+  // This motion value handles the inner horizontal SCROLL (carousel effect)
+  const innerX = useMotionValue(0); 
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -99,95 +100,80 @@ export default function StickyHeroSection() {
     visible: { opacity: 1, y: 0 },
   };
 
-  // Desktop animations (unchanged)
-  const card1_Opacity = useTransform(
-    scrollYProgress,
-    [0, 0.05, 0.26, 0.3],
-    [0, 1, 1, 0]
-  );
-  const card1_Y = useTransform(scrollYProgress, [0, 0.12, 0.3], [600, 0, -600], {
-    ease: easeOut,
-  });
-
-  const card2_Opacity = useTransform(
-    scrollYProgress,
-    [0.02, 0.07, 0.28, 0.32],
-    [0, 1, 1, 0]
-  );
-  const card2_Y = useTransform(
-    scrollYProgress,
-    [0.02, 0.14, 0.32],
-    [500, 0, -500],
-    { ease: easeOut }
-  );
-
-  const card3_Opacity = useTransform(
-    scrollYProgress,
-    [0.26, 0.3, 0.56, 0.6],
-    [0, 1, 1, 0]
-  );
-  const card3_Y = useTransform(
-    scrollYProgress,
-    [0.3, 0.42, 0.6],
-    [450, 0, -450],
-    { ease: easeOut }
-  );
-
-  const card4_Opacity = useTransform(
-    scrollYProgress,
-    [0.28, 0.32, 0.58, 0.62],
-    [0, 1, 1, 0]
-  );
-  const card4_Y = useTransform(
-    scrollYProgress,
-    [0.32, 0.44, 0.62],
-    [500, 0, -500],
-    { ease: easeOut }
-  );
-
+  // --- Desktop Animations (unchanged) ---
+  const card1_Opacity = useTransform(scrollYProgress, [0, 0.05, 0.26, 0.3], [0, 1, 1, 0]);
+  const card1_Y = useTransform(scrollYProgress, [0, 0.12, 0.3], [600, 0, -600], { ease: easeOut });
+  const card2_Opacity = useTransform(scrollYProgress, [0.02, 0.07, 0.28, 0.32], [0, 1, 1, 0]);
+  const card2_Y = useTransform(scrollYProgress, [0.02, 0.14, 0.32], [500, 0, -500], { ease: easeOut });
+  const card3_Opacity = useTransform(scrollYProgress, [0.26, 0.3, 0.56, 0.6], [0, 1, 1, 0]);
+  const card3_Y = useTransform(scrollYProgress, [0.3, 0.42, 0.6], [450, 0, -450], { ease: easeOut });
+  const card4_Opacity = useTransform(scrollYProgress, [0.28, 0.32, 0.58, 0.62], [0, 1, 1, 0]);
+  const card4_Y = useTransform(scrollYProgress, [0.32, 0.44, 0.62], [500, 0, -500], { ease: easeOut });
   const card5_Opacity = useTransform(scrollYProgress, [0.56, 0.6], [0, 1]);
-  const card5_Y = useTransform(
-    scrollYProgress,
-    [0.6, 0.75, 0.8],
-    [500, 0, 0],
-    { ease: easeOut }
-  );
+  const card5_Y = useTransform(scrollYProgress, [0.6, 0.75, 0.8], [500, 0, 0], { ease: easeOut });
 
   const lightGray = "text-[#C0C0C0]";
   const darkGray = "text-[#6A6A6A]";
 
-  // Mobile horizontal scroll animation
+  // --- Mobile-Only Animations (FIXED LOGIC) ---
   const easeOutCubic = (val) => 1 - Math.pow(1 - val, 3);
 
+  // ⭐️ FIX: Adjusted text fade-out range to happen BEFORE cards slide in
+  const textFadeStart = 0.05;
+  const textFadeEnd = 0.10;
+
+  // Text Opacity Transform (Fades out the text)
+  const textOpacity = useTransform(scrollYProgress, [textFadeStart, textFadeEnd], [1, 0]);
+  
+  // Text Z-Index Transition (Moves text behind cards)
+  const textZIndex = useTransform(scrollYProgress, [textFadeStart, textFadeEnd], [101, 0]);
+  
+  const backgroundTextStyle = isMobile
+  ? { zIndex: 0, opacity: 1 } // ⭐️ FIX: Keep text visible, place it behind cards
+  : { zIndex: 0, opacity: 1 };
+
+  // Card Slide-in (starts right after the text fades out)
+  const cardsEntranceStart = 0.10;
+  const cardsEntranceEnd = 0.18; 
+
+  const xInitial = useTransform(
+    scrollYProgress,
+    [cardsEntranceStart, cardsEntranceEnd], 
+    [typeof window !== 'undefined' ? window.innerWidth : 768, 0] // Screen Width -> 0
+  );
+  
+  // Opacity is static 1 for mobile cards now.
+
+  // 2. innerX (Carousel Scroll): Separated from xInitial to prevent conflict.
   useEffect(() => {
     if (!isMobile) return;
 
     const unsubscribe = scrollYProgress.on("change", (latest) => {
       const cardWrapper = cardWrapperRef.current;
-      const container = containerRef.current;
-      if (!cardWrapper || !container) return;
+      if (!cardWrapper) return;
 
       const scrollWidth = cardWrapper.scrollWidth;
       const containerWidth = window.innerWidth;
       const maxScroll = scrollWidth - containerWidth;
       
-      // Delay card scroll to start after text animation (after 20% of scroll)
-      const cardScrollStart = 0.2;
-      const adjustedProgress = Math.max(0, (latest - cardScrollStart) / (1 - cardScrollStart));
-      const easedProgress = easeOutCubic(adjustedProgress);
-      x.set(-easedProgress * maxScroll);
+      // Horizontal scroll logic starts AFTER the initial slide-in is complete.
+      const carouselScrollStart = cardsEntranceEnd; 
+      
+      if (latest > carouselScrollStart) {
+        // Map the remaining scroll to the carousel scroll
+        const adjustedProgress = Math.max(0, (latest - carouselScrollStart) / (1 - carouselScrollStart));
+        const easedProgress = easeOutCubic(adjustedProgress);
+        innerX.set(-easedProgress * maxScroll);
+      } else {
+        // Lock the carousel at the start point (x=0) during the slide-in animation
+        innerX.set(0); 
+      }
     });
 
     return () => unsubscribe();
-  }, [scrollYProgress, x, isMobile]);
+  }, [scrollYProgress, innerX, isMobile]);
 
-  // Mobile card opacity - fade in after text
-  const mobileCardsOpacity = useTransform(
-    scrollYProgress,
-    [0.15, 0.25],
-    [0, 1]
-  );
-
+  // Intersection Observer for analytics (unchanged)
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -207,17 +193,9 @@ export default function StickyHeroSection() {
     return () => observer.disconnect();
   }, [hasTrackedView]);
   
-  // New Desktop Text Styling based on user request
-  // Applying font-family: Montserrat (assuming a 'font-montserrat' utility exists 
-  // or using a generic font-sans fallback if not configured), 
-  // font-weight: 400 (font-normal), font-size: 40px (text-[40px]), 
-  // line-height: 48px (leading-[48px]), letter-spacing: -4% (tracking-[-0.04em])
+  // Desktop Text Styling (unchanged)
   const desktopTextStyle = 
     `relative z-10 text-[40px] font-normal text-[#6A6A6A] tracking-[-0.04em] font-sans leading-[48px]`; 
-    // NOTE: Replace 'font-sans' with 'font-montserrat' if configured in tailwind.config.js
-    // I'm using 'font-sans' as a placeholder to prevent errors if custom font is missing.
-    // However, for the best visual match, I'll ensure the requested font-weight (400 -> font-normal) 
-    // and line-height are applied.
 
   return (
     <div ref={containerRef} className="relative h-[400vh] bg-[#F9F9F9]">
@@ -226,8 +204,11 @@ export default function StickyHeroSection() {
           ref={cardsRef}
           className="relative z-10 flex h-screen items-center justify-center flex-col gap-8 px-4 overflow-hidden"
         >
-          {/* Background Text */}
-          <div className="absolute inset-0 flex items-center justify-center z-0 pointer-events-none">
+          {/* Background Text - **FIXED: Fades out earlier** */}
+          <motion.div 
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            style={backgroundTextStyle} 
+          >
             <div className="flex flex-col items-center justify-center text-center">
               <motion.div
                 className="font-sans font-[400] tracking-[-0.06em] uppercase leading-[0.8] text-6xl sm:text-7xl md:text-[200px]"
@@ -262,9 +243,9 @@ export default function StickyHeroSection() {
                 <span className={lightGray}>EAL.</span>
               </motion.div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Desktop Cards - Positioned Absolutely (TEXT STYLES UPDATED) */}
+          {/* Desktop Cards - (UNCHANGED) */}
           {!isMobile && (
             <>
               {/* Card 1 */}
@@ -281,7 +262,6 @@ export default function StickyHeroSection() {
                     className="object-contain"
                   />
                 </div>
-                {/* Text Updated */}
                 <p className={desktopTextStyle}>
                   <span className="font-medium text-[#333333]">₹2.06 Cr</span> paid back<br />to users this month
                 </p>
@@ -301,7 +281,6 @@ export default function StickyHeroSection() {
                     className="object-contain"
                   />
                 </div>
-                {/* Text Updated */}
                 <p className={desktopTextStyle}>
                   <span className="font-medium text-[#333333]">50,000+</span> daily<br />active earners
                 </p>
@@ -321,7 +300,6 @@ export default function StickyHeroSection() {
                     className="object-contain"
                   />
                 </div>
-                {/* Text Updated */}
                 <p className={desktopTextStyle}>
                   <span className="font-medium text-[#333333]">Backed by</span> Federal<br />& RBL
                 </p>
@@ -341,7 +319,6 @@ export default function StickyHeroSection() {
                     className="object-contain"
                   />
                 </div>
-                {/* Text Updated */}
                 <p className={desktopTextStyle}>
                   <span className="font-medium text-[#333333]">Powered by</span><br />Razorpay/JustPay
                 </p>
@@ -361,7 +338,6 @@ export default function StickyHeroSection() {
                     className="object-contain"
                   />
                 </div>
-                {/* Text Updated */}
                 <p className={desktopTextStyle}>
                   <span className="font-medium text-[#333333]">Fully encrypted</span> &<br />RBI-compliant
                 </p>
@@ -369,26 +345,30 @@ export default function StickyHeroSection() {
             </>
           )}
 
-          {/* Mobile Cards - Horizontal Scroll (UNCHANGED) */}
+          {/* Mobile Cards - Horizontal Scroll (Opacity FIXED) */}
           {isMobile && (
             <motion.div 
-              className="w-full h-full flex items-center"
-              style={{ opacity: mobileCardsOpacity }}
+              className="w-full h-full flex items-center bg-[#F9F9F9]"
+              // Outer div handles the fast slide-in (xInitial)
+              style={{ x: xInitial, opacity: 1 }}
             >
               <motion.div
                 ref={cardWrapperRef}
-                className="flex gap-4 px-4"
-                style={{ x }}
+                className="flex gap-4"
+                // Inner div handles the horizontal carousel scroll (innerX)
+                style={{ x: innerX }} 
               >
                 {cardsData.map((card, index) => (
                   <div
                     key={index}
-                    className="h-[390px] w-[315px] bg-white p-6 flex flex-col justify-end relative overflow-hidden flex-shrink-0 shadow-lg"
+                    className="h-[390px] w-[315px] bg-white p-6 flex flex-col justify-end relative overflow-hidden flex-shrink-0"
                     style={{ 
                       borderRadius: '26.4px', 
                       borderWidth: '1.2px', 
                       borderColor: '#EFEFEF', 
-                      minWidth: '315px', 
+                      minWidth: '315px',
+                      boxShadow: '60px 20px 30px -20px rgba(0, 0, 0, 0.05), 80px 30px 120px -90px rgba(0, 0, 0, 0.02)',
+                      zIndex: 100 - index,
                     }}
                   >
                     <Image

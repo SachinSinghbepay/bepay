@@ -12,7 +12,11 @@ import { Button } from "./ui/button";
 /**
  * Renders the mobile-specific layout and animations.
  */
-const MobileCreditCardView = ({ containerRef, handleStartClick, scrollYProgress }) => {
+const MobileCreditCardView = ({
+  containerRef,
+  handleStartClick,
+  scrollYProgress,
+}) => {
   const mobileMockupY = useTransform(scrollYProgress, [0, 0.5], [0, -1200]);
   const mobileContentY = useTransform(scrollYProgress, [0.4, 0.6], [50, 0]);
   const mobileContentOpacity = useTransform(
@@ -24,22 +28,33 @@ const MobileCreditCardView = ({ containerRef, handleStartClick, scrollYProgress 
   return (
     <>
       {/* Sticky Container for Title and Mockup (initial screen) */}
-      <div className="relative h-[200vh]"> 
+      <div className="relative h-[200vh]">
         <div className="sticky top-0 h-screen overflow-hidden">
           <section className="bg-[#F9F9F9] h-full flex flex-col justify-start pt-6 md:pt-0">
             {/* Title - Fades Out */}
             <div className="text-center pt-8">
               <p>
-                Meet the <span className="font-semibold text-[#333333]">bepay RuPay Credit</span>
+                Meet the{" "}
+                <span className="font-semibold text-[#333333]">
+                  bepay RuPay Credit
+                </span>
               </p>
               <p>
-                <span className="font-semibold text-[#333333]">Card — designed for rewards,</span>
+                <span className="font-semibold text-[#333333]">
+                  Card — designed for rewards,
+                </span>
               </p>
               <p>
-                <span className="font-semibold text-[#333333]">lifestyle, zero</span> and <span className="font-semibold text-[#333333]">compromise.</span>
+                <span className="font-semibold text-[#333333]">
+                  lifestyle, zero
+                </span>{" "}
+                and{" "}
+                <span className="font-semibold text-[#333333]">
+                  compromise.
+                </span>
               </p>
             </div>
-            
+
             {/* Mobile Mockup - Scrolls Up and Fades Out */}
             <motion.div
               className="absolute top-[62%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
@@ -57,8 +72,8 @@ const MobileCreditCardView = ({ containerRef, handleStartClick, scrollYProgress 
             </motion.div>
 
             {/* Scrollable content below - Animates in */}
-            <motion.div 
-              className="w-full h-full bg-[#F9F9F9] px-4 py-8 relative z-30" 
+            <motion.div
+              className="w-full h-full bg-[#F9F9F9] px-4 py-8 relative z-30"
               style={{ y: mobileContentY, opacity: mobileContentOpacity }}
             >
               <div className="w-full max-w-[340px] mx-auto space-y-4">
@@ -72,7 +87,7 @@ const MobileCreditCardView = ({ containerRef, handleStartClick, scrollYProgress 
                     className="w-full h-auto"
                   />
                 </div>
-                
+
                 {/* Card 2 - Cashback */}
                 <div className="w-full rounded-3xl overflow-hidden shadow-sm">
                   <Image
@@ -83,7 +98,7 @@ const MobileCreditCardView = ({ containerRef, handleStartClick, scrollYProgress 
                     className="w-full h-auto"
                   />
                 </div>
-                
+
                 {/* Card 3 - EMI */}
                 <div className="w-full rounded-3xl overflow-hidden shadow-sm">
                   <Image
@@ -94,7 +109,7 @@ const MobileCreditCardView = ({ containerRef, handleStartClick, scrollYProgress 
                     className="w-full h-auto"
                   />
                 </div>
-                
+
                 {/* Card 4 - Airport Lounge */}
                 <div className="w-full rounded-3xl overflow-hidden shadow-sm">
                   <Image
@@ -105,7 +120,7 @@ const MobileCreditCardView = ({ containerRef, handleStartClick, scrollYProgress 
                     className="w-full h-auto"
                   />
                 </div>
-                
+
                 {/* Card 5 - Forex */}
                 <div className="w-full rounded-3xl overflow-hidden shadow-sm">
                   <Image
@@ -116,7 +131,7 @@ const MobileCreditCardView = ({ containerRef, handleStartClick, scrollYProgress 
                     className="w-full h-auto"
                   />
                 </div>
-                
+
                 {/* Card 6 - Premium Subscriptions */}
                 <div className="w-full rounded-3xl overflow-hidden shadow-sm">
                   <Image
@@ -130,7 +145,10 @@ const MobileCreditCardView = ({ containerRef, handleStartClick, scrollYProgress 
 
                 {/* Mobile CTA - Placed directly after the cards */}
                 <div className="mt-8 pb-12">
-                  <WaitlistTriggerButton triggerSource="'Get Your BePay Card' button" buttonLocation="UPI_credit_card_section">
+                  <WaitlistTriggerButton
+                    triggerSource="'Get Your BePay Card' button"
+                    buttonLocation="UPI_credit_card_section"
+                  >
                     <Button
                       className="bg-black cursor-pointer text-white rounded-full px-6 py-6 text-sm font-medium flex items-center gap-2 hover:bg-black/90 transition-colors w-full justify-center"
                       onClick={handleStartClick}
@@ -178,20 +196,76 @@ const DesktopCreditCardView = ({ scrollYProgress, handleStartClick }) => {
   const line4X = useTransform(scrollYProgress, [0.66, 0.71], ["0%", "-100%"]);
   const line4Opacity = useTransform(scrollYProgress, [0.66, 0.71], [1, 0]);
 
-  const desktopStackOpacity = useTransform(scrollYProgress, [0.7, 0.75], [0, 1]);
-  const desktopCard1Y = useTransform(scrollYProgress, [0.75, 0.8], ["0%", "-200%"]);
-  const desktopCard1Rotate = useTransform(scrollYProgress, [0.75, 0.8], [0, 15]);
-  const desktopCard1Opacity = useTransform(scrollYProgress, [0.75, 0.8], [1, 0]);
-  const desktopCard2Y = useTransform(scrollYProgress, [0.8, 0.85], ["0%", "-200%"]);
-  const desktopCard2Rotate = useTransform(scrollYProgress, [0.8, 0.85], [0, -10]);
-  const desktopCard2Opacity = useTransform(scrollYProgress, [0.8, 0.85], [1, 0]);
-  const desktopCard3Y = useTransform(scrollYProgress, [0.85, 0.9], ["0%", "-200%"]);
-  const desktopCard3Rotate = useTransform(scrollYProgress, [0.85, 0.9], [0, 20]);
-  const desktopCard3Opacity = useTransform(scrollYProgress, [0.85, 0.9], [1, 0]);
-  const desktopCard4Y = useTransform(scrollYProgress, [0.9, 0.95], ["0%", "-200%"]);
-  const desktopCard4Rotate = useTransform(scrollYProgress, [0.9, 0.95], [0, -15]);
-  const desktopCard4Opacity = useTransform(scrollYProgress, [0.9, 0.95], [1, 0]);
-  const desktopCard5Scale = useTransform(scrollYProgress, [0.95, 1.0], [1, 1.1]);
+  const desktopStackOpacity = useTransform(
+    scrollYProgress,
+    [0.7, 0.75],
+    [0, 1]
+  );
+  const desktopCard1Y = useTransform(
+    scrollYProgress,
+    [0.75, 0.8],
+    ["0%", "-200%"]
+  );
+  const desktopCard1Rotate = useTransform(
+    scrollYProgress,
+    [0.75, 0.8],
+    [0, 15]
+  );
+  const desktopCard1Opacity = useTransform(
+    scrollYProgress,
+    [0.75, 0.8],
+    [1, 0]
+  );
+  const desktopCard2Y = useTransform(
+    scrollYProgress,
+    [0.8, 0.85],
+    ["0%", "-200%"]
+  );
+  const desktopCard2Rotate = useTransform(
+    scrollYProgress,
+    [0.8, 0.85],
+    [0, -10]
+  );
+  const desktopCard2Opacity = useTransform(
+    scrollYProgress,
+    [0.8, 0.85],
+    [1, 0]
+  );
+  const desktopCard3Y = useTransform(
+    scrollYProgress,
+    [0.85, 0.9],
+    ["0%", "-200%"]
+  );
+  const desktopCard3Rotate = useTransform(
+    scrollYProgress,
+    [0.85, 0.9],
+    [0, 20]
+  );
+  const desktopCard3Opacity = useTransform(
+    scrollYProgress,
+    [0.85, 0.9],
+    [1, 0]
+  );
+  const desktopCard4Y = useTransform(
+    scrollYProgress,
+    [0.9, 0.95],
+    ["0%", "-200%"]
+  );
+  const desktopCard4Rotate = useTransform(
+    scrollYProgress,
+    [0.9, 0.95],
+    [0, -15]
+  );
+  const desktopCard4Opacity = useTransform(
+    scrollYProgress,
+    [0.9, 0.95],
+    [1, 0]
+  );
+  const desktopCard5Scale = useTransform(
+    scrollYProgress,
+    [0.95, 1.0],
+    [1, 1.1]
+  );
 
   const ctaOpacity = useTransform(scrollYProgress, [0.95, 1.0], [0, 1]);
   const ctaScale = useTransform(scrollYProgress, [0.95, 1.0], [0.8, 1]);
@@ -227,13 +301,21 @@ const DesktopCreditCardView = ({ scrollYProgress, handleStartClick }) => {
         <div className="relative md:w-1/2 lg:w-2/5 text-lg text-[#666666] space-y-0 h-full">
           <div className="hidden md:block">
             <motion.p style={{ x: line1X, opacity: line1Opacity }}>
-              Meet the <span className="font-semibold text-[#333333]">bepay RuPay Credit</span>
+              Meet the{" "}
+              <span className="font-semibold text-[#333333]">
+                bepay RuPay Credit
+              </span>
             </motion.p>
             <motion.p style={{ x: line2X, opacity: line2Opacity }}>
-              <span className="font-semibold text-[#333333]">Card — designed for rewards,</span>
+              <span className="font-semibold text-[#333333]">
+                Card — designed for rewards,
+              </span>
             </motion.p>
             <motion.p style={{ x: line3X, opacity: line3Opacity }}>
-              <span className="font-semibold text-[#333333]">lifestyle, zero</span> and
+              <span className="font-semibold text-[#333333]">
+                lifestyle, zero
+              </span>{" "}
+              and
             </motion.p>
             <motion.p style={{ x: line4X, opacity: line4Opacity }}>
               <span className="font-semibold text-[#333333]">compromise.</span>
@@ -349,18 +431,25 @@ const DesktopCreditCardView = ({ scrollYProgress, handleStartClick }) => {
               style={{ opacity: ctaOpacity, scale: ctaScale }}
               className="mt-8"
             >
-              <WaitlistTriggerButton triggerSource="'Get Your BePay Card' button" buttonLocation="UPI_credit_card_section">
+              <WaitlistTriggerButton
+                triggerSource="'Get Your BePay Card' button"
+                buttonLocation="UPI_credit_card_section"
+              >
                 <Button
-                  className="bg-black cursor-pointer rounded-[100px] text-[12px] w-[230x] h-[56px] text-white  px-5 mb-13 py-8 text-base font-medium flex items-center gap-2 hover:bg-black/90 transition-colors"
                   onClick={handleStartClick}
+                  className="relative z-20 bg-black cursor-pointer whitespace-nowrap text-white 
+               w-[258px] h-[56px] rounded-full flex items-center justify-center gap-2 
+               text-[14px] font-medium px-6 py-4 -mt-12
+               hover:bg-gray-800 transition-colors"
                 >
                   <Image
                     src="/wal2.png"
                     alt="Wallet icon"
-                    width={20}
-                    height={20}
+                    width={24}
+                    height={24}
+                    className="w-6 h-6"
                   />
-                  Get your bepay card now
+                  Get your BePay card now
                 </Button>
               </WaitlistTriggerButton>
             </motion.div>
@@ -422,7 +511,7 @@ const DesktopCreditCardView = ({ scrollYProgress, handleStartClick }) => {
               </button>
             </div>
           </motion.div>
-          
+
           <motion.div
             style={{
               rotate: cardRotate,
@@ -453,7 +542,6 @@ const DesktopCreditCardView = ({ scrollYProgress, handleStartClick }) => {
   );
 };
 
-
 // --- 3. Main Export Component ---
 
 export default function CreditCardSection() {
@@ -465,7 +553,6 @@ export default function CreditCardSection() {
 
   const [isMobile, setIsMobile] = useState(false);
   const [hasTrackedView, setHasTrackedView] = useState(false);
-
 
   // View Tracking Logic
   useEffect(() => {
@@ -487,10 +574,9 @@ export default function CreditCardSection() {
     return () => observer.disconnect();
   }, [hasTrackedView]);
 
-  const handleStartClick= () => {
-      AnalyticsService.sendEvent("Get_Your_Bepay_card_clicked");
-    };
-  
+  const handleStartClick = () => {
+    AnalyticsService.sendEvent("Get_Your_Bepay_card_clicked");
+  };
 
   // Resize/Mobile Detection Logic
   useEffect(() => {
@@ -509,15 +595,15 @@ export default function CreditCardSection() {
         className="relative md:min-h-[800vh] max-w-[1500px] mx-auto"
       >
         {isMobile ? (
-          <MobileCreditCardView 
-            scrollYProgress={scrollYProgress} 
-            handleStartClick={handleStartClick} 
+          <MobileCreditCardView
+            scrollYProgress={scrollYProgress}
+            handleStartClick={handleStartClick}
             containerRef={sectionRef}
           />
         ) : (
-          <DesktopCreditCardView 
-            scrollYProgress={scrollYProgress} 
-            handleStartClick={handleStartClick} 
+          <DesktopCreditCardView
+            scrollYProgress={scrollYProgress}
+            handleStartClick={handleStartClick}
           />
         )}
       </section>

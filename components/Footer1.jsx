@@ -219,9 +219,9 @@ const Footer = ({ heading, headingSize = "text-[24px]", isUpiPage = false }) => 
       setError("Something went wrong. Please try again.");
         // ANALYTICS: Track submission failure due to server/network error
         AnalyticsService.sendEvent("Newsletter submission failed", {
-         reason: "Server error",
-         error_message: error.message,
-       });
+          reason: "Server error",
+          error_message: error.message,
+        });
     } finally {
       setIsSubmitting(false);
     }
@@ -589,15 +589,16 @@ const Footer = ({ heading, headingSize = "text-[24px]", isUpiPage = false }) => 
             </>
           </motion.div>
 
-          {/* === MODIFICATION START: Conditional link rendering === */}
+          {/* === MODIFICATION START: Conditional link rendering for mobile UPI view === */}
           <motion.div
+            // Default to flex-col (vertical list) on mobile. Use md:flex (row) on desktop.
             className="w-full grid grid-cols-2 gap-8 md:flex md:justify-between mt-8 text-[14px]"
             variants={itemVariants}
           >
             {isUpiPage ? (
               <>
-                {/* UPI Page - Only the requested pointers */}
-                <div className="space-y-4">
+                {/* UPI Page - All main links in one vertical column for mobile */}
+                <div className="space-y-4 flex flex-col">
                     <Link href="/about-us" onClick={() => handleLinkClick("About Us")} className="block text-[#7A7A7A] hover:text-gray-400 transition-colors">
                         ABOUT US
                     </Link>
@@ -607,8 +608,6 @@ const Footer = ({ heading, headingSize = "text-[24px]", isUpiPage = false }) => 
                     <Link href="/contact-us" onClick={() => handleLinkClick("Contact Us")} className="block text-[#7A7A7A] hover:text-gray-400 transition-colors">
                         CONTACT US
                     </Link>
-                </div>
-                <div className="space-y-4">
                     <Link href="/privacy-policy" onClick={() => handleLinkClick("Privacy Policy")} className="block text-[#7A7A7A] hover:text-gray-400 transition-colors">
                         PRIVACY POLICY
                     </Link>
@@ -619,9 +618,12 @@ const Footer = ({ heading, headingSize = "text-[24px]", isUpiPage = false }) => 
                         LEGAL DISCLAIMER
                     </Link>
                 </div>
-                {/* Render empty divs for layout consistency, if necessary for flex/grid, or simply omit them */}
-                <div className="hidden md:block"></div> 
-                <div className="hidden md:block"></div>
+                {/* SWITCH TO GLOBAL alone on the side (after the main column on mobile) */}
+                <div className="space-y-4 md:self-start">
+                    <Link href="/" onClick={() => handleLinkClick("Switch to Global")} className="block uppercase text-[#7A7A7A] hover:text-gray-400 transition-colors">
+                        SWITCH TO GLOBAL
+                    </Link>
+                </div>
               </>
             ) : (
               // Default Footer links for all other pages
@@ -731,7 +733,7 @@ const Footer = ({ heading, headingSize = "text-[24px]", isUpiPage = false }) => 
               </>
             )}
           </motion.div>
-          {/* === MODIFICATION END: Conditional link rendering === */}
+          {/* === MODIFICATION END: Conditional link rendering for mobile UPI view === */}
         </motion.div>
 
         <motion.div

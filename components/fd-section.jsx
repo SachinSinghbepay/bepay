@@ -146,8 +146,8 @@ const FdSection = forwardRef(function FdSection(props, ref) {
         transition={{ duration: 0.8 }}
       >
         {/* ─────────── Mobile-only text block ─────────── */}
-        <div className="block lg:hidden text-left mb-8 w-full max-w-md">
-          <h1 className="text-4xl md:text-5xl font-[400] leading-[35px] mb-4">
+        <div className="block lg:hidden text-left mt-2 w-full max-w-md">
+          <h1 className="text-[44.63px] md:text-5xl font-[400] leading-[38px] mb-5">
             <span className="text-[#333333] tracking-[-0.08em]">FDs</span>{" "}
             <span className="text-[#C0C0C0] tracking-[-0.08em]">
               that <br /> actually pay
@@ -155,12 +155,14 @@ const FdSection = forwardRef(function FdSection(props, ref) {
             <br />
           </h1>
           <div className="text-left text-[#6A6A6A] text-[14px] leading-relaxed">
-  While others offer 4-6%,{" "}
-  <span className="font-bold text-[#333333]">we give you 9%*</span><br /> just{" "}
-  <span className="font-bold text-[#333333]">safe & secure</span> returns and{" "}
-  <span className="font-bold text-[#333333]">compound interest</span> that grows monthly.
-</div>
-
+            While others offer 4-6%,{" "}
+            <span className="font-bold text-[#333333]">we provide upto 9%*</span>
+            <br />{" "}
+            <span className="font-bold text-[#333333]">Safe & secure</span>{" "}
+            returns and{" "}
+            <span className="font-bold text-[#333333]">compound interest</span>{" "}
+            that grows monthly.
+          </div>
         </div>
 
         {/* ─────────── Desktop-Only text block ─────────── */}
@@ -183,10 +185,9 @@ const FdSection = forwardRef(function FdSection(props, ref) {
           </div>
           <div className="text-center lg:text-left text-[#6A6A6A] text-[20px] leading-relaxed lg:mt-12">
             While others offer 4‑6%,{" "}
-            <span className="font-bold text-[#333333]"> we give you 9%*</span>
+            <span className="font-bold text-[#333333]"> we provide upto 9%*</span>
             <br />
-            Just{" "}
-            <span className="font-bold text-[#333333]">
+            Just <span className="font-bold text-[#333333]">
               safe & secure
             </span>{" "}
             returns.
@@ -199,7 +200,7 @@ const FdSection = forwardRef(function FdSection(props, ref) {
         </div>
 
         {/* ─────────── Bottom block ─────────── */}
-        <div className="w-full max-w-6xl flex flex-col lg:flex-row items-center justify-center gap-5 lg:gap-10">
+        <div className="w-full max-w-6xl flex flex-col lg:flex-row items-center justify-center gap-3 lg:gap-10 mt-7">
           {/* left image */}
           <motion.div
             initial={{ opacity: 0, x: -60 }}
@@ -312,20 +313,29 @@ const FdSection = forwardRef(function FdSection(props, ref) {
                   y: isMobile ? mobileButtonY : 0,
                 }}
               >
-                <WaitlistTriggerButton
-                  triggerSource=" 'Start Earning' button"
-                  buttonLocation="fd_section"
-                >
-                  <motion.button
-                    onClick={handleCTAClick}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="mx-auto flex items-center justify-center gap-2 w-[250px] h-[56px] rounded-full bg-black text-white text-[14px] font-medium px-6 py-4 hover:bg-black/90 transition-colors"
-                  >
-                    <Wallet className="w-4 h-4" />
-                    Start earning 9%* today
-                  </motion.button>
-                </WaitlistTriggerButton>
+              <WaitlistTriggerButton
+  triggerSource="'Start Earning' button"
+  buttonLocation="fd_section"
+>
+  <motion.button
+    onClick={handleCTAClick}
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="
+      mx-auto flex items-center justify-center gap-2
+      rounded-full bg-black text-white font-medium 
+      transition-colors
+      text-[12px] px-6 h-[48px]   /* 📱 mobile-optimized dimensions */
+      sm:text-[14px] sm:px-6 sm:h-[56px]  /* 💻 keep desktop same */
+    "
+  >
+    <Wallet className="w-5 h-5 sm:w-6 sm:h-6" />
+    <span className="whitespace-nowrap">
+      Start earning 9%* today
+    </span>
+  </motion.button>
+</WaitlistTriggerButton>
+
               </motion.div>
             </motion.div>
           </motion.div>

@@ -212,16 +212,16 @@ const MobileHero = ({ containerRef, frameRef }) => {
 
 
   {/* 9%* returns on FDs! - MODIFIED BLOCK 1 */}
- <div className="flex flex-col gap-4">
+ <div className="flex flex-col gap-0">
   {/* 1️⃣ Returns Section */}
   <div className="flex items-center text-[18px]">
-    <div className="bg-black p-3 rounded-xl mr-4 flex-shrink-0">
+    <div className="p-3 rounded-xl mr-4 flex-shrink-0">
       <Image
         src="/a1.png"
         alt="High returns icon"
-        width={30}
-        height={30}
-        className="h-6 w-auto"
+        width={64}
+        height={64}
+        className="h-11 w-auto"
       />
     </div>
     <div className="text-sm sm:text-lg">
@@ -232,13 +232,13 @@ const MobileHero = ({ containerRef, frameRef }) => {
 
   {/* 2️⃣ Cashback & Rewards Section */}
   <div className="flex items-center text-[18px]">
-    <div className="bg-black p-3 rounded-xl mr-4 flex-shrink-0">
+    <div className=" p-3 rounded-xl mr-4 flex-shrink-0">
       <Image
         src="/a2.png"
         alt="Cashback and rewards icon"
-        width={30}
-        height={30}
-        className="h-6 w-auto"
+        width={64}
+        height={64}
+        className="h-11 w-auto"
       />
     </div>
     <div className="text-sm sm:text-lg text-left">
@@ -255,10 +255,10 @@ const MobileHero = ({ containerRef, frameRef }) => {
 
   {/* Existing Buttons - MODIFIED DIMENSIONS */}
   <button
-    className="bg-black text-white rounded-full flex items-center justify-center mt-15"
+    className="bg-black text-white rounded-full flex items-center justify-center mt-2"
     style={{
-      width: '250px',
-      height: '80px',
+      width: '265px',
+      height: '83px',
       borderRadius: '61px',
       opacity: 1,
       gap: '10px',
@@ -273,18 +273,19 @@ const MobileHero = ({ containerRef, frameRef }) => {
       alt="Apple App Store"
       width={30}
       height={30}
-      className="h-4 w-auto"
+      className="h-6 w-6"
     />
-    <div className="text-left text-xs">
-      <div>Download on the</div>
+    <div className="font-semibold text-sm leading-5 tracking-[0.02em] text-left"
+          style={{ fontFamily: "'Open Sans', sans-serif" }}>
+      <div>Download on</div>
       <div>App Store</div>
     </div>
   </button>
   <button
     className="bg-black text-white rounded-full flex items-center justify-center"
     style={{
-      width: '250px',
-      height: '80px',
+      width: '265px',
+      height: '83px',
       borderRadius: '61px',
       opacity: 1,
       gap: '10px',
@@ -299,9 +300,10 @@ const MobileHero = ({ containerRef, frameRef }) => {
       alt="Google Play Store"
       width={20}
       height={20}
-      className="h-4 w-auto"
+      className="h-6 w-6"
     />
-    <div className="text-left text-xs">
+    <div className="font-semibold text-sm leading-5 tracking-[0.02em] text-left"
+          style={{ fontFamily: "'Open Sans', sans-serif" }}>
       <div>Get the App on</div>
       <div>Google Play</div>
     </div>
