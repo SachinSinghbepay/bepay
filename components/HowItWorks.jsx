@@ -42,7 +42,7 @@ const HowItWorksSection = forwardRef(function HowItWorksSection(props, ref) {
   const [hasTrackedView, setHasTrackedView] = useState(false);
 
   const handleJoinUsersClick = () => {
-    AnalyticsService.sendEvent("HowItWorks CTA Clicked: Join 50,000+");
+    AnalyticsService.sendEvent("'Join 50,000+ smart earners' button clicked");
   };
 
   useEffect(() => {
@@ -127,7 +127,7 @@ const HowItWorksSection = forwardRef(function HowItWorksSection(props, ref) {
     >
       <div className="sticky top-0 flex flex-col items-center justify-center h-screen px-4 py-12">
         {/* Header section with title and subheading */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 md:mt-15">
           <h1 className="text-5xl md:text-[140px] font-[400] tracking-[-0.08em] mb-10 md:leading-[130px] leading-[1.2]">
             <span style={{ color: "#C0C0C0" }}>How </span>
             <span className="text-[#333333]">bepay </span>
@@ -138,7 +138,7 @@ const HowItWorksSection = forwardRef(function HowItWorksSection(props, ref) {
           </h1>
           {/* MOBILE: mb-24 pushes this down, DESKTOP: md:mb-0 removes margin */}
           <p
-            className="text-[20px] tracking-[0.01%] font-medium mt-29 mb-2 md:mb-0"
+            className="text-[20px] tracking-[0.01%] font-medium mt-29 mb-2 md:mb-20"
             style={{ color: "#6A6A6A" }}
           >
             Start in 30 Seconds. Earn Forever.
@@ -146,7 +146,7 @@ const HowItWorksSection = forwardRef(function HowItWorksSection(props, ref) {
         </div>
         
         {/* MOBILE: -mt-16 pulls content up, DESKTOP: md:mt-0 resets to normal */}
-        <div className="relative flex flex-col items-center justify-center w-full max-w-7xl -mt-16 md:mt-0">
+        <div className="relative flex flex-col items-center justify-center w-full max-w-7xl -mt-16 md:-mt-40 md:mb-20">
           {/* Animated step number */}
           <AnimatePresence mode="wait">
             <motion.div

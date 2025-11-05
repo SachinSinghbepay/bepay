@@ -22,7 +22,7 @@ const page = () => {
       {/* <AnimatedTextScroll/> */}
       <FdSection/>
       <HowItWorksSection/>
-      <StickyHeroSection/>
+      {/* <StickyHeroSection/> */}
       
       {/* <Footer /> */}
     </>

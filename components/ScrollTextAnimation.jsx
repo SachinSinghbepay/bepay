@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react"; // 👈 ADDED useCallback
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -19,13 +19,13 @@ const ScrollTextAnimation = () => {
   const fifthLineRef = useRef(null);
   const cardSectionRef = useRef(null);
   const cardsContainerRef = useRef(null);
-  
+
   // Refs for the new last card (Card 7)
   const lastCardLeftRef = useRef(null);
   const lastCardRightRef = useRef(null);
   const lastCardContentRef = useRef(null);
   const lastCardNumberRef = useRef(null);
-  
+
   const downloadButtonsContainerRef = useRef(null);
   const downloadButton1Ref = useRef(null);
   const downloadButton2Ref = useRef(null);
@@ -102,11 +102,10 @@ const ScrollTextAnimation = () => {
         alt: "Digital Banking",
       },
     },
-    // Card 6 is removed
     {
-      id: 7, // This is the new "last card" for the animation logic
+      id: 7,
       leftCard: {
-        number: "6", // Renumbered to 6 for sequential display
+        number: "6",
         title: "Insurance that covers your ",
         highlight: "life, health, car, home & more",
         description: "",
@@ -116,11 +115,53 @@ const ScrollTextAnimation = () => {
         alt: "Digital Banking",
       },
     },
-    // Card 8 is removed
   ];
 
-  // We are directly using the filtered card set since cardSets now only has the required cards (1-5, 7)
-  const finalCardSets = cardSets; 
+  const finalCardSets = cardSets;
+
+  /**
+   * Helper to determine the index of the card currently in view on mobile.
+   * This is used to dynamically adjust the z-index for overlapping shadows.
+   */
+  const getCurrentCardIndex = useCallback(() => { // 👈 WRAPPED in useCallback
+    if (!cardsContainerRef.current || !isMobile || windowWidth === 0) return 0;
+
+    const scrollLeft = cardsContainerRef.current.scrollLeft;
+    // Card width + margin = 80vw + 10vw = 90vw (0.9 * windowWidth)
+    const cardWidthWithMargin = windowWidth * 0.9; 
+
+    // Adjust for the 10vw margin on the first card
+    const effectiveScrollLeft = Math.max(0, scrollLeft);
+
+    let index = Math.round(effectiveScrollLeft / cardWidthWithMargin);
+
+    return Math.min(Math.max(0, index), finalCardSets.length - 1);
+  }, [isMobile, windowWidth, finalCardSets.length]); // 👈 Added dependencies
+
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+
+  // Update current card index on mobile scroll
+  useEffect(() => {
+    if (!isMobile || !cardsContainerRef.current) return;
+
+    const container = cardsContainerRef.current;
+    let timeout;
+
+    const handleScroll = () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            setCurrentCardIndex(getCurrentCardIndex());
+        }, 100);
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    
+    return () => {
+        container.removeEventListener('scroll', handleScroll);
+        clearTimeout(timeout);
+    };
+  }, [isMobile, windowWidth, finalCardSets.length, getCurrentCardIndex]); // 👈 ADDED getCurrentCardIndex to fix the warning
+
 
   // Analytics Tracking
   useEffect(() => {
@@ -164,13 +205,12 @@ const ScrollTextAnimation = () => {
     const fifthLine = fifthLineRef.current;
     const cardSection = cardSectionRef.current;
     const cardsContainer = cardsContainerRef.current;
-    
-    // Refs for the new last card (Card 7)
+
     const lastCardLeft = lastCardLeftRef.current;
     const lastCardRight = lastCardRightRef.current;
     const lastCardContent = lastCardContentRef.current;
     const lastCardNumber = lastCardNumberRef.current;
-    
+
     const downloadButtonsContainer = downloadButtonsContainerRef.current;
     const downloadButton1 = downloadButton1Ref.current;
     const downloadButton2 = downloadButton2Ref.current;
@@ -197,14 +237,11 @@ const ScrollTextAnimation = () => {
     )
       return;
 
-    // Revert existing GSAP context before creating a new one
     ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     gsap.killTweensOf("*");
 
     const ctx = gsap.context(() => {
-      // Apply GSAP logic only for desktop view (windowWidth >= 1024)
       if (!isMobile) {
-        // Initial GSAP setup for desktop
         gsap.set(cardSection, { opacity: 0, y: 100 });
         gsap.set([thirdLine, fourthLine, fifthLine], { opacity: 0, y: 50 });
         gsap.set([firstLine, secondLine], { opacity: 0, y: 100 });
@@ -214,15 +251,12 @@ const ScrollTextAnimation = () => {
           opacity: 0,
           y: 30,
         });
-        
-        // **UPDATED: The end value is now based on the new total of 6 cards**
+
         const mainTl = gsap.timeline({
           scrollTrigger: {
             trigger: container,
             start: "top top",
-            // The duration is reduced because we have fewer cards (8 -> 6)
-            // Original: 1200% for 8 cards. New: 900% for 6 cards (approx 150% per card).
-            end: "+=900%", 
+            end: "+=900%",
             pin: true,
             scrub: 1,
             anticipatePin: 1,
@@ -261,14 +295,13 @@ const ScrollTextAnimation = () => {
           .to(
             cardsContainer,
             {
-              // **UPDATED: Use finalCardSets.length (which is 6)**
               x: () => -(finalCardSets.length - 1) * windowWidth,
-              duration: 8, // Reduced duration for horizontal scroll
+              duration: 8,
               ease: "none",
             },
             "+=0.5"
           )
-          .to({}, { duration: 2 }, "lastCardHold") // Increased hold duration
+          .to({}, { duration: 2 }, "lastCardHold")
           .to(
             lastCardRight,
             {
@@ -310,7 +343,7 @@ const ScrollTextAnimation = () => {
           .to(
             downloadButtonsContainer,
             { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-            "lastCardHold+=1.6" // Adjusted timing
+            "lastCardHold+=1.6"
           )
           .to(
             downloadButton1,
@@ -327,10 +360,10 @@ const ScrollTextAnimation = () => {
             { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
             "lastCardHold+=2.4"
           )
-          .to({}, { duration: 3 }, "+=0.5"); // Extended final hold
+          .to({}, { duration: 3 }, "+=0.5");
       }
     }, container);
-    
+
     return () => ctx.revert();
   }, [windowWidth, finalCardSets.length, isMobile]);
 
@@ -340,7 +373,7 @@ const ScrollTextAnimation = () => {
       <button
         ref={buttonRef}
         className={`rounded-[61px] bg-[#080808] text-white flex items-center gap-[10px] ${isMobile ? "opacity-100 justify-center" : "opacity-0 justify-start"}`}
-        style={{ 
+        style={{
           borderRadius: '61px',
           width: isMobile ? '265px' : '260px',
           height: isMobile ? '83px' : '90px',
@@ -371,7 +404,6 @@ const ScrollTextAnimation = () => {
 
   return (
     <>
-      {/* Hide the horizontal scrollbar on mobile */}
       {isMobile && (
         <style jsx global>{`
           .mobile-scroll-hide-bar::-webkit-scrollbar {
@@ -386,11 +418,11 @@ const ScrollTextAnimation = () => {
 
       <div
         ref={containerRef}
-        className={`relative bg-[#F9F9F9] z-20 w-full overflow-hidden ${isMobile ? "min-h-auto" : "min-h-screen"}`}
+        className={`relative z-20 w-full overflow-hidden ${isMobile ? "min-h-auto bg-[#F6F6F6]" : "min-h-screen bg-[#F9F9F9]"}`}
       >
         {/* Text Content */}
         <div className={`absolute inset-0 flex flex-col items-center text-center px-4 ${isMobile ? "relative justify-start pt-10" : "justify-center"}`}>
-          
+
           {/* Main Heading: One SuperApp. Full Control. */}
           <div ref={firstLineRef} className="lg:mb-2 lg:mt-30">
             <span
@@ -436,7 +468,7 @@ const ScrollTextAnimation = () => {
               Send. Spend. Earn.
             </span>
           </div>
-          
+
           {/* Subheading: Crypto or UPI — it just works. */}
           <div ref={fourthLineRef} className="mb-6 lg:mb-2">
             <span
@@ -498,166 +530,186 @@ const ScrollTextAnimation = () => {
               >
                 earn you up to ₹3,500 back — automatically.
               </span>{" "}
-              
+
             </p>
           </div>
         </div>
 
         {/* Cards Section */}
-        <div 
-          ref={cardSectionRef} 
+        <div
+          ref={cardSectionRef}
           className={`${isMobile ? "relative opacity-100 mt-0 pb-12" : "absolute inset-0 opacity-0"}`}
         >
           <div
             ref={cardsContainerRef}
-            // Use finalCardSets.length for the width calculation
             className={`flex h-full ${isMobile ? "overflow-x-scroll whitespace-nowrap pt-12 mobile-scroll-hide-bar" : ""}`}
             style={
               isMobile
                 ? {
-                    width: "100%", 
+                    width: "100%",
                     transform: "none",
-                    paddingLeft: "5vw",
+                    // REMOVED paddingLeft: "10vw" to fix mobile scroll view starting point
                   }
                 : { width: `${finalCardSets.length * 100}vw` }
             }
           >
-            {finalCardSets.map((cardSet, index) => (
-              <div
-                key={cardSet.id}
-                className={`flex-shrink-0 h-full flex items-center ${isMobile ? "w-[90vw] mr-[5vw] justify-start" : "w-screen justify-center"}`}
-                style={isMobile && index === finalCardSets.length - 1 ? { marginRight: "10vw" } : {}}
-              >
-                <div className={`w-full mx-auto ${isMobile ? "px-0" : "max-w-7xl px-4 sm:px-6 lg:px-8"}`}>
-                  <div className={`grid h-full items-center ${isMobile ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8"}`}>
-                    
-                    {/* Left Card - Text Content */}
-                    <div
-                      // **UPDATED: The last card ID is now 7**
-                      ref={cardSet.id === 7 ? lastCardLeftRef : null}
-                      className={`relative h-full max-w-[600px] w-full min-h-[350px] sm:min-h-[400px] lg:min-h-[450px] p-6 sm:p-8 lg:p-12 rounded-2xl lg:rounded-3xl bg-white mx-auto ${isMobile ? "shadow-none" : "shadow-xl border border-gray-200"}`}
-                      style={{ zIndex: cardSet.id === 7 && !isMobile ? 10 : "auto" }}
-                    >
-                      <div
-                        // **UPDATED: The last card ID is now 7**
-                        ref={cardSet.id === 7 ? lastCardNumberRef : null}
-                        className="absolute top-4 z-30 sm:top-6 lg:top-8 right-4 sm:right-6 lg:right-8"
-                      >
-                        <span 
-  className="text-6xl sm:text-8xl lg:text-[120px] xl:text-[140px] font-[500] bg-gradient-to-b from-[#EDEDED] to-[#EDEDED1A] text-transparent bg-clip-text"
-  style={isMobile ? { fontFamily: "'Open Sans', sans-serif" } : { fontFamily: 'Montserrat, sans-serif' }}
->
-  {cardSet.leftCard.number}  {/* <-- CORRECT: Placed as the child content */}
-</span>
-                      </div>
-                      <div
-                        // **UPDATED: The last card ID is now 7**
-                        ref={cardSet.id === 7 ? lastCardContentRef : null}
-                        className="absolute bottom-4 z-10 text-left left-6 sm:left-8 lg:left-12 right-6 lg:right-12"
-                      >
-                        <p
-                          className={`text-[20px] whitespace-normal mb-3 ${isMobile ? "text-[#6A6A6A]" : "text-base sm:text-lg max-w-[400px] lg:text-2xl text-gray-600"}`}
-                          style={{ fontFamily: "'Montserrat', sans-serif" }}
-                        >
-                          {cardSet.leftCard.title}
-                          <span className="text-black font-semibold">
-                            {" "}
-                            {cardSet.leftCard.highlight}
-                          </span>
-                          {cardSet.leftCard.description}
-                        </p>
-                      </div>
-                      {/* Download Buttons - Only for the new last card (ID 7) on desktop */}
-                      {cardSet.id === 7 && !isMobile && (
-                        <div 
-                          ref={downloadButtonsContainerRef}
-                          className="absolute  bottom-12 left-8 space-y-3 z-50"
-                          style={{ opacity: 0 }}
-                        >
-                          <DownloadButtons 
-                            buttonRef={downloadButton1Ref}
-                            id="downloadButton1"
-                            src="/apple.png"
-                            alt="apple logo"
-                            text="Download on the App Store"
-                          />
-                          <DownloadButtons 
-                            buttonRef={downloadButton2Ref}
-                            id="downloadButton2"
-                            src="/playstore.png"
-                            alt="playstore logo"
-                            text="Get the App on Google Play!"
-                          />
-                          <DownloadButtons 
-                            buttonRef={downloadButton3Ref}
-                            id="downloadButton3"
-                            src="/gal.png"
-                            alt="gallery logo"
-                            text="Get it on the App Gallery!"
-                          />
-                        </div>
-                      )}
-                    </div>
+            {finalCardSets.map((cardSet, index) => {
+              let currentZIndex = 1;  
+              if (isMobile) {
+                  // Logic to keep the active card on top for mobile shadow overlap
+                  if (index === currentCardIndex) {
+                      currentZIndex = 20;
+                  } else if (index === currentCardIndex + 1) {
+                      currentZIndex = 10;
+                  } else {
+                      currentZIndex = 1;
+                  }
+              }
 
-                    {/* Right Card - Image / Video (Hidden on Mobile) */}
-                    <div
-                      // **UPDATED: The last card ID is now 7**
-                      ref={cardSet.id === 7 ? lastCardRightRef : null}
-                      className={`relative bg-[#D1D1D1] h-[350px] sm:h-[450px] max-w-[600px] mx-auto w-full lg:h-[500px] rounded-2xl lg:rounded-3xl items-end justify-center overflow-hidden ${isMobile ? "hidden" : "flex shadow-xl"}`}
-                      style={{
-                        border: isMobile ? "none" : "1px solid rgba(255,255,255,0.2)",
-                        zIndex: cardSet.id === 7 && !isMobile ? 1 : "auto",
-                      }}
-                    >
-                      {cardSet.rightCard.video ? (
-                        <video
-                          src={cardSet.rightCard.video}
-                          autoPlay
-                          loop
-                          muted
-                          playsInline
-                          className="absolute inset-0 w-full h-full object-cover rounded-2xl lg:rounded-3xl"
-                        />
-                      ) : (
-                        <div className={`${index === 0 ? "w-[90%] h-[90%] mb-0" : "w-full h-full"} relative`}>
-                          <Image
-                            src={cardSet.rightCard.image || "/placeholder.svg"}
-                            alt={cardSet.rightCard.alt}
-                            fill
-                            className={`${
-                              index === 0 ? "object-contain" : "object-cover"
-                            } w-full h-full rounded-2xl lg:rounded-3xl`}
-                            priority={index === 0}
-                          />
+              return (
+                <div
+                  key={cardSet.id}
+                  // ADDED ml-[10vw] for the first card to inset it, making the subsequent card's 10vw visible
+                  className={`flex-shrink-0 h-full flex items-center ${isMobile ? "w-[80vw] mr-[5vw] justify-start" : "w-screen justify-center"} ${isMobile && index === 0 ? "ml-[5vw]" : ""}`} 
+                >
+                  <div className={`w-full mx-auto ${isMobile ? "px-0" : "max-w-7xl px-4 sm:px-6 lg:px-8"}`}>
+                    <div className="grid h-full items-center grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+
+                      {/* Left Card - Text Content */}
+                      <div
+                        ref={cardSet.id === 7 ? lastCardLeftRef : null}
+                        className={`flex justify-center item-center relative h-full max-w-[600px] w-full min-h-[350px] sm:min-h-[400px] lg:min-h-[450px] p-6 sm:p-8 lg:p-12 rounded-2xl lg:rounded-3xl bg-white mx-auto 
+                          ${isMobile ? "" : "shadow-xl border border-gray-200"}`}
+                        style={{ 
+                            zIndex: isMobile ? currentZIndex : (cardSet.id === 7 ? 10 : "auto"),
+                            ...(isMobile ? {
+                              borderRadius: '26.4px',
+                              borderWidth: '1.2px',
+                              borderColor: '#EFEFEF',
+                              boxShadow: '60px 20px 30px -20px rgba(0, 0, 0, 0.05), 80px 30px 120px -90px rgba(0, 0, 0, 0.02)'
+                            } : {})
+                        }}
+                      >
+                        <div>
+                          <div
+                          ref={cardSet.id === 7 ? lastCardNumberRef : null}
+                          className="absolute top-4 z-30 sm:top-6 lg:top-8 right-4 sm:right-6 lg:right-8"
+                          >
+                            <span
+                              className="text-6xl sm:text-8xl lg:text-[120px] xl:text-[140px] font-[500] bg-gradient-to-b from-[#EDEDED] to-[#EDEDED1A] text-transparent bg-clip-text"
+                              style={isMobile ? { fontFamily: "'Open Sans', sans-serif" } : { fontFamily: 'Montserrat, sans-serif' }}
+                            >
+                              {cardSet.leftCard.number}
+                            </span>
+                          </div>
+                          <div
+                            ref={cardSet.id === 7 ? lastCardContentRef : null}
+                            className="absolute bottom-4 z-10 text-left left-6 sm:left-8 lg:left-12 right-6 lg:right-12"
+                          >
+                            <p
+                              className={`text-[20px] whitespace-normal mb-3 ${isMobile ? "text-[#6A6A6A]" : "text-base sm:text-lg max-w-[400px] lg:text-2xl text-gray-600"}`}
+                              style={{ fontFamily: "'Montserrat', sans-serif" }}
+                            >
+                              {cardSet.leftCard.title}
+                              <span className="text-black font-semibold">
+                                {" "}
+                                {cardSet.leftCard.highlight}
+                              </span>
+                              {cardSet.leftCard.description}
+                            </p>
+                          </div>
+                          {cardSet.id === 7 && !isMobile && (
+                            <div
+                              ref={downloadButtonsContainerRef}
+                              className="absolute  bottom-12 left-[1%] space-y-3 z-50"
+                              style={{ opacity: 0 }}
+                            >
+                              <DownloadButtons
+                                buttonRef={downloadButton1Ref}
+                                id="downloadButton1"
+                                src="/apple.png"
+                                alt="apple logo"
+                                text="Download on the App Store"
+                              />
+                              <DownloadButtons
+                                buttonRef={downloadButton2Ref}
+                                id="downloadButton2"
+                                src="/playstore.png"
+                                alt="playstore logo"
+                                text="Get the App on Google Play!"
+                              />
+                              <DownloadButtons
+                                buttonRef={downloadButton3Ref}
+                                id="downloadButton3"
+                                src="/gal.png"
+                                alt="gallery logo"
+                                text="Get it on the App Gallery!"
+                              />
+                            </div>
+                          )}
                         </div>
-                      )}
+                      </div>
+
+
+                      {/* Right Card - Image / Video (Hidden on Mobile) */}
+                      <div
+                        ref={cardSet.id === 7 ? lastCardRightRef : null}
+                        className={`relative bg-[#D1D1D1] h-[350px] sm:h-[450px] max-w-[600px] mx-auto w-full lg:h-[500px] rounded-2xl lg:rounded-3xl items-end justify-center overflow-hidden ${isMobile ? "hidden" : "flex shadow-xl"}`}
+                        style={{
+                          border: isMobile ? "none" : "1px solid rgba(255,255,255,0.2)",
+                          zIndex: cardSet.id === 7 && !isMobile ? 1 : "auto",
+                        }}
+                      >
+                        {cardSet.rightCard.video ? (
+                          <video
+                            src={cardSet.rightCard.video}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="absolute inset-0 w-full h-full object-cover rounded-2xl lg:rounded-3xl"
+                          />
+                        ) : (
+                          <div className={`${index === 0 ? "w-[90%] h-[90%] mb-0" : "w-full h-full"} relative`}>
+                            <Image
+                              src={cardSet.rightCard.image || "/placeholder.svg"}
+                              alt={cardSet.rightCard.alt}
+                              fill
+                              className={`${
+                                index === 0 ? "object-contain" : "object-cover"
+                              } w-full h-full rounded-2xl lg:rounded-3xl`}
+                              priority={index === 0}
+                            />
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
-      
+
       {/* Download Buttons Section - Mobile Only */}
       {isMobile && (
-        <div className="bg-[#F9F9F9] flex flex-col items-center space-y-3 px-4 w-full mt-0 pb-12">
-          <DownloadButtons 
+        <div className="bg-[#F6F6F6] flex flex-col items-center space-y-3 px-4 w-full mt-0 pb-12">
+          <DownloadButtons
             buttonRef={downloadButton1Ref}
             id="downloadButton1-mobile"
             src="/apple.png"
             alt="apple logo"
             text="Download on the App Store"
           />
-          <DownloadButtons 
+          <DownloadButtons
             buttonRef={downloadButton2Ref}
             id="downloadButton2-mobile"
             src="/playstore.png"
             alt="playstore logo"
             text="Get the App on Google Play!"
           />
-          <DownloadButtons 
+          <DownloadButtons
             buttonRef={downloadButton3Ref}
             id="downloadButton3-mobile"
             src="/gal.png"
