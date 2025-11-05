@@ -117,7 +117,7 @@ export default function AnimatedTextScroll() {
               className="relative"
             >
               <Image
-                src="/phone_a.png"
+                src="/phone_c.png"
                 alt="Phone Mockup"
                 fill={true}
                 className="object-contain"
