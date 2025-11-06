@@ -12,7 +12,7 @@ import WaitlistTriggerButton from "./waitlist-trigger-button";
 const FdSection = forwardRef(function FdSection(props, ref) {
   // 🔑 FIX: Use the forwarded ref (ref) if available, otherwise use a local one
   const internalRef = useRef(null);
-  const sectionRef = ref || internalRef;
+    const sectionRef = useRef(null);
   const [hasTrackedView, setHasTrackedView] = useState(false);
 
   // --- Mobile Viewport Detection ---
@@ -102,39 +102,43 @@ const FdSection = forwardRef(function FdSection(props, ref) {
   });
 
   // --- Analytics Tracking ---
-  useEffect(() => {
-    // Only run observer if the ref is valid
-    if (!sectionRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasTrackedView) {
-          AnalyticsService.sendEvent("UPI FD-section viewed");
-          setHasTrackedView(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const currentRef = sectionRef.current; // Capture ref.current
-    observer.observe(currentRef);
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
+ // Move the analytics useEffect BEFORE the early return check
+useEffect(() => {
+  // Wait for both mobile detection AND ref to be ready
+  if (isMobile === undefined || !sectionRef.current) return;
+  
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting && !hasTrackedView) {
+        console.log('🔥 FD Section viewed - firing analytics'); // Debug log
+        AnalyticsService.sendEvent("UPI - fd section viewed");
+        setHasTrackedView(true);
       }
-    };
-  }, [hasTrackedView, sectionRef]); // Re-run if ref or state changes
+    },
+    { 
+      threshold: 0.1,
+      rootMargin: '0px' // Ensure proper triggering
+    }
+  );
+
+  console.log('👀 Setting up observer for:', sectionRef.current); // Debug log
+  observer.observe(sectionRef.current);
+
+  return () => {
+    console.log('🧹 Cleaning up observer'); // Debug log
+    observer.disconnect();
+  };
+}, [isMobile, hasTrackedView]); // Add isMobile as dependency
+
 
   const handleCTAClick = () => {
     AnalyticsService.sendEvent("start_earining_button_clicked");
   };
 
-  // This check is now safe because useScroll target is set in useEffect
-  if (isMobile === undefined) {
-    return null;
-  }
+  // // This check is now safe because useScroll target is set in useEffect
+  // if (isMobile === undefined) {
+  //   return null;
+  // }
 
   return (
     // 🔑 FIX: Attach the sectionRef

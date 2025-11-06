@@ -621,7 +621,7 @@ const ScrollTextAnimation = () => {
                           {cardSet.id === 7 && !isMobile && (
                             <div
                               ref={downloadButtonsContainerRef}
-                              className="absolute  bottom-12 left-[1%] space-y-3 z-50"
+                              className="absolute  bottom-12 left-[26%] space-y-3 z-50"
                               style={{ opacity: 0 }}
                             >
                               <DownloadButtons
