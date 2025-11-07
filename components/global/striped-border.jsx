@@ -2,10 +2,11 @@
 
 import { useEffect, useRef } from "react"
 import { useInView } from "framer-motion"
-
+import Image from "next/image" // 1. Import next/image
 
 const StripedBorder = ({
   imageSrc,
+  alt = "",
   width = 742,
   height = 661,
   borderWidth = 4,
@@ -21,6 +22,7 @@ const StripedBorder = ({
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: true })
 
+  // This useEffect remains unchanged, it just creates the striped background
   useEffect(() => {
     if (!containerRef.current || !isInView) return
 
@@ -28,40 +30,30 @@ const StripedBorder = ({
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    // Set canvas dimensions
     canvas.width = width
     canvas.height = height
 
-    // Draw black background
     ctx.fillStyle = "#000000"
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-    // Calculate angle in radians
     const angleRad = (lineAngle * Math.PI) / 180
-
-    // Draw white diagonal stripes
     ctx.strokeStyle = "#FFFFFF"
     ctx.lineWidth = lineWidth
 
-    // Calculate spacing for diagonal lines based on angle
-    const diagonalLength = Math.sqrt(canvas.width * canvas.width + canvas.height * canvas.height)
+    const diagonalLength = Math.sqrt(
+      canvas.width * canvas.width + canvas.height * canvas.height
+    )
     const totalLines = Math.ceil(diagonalLength / lineSpacing) * 2
-
-    // Calculate start and end points for the lines
     const centerX = canvas.width / 2
     const centerY = canvas.height / 2
     const radius = diagonalLength / 2
 
     for (let i = -totalLines / 2; i < totalLines / 2; i++) {
       const offset = i * lineSpacing
-
-      // Calculate start and end points for the line
       const startX = centerX + offset * Math.cos(angleRad + Math.PI / 2)
       const startY = centerY + offset * Math.sin(angleRad + Math.PI / 2)
-
       const endX = startX + radius * Math.cos(angleRad)
       const endY = startY + radius * Math.sin(angleRad)
-
       const startX2 = startX - radius * Math.cos(angleRad)
       const startY2 = startY - radius * Math.sin(angleRad)
 
@@ -71,58 +63,42 @@ const StripedBorder = ({
       ctx.stroke()
     }
 
-    // Create image element
-    const img = new Image()
-    img.src = imageSrc
-    img.crossOrigin = "anonymous"
-
-    img.onload = () => {
-      // Calculate padding based on which sides should have borders
-      const paddingLeft = showLeft ? borderWidth : 0
-      const paddingTop = showTop ? borderWidth : 0
-      const paddingRight = showRight ? borderWidth : 0
-      const paddingBottom = showBottom ? borderWidth : 0
-
-      // Calculate image dimensions
-      const imgWidth = canvas.width - paddingLeft - paddingRight
-      const imgHeight = canvas.height - paddingTop - paddingBottom
-
-      // Draw image with appropriate padding
-      ctx.drawImage(img, paddingLeft, paddingTop, imgWidth, imgHeight)
-
-      // Apply the canvas as background
-      if (containerRef.current) {
-        const dataUrl = canvas.toDataURL("image/png")
-        containerRef.current.style.backgroundImage = `url(${dataUrl})`
-        containerRef.current.style.backgroundSize = "cover"
-        containerRef.current.style.backgroundPosition = "center"
-      }
+    if (containerRef.current) {
+      const dataUrl = canvas.toDataURL("image/png")
+      containerRef.current.style.backgroundImage = `url(${dataUrl})`
+      containerRef.current.style.backgroundSize = "cover"
+      containerRef.current.style.backgroundPosition = "center"
     }
-  }, [
-    isInView,
-    imageSrc,
-    width,
-    height,
-    borderWidth,
-    lineWidth,
-    lineSpacing,
-    lineAngle,
-    showTop,
-    showRight,
-    showBottom,
-    showLeft,
-  ])
+  }, [isInView, width, height, lineWidth, lineSpacing, lineAngle])
+
+  const paddingStyles = {
+    paddingTop: showTop ? `${borderWidth}px` : "0px",
+    paddingRight: showRight ? `${borderWidth}px` : "0px",
+    paddingBottom: showBottom ? `${borderWidth}px` : "0px",
+    paddingLeft: showLeft ? `${borderWidth}px` : "0px",
+  }
 
   return (
     <div
       ref={containerRef}
-      className={`aspect-[${width}/${height}] w-full h-auto rounded-sm shadow-lg transform transition-all duration-700 ${className}`}
+      // 2. Added `relative` here
+      className={`relative aspect-[${width}/${height}] w-full h-auto rounded-sm shadow-lg transform transition-all duration-700 ${className}`}
       style={{
+        ...paddingStyles,
         minHeight: "300px",
         opacity: isInView ? 1 : 0,
         transform: isInView ? "translateY(0)" : "translateY(20px)",
       }}
-    />
+    >
+      <Image
+        src={imageSrc}
+        alt={alt}
+        fill
+        className="object-cover"
+        // For optimal performance, add a 'sizes' prop based on your layout
+        // e.g., sizes="(max-width: 768px) 100vw, 50vw"
+      />
+    </div>
   )
 }
 

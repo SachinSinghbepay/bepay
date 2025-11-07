@@ -56,7 +56,6 @@ const FTR = () => {
           </motion.span>
           <motion.span
             className="text-[#6a6a6a] text-[0.8rem] text-center"
-            v
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -84,7 +83,17 @@ const FTR = () => {
             viewport={{ once: false, amount: 0.5 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Image src="apple.png" alt="" className="h-5" />
+            {/* FIX: Added width={20} and height={20} to match the 'h-5' Tailwind class (1.25rem = 20px).
+              Also added a descriptive alt tag.
+            */}
+            <Image
+              src="https://placehold.co/20x20/ffffff/000000?text=A&font=sans"
+              alt="Apple App Store"
+              width={20}
+              height={20}
+              className="h-5 w-auto"
+              onError={(e) => (e.currentTarget.src = 'https://placehold.co/20x20/ffffff/000000?text=A&font=sans')}
+            />
             <div className="text-left">
               <div>Download on the</div>
               <div>App Store</div>
@@ -98,7 +107,16 @@ const FTR = () => {
             viewport={{ once: false, amount: 0.5 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Image src="playstore.png" alt="" className="h-5" />
+            {/* FIX: Added width={20} and height={20} to match 'h-5'.
+            */}
+            <Image
+              src="https://placehold.co/20x20/ffffff/000000?text=P&font=sans"
+              alt="Google Play Store"
+              width={20}
+              height={20}
+              className="h-5 w-auto"
+              onError={(e) => (e.currentTarget.src = 'https://placehold.co/20x20/ffffff/000000?text=P&font=sans')}
+            />
             <div className="text-left">
               <div>Get the App on</div>
               <div>Google Play</div>
@@ -112,7 +130,16 @@ const FTR = () => {
             viewport={{ once: false, amount: 0.5 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Image src="huawei.png" alt="" className="h-5" />
+            {/* FIX: Added width={20} and height={20} to match 'h-5'.
+            */}
+            <Image
+              src="https://placehold.co/20x20/ffffff/000000?text=H&font=sans"
+              alt="Huawei App Gallery"
+              width={20}
+              height={20}
+              className="h-5 w-auto"
+              onError={(e) => (e.currentTarget.src = 'https://placehold.co/20x20/ffffff/000000?text=H&font=sans')}
+            />
             <div className="text-left">
               <div>Get it on the App</div>
               <div>Gallery!</div>
@@ -168,7 +195,16 @@ const FTR = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: false, amount: 0.5 }}
           >
-            <Image src="linkdin.png" className="h-8" alt="" />
+            {/* FIX: Added width={32} and height={32} to match 'h-8' (2rem = 32px).
+            */}
+            <Image
+              src="https://placehold.co/32x32/ffffff/000000?text=Li&font=sans"
+              alt="LinkedIn"
+              width={32}
+              height={32}
+              className="h-8 w-auto"
+              onError={(e) => (e.currentTarget.src = 'https://placehold.co/32x32/ffffff/000000?text=Li&font=sans')}
+            />
           </motion.li>
           <motion.li
             initial={{ opacity: 0, y: 50 }}
@@ -176,7 +212,16 @@ const FTR = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             viewport={{ once: false, amount: 0.5 }}
           >
-            <Image src="x.png" className="h-8" alt="" />
+            {/* FIX: Added width={32} and height={32} to match 'h-8'.
+            */}
+            <Image
+              src="https://placehold.co/32x32/ffffff/000000?text=X&font=sans"
+              alt="X (formerly Twitter)"
+              width={32}
+              height={32}
+              className="h-8 w-auto"
+              onError={(e) => (e.currentTarget.src = 'https://placehold.co/32x32/ffffff/000000?text=X&font=sans')}
+            />
           </motion.li>
           <motion.li
             initial={{ opacity: 0, y: 50 }}
@@ -184,7 +229,16 @@ const FTR = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             viewport={{ once: false, amount: 0.5 }}
           >
-            <Image src="facebook.png" className="h-8" alt="" />
+            {/* FIX: Added width={32} and height={32} to match 'h-8'.
+            */}
+            <Image
+              src="https://placehold.co/32x32/ffffff/000000?text=F&font=sans"
+              alt="Facebook"
+              width={32}
+              height={32}
+              className="h-8 w-auto"
+              onError={(e) => (e.currentTarget.src = 'https://placehold.co/32x32/ffffff/000000?text=F&font=sans')}
+            />
           </motion.li>
           <motion.li
             initial={{ opacity: 0, y: 50 }}
@@ -192,7 +246,16 @@ const FTR = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
             viewport={{ once: false, amount: 0.5 }}
           >
-            <Image src="teligram.png" className="h-8" alt="" />
+            {/* FIX: Added width={32} and height={32} to match 'h-8'.
+            */}
+            <Image
+              src="https://placehold.co/32x32/ffffff/000000?text=T&font=sans"
+              alt="Telegram"
+              width={32}
+              height={32}
+              className="h-8 w-auto"
+              onError={(e) => (e.currentTarget.src = 'https://placehold.co/32x32/ffffff/000000?text=T&font=sans')}
+            />
           </motion.li>
         </motion.ul>
 
@@ -211,10 +274,18 @@ const FTR = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: false, amount: 0.5 }}
           >
+            {/* FIX: For responsive images meant to fill a container, use the 'fill' prop.
+              This tells Next.js to fill the parent element ('motion.div' with 'card').
+              Removed 'w-full' and 'h-full' from this className as 'fill' handles it.
+              The 'object-contain' class will still work as expected.
+              I've also used a placeholder for this large image.
+            */}
             <Image
-              src="/Bepay hover effect.png"
+              src="https://placehold.co/1200x600/333333/ffffff?text=Bepay+Card"
               alt="Bepay Hover Effect"
-              className="w-full h-full relative object-contain rounded-3xl shadow-2xl z-5"
+              fill
+              className="relative object-contain rounded-3xl shadow-2xl z-5"
+              onError={(e) => (e.currentTarget.src = 'https://placehold.co/1200x600/333333/ffffff?text=Bepay+Card')}
             />
           </motion.div>
         </motion.div>

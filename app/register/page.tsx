@@ -1,9 +1,9 @@
-'use client';
+'use client'; // <-- MUST be the very first line
 
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AnalyticsService } from '../../services/analyticsService';
-import { CSSProperties } from 'react';
+import { CSSProperties } from 'react'; // Assuming AnalyticsService and CSSProperties types are external
 
 const Redirect = () => {
   const router = useRouter();
@@ -19,13 +19,16 @@ const Redirect = () => {
 
   // Only use search params when on the client side
   const queryParams = useMemo(() => {
-    return isClient ? Object.fromEntries(new URLSearchParams(window.location.search).entries()) : {};
+    // Check if window is defined before accessing location.search
+    return isClient && typeof window !== 'undefined'
+      ? Object.fromEntries(new URLSearchParams(window.location.search).entries())
+      : {};
   }, [isClient]);
 
   // Track query params with Mixpanel if they exist
   useEffect(() => {
     if (queryParams) {
-      AnalyticsService.sendEvent('bepay_register_page_view', { 
+      AnalyticsService.sendEvent('bepay_register_page_view', {
         ...queryParams,
         timestamp: new Date().toISOString(),
       });
@@ -33,6 +36,9 @@ const Redirect = () => {
   }, [queryParams]);
 
   useEffect(() => {
+    // Ensure navigator is defined for client-side execution
+    if (typeof navigator === 'undefined') return;
+
     const userAgent = navigator.userAgent || navigator.vendor;
     const androidUrl = 'https://play.google.com/store/apps/details?id=com.bepay.user';
     // iOS app is not live yet, so we'll handle it differently
@@ -52,7 +58,7 @@ const Redirect = () => {
       setIsIos(true);
     } else {
       AnalyticsService.sendEvent('bepay_redirect_to_unsupported_device', { ...deviceDetails, ...queryParams });
-      
+
       // Redirect unsupported devices to the homepage after 5 seconds
       const timer = setTimeout(() => {
         router.push('/');

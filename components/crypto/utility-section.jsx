@@ -184,7 +184,7 @@ const MobileView = () => {
             </motion.div>
           </div>
           <div className="flex items-center justify-center mt-6">
-            <button
+            <button 
               onClick={handleStartPayingClick} // ANALYTICS: Added onClick handler
               className="bg-black cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
             >

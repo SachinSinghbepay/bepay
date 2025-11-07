@@ -181,7 +181,7 @@ export default function BepayFeatures() {
                     width={500}
                     height={500}
                     className="object-contain w-full h-full rounded-lg"
-                    priority={index === 0}
+                    loading="lazy"
                   />
                 </motion.div>
               </motion.div>

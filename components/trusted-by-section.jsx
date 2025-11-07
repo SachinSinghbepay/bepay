@@ -138,6 +138,7 @@ export default function TrustedBySection() {
             height={300}
             // 👇 Removed max-w-sm to allow the image to fill the container
             className="h-auto w-full object-contain opacity-90"
+            loading="lazy"
           />
         </motion.div>
 
@@ -156,6 +157,7 @@ export default function TrustedBySection() {
               width={1100}
               height={100}
               className="h-auto w-full object-contain opacity-90 -mb-20"
+              loading="lazy"
             />
           </motion.div>
         </motion.div>
