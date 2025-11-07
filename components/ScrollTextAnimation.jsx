@@ -258,13 +258,21 @@ const ScrollTextAnimation = () => {
           scrollTrigger: {
             trigger: container,
             start: "top top",
-            end: "+=950%", 
+            end: "+=600%", // Reduced scroll length for more reliable behavior
             pin: true,
-            scrub: 1,
+            scrub: 0.5, // Smoother scrubbing
+            pinSpacing: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            fastScrollEnd: true, // Better performance for fast scrolling
             onEnter: () => {
               scrollTriggerInstance = ScrollTrigger.getById(mainTl.scrollTrigger.vars.id);
+            },
+            onUpdate: (self) => {
+              // Ensure visibility during scroll
+              if (self.progress > 0 && self.progress < 1) {
+                container.style.visibility = 'visible';
+              }
             },
           },
         });
