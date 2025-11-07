@@ -17,6 +17,17 @@ import { usePathname } from "next/navigation";
 import { AnalyticsService } from "@/services/analyticsService";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
 
+// --- FONT OPTIMIZATION ---
+import { Montserrat } from "next/font/google";
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-montserrat",
+  display: "swap", // Critical for text LCP
+});
+// -------------------------
+
 const BusinessHero = () => {
   const containerRef = useRef(null);
   const [showContent, setShowContent] = useState(false);
@@ -70,7 +81,6 @@ const BusinessHero = () => {
     AnalyticsService.sendEvent("on_join_waitlist_clicked");
   };
 
-  // Using a more robust email handler from previous versions
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
     if (!email || isSubmitting || isSuccess) return;
@@ -123,7 +133,8 @@ const BusinessHero = () => {
   useEffect(() => {
     const checkMobile = () => {
       const width = window.innerWidth;
-      setIsMobile(width < 1024);
+      // Using 1024px (lg breakpoint) to separate mobile/desktop
+      setIsMobile(width < 1024); 
       setScreenWidth(width);
     };
     checkMobile();
@@ -144,8 +155,7 @@ const BusinessHero = () => {
   const imageOpacity = useTransform(scrollYProgress, [0.5, 1], [1, 0]);
   const leftCardScale = useTransform(scrollYProgress, [0, 1], [1, 1]);
 
-  // ✅ MODIFICATION: Add a new transform for scaling the image
-  const imageScale = useTransform(scrollYProgress, [0, 1], [0.9, 0.8]); // Start at 100% size, end at 80% size. Adjust 0.8 as needed.
+  const imageScale = useTransform(scrollYProgress, [0, 1], [0.9, 0.8]);
 
   // --- MOBILE ANIMATION VALUES ---
   const mobileMockupY = useTransform(scrollYProgress, [0, 0.5], [0, -1200]);
@@ -201,16 +211,17 @@ const BusinessHero = () => {
   ];
 
   return (
-    <div ref={containerRef} className="relative h-[200vh]">
+    <div ref={containerRef} className={`${montserrat.variable} font-sans relative h-[200vh]`}> {/* Applied font variable */}
       <div className="sticky top-0 h-screen overflow-hidden">
         <section className="bg-[#F9F9F9] h-full flex flex-col justify-start pt-6 md:pt-0">
           {isMobile ? (
             // ===================================
-            // MOBILE VIEW (Unaffected)
+            // MOBILE VIEW (LCP Optimized)
             // ===================================
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col relative">
               <div className="text-center mb-4 max-w-[95%] mx-auto">
-                <h1 className="font-montserrat font-medium text-[28px] leading-[32px] tracking-[-0.07em] uppercase mb-4 text-[#333333]">
+                {/* LCP Text: Applied Next.js font class */}
+                <h1 className={`${montserrat.className} font-medium text-[28px] leading-[32px] tracking-[-0.07em] uppercase mb-4 text-[#333333]`}>
                   <>
                     <span className="text-[#C0C0C0] font-normal">Accept</span>{" "}
                     stablecoins.{" "}
@@ -240,12 +251,14 @@ const BusinessHero = () => {
                   style={{ y: mobileMockupY }}
                 >
                   <div className="relative w-[85vw] max-w-[380px]">
+                    {/* LCP Image: Mockup Frame */}
                     <Image
                       src="/images/business/video_mockup.svg"
                       alt="Bepay video mockup frame"
                       width={380}
                       height={211}
                       className="w-full h-auto"
+                      priority // <-- CRITICAL LCP IMAGE
                     />
                     <div
                       className="absolute overflow-hidden shadow-lg"
@@ -258,13 +271,15 @@ const BusinessHero = () => {
                         transform: "translateX(-50%)",
                       }}
                     >
+                      {/* Video Optimization */}
                       <video
                         className="w-full h-full object-cover"
                         autoPlay
                         muted
                         loop
                         playsInline
-                        poster="/path/to/your/horizontal_poster.jpg"
+                        preload="metadata" // <-- Optimization: Load minimal data first
+                        poster="/path/to/your/horizontal_poster.jpg" // <-- CRITICAL: Efficient static poster for LCP
                       >
                         <source
                           src="/videos/crypto/business_mockup.mp4"
@@ -275,6 +290,7 @@ const BusinessHero = () => {
                     </div>
                   </div>
                 </motion.div>
+                {/* ... (Rest of Mobile content remains the same) ... */}
                 <motion.div
                   className="absolute inset-0 top-0 pt-0 flex flex-col items-center justify-start gap-8 z-10"
                   style={{ y: mobileContentY, opacity: mobileContentOpacity }}
@@ -296,6 +312,7 @@ const BusinessHero = () => {
                       </div>
                     ))}
                   </div>
+                  {/* Waitlist form... (unchanged) */}
                   <div className="w-full max-w-[285px]">
                     {!isSubmitted ? (
                       <form
@@ -351,12 +368,13 @@ const BusinessHero = () => {
             </div>
           ) : (
             // ===================================
-            // DESKTOP VIEW (MODIFIED)
+            // DESKTOP VIEW (LCP Optimized)
             // ===================================
             <div className="h-full">
               <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
                 <div className="text-center mb-4 max-w-[95%] mx-auto">
-                  <h1 className="text-l sm:text-4xl lg:text-[70px] xl:text-[80px] 3xl:text-[100px] font-[300] leading-[0.5] mb-1 -mt-14">
+                  {/* LCP Text: Applied Next.js font class */}
+                  <h1 className={`${montserrat.className} text-l sm:text-4xl lg:text-[70px] xl:text-[80px] 3xl:text-[100px] font-[300] leading-[0.5] mb-1 -mt-14`}>
                     <span className="font-light text-[90px] leading-[80px] tracking-[-0.1em] uppercase text-[#C0C0C0]">
                       ACCEPT
                     </span>
@@ -410,13 +428,15 @@ const BusinessHero = () => {
                             "805.1359252929694 / 325.2563781738284",
                         }}
                       >
+                        {/* Video Optimization */}
                         <video
                           className="w-full h-full object-cover"
                           autoPlay
                           muted
                           loop
                           playsInline
-                          poster="/path/to/your/horizontal_poster.jpg"
+                          preload="metadata" // <-- Optimization: Load minimal data first
+                          poster="/path/to/your/horizontal_poster.jpg" // <-- CRITICAL: Efficient static poster for LCP
                         >
                           <source
                             src="/videos/crypto/business_mockup.mp4"
@@ -458,16 +478,18 @@ const BusinessHero = () => {
                           onClick={handleLogoClick}
                           className="absolute top-1 left-1/2 -translate-x-1/2 z-10 cursor-pointer"
                         >
+                          {/* Non-LCP Image: Logo (No priority) */}
                           <Image
                             src="/bepaybusiness.svg"
                             alt="Bepay Logo"
                             width={200}
                             height={100}
                             className="w-[45px] h-[45px] md:w-[140px] lg:h-[125px] object-contain"
+                            loading="lazy" // Added: Not critical for initial view
                           />
                         </div>
 
-                        {/* ✅ MODIFICATION: Added imageScale to the style prop */}
+                        {/* LCP Image: Mobile Interface Screenshot */}
                         <motion.div
                           style={{ x: imageX, opacity: imageOpacity, scale: imageScale }}
                           className="absolute inset-0 -top-30"
@@ -477,9 +499,11 @@ const BusinessHero = () => {
                             alt="Bepay Mobile Interface"
                             fill
                             className="object-contain"
+                            priority // <-- CRITICAL LCP IMAGE
                           />
                         </motion.div>
 
+                        {/* ... (Rest of Desktop content remains the same) ... */}
                         {showContent && (
                           <motion.div
                             initial={{ opacity: 0 }}

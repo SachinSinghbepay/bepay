@@ -21,7 +21,7 @@ export default function RealSavingSection() {
 
   // ✅ CORRECTED: Memoize the steps array to prevent it from changing on every render.
   const steps = useMemo(() => [
-    { number: "1", image: "m1.png" },
+    { number: "1", image: "m2.png" },
     { number: "2", image: "m2.png" },
     { number: "3", image: "m3.png" },
     { number: "4", image: "m4.png" },

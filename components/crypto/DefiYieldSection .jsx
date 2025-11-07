@@ -264,7 +264,7 @@ const DefiYieldSection = () => {
             >
               {/* === LEFT COLUMN: TEXT BLOCK (DESKTOP ONLY) === */}
 
-              <div className="hidden lg:flex items-center justify-start min-h-screen pl-[-25]">
+              <div className="hidden lg:flex items-center justify-start ">
                 {/* LEFT SIDE - TEXT CONTENT */}
                 <div className="flex-1 max-w-2xl">
                   <h2 className="font-montserrat font-normal text-[70px] leading-[68px] mb-6">
@@ -286,23 +286,18 @@ const DefiYieldSection = () => {
               </div>
 
               {/* === RIGHT COLUMN: EXISTING ANIMATION === */}
-              <div className="w-full flex flex-col items-center justify-center gap-10 lg:gap-1 lg:-mt-28">
-                {/* Image Container - Modified to allow images to exit completely */}
-              <div
-                className="
-                  mx-auto
-                  w-[350px]           /* mobile width */
-                  sm:w-[380px]        /* slightly bigger on small screens */
-                  md:w-full           /* full width on tablets and larger */
-                  lg:w-full lg:ml-25 -ml-4  /* full + margin on large screens */
-                  h-[280px] md:h-[250px] lg:h-[350px]
-                  flex flex-col items-center justify-center
-                  text-lg md:text-xl font-medium text-gray-700
-                  bg-gray-50 p-6 rounded-full 
-                "
-              >
+              <div className="w-full flex flex-col items-center justify-center gap-10 lg:gap-4">
+                {/* Image Container - Modified to match content container size */}
+                <div
+                  className="
+                    relative w-full max-w-[642px] h-[250px] md:h-[250px] lg:h-[300px] 
+                    flex flex-col items-center justify-center
+                    text-lg md:text-xl font-medium text-gray-700
+                    bg-gray-50 p-6 rounded-full 
+                  "
+                >
                   {/* Wrapper div to contain overflow and create exit space */}
-                  <div className="relative w-full h-full overflow-visible">
+                  <div >
                     <motion.div
                       style={{ y: image1Y, rotate: image1Rotate, zIndex: 6 }}
                       className="absolute inset-0 rounded-full overflow-hidden"
@@ -384,7 +379,7 @@ const DefiYieldSection = () => {
                   </div>
                 </div>
                 <div
-                  className="lg:ml-50 relative w-full max-w-[642px] h-[250px] md:h-[250px] lg:h-[300px] flex flex-col items-center justify-center text-lg md:text-xl font-medium text-gray-700 bg-gray-50 p-6 rounded-full overflow-hidden"
+                  className=" relative w-full max-w-[642px] h-[250px] md:h-[250px] lg:h-[300px] flex flex-col items-center justify-center text-lg md:text-xl font-medium text-gray-700 bg-gray-50 p-6 rounded-full overflow-hidden"
                   style={{
                     boxShadow:
                       "inset 10px 10px 20px 0px #0000001A, inset -10px -10px 30px 0px #FFFFFF",
@@ -539,4 +534,3 @@ const DefiYieldSection = () => {
 };
 
 export default DefiYieldSection;
-//this is a comment

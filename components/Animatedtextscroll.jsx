@@ -1,11 +1,10 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import Image from "next/image"; // ✅ Import Next.js Image
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowDown, UserPlus } from "lucide-react";
 import { AnalyticsService } from "@/services/analyticsService";
-import WaitlistTriggerButton from "./waitlist-trigger-button";
 
 // The sentence is an array for easy mapping and staggered animation.
 const sentence = [
@@ -72,7 +71,7 @@ export default function AnimatedTextScroll() {
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.2 } 
     );
     const currentRef = containerRef.current;
     if (currentRef) observer.observe(currentRef);
@@ -82,53 +81,62 @@ export default function AnimatedTextScroll() {
   }, [hasTrackedView]);
 
   return (
-    <div ref={containerRef} className="relative h-screen bg-gray-50 flex items-center justify-center">
+    <div ref={containerRef} className="relative min-h-screen bg-gray-50 flex items-center justify-center py-16 lg:py-0">
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.5 }}
+          viewport={{ once: false, amount: 0.2 }} 
           className="container mx-auto flex flex-col lg:flex-row items-center justify-center lg:gap-x-20 px-8"
         >
           {/* LEFT SIDE: Animated Text */}
           <motion.h1
             variants={containerVariants}
-            className="text-left text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-[400] tracking-[-0.08em] w-full lg:w-1/2"
+            className="text-center lg:text-left text-6xl sm:text-7xl md:text-8xl lg:text-8xl font-[400] tracking-[-0.08em] w-full lg:w-1/2 mb-10 lg:mb-0" 
           >
             {sentence.map((item, index) => (
               <motion.span
                 key={index}
                 variants={wordVariants}
-                className={`inline-block mr-3 md:mr-4 ${item.isBrand ? "text-[#333333]" : "text-[#C0C0C0]"}`}
+                className={`inline-block mr-2 md:mr-4 ${item.isBrand ? "text-[#333333]" : "text-[#C0C0C0]"}`} 
               >
                 {item.word}
               </motion.span>
             ))}
           </motion.h1>
 
-          {/* RIGHT SIDE: Animated Mockup with Image and CTA */}
+          {/* RIGHT SIDE: Animated Mockup with Image */}
           <motion.div
             variants={mockupVariants}
-            className="relative w-full max-w-[450px] mt-50  flex justify-center lg:justify-start -translate-y-16" // ✅ MODIFIED: max-w increased, -translate-y-16 added
+            className="relative w-full max-w-[450px] mt-0 flex justify-center lg:justify-start lg:-translate-y-16" 
           >
             <div
               style={{
-                width: "min(450px, 90vw)", // ✅ MODIFIED: Increased width
+                width: "min(450px, 90vw)",
                 aspectRatio: "409 / 868",
               }}
               className="relative"
             >
               <Image
-                src="/phone_a.png"
+                src="/phone_c.png"
                 alt="Phone Mockup"
                 fill={true}
                 className="object-contain"
                 loading="lazy"
               />
 
-              {/* CTA positioned absolutely on top of the image */}
-              
             </div>
+            
           </motion.div>
+
+            {/* Scroll indicator for large screens */}
+            <div className="absolute bottom-10 hidden lg:block">
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+            >
+              <ArrowDown className="w-8 h-8 text-[#333333]" />
+            </motion.div>
+          </div>
         </motion.div>
     </div>
   );
