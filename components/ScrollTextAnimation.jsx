@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react"; // 👈 ADDED useCallback
+import { useEffect, useRef, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -26,13 +26,16 @@ const ScrollTextAnimation = () => {
   const lastCardContentRef = useRef(null);
   const lastCardNumberRef = useRef(null);
 
-  const downloadButtonsContainerRef = useRef(null);
+  // Structural FIX: Ref for the desktop download buttons moved outside the card loop
+  const fixedDownloadButtonsRef = useRef(null); // <-- NEW REF
+
   const downloadButton1Ref = useRef(null);
   const downloadButton2Ref = useRef(null);
   const downloadButton3Ref = useRef(null);
 
   const [windowWidth, setWindowWidth] = useState(0);
-  const isMobile = windowWidth < 1024; // Check for desktop breakpoint (Tailwind 'lg')
+  const [isReady, setIsReady] = useState(false);
+  const isMobile = windowWidth < 1024;
 
   // Card data
   const cardSets = [
@@ -119,24 +122,14 @@ const ScrollTextAnimation = () => {
 
   const finalCardSets = cardSets;
 
-  /**
-   * Helper to determine the index of the card currently in view on mobile.
-   * This is used to dynamically adjust the z-index for overlapping shadows.
-   */
-  const getCurrentCardIndex = useCallback(() => { // 👈 WRAPPED in useCallback
+  const getCurrentCardIndex = useCallback(() => {
     if (!cardsContainerRef.current || !isMobile || windowWidth === 0) return 0;
-
     const scrollLeft = cardsContainerRef.current.scrollLeft;
-    // Card width + margin = 80vw + 10vw = 90vw (0.9 * windowWidth)
-    const cardWidthWithMargin = windowWidth * 0.9; 
-
-    // Adjust for the 10vw margin on the first card
+    const cardWidthWithMargin = windowWidth * 0.85;
     const effectiveScrollLeft = Math.max(0, scrollLeft);
-
     let index = Math.round(effectiveScrollLeft / cardWidthWithMargin);
-
     return Math.min(Math.max(0, index), finalCardSets.length - 1);
-  }, [isMobile, windowWidth, finalCardSets.length]); // 👈 Added dependencies
+  }, [isMobile, windowWidth, finalCardSets.length]);
 
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
 
@@ -160,8 +153,7 @@ const ScrollTextAnimation = () => {
         container.removeEventListener('scroll', handleScroll);
         clearTimeout(timeout);
     };
-  }, [isMobile, windowWidth, finalCardSets.length, getCurrentCardIndex]); // 👈 ADDED getCurrentCardIndex to fix the warning
-
+  }, [isMobile, getCurrentCardIndex]);
 
   // Analytics Tracking
   useEffect(() => {
@@ -189,6 +181,7 @@ const ScrollTextAnimation = () => {
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
+      setIsReady(true); 
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -210,8 +203,10 @@ const ScrollTextAnimation = () => {
     const lastCardRight = lastCardRightRef.current;
     const lastCardContent = lastCardContentRef.current;
     const lastCardNumber = lastCardNumberRef.current;
-
-    const downloadButtonsContainer = downloadButtonsContainerRef.current;
+    
+    // FIX: Use the new fixed container ref
+    const fixedDownloadButtons = fixedDownloadButtonsRef.current; 
+    
     const downloadButton1 = downloadButton1Ref.current;
     const downloadButton2 = downloadButton2Ref.current;
     const downloadButton3 = downloadButton3Ref.current;
@@ -229,11 +224,11 @@ const ScrollTextAnimation = () => {
       !lastCardRight ||
       !lastCardContent ||
       !lastCardNumber ||
-      !downloadButtonsContainer ||
+      !fixedDownloadButtons || // <-- Check new ref
       !downloadButton1 ||
       !downloadButton2 ||
       !downloadButton3 ||
-      windowWidth === 0
+      !isReady 
     )
       return;
 
@@ -242,27 +237,40 @@ const ScrollTextAnimation = () => {
 
     const ctx = gsap.context(() => {
       if (!isMobile) {
+        
+        // Initial Setup - Desktop only
         gsap.set(cardSection, { opacity: 0, y: 100 });
         gsap.set([thirdLine, fourthLine, fifthLine], { opacity: 0, y: 50 });
         gsap.set([firstLine, secondLine], { opacity: 0, y: 100 });
         gsap.set(cardsContainer, { x: 0 });
-        gsap.set(downloadButtonsContainer, { opacity: 0, y: 50 });
+        
+        // FIX: Set initial state for the NEW fixed button container
+        gsap.set(fixedDownloadButtons, { opacity: 0, y: 50 }); 
         gsap.set([downloadButton1, downloadButton2, downloadButton3], {
-          opacity: 0,
-          y: 30,
+            opacity: 0,
+            y: 30,
         });
 
+        let scrollTriggerInstance;
+
+        // Main Timeline
         const mainTl = gsap.timeline({
           scrollTrigger: {
             trigger: container,
             start: "top top",
-            end: "+=900%",
+            end: "+=950%", 
             pin: true,
             scrub: 1,
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            onEnter: () => {
+              scrollTriggerInstance = ScrollTrigger.getById(mainTl.scrollTrigger.vars.id);
+            },
           },
         });
+
+        // Store the ScrollTrigger instance for later access
+        scrollTriggerInstance = mainTl.scrollTrigger;
 
         mainTl
           .to([firstLine, secondLine], {
@@ -295,22 +303,17 @@ const ScrollTextAnimation = () => {
           .to(
             cardsContainer,
             {
-              x: () => -(finalCardSets.length - 1) * windowWidth,
-              duration: 8,
+              x: () => -(finalCardSets.length - 1) * windowWidth, 
+              duration: 6,
               ease: "none",
             },
             "+=0.5"
           )
-          .to({}, { duration: 2 }, "lastCardHold")
+          .to({}, { duration: 1 }, "lastCardHold")
           .to(
             lastCardRight,
             {
-              x: () => {
-                if (windowWidth < 1024) {
-                  return 0;
-                }
-                return "-56%";
-              },
+              x: () => "-56%",
               y: 0,
               opacity: 1,
               zIndex: 1,
@@ -322,12 +325,7 @@ const ScrollTextAnimation = () => {
           .to(
             lastCardLeft,
             {
-              x: () => {
-                if (windowWidth < 1024) {
-                  return 0;
-                }
-                return "50%";
-              },
+              x: () => "50%",
               y: 0,
               zIndex: 10,
               duration: 1.5,
@@ -340,8 +338,9 @@ const ScrollTextAnimation = () => {
             { y: -100, opacity: 0, duration: 0.8, ease: "power2.inOut" },
             "lastCardHold+=1.0"
           )
+          // FIX: Animate the NEW fixed container
           .to(
-            downloadButtonsContainer,
+            fixedDownloadButtons,
             { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
             "lastCardHold+=1.6"
           )
@@ -360,19 +359,27 @@ const ScrollTextAnimation = () => {
             { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
             "lastCardHold+=2.4"
           )
-          .to({}, { duration: 3 }, "+=0.5");
+          .to({}, { duration: 1.5 }, "endHold")
+          // FIX: Force buttons to stay visible at the end after the duration ends
+          .call(() => {
+            gsap.set(fixedDownloadButtons, { opacity: 1, y: 0 });
+            gsap.set([downloadButton1, downloadButton2, downloadButton3], {
+              opacity: 1,
+              y: 0,
+            });
+          }, null, "endHold"); 
       }
     }, container);
 
     return () => ctx.revert();
-  }, [windowWidth, finalCardSets.length, isMobile]);
+  }, [windowWidth, finalCardSets.length, isMobile, isReady]);
 
   // Helper component for the download buttons
   const DownloadButtons = ({ buttonRef, id, src, alt, text }) => {
     return (
       <button
         ref={buttonRef}
-        className={`rounded-[61px] bg-[#080808] text-white flex items-center gap-[10px] ${isMobile ? "opacity-100 justify-center" : "opacity-0 justify-start"}`}
+        className={`rounded-[61px] bg-[#080808] text-white flex items-center gap-[10px] ${isMobile ? "opacity-100 justify-center" : "justify-start"}`}
         style={{
           borderRadius: '61px',
           width: isMobile ? '265px' : '260px',
@@ -548,15 +555,13 @@ const ScrollTextAnimation = () => {
                 ? {
                     width: "100%",
                     transform: "none",
-                    // REMOVED paddingLeft: "10vw" to fix mobile scroll view starting point
                   }
                 : { width: `${finalCardSets.length * 100}vw` }
             }
           >
             {finalCardSets.map((cardSet, index) => {
-              let currentZIndex = 1;  
+              let currentZIndex = 1;  
               if (isMobile) {
-                  // Logic to keep the active card on top for mobile shadow overlap
                   if (index === currentCardIndex) {
                       currentZIndex = 20;
                   } else if (index === currentCardIndex + 1) {
@@ -569,7 +574,6 @@ const ScrollTextAnimation = () => {
               return (
                 <div
                   key={cardSet.id}
-                  // ADDED ml-[10vw] for the first card to inset it, making the subsequent card's 10vw visible
                   className={`flex-shrink-0 h-full flex items-center ${isMobile ? "w-[80vw] mr-[5vw] justify-start" : "w-screen justify-center"} ${isMobile && index === 0 ? "ml-[5vw]" : ""}`} 
                 >
                   <div className={`w-full mx-auto ${isMobile ? "px-0" : "max-w-7xl px-4 sm:px-6 lg:px-8"}`}>
@@ -618,35 +622,6 @@ const ScrollTextAnimation = () => {
                               {cardSet.leftCard.description}
                             </p>
                           </div>
-                          {cardSet.id === 7 && !isMobile && (
-                            <div
-                              ref={downloadButtonsContainerRef}
-                              className="absolute  bottom-12 left-[26%] space-y-3 z-50"
-                              style={{ opacity: 0 }}
-                            >
-                              <DownloadButtons
-                                buttonRef={downloadButton1Ref}
-                                id="downloadButton1"
-                                src="/apple.png"
-                                alt="apple logo"
-                                text="Download on the App Store"
-                              />
-                              <DownloadButtons
-                                buttonRef={downloadButton2Ref}
-                                id="downloadButton2"
-                                src="/playstore.png"
-                                alt="playstore logo"
-                                text="Get the App on Google Play!"
-                              />
-                              <DownloadButtons
-                                buttonRef={downloadButton3Ref}
-                                id="downloadButton3"
-                                src="/gal.png"
-                                alt="gallery logo"
-                                text="Get it on the App Gallery!"
-                              />
-                            </div>
-                          )}
                         </div>
                       </div>
 
@@ -690,6 +665,38 @@ const ScrollTextAnimation = () => {
             })}
           </div>
         </div>
+
+        {/* FIX: New Container for Desktop Download Buttons (Outside the card scroll) */}
+        {!isMobile && (
+            <div 
+                ref={fixedDownloadButtonsRef}
+                // Centering classes applied here: absolute, left-1/2, -translate-x-1/2
+                className="absolute bottom-12 left-1/2 -translate-x-1/2 space-y-3 z-50 flex flex-col items-center"
+                style={{ opacity: 0 }} // Initial opacity set by GSAP 
+            >
+                <DownloadButtons
+                    buttonRef={downloadButton1Ref}
+                    id="downloadButton1"
+                    src="/apple.png"
+                    alt="apple logo"
+                    text="Download on the App Store"
+                />
+                <DownloadButtons
+                    buttonRef={downloadButton2Ref}
+                    id="downloadButton2"
+                    src="/playstore.png"
+                    alt="playstore logo"
+                    text="Get the App on Google Play!"
+                />
+                <DownloadButtons
+                    buttonRef={downloadButton3Ref}
+                    id="downloadButton3"
+                    src="/gal.png"
+                    alt="gallery logo"
+                    text="Get it on the App Gallery!"
+                />
+            </div>
+        )}
       </div>
 
       {/* Download Buttons Section - Mobile Only */}
