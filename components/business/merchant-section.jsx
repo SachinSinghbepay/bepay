@@ -116,7 +116,7 @@ export default function MerchantSection() {
             </p>
           </motion.div>
 
-          <WaitlistTriggerButton triggerSource="'Merchant section' button">
+          <WaitlistTriggerButton triggerSource="become a merchant on bepay button" buttonLocation="merchant_section_business">
             <motion.button
               variants={itemVariants}
               onClick={handleButtonClick}
@@ -141,7 +141,7 @@ export default function MerchantSection() {
             width={280}
             height={650}
             className="w-full h-auto"
-            priority
+            loading="lazy"
             style={{
               filter:
                 "drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.1)) drop-shadow(-10px -10px 20px #FFFFFF)",
@@ -194,7 +194,7 @@ export default function MerchantSection() {
                 </span>{" "}
               </p>
             </motion.div>
-            <WaitlistTriggerButton triggerSource="'Merchant section' button">
+            <WaitlistTriggerButton triggerSource="become a merchant on bepay button" buttonLocation="merchant_section_business">
   <motion.div
     variants={itemVariants}
     className="flex flex-col sm:flex-row lg:flex-col max-w-[300px] sm:max-w-none lg:max-w-[300px] gap-4"
@@ -224,7 +224,7 @@ export default function MerchantSection() {
                 width={400}
                 height={800}
                 className="w-full h-auto"
-                priority
+                loading="lazy"
               />
             </div>
           </motion.div>

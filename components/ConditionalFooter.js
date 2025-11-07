@@ -11,15 +11,23 @@ export default function ConditionalFooter() {
     return null;
   }
   
-  // NEW: Check if the path is '/business'
+  // Check for '/business' page
   if (pathname === '/business') {
-    // If it is, render the Footer with a custom heading prop
     return <Footer
         heading="Experience the power of receiving low-fee, lightening fast global payments for your business!"
-        headingSize="text-[20px]" // ✅ ADDED: Pass the desired size here
+        headingSize="text-[20px]" 
+      />;
+  }
+
+  // ✅ MODIFICATION: Check for '/upi' page and pass a special prop
+  if (pathname === '/upi') {
+    return <Footer
+        heading="Tired of being charged to use your own money?"
+        // Highlight this specific page to control link rendering in Footer.jsx
+        isUpiPage={true} 
       />;
   }
   
-  // For all other pages, render the default Footer without the special heading
+  // For all other pages, render the default Footer (no special heading)
   return <Footer />;
 }

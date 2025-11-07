@@ -320,7 +320,7 @@ export default function HowCryptoWorksSection() {
                 className="absolute bottom-16 w-full flex justify-center"
                 style={{ opacity: finalCtaOpacity, y: finalCtaY }}
               >
-                <WaitlistTriggerButton triggerSource="'How crypto make section' button">
+                <WaitlistTriggerButton triggerSource="become a merchant on bepay button clicked" buttonLocation="how_crypto_make_section">
                   <motion.button
                     onClick={handleStartEarningClick}
                     className="flex items-center justify-center gap-2 bg-black text-white px-6 h-[56px] rounded-full hover:bg-gray-800 transition-colors text-xs font-medium"
@@ -440,7 +440,7 @@ export default function HowCryptoWorksSection() {
                 <p className="font-montserrat font-medium text-[20px] leading-snug tracking-[-0.04em] text-[#080808] mb-8 whitespace-nowrap">
                   {stepsData[3].text}
                 </p>
-                <WaitlistTriggerButton triggerSource="'how crypto make section' button">
+                <WaitlistTriggerButton triggerSource="'become a merchant on bepay clicked" buttonLocation="how_crypto_make_section">
                   <button
                     onClick={handleStartEarningClick}
                     className="h-[56px]  bg-black ml-2 text-white rounded-full flex items-center justify-center gap-2 text-xs font-medium px-4 py-4 hover:bg-gray-800 transition-colors cursor-pointer whitespace-nowrap md:w-[300px] md:text-[14px]"

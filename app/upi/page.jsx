@@ -19,10 +19,11 @@ const page = () => {
       <CreditCardSection />
       <ScrollTextAnimation />
       <SavingSection/>
-      <AnimatedTextScroll/>
+      {/* <AnimatedTextScroll/> */}
       <FdSection/>
       <HowItWorksSection/>
-      <StickyHeroSection/>
+      {/* <StickyHeroSection/> */}
+      
       {/* <Footer /> */}
     </>
   );

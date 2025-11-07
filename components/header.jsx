@@ -14,6 +14,9 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  // New: Calculate the correct button location identifier
+  const calculatedButtonLocation = pathname === "/" ? "personal" : pathname;
+
   // Check if current page is contact us
   const isContactPage = pathname === "/contact" || pathname === "/contact-us";
 
@@ -42,16 +45,15 @@ export default function Header() {
     } transition-colors duration-200`;
   };
 
-  const handleDownloadAppClick = (path) => {
-    // Use 'personal' if the path is '/', otherwise use the actual path
-    const pageIdentifier = path === "/" ? "personal" : path;
-    AnalyticsService.sendEvent("Download App Clicked", { onPage: pageIdentifier });
+  // FIXED: Changed onPage to buttonLocation
+  const handleDownloadAppClick = (pageIdentifier) => {
+    AnalyticsService.sendEvent("Download App Clicked", { buttonLocation: pageIdentifier });
   };
 
   const handlebepaymoneylogoclicked = () => {
     AnalyticsService.sendEvent("bepaymoney logo Clicked");
   };
-  
+
   // Conditional header classes
   const headerClasses = isContactPage
     ? "w-full absolute top-0 left-0 right-0 bg-transparent z-50"
@@ -96,15 +98,35 @@ export default function Header() {
                 "/business",
                 "text-sm lg:text-[14px] tracking-wide uppercase"
               )}
+              onClick={() => {
+                AnalyticsService.sendEvent("business_nav_clicked");
+              }}
             >
               BUSINESS
+            </Link>
+            <Link
+              href="/upi"
+              className={getLinkClasses(
+                "/upi",
+                "text-sm lg:text-[14px] tracking-wide uppercase"
+              )}
+              onClick={() => {
+                AnalyticsService.sendEvent("upi_nav_clicked");
+              }}
+            >
+              UPI
             </Link>
           </nav>
 
           {/* Download Button - Hidden on small screens */}
-          <WaitlistTriggerButton triggerSource="'Download bepay app' button">
+          {/* UPDATED: buttonLocation now uses the calculated value */}
+          <WaitlistTriggerButton
+            triggerSource="'Download bepay app' button"
+            buttonLocation={calculatedButtonLocation} 
+          >
             <Button
-              onClick={() => handleDownloadAppClick(pathname)}
+              // UPDATED: onClick now uses the calculated value
+              onClick={() => handleDownloadAppClick(calculatedButtonLocation)}
               variant="outline"
               className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
             >
@@ -211,12 +233,28 @@ export default function Header() {
               BUSINESS
             </Link>
 
+            <Link
+              href="/upi"
+              className={getLinkClasses(
+                "/upi",
+                "text-sm uppercase tracking-wide py-2"
+              )}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              UPI
+            </Link>
+
             {/* Mobile Download Button */}
-            <WaitlistTriggerButton triggerSource="'download bepay app' button">
+            {/* UPDATED: buttonLocation now uses the calculated value */}
+            <WaitlistTriggerButton
+              triggerSource="'download bepay app' button"
+              buttonLocation={calculatedButtonLocation}
+            >
               <Button
                 variant="outline"
                 className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2 border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
-                onClick={() => handleDownloadAppClick(pathname)}
+                // UPDATED: onClick now uses the calculated value
+                onClick={() => handleDownloadAppClick(calculatedButtonLocation)}
               >
                 <Smartphone className="w-4 h-4" />
                 <span className="font-semibold text-xs">

@@ -112,6 +112,7 @@ export default function ComplianceSection() {
                     width={80}
                     height={80}
                     className="w-8 h-8 lg:w-[60px] lg:h-[60px] 3xl:w-[80px] 3xl:h-[80px]"
+                    loading="lazy" // <-- ADDED
                   />
                 </div>
                 <h3 className="text-3xl lg:text-[60px] 3xl:text-[80px] font-[500] text-[#6A6A6A] leading-tight">
@@ -125,6 +126,7 @@ export default function ComplianceSection() {
                     width={45}
                     height={40}
                     className="absolute top-[29%] right-[5%] pointer-events-none lg:hidden"
+                    loading="lazy" // <-- ADDED
                   />
                 )}
               </div>
@@ -155,6 +157,7 @@ export default function ComplianceSection() {
                   width={70}
                   height={63}
                   className="absolute bottom-8 right-8 lg:bottom-12 lg:right-12 pointer-events-none hidden lg:block"
+                  loading="lazy" // <-- ADDED
                 />
               )}
             </motion.div>

@@ -78,7 +78,7 @@ export function BankAccountView({ setActiveView }) {
       </div>
 
       {/* CTA */}
-      <WaitlistTriggerButton triggerSource="'Swiss bank account view' button">
+      <WaitlistTriggerButton triggerSource="'Swiss bank account view' button" buttonLocation="Crypto Bank Account View">
         <button onClick={handleButtonClick} className="mt-auto mx-auto flex items-center justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white">
           Get a free swiss bank account
         </button>

@@ -13,6 +13,7 @@ export default function WaitlistPopup({
   isOpen: externalIsOpen,
   onClose: externalOnClose,
   onSubmit: externalOnSubmit,
+  buttonLocation = "auto_waitlist_popup",
   triggerSource = "auto_waitlist_popup",
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,31 +42,27 @@ export default function WaitlistPopup({
     );
 
     if (finalIsOpen && !submittedEmail) {
-      let popupType;
-
-      if (triggerSource === "auto_waitlist_popup") {
-        popupType =
-          pathname === "/"
-            ? "auto_waitlist_popup_viewed_personal"
-            : pathname === "/business"
-            ? "auto_waitlist_popup_viewed_business"
-            : "auto_waitlist_popup_viewed_other";
-      } else {
-        popupType =
-          pathname === "/"
-            ? "waitlist_popup_viewed_personal"
-            : pathname === "/business"
-            ? "waitlist_popup_viewed_business"
-            : "waitlist_popup_viewed_other";
-      }
+      // --- MODIFICATION START ---
+      // Refactored to easily add new paths like '/upi'
+      const popupTypeMap = {
+        "/": "personal",
+        "/business": "business",
+        "/upi": "upi", // Added UPI path
+      };
+      const pageType = popupTypeMap[pathname] || "other";
+      const prefix =
+        triggerSource === "auto_waitlist_popup" ? "auto_" : "";
+      const popupType = `${prefix}waitlist_popup_viewed_${pageType}`;
+      // --- MODIFICATION END ---
 
       AnalyticsService.sendEvent(popupType, {
         screen_name: "waitlist_popup",
         triggerSource,
+        buttonLocation,
         pathname,
       });
     }
-  }, [finalIsOpen, triggerSource, pathname]);
+  }, [finalIsOpen, triggerSource, buttonLocation,pathname]);
 
   const handleOverlayClose = () => {
     AnalyticsService.sendEvent("user_clicked_on_screen_to_close_popup");
@@ -79,6 +76,7 @@ export default function WaitlistPopup({
   const handleCloseButtonClick = () => {
     AnalyticsService.sendEvent("on_waitlist_close_button_clicked", {
       triggerSource,
+      buttonLocation,
     });
     if (externalOnClose) {
       externalOnClose();
@@ -121,11 +119,12 @@ export default function WaitlistPopup({
     if (finalIsOpen && isSuccess && !hasViewedSuccessPopup) {
       AnalyticsService.sendEvent("joined_waitlist_popup_viewed", {
         triggerSource,
+        buttonLocation,
         email,
       });
       setHasViewedSuccessPopup(true);
     }
-  }, [finalIsOpen, isSuccess, hasViewedSuccessPopup, triggerSource, email]);
+  }, [finalIsOpen, isSuccess, hasViewedSuccessPopup, triggerSource, buttonLocation, email]);
 
   useEffect(() => {
     if (finalIsOpen) {
@@ -162,6 +161,7 @@ export default function WaitlistPopup({
 
     AnalyticsService.sendEvent("on_join_the_waitlist_button_clicked", {
       triggerSource,
+      buttonLocation,
     });
 
     setIsSubmitting(true);
@@ -176,12 +176,14 @@ export default function WaitlistPopup({
       localStorage.setItem("waitlist_submitted_email" + pathname, email);
       AnalyticsService.createWaitlistUser(email, {
         triggerSource,
+        buttonLocation,
         joined_via: "waitlist_form",
       });
       setIsSuccess(true);
       AnalyticsService.sendEvent("pop-up_waitlist_submission_successful", {
         status: "success",
         triggerSource,
+        buttonLocation,
         email,
       });
     } catch (error) {
@@ -190,6 +192,7 @@ export default function WaitlistPopup({
         status: "failure",
         error_reason: error.message || "Unknown error",
         triggerSource,
+        buttonLocation,
       });
     } finally {
       setIsSubmitting(false);
@@ -238,78 +241,21 @@ function PortalContent({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Inline styles are kept as they were in the original code
   const overlayStyle = {
-    position: "fixed",
-    inset: 0,
-    width: "100vw",
-    height: "100vh",
-    zIndex: 2147483647,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: isMobile ? "0.5rem" : "1rem",
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
-    backdropFilter: "blur(8px)",
-    WebkitBackdropFilter: "blur(8px)",
-    isolation: "isolate",
+    position: "fixed", inset: 0, width: "100vw", height: "100vh", zIndex: 2147483647, display: "flex", alignItems: "center", justifyContent: "center", padding: isMobile ? "0.5rem" : "1rem", backgroundColor: "rgba(0, 0, 0, 0.6)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", isolation: "isolate",
   };
   const modalStyle = {
-    position: "relative",
-    width: "100%",
-    maxWidth: isMobile ? "22rem" : "38rem",
-    backgroundColor: "#ffffff",
-    border: "1px solid rgba(0,0,0,0.1)",
-    borderRadius: "47px",
-    boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.2)",
-    overflow: "hidden",
-    zIndex: 2147483647,
-    isolation: "isolate",
-    minHeight: isMobile ? "20rem" : "24rem",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    paddingBottom: isMobile ? "0.5rem" : "0",
-    color: "#111827",
+    position: "relative", width: "100%", maxWidth: isMobile ? "22rem" : "38rem", backgroundColor: "#ffffff", border: "1px solid rgba(0,0,0,0.1)", borderRadius: "47px", boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.2)", overflow: "hidden", zIndex: 2147483647, isolation: "isolate", minHeight: isMobile ? "20rem" : "24rem", display: "flex", flexDirection: "column", justifyContent: "flex-start", paddingBottom: isMobile ? "0.5rem" : "0", color: "#111827",
   };
   const closeButtonStyle = {
-    position: "absolute",
-    top: isMobile ? "1rem" : "1.6rem",
-    right: isMobile ? "1.3rem" : "2rem",
-    zIndex: 2147483647,
-    padding: "0.4rem",
-    borderRadius: "9999px",
-    backgroundColor: "transparent",
-    border: "none",
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    transition: "background-color 0.2s",
+    position: "absolute", top: isMobile ? "1rem" : "1.6rem", right: isMobile ? "1.3rem" : "2rem", zIndex: 2147483647, padding: "0.4rem", borderRadius: "9999px", backgroundColor: "transparent", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "background-color 0.2s",
   };
   const inputStyle = {
-    width: "100%",
-    height: "42px",
-    padding: "0 1rem",
-    border: "1px solid rgb(209,213,219)",
-    borderRadius: "9999px",
-    fontSize: "13px",
-    outline: "none",
-    backgroundColor: "rgb(249,250,251)",
-    color: "#111827",
+    width: "100%", height: "42px", padding: "0 1rem", border: "1px solid rgb(209,213,219)", borderRadius: "9999px", fontSize: "13px", outline: "none", backgroundColor: "rgb(249,250,251)", color: "#111827",
   };
   const buttonStyle = {
-    width: "100%",
-    height: "42px",
-    borderRadius: "9999px",
-    backgroundColor: "#000000",
-    color: "#ffffff",
-    fontWeight: "600",
-    border: "none",
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "1rem",
+    width: "100%", height: "42px", borderRadius: "9999px", backgroundColor: "#000000", color: "#ffffff", fontWeight: "600", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1rem",
   };
 
   return (
@@ -339,7 +285,6 @@ function PortalContent({
               }
               onMouseLeave={(e) =>
                 (e.currentTarget.style.backgroundColor = "transparent")
-                (e.currentTarget.style.backgroundColor = "transparent")
               }
             >
               <X
@@ -363,8 +308,18 @@ function PortalContent({
                 style={{ marginBottom: isMobile ? "1rem" : "1.5rem" }}
               >
                 <Image
-                  src={pathname === "/business" ? "/business_logo.svg" : "/bepaymoney.svg"}
-                  alt={pathname === "/business" ? "BePayMoney Business" : "BePayMoney"}
+                  // NOTE: This will use the default logo for the '/upi' path.
+                  // You can add another condition if you have a specific UPI logo.
+                  src={
+                    pathname === "/business"
+                      ? "/business_logo.svg"
+                      : "/bepaymoney.svg"
+                  }
+                  alt={
+                    pathname === "/business"
+                      ? "BePayMoney Business"
+                      : "BePayMoney"
+                  }
                   width={isMobile ? 140 : 180}
                   height={isMobile ? 50 : 70}
                   style={{
@@ -394,9 +349,13 @@ function PortalContent({
                       color: "#000000",
                     }}
                   >
+                    {/* --- MODIFICATION START --- */}
                     {pathname === "/business"
                       ? "Every business starts with a spark!"
+                      : pathname === "/upi"
+                      ? "Be the first to experience smarter UPI payments." // Added text for UPI path
                       : "Be the first to experience the future of payments."}
+                    {/* --- MODIFICATION END --- */}
                   </h2>
                 </motion.div>
               )}
@@ -493,12 +452,14 @@ function PortalContent({
                         color: "#333333",
                       }}
                     >
+                      {/* --- MODIFICATION START --- */}
                       {pathname === "/business"
-                      ? "We’re launching soon! Join the waitlist and stay ahead of others businesses!"
-                      : "We’re launching soon! Join the waitlist and stay ahead of others!"}
-                  </p>
-                      
-                  
+                        ? "We’re launching soon! Join the waitlist and stay ahead of others businesses!"
+                        : pathname === "/upi"
+                        ? "Join the waitlist and get early access to our upcoming UPI app." // Added text for UPI path
+                        : "We’re launching soon! Join the waitlist and stay ahead of others!"}
+                      {/* --- MODIFICATION END --- */}
+                    </p>
                     {isMobile ? (
                       <div
                         style={{
@@ -588,7 +549,6 @@ function PortalContent({
                               animate={{ rotate: 360 }}
                               transition={{
                                 duration: 1,
-                                repeat: Infinity,
                                 repeat: Infinity,
                                 ease: "linear",
                               }}

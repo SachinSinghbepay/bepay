@@ -1,10 +1,11 @@
-"use client"
-import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Smartphone, ScanLine, Bitcoin, MessageSquare, ShoppingBag, Smile, Users } from "lucide-react"
-import { Button } from "@/components/ui/button"
+"use client";
+import { useState, useEffect, useRef, forwardRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Smartphone, Users } from "lucide-react";
+import { AnalyticsService } from "@/services/analyticsService";
+import Image from "next/image";
+import WaitlistTriggerButton from "./waitlist-trigger-button";
 
-// Define the steps data
 const steps = [
   {
     number: 1,
@@ -13,122 +14,140 @@ const steps = [
   },
   {
     number: 2,
-    icon: ScanLine,
+    icon: "/icons/solar.png",
     text: "Quick KYC, instant approval",
   },
   {
     number: 3,
-    icon: Bitcoin,
-    text: "Receive Bitcoin",
+    icon: "/icons/card.png",
+    text: "Make your 1st payment - rent, groceries etc.",
   },
   {
     number: 4,
-    icon: MessageSquare,
-    text: "Make your first payment — rent, groceries, anything",
-  },
-  {
-    number: 5,
-    icon: ShoppingBag,
+    icon: "/icons/shopping.png",
     text: "Earn up to 7% instant cashback & rewards",
   },
   {
-    number: 6,
-    icon: Smile,
+    number: 5,
+    icon: "/icons/face.png",
     text: "Unlock financial freedom while you live your life",
   },
-]
+];
 
-export default function HowItWorksSection() {
-  const [currentStep, setCurrentStep] = useState(1)
-  const [totalScrollHeight, setTotalScrollHeight] = useState(0)
-  const sectionRef = useRef(null) // Explicitly type useRef
+const HowItWorksSection = forwardRef(function HowItWorksSection(props, ref) {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [totalScrollHeight, setTotalScrollHeight] = useState(0);
+  const localRef = useRef(null);
+  const sectionRef = ref || localRef;
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+
+  const handleJoinUsersClick = () => {
+    AnalyticsService.sendEvent("'Join 50,000+ smart earners' button clicked");
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("UPI HowItWorks-section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [hasTrackedView, sectionRef]);
+
+  const handleScroll = useCallback(() => {
+    if (!sectionRef.current || typeof window === "undefined") return;
+
+    const sectionTop = sectionRef.current.offsetTop;
+    const scrollY = window.scrollY;
+    const viewportHeight = window.innerHeight;
+
+    const scrollProgress = scrollY - sectionTop + viewportHeight / 2;
+    const scrollPerStep = viewportHeight;
+    let newStep = Math.floor(scrollProgress / scrollPerStep) + 1;
+    newStep = Math.max(1, Math.min(steps.length, newStep));
+
+    setCurrentStep((prevStep) => (newStep !== prevStep ? newStep : prevStep));
+  }, [sectionRef]);
 
   useEffect(() => {
     const updateScrollHeight = () => {
-      // Set the total scroll height to allow for each step to be visible
-      // Each step effectively occupies one full viewport height of scroll space.
-      // We add an extra viewport height to ensure the last step is fully visible
-      // and the user can scroll past it slightly to trigger the final state.
-      setTotalScrollHeight(steps.length * window.innerHeight)
-    }
-
-    const handleScroll = () => {
-      if (!sectionRef.current) return
-
-      const sectionTop = sectionRef.current.offsetTop
-      const scrollY = window.scrollY
-      const viewportHeight = window.innerHeight
-
-      // Calculate scroll progress relative to the start of the section
-      // Adding viewportHeight / 2 helps center the activation point for each step
-      const scrollProgress = scrollY - sectionTop + viewportHeight / 2
-
-      // Each step occupies a full viewport height of scroll space
-      const scrollPerStep = viewportHeight
-
-      // Determine the current step based on scroll progress
-      let newStep = Math.floor(scrollProgress / scrollPerStep) + 1
-
-      // Ensure newStep is within bounds [1, steps.length]
-      newStep = Math.max(1, Math.min(steps.length, newStep))
-
-      if (newStep !== currentStep) {
-        setCurrentStep(newStep)
+      if (typeof window !== "undefined") {
+        setTotalScrollHeight(steps.length * window.innerHeight);
       }
-    }
+    };
 
-    updateScrollHeight() // Set initial height
-    window.addEventListener("resize", updateScrollHeight) // Update on resize
-    window.addEventListener("scroll", handleScroll)
-    handleScroll() // Initial check on mount
+    updateScrollHeight();
+    window.addEventListener("resize", updateScrollHeight);
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
 
     return () => {
-      window.removeEventListener("resize", updateScrollHeight)
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [currentStep]) // currentStep is a dependency because handleScroll uses it.
+      window.removeEventListener("resize", updateScrollHeight);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [handleScroll]);
 
-  const activeStepContent = steps.find((step) => step.number === currentStep) || steps[0]
-  const IconComponent = activeStepContent.icon
+  const activeStepContent =
+    steps.find((step) => step.number === currentStep) || steps[0];
 
-  // Custom CSS for the content box border-image and box-shadows
+  const IconComponent = currentStep === 1 ? activeStepContent.icon : null;
+  const imageSrc = currentStep !== 1 ? activeStepContent.icon : null;
+
   const contentBoxStyle = {
-    border: "1px #ffffff transparent", // Use transparent border as border-image will overlay
-
-    borderImage: "linear-gradient(134.52deg, rgba(255, 255, 255, 0.8) 12.5%, #F5F5F5 88.99%) 1",
+    border: "1px #ffffff transparent",
+    borderImage:
+      "linear-gradient(134.52deg, rgba(255, 255, 255, 0.8) 12.5%, #F5F5F5 88.99%) 1",
     boxShadow:
       "10px 10px 20px 0px #0000001A inset, -10px -10px 30px 0px #FFFFFF inset, -10px -10px 15px 0px #FFFFFF inset",
-  }
+  };
 
-  // Custom CSS for the "bepay" gradient text
-  const bepayGradientStyle = {
-    background: "linear-gradient(90deg, #333333 30.99%, rgba(51, 51, 51, 0.2) 100%)",
-    WebkitBackgroundClip: "text",
-    backgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    color: "transparent", // Fallback for browsers that don't support text-fill-color
-  }
+  const step4NoWrapClass =
+    currentStep === 3 || currentStep === 5 ? "whitespace-nowrap" : "whitespace-normal";
 
   return (
     <section
       ref={sectionRef}
       className="relative py-20 w-full"
-      style={{ height: `${totalScrollHeight}px` }} // Apply the calculated scroll height
+      style={{ height: `${totalScrollHeight}px` }}
     >
-      {/* Sticky content container */}
       <div className="sticky top-0 flex flex-col items-center justify-center h-screen px-4 py-12">
-        <div className="text-center mb-8">
-          <h1 className="text-5xl md:text-[140px] font-[400] leading-none tracking-wider mb-10">
+        {/* Header section with title and subheading */}
+        <div className="text-center mb-8 md:mt-15">
+          <h1 className="text-5xl md:text-[140px] font-[400] tracking-[-0.08em] mb-10 md:leading-[130px] leading-[1.2]">
             <span style={{ color: "#C0C0C0" }}>How </span>
-            <span style={bepayGradientStyle}>bepay</span>
-            <span style={{ color: "#C0C0C0" }}> works</span>
+            <span className="text-[#333333]">bepay </span>
+            <span className="md:hidden block">
+              <span className="text-[#333333]">money works</span>
+            </span>
+            <span className="hidden md:inline text-[#333333]">works</span>
           </h1>
-          <p className="text-base md:text-xl font-medium" style={{ color: "#6A6A6A" }}>
+          {/* MOBILE: mb-24 pushes this down, DESKTOP: md:mb-0 removes margin */}
+          <p
+            className="text-[20px] tracking-[0.01%] font-medium mt-29 mb-2 md:mb-20"
+            style={{ color: "#6A6A6A" }}
+          >
             Start in 30 Seconds. Earn Forever.
           </p>
         </div>
-        <div className="relative flex flex-col items-center justify-center w-full max-w-7xl">
-          {/* Step Number */}
+        
+        {/* MOBILE: -mt-16 pulls content up, DESKTOP: md:mt-0 resets to normal */}
+        <div className="relative flex flex-col items-center justify-center w-full max-w-7xl -mt-16 md:-mt-40 md:mb-20">
+          {/* Animated step number */}
           <AnimatePresence mode="wait">
             <motion.div
               key={currentStep}
@@ -136,66 +155,101 @@ export default function HowItWorksSection() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -50 }}
               transition={{ duration: 0.3 }}
-              className="text-8xl md:text-[200px] font-bold mb-8"
+              className="text-[220px] md:text-[220px] font-bold -mb-25 md:mb-0"
               style={{
-                background: "linear-gradient(167.94deg, #E8E8E8 13.86%, rgba(232, 232, 232, 0.1) 101.57%)",
+                background:
+                  "linear-gradient(167.94deg, #E8E8E8 13.86%, rgba(232, 232, 232, 0.1) 101.57%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                color: "transparent", // Fallback
+                color: "transparent",
               }}
             >
               {currentStep}
             </motion.div>
           </AnimatePresence>
-          {/* Content Box */}
-          <AnimatePresence mode="wait">
-            <div
-              key={currentStep + "-content-box"} // Changed key for clarity
-             
-              className="relative flex items-center justify-center p-6 md:p-10 rounded-full w-full max-w-7xl mx-auto"
-              style={contentBoxStyle}
-            >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentStep + "-inner-content"} // Key for inner content animation
-                  initial={{ opacity: 0, y: 50 }} // Animate inner content
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -50 }}
-                  transition={{ duration: 0.3, delay: 0.1 }} // Keep a slight delay for inner content
-                  className="flex items-center justify-center" // Ensure content stays centered
-                >
-                  <IconComponent
-                    className="w-8 h-8 md:w-10 md:h-10 mr-4"
-                    style={{ color: "#333333" }}
-                    aria-hidden="true"
-                  />
-                  <span className="text-xl md:text-[40px] font-medium text-center" style={{ color: "#333333" }}>
-                    {activeStepContent.text}
-                  </span>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </AnimatePresence>
-          {/* Button for step 6 */}
-          <AnimatePresence>
-            {currentStep === 6 && (
+
+          {/* Content box with icon and text */}
+          <div
+            className="relative flex items-center justify-center p-6 md:p-10 bg-white rounded-full w-full max-w-7xl mx-auto"
+            style={contentBoxStyle}
+          >
+            <AnimatePresence mode="wait">
               <motion.div
+                key={currentStep + "-inner-content"}
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -50 }}
-                transition={{ duration: 0.3, delay: 0.2 }}
-                className="mt-12"
+                transition={{ duration: 0.3, delay: 0.1 }}
+                className="flex items-center justify-center"
               >
-                <Button className="rounded-full px-5 cursor-pointer py-8 text-lg bg-black text-white hover:bg-black/90 transition-colors flex items-center space-x-2">
-                  <Users className="w-5 h-5" aria-hidden="true" />
-                  <span>Join 50,000+ smart earners</span>
-                </Button>
+                {/* MOBILE: mr-2 reduces gap, DESKTOP: md:mr-4 keeps original gap */}
+                {IconComponent && (
+                  <IconComponent
+                    className="w-6 h-6 md:w-10 md:h-10 mr-2 md:mr-4"
+                    style={{ color: "#333333" }}
+                    aria-hidden="true"
+                  />
+                )}
+                {imageSrc && (
+                  <Image
+                    src={imageSrc}
+                    alt={`Step ${currentStep} icon`}
+                    width={40}
+                    height={40}
+                    className="w-6 h-6 md:w-10 md:h-10 mr-2 md:mr-4"
+                    aria-hidden="true"
+                  />
+                )}
+                <span
+                  className={`font-semibold text-[12.31px] md:text-[40px] md:font-normal ${step4NoWrapClass}`}
+                  style={{
+                    fontFamily: "Montserrat, sans-serif",
+                    letterSpacing: "-0.02em",
+                    textAlign: "center",
+                    color: "#333333",
+                    lineHeight: currentStep === 5 ? "1.5" : "40.02px",
+                  }}
+                >
+                  {activeStepContent.text}
+                </span>
               </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* CTA Button - appears on step 5 */}
+          <AnimatePresence>
+            {currentStep === 5 && (
+             <WaitlistTriggerButton
+  triggerSource="'Join 50,000+ smart earners' button"
+  buttonLocation="how_it_works_section"
+>
+  <motion.button
+    onClick={handleJoinUsersClick}
+    initial={{ opacity: 0, y: 50 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -50 }}
+    transition={{ duration: 0.3, delay: 0.2 }}
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="
+      mt-12 bg-black cursor-pointer whitespace-nowrap text-white 
+      flex items-center justify-center gap-2 rounded-full 
+      text-[12px] font-medium px-6 h-[48px] hover:bg-gray-800 transition-colors
+      sm:text-[14px] sm:w-[270px] sm:h-[56px] sm:px-6 sm:py-4
+    "
+  >
+    <Users className="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
+    <span>Join 50,000+ smart earners</span>
+  </motion.button>
+</WaitlistTriggerButton>
+
             )}
           </AnimatePresence>
         </div>
       </div>
     </section>
-  )
-}
+  );
+});
+
+export default HowItWorksSection;
