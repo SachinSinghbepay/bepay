@@ -7,175 +7,152 @@ import { AnalyticsService } from "@/services/analyticsService";
 import WaitlistTriggerButton from "./waitlist-trigger-button";
 import { Button } from "./ui/button";
 
-// --- 1. Mobile View Component (Fixed closing tags) ---
+// --- 1. Mobile View Component (REVISED: Static Flow) ---
 
 /**
- * Renders the mobile-specific layout and animations.
+ * Renders the mobile-specific layout as a static, continuous flow (heading -> image -> cards -> CTA).
+ * All scroll-based animations are removed.
  */
-const MobileCreditCardView = ({
-  containerRef,
-  handleStartClick,
-  scrollYProgress,
-}) => {
-  const mobileMockupY = useTransform(scrollYProgress, [0, 0.5], [0, -1200]);
-  const mobileContentY = useTransform(scrollYProgress, [0.2, 0.5], [50, 0]);
-  const mobileContentOpacity = useTransform(
-    scrollYProgress,
-    [0.4, 0.6],
-    [0.8, 1]
-  );
+const MobileCreditCardView = ({ handleStartClick }) => {
+  // Props related to scroll animation (containerRef, scrollYProgress) are removed for a static view.
 
   return (
-    <>
-      {/* Sticky Container for Title and Mockup (initial screen) */}
-      <div>
-        <div className="relative h-[200vh]">
-          <div className="sticky top-0 h-screen overflow-hidden">
-            <section className="bg-[#F9F9F9] h-full flex flex-col justify-start pt-6 md:pt-0">
-              {/* Title - Fades Out */}
-              <div className="text-center pt-8">
-                <p>
-                  Meet the{" "}
-                  <span className="font-semibold text-[#333333]">
-                    bepay RuPay Credit
-                  </span>
-                </p>
-                <p>
-                  <span className="font-semibold text-[#333333]">
-                    Card — designed for rewards,
-                  </span>
-                </p>
-                <p>
-                  <span className="font-semibold text-[#333333]">
-                    lifestyle, zero
-                  </span>{" "}
-                  and{" "}
-                  <span className="font-semibold text-[#333333]">
-                    compromise.
-                  </span>
-                </p>
-              </div>
-
-              {/* Mobile Mockup - Scrolls Up and Fades Out */}
-              <motion.div
-                className="absolute top-[62%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
-                style={{ y: mobileMockupY }}
-              >
-                <div className="relative w-[85vw] max-w-[380px]">
-                  <Image
-                    src="/phone_c.png"
-                    alt="Bepay video mockup frame"
-                    width={380}
-                    height={211}
-                    className="w-full h-auto"
-                  />
-                </div>
-              </motion.div>
-
-              {/* Scrollable content below - Animates in */}
-            </section>
-          </div>
-        </div>
-        <motion.div
-          className="w-full h-full bg-[#F9F9F9] px-4 py-8 -mt-[800px] relative z-30"
-          style={{ y: mobileContentY, opacity: mobileContentOpacity }}
-        >
-          <div className="w-full max-w-[340px] mx-auto space-y-4">
-            {/* Card 1 - UPI */}
-            <div className="w-full rounded-3xl overflow-hidden shadow-sm">
-              <Image
-                src="/cardupi.png"
-                alt="Seamless UPI payments"
-                width={340}
-                height={200}
-                className="w-full h-auto"
-              />
-            </div>
-
-            {/* Card 2 - Cashback */}
-            <div className="w-full rounded-3xl overflow-hidden shadow-sm">
-              <Image
-                src="/cardupi2.png"
-                alt="7% cashback & rewards"
-                width={340}
-                height={200}
-                className="w-full h-auto"
-              />
-            </div>
-
-            {/* Card 3 - EMI */}
-            <div className="w-full rounded-3xl overflow-hidden shadow-sm">
-              <Image
-                src="/cardupi3.png"
-                alt="Cashback on EMI payments"
-                width={340}
-                height={200}
-                className="w-full h-auto"
-              />
-            </div>
-
-            {/* Card 4 - Airport Lounge */}
-            <div className="w-full rounded-3xl overflow-hidden shadow-sm">
-              <Image
-                src="/cardupi4.png"
-                alt="Airport lounge access"
-                width={340}
-                height={200}
-                className="w-full h-auto"
-              />
-            </div>
-
-            {/* Card 5 - Forex */}
-            <div className="w-full rounded-3xl overflow-hidden shadow-sm">
-              <Image
-                src="/cardupi5.png"
-                alt="No forex fees"
-                width={340}
-                height={200}
-                className="w-full h-auto"
-              />
-            </div>
-
-            {/* Card 6 - Premium Subscriptions */}
-            <div className="w-full rounded-3xl overflow-hidden shadow-sm">
-              <Image
-                src="/cardupi6.png"
-                alt="Free Bumble & Tinder Gold subscriptions"
-                width={340}
-                height={200}
-                className="w-full h-auto"
-              />
-            </div>
-
-            {/* Mobile CTA - Placed directly after the cards */}
-            <div className="mt-8 pb-12">
-              <WaitlistTriggerButton
-                    triggerSource="'Get Your BePay Card' button"
-                    buttonLocation="UPI_credit_card_section"
-                  >
-                    <Button
-                      className="bg-black cursor-pointer text-white rounded-full px-6 py-6 text-sm font-medium flex items-center gap-2 hover:bg-black/90 transition-colors w-full justify-center"
-                      onClick={handleStartClick}
-                    >
-                      <Image
-                        src="/wal2.png"
-                        alt="Wallet icon"
-                        width={18}
-                        height={18}
-                        className="opacity-70"
-                      />
-                      Get your bepay card now
-                    </Button>
-                  </WaitlistTriggerButton>
-            </div>
-          </div>
-        </motion.div>
+    <section className="bg-[#F9F9F9] pt-6 pb-12 px-4 flex flex-col items-center min-h-[100vh]">
+      {/* 1. Static Heading */}
+      <div className="text-center pt-8 mb-10 w-full max-w-sm">
+        <p className="text-base text-[#666666]">
+          Meet the{" "}
+          <span className="font-semibold text-[#333333]">
+            bepay RuPay Credit
+          </span>
+        </p>
+        <p className="text-base text-[#666666]">
+          <span className="font-semibold text-[#333333]">
+            Card — designed for rewards,
+          </span>
+        </p>
+        <p className="text-base text-[#666666]">
+          <span className="font-semibold text-[#333333]">
+            lifestyle, zero
+          </span>{" "}
+          and{" "}
+          <span className="font-semibold text-[#333333]">
+            compromise.
+          </span>
+        </p>
       </div>
-    </>
+
+      {/* 2. Static Mobile Mockup Image */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="relative w-[85vw] max-w-[380px] mb-12"
+      >
+        <Image
+          src="/phone_c.png"
+          alt="Bepay video mockup frame"
+          width={380}
+          height={211}
+          className="w-full h-auto"
+        />
+      </motion.div>
+
+      {/* 3. Static Cards Content */}
+      <div className="w-full max-w-[340px] mx-auto space-y-4">
+        {/* Card 1 - UPI */}
+        <div className="w-full rounded-3xl overflow-hidden shadow-sm">
+          <Image
+            src="/cardupi.png"
+            alt="Seamless UPI payments"
+            width={340}
+            height={200}
+            className="w-full h-auto"
+          />
+        </div>
+
+        {/* Card 2 - Cashback */}
+        <div className="w-full rounded-3xl overflow-hidden shadow-sm">
+          <Image
+            src="/cardupi2.png"
+            alt="7% cashback & rewards"
+            width={340}
+            height={200}
+            className="w-full h-auto"
+          />
+        </div>
+
+        {/* Card 3 - EMI */}
+        <div className="w-full rounded-3xl overflow-hidden shadow-sm">
+          <Image
+            src="/cardupi3.png"
+            alt="Cashback on EMI payments"
+            width={340}
+            height={200}
+            className="w-full h-auto"
+          />
+        </div>
+
+        {/* Card 4 - Airport Lounge */}
+        <div className="w-full rounded-3xl overflow-hidden shadow-sm">
+          <Image
+            src="/cardupi4.png"
+            alt="Airport lounge access"
+            width={340}
+            height={200}
+            className="w-full h-auto"
+          />
+        </div>
+
+        {/* Card 5 - Forex */}
+        <div className="w-full rounded-3xl overflow-hidden shadow-sm">
+          <Image
+            src="/cardupi5.png"
+            alt="No forex fees"
+            width={340}
+            height={200}
+            className="w-full h-auto"
+          />
+        </div>
+
+        {/* Card 6 - Premium Subscriptions */}
+        <div className="w-full rounded-3xl overflow-hidden shadow-sm">
+          <Image
+            src="/cardupi6.png"
+            alt="Free Bumble & Tinder Gold subscriptions"
+            width={340}
+            height={200}
+            className="w-full h-auto"
+          />
+        </div>
+      </div>
+
+      {/* 4. Mobile CTA - Placed directly after the cards */}
+      <div className="mt-12 w-full max-w-[340px]">
+        <WaitlistTriggerButton
+          triggerSource="'Get Your BePay Card' button"
+          buttonLocation="UPI_credit_card_section"
+        >
+          <Button
+            className="bg-black cursor-pointer text-white rounded-full px-6 py-6 text-sm font-medium flex items-center gap-2 hover:bg-black/90 transition-colors w-full justify-center"
+            onClick={handleStartClick}
+          >
+            <Image
+              src="/wal2.png"
+              alt="Wallet icon"
+              width={18}
+              height={18}
+              className="opacity-70"
+            />
+            Get your bepay card now
+          </Button>
+        </WaitlistTriggerButton>
+      </div>
+    </section>
   );
 };
 
-// --- 2. Desktop View Component ---
+// --- 2. Desktop View Component (UNCHANGED) ---
 
 /**
  * Renders the desktop-specific layout and scroll-based animations.
@@ -440,9 +417,9 @@ const DesktopCreditCardView = ({ scrollYProgress, handleStartClick }) => {
                 <Button
                   onClick={handleStartClick}
                   className="relative z-20 bg-black cursor-pointer whitespace-nowrap text-white 
-               w-[258px] h-[56px] rounded-full flex items-center justify-center gap-2 
-               text-[14px] font-medium px-6 py-4 -mt-12
-               hover:bg-gray-800 transition-colors"
+                w-[258px] h-[56px] rounded-full flex items-center justify-center gap-2 
+                text-[14px] font-medium px-6 py-4 -mt-12
+                hover:bg-gray-800 transition-colors"
                 >
                   <Image
                     src="/wal2.png"
@@ -544,7 +521,7 @@ const DesktopCreditCardView = ({ scrollYProgress, handleStartClick }) => {
   );
 };
 
-// --- 3. Main Export Component ---
+// --- 3. Main Export Component (Adjusted for Mobile Static View) ---
 
 export default function CreditCardSection() {
   const sectionRef = useRef(null);
@@ -556,7 +533,7 @@ export default function CreditCardSection() {
   const [isMobile, setIsMobile] = useState(false);
   const [hasTrackedView, setHasTrackedView] = useState(false);
 
-  // View Tracking Logic
+  // View Tracking Logic (UNCHANGED)
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -580,7 +557,7 @@ export default function CreditCardSection() {
     AnalyticsService.sendEvent("Get_Your_Bepay_card_clicked");
   };
 
-  // Resize/Mobile Detection Logic
+  // Resize/Mobile Detection Logic (UNCHANGED)
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -594,13 +571,15 @@ export default function CreditCardSection() {
     <div className="relative bg-[#F9F9F9]">
       <section
         ref={sectionRef}
-        className="relative md:min-h-[800vh] max-w-[1500px] mx-auto"
+        // Mobile view no longer needs the huge scroll height, only desktop does.
+        className={`relative max-w-[1500px] mx-auto ${
+          isMobile ? "min-h-0" : "md:min-h-[800vh]"
+        }`}
       >
         {isMobile ? (
           <MobileCreditCardView
-            scrollYProgress={scrollYProgress}
             handleStartClick={handleStartClick}
-            containerRef={sectionRef}
+            // Removed scrollYProgress and containerRef for static mobile view
           />
         ) : (
           <DesktopCreditCardView
