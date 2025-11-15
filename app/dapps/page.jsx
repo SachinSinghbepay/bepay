@@ -23,7 +23,7 @@ import NetworkSelectionPage from "@/components/allNetworks";
 import DAppPage from "@/components/deAppHero";
 
 
-const page = () => {
+const Page = () => {
   // Check for bepay_web_session cookie and call test API to verify cookies are sent.
   useEffect(() => {
     const getCookie = (name) => {
@@ -90,4 +90,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
