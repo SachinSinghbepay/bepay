@@ -117,7 +117,7 @@ const HowItWorksSection = forwardRef(function HowItWorksSection(props, ref) {
   };
 
   const step4NoWrapClass =
-    currentStep === 3 || currentStep === 5 ? "whitespace-nowrap" : "whitespace-normal";
+    currentStep === 3 || currentStep === 4 || currentStep === 5 ? "whitespace-nowrap" : "whitespace-normal";
 
   return (
     <section

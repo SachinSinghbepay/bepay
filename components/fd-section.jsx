@@ -110,7 +110,7 @@ useEffect(() => {
   const observer = new IntersectionObserver(
     ([entry]) => {
       if (entry.isIntersecting && !hasTrackedView) {
-        console.log('🔥 FD Section viewed - firing analytics'); // Debug log
+        console.log('FD Section viewed - firing analytics'); // Debug log
         AnalyticsService.sendEvent("UPI - fd section viewed");
         setHasTrackedView(true);
       }
