@@ -31,7 +31,7 @@ const montserrat = Montserrat({
 const BusinessHero = () => {
   const containerRef = useRef(null);
   const [showContent, setShowContent] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(null); // null = not yet determined
   const [screenWidth, setScreenWidth] = useState(0);
   const [hasTrackedView, setHasTrackedView] = useState(false);
 
@@ -209,6 +209,20 @@ const BusinessHero = () => {
       subtitle: "set up",
     },
   ];
+
+  // Prevent flash of desktop content on mobile - wait until screen size is determined
+  if (isMobile === null) {
+    return (
+      <div ref={containerRef} className={`${montserrat.variable} font-sans relative h-[200vh]`}>
+        <div className="sticky top-0 h-screen overflow-hidden">
+          <section className="bg-[#F9F9F9] h-full flex items-center justify-center">
+            {/* Optional: Add a subtle loading indicator or just empty space */}
+            <div className="w-8 h-8 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin"></div>
+          </section>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef} className={`${montserrat.variable} font-sans relative h-[200vh]`}> {/* Applied font variable */}

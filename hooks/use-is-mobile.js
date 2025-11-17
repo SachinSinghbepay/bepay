@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react"
 
 export const useIsMobile = (breakpoint = 768) => {
-  const [isMobile, setIsMobile] = useState(false)
+  // Initialize as null to prevent flash of wrong content during SSR/hydration
+  const [isMobile, setIsMobile] = useState(null)
 
   useEffect(() => {
     const checkScreenSize = () => {
