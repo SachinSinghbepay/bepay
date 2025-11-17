@@ -123,14 +123,18 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
           {service.video ? (
             <video
               ref={videoRef}
-              src={service.video}
               className="w-full h-full object-cover"
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="none"
+              disablePictureInPicture
+              controlsList="nodownload"
               onError={(e) => console.error('Video failed to load:', e)}
-            />
+            >
+              <source src={service.video} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           ) : (
             <Image
               src={service.image || "/placeholder.svg"}
@@ -270,16 +274,20 @@ const MobileView = () => {
                             videoRefs.current[i] = el;
                           }
                         }}
-                        src={service.video}
                         className="w-full h-full object-cover"
                         muted
                         loop
                         playsInline
-                        preload="metadata"
+                        preload="none"
+                        disablePictureInPicture
+                        controlsList="nodownload"
                         onError={(e) => console.error('Video failed to load:', service.video, e)}
                         onLoadStart={() => console.log('Loading video:', service.video)}
                         onCanPlay={() => console.log('Video can play:', service.video)}
-                      />
+                      >
+                        <source src={service.video} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
                     ) : (
                       <Image 
                         src={service.image || "/placeholder.svg"} 

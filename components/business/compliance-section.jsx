@@ -14,17 +14,17 @@ const complianceData = [
   {
     icon: "/images/business/licensed.svg",
     title: "Licensed",
-    badges: ["MSB (USA)", "VASP (EU)", "FIU (India)", "MiCA (EU)"],
+    badges: ["MSB (USA)", "VASP (EU)", "","","" ],
   },
   {
     icon: "/images/business/compliant.svg",
     title: "Compliant",
-    badges: ["GDPR", "DORA", "DPDP", "AML/KYC automation", "CFT"],
+    badges: ["DORA", "DPDP", "AML/KYC automation", "CFT","MiCA (EU)"],
   },
   {
     icon: "/images/business/protected.svg",
     title: "Protected",
-    badges: ["Multi-sig wallets", "fraud detection", "", ""],
+    badges: ["Multi-sig wallets", "fraud detection", "GDPR", ""],
   },
 ];
 

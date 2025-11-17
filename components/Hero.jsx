@@ -483,22 +483,15 @@ const DesktopHero = ({ containerRef, logoRef, frameRef, cardSectionRef }) => {
               </div>
 
               {/* App Mockup (LCP Candidate) */}
-              <div
-                data-scroll
-                data-scroll-speed="0.2"
-                className="absolute inset-0 bg-white rounded-[24px] sm:rounded-[32px] md:rounded-[50px] overflow-hidden shadow-2xl"
-              >
-                <div ref={frameRef} className="absolute inset-0 w-full h-full">
-                  <Image
-                    src="/mobileframer.png"
-                    alt="App Interface"
-                    fill
-                    className="object-contain p-2 sm:p-3 py-5 w-full h-full"
-                    priority // <--- CRITICAL FOR LCP
-                  />
-                </div>
+              <div ref={frameRef} className="absolute inset-0 w-full h-full">
+                <Image
+                  src="/phone_h.png"
+                  alt="App Interface"
+                  fill
+                  className="object-contain w-full h-full"
+                  priority // <--- CRITICAL FOR LCP
+                />
               </div>
-              <div className="mockup absolute inset-0 border-[4px] sm:border-[6px] md:border-8 z-1 border-black/10 rounded-[24px] sm:rounded-[36px] md:rounded-[46px] overflow-hidden pointer-events-none"></div>
             </div>
           </div>
         </div>
