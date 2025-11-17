@@ -279,7 +279,7 @@ const BusinessHero = () => {
                         loop
                         playsInline
                         preload="metadata" // <-- Optimization: Load minimal data first
-                        poster="/path/to/your/horizontal_poster.jpg" // <-- CRITICAL: Efficient static poster for LCP
+                        poster="/images/business/video_mockup.svg" // <-- CRITICAL: Efficient static poster for LCP
                       >
                         <source
                           src="/videos/crypto/business_mockup.mp4"
@@ -436,7 +436,7 @@ const BusinessHero = () => {
                           loop
                           playsInline
                           preload="metadata" // <-- Optimization: Load minimal data first
-                          poster="/path/to/your/horizontal_poster.jpg" // <-- CRITICAL: Efficient static poster for LCP
+                          poster="/images/business/video_mockup.svg" // <-- CRITICAL: Efficient static poster for LCP
                         >
                           <source
                             src="/videos/crypto/business_mockup.mp4"

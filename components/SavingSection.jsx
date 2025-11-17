@@ -277,23 +277,29 @@ const SavingSection = () => {
                     className="flex-shrink-0 w-screen h-full flex flex-col items-center justify-start p-2"
                   >
                     <div 
-                      // Retained h-[200px] 
-                      className="text-center h-[200px] flex items-start justify-center"
+                      // Adjusted height for better "Total" text containment
+                      className={`text-center flex items-start justify-center ${
+                        step.number === "Total" 
+                          ? "h-[180px]" 
+                          : "h-[200px]"
+                      }`}
                     >
                       {" "}
                       {/* Fixed height container */}
                       <span
                         className={`bg-gradient-to-t from-[#ECECEC05] to-[#ECECEC] bg-clip-text text-transparent leading-none select-none font-montserrat ${
                           step.number === "Total"
-                            ? "text-[165px] font-semibold mt-8" // Pushed 'Total' up slightly more
-                            : "text-[250px] font-bold mt-[-40px]" // MODIFIED: Pushed number up more aggressively (4-5 spaces)
+                            ? "text-[120px] sm:text-[140px] md:text-[165px] font-semibold mt-[-20px] sm:mt-[-25px] md:mt-[-30px]" // Pushed Total up to match numbers
+                            : "text-[200px] sm:text-[225px] md:text-[250px] font-bold mt-[-40px]" // Responsive sizing for numbers
                         }`}
                       >
                         {step.number}
                       </span>
                     </div>
                     {/* MODIFIED: Reduced negative margin from -mt-28 to -mt-16 to push image DOWN (3 spaces) */}
-                    <div className="relative w-11/12 h-[60%] flex-grow flex flex-col -mt-16">
+                    <div className={`relative w-11/12 flex-grow flex flex-col ${
+                      step.number === "Total" ? "-mt-12" : "-mt-16"
+                    }`}>
                       <Image
                         src={step.imageSrc}
                         alt={`Step ${step.number}`}
