@@ -27,7 +27,7 @@ const ScrollTextAnimation = () => {
   const lastCardNumberRef = useRef(null);
 
   // Structural FIX: Ref for the desktop download buttons moved outside the card loop
-  const fixedDownloadButtonsRef = useRef(null); // <-- NEW REF
+  const fixedDownloadButtonsRef = useRef(null);
 
   const downloadButton1Ref = useRef(null);
   const downloadButton2Ref = useRef(null);
@@ -204,7 +204,6 @@ const ScrollTextAnimation = () => {
     const lastCardContent = lastCardContentRef.current;
     const lastCardNumber = lastCardNumberRef.current;
     
-    // FIX: Use the new fixed container ref
     const fixedDownloadButtons = fixedDownloadButtonsRef.current; 
     
     const downloadButton1 = downloadButton1Ref.current;
@@ -224,7 +223,7 @@ const ScrollTextAnimation = () => {
       !lastCardRight ||
       !lastCardContent ||
       !lastCardNumber ||
-      !fixedDownloadButtons || // <-- Check new ref
+      !fixedDownloadButtons ||
       !downloadButton1 ||
       !downloadButton2 ||
       !downloadButton3 ||
@@ -244,7 +243,6 @@ const ScrollTextAnimation = () => {
         gsap.set([firstLine, secondLine], { opacity: 0, y: 100 });
         gsap.set(cardsContainer, { x: 0 });
         
-        // FIX: Set initial state for the NEW fixed button container
         gsap.set(fixedDownloadButtons, { opacity: 0, y: 50 }); 
         gsap.set([downloadButton1, downloadButton2, downloadButton3], {
             opacity: 0,
@@ -258,18 +256,17 @@ const ScrollTextAnimation = () => {
           scrollTrigger: {
             trigger: container,
             start: "top top",
-            end: "+=600%", // Reduced scroll length for more reliable behavior
+            end: "+=600%",
             pin: true,
-            scrub: 0.5, // Smoother scrubbing
+            scrub: 0.5,
             pinSpacing: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            fastScrollEnd: true, // Better performance for fast scrolling
+            fastScrollEnd: true,
             onEnter: () => {
               scrollTriggerInstance = ScrollTrigger.getById(mainTl.scrollTrigger.vars.id);
             },
             onUpdate: (self) => {
-              // Ensure visibility during scroll
               if (self.progress > 0 && self.progress < 1) {
                 container.style.visibility = 'visible';
               }
@@ -277,7 +274,6 @@ const ScrollTextAnimation = () => {
           },
         });
 
-        // Store the ScrollTrigger instance for later access
         scrollTriggerInstance = mainTl.scrollTrigger;
 
         mainTl
@@ -346,7 +342,6 @@ const ScrollTextAnimation = () => {
             { y: -100, opacity: 0, duration: 0.8, ease: "power2.inOut" },
             "lastCardHold+=1.0"
           )
-          // FIX: Animate the NEW fixed container
           .to(
             fixedDownloadButtons,
             { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
@@ -368,7 +363,6 @@ const ScrollTextAnimation = () => {
             "lastCardHold+=2.4"
           )
           .to({}, { duration: 1.5 }, "endHold")
-          // FIX: Force buttons to stay visible at the end after the duration ends
           .call(() => {
             gsap.set(fixedDownloadButtons, { opacity: 1, y: 0 });
             gsap.set([downloadButton1, downloadButton2, downloadButton3], {
@@ -674,13 +668,12 @@ const ScrollTextAnimation = () => {
           </div>
         </div>
 
-        {/* FIX: New Container for Desktop Download Buttons (Outside the card scroll) */}
+        {/* FIXED: Desktop Download Buttons - Now properly centered */}
         {!isMobile && (
             <div 
                 ref={fixedDownloadButtonsRef}
-                // Centering classes applied here: absolute, left-1/2, -translate-x-1/2
-                className="absolute bottom-12 left-1/2 -translate-x-1/2 space-y-3 z-50 flex flex-col items-center"
-                style={{ opacity: 0 }} // Initial opacity set by GSAP 
+                className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-3 z-50"
+                style={{ opacity: 0 }}
             >
                 <DownloadButtons
                     buttonRef={downloadButton1Ref}
