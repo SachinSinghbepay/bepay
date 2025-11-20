@@ -120,6 +120,86 @@ export async function fetchDAppById(identifier) {
 }
 
 /**
+ * Fetch user's recently visited dApps
+ * @returns {Promise<Array>} Array of recently visited dApps
+ */
+export async function fetchRecentDApps() {
+  try {
+    const url = `${API_BASE_URL}/api/dapps/user/recent`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Include cookies for authenticated requests
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('[dappsService] Error response:', errorText);
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.message || 'Failed to fetch recent dApps');
+    }
+
+    return result.data;
+  } catch (error) {
+    console.error('[dappsService] fetchRecentDApps error:', error);
+    throw error;
+  }
+}
+
+/**
+ * Fetch available dApp categories
+ * @returns {Promise<Array>} Array of category names
+ */
+export async function fetchCategories() {
+  try {
+    const url = `${API_BASE_URL}/api/dapps/categories`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('[dappsService] Error response:', errorText);
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    console.log('[dappsService] Categories API response:', result);
+    
+    if (!result.success) {
+      throw new Error(result.message || 'Failed to fetch categories');
+    }
+
+    // Extract category names from the response
+    if (result.data && Array.isArray(result.data.categories)) {
+      return result.data.categories.map(cat => cat.name);
+    } else {
+      console.warn('[dappsService] Unexpected categories data structure:', result.data);
+      return [];
+    }
+  } catch (error) {
+    console.error('[dappsService] fetchCategories error:', error);
+    // Return empty array instead of throwing to prevent UI from breaking
+    return [];
+  }
+}
+
+/**
  * Track a dApp visit
  * @param {string} dappId - dApp ID
  * @returns {Promise<Object>} Response

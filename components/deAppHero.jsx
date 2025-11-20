@@ -5,7 +5,8 @@ import { ChevronRight, Star, ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
 import allNetworks from "@/components/allNetworks";
 import Link from 'next/link'; // Import the Link component for navigation
-import { fetchDApps, fetchTopDApps, trackDAppVisit } from '@/services/dappsService';
+import { fetchDApps, fetchTopDApps, fetchRecentDApps, fetchCategories, trackDAppVisit } from '@/services/dappsService';
+
 
 
 // --- Reusable Sub-Components ---
@@ -128,17 +129,23 @@ const DAppListItem = ({ iconUrl, name, tag, description, url, dappId, onVisit })
 const DAppPage = () => {
   const [dapps, setDapps] = useState([]);
   const [topDapps, setTopDapps] = useState([]);
+  const [recentDapps, setRecentDapps] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch dApps from API on mount
+  // Fetch dApps from API on mount or when category changes
   useEffect(() => {
     const loadDApps = async () => {
       try {
         setLoading(true);
-        const data = await fetchDApps({ limit: 100 });
-        console.log('[DAppPage] Loaded dApps:', data.dapps?.length, 'dApps');
-        console.log('[DAppPage] Sample logo URL:', data.dapps?.[0]?.logo_url);
+        console.log('[DAppPage] Starting to fetch dApps...');
+        const category = selectedCategory === 'all' ? undefined : selectedCategory;
+        const data = await fetchDApps({ limit: 100, category });
+        console.log('[DAppPage] Loaded dApps - Full response:', data);
+        console.log('[DAppPage] Loaded dApps count:', data.dapps?.length, 'dApps');
+        console.log('[DAppPage] Sample dApp:', data.dapps?.[0]);
         setDapps(data.dapps || []);
         setError(null);
       } catch (err) {
@@ -150,14 +157,16 @@ const DAppPage = () => {
     };
 
     loadDApps();
-  }, []);
+  }, [selectedCategory]);
 
   // Fetch top dApps from category endpoint
   useEffect(() => {
     const loadTopDApps = async () => {
       try {
+        console.log('[DAppPage] Starting to fetch top dApps...');
         const data = await fetchTopDApps();
-        console.log('[DAppPage] Loaded top dApps:', data.dapps?.length, 'dApps');
+        console.log('[DAppPage] Loaded top dApps - Full response:', data);
+        console.log('[DAppPage] Loaded top dApps count:', data.dapps?.length, 'dApps');
         setTopDapps(data.dapps || []);
       } catch (err) {
         console.error('[DAppPage] Failed to load top dApps:', err);
@@ -165,6 +174,39 @@ const DAppPage = () => {
     };
 
     loadTopDApps();
+  }, []);
+
+  // Fetch recent dApps from category endpoint
+  useEffect(() => {
+    const loadRecentDApps = async () => {
+      try {
+        console.log('[DAppPage] Starting to fetch recent dApps...');
+        const data = await fetchRecentDApps();
+        console.log('[DAppPage] Loaded recent dApps - Full response:', data);
+        console.log('[DAppPage] Loaded recent dApps count:', data?.length, 'dApps');
+        setRecentDapps(data || []);
+      } catch (err) {
+        console.error('[DAppPage] Failed to load recent dApps:', err);
+      }
+    };
+
+    loadRecentDApps();
+  }, []);
+
+  // Fetch categories
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        console.log('[DAppPage] Starting to fetch categories...');
+        const data = await fetchCategories();
+        console.log('[DAppPage] Loaded categories:', data);
+        setCategories(data || []);
+      } catch (err) {
+        console.error('[DAppPage] Failed to load categories:', err);
+      }
+    };
+
+    loadCategories();
   }, []);
 
   // Track dApp visit
@@ -183,6 +225,18 @@ const DAppPage = () => {
       tag: d.category,
       iconUrl: d.logo_url,
       url: d.website_url,
+    }));
+
+  // Get recently visited dApps (API returns different structure with nested 'dapp' object)
+  // Show only first 5 for the preview section
+  const recentDappsList = recentDapps
+    .slice(0, 5)
+    .map(item => ({
+      id: item.dapp.id,
+      name: item.dapp.name,
+      tag: item.dapp.category,
+      iconUrl: item.dapp.logo_url,
+      url: item.dapp.website_url,
     }));
 
   // Get all dApps for the list
@@ -229,35 +283,6 @@ const DAppPage = () => {
   }
 
   return (
-    <div className="bg-white max-w-md mx-auto p-4 font-sans">
-      <div className="relative text-white rounded-2xl overflow-hidden mb-8 h-[120px]">
-        <Image 
-          src="/icons/banner.svg" 
-          alt="Staking opportunities background" 
-          fill
-          style={{ objectFit: 'cover' }}
-          className="z-0" 
-        />
-        <div className="relative z-10 flex items-center p-4 min-h-[120px]">
-          {/* Content removed as per your previous edit */}
-        </div>
-      </div>
-
-      {/* Top dApps Section */}
-      <div className="mb-8">
-        <SectionHeader title="Top dApps" actionText="All" href="#" />
-        <div className="mt-4 flex space-x-4 overflow-x-auto pb-4 -mx-4 px-4">
-          {featuredDapps.length > 0 ? (
-            featuredDapps.map((dapp) => (
-              <DAppCard key={dapp.id} {...dapp} dappId={dapp.id} onVisit={handleDAppVisit} />
-            ))
-          ) : (
-            <p className="text-gray-500 text-sm">No featured dApps available</p>
-          )}
-        </div>
-      </div>
-
-  return (
     // Mobile: max-w-md mx-auto p-4. Desktop: max-w-7xl, larger padding
     <div className="bg-white max-w-md mx-auto p-4 font-sans lg:max-w-7xl lg:px-8 lg:py-10">
       
@@ -287,64 +312,78 @@ const DAppPage = () => {
             {/* Mobile and Desktop: horizontal scroll with gap */}
             <div className="mt-4 flex gap-4 overflow-x-auto pb-4 lg:gap-6">
               {featuredDapps.map((dapp, index) => (
-                <DAppCard key={dapp.id || `${dapp.name}-featured-${index}`} {...dapp} />
+                <DAppCard key={dapp.id || `${dapp.name}-featured-${index}`} {...dapp} dappId={dapp.id} onVisit={handleDAppVisit} />
               ))}
             </div>
           </div>
 
-          {/* Favorite dApps Section - Show only if user has favorites */}
-          {!favoritesLoading && favorites.length > 0 && (
-            <div className="mb-8 lg:mb-10">
-              <SectionHeader title="⭐ Your Favorites" actionText={`${favorites.length}`} />
-              {/* Mobile and Desktop: horizontal scroll with gap */}
-              <div className="mt-4 flex gap-4 overflow-x-auto pb-4 lg:gap-6">
-                {favorites.map((dapp, index) => (
-                  <FavoriteDAppCard 
-                    key={dapp.id || `${dapp.name}-favorite-${index}`} 
-                    {...dapp}
-                    isFavorited={isFavorited(dapp.name)}
-                    onToggleFavorite={toggleFavorite}
-                  />
+          {/* Recently Visited dApps Section */}
+          <div className="mb-8 lg:mb-10">
+            <SectionHeader title="Recently Visited" actionText="View All" href="/dapps/recently-visited" />
+            {/* Mobile and Desktop: horizontal scroll with gap */}
+            <div className="mt-4 flex gap-4 overflow-x-auto pb-4 lg:gap-6">
+              {recentDappsList.length > 0 ? (
+                recentDappsList.map((dapp, index) => (
+                  <DAppCard key={dapp.id || `${dapp.name}-recent-${index}`} {...dapp} dappId={dapp.id} onVisit={handleDAppVisit} />
+                ))
+              ) : (
+                <p className="text-gray-500 text-sm py-4">No recently visited dApps yet</p>
+              )}
+            </div>
+          </div>
+
+          {/* Category Filter */}
+          {categories.length > 0 && (
+            <div className="mb-6 lg:mb-8">
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">Categories</h3>
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                <button
+                  onClick={() => setSelectedCategory('all')}
+                  className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                    selectedCategory === 'all'
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  All
+                </button>
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap capitalize transition-all ${
+                      selectedCategory === category
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {category}
+                  </button>
                 ))}
               </div>
             </div>
           )}
 
-          {/* DApps Section Header & Filter */}
+          {/* DApps Section Header */}
           <div className="mb-2 lg:mb-6">
             <SectionHeader
-              title="DApps"
+              title="All dApps"
               actionText="All Networks"
               href="/allNetworks"
             />
           </div>
 
-          <div className="mb-6">
-            <DAppFilter activeFilter={activeCategory} setActiveFilter={setActiveCategory} dappCategories={dappCategories} />
-          </div>
-
           {/* The List at the bottom */}
           <div className="space-y-3 lg:space-y-4">
-            {displayedDappList.map((dapp, index) => (
-              <DAppListItem 
-                key={dapp.id || `${dapp.category}-${dapp.name}-${index}`} 
-                {...dapp}
-                isFavorited={isFavorited(dapp.name)}
-                onToggleFavorite={toggleFavorite}
-              />
-            ))}
+            {dAppList.length > 0 ? (
+              dAppList.map((dapp) => (
+                <DAppListItem key={dapp.id} {...dapp} dappId={dapp.id} onVisit={handleDAppVisit} />
+              ))
+            ) : (
+              <p className="text-gray-500 text-sm text-center py-8">No dApps available</p>
+            )}
           </div>
-
-      {/* The List at the bottom */}
-      <div className="space-y-3">
-        {dAppList.length > 0 ? (
-          dAppList.map((dapp) => (
-            <DAppListItem key={dapp.id} {...dapp} dappId={dapp.id} onVisit={handleDAppVisit} />
-          ))
-        ) : (
-          <p className="text-gray-500 text-sm text-center py-8">No dApps available</p>
-        )}
-
+        </div>
       </div>
     </div>
   );
