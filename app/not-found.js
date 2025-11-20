@@ -114,7 +114,7 @@ export default function NotFound() {
           The page you&apos;re looking for doesn&apos;t exist, but our app has everything you need!
         </p>
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-          Download Bepay Money
+          Download bepay money
         </h2>
         {getStoreButton()}
       </div>

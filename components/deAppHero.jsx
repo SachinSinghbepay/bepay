@@ -8,6 +8,7 @@ import Link from 'next/link'; // Import the Link component for navigation
 import { fetchDApps, fetchTopDApps, fetchRecentDApps, fetchCategories, trackDAppVisit } from '@/services/dappsService';
 
 
+
 // --- Reusable Sub-Components ---
 const SectionHeader = ({ title, actionText, secondaryTitle = null, href }) => (
   <div className="flex justify-between items-center">

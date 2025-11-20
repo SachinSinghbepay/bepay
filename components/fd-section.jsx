@@ -110,7 +110,7 @@ useEffect(() => {
   const observer = new IntersectionObserver(
     ([entry]) => {
       if (entry.isIntersecting && !hasTrackedView) {
-        console.log('🔥 FD Section viewed - firing analytics'); // Debug log
+        console.log('FD Section viewed - firing analytics'); // Debug log
         AnalyticsService.sendEvent("UPI - fd section viewed");
         setHasTrackedView(true);
       }
@@ -231,9 +231,6 @@ useEffect(() => {
             style={{
               boxShadow:
                 "inset 10px 10px 20px 0px #0000001A, inset -10px -10px 30px 0px #FFFFFF",
-              border: "2px solid transparent",
-              borderImage:
-                "linear-gradient(135deg, rgba(255,255,255,0.8) 0%, #F5F5F5 100%) 1",
             }}
           >
             {/* The absolute positioning wrapper */}

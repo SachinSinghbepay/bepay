@@ -7,7 +7,13 @@ export default function ConditionalFooter() {
   const pathname = usePathname();
   
   // Don't render footer on specific pages
-  if (pathname === '/cookie-policy' || pathname === '/bepay-foundations') {
+  if (
+    pathname === '/cookie-policy' || 
+    pathname === '/bepay-foundations' || 
+    // ✅ ADDITION: Exclude /dapps and /allNetworks
+    pathname.startsWith('/dapps') ||
+    pathname === '/allNetworks' || pathname === '/airdrops'
+  ) {
     return null;
   }
   
@@ -19,7 +25,7 @@ export default function ConditionalFooter() {
       />;
   }
 
-  // ✅ MODIFICATION: Check for '/upi' page and pass a special prop
+  // Check for '/upi' page and pass a special prop
   if (pathname === '/upi') {
     return <Footer
         heading="Tired of being charged to use your own money?"
