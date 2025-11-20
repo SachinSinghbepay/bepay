@@ -219,43 +219,38 @@ const SavingSection = () => {
           <div className="h-full flex flex-col">
             {/* 1. Static Header Content */}
             <motion.div
-              // Retained reduced padding from previous step (pt-10 pb-4)
-              className="w-full pt-10 pb-4 px-6 bg-[#F9F9F9]" 
+              className="w-full pt-8 pb-4 px-4 sm:px-6 bg-[#F9F9F9]" 
               initial="hidden"
               animate="visible"
               variants={leftContentContainerVariants}
             >
-              {/* Using desktop text, but with mobile-friendly font sizes */}
-              {/* MODIFIED: Removed 'space-y-0' from the container to allow the lines to naturally collapse closer */}
-              <div className="">
+              {/* Mobile-optimized left-aligned heading */}
+              <div className="text-left">
                 <motion.h1
-                  // MODIFIED: Added leading-none to reduce space after the line
-                  className="text-6xl font-[400] text-[#C0C0C0] tracking-tighter leading-[80px] -mt-5"
+                  className="text-[48px] xs:text-[52px] sm:text-[56px] md:text-[60px] font-[400] text-[#C0C0C0] tracking-tighter leading-[1.1] -mt-2"
                   variants={textLineVariants}
                 >
                   Real <span className="text-[#333333] font-normal">use.</span>
                 </motion.h1>
                 <motion.h2
-  className="text-6xl font-[400] text-[#C0C0C0] tracking-tighter leading-[20px]"
-  variants={textLineVariants}
->
-  <span className="whitespace-nowrap">
-    Real{" "}
-    <span className="text-[#333333] font-normal">savings.</span>
-  </span>
-</motion.h2>
+                  className="text-[48px] xs:text-[52px] sm:text-[56px] md:text-[60px] font-[400] text-[#C0C0C0] tracking-tighter leading-[1.1]"
+                  variants={textLineVariants}
+                >
+                  Real{" "}
+                  <span className="text-[#333333] font-normal">savings.</span>
+                </motion.h2>
                 <motion.div
-                  className="pt-7 space-y-0" // Kept pt-7 for gap to subtext
+                  className="pt-4 sm:pt-6 space-y-0"
                   variants={leftContentContainerVariants}
                 >
                   <motion.p
-                    className="text-[20px] text-[#6A6A6A] font-regular font-[400] leading-snug"
+                    className="text-[16px] xs:text-[17px] sm:text-[18px] md:text-[20px] text-[#6A6A6A] font-regular font-[400] leading-snug"
                     variants={textLineVariants}
                   >
                     Your Life Already Costs Money.
                   </motion.p>
                   <motion.p
-                    className="text-[20px] text-[#6A6A6A] font-regular font-[400] leading-snug"
+                    className="text-[16px] xs:text-[17px] sm:text-[18px] md:text-[20px] text-[#6A6A6A] font-regular font-[400] leading-snug"
                     variants={textLineVariants}
                   >
                     We Just{" "}
@@ -273,31 +268,26 @@ const SavingSection = () => {
                 {STEPS.map((step, index) => (
                   <div
                     key={index}
-                    // Retained p-2 for minimal overall padding
-                    className="flex-shrink-0 w-screen h-full flex flex-col items-center justify-start p-2"
+                    className="flex-shrink-0 w-screen h-full flex flex-col items-center justify-start pt-2 px-2 pb-0"
                   >
                     <div 
-                      // Adjusted height for better "Total" text containment
                       className={`text-center flex items-start justify-center ${
                         step.number === "Total" 
                           ? "h-[180px]" 
                           : "h-[200px]"
                       }`}
                     >
-                      {" "}
-                      {/* Fixed height container */}
                       <span
                         className={`bg-gradient-to-t from-[#ECECEC05] to-[#ECECEC] bg-clip-text text-transparent leading-none select-none font-montserrat ${
                           step.number === "Total"
-                            ? "text-[120px] sm:text-[140px] md:text-[165px] font-semibold mt-[-20px] sm:mt-[-25px] md:mt-[-30px]" // Pushed Total up to match numbers
-                            : "text-[200px] sm:text-[225px] md:text-[250px] font-bold mt-[-40px]" // Responsive sizing for numbers
+                            ? "text-[120px] sm:text-[140px] md:text-[165px] font-semibold mt-[-20px] sm:mt-[-25px] md:mt-[-30px]"
+                            : "text-[200px] sm:text-[225px] md:text-[250px] font-bold mt-[-40px]"
                         }`}
                       >
                         {step.number}
                       </span>
                     </div>
-                    {/* MODIFIED: Reduced negative margin from -mt-28 to -mt-16 to push image DOWN (3 spaces) */}
-                    <div className={`relative w-11/12 flex-grow flex flex-col ${
+                    <div className={`relative w-11/12 flex-grow flex flex-col mb-0 ${
                       step.number === "Total" ? "-mt-12" : "-mt-16"
                     }`}>
                       <Image
@@ -305,7 +295,7 @@ const SavingSection = () => {
                         alt={`Step ${step.number}`}
                         width={400}
                         height={900}
-                        className="w-full flex-grow object-contain"
+                        className="w-full h-full object-cover object-bottom"
                       />
                     </div>
                   </div>

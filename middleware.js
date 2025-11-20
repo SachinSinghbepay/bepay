@@ -9,8 +9,12 @@ const APP_DEEP_LINK_ROUTES = [
 
 // Play Store and App Store URLs
 const PLAY_STORE_URL =
-  "https://play.google.com/store/apps/details?id=com.bepay.user";
+"https://play.google.com/store/apps/details?id=com.bepay.user";
 const APP_STORE_URL = "https://apps.apple.com/app/6749352458"; // Replace with your actual App Store ID
+
+// In-memory cache for geo detection (prevents rate limiting)
+const geoCache = new Map();
+const CACHE_DURATION = 60 * 60 * 1000; // 1 hour cache
 
 export async function middleware(request) {
   const { pathname, search } = request.nextUrl;
@@ -19,19 +23,52 @@ export async function middleware(request) {
   // ─────────────────────────────────────────────
   // 🌍 COUNTRY DETECTION (works both locally and on Vercel)
   // ─────────────────────────────────────────────
-  let country = request.geo?.country || "";
+  
+  // Try multiple methods to get country code
+  let country = 
+    request.geo?.country ||           // Vercel's geo object
+    request.headers.get("x-vercel-ip-country") || // Vercel header fallback
+    "";
 
+  // Fallback for local development (with caching to avoid rate limits)
   if (!country) {
-    try {
-      // NOTE: Relying solely on Vercel's geo headers is best practice,
-      // but the fallback to an external API remains for non-Vercel environments.
-      const res = await fetch("https://ipapi.co/json/");
-      const data = await res.json();
-      country = data.country_code || "";
-      console.log("Detected country (via API):", country);
-    } catch (error) {
-      console.error("Geo detection failed:", error);
+    const clientIP = request.ip || request.headers.get("x-forwarded-for") || "unknown";
+    
+    // Check cache first
+    const cached = geoCache.get(clientIP);
+    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+      country = cached.country;
+      console.log("Using cached country:", country);
+    } else {
+      // Only make API call if not cached
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3s timeout
+        
+        const res = await fetch("https://ipapi.co/json/", {
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+        
+        if (res.ok) {
+          const data = await res.json();
+          country = data.country_code || "";
+          
+          // Cache the result
+          geoCache.set(clientIP, {
+            country,
+            timestamp: Date.now(),
+          });
+          
+          console.log("Detected country (via API - cached):", country);
+        }
+      } catch (error) {
+        console.log("Geo detection skipped (using fallback):", error.message);
+        // Silently fail - don't break the site
+      }
     }
+  } else {
+    console.log("Detected country (via Vercel):", country);
   }
 
   // ─────────────────────────────────────────────
