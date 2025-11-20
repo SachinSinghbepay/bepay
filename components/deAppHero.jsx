@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, Star, ArrowUpRight } from 'lucide-react';
@@ -7,20 +7,29 @@ import allNetworks from "@/components/allNetworks";
 import Link from 'next/link'; // Import the Link component for navigation
 import { fetchDApps, fetchTopDApps, trackDAppVisit } from '@/services/dappsService';
 
+
 // --- Reusable Sub-Components ---
 const SectionHeader = ({ title, actionText, secondaryTitle = null, href }) => (
   <div className="flex justify-between items-center">
     <div className="flex items-center space-x-4">
-      <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
-      {secondaryTitle && <span className="text-lg text-gray-400">{secondaryTitle}</span>}
+      {/* Mobile text-[16px] is default, Desktop is lg:text-xl */}
+      <h2 className="text-[16px] lg:text-xl font-semibold text-[#080808]">{title}</h2>
+      {secondaryTitle && (
+        <span className="text-lg text-gray-400">{secondaryTitle}</span>
+      )}
     </div>
-    {/* Use a Link if href is provided, otherwise it's just text */}
     {href ? (
-      <Link href={href} className="flex items-center text-sm font-semibold text-blue-600 shrink-0">
+      <Link
+        href={href}
+        // Mobile text-[14px] is default, Desktop is lg:text-base
+        className="flex items-center text-[14px] lg:text-base font-medium text-[#6A6A6A] shrink-0 hover:text-gray-900 transition-colors"
+      >
         {actionText} <ChevronRight size={16} className="ml-1" />
       </Link>
     ) : (
-       <span className="flex items-center text-sm font-semibold text-gray-500 shrink-0">{actionText}</span>
+      <span className="flex items-center text-sm font-semibold text-gray-500 shrink-0">
+        {actionText}
+      </span>
     )}
   </div>
 );
@@ -248,15 +257,83 @@ const DAppPage = () => {
         </div>
       </div>
 
-      {/* DApps Section */}
-      <div className="mb-8">
-        {/* THIS IS THE CLICKABLE LINK TO THE NEW PAGE */}
-        <SectionHeader 
-          title="DApps" 
-          actionText="All Networks" 
-          href="/allNetworks" 
+  return (
+    // Mobile: max-w-md mx-auto p-4. Desktop: max-w-7xl, larger padding
+    <div className="bg-white max-w-md mx-auto p-4 font-sans lg:max-w-7xl lg:px-8 lg:py-10">
+      
+      {/* 1. Header/Banner Area (Wider on desktop) */}
+      <div className="relative text-white rounded-2xl overflow-hidden mb-4 cursor-pointer lg:rounded-3xl lg:mb-6">
+        <Image
+          src="/icons/banner.svg"
+          alt="Staking opportunities background chart"
+          width={800}
+          height={180}
+          className="w-full h-[100px] lg:h-[160px] object-cover"
+          priority
         />
+        {/* Added overlay content for desktop banner visibility */}
+       
       </div>
+      
+      {/* 2. Main Content Layout (Desktop Grid - Mobile is single column default) */}
+      <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+        
+        {/* === LEFT COLUMN: Primary DApp List (Takes 2/3 width on desktop) === */}
+        <div className="lg:col-span-2">
+          
+          {/* Featured dApps Section */}
+          <div className="mb-8 lg:mb-10">
+            <SectionHeader title="Featured dApps" actionText="All" href="#" />
+            {/* Mobile and Desktop: horizontal scroll with gap */}
+            <div className="mt-4 flex gap-4 overflow-x-auto pb-4 lg:gap-6">
+              {featuredDapps.map((dapp, index) => (
+                <DAppCard key={dapp.id || `${dapp.name}-featured-${index}`} {...dapp} />
+              ))}
+            </div>
+          </div>
+
+          {/* Favorite dApps Section - Show only if user has favorites */}
+          {!favoritesLoading && favorites.length > 0 && (
+            <div className="mb-8 lg:mb-10">
+              <SectionHeader title="⭐ Your Favorites" actionText={`${favorites.length}`} />
+              {/* Mobile and Desktop: horizontal scroll with gap */}
+              <div className="mt-4 flex gap-4 overflow-x-auto pb-4 lg:gap-6">
+                {favorites.map((dapp, index) => (
+                  <FavoriteDAppCard 
+                    key={dapp.id || `${dapp.name}-favorite-${index}`} 
+                    {...dapp}
+                    isFavorited={isFavorited(dapp.name)}
+                    onToggleFavorite={toggleFavorite}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* DApps Section Header & Filter */}
+          <div className="mb-2 lg:mb-6">
+            <SectionHeader
+              title="DApps"
+              actionText="All Networks"
+              href="/allNetworks"
+            />
+          </div>
+
+          <div className="mb-6">
+            <DAppFilter activeFilter={activeCategory} setActiveFilter={setActiveCategory} dappCategories={dappCategories} />
+          </div>
+
+          {/* The List at the bottom */}
+          <div className="space-y-3 lg:space-y-4">
+            {displayedDappList.map((dapp, index) => (
+              <DAppListItem 
+                key={dapp.id || `${dapp.category}-${dapp.name}-${index}`} 
+                {...dapp}
+                isFavorited={isFavorited(dapp.name)}
+                onToggleFavorite={toggleFavorite}
+              />
+            ))}
+          </div>
 
       {/* The List at the bottom */}
       <div className="space-y-3">
@@ -267,6 +344,7 @@ const DAppPage = () => {
         ) : (
           <p className="text-gray-500 text-sm text-center py-8">No dApps available</p>
         )}
+
       </div>
     </div>
   );

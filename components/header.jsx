@@ -14,6 +14,17 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  // 💥 UPDATED: Conditional check to hide the component on /dapps OR /allNetworks route
+ if (
+    pathname.startsWith("/dapps") || // CHECK if path starts with /dapps
+    pathname === "/allNetworks" ||
+    pathname === "/airdrops"
+  ) {
+    return null; // Do not render the header on these routes
+  }
+
+  // --- END OF UPDATED CODE ---
+
   // New: Calculate the correct button location identifier
   const calculatedButtonLocation = pathname === "/" ? "personal" : pathname;
 
@@ -81,7 +92,7 @@ export default function Header() {
           {/* Navigation - Hidden on mobile */}
           <nav className="hidden md:flex items-center space-x-8 lg:space-x-14">
             <Link
-              href="/"
+              href="/?personal=true"
               className={getLinkClasses(
                 "/",
                 "text-sm lg:text-[14px] tracking-wide uppercase"
@@ -213,7 +224,7 @@ export default function Header() {
             }}
           >
             <Link
-              href="/"
+              href="/?personal=true"
               className={getLinkClasses(
                 "/",
                 "text-sm uppercase tracking-wide py-2"

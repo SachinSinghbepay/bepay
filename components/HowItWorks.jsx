@@ -117,7 +117,7 @@ const HowItWorksSection = forwardRef(function HowItWorksSection(props, ref) {
   };
 
   const step4NoWrapClass =
-    currentStep === 3 || currentStep === 5 ? "whitespace-nowrap" : "whitespace-normal";
+    currentStep === 3 || currentStep === 4 || currentStep === 5 ? "whitespace-nowrap" : "whitespace-normal";
 
   return (
     <section
@@ -183,10 +183,10 @@ const HowItWorksSection = forwardRef(function HowItWorksSection(props, ref) {
                 transition={{ duration: 0.3, delay: 0.1 }}
                 className="flex items-center justify-center"
               >
-                {/* MOBILE: mr-2 reduces gap, DESKTOP: md:mr-4 keeps original gap */}
+                {/* MOBILE: mr-1 reduces gap for longer text, DESKTOP: md:mr-4 keeps original gap */}
                 {IconComponent && (
                   <IconComponent
-                    className="w-6 h-6 md:w-10 md:h-10 mr-2 md:mr-4"
+                    className="w-6 h-6 md:w-10 md:h-10 mr-1 md:mr-4"
                     style={{ color: "#333333" }}
                     aria-hidden="true"
                   />
@@ -197,7 +197,7 @@ const HowItWorksSection = forwardRef(function HowItWorksSection(props, ref) {
                     alt={`Step ${currentStep} icon`}
                     width={40}
                     height={40}
-                    className="w-6 h-6 md:w-10 md:h-10 mr-2 md:mr-4"
+                    className="w-6 h-6 md:w-10 md:h-10 mr-1 md:mr-4"
                     aria-hidden="true"
                   />
                 )}
