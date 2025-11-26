@@ -85,7 +85,12 @@ export default function ContactsPage() {
     link.style.visibility = "hidden"
     document.body.appendChild(link)
     link.click()
-    document.body.removeChild(link)
+    if (link.parentNode) link.parentNode.removeChild(link)
+    try {
+      URL.revokeObjectURL(url)
+    } catch (e) {
+      // ignore
+    }
   }
 
   const getStatusBadge = (status) => {
