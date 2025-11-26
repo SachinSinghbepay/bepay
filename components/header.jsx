@@ -16,14 +16,14 @@ export default function Header() {
 
   // 💥 UPDATED: Conditional check to hide the component on /dapps OR /allNetworks route
  if (
-    pathname.startsWith("/dapps") || // CHECK if path starts with /dapps
-    pathname === "/allNetworks" ||
-    pathname === "/airdrops"
-  ) {
-    return null; // Do not render the header on these routes
-  }
+    pathname.startsWith("/dapps") || // CHECK if path starts with /dapps
+    pathname === "/allNetworks" ||
+    pathname === "/airdrops"
+  ) {
+    return null; // Do not render the header on these routes
+  }
 
-  // --- END OF UPDATED CODE ---
+  // --- END OF UPDATED CODE --
 
   // New: Calculate the correct button location identifier
   const calculatedButtonLocation = pathname === "/" ? "personal" : pathname;
@@ -126,6 +126,18 @@ export default function Header() {
               }}
             >
               UPI
+            </Link>
+            <Link
+              href="/igps"
+              className={getLinkClasses(
+                "/igps",
+                "text-sm lg:text-[14px] tracking-wide uppercase"
+              )}
+              onClick={() => {
+                AnalyticsService.sendEvent("igps_nav_clicked");
+              }}
+            >
+              IGPS
             </Link>
           </nav>
 
@@ -253,6 +265,16 @@ export default function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               UPI
+            </Link>
+            <Link
+              href="/igps"
+              className={getLinkClasses(
+                "/igps",
+                "text-sm uppercase tracking-wide py-2"
+              )}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              IGPS
             </Link>
 
             {/* Mobile Download Button */}
