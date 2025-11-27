@@ -8,10 +8,12 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import WaitlistTriggerButton from "./waitlist-trigger-button";
+import GetStartedPopup from "./popups/getStartedPopup";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isGetStartedOpen, setIsGetStartedOpen] = useState(false);
   const pathname = usePathname();
 
   // 💥 UPDATED: Conditional check to hide the component on /dapps OR /allNetworks route
@@ -143,24 +145,47 @@ export default function Header() {
 
           {/* Download Button - Hidden on small screens */}
           {/* UPDATED: buttonLocation now uses the calculated value */}
-          <WaitlistTriggerButton
-            triggerSource="'Download bepay app' button"
-            buttonLocation={calculatedButtonLocation} 
-          >
-            <Button
-              // UPDATED: onClick now uses the calculated value
-              onClick={() => handleDownloadAppClick(calculatedButtonLocation)}
-              variant="outline"
-              className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
+          {pathname === "/igps" ? (
+            <div className="hidden lg:flex items-center gap-4">
+              <Button
+                onClick={() => setIsGetStartedOpen(true)}
+                variant="outline"
+                className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
+              >
+                <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">Get in touch</span>
+              </Button>
+              <Button
+                disabled
+                aria-disabled="true"
+                variant="outline"
+                className="hidden lg:flex lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black bg-transparent rounded-full transition-all duration-200 opacity-60 cursor-not-allowed"
+              >
+                <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">Login</span>
+              </Button>
+              {isGetStartedOpen && (
+                <GetStartedPopup isOpen={true} onClose={() => setIsGetStartedOpen(false)} />
+              )}
+            </div>
+          ) : (
+            <WaitlistTriggerButton
+              triggerSource="'Download bepay app' button"
+              buttonLocation={calculatedButtonLocation}
             >
-              <div className="flex gap-2">
-                <Smartphone className="w-4 h-4 lg:w-5 lg:h-9" />
-                <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">
-                  Download bepay app
-                </span>
-              </div>
-            </Button>
-          </WaitlistTriggerButton>
+              <Button
+                // UPDATED: onClick now uses the calculated value
+                onClick={() => handleDownloadAppClick(calculatedButtonLocation)}
+                variant="outline"
+                className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
+              >
+                <div className="flex gap-2">
+                  <Smartphone className="w-4 h-4 lg:w-5 lg:h-9" />
+                  <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">
+                    Download bepay app
+                  </span>
+                </div>
+              </Button>
+            </WaitlistTriggerButton>
+          )}
 
           {/* Animated Mobile menu button */}
           <button
