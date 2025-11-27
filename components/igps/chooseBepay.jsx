@@ -1,10 +1,16 @@
+"use client"
 import React from 'react';
+import { useEffect } from 'react';
+import { AnalyticsService } from '@/services/analyticsService';
 // Removed unused imports: Globe, Route, Percent, FileCheck, ArrowUpRight
 
 // Assuming c1.png, c2.png, c3.png, and c4.png are accessible via the public folder
 // If these are locally imported files (e.g., import c1 from './c1.png'), you would need to adjust the import statements.
 
 export default function BepayLanding() {
+  useEffect(() => {
+    AnalyticsService.sendEvent('IGPS Component View', { component: 'BepayLanding', page: 'igps' });
+  }, []);
   // Utility component to render the image tile
   const FeatureImage = ({ src }) => (
     <div className="flex justify-center mb-6">

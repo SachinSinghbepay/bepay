@@ -1,5 +1,6 @@
 'use client'
 import React, { useRef, useState } from 'react';
+import { AnalyticsService } from '@/services/analyticsService';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -77,6 +78,10 @@ const VerticalScrollingSection = () => {
   const containerRef = useRef(null);
   const mobileScrollRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+
+  React.useEffect(() => {
+    AnalyticsService.sendEvent('IGPS Component View', { component: 'VerticalScrollingSection', page: 'igps' });
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,

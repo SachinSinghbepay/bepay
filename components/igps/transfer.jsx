@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
+import { AnalyticsService } from "@/services/analyticsService";
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
@@ -91,6 +92,10 @@ function Calculator() {
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
     };
+  }, []);
+
+  useEffect(() => {
+    AnalyticsService.sendEvent('IGPS Component View', { component: 'TransferCalculator', page: 'igps' });
   }, []);
 
   // keyboard accessibility: left/right arrow adjust position

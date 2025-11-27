@@ -69,7 +69,7 @@ export default function ComplianceSection() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasTrackedView) {
-          AnalyticsService.sendEvent("Compliance section viewed");
+          AnalyticsService.sendEvent("IGPS Compliance section viewed");
           setHasTrackedView(true);
           observer.unobserve(entry.target);
         }

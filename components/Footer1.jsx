@@ -123,11 +123,12 @@ const NewsletterModal = ({ isOpen, onClose }) => {
   );
 };
 
-// 🛑 MODIFICATION HERE: Added isUpiPage prop
+// 🛑 MODIFICATION: Added isUpiPage and isIGPSPage props
 const Footer = ({
   heading,
   headingSize = "text-[24px]",
   isUpiPage = false,
+  isIGPSPage = false,
 }) => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -481,48 +482,63 @@ const Footer = ({
               {heading || "Ready to transform your financial future?"}
             </h2>
             <p className="text-[#6A6A6A] text-[13px] font-medium leading-relaxed">
-                           {" "}
-              {isUpiPage ? (
-                "It’s time your wallet started working for you. With bepay, every swipe, scan, and spend puts money back where it belongs — in your hands."
-              ) : (
-                <>
-                                        Join millions of users who trust bepay
-                  for their crypto financial                       needs. Start
-                  earning, spending, and growing your wealth today with        
-                                the most comprehensive crypto financial
-                  platform.                    {" "}
-                </>
-              )}
-                         {" "}
-            </p>
+  {isUpiPage ? (
+    "It’s time your wallet started working for you. With bepay, every swipe, scan, and spend puts money back where it belongs — in your hands."
+  ) : isIGPSPage ? (
+    "Whether you’re scaling exports, managing global payroll, collecting international invoices, or paying suppliers across continents, bepay provides a single, intelligent infrastructure to streamline your global money movement."
+   ) : (
+    <>
+      Join millions of users who trust bepay for their crypto financial needs.
+      Start earning, spending, and growing your wealth today with the most
+      comprehensive crypto financial platform.
+    </>
+  )}
+</p>
+
+          {isIGPSPage && (
+            <div className="mt-6 flex flex-col items-center">
+              <h3 className="text-[13px] md:text-[14px] tracking-[0.18em] uppercase text-white font-semibold mb-4">
+                GO GLOBAL WITHOUT COMPLEXITY!
+              </h3>
+              <Link href="/contact-us" className="inline-flex items-center bg-white text-black px-6 py-3 rounded-full font-medium hover:opacity-95">
+                <span>Get Started Now</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="ml-3">
+                  <path d="M7 17l10-10M7 7h10v10" />
+                </svg>
+              </Link>
+            </div>
+          )}
+
           </motion.div>
 
-          <motion.div
-            className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
-            variants={containerVariants}
-          >
-            <AppStoreButton
-              onClick={handleAppStoreClick}
-              iconSrc="/apple.png"
-              iconAlt="Apple Store"
-              line1="Download on the "
-              line2=" App Store!"
-            />
-            <AppStoreButton
-              onClick={handleGooglePlayClick}
-              iconSrc="/playstore.png"
-              iconAlt="Google Play"
-              line1="Get the App on "
-              line2="Google Play!"
-            />
-            <AppStoreButton
-              onClick={handleAppGalleryClick}
-              iconSrc="/huawei.png"
-              iconAlt="Huawei App Gallery"
-              line1="Get it on the App "
-              line2=" Gallery!"
-            />
-          </motion.div>
+          {!isIGPSPage && (
+            <motion.div
+              className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
+              variants={containerVariants}
+            >
+              <AppStoreButton
+                onClick={handleAppStoreClick}
+                iconSrc="/apple.png"
+                iconAlt="Apple Store"
+                line1="Download on the "
+                line2=" App Store!"
+              />
+              <AppStoreButton
+                onClick={handleGooglePlayClick}
+                iconSrc="/playstore.png"
+                iconAlt="Google Play"
+                line1="Get the App on "
+                line2="Google Play!"
+              />
+              <AppStoreButton
+                onClick={handleAppGalleryClick}
+                iconSrc="/huawei.png"
+                iconAlt="Huawei App Gallery"
+                line1="Get it on the App "
+                line2=" Gallery!"
+              />
+            </motion.div>
+          )}
 
           <motion.div
             className="w-full flex flex-col items-center gap-6"
@@ -795,6 +811,67 @@ const Footer = ({
                   </Link>
                 </div>
               </>
+            ) : isIGPSPage ? (
+              // IGPS-specific simplified links (matches screenshot)
+              <>
+                <div className="space-y-4">
+                  <Link
+                    href="/about-us"
+                    onClick={() => handleLinkClick("About Us")}
+                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                  >
+                    ABOUT US
+                  </Link>
+                  <Link
+                    href="/bepay-foundations"
+                    onClick={() => handleLinkClick("Bepay Foundation")}
+                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                  >
+                    BEPAY FOUNDATION
+                  </Link>
+                </div>
+
+                <div className="space-y-4">
+                  <Link
+                    href="/"
+                    onClick={() => handleLinkClick("Switch to Global")}
+                    className="block uppercase text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                  >
+                    SWITCH TO GLOBAL
+                  </Link>
+                  <Link
+                    href="/upi"
+                    onClick={() => handleLinkClick("UPI")}
+                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                  >
+                    UPI
+                  </Link>
+                </div>
+
+                <div className="space-y-4 mt-6">
+                  <Link
+                    href="/privacy-policy"
+                    onClick={() => handleLinkClick("Privacy Policy")}
+                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                  >
+                    PRIVACY POLICY
+                  </Link>
+                  <Link
+                    href="/terms-and-conditions"
+                    onClick={() => handleLinkClick("Terms & Conditions")}
+                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                  >
+                    TERMS & CONDITIONS
+                  </Link>
+                  <Link
+                    href="/legal-disclamer"
+                    onClick={() => handleLinkClick("Legal Disclaimer")}
+                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                  >
+                    LEGAL DISCLAIMER
+                  </Link>
+                </div>
+              </>
             ) : (
               // Default Footer links for all other pages
               <>
@@ -930,45 +1007,51 @@ const Footer = ({
         </motion.div>
 
         <p className="text-[8px] font-[400] lg:tracking-[2%] lg:leading-[20px] max-w-[1359px] mx-auto lg:text-[10px] text-[#6A6A6A]">
-          {isUpiPage ? (
-            <>
-              bepay operates under the brand name “bepay money”, with its
-              registered legal entity Bepay Technologies Private Limited.
-              Payment services on this platform are provided in partnership with
-              authorized banking and payment partners, in compliance with
-              guidelines issued by the Reserve Bank of India (RBI) and the
-              National Payments Corporation of India (NPCI).The information and
-              services presented on this website are intended for general
-              informational purposes only and do not constitute financial,
-              investment, or legal advice. bepay money does not operate as a
-              bank, financial institution, or digital asset exchange.
-              Availability of services is subject to regulatory approvals and
-              partner bank policies.
-            </>
-          ) : (
-            <>
-              bepay operates under the brand name bepay through its legal
-              entities registered across multiple jurisdictions worldwide: Bepay
-              Fintech Products Holding LTD, British Virgin Islands (Registration
-              No: 2185015); Bepay Money Europe S.R.L, Romania (Registration No:
-              52474864); Bepay Money Fintech UAB, Lithuania, European Union
-              (Registration No: 306999867); and Bepay Fintech Inc, United States
-              (Registration No: 31000294520372). The information and services
-              presented on this website are provided for informational purposes
-              only and do not constitute financial, investment, or legal advice.
-              bepay does not operate as a bank, financial institution, or
-              digital asset exchange. All wallet and payment-related services
-              are provided in a non-custodial capacity, leveraging public
-              distributed ledger technologies and open-source data from
-              integrated platforms and partners. Cryptocurrency trading is
-              highly volatile, and users may lose their entire investment; all
-              activities are undertaken at your own risk. bepay holds ISO 9001,
-              ISO 20022, and ISO 27001 certifications, and is
-              licensed/registered under applicable frameworks including MSB,
-              DORA, MiCA, VASP, and DPDP
-            </>
-          )}
-        </p>
+  {isUpiPage ? (
+    <>
+      bepay operates under the brand name “bepay money”, with its registered
+      legal entity Bepay Technologies Private Limited. Payment services on this
+      platform are provided in partnership with authorized banking and payment
+      partners, in compliance with guidelines issued by the Reserve Bank of India
+      (RBI) and the National Payments Corporation of India (NPCI). The information
+      and services presented on this website are intended for general informational
+      purposes only and do not constitute financial, investment, or legal advice.
+      bepay money does not operate as a bank, financial institution, or digital
+      asset exchange. Availability of services is subject to regulatory approvals
+      and partner bank policies.
+    </>
+  ) : isIGPSPage ? (
+    <>
+      The information and services presented on this website are provided for
+      informational purposes only and do not constitute financial, investment, or
+      legal advice. The group operates under the brand name bepay through its
+      legal entity, Bepay Money Fintech UAB, registered in the European Union
+      (Company Registration No. 306999867). bepay does not operate as a bank or
+      financial institution. bepay holds ISO 9001, 20022, and 27001 certifications
+      across India, UAE, USA, and the EU.
+    </>
+  ) : (
+    <>
+      bepay operates under the brand name bepay through its legal entities
+      registered across multiple jurisdictions worldwide: Bepay Fintech Products
+      Holding LTD, British Virgin Islands (Registration No: 2185015); Bepay Money
+      Europe S.R.L, Romania (Registration No: 52474864); Bepay Money Fintech UAB,
+      Lithuania, European Union (Registration No: 306999867); and Bepay Fintech
+      Inc, United States (Registration No: 31000294520372). The information and
+      services presented on this website are provided for informational purposes
+      only and do not constitute financial, investment, or legal advice. bepay does
+      not operate as a bank, financial institution, or digital asset exchange. All
+      wallet and payment-related services are provided in a non-custodial capacity,
+      leveraging public distributed ledger technologies and open-source data from
+      integrated platforms and partners. Cryptocurrency trading is highly volatile,
+      and users may lose their entire investment; all activities are undertaken at
+      your own risk. bepay holds ISO 9001, ISO 20022, and ISO 27001 certifications,
+      and is licensed/registered under applicable frameworks including MSB, DORA,
+      MiCA, VASP, and DPDP.
+    </>
+  )}
+</p>
+
       </footer>
 
       <NewsletterModal isOpen={showModal} onClose={() => setShowModal(false)} />

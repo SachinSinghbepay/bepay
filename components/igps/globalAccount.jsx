@@ -374,6 +374,10 @@ const SetupGlobalAccount = () => {
     const [activeStep, setActiveStep] = useState(1);
     const currentStepData = steps.find(s => s.number === activeStep);
 
+    useEffect(() => {
+        AnalyticsService.sendEvent('IGPS Component View', { component: 'SetupGlobalAccount', page: 'igps' });
+    }, []);
+
     // Dynamic number styling
     const getNumberStyle = (num) => {
         // Base style is the desktop one

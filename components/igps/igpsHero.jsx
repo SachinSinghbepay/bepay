@@ -1,7 +1,13 @@
+"use client"
+import { useEffect } from 'react';
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { AnalyticsService } from "@/services/analyticsService";
 
 const IgpsHero = () => {
+  useEffect(() => {
+    AnalyticsService.sendEvent("IGPS Component View", { component: "IgpsHero", page: "igps" });
+  }, []);
   return (
     // 1. Mobile BG is white (bg-white), Desktop BG is the original gray (lg:bg-[#F9F9F9])
     <section className="bg-white lg:bg-[#F9F9F9] text-black py-20 md:py-20"> 

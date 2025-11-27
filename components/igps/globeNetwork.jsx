@@ -1,8 +1,13 @@
 'use client'
 import React from 'react';
+import { AnalyticsService } from '@/services/analyticsService';
 
 const GlobalNetworkCoverage = ({ globeImagePath }) => {
   const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    AnalyticsService.sendEvent('IGPS Component View', { component: 'GlobalNetworkCoverage', page: 'igps' });
+  }, []);
 
   React.useEffect(() => {
     const checkMobile = () => {

@@ -33,6 +33,14 @@ export default function ConditionalFooter() {
         isUpiPage={true} 
       />;
   }
+
+  if (pathname === '/igps') {
+    return <Footer
+        heading="Ready to accept international payments?"
+        // Mark this as the IGPS page so Footer renders IGPS-specific copy/CTA
+        isIGPSPage={true}
+      />;
+  }
   
   // For all other pages, render the default Footer (no special heading)
   return <Footer />;

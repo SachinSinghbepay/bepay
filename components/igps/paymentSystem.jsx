@@ -1,5 +1,6 @@
 'use client'
 import React, { useRef, useEffect, useState } from 'react';
+import { AnalyticsService } from '@/services/analyticsService';
 
 const Card = ({ title, description, visual, index }) => {
     // Styles for the Title
@@ -116,6 +117,10 @@ const PaymentSystemUI = () => {
         `;
         document.head.appendChild(style);
         return () => document.head.removeChild(style);
+    }, []);
+
+    useEffect(() => {
+        AnalyticsService.sendEvent('IGPS Component View', { component: 'PaymentSystemUI', page: 'igps' });
     }, []);
 
     return (

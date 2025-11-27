@@ -1,10 +1,16 @@
+"use client"
 import React from 'react';
+import { useEffect } from 'react';
+import { AnalyticsService } from '@/services/analyticsService';
 
 // Assuming your image is hosted at a publicly accessible URL 
 // OR placed in your project's public folder.
 const TABLE_IMAGE_URL = '/table.png'; 
 
 const ImageComparisonTable = () => {
+  useEffect(() => {
+    AnalyticsService.sendEvent('IGPS Component View', { component: 'ImageComparisonTable', page: 'igps' });
+  }, []);
   return (
     <>
       {/* 1. Import Montserrat font from Google Fonts.
