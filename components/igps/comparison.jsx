@@ -77,6 +77,7 @@ const ImageComparisonTable = () => {
           text-center 
           max-w-3xl 
           mx-auto
+          md:whitespace-nowrap
         ">
           Most payment providers hide their fees in the Exchange Rate. We don't. <span className="text-[#080808]">We offer zero FX Markup rates on major corridors.</span>
         </p>

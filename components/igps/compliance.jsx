@@ -106,7 +106,7 @@ export default function ComplianceSection() {
         {/* --- End of Heading and Subheading --- */}
 
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-3"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"

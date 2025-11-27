@@ -5,49 +5,106 @@ import { useState, useRef, useEffect } from "react";
 import { Plus, X } from "lucide-react";
 import { AnalyticsService } from "@/services/analyticsService";
 
-// ... (faqData and variants remain the same)
+// FAQ content — matched and expanded from product copy
 const faqData = [
   {
     id: 1,
-    question: "Do you charge FX markup?",
+    question: "What currencies does bepay support?",
     answer:
-      "bepay is an all-in-one commerce and payment platform that enables businesses and consumers to transact seamlessly using fiat, cryptocurrencies, and stablecoins. It offers features like no-code store creation, AI-driven insights, and instant cross-border payments.",
+      "We support over 30 major global currencies — including USD, EUR, GBP, AED, CNY and INR — plus major stablecoins for instant settlement where permitted.",
   },
   {
     id: 2,
-    question: "How do I get started with bepay?",
-    answer:
-      "Not at all! Our platform handles all the technical complexity. You just need to set up your account and start accepting payments. We provide simple guides and 24/7 support to help you get started.",
+    question: "Do you charge FX markup?",
+    answer: "No — bepay offers zero FX markup.",
   },
   {
     id: 3,
-    question: "What documents are required for onboarding?",
+    question: "How do I get started with bepay?",
     answer:
-      "No monthly fees! We only charge a small transaction fee when you receive payments. There are no setup costs, monthly subscriptions, or hidden charges.",
+      "Sign up, complete a quick KYB, add your business details, and activate your preferred corridors. The process typically takes under 5 minutes for standard accounts.",
   },
   {
     id: 4,
-    question: "Can I withdraw funds to my local bank account?",
+    question: "What documents are required for onboarding?",
     answer:
-      "We support all major cryptocurrencies including Bitcoin (BTC), Ethereum (ETH), USDC, USDT, and many more. Our platform automatically handles conversions and settlements.",
+      "Basic KYB documentation is required and varies by business type and region (for example: company registration, proof of address, and ID for authorized signatories).",
   },
   {
     id: 5,
-    question: "Is bepay regulated?",
+    question: "Can I withdraw funds to my local bank account?",
     answer:
-      "Yes! We provide 24/7 customer support through live chat, email, and phone. Our team of experts is always ready to help you with any questions or issues.",
+      "Yes — you can withdraw to your domestic bank account in your local currency anytime.",
   },
   {
     id: 6,
-    question: "Are there any account maintenance or setup fees?",
+    question: "Is bepay regulated?",
     answer:
-      "Yes! We provide 24/7 customer support through live chat, email, and phone. Our team of experts is always ready to help you with any questions or issues.",
+      "Yes — bepay is licensed as an MSB (USA), VASP (EU), and compliant with frameworks including DORA, MiCA, DPDP, CFT, RBI’s PA-CB & FEMA.",
   },
   {
     id: 7,
+    question: "Are there any account maintenance or setup fees?",
+    answer: "No — creating and maintaining your bepay global account is free.",
+  },
+  {
+    id: 8,
     question: "What can I do with my multi-currency bank account?",
     answer:
-      "Yes! We provide 24/7 customer support through live chat, email, and phone. Our team of experts is always ready to help you with any questions or issues.",
+      "Receive global payments, collect marketplace payouts, generate statements, convert currencies, and withdraw to your local bank account.",
+  },
+  {
+    id: 9,
+    question: "How do I get my e-FIRA / FIRC documents?",
+    answer:
+      "We automate this completely — as soon as an inward remittance is settled into your account, a digital FIRA/FIRC is generated instantly and available to download from your dashboard.",
+  },
+  {
+    id: 10,
+    question: "Are there any limits on transaction volume?",
+    answer:
+      "bepay is built for B2B trade and supports high-value transactions for exporters, importers, and large enterprises. Specific limits/tiering depend on KYB and corridor rules — contact support for custom volume needs.",
+  },
+  {
+    id: 11,
+    question: "How do I check the status of my payments?",
+    answer:
+      "You can track every transaction in real time through your dashboard, including routing, FX, settlements, and compliance documents.",
+  },
+  {
+    id: 12,
+    question: "Does bepay support stablecoin-based rails?",
+    answer:
+      "Yes — wherever permitted by regulation, stablecoin rails can be used for faster settlement and lower fees, paired with full compliance controls.",
+  },
+  {
+    id: 13,
+    question: "Which stablecoins are supported?",
+    answer:
+      "bepay supports major stablecoins such as USDC and USDT where corridors and regulation allow — exact availability depends on region and corridor.",
+  },
+  {
+    id: 14,
+    question: "Do you support receiving payments from Amazon?",
+    answer:
+      "Yes — you can receive your Amazon marketplace payouts directly into your bepay multi-currency virtual accounts.",
+  },
+  {
+    id: 15,
+    question: "Do you provide customer support?",
+    answer: "Yes — 24/7 support with priority handling for global merchants.",
+  },
+  {
+    id: 16,
+    question: "How secure is bepay?",
+    answer:
+      "bepay uses banking-grade security and compliance controls (encryption, KYC/AML, monitoring, and regulatory oversight) to protect funds and data.",
+  },
+  {
+    id: 17,
+    question: "How do I integrate bepay with my systems (APIs, webhooks)?",
+    answer:
+      "bepay offers integration options (APIs and webhooks) for payment flows and notifications — contact your account manager or support for developer docs and onboarding.",
   },
 ];
 
@@ -89,6 +146,7 @@ const itemVariants = {
 
 export default function FAQSection() {
   const [openItems, setOpenItems] = useState([1]);
+  const [showAll, setShowAll] = useState(false);
   const sectionRef = useRef(null);
   const [hasTrackedView, setHasTrackedView] = useState(false); 
 
@@ -160,13 +218,16 @@ export default function FAQSection() {
         </motion.h2>
 
         <motion.div
+          key={showAll ? "expanded" : "collapsed"}
           className="space-y-4 lg:space-y-8"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {faqData.map((faq) => {
+          {(
+            showAll ? faqData : faqData.slice(0, 8)
+          ).map((faq) => {
             const isOpen = openItems.includes(faq.id);
 
             return (
@@ -179,7 +240,7 @@ export default function FAQSection() {
                   onClick={() => toggleItem(faq)}
                   className="w-full flex items-center justify-between text-left group focus:outline-none"
                 >
-                  <h3 className="text-xl md:text-2xl lg:text-[32px] font-medium text-gray-900 leading-tight pr-4 group-hover:text-gray-700 transition-colors duration-200">
+                  <h3 className="text-xl md:text-2xl lg:text-[32px] font-medium text-black leading-tight pr-4 group-hover:text-gray-700 transition-colors duration-200">
                     {faq.question}
                   </h3>
 
@@ -222,6 +283,23 @@ export default function FAQSection() {
               </motion.div>
             );
           })}
+
+          {/* View all / View less toggle */}
+          {faqData.length > 8 && (
+            <div className="pt-4 flex justify-center">
+              <button
+                onClick={() => {
+                  const willShowAll = !showAll;
+                  AnalyticsService.sendEvent(willShowAll ? "igps_faqs_view_all_clicked" : "igps_faqs_view_less_clicked");
+                  setShowAll(willShowAll);
+                }}
+                className="text-sm md:text-base text-[#080808] hover:underline focus:outline-none"
+                aria-expanded={showAll}
+              >
+                {showAll ? "View less" : "View all"}
+              </button>
+            </div>
+          )}
         </motion.div>
       </div>
     </section>

@@ -41,7 +41,7 @@ export default function BepayLanding() {
   Why Businesses Choose <span className="text-[#080808]">bepay IGPS</span>
 </h1>
 
-          <p className="text-[#080808] text-[14px] md:text-24px] mt-5" style={{
+          <p className="text-[#080808] text-[14px] md:text-[24px] mt-5" style={{
             fontFamily: 'Montserrat',
             fontWeight: 500,
            

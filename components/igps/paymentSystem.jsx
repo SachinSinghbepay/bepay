@@ -3,29 +3,51 @@ import React, { useRef, useEffect, useState } from 'react';
 import { AnalyticsService } from '@/services/analyticsService';
 
 const Card = ({ title, description, visual, index }) => {
-    // Styles for the Title
-    const titleStyle = {
-        fontFamily: 'Montserrat, sans-serif',
-        fontWeight: 600, // SemiBold
-        fontSize: '30px',
-        lineHeight: '32px',
-        letterSpacing: '-0.04em', // -4%
-        color: '#333333',
-        textAlign: 'left', // Left align
-        // Note: leading-trim: CAP_HEIGHT is a modern CSS feature and is best applied via a global CSS file for broader browser support
-    };
+    // Determine mobile vs desktop (client-only code)
+    const isClient = typeof window !== 'undefined';
+    const isMobile = isClient ? window.innerWidth < 768 : false;
 
-    // Styles for the Description
-    const descriptionStyle = {
-        fontFamily: 'Montserrat, sans-serif',
-        fontWeight: 500, // Medium
-        fontSize: '16px',
-        lineHeight: '20px',
-        letterSpacing: '-0.02em', // -2%
-        color: '#6A6A6A',
-        textAlign: 'left', // Left align
-        // Note: leading-trim: CAP_HEIGHT is a modern CSS feature and is best applied via a global CSS file for broader browser support
-    };
+    // Styles for the Title (use requested mobile metrics when on mobile)
+    const titleStyle = isMobile
+        ? {
+              fontFamily: 'Montserrat, sans-serif',
+              fontWeight: 600, // SemiBold
+              fontSize: '28.25px',
+              lineHeight: '26.83px',
+              letterSpacing: '-0.04em', // -4%
+              color: '#333333',
+              textAlign: 'left',
+          }
+        : {
+              fontFamily: 'Montserrat, sans-serif',
+              fontWeight: 600, // SemiBold
+              fontSize: '30px',
+              lineHeight: '32px',
+              letterSpacing: '-0.04em', // -4%
+              color: '#333333',
+              textAlign: 'left',
+          };
+
+    // Styles for the Description (use requested mobile metrics when on mobile)
+    const descriptionStyle = isMobile
+        ? {
+              fontFamily: 'Montserrat, sans-serif',
+              fontWeight: 500, // Medium
+              fontSize: '14.12px',
+              lineHeight: '16.95px',
+              letterSpacing: '-0.02em', // -2%
+              color: '#6A6A6A',
+              textAlign: 'left',
+          }
+        : {
+              fontFamily: 'Montserrat, sans-serif',
+              fontWeight: 500, // Medium
+              fontSize: '16px',
+              lineHeight: '20px',
+              letterSpacing: '-0.02em', // -2%
+              color: '#6A6A6A',
+              textAlign: 'left',
+          };
 
     return (
         <div 
@@ -126,26 +148,22 @@ const PaymentSystemUI = () => {
     return (
         <div className="font-sans py-12 bg-gray-50 text-center flex flex-col justify-center PaymentSystemUI">
             
-            <h1 
-                className="text-gray-900 mb-3 capitalize"
-                style={{
-                    fontFamily: 'Montserrat, sans-serif',
-                    fontWeight: 600,
-                    fontSize: window.innerWidth < 768 ? '30px' : '54px',
-                    lineHeight: window.innerWidth < 768 ? '30px' : '100%',
-                    letterSpacing: '-6%',
-                    textAlign: window.innerWidth < 768 ? 'center' : 'center',
-                }}
-            >
-                The Intelligent <span className="text-gray-400">Global Payment System</span>
-            </h1>
+            <h1
+  className="
+    text-gray-900 mb-3 capitalize font-montserrat font-semibold text-center
+    text-[30px] leading-[30px] tracking-[-0.04em]
+    md:text-[54px] md:leading-[100%] md:tracking-[-0.06em]
+  "
+>
+  The Intelligent <span className="text-gray-400">Global Payment System</span>
+</h1>
+
             
             <h2 
-                className="text-gray-600 my-3 inline-block"
+                className="text-gray-600 my-3 inline-block md:text-[24px]  text-[14px] "
                 style={{
                     fontFamily: 'Montserrat, sans-serif',
                     fontWeight: 500,
-                    fontSize: '24px',
                     lineHeight: '24px',
                     letterSpacing: '-2%',
                     background: 'linear-gradient(90deg, #080808 0%, rgba(8, 8, 8, 0.5) 100%)',
@@ -158,17 +176,17 @@ const PaymentSystemUI = () => {
             
             <div className="w-full px-14">
                 <div 
-                    className="text-gray-600 md:whitespace-nowrap text-left mt-15 flex md:items-start gap-2.5 max-w-2xl"
+                    className="text-gray-600 md:whitespace-nowrap mt-7 flex md:flex-row flex-col md:items-start items-center gap-2.5 max-w-2xl mx-auto md:mx-0 text-center md:text-left"
                     style={{
                         fontFamily: 'Montserrat, sans-serif',
                         fontWeight: 500,
                         fontSize: window.innerWidth < 768 ? '13px' : '20px',
-                        lineHeight: '28px',
+                        lineHeight: '20px',
                         letterSpacing: '-2%',
                     }}
                 >
-                    <span className="w-2.5 h-2.5 bg-green-500 rounded-full mt-2.5 flex-shrink-0"></span>
-                    <span>Connecting your business to the world's most important corridors through a single, Intelligent Payment Network.</span>
+                    <span className="hidden md:block w-2.5 h-2.5 bg-green-500 rounded-full mt-2.5 flex-shrink-0"></span>
+                    <span className="max-w-3xl">Connecting your business to the world's most important corridors through a single, Intelligent Payment Network.</span>
                 </div>
             </div>
 
@@ -191,7 +209,7 @@ const PaymentSystemUI = () => {
                 </div>
             </div>
 
-            <p className="text-xl font-medium text-gray-800 mt-8 px-5">
+            <p className="md:text-xl text-[16px] font-semibold md:font-medium text-[#080808] mt-8 px-5">
                 No more delays. No borders. Just intelligent payments!
             </p>
             <button

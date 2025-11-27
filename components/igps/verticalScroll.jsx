@@ -10,7 +10,8 @@ const PhotoCardItem = ({ imageSrc, altText, index, progress, totalImages }) => {
   const start = index * segmentDuration;
   const end = start + segmentDuration;
 
-  const travelDistance = 900;
+  // Use viewport height so images move exactly one screen height (no vertical gaps)
+  const travelDistance = typeof window !== 'undefined' && window.innerHeight ? window.innerHeight : 900;
   const fixedTransformDistance = 0.4;
 
   let inputRange = [];
@@ -48,27 +49,28 @@ const PhotoCardItem = ({ imageSrc, altText, index, progress, totalImages }) => {
   return (
     <motion.div
       style={{ y }}
-      className="absolute inset-0 flex items-center justify-center"
+      className="absolute inset-0 flex items-center justify-end pr-0"
     >
       <img
         src={imageSrc}
         alt={altText}
         loading="lazy"
-        className="block h-full w-auto object-contain bg-white"
+        className="block h-full w-[70%] object-cover"
+        style={{ maxWidth: '70%', height: '100%', margin: 0, padding: 0 }}
       />
     </motion.div>
   );
 };
 
-// Mobile horizontal card component
+// Mobile horizontal card component (image only; overlays removed)
 const MobileCard = ({ imageSrc, altText }) => {
   return (
-    <div className="flex-shrink-0 w-full h-full flex items-center justify-center bg-gray-100">
+    <div className="flex-shrink-0 w-full h-[500px] relative">
       <img
         src={imageSrc}
         alt={altText}
         loading="lazy"
-        className="block h-full w-auto object-contain"
+        className="absolute inset-0 w-full h-full object-cover"
       />
     </div>
   );
@@ -109,15 +111,17 @@ const VerticalScrollingSection = () => {
     fontWeight: 600,
     fontSize: '60px',
     lineHeight: '60px',
-    letterSpacing: '-0.06em',
+    letterSpacing: '-0.02em',
+    wordSpacing: '0em',
     textTransform: 'capitalize',
   };
 
   const builtForStyle = {
     ...staticTextStyle,
     color: '#C0C0C0',
-    display: 'inline-block',
-    padding: '6px 10px',
+    display: 'inline',
+    padding: 0,
+    wordSpacing: '-0.12em',
   };
 
   const titleStyle = {
@@ -132,8 +136,9 @@ const VerticalScrollingSection = () => {
     fontFamily: 'Montserrat, sans-serif',
     fontWeight: 600,
     fontSize: '32px',
-    lineHeight: '32px',
-    letterSpacing: '-0.06em',
+    lineHeight: '24px',
+    letterSpacing: '-0.02em',
+    wordSpacing: '0em',
     textAlign: 'center',
     textTransform: 'capitalize',
   };
@@ -141,11 +146,14 @@ const VerticalScrollingSection = () => {
   const mobileBuiltForStyle = {
     ...mobileHeadingStyle,
     color: '#C0C0C0',
+    padding: 0,
+    wordSpacing: '-0.06em',
   };
 
   const mobileTitleStyle = {
     ...mobileHeadingStyle,
     color: '#333333',
+    lineHeight: '35px',
   };
 
   // Calculate the total scroll height: base height + extra scroll for animations
@@ -210,8 +218,8 @@ const VerticalScrollingSection = () => {
 
       {/* Mobile View */}
       <div className="md:hidden bg-white">
-        {/* Heading Section */}
-        <div className="px-6 py-12 text-center">
+        {/* Heading Section (mobile) */}
+        <div className="px-6 py-6 text-center bg-white">
           <p className="mb-2" style={mobileBuiltForStyle}>
             Built For
           </p>
@@ -229,7 +237,6 @@ const VerticalScrollingSection = () => {
             style={{
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
-              height: '500px',
             }}
           >
             {cardData.map((card, index) => (
@@ -241,34 +248,31 @@ const VerticalScrollingSection = () => {
             ))}
           </div>
 
-          {/* Navigation Arrows */}
-          <button
-            onClick={handlePrevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-lg p-3 shadow-lg transition-all"
-            aria-label="Previous slide"
-          >
-            <ChevronLeft className="w-6 h-6 text-gray-800" />
-          </button>
-
-          <button
-            onClick={handleNextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-90 hover:bg-opacity-100 rounded-lg p-3 shadow-lg transition-all"
-            aria-label="Next slide"
-          >
-            <ChevronRight className="w-6 h-6 text-gray-800" />
-          </button>
-
-          {/* Slide Indicators */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-            {cardData.map((_, index) => (
+          {/* Top-right Navigation Arrows (vertical stack, 56x56, 14px radius, 10% white) */}
+          <div className="absolute right-4 top-6">
+            <div className="flex flex-col-2 items-center" style={{ gap: '5px' }}>
               <button
-                key={index}
-                onClick={() => scrollToSlide(index)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  currentSlide === index ? 'bg-gray-800 w-8' : 'bg-gray-400'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
+                onClick={handlePrevSlide}
+                className="flex items-center justify-center w-14 h-14 rounded-[14px] bg-transparent bg-opacity-10 backdrop-blur-sm hover:bg-opacity-20 transition-shadow shadow-md"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft className="w-5 h-5 text-gray-800" />
+              </button>
+
+              <button
+                onClick={handleNextSlide}
+                className="flex items-center justify-center w-14 h-14 rounded-[14px] bg-transparent bg-opacity-10 backdrop-blur-sm hover:bg-opacity-20 transition-shadow shadow-md"
+                aria-label="Next slide"
+              >
+                <ChevronRight className="w-5 h-5 text-gray-800" />
+              </button>
+            </div>
+          </div>
+
+          {/* Hide the old dot indicators (keep for accessibility only) */}
+          <div className="sr-only">
+            {cardData.map((_, index) => (
+              <button key={index} onClick={() => scrollToSlide(index)} />
             ))}
           </div>
         </div>

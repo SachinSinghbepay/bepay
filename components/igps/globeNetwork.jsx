@@ -63,6 +63,9 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
 
   // Mobile styles
   const mobileStyles = `
+    .desktop-only { display: block; }
+    .mobile-only { display: none; }
+
     @media (max-width: 768px) {
       .content-wrapper {
         flex-direction: column !important;
@@ -103,6 +106,9 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
         line-height: 24px !important;
         letter-spacing: -0.02em !important;
       }
+
+      .desktop-only { display: none !important; }
+      .mobile-only { display: block !important; }
       
       .main-title {
         font-family: Montserrat, sans-serif !important;
@@ -168,6 +174,21 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
           />
         </div>
 
+        {/* Mobile-only bottom text: appears below the globe on small screens */}
+        <div className="bottom-text mobile-only" style={{
+          marginTop: '0px',
+          fontSize: '16px',
+          color: '#333',
+          fontWeight: '700',
+          fontFamily: 'Montserrat, sans-serif',
+          lineHeight: '24px',
+          letterSpacing: '-0.02em',
+          textAlign: 'center',
+          width: '100%'
+        }}>
+          <p>+100 other countries supported via global hybrid rails</p>
+        </div>
+
         {/* Right side: Text content */}
         <div className="right-content" style={rightContentStyle}>
           {/* Top text box */}
@@ -211,7 +232,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
       </div>
 
       {/* Bottom text */}
-      <div className="bottom-text" style={{ 
+      <div className="bottom-text desktop-only" style={{ 
         marginTop: '-160px', 
       
         fontSize: '20px', 

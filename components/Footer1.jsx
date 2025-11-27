@@ -496,16 +496,20 @@ const Footer = ({
 </p>
 
           {isIGPSPage && (
-            <div className="mt-6 flex flex-col items-center">
-              <h3 className="text-[13px] md:text-[14px] tracking-[0.18em] uppercase text-white font-semibold mb-4">
+            <div className="mt-10 flex flex-col items-center">
+              <h3 className="text-[16px] md:text-[14px]  tracking-[0.06em] uppercase text-[#C0C0C0] font-semibold mb-4">
                 GO GLOBAL WITHOUT COMPLEXITY!
               </h3>
-              <Link href="/contact-us" className="inline-flex items-center bg-white text-black px-6 py-3 rounded-full font-medium hover:opacity-95">
-                <span>Get Started Now</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="ml-3">
-                  <path d="M7 17l10-10M7 7h10v10" />
-                </svg>
-              </Link>
+              <button
+            className="flex items-center justify-center font-[600] gap-2 bg-white text-[#080808] px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto"
+            >
+            
+            <span>Get Started Now</span>
+            {/* Keeping ArrowUpRight from lucide-react for the button icon */}
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-7 flex-shrink-0">
+                <path d="M7 17l10-10M7 7h10v10"/>
+            </svg>
+            </button>
             </div>
           )}
 
