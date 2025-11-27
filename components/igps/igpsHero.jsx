@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { AnalyticsService } from "@/services/analyticsService";
+import GetStartedPopup from "@/components/popups/getStartedPopup";
 
 const IgpsHero = () => {
   useEffect(() => {
@@ -212,6 +213,7 @@ const IgpsHero = () => {
                 
                 {/* Get Started Button */}
                 <button
+                  onClick={() => setPopup('getstarted')}
                   // Reduced height and padding for mobile
                   className="flex items-center justify-center gap-2 bg-black text-[#F9F9F9] px-6 py-4 h-[56px] rounded-[100px] text-xs font-medium md:w-[180px] md:text-[14px] md:h-[66px]"
                 >
@@ -274,7 +276,7 @@ const IgpsHero = () => {
           </div>
         </div>
       </div>
-      {popup && (
+      {popup && popup !== 'getstarted' && (
         <div className="igps-popup-overlay" onClick={() => setPopup(null)}>
           <div className="igps-popup" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
             <button className="igps-popup-close" onClick={() => setPopup(null)} aria-label="Close popup">×</button>
@@ -306,6 +308,9 @@ const IgpsHero = () => {
             </div>
           </div>
         </div>
+      )}
+      {popup === 'getstarted' && (
+        <GetStartedPopup isOpen={true} onClose={() => setPopup(null)} />
       )}
       <style jsx>{`
         @media (max-width: 1023px) {
