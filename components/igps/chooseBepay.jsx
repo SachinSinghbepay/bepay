@@ -13,7 +13,7 @@ export default function BepayLanding() {
         <img
           src={src}
           alt="Feature Icon"
-          className="w-17 h-17 object-contain" // Adjusted size and object-fit for the image
+          className="w-25 h-25 object-contain" // Adjusted size and object-fit for the image
         />
       </div>
     </div>
@@ -23,22 +23,22 @@ export default function BepayLanding() {
     <div className="min-h-screen bg-[#F9F9F9] py-16 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className='text-[#C0C0C0]' style={{
-            fontFamily: 'Montserrat',
-            fontWeight: 600,
-            fontSize: '54px',
-            lineHeight: '100%',
-            letterSpacing: '-6%',
-            textAlign: 'center',
-            whiteSpace: "nowrap"
-          }}>
-            Why Businesses Choose <span className="font-semibold text-[#080808]">bepay IGPS</span>
-          </h1>
-          <p className="text-[#080808] mt-5" style={{
+        <div className="text-center mb-11">
+        <h1
+  className="
+    text-[30px] leading-[30px] font-semibold text-[#C0C0C0]
+    tracking-[-0.04em] text-center md:whitespace-nowrap
+    md:text-[54px] md:leading-[54px] md:tracking-[-0.06em]
+    font-montserrat
+  "
+>
+  Why Businesses Choose <span className="text-[#080808]">bepay IGPS</span>
+</h1>
+
+          <p className="text-[#080808] text-[14px] md:text-24px] mt-5" style={{
             fontFamily: 'Montserrat',
             fontWeight: 500,
-            fontSize: '24px',
+           
             lineHeight: '100%',
             letterSpacing: '-2%',
             textAlign: 'center',
@@ -49,11 +49,10 @@ export default function BepayLanding() {
 
         {/* Subtitle */}
         <div>
-          <p className="text-[#080808]" style={{
+          <p className="text-[#6A6A6A] text-[13px] md:text-[18px]" style={{
             fontFamily: 'Montserrat',
             fontWeight: 500,
-            fontSize: '18px',
-            lineHeight: '24px',
+            lineHeight: '20px',
             letterSpacing: '-2%',
             textAlign: 'center',
           }}>

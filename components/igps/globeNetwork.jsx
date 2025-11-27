@@ -1,12 +1,26 @@
+'use client'
 import React from 'react';
 
 const GlobalNetworkCoverage = ({ globeImagePath }) => {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Constants for box styles based on the provided dimensions and color
   // Keeping the width, radius, and background color consistent
   const boxWidth = '567px';
   const boxBorderRadius = '44px';
   const boxBackgroundColor = '#F0F0F0';
-  const globalBackgroundColor = '#F6F6F6';
+  const globalBackgroundColor = '#F9F9F9';
 
   // New text styles based on your specifications
   const textStyle = {
@@ -24,7 +38,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
 
   const mainContainerStyle = {
     fontFamily: 'Arial, sans-serif', // Using Arial as a general fallback for the rest of the page elements
-    padding: '60px 40px',
+    padding: isMobile ? '0px 0px' : '60px 40px',
     backgroundColor: globalBackgroundColor,
     minHeight: '100vh',
     display: 'flex',
@@ -41,6 +55,61 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
     marginTop: '50px',
     gap: '60px',
   };
+
+  // Mobile styles
+  const mobileStyles = `
+    @media (max-width: 768px) {
+      .content-wrapper {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 20px !important;
+        margin-top: 30px !important;
+      }
+      
+      .globe-container {
+        margin-left: 0 !important;
+        order: 1;
+      }
+      
+      .globe-container img {
+        width: 90% !important;
+        height: auto !important;
+        max-width: 400px !important;
+      }
+      
+      .right-content {
+        margin-left: 0 !important;
+        order: 3;
+        align-items: center !important;
+        width: 98% !important;
+        margin-top: 20px !important;
+      }
+      
+      .bottom-text {
+        margin-top: 20px !important;
+        margin-left: 0 !important;
+        text-align: center !important;
+        align-self: center !important;
+        width: 90% !important;
+        order: 2;
+        font-family: Montserrat, sans-serif !important;
+        font-weight: 700 !important;
+        font-size: 12px !important;
+        line-height: 24px !important;
+        letter-spacing: -0.02em !important;
+      }
+      
+      .main-title {
+        font-family: Montserrat, sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 30px !important;
+        line-height: 18px !important;
+        letter-spacing: -0.06em !important;
+        text-transform: capitalize !important;
+        text-align: center !important;
+      }
+    }
+  `;
 
   const globeContainerStyle = {
     display: 'flex',
@@ -64,8 +133,8 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
     boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
     position: 'relative',
     // Using the specified width for consistency, adjusting only slightly for visual flow
-    width: '467px', 
-    minHeight: '282px', // Use minHeight for flexible content, or adjust padding to hit the target height
+    width: isMobile ? '98%' : '467px', 
+    minHeight: isMobile ? 'auto' : '282px', // Use minHeight for flexible content, or adjust padding to hit the target height
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center', // Vertically center content if box height is enforced
@@ -75,16 +144,18 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
 
   return (
     <div style={mainContainerStyle}>
+      <style>{mobileStyles}</style>
+      
       {/* Title */}
-      <h1 className='-mt-10' style={{ fontSize: '60px', fontWeight: 'bold', color: '#333', marginBottom: '2px' }}>
+      <h1 className='main-title md:-mt-10 mt-12 whitespace-nowrap' style={{ fontSize: '60px', fontWeight: 'bold', color: '#333', marginBottom: '2px' }}>
         Global Network <span style={{ color: '#ccc' }}>Coverage</span>
       </h1>
 
       {/* Main Content: Globe and Text Boxes */}
-      <div style={contentWrapperStyle}>
+      <div className="content-wrapper" style={contentWrapperStyle}>
 
         {/* Left side: Globe Image */}
-        <div style={globeContainerStyle}>
+        <div className="globe-container" style={globeContainerStyle}>
           <img
             src="/globe.png" 
             alt="Global Network Globe with Flags"
@@ -93,16 +164,16 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
         </div>
 
         {/* Right side: Text content */}
-        <div style={rightContentStyle}>
+        <div className="right-content" style={rightContentStyle}>
           {/* Top text box */}
-          <div className='-mt-40' style={{ ...textBoxBaseStyle,padding: '40px' }}> {/* Adjusted padding to help meet the 282px height visually */}
+          <div className='text-box -mt-20 md:-mt-40' style={{ ...textBoxBaseStyle,padding: '40px' }}> {/* Adjusted padding to help meet the 282px height visually */}
             <p style={textStyle}>
               Trade like a local. Get virtual account details in key economic zones to collect payments instantly without cross-border friction.
             </p>
           </div>
 
           {/* Bottom text box with flags and stablecoins */}
-          <div style={{...textBoxBaseStyle, padding: '40px'}}>{/* Adjusted padding to help meet the 282px height visually */}
+          <div className='text-box' style={{...textBoxBaseStyle, padding: '40px'}}>{/* Adjusted padding to help meet the 282px height visually */}
             <p style={{...textStyle, marginBottom: '20px'}}>
               **USD, EUR, GBP, AED, CNY, INR** + other major business currencies & other global stablecoins supported.
             </p>
@@ -135,7 +206,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
       </div>
 
       {/* Bottom text */}
-      <div style={{ 
+      <div className="bottom-text" style={{ 
         marginTop: '-160px', 
       
         fontSize: '20px', 
@@ -148,7 +219,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
         marginLeft: '81.42px'
       }}>
         <p>
-          +100 other countries** supported via global hybrid rails
+          +100 other countries supported via global hybrid rails
         </p>
       </div>
     </div>

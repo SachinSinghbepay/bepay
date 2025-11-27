@@ -28,11 +28,13 @@ const Card = ({ title, description, visual, index }) => {
 
     return (
         <div 
-            className="flex-shrink-0 w-[400px] h-[450px] bg-white p-6 flex flex-col justify-end relative overflow-visible transition-all duration-300 cursor-default" 
+            className="flex-shrink-0 w-[98%] md:w-[400px] h-[450px] bg-white p-6 flex flex-col justify-end relative overflow-visible transition-all duration-300 cursor-default" 
             style={{
                 borderRadius: '40px',
-                boxShadow: '30px 60px 50px rgba(0, 0, 0, 0.08)',
-                zIndex: 50 - index
+                boxShadow: window.innerWidth < 768 
+                    ? '14.75px 14.75px 44.26px 0px rgba(0, 0, 0, 0.06)'
+                    : '30px 60px 50px rgba(0, 0, 0, 0.08)',
+                zIndex: window.innerWidth < 768 ? 'auto' : 50 - index
             }}
         >
             <div className="absolute top-6 left-6 opacity-75 w-[200px] h-[200px] flex items-center justify-center">
@@ -124,9 +126,10 @@ const PaymentSystemUI = () => {
                 style={{
                     fontFamily: 'Montserrat, sans-serif',
                     fontWeight: 600,
-                    fontSize: '54px',
-                    lineHeight: '100%',
+                    fontSize: window.innerWidth < 768 ? '30px' : '54px',
+                    lineHeight: window.innerWidth < 768 ? '30px' : '100%',
                     letterSpacing: '-6%',
+                    textAlign: window.innerWidth < 768 ? 'center' : 'center',
                 }}
             >
                 The Intelligent <span className="text-gray-400">Global Payment System</span>
@@ -150,11 +153,11 @@ const PaymentSystemUI = () => {
             
             <div className="w-full px-14">
                 <div 
-                    className="text-gray-600 whitespace-nowrap text-left mt-15 flex items-start gap-2.5 max-w-2xl"
+                    className="text-gray-600 md:whitespace-nowrap text-left mt-15 flex md:items-start gap-2.5 max-w-2xl"
                     style={{
                         fontFamily: 'Montserrat, sans-serif',
                         fontWeight: 500,
-                        fontSize: '20px',
+                        fontSize: window.innerWidth < 768 ? '13px' : '20px',
                         lineHeight: '28px',
                         letterSpacing: '-2%',
                     }}
@@ -167,11 +170,11 @@ const PaymentSystemUI = () => {
             <div className="w-full flex items-center justify-center py-5 overflow-hidden">
                 <div 
                     ref={scrollerRef}
-                    className="flex gap-4 overflow-x-auto hide-scrollbar px-5" 
-                    style={{ scrollSnapType: 'x mandatory' }}
+                    className="flex flex-col md:flex-row gap-4 md:overflow-x-auto hide-scrollbar px-5 items-center" 
+                    style={{ scrollSnapType: window.innerWidth >= 768 ? 'x mandatory' : 'none' }}
                 >
                     {cardsData.map((card, index) => (
-                        <div key={index} className={index === 0 ? 'ml-11' : index === cardsData.length - 1 ? 'mr-11' : ''}>
+                        <div key={index} className={index === 0 ? 'md:ml-11' : index === cardsData.length - 1 ? 'md:mr-11' : ''}>
                             <Card
                                 index={index}
                                 title={card.title}

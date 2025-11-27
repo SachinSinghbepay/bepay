@@ -8,6 +8,8 @@ import ComplianceSection from '@/components/igps/compliance';
 import FAQSection from '@/components/igps/faqs';
 import PaymentSystemUI from '@/components/igps/paymentSystem';
 import SetupGlobalAccount from '@/components/igps/globalAccount';
+import VerticalScrollingSection from '@/components/igps/verticalScroll';
+
 const IgpsPage = () => {
   return (
     <div>
@@ -17,6 +19,7 @@ const IgpsPage = () => {
       <App/>
       <PaymentSystemUI/>
       <BepayLanding/>
+      <VerticalScrollingSection/>
       <SetupGlobalAccount/>
       <ComplianceSection/>
       <FAQSection/>

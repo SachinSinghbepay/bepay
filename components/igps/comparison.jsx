@@ -43,7 +43,7 @@ const ImageComparisonTable = () => {
         }
       `}</style>
 
-      <div className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+      <div className="py-10 bg-[#F9F9F9] px-4 sm:px-6 lg:px-8">
         
         {/* --- Heading Section --- 
           Applying font-montserrat and h1-style
@@ -72,7 +72,7 @@ const ImageComparisonTable = () => {
           max-w-3xl 
           mx-auto
         ">
-          Most payment providers hide their fees in the Exchange Rate. We don't. <span classname="text-[#080808]">We offer zero FX Markup rates on major corridors.</span>
+          Most payment providers hide their fees in the Exchange Rate. We don't. <span className="text-[#080808]">We offer zero FX Markup rates on major corridors.</span>
         </p>
 
         {/* --- Image Table Replacement --- */}

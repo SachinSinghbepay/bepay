@@ -98,7 +98,7 @@ export default function ComplianceSection() {
             Bank-Grade Security & Compliance
           </h2>
           {/* Subheading updated: removed mt-4, max-w-3xl, mx-auto, and added p-0 m-0 */}
-          <p className="font-['Montserrat'] font-medium text-lg lg:text-xl leading-relaxed tracking-[-0.02em] text-[#6A6A6A] whitespace-nowrap p-0 m-0 w-full inline-block">
+          <p className="font-['Montserrat'] font-medium text-lg lg:text-xl leading-relaxed tracking-[-0.02em] text-[#6A6A6A] lg:whitespace-nowrap p-0 m-0 w-full inline-block">
             Your security is our priority. We employ the highest standards of
             protection and comply with global financial regulations.
           </p>
@@ -140,11 +140,11 @@ export default function ComplianceSection() {
                 {/* Mobile-only flag image */}
                 {item.title === "Licensed" && (
                   <Image
-                    src="/igpa_flag.png"
+                    src="/igps_flag.png"
                     alt="Flag"
                     width={45}
                     height={40}
-                    className="absolute top-[29%] left-[5%] pointer-events-none lg:hidden"
+                    className="absolute top-[29%] right-[5%] pointer-events-none lg:hidden"
                     loading="lazy" // <-- ADDED
                   />
                 )}
