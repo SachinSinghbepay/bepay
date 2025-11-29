@@ -39,6 +39,18 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
     // but the font family, size, weight, and line-height are applied.
   };
 
+  // Mobile card text style (user requested)
+  const cardMobileTextStyle = {
+    fontFamily: 'Montserrat, sans-serif',
+    fontWeight: 600,
+    fontStyle: 'normal',
+    fontSize: '12px',
+    lineHeight: '18px',
+    letterSpacing: '-0.02em', // -2%
+    color: '#333'
+    // leading-trim: CAP_HEIGHT is not available via inline styles
+  };
+
   // --- Styles for the main component ---
 
   const mainContainerStyle = {
@@ -124,10 +136,11 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
 
   const globeContainerStyle = {
     display: 'flex',
-    justifyContent: 'flex-start',
+    justifyContent: isMobile ? 'center' : 'flex-start',
     alignItems: 'center',
     position: 'relative',
-    marginLeft: '100px',
+    marginLeft: isMobile ? '0' : '100px',
+    marginTop: isMobile ? '0' : '-40px', // nudge globe up slightly on desktop
   };
 
   const rightContentStyle = {
@@ -170,8 +183,40 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
           <img
             src="/globe.png" 
             alt="Global Network Globe with Flags"
-            style={{ width: '679.79px', height: '669.48px' }}
+            style={{
+              width: isMobile ? '90%' : '480px',
+              maxWidth: '100%',
+              height: 'auto',
+              display: 'block',
+              margin: isMobile ? '0 auto' : undefined
+            }}
           />
+
+          {/* Desktop-only caption centered below the globe image */}
+          <div
+            className="desktop-caption desktop-only"
+            style={{
+              position: 'absolute',
+              bottom: isMobile ? 'auto' : '-56px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              fontSize: isMobile ? '12px' : '20px',
+              color: '#333',
+              fontWeight: 700,
+              fontFamily: 'Montserrat, sans-serif',
+              lineHeight: '24px',
+              letterSpacing: '-0.02em',
+              whiteSpace: 'nowrap', // keep caption on one line on desktop
+              textAlign: 'center',
+              width: 'auto'
+            }}
+          >
+            <p style={{ margin: 0 }}>
+              <span style={{ color: '#080808' }}>+100 other countries</span>
+              {' '}
+              <span style={{ color: '#6A6A6A' }}>supported via global hybrid rails</span>
+            </p>
+          </div>
         </div>
 
         {/* Mobile-only bottom text: appears below the globe on small screens */}
@@ -186,68 +231,46 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
           textAlign: 'center',
           width: '100%'
         }}>
-          <p>+100 other countries supported via global hybrid rails</p>
+          <p>
+            <span style={{ color: '#080808' }}>+100 other countries</span>
+            {' '}
+            <span style={{ color: '#6A6A6A' }}>supported via global hybrid rails</span>
+          </p>
         </div>
 
         {/* Right side: Text content */}
         <div className="right-content" style={rightContentStyle}>
           {/* Top text box */}
-          <div className='text-box -mt-20 md:-mt-40' style={{ ...textBoxBaseStyle,padding: '40px' }}> {/* Adjusted padding to help meet the 282px height visually */}
-            <p style={textStyle}>
-              Trade like a local. Get virtual account details in key economic zones to collect payments instantly without cross-border friction.
+          <div className='text-box mt-0 md:-mt-10' style={{ ...textBoxBaseStyle,padding: '40px' }}> {/* Adjusted padding to help meet the 282px height visually */}
+            <p style={isMobile ? cardMobileTextStyle : textStyle}>
+            Trade like a local. Get virtual account details in key economic zones to collect payments instantly without cross-border friction.
             </p>
           </div>
 
           {/* Bottom text box with flags and stablecoins */}
           <div className='text-box' style={{...textBoxBaseStyle, padding: '40px'}}>{/* Adjusted padding to help meet the 282px height visually */}
-            <p style={{...textStyle, marginBottom: '20px'}}>
-              **USD, EUR, GBP, AED, CNY, INR** + other major business currencies & other global stablecoins supported.
+            <p style={isMobile ? {...cardMobileTextStyle, marginBottom: '20px'} : {...textStyle, marginBottom: '20px'}}>
+              USD, EUR, GBP, AED, CNY, INR + other major business currencies & other global stablecoins supported.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', alignItems: 'center' }}>
-              {/* Flag Images - Using emojis for simplicity */}
-              <span style={{ fontSize: '30px' }}>🇺🇸</span>
-              <span style={{ fontSize: '30px' }}>🇪🇺</span>
-              <span style={{ fontSize: '30px' }}>🇬🇧</span>
-              <span style={{ fontSize: '30px' }}>🇦🇪</span>
-              <span style={{ fontSize: '30px' }}>🇨🇳</span>
-              <span style={{ fontSize: '30px' }}>🇮🇳</span>
-              {/* Stablecoin icon */}
-              <div style={{
-                backgroundColor: '#00B050',
-                color: '#fff',
-                fontSize: '18px',
-                fontWeight: 'bold',
-                padding: '5px 8px',
-                borderRadius: '50%',
-                lineHeight: '1',
-                width: '30px',
-                height: '30px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}>T$</div>
+              {/* Replace the flag emojis and stablecoin icon with a single global image */}
+              <img
+                src="/global_flag.png"
+                alt="Global flags"
+                style={{
+                  width: '180px',
+                  maxWidth: '100%',
+                  height: '30px',
+                  objectFit: 'contain',
+                  display: 'block'
+                }}
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom text */}
-      <div className="bottom-text desktop-only" style={{ 
-        marginTop: '-160px', 
-      
-        fontSize: '20px', 
-        color: '#333', 
-        fontWeight: '700',
-        fontFamily: 'Montserrat, sans-serif',
-        lineHeight: '24px',
-        letterSpacing: '-0.02em',
-        alignSelf: 'flex-start',
-        marginLeft: '81.42px'
-      }}>
-        <p>
-          +100 other countries supported via global hybrid rails
-        </p>
-      </div>
+      {/* (Desktop caption moved into globe container) */}
     </div>
   );
 };

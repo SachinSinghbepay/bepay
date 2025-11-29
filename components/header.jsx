@@ -33,6 +33,9 @@ export default function Header() {
   // Check if current page is contact us
   const isContactPage = pathname === "/contact" || pathname === "/contact-us";
 
+  // Make header background white on the IGPS page
+  const isIgpsPage = pathname === "/igps" || pathname.startsWith("/igps");
+
   // Helper function to determine if a link is active
   const isActivePage = (path) => {
     if (path === "/") {
@@ -68,8 +71,13 @@ export default function Header() {
   };
 
   // Conditional header classes
+  // - Contact pages: transparent (absolute)
+  // - IGPS mobile: white background, but on md+ fall back to the regular bg
+  // - Other pages: original light gray background
   const headerClasses = isContactPage
     ? "w-full absolute top-0 left-0 right-0 bg-transparent z-50"
+    : isIgpsPage
+    ? "w-full relative bg-white md:bg-[#F9F9F9] z-50"
     : "w-full relative bg-[#F9F9F9] z-50";
 
   return (

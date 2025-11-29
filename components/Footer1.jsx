@@ -501,7 +501,7 @@ const Footer = ({
                 GO GLOBAL WITHOUT COMPLEXITY!
               </h3>
               <button
-            className="flex items-center justify-center font-[600] gap-2 bg-white text-[#080808] px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto"
+            className="flex items-center justify-center font-[600] gap-2 bg-white text-[#080808] px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[200px] md:text-[14px] mx-auto"
             >
             
             <span>Get Started Now</span>
@@ -852,6 +852,41 @@ const Footer = ({
                   </Link>
                 </div>
 
+                {/* IGPS: contact pills (whatsapp / call / email) - centered and spanning both columns on mobile */}
+                <div className="col-span-2 flex items-center justify-center gap-4 mt-8">
+                  <a
+                    href="https://wa.me/919820000000"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="WhatsApp"
+                    onClick={() => handleSocialLinkClick('whatsapp')}
+                    className="rounded-full w-[60px] h-[60px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border flex items-center justify-center hover:bg-white/5 transition-colors"
+                    style={{ borderColor: '#191919'  }}
+                  >
+                    <Image src="/icons/wp.png" alt="whatsapp icon" width={26} height={26} />
+                  </a>
+
+                  <a
+                    href="tel:+918200000000"
+                    aria-label="Call"
+                    onClick={() => handleSocialLinkClick('call')}
+                    className="rounded-full w-[60px] h-[60px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border flex items-center justify-center hover:bg-white/5 transition-colors"
+                    style={{ borderColor: '#191919'  }}
+                  >
+                    <Image src="/phone_f.png" alt="phone icon" width={26} height={26} />
+                  </a>
+
+                  <a
+                    href="mailto:info@bepay.money"
+                    aria-label="Email"
+                    onClick={() => handleSocialLinkClick('email')}
+                    className="rounded-full w-[60px] h-[60px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border flex items-center justify-center hover:bg-white/5 transition-colors"
+                    style={{ borderColor: '#191919' }}
+                  >
+                    <Image src="/mail_f.png" alt="mail icon" width={26} height={26} />
+                  </a>
+                </div>
+
                 <div className="space-y-4 mt-6">
                   <Link
                     href="/privacy-policy"
@@ -1026,13 +1061,16 @@ const Footer = ({
     </>
   ) : isIGPSPage ? (
     <>
-      The information and services presented on this website are provided for
-      informational purposes only and do not constitute financial, investment, or
-      legal advice. The group operates under the brand name bepay through its
-      legal entity, Bepay Money Fintech UAB, registered in the European Union
-      (Company Registration No. 306999867). bepay does not operate as a bank or
-      financial institution. bepay holds ISO 9001, 20022, and 27001 certifications
-      across India, UAE, USA, and the EU.
+    bepay operates under the brand name “bepay money”, with its registered
+      legal entity Bepay Technologies Private Limited. Payment services on this
+      platform are provided in partnership with authorized banking and payment
+      partners, in compliance with guidelines issued by the Reserve Bank of India
+      (RBI) and the National Payments Corporation of India (NPCI). The information
+      and services presented on this website are intended for general informational
+      purposes only and do not constitute financial, investment, or legal advice.
+      bepay money does not operate as a bank, financial institution, or digital
+      asset exchange. Availability of services is subject to regulatory approvals
+      and partner bank policies.
     </>
   ) : (
     <>

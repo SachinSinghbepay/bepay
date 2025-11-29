@@ -56,10 +56,12 @@ const IgpsHero = () => {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="text-center -mt-10 lg:-mt-20 mb-8 md:mb-16">
           <h1 className="text-gray-800 lg:-mt-15 text-[26px] md:text-[44px]" style={{ fontFamily: 'Montserrat', fontWeight: 500, lineHeight: '100%', letterSpacing: '-0.1em', textTransform: 'uppercase' }}>
-            MOVE MONEY GLOBALLY
+            <span style={{ color: '#C0C0C0' }}>MOVE</span>
+            <span style={{ color: '#6A6A6A' }}> MONEY</span>
+            <span style={{ color: '#333333' }}> GLOBALLY</span>
           </h1>
           <p className="text-gray-600 mt-2 text-center igps-subheading" style={{ fontFamily: 'Montserrat', fontWeight: 600, fontSize: '13px', lineHeight: '15px', letterSpacing: '0.18em', textTransform: 'uppercase' }}>
-            YOUR ALL-IN-ONE PLATFORM FOR INTERNATIONAL PAYMENTS
+           ACCEPT INTERNATIONAL PAYMENTS WITH ZERO FEES
           </p>
         </div>
         <div className="flex flex-col lg:flex-row items-center gap-8">
@@ -88,116 +90,73 @@ const IgpsHero = () => {
             {/* 2. Removed -mt-10 on mobile. Added lg:-mt-10 to keep desktop style. */}
             <div className="space-y-0 mt-0 lg:-mt-10"> 
               
-              {/* Pointer 1: mobile-only image uses /hi1.png, desktop keeps /h1.png */}
-              <div className="flex items-center mb-5 lg:mb-0"> 
-                <div className="flex-shrink-0">
-                  <Image
-                    src="/hi1.png"
-                    alt="rupee icon mobile"
-                    width={32}
-                    height={32}
-                    className="block lg:hidden"
-                  />
-                  <Image
-                    src="/h1.png"
-                    alt="rupee icon"
-                    width={91}
-                    height={91}
-                    className="hidden lg:block"
-                  />
-                </div>
-                <p className="ml-4 igps-pointer-text">
-                  Send and receive business payments across{" "}<br/>
-                  <span className="font-bold">100+ countries & 40+ currencies</span>.
+              {/* Intro text (placed before pointers) - left aligned with pointer texts */}
+              <div className="w-full mb-6">
+
+                <p className="igps-intro text-left">
+                  India’s first platform offering free <br/>international settlements for businesses
                 </p>
-              </div>
-              
-              {/* Pointer 2: mobile-only image uses /hi2.png, desktop keeps /h2.png */}
-              <div className="flex items-center mt-0 lg:-mt-5 mb-5 lg:mb-0">
-                <div className="flex-shrink-0">
-                  <Image
-                    src="/hi2.png"
-                    alt="sync icon mobile"
-                    width={32}
-                    height={32}
-                    className="block lg:hidden"
-                  />
-                  <Image
-                    src="/h2.png"
-                    alt="sync icon"
-                    width={91}
-                    height={91}
-                    className="hidden lg:block"
-                  />
-                </div>
-                <p className="ml-4 igps-pointer-text">
-                  <span className="font-bold">Faster settlements, transparent pricing</span> and <br/>
-                  complete control over your cash flow.
-                </p>
-              </div>
-              
-              {/* Pointer 3: mobile-only image uses /hi3.png, desktop keeps /h3.png */}
-              <div className="flex items-center mt-0 lg:-mt-5 mb-5 lg:mb-0">
-                <div className="flex-shrink-0">
-                  <Image
-                    src="/hi3.png"
-                    alt="power icon mobile"
-                    width={32}
-                    height={32}
-                    className="block lg:hidden"
-                  />
-                  <Image
-                    src="/h3.png"
-                    alt="power icon"
-                    width={91}
-                    height={91}
-                    className="hidden lg:block"
-                  />
-                </div>
-                <p className="ml-4 igps-pointer-text">
-                  Powering <span className="font-bold">$200T+ in global B2B trade</span> with an{" "}<br/>
-                  <span className="font-bold">intelligent global payment system.</span>
-                </p>
-              </div>
+          
+
               
               {/* Checkmark List (Hidden on Mobile, block on Desktop) */}
-              <div className="mt-5 space-y-4 hidden lg:block">
-                <div className="flex items-center">
-                  <Image
-                    src="/icons/h1.png"
-                    alt="check icon"
-                    width={20} 
-                    height={20} 
-                  />
-                  <p className="ml-3">Global coverage across 100+ Countries</p>
+              <div className="mt-7 space-y-4 lg:space-y-0 lg:block lg:divide-y lg:divide-gray-200">
+                <div className="flex items-center justify-between lg:py-4">
+                  <div className="flex items-center flex-1">
+                    <Image src="/icons/h1.png" alt="globe icon" width={20} height={20} />
+                    <p className="igps-check-text ml-3 w-full">Free International Settlement</p>
+                  </div>
+                  <svg className="hidden lg:block" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
-                <div className="flex items-center">
-                  <Image
-                    src="/icons/h3.png"
-                    alt="check icon"
-                    width={20} 
-                    height={20} 
-                  />
-                  <p className="ml-3">Zero FX markup</p>
+
+                <div className="flex items-center justify-between lg:py-4">
+                  <div className="flex items-center flex-1">
+                    <Image src="/icons/h2.png" alt="currency icon" width={20} height={20} />
+                    <p className="igps-check-text ml-3 w-full">USD, EUR, GBP, AED, CNY &amp; 40+ Major Currencies accepted!</p>
+                  </div>
+                  <svg className="hidden lg:block" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
-                <div className="flex items-center">
-                  <Image
-                    src="/icons/h3.png"
-                    alt="check icon"
-                    width={20} 
-                    height={20} 
-                  />
-                  <p className="ml-3">Instant e-FIRA/FIRC</p>
+
+                <div className="flex items-center justify-between lg:py-4">
+                  <div className="flex items-center flex-1">
+                    <Image src="/icons/h3.png" alt="countries icon" width={20} height={20} />
+                    <p className="igps-check-text ml-3 w-full">US, UK, Europe, China, UAE, Canada, &amp; 100+ Countries supported!</p>
+                  </div>
+                  <svg className="hidden lg:block" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
-                <div className="flex items-center">
-                  <Image
-                    src="/icons/h4.png"
-                    alt="check icon"
-                    width={20} 
-                    height={20} 
-                  />
-                  <p className="ml-3">Multi-currency Bank Accounts</p>
+
+                <div className="flex items-center justify-between lg:py-4">
+                  <div className="flex items-center flex-1">
+                    <Image src="/icons/h4.png" alt="fira icon" width={20} height={20} />
+                    <p className="igps-check-text ml-3 w-full">Instant e-FIRA &amp; e-BRC</p>
+                  </div>
+                  <svg className="hidden lg:block" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
+
+                <div className="flex items-center justify-between lg:py-4">
+                  <div className="flex items-center flex-1">
+                    <Image src="/icons/h5.png" alt="bank icon" width={20} height={20} />
+                    <p className="igps-check-text ml-3 w-full">Multi-currency Bank Account</p>
+                  </div>
+                  <svg className="hidden lg:block" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+
+                <div className="flex items-center justify-between lg:py-4">
+                  <div className="flex items-center flex-1">
+                    <Image src="/icons/h6.png" alt="kyb icon" width={20} height={20} />
+                    <p className="igps-check-text ml-3 w-full">Quick KYB Approval</p>
+                  </div>
+                  <svg className="hidden lg:block" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+
+                <div className="flex items-center justify-between lg:py-4">
+                  <div className="flex items-center flex-1">
+                    <Image src="/icons/h7.png" alt="support icon" width={20} height={20} />
+                    <p className="igps-check-text ml-3 w-full">24/7 Merchant Support</p>
+                  </div>
+                  <svg className="hidden lg:block" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="#16A34A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+              </div>
               </div>
               
               {/* Compliance Text (Original spacing kept, except for overall flow) */}
@@ -293,7 +252,12 @@ const IgpsHero = () => {
                   <button className="igps-pill-copy" ref={iconRef} onClick={() => {
                     const text = popup === 'email' ? 'info@bepay.money' : '+918-200-000-000';
                     if (navigator && navigator.clipboard) navigator.clipboard.writeText(text);
-                  }} aria-label="Copy contact">📋</button>
+                  }} aria-label="Copy contact">
+                    <svg width="17.35" height="19.66" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                      <rect x="3" y="2" width="11" height="12" rx="2" fill="none" stroke="#6A6A6A" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.32" />
+                      <rect x="6" y="6" width="11" height="12" rx="2" fill="none" stroke="#6A6A6A" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
                 </div>
               </div>
 
@@ -341,6 +305,39 @@ const IgpsHero = () => {
             text-align: center;
             text-transform: uppercase;
             color: #080808;
+          }
+          /* mobile checklist text size */
+          .igps-check-text {
+            font-size: 14px;
+            line-height: 16px;
+          }
+        }
+        .igps-check-text {
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 600;
+          font-style: normal;
+          color: #080808;
+          /* leading-trim is experimental */
+          leading-trim: cap-height;
+          line-height: 20px;
+          letter-spacing: -0.02em; /* approx -2% */
+          text-align: left;
+        }
+        .igps-intro {
+          color: #6A6A6A;
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 600;
+          font-style: normal;
+          font-size: 18px;
+          /* leading-trim is experimental */
+          leading-trim: cap-height;
+          line-height: 22px;
+        }
+        @media (min-width: 1024px) {
+          .igps-intro {
+            font-size: 28px;
+            line-height: 32px;
+            letter-spacing: -0.04em; /* approx -4% */
           }
         }
         /* Popup styles */

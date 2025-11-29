@@ -149,15 +149,20 @@ function PortalContent({ onClose }) {
                 <label htmlFor="gs-phone" className="gs-field-label">Phone number</label>
                 <div className="gs-phone-control" role="group" aria-label="Phone input">
                   <div className="gs-phone-left">
-                    <span className="gs-code-overlay" aria-hidden="true">{country.dial_code}</span>
-                    <select value={country.iso2} onChange={(e) => setCountry(countries.find(c => c.iso2 === e.target.value))} aria-label="Country code">
+                    <span className="gs-dial-code-display">{country.dial_code}</span>
+                    <select 
+                      className="gs-country-select"
+                      value={country.iso2} 
+                      onChange={(e) => setCountry(countries.find(c => c.iso2 === e.target.value))} 
+                      aria-label="Country code"
+                    >
                       {countries.map((c) => (
                         <option key={c.iso2} value={c.iso2}>{`${c.name} (${c.dial_code})`}</option>
                       ))}
                     </select>
                   </div>
                   <div className="gs-phone-divider" aria-hidden="true" />
-                  <input id="gs-phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Select country & enter phone number" className="gs-phone-input" />
+                  <input id="gs-phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Enter phone number" className="gs-phone-input" />
                 </div>
               </div>
 
@@ -198,23 +203,23 @@ function PortalContent({ onClose }) {
       @media (min-width: 1024px) {
         .gs-title {
           font-family: 'Montserrat', sans-serif;
-          font-weight: 600; /* SemiBold */
+          font-weight: 600;
           font-style: normal;
           font-size: 48px;
           leading-trim: cap-height;
           line-height: 100%;
-          letter-spacing: -0.04em; /* approx -4% */
+          letter-spacing: -0.04em;
           margin: 0;
           text-align: left;
         }
         .gs-subtitle {
           font-family: 'Montserrat', sans-serif;
-          font-weight: 500; /* Medium */
+          font-weight: 500;
           font-style: normal;
           font-size: 16px;
           leading-trim: cap-height;
           line-height: 100%;
-          letter-spacing: -0.02em; /* approx -2% */
+          letter-spacing: -0.02em;
           color: #333333;
           margin-top: 6px;
           text-align: left;
@@ -222,18 +227,18 @@ function PortalContent({ onClose }) {
         .gs-field-label {
           display: block;
           font-family: 'Montserrat', sans-serif;
-          font-weight: 600; /* SemiBold */
+          font-weight: 600;
           font-style: normal;
           font-size: 16px;
           leading-trim: cap-height;
           line-height: 100%;
-          letter-spacing: -0.04em; /* approx -4% */
+          letter-spacing: -0.04em;
           margin-bottom: 8px;
           color: #000000;
           text-align: left;
         }
       }
-      /* Phone control styles (all viewports) */
+      
       .gs-phone-control {
         display: flex;
         align-items: center;
@@ -245,45 +250,51 @@ function PortalContent({ onClose }) {
         box-sizing: border-box;
         background: #fff;
       }
+      
       .gs-phone-left {
         display: flex;
         align-items: center;
-        gap: 0;
-        min-width: 36px;
-        padding-right: 0px;
         position: relative;
-        justify-content: center;
+        min-width: 60px;
       }
-      .gs-phone-left select {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        background: transparent;
-        border: none;
-        padding: 0;
-        margin: 0;
-        font-family: inherit;
-        font-size: 13px;
+      
+      .gs-dial-code-display {
+        font-size: 14px;
         color: #333333;
-        outline: none;
-        width: auto;
-        text-align: right;
+        pointer-events: none;
+        padding-right: 18px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right center;
       }
-      .gs-code-overlay {
-        position: relative;
+      
+      .gs-country-select {
+        position: absolute;
         left: 0;
         top: 0;
-        transform: none;
-        pointer-events: none;
-        font-family: inherit;
-        font-size: 13px;
-        color: #333333;
-        display: inline-block;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
       }
-      .gs-phone-left select { color: transparent; width: 1px; padding: 0; margin: 0; }
-      .gs-phone-divider { width: 1px; height: 32px; background: #E6E6E6; }
-      .gs-phone-input { flex: 1; border: none; outline: none; padding: 8px 0; font-size: 14px; }
-      .gs-phone-input::placeholder { color: #BDBDBD }
+      
+      .gs-phone-divider { 
+        width: 1px; 
+        height: 32px; 
+        background: #E6E6E6; 
+      }
+      
+      .gs-phone-input { 
+        flex: 1; 
+        border: none; 
+        outline: none; 
+        padding: 8px 0; 
+        font-size: 14px; 
+      }
+      
+      .gs-phone-input::placeholder { 
+        color: #BDBDBD;
+      }
     `}</style>
     </>
   );

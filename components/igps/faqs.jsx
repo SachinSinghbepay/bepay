@@ -15,93 +15,88 @@ const faqData = [
   },
   {
     id: 2,
-    question: "Do you charge FX markup?",
-    answer: "No — bepay offers zero FX markup.",
-  },
-  {
-    id: 3,
     question: "How do I get started with bepay?",
     answer:
       "Sign up, complete a quick KYB, add your business details, and activate your preferred corridors. The process typically takes under 5 minutes for standard accounts.",
   },
   {
-    id: 4,
+    id: 3,
     question: "What documents are required for onboarding?",
     answer:
       "Basic KYB documentation is required and varies by business type and region (for example: company registration, proof of address, and ID for authorized signatories).",
   },
   {
-    id: 5,
+    id: 4,
     question: "Can I withdraw funds to my local bank account?",
     answer:
       "Yes — you can withdraw to your domestic bank account in your local currency anytime.",
   },
   {
-    id: 6,
+    id: 5,
     question: "Is bepay regulated?",
     answer:
       "Yes — bepay is licensed as an MSB (USA), VASP (EU), and compliant with frameworks including DORA, MiCA, DPDP, CFT, RBI’s PA-CB & FEMA.",
   },
   {
-    id: 7,
+    id: 6,
     question: "Are there any account maintenance or setup fees?",
     answer: "No — creating and maintaining your bepay global account is free.",
   },
   {
-    id: 8,
+    id: 7,
     question: "What can I do with my multi-currency bank account?",
     answer:
       "Receive global payments, collect marketplace payouts, generate statements, convert currencies, and withdraw to your local bank account.",
   },
   {
-    id: 9,
+    id: 8,
     question: "How do I get my e-FIRA / FIRC documents?",
     answer:
       "We automate this completely — as soon as an inward remittance is settled into your account, a digital FIRA/FIRC is generated instantly and available to download from your dashboard.",
   },
   {
-    id: 10,
+    id: 9,
     question: "Are there any limits on transaction volume?",
     answer:
       "bepay is built for B2B trade and supports high-value transactions for exporters, importers, and large enterprises. Specific limits/tiering depend on KYB and corridor rules — contact support for custom volume needs.",
   },
   {
-    id: 11,
+    id: 10,
     question: "How do I check the status of my payments?",
     answer:
       "You can track every transaction in real time through your dashboard, including routing, FX, settlements, and compliance documents.",
   },
   {
-    id: 12,
+    id: 11,
     question: "Does bepay support stablecoin-based rails?",
     answer:
       "Yes — wherever permitted by regulation, stablecoin rails can be used for faster settlement and lower fees, paired with full compliance controls.",
   },
   {
-    id: 13,
+    id: 12,
     question: "Which stablecoins are supported?",
     answer:
       "bepay supports major stablecoins such as USDC and USDT where corridors and regulation allow — exact availability depends on region and corridor.",
   },
   {
-    id: 14,
+    id: 13,
     question: "Do you support receiving payments from Amazon?",
     answer:
       "Yes — you can receive your Amazon marketplace payouts directly into your bepay multi-currency virtual accounts.",
   },
   {
-    id: 15,
+    id: 14,
     question: "Do you provide customer support?",
     answer: "Yes — 24/7 support with priority handling for global merchants.",
   },
   {
-    id: 16,
+    id: 15,
     question: "How secure is bepay?",
     answer:
       "bepay uses banking-grade security and compliance controls (encryption, KYC/AML, monitoring, and regulatory oversight) to protect funds and data.",
   },
   {
-    id: 17,
+    id: 16,
     question: "How do I integrate bepay with my systems (APIs, webhooks)?",
     answer:
       "bepay offers integration options (APIs and webhooks) for payment flows and notifications — contact your account manager or support for developer docs and onboarding.",

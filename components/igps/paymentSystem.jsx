@@ -54,10 +54,9 @@ const Card = ({ title, description, visual, index }) => {
             className="flex-shrink-0 w-[98%] md:w-[400px] h-[450px] bg-white p-6 flex flex-col justify-end relative overflow-visible transition-all duration-300 cursor-default" 
             style={{
                 borderRadius: '40px',
-                boxShadow: window.innerWidth < 768 
-                    ? '14.75px 14.75px 44.26px 0px rgba(0, 0, 0, 0.06)'
-                    : '30px 60px 50px rgba(0, 0, 0, 0.08)',
-                zIndex: window.innerWidth < 768 ? 'auto' : 50 - index
+                        boxShadow: "60px 20px 30px -20px rgba(0, 0, 0, 0.05), 80px 30px 120px -90px rgba(0, 0, 0, 0.02)",
+
+                zIndex: window.innerWidth < 768 ? 'auto' : 100 - index
             }}
         >
             <div className="absolute top-6 left-6 opacity-75 w-[200px] h-[200px] flex items-center justify-center">
@@ -93,8 +92,8 @@ const PaymentSystemUI = () => {
             visual: <img src="/p1.png" alt="Multi-currency visual" className="max-w-full h-auto" /> 
         },
         {
-            title: <>Transparent<br />FX rates</>,
-            description: "Zero hidden spreads. Always know exactly what you pay.",
+            title: <>Free<br />settlement</>,
+            description: "Send and receive money worldwide without paying any settlement fees.",
             visual: <img src="/p2.png" alt="FX Rate visual" className="max-w-full h-auto" />
         },
         {
@@ -155,7 +154,7 @@ const PaymentSystemUI = () => {
     md:text-[54px] md:leading-[100%] md:tracking-[-0.06em]
   "
 >
-  The Intelligent <span className="text-gray-400">Global Payment System</span>
+  The Intelligent <span className="text-[#6A6A6A]">Global Payment System</span>
 </h1>
 
             

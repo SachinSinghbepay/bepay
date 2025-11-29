@@ -19,52 +19,177 @@ const ImageComparisonTable = () => {
       */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&display=swap');
-        
+
         .font-montserrat {
           font-family: 'Montserrat', sans-serif;
         }
 
-        /* Custom style for the H1 heading */
-        .h1-style {
-          font-weight: 600; /* SemiBold */
-          font-size: 54px; 
+        /* Primary title: "Keep Your Margins." */
+        .title-primary {
+          font-weight: 600;
+          font-size: 54px;
           line-height: 1; /* 100% */
+          leading-trim: cap-height;
           letter-spacing: -0.06em; /* -6% */
+          text-align: center;
+          color: #333333;
+          margin: 0;
         }
 
-        /* Custom style for the subheading P tag */
+        /* Highlight title: "Stop Paying Hidden FX." */
+        .title-highlight {
+          font-weight: 600;
+          font-size: 54px;
+          line-height: 1; /* 100% */
+          leading-trim: cap-height;
+          letter-spacing: -0.06em; /* -6% */
+          text-align: center;
+          color: #BC4242;
+          margin: 0;
+        }
+
+        /* New color helpers (used for the IGPS heading) */
+        .title-green { color: #0E7630; }
+        .title-black { color: #333333; }
+        /* Desktop-only forced line break helper: inline on mobile, block on desktop */
+        .desktop-break { display: inline; }
+
+        /* Subheading */
         .subheading-style {
-          font-weight: 500; /* Medium */
-          font-size: 18px; 
-          line-height: 24px; 
+          font-family: 'Montserrat', sans-serif;
+          font-weight: 500;
+          font-style: normal;
+          font-size: 18px;
+          leading-trim: cap-height;
+          line-height: 24px;
           letter-spacing: -0.02em; /* -2% */
+          text-align: center; /* center on desktop */
+          max-width: 1024px;
+          margin-left: auto;
+          margin-right: auto;
+          white-space: normal;
         }
 
-        /* Responsive scaling for H1 on mobile */
+        /* Mobile styles */
         @media (max-width: 640px) {
-            .h1-style {
-                font-size: 38px; 
-                letter-spacing: -0.04em;
-            }
+          .title-primary,
+          .title-highlight {
+            font-size: 25px;
+            line-height: 30px;
+            leading-trim: cap-height;
+            letter-spacing: -0.06em;
+            text-align: center;
+            text-transform: capitalize;
+          }
+
+          /* Subheading mobile overrides per design */
+          .subheading-style {
+            font-weight: 500;
+            font-size: 14px;
+            leading-trim: cap-height;
+            line-height: 20px;
+            letter-spacing: -0.02em; /* -2% */
+            text-align: center;
+          }
+        }
+
+        /* Scroll wrapper for wide images on small screens */
+        .image-scroll {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          scroll-snap-type: x proximity;
+        }
+
+        .image-scroll img {
+          display: block;
+          width: 100%;
+          max-width: 1024px; /* keep desktop responsive and contained */
+          height: auto;
+        }
+
+        @media (max-width: 640px) {
+          /* Make the image slightly wider than the viewport so users can pan horizontally
+             but not excessively large — this matches the alignment in the screenshot. */
+          .image-scroll {
+            padding-left: 16px;
+            padding-right: 16px;
+          }
+
+          /* Use the exact requested dimensions on mobile; allow horizontal scrolling to view full width */
+          .image-scroll img {
+            width: 921px;
+            height: 680px; /* increased for more vertical space on mobile */
+            max-width: none;
+            display: block;
+          }
+        }
+
+        /* Desktop: center the image container and keep subheading centered */
+
+        @media (min-width: 641px) {
+          .subheading-style {
+            /* Reinforce desktop-specific typography */
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            font-style: normal;
+            font-size: 16px;
+            leading-trim: cap-height;
+            line-height: 24px;
+            letter-spacing: -0.02em; /* -2% */
+            text-align: center;
+            white-space: normal;
+            max-width: 1024px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 20px; /* push subheading down on desktop */
+          }
+
+          .image-scroll {
+            max-width: 1024px; /* keep image contained on desktop */
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .image-scroll img {
+            width: 100%;
+            height: auto;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+          }
+        }
+        /* Larger desktop adjustments: push content further down for spacious layout */
+        @media (min-width: 1024px) {
+          .hero-section {
+            padding-top: 6rem; /* increase top spacing on desktop */
+          }
+
+          .title-wrapper {
+            margin-top: 1.5rem; /* extra spacing above the headings */
+          }
+
+          .subheading-style {
+            margin-top: 32px; /* more space between title and subheading on desktop */
+            font-size: 18px; /* slightly larger subheading on larger screens */
+          }
+          .desktop-break { display: block; }
         }
       `}</style>
 
-      <div className="py-10 bg-[#F9F9F9] px-4 sm:px-6 lg:px-8">
+      <div className="py-10 bg-[#F9F9F9] px-4 sm:px-6 lg:px-8 hero-section">
         
         {/* --- Heading Section --- 
           Applying font-montserrat and h1-style
         */}
-        <h1 className="
-          font-montserrat 
-          h1-style 
-          text-gray-800 
-          mb-4 sm:mb-2 
-          text-center 
-          transition-colors duration-300
-          text-54px
-        ">
-          Keep Your Margins. <span className="text-red-600">Stop Paying Hidden FX.</span>
-        </h1>
+        <div className="flex flex-col items-center justify-center mb-4 sm:mb-2 title-wrapper">
+          <h1 className="font-montserrat title-primary transition-colors duration-300">
+            <span className="title-green">Improve Your Margins</span>
+            <span className="title-black"> on</span>{" "}
+            <span className="desktop-break title-black">Every International Settlement</span>
+          </h1>
+        </div>
         
         {/* --- Subheading Section --- 
           Applying font-montserrat and subheading-style
@@ -77,18 +202,19 @@ const ImageComparisonTable = () => {
           text-center 
           max-w-3xl 
           mx-auto
-          md:whitespace-nowrap
         ">
-          Most payment providers hide their fees in the Exchange Rate. We don't. <span className="text-[#080808]">We offer zero FX Markup rates on major corridors.</span>
+          Businesses lose time and money to complex cross-border processes. bepay IGPS simplifies it, offering <span className="text-[#080808]">free international settlements, faster transfers, and a reliable experience built for modern trade.</span>
         </p>
 
         {/* --- Image Table Replacement --- */}
-        <div className="flex justify-center">
-          <img 
-            src="/table.png"
-            alt="Comparison table of fees for Traditional Banks, Payment Gateways, and bepay IGPS"
-            className="w-full max-w-4xl h-auto "
-          />
+        <div className="flex justify-center w-full">
+          <div className="image-scroll w-full">
+            <img 
+              src="/table.png"
+              alt="Comparison table of fees for Traditional Banks, Payment Gateways, and bepay IGPS"
+              className="h-auto block"
+            />
+          </div>
         </div>
 
       </div>

@@ -62,8 +62,7 @@ export default function BepayLanding() {
             letterSpacing: '-2%',
             textAlign: 'center',
           }}>
-            A single platform that bridges traditional banking with intelligent stablecoin rails, delivering near real-time
-            settlements, cost savings, and seamless compliance for global enterprises.
+           A single platform that bridges traditional banking with intelligent payment rails, delivering near real-time settlements, cost savings, and easy compliance for global enterprises.
           </p>
         </div>
 
@@ -117,9 +116,22 @@ export default function BepayLanding() {
 
         {/* CTA Section */}
         <div className="text-center">
-          <h2 className="text-[24px] font-semibold text-[#080808] mb-8 mt-10">
-            Ready to Receive International Payments?
-          </h2>
+        <h2
+  className="
+    font-semibold text-[#080808] mb-8 mt-10
+    md:text-[24px] md:font-semibold   /* Desktop stays same */
+    text-center                      /* Mobile: center */
+    text-[16px] leading-[24px]       /* Mobile: font-size + line-height */
+    tracking-[-0.02em]               /* Mobile: letter-spacing -2% */
+    font-[600]                       /* Mobile: font-weight 600 */
+  "
+  style={{
+    fontFamily: "Montserrat",
+  }}
+>
+  Ready to Receive International Payments?
+</h2>
+
           <button
             className="flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto"
           >

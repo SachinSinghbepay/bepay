@@ -97,7 +97,7 @@ const VerticalScrollingSection = () => {
     'sp3.png',
     'sp4.png',
     'sp5.png',
-    'p6.png',
+    'sp6.png',
   ];
 
   const cardData = scrollFilenames.map((name) => ({
