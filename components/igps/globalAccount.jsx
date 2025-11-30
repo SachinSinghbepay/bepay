@@ -1,9 +1,9 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import WaitlistTriggerButton from "../waitlist-trigger-button";
 import { AnalyticsService } from "@/services/analyticsService";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import GetStartedPopup from '@/components/popups/getStartedPopup';
 
 // --- CUSTOM HOOK: useMediaQuery ---
 const useMediaQuery = (query) => {
@@ -29,9 +29,7 @@ const useMediaQuery = (query) => {
 
 // --- STYLES OBJECT (Updated numberIndicatorsContainerMobile) ---
 
-const handleButtonClick = () => {
-    AnalyticsService.sendEvent("Get your global account Clicked");
-};
+// NOTE: analytics call will be executed where the popup is opened.
 
 const styles = {
     setupWrapper: {
@@ -273,7 +271,7 @@ const steps = [
 
 
 // --- STEP CONTENT HELPER (Updated to push button down on mobile) ---
-const StepContent = ({ step, isMobile }) => {
+const StepContent = ({ step, isMobile, onOpenPopup }) => {
     if (!step) return null;
 
     // Framer motion variants 
@@ -328,24 +326,25 @@ const StepContent = ({ step, isMobile }) => {
             {/* Use the conditional stepTitleStyle */}
             <h2 style={stepTitleStyle}>{step.title}</h2>
             <p style={stepDescriptionStyle}>{step.description}</p>
-            <WaitlistTriggerButton triggerSource="become a merchant on bepay button" buttonLocation="merchant_section_business">
-                <motion.div
-                    // APPLY PUSH BUTTONS DOWN (2-3 spaces) using inline style
-                    style={isMobile ? { marginTop: '23px' } : {}} 
-                    className="flex flex-col sm:flex-row lg:flex-col max-w-[300px] sm:max-w-none lg:max-w-[300px] gap-4"
+            <motion.div
+                // APPLY PUSH BUTTONS DOWN (2-3 spaces) using inline style
+                style={isMobile ? { marginTop: '23px' } : {}} 
+                className="flex flex-col sm:flex-row lg:flex-col max-w-[300px] sm:max-w-none lg:max-w-[300px] gap-4"
+            >
+                <button
+                    onClick={() => {
+                        AnalyticsService.sendEvent("Get your global account Clicked");
+                        if (typeof onOpenPopup === 'function') onOpenPopup();
+                    }}
+                    className={`bg-black ${isMobile ? 'w-full' : 'w-[250px]'} h-[56px] text-white text-[14px] font-medium rounded-full flex items-center justify-center gap-2 py-4 px-6 cursor-pointer whitespace-nowrap hover:bg-gray-800 transition-colors`}
                 >
-                    <button
-                        onClick={handleButtonClick}
-                        className={`bg-black ${isMobile ? 'w-full' : 'w-[250px]'} h-[56px] text-white text-[14px] font-medium rounded-full flex items-center justify-center gap-2 py-4 px-6 cursor-pointer whitespace-nowrap hover:bg-gray-800 transition-colors`}
-                    >
-                        Get your global account
-                        <ArrowUpRight
-                        className="w-5 h-7 flex-shrink-0"
-                        strokeWidth={1.5}
-                        />
-                    </button>
-                </motion.div>
-            </WaitlistTriggerButton>
+                    Get your global account
+                    <ArrowUpRight
+                    className="w-5 h-7 flex-shrink-0"
+                    strokeWidth={1.5}
+                    />
+                </button>
+            </motion.div>
         </div>
     );
 
@@ -372,7 +371,10 @@ const StepContent = ({ step, isMobile }) => {
 const SetupGlobalAccount = () => {
     const isMobile = useMediaQuery('(max-width: 640px)');
     const [activeStep, setActiveStep] = useState(1);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const currentStepData = steps.find(s => s.number === activeStep);
+
+    const openPopup = () => setIsPopupOpen(true);
 
     useEffect(() => {
         AnalyticsService.sendEvent('IGPS Component View', { component: 'SetupGlobalAccount', page: 'igps' });
@@ -444,7 +446,8 @@ const SetupGlobalAccount = () => {
                 </div>
 
                 {/* Dynamic Step Content */}
-                <StepContent step={currentStepData} isMobile={isMobile} />
+                <StepContent step={currentStepData} isMobile={isMobile} onOpenPopup={openPopup} />
+                <GetStartedPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
                 
             </div>
             

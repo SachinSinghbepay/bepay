@@ -1,7 +1,7 @@
 "use client"
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AnalyticsService } from '@/services/analyticsService';
+import GetStartedPopup from '@/components/popups/getStartedPopup';
 // Removed unused imports: Globe, Route, Percent, FileCheck, ArrowUpRight
 
 // Assuming c1.png, c2.png, c3.png, and c4.png are accessible via the public folder
@@ -11,6 +11,7 @@ export default function BepayLanding() {
   useEffect(() => {
     AnalyticsService.sendEvent('IGPS Component View', { component: 'BepayLanding', page: 'igps' });
   }, []);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   // Utility component to render the image tile
   const FeatureImage = ({ src }) => (
     <div className="flex justify-center mb-6">
@@ -133,6 +134,7 @@ export default function BepayLanding() {
 </h2>
 
           <button
+            onClick={() => setIsPopupOpen(true)}
             className="flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto"
           >
             
@@ -143,6 +145,11 @@ export default function BepayLanding() {
             </svg>
           </button>
         </div>
+        {/* Get Started popup */}
+        {typeof window !== 'undefined' && (
+          // lazy render popup only on client
+          <GetStartedPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
+        )}
       </div>
     </div>
   );

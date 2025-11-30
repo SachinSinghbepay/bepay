@@ -8,6 +8,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Link from "next/link";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import GetStartedPopup from '@/components/popups/getStartedPopup';
 
 const AppStoreButton = (
   { iconSrc, iconAlt, line1, line2, onClick } // ANALYTICS: Added onClick prop
@@ -135,6 +136,7 @@ const Footer = ({
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [isGetStartedPopupOpen, setIsGetStartedPopupOpen] = useState(false);
   const [subscribedEmail, setSubscribedEmail] = useState("");
   const [isMobile, setIsMobile] = useState(false);
   const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
@@ -501,6 +503,7 @@ const Footer = ({
                 GO GLOBAL WITHOUT COMPLEXITY!
               </h3>
               <button
+            onClick={() => setIsGetStartedPopupOpen(true)}
             className="flex items-center justify-center font-[600] gap-2 bg-white text-[#080808] px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[200px] md:text-[14px] mx-auto"
             >
             
@@ -1095,6 +1098,11 @@ const Footer = ({
 </p>
 
       </footer>
+
+      {/* Render GetStartedPopup when on IGPS route */}
+      {typeof window !== 'undefined' && isGetStartedPopupOpen && (
+        <GetStartedPopup isOpen={isGetStartedPopupOpen} onClose={() => setIsGetStartedPopupOpen(false)} />
+      )}
 
       <NewsletterModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </>

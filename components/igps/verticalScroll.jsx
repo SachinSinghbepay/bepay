@@ -1,8 +1,9 @@
-'use client'
+"use client"
 import React, { useRef, useState } from 'react';
 import { AnalyticsService } from '@/services/analyticsService';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 
 // Reusable component for the scrolling photo item (Desktop)
 const PhotoCardItem = ({ imageSrc, altText, index, progress, totalImages }) => {
@@ -80,13 +81,17 @@ const VerticalScrollingSection = () => {
   const containerRef = useRef(null);
   const mobileScrollRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const isMobile = useIsMobile();
 
   React.useEffect(() => {
     AnalyticsService.sendEvent('IGPS Component View', { component: 'VerticalScrollingSection', page: 'igps' });
   }, []);
 
+  // Only attach the scroll target for desktop (isMobile === false).
+  // When `isMobile` is `null` (initial client-detection phase) or `true`,
+  // pass `undefined` to avoid `framer-motion` complaining about a non-hydrated ref.
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: isMobile === false ? containerRef : undefined,
     offset: ["start start", "end end"],
   });
 
@@ -159,6 +164,12 @@ const VerticalScrollingSection = () => {
   // Calculate the total scroll height: base height + extra scroll for animations
   const scrollHeight = `${(cardData.length + 2) * 100}vh`;
 
+  // Avoid rendering until we know client viewport size (prevents flash of wrong layout)
+  if (isMobile === null) {
+    // Render an empty spacer preserving height so layout doesn't jump.
+    return <div style={{ height: scrollHeight }} />;
+  }
+
   // Mobile scroll functions
   const scrollToSlide = (index) => {
     if (mobileScrollRef.current) {
@@ -186,7 +197,8 @@ const VerticalScrollingSection = () => {
   return (
     <>
       {/* Desktop View */}
-      <div ref={containerRef} style={{ height: scrollHeight }} className="hidden md:block">
+      {!isMobile && (
+        <div ref={containerRef} style={{ height: scrollHeight }} className="block">
         <div className="sticky top-0 h-screen grid grid-cols-2">
           {/* 1. Left Side: Static Content */}
           <div className="p-16 flex items-center justify-center bg-white">
@@ -213,11 +225,13 @@ const VerticalScrollingSection = () => {
               />
             ))}
           </div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Mobile View */}
-      <div className="md:hidden bg-white">
+      {isMobile && (
+        <div className="block bg-white">
         {/* Heading Section (mobile) */}
         <div className="px-6 py-6 text-center bg-white">
           <p className="mb-2" style={mobileBuiltForStyle}>
@@ -276,7 +290,8 @@ const VerticalScrollingSection = () => {
             ))}
           </div>
         </div>
-      </div>
+        </div>
+      )}
 
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {

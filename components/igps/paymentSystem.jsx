@@ -1,6 +1,7 @@
 'use client'
 import React, { useRef, useEffect, useState } from 'react';
 import { AnalyticsService } from '@/services/analyticsService';
+import GetStartedPopup from '@/components/popups/getStartedPopup';
 
 const Card = ({ title, description, visual, index }) => {
     // Determine mobile vs desktop (client-only code)
@@ -84,6 +85,7 @@ const Card = ({ title, description, visual, index }) => {
 
 const PaymentSystemUI = () => {
     const scrollerRef = useRef(null);
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
 
     const cardsData = [
         {
@@ -212,6 +214,8 @@ const PaymentSystemUI = () => {
                 No more delays. No borders. Just intelligent payments!
             </p>
             <button
+            type="button"
+            onClick={() => { setIsPopupOpen(true); AnalyticsService.sendEvent('get_started_popup_opened'); }}
             className="flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto"
             >
             
@@ -221,6 +225,8 @@ const PaymentSystemUI = () => {
                 <path d="M7 17l10-10M7 7h10v10"/>
             </svg>
             </button>
+            {/* Render Get Started popup */}
+            <GetStartedPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
         </div>
     );
 };
