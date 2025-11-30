@@ -219,7 +219,7 @@ const IgpsHero = () => {
                 </button>
 
                 {/* Telegram/WhatsApp Button (56x56 on mobile, 66x66 on md) */}
-                <Button 
+                {/* <Button 
                   variant="outline" 
                   onClick={() => handleOpenPopup('whatsapp', 'IGPS WhatsApp Clicked')}
                   // Reduced size and padding for mobile
@@ -232,10 +232,10 @@ const IgpsHero = () => {
                     width={26}
                     height={26}
                   />
-                </Button>
+                </Button> */}
                 
                 {/* Call Button (56x56 on mobile, 66x66 on md) */}
-                <Button 
+                {/* <Button 
                   variant="outline" 
                    // Reduced size and padding for mobile
                   onClick={() => handleOpenPopup('call', 'IGPS Call Clicked')}
@@ -248,7 +248,7 @@ const IgpsHero = () => {
                     width={26}
                     height={26}
                   />
-                </Button>
+                </Button> */}
                 
                 {/* Mail Button (56x56 on mobile, 66x66 on md) */}
                 <Button 

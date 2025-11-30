@@ -819,99 +819,69 @@ const Footer = ({
                 </div>
               </>
             ) : isIGPSPage ? (
-              // IGPS-specific simplified links (matches screenshot)
+              /* IGPS minimal footer: COMPANY links + Get in touch icons (matches screenshot) */
               <>
-                <div className="space-y-4">
-                  <Link
-                    href="/about-us"
-                    onClick={() => handleLinkClick("About Us")}
-                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-                  >
-                    ABOUT US
-                  </Link>
-                  <Link
-                    href="/bepay-foundations"
-                    onClick={() => handleLinkClick("Bepay Foundation")}
-                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-                  >
-                    BEPAY FOUNDATION
-                  </Link>
-                </div>
+                <div className="w-full flex flex-col md:flex-row items-center justify-center gap-12">
+                  <div className="text-center md:text-left">
+                    <h4 className="text-xs tracking-[0.08em] uppercase text-[#C0C0C0] font-semibold mb-4">
+                      COMPANY
+                    </h4>
+                    <div className="space-y-2">
+                      <Link
+                        href="/privacy-policy"
+                        onClick={() => handleLinkClick("Privacy Policy")}
+                        className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                      >
+                        Privacy Policy
+                      </Link>
+                      <Link
+                        href="/terms-and-conditions"
+                        onClick={() => handleLinkClick("Terms & Conditions")}
+                        className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                      >
+                        Terms & Conditions
+                      </Link>
+                    </div>
+                  </div>
 
-                <div className="space-y-4">
-                  <Link
-                    href="/"
-                    onClick={() => handleLinkClick("Switch to Global")}
-                    className="block uppercase text-[#7A7A7A] hover:text-gray-400 transition-colors"
-                  >
-                    SWITCH TO GLOBAL
-                  </Link>
-                  <Link
-                    href="/upi"
-                    onClick={() => handleLinkClick("UPI")}
-                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-                  >
-                    UPI
-                  </Link>
-                </div>
+                  <div className="flex flex-col items-center md:items-end text-center md:text-right">
+                    <h4 className="text-xs tracking-[0.08em] uppercase text-[#C0C0C0] font-semibold mb-4">
+                      Get in touch
+                    </h4>
+                    <div className="flex items-center gap-4">
+                      {/* <a
+                        href="https://wa.me/91820000000"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="WhatsApp"
+                        onClick={() => handleSocialLinkClick("whatsapp")}
+                        className="rounded-full w-[60px] h-[60px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border flex items-center justify-center hover:bg-white/5 transition-colors"
+                        style={{ borderColor: "#191919" }}
+                      >
+                        <Image src="/icons/wp.png" alt="whatsapp icon" width={26} height={26} />
+                      </a> */}
 
-                {/* IGPS: contact pills (whatsapp / call / email) - centered and spanning both columns on mobile */}
-                <div className="col-span-2 flex items-center justify-center gap-4 mt-8">
-                  <a
-                    href="https://wa.me/91820000000"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="WhatsApp"
-                    onClick={() => handleSocialLinkClick('whatsapp')}
-                    className="rounded-full w-[60px] h-[60px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border flex items-center justify-center hover:bg-white/5 transition-colors"
-                    style={{ borderColor: '#191919'  }}
-                  >
-                    <Image src="/icons/wp.png" alt="whatsapp icon" width={26} height={26} />
-                  </a>
+                      {/* <a
+                        href="tel:+918200000000"
+                        aria-label="Call"
+                        onClick={() => handleSocialLinkClick("call")}
+                        className="rounded-full w-[60px] h-[60px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border flex items-center justify-center hover:bg-white/5 transition-colors"
+                        style={{ borderColor: "#191919" }}
+                      >
+                        <Image src="/phone_f.png" alt="phone icon" width={26} height={26} />
+                      </a> */}
 
-                  <a
-                    href="tel:+918200000000"
-                    aria-label="Call"
-                    onClick={() => handleSocialLinkClick('call')}
-                    className="rounded-full w-[60px] h-[60px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border flex items-center justify-center hover:bg-white/5 transition-colors"
-                    style={{ borderColor: '#191919'  }}
-                  >
-                    <Image src="/phone_f.png" alt="phone icon" width={26} height={26} />
-                  </a>
-
-                  <a
-                    href="mailto:info@bepay.money"
-                    aria-label="Email"
-                    onClick={() => handleSocialLinkClick('email')}
-                    className="rounded-full w-[60px] h-[60px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border flex items-center justify-center hover:bg-white/5 transition-colors"
-                    style={{ borderColor: '#191919' }}
-                  >
-                    <Image src="/mail_f.png" alt="mail icon" width={26} height={26} />
-                  </a>
-                </div>
-
-                <div className="space-y-4 mt-6">
-                  <Link
-                    href="/privacy-policy"
-                    onClick={() => handleLinkClick("Privacy Policy")}
-                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-                  >
-                    PRIVACY POLICY
-                  </Link>
-                  <Link
-                    href="/terms-and-conditions"
-                    onClick={() => handleLinkClick("Terms & Conditions")}
-                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-                  >
-                    TERMS & CONDITIONS
-                  </Link>
-                  <Link
-                    href="/legal-disclamer"
-                    onClick={() => handleLinkClick("Legal Disclaimer")}
-                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-                  >
-                    LEGAL DISCLAIMER
-                  </Link>
+                      <a
+                        href="mailto:info@bepay.money"
+                        aria-label="Email"
+                        onClick={() => handleSocialLinkClick("email")}
+                        className="rounded-full w-[60px] h-[60px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border flex items-center justify-center hover:bg-white/5 transition-colors"
+                        style={{ borderColor: "#191919" }}
+                      >
+                        <Image src="/mail_f.png" alt="mail icon" width={26} height={26} />
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </>
             ) : (
