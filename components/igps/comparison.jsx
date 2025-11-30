@@ -110,7 +110,9 @@ const ImageComparisonTable = () => {
           scroll-snap-type: x proximity;
         }
 
-        .image-scroll img, .image-scroll .next-image-container > span {
+        /* default inner wrapper that Next/Image will fill */
+        .image-inner {
+          position: relative;
           display: block;
           width: 100%;
           max-width: 1024px; /* keep desktop responsive and contained */
@@ -125,12 +127,19 @@ const ImageComparisonTable = () => {
             padding-right: 16px;
           }
 
-          /* Use the exact requested dimensions on mobile; allow horizontal scrolling to view full width */
+          /* Move the image up on mobile so it's closer to the headings */
+          .image-scroll {
+            margin-top: -40px; /* adjust this value if you want more/less overlap */
+          }
+
+          /* Increase image size on mobile so users can pan horizontally. */
           /* Note: When using Next.js Image with fixed w/h for the image, the surrounding div handles overflow. */
-          .image-scroll > span {
-            width: 921px !important;
-            height: 680px !important;
+          /* On mobile, make the inner wrapper wider than viewport to enable horizontal panning */
+          .image-inner {
+            min-width: 1280px !important; /* wider than most mobile viewports to enable horizontal panning */
+            height: 900px !important; /* taller to preserve aspect */
             max-width: none !important;
+            display: block !important;
           }
         }
 
@@ -213,22 +222,22 @@ const ImageComparisonTable = () => {
           max-w-3xl 
           mx-auto
         ">
-          Businesses lose time and money to complex cross-border processes. bepay IGPS simplifies it, offering <span className="text-[#080808]">**free international settlements, faster transfers, and a reliable experience built for modern trade.**</span>
+          Businesses lose time and money to complex cross-border processes. bepay IGPS simplifies it, offering <span className="text-[#080808]">free international settlements, faster transfers, and a reliable experience built for modern trade.</span>
         </p>
 
         {/* --- Image Table Replacement --- */}
         <div ref={sectionRef} className="flex justify-center w-full">
           <div className="image-scroll w-full" onClick={() => { try { AnalyticsService.sendEvent('Comparison Table Clicked'); } catch (e) {} }} style={{ cursor: 'pointer' }}>
-            {/* 2. Changed <img> to <Image /> with explicit dimensions */}
-            <Image 
-              src={TABLE_IMAGE_URL} // uses '/table.png'
-              alt="Comparison table of fees for Traditional Banks, Payment Gateways, and bepay IGPS"
-              // Setting width and height based on the CSS for mobile (921px x 680px)
-              width={921}
-              height={680}
-              priority={true} // High-priority since it's a critical hero image
-              className="h-auto block" // Tailwind classes
-            />
+            {/* Wrap Image in an explicit container and use `fill` so the container controls size */}
+            <div className="image-inner">
+              <Image
+                src={TABLE_IMAGE_URL}
+                alt="Comparison table of fees for Traditional Banks, Payment Gateways, and bepay IGPS"
+                fill={true}
+                priority={true}
+                className="object-contain"
+              />
+            </div>
           </div>
         </div>
 

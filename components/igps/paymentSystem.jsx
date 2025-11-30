@@ -209,7 +209,7 @@ const PaymentSystemUI = () => {
             
             <div className="w-full px-14">
                 <div 
-                    className="text-gray-600 md:whitespace-nowrap mt-7 flex md:flex-row flex-col md:items-start items-center gap-2.5 max-w-2xl mx-auto md:mx-0 text-center md:text-left"
+                    className="text-gray-600 md:whitespace-nowrap mt-7 flex md:flex-row flex-col md:items-center items-center gap-2.5 max-w-2xl mx-auto md:mx-0 text-center md:text-left"
                     style={{
                         fontFamily: 'Montserrat, sans-serif',
                         fontWeight: 500,
@@ -218,7 +218,7 @@ const PaymentSystemUI = () => {
                         letterSpacing: '-2%',
                     }}
                 >
-                    <span className="hidden md:block w-2.5 h-2.5 bg-green-500 rounded-full mt-2.5 flex-shrink-0"></span>
+                    <span className="hidden md:block w-2.5 h-2.5 bg-[#0E7630] rounded-full flex-shrink-0 self-center"></span>
                     <span className="max-w-3xl">Connecting your business to the world&apos;s most important corridors through a single, Intelligent Payment Network.</span>
                 </div>
             </div>
