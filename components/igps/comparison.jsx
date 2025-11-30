@@ -110,13 +110,17 @@ const ImageComparisonTable = () => {
           scroll-snap-type: x proximity;
         }
 
-        /* default inner wrapper that Next/Image will fill */
+        /* default inner wrapper that Next/Image will fill
+           NOTE: when using  with the parent must have an
+           explicit height (or aspect ratio). Without it the parent collapses
+           to 0 height and the image becomes invisible on desktop. */
         .image-inner {
           position: relative;
           display: block;
           width: 100%;
           max-width: 1024px; /* keep desktop responsive and contained */
-          height: auto;
+          height: 600px; /* explicit desktop height so a sizing context */
+          aspect-ratio: 16/9; /* hint for modern browsers (keeps proportions) */
         }
 
         @media (max-width: 640px) {
