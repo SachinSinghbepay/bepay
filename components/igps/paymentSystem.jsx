@@ -204,7 +204,7 @@ const PaymentSystemUI = () => {
                     color: '#080808', 
                 }}
             >
-                Global Infrastructure. Local Experience.
+                Zero Fees. Global Infrastructure. Local Experience.
             </h2>
             
             <div className="w-full px-14">
@@ -246,7 +246,7 @@ const PaymentSystemUI = () => {
                 </div>
             </div>
 
-            <p className="md:text-xl text-[16px] font-semibold md:font-medium text-[#080808] mt-8 px-5">
+            <p className="md:text-xl text-[16px] font-semibold md:font-semibold text-[#080808] mt-8 px-5">
                 No more delays. No borders. Just intelligent payments!
             </p>
             <button

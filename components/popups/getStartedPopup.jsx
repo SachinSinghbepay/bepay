@@ -129,24 +129,24 @@ function PortalContent({ onClose }) {
           </button>
 
           <div style={{ textAlign: "left", padding: "0 0 0.5rem" }}>
-            <h2 className="gs-title" style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 600, fontSize: "20px", margin: 0 }}>Leave us a message</h2>
+            <h2 className="gs-title" style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 600, fontSize: "24px", margin: 0 }}>Leave us a message</h2>
             <p className="gs-subtitle" style={{ fontSize: "14px", color: "#6B7280", marginTop: "6px" }}>Share your details, and our team will get back to you within 24 hours.</p>
           </div>
 
           <form onSubmit={handleSubmit} style={{ marginTop: "1rem" }}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "0.75rem" }}>
               <div>
-                <label htmlFor="gs-name" className="gs-field-label">Name</label>
+                <label htmlFor="gs-name" className="gs-field-label">Name*</label>
                 <input id="gs-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your name" style={{ width: '100%', height: 44, padding: "0 1rem", borderRadius: 8, border: "1px solid #E5E7EB" }} />
               </div>
 
               <div>
-                <label htmlFor="gs-email" className="gs-field-label">Email</label>
+                <label htmlFor="gs-email" className="gs-field-label">Email*</label>
                 <input id="gs-email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" style={{ width: '100%', height: 44, padding: "0 1rem", borderRadius: 8, border: "1px solid #E5E7EB" }} />
               </div>
 
               <div>
-                <label htmlFor="gs-phone" className="gs-field-label">Phone number</label>
+                <label htmlFor="gs-phone" className="gs-field-label">Phone number*</label>
                 <div className="gs-phone-control" role="group" aria-label="Phone input">
                   <div className="gs-phone-left">
                     <span className="gs-dial-code-display">{country.dial_code}</span>
@@ -167,18 +167,17 @@ function PortalContent({ onClose }) {
               </div>
 
               <div>
-                <label htmlFor="gs-company" className="gs-field-label">Company name</label>
+                <label htmlFor="gs-company" className="gs-field-label">Company name*</label>
                 <input id="gs-company" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Tell us your company's name" style={{ width: '100%', height: 44, padding: "0 1rem", borderRadius: 8, border: "1px solid #E5E7EB" }} />
               </div>
 
               <div>
-                <label htmlFor="gs-message" className="gs-field-label">Message</label>
+                <label htmlFor="gs-message" className="gs-field-label">Message*</label>
                 <textarea id="gs-message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Write your message here...." rows={5} style={{ width: '100%', padding: "0.75rem 1rem", borderRadius: 8, border: "1px solid #E5E7EB", resize: "vertical" }} />
               </div>
 
               <div style={{ fontSize: 11, color: "#6B7280" }}>
-                By submitting this form, you agree to be contacted by our team. We respect your privacy; please read our <a href="/privacy-policy" style={{ color: "#000" }}>Privacy Policy</a>.
-              </div>
+              By submitting this form, you agree to be contacted by our team. We respect your privacy; please read our Privacy Policy. If you wish to opt-out of future communications, please let us know via email.              </div>
 
               {error && <div style={{ color: "#ef4444", fontSize: 13 }}>{error}</div>}
 
@@ -205,7 +204,7 @@ function PortalContent({ onClose }) {
           font-family: 'Montserrat', sans-serif;
           font-weight: 600;
           font-style: normal;
-          font-size: 48px;
+          font-size: 56px;
           leading-trim: cap-height;
           line-height: 100%;
           letter-spacing: -0.04em;
@@ -229,7 +228,7 @@ function PortalContent({ onClose }) {
           font-family: 'Montserrat', sans-serif;
           font-weight: 600;
           font-style: normal;
-          font-size: 16px;
+          font-size: 14px;
           leading-trim: cap-height;
           line-height: 100%;
           letter-spacing: -0.04em;

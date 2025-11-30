@@ -154,7 +154,6 @@ const VerticalScrollingSection = () => {
     ...staticTextStyle,
     color: '#333333',
     display: 'block',
-    padding: '6px 10px',
     maxWidth: '480px',
   };
 
@@ -237,7 +236,7 @@ const VerticalScrollingSection = () => {
         <div ref={containerRef} style={{ height: scrollHeight }} className="block">
         <div ref={viewRef} className="sticky top-0 h-screen grid grid-cols-2" style={{ outline: '2px dashed rgba(255,0,0,0.6)', zIndex: 50 }}>
           {/* 1. Left Side: Static Content */}
-          <div className="p-16 flex items-center justify-center bg-white">
+          <div className="p-16 flex items-center justify-start bg-white">
             <div className="max-w-lg">
               <p className="mb-2" style={builtForStyle}>
                 Built For
@@ -341,9 +340,9 @@ const VerticalScrollingSection = () => {
           overflow: hidden;
           -webkit-line-clamp: 3;
           line-clamp: 3;
-          /* Force exactly 3 lines using line-height from staticTextStyle (60px) */
-          max-height: 180px;
-          line-height: 60px !important;
+          /* Match the titleStyle lineHeight (45px per line) to avoid vertical misalignment */
+          max-height: 135px; /* 45px * 3 lines */
+          line-height: 45px !important;
           word-break: normal;
           hyphens: none;
         }
