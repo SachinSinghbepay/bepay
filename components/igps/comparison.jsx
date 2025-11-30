@@ -1,6 +1,5 @@
 "use client"
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 // 1. Import the Next.js Image component
 import Image from 'next/image'; 
 import { AnalyticsService } from '@/services/analyticsService';
@@ -9,9 +8,31 @@ import { AnalyticsService } from '@/services/analyticsService';
 const TABLE_IMAGE_URL = '/table.png'; 
 
 const ImageComparisonTable = () => {
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+
+  // track view with IntersectionObserver (matches merchant-section pattern)
   useEffect(() => {
-    AnalyticsService.sendEvent('IGPS Component View', { component: 'ImageComparisonTable', page: 'igps' });
-  }, []);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          try {
+            AnalyticsService.sendEvent('Image Comparison viewed');
+          } catch (e) {}
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const current = sectionRef.current;
+    if (current) observer.observe(current);
+
+    return () => {
+      if (current) observer.unobserve(current);
+    };
+  }, [hasTrackedView]);
   return (
     <>
       {/* 1. Import Montserrat font from Google Fonts.
@@ -196,8 +217,8 @@ const ImageComparisonTable = () => {
         </p>
 
         {/* --- Image Table Replacement --- */}
-        <div className="flex justify-center w-full">
-          <div className="image-scroll w-full">
+        <div ref={sectionRef} className="flex justify-center w-full">
+          <div className="image-scroll w-full" onClick={() => { try { AnalyticsService.sendEvent('Comparison Table Clicked'); } catch (e) {} }} style={{ cursor: 'pointer' }}>
             {/* 2. Changed <img> to <Image /> with explicit dimensions */}
             <Image 
               src={TABLE_IMAGE_URL} // uses '/table.png'

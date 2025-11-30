@@ -83,9 +83,30 @@ const VerticalScrollingSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const isMobile = useIsMobile();
 
+  const viewRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+
   React.useEffect(() => {
-    AnalyticsService.sendEvent('IGPS Component View', { component: 'VerticalScrollingSection', page: 'igps' });
-  }, []);
+    const target = viewRef.current || containerRef.current;
+    if (!target) return;
+
+    console.log('[debug] verticalScroll: observing target', target);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          console.log('[debug] verticalScroll: intersected', entry);
+          try { AnalyticsService.sendEvent('Vertical Scrolling viewed'); } catch (e) {}
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { rootMargin: '0px 0px -30% 0px' }
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [hasTrackedView]);
 
   // Only attach the scroll target for desktop (isMobile === false).
   // When `isMobile` is `null` (initial client-detection phase) or `true`,
@@ -165,11 +186,23 @@ const VerticalScrollingSection = () => {
   // Calculate the total scroll height: base height + extra scroll for animations
   const scrollHeight = `${(cardData.length + 2) * 100}vh`;
 
-  // Avoid rendering until we know client viewport size (prevents flash of wrong layout)
-  if (isMobile === null) {
-    // Render an empty spacer preserving height so layout doesn't jump.
-    return <div style={{ height: scrollHeight }} />;
-  }
+  // Treat `isMobile === null` as desktop for debugging so the section renders immediately.
+  // This fallback is temporary to help surface the issue — we can revert after debugging.
+  const resolvedIsMobile = isMobile === null ? false : isMobile;
+
+  // Debug: log render-time values to help diagnose why the section may not appear
+  try {
+    // eslint-disable-next-line no-console
+    console.log('[debug] verticalScroll: render', {
+      isMobile,
+      resolvedIsMobile,
+      currentSlide,
+      cardCount: cardData.length,
+      scrollHeight,
+      containerRefCurrent: !!containerRef.current,
+      viewRefCurrent: !!(typeof viewRef !== 'undefined' && viewRef.current),
+    });
+  } catch (e) {}
 
   // Mobile scroll functions
   const scrollToSlide = (index) => {
@@ -197,10 +230,12 @@ const VerticalScrollingSection = () => {
 
   return (
     <>
+      { /* render-time debug markers */ }
       {/* Desktop View */}
       {!isMobile && (
+        <> {console.log('[debug] verticalScroll: rendering desktop branch')} 
         <div ref={containerRef} style={{ height: scrollHeight }} className="block">
-        <div className="sticky top-0 h-screen grid grid-cols-2">
+        <div ref={viewRef} className="sticky top-0 h-screen grid grid-cols-2" style={{ outline: '2px dashed rgba(255,0,0,0.6)', zIndex: 50 }}>
           {/* 1. Left Side: Static Content */}
           <div className="p-16 flex items-center justify-center bg-white">
             <div className="max-w-lg">
@@ -228,11 +263,12 @@ const VerticalScrollingSection = () => {
           </div>
           </div>
         </div>
-      )}
+      </> )}
 
       {/* Mobile View */}
       {isMobile && (
-        <div className="block bg-white">
+        <> {console.log('[debug] verticalScroll: rendering mobile branch')} 
+        <div ref={viewRef} className="block bg-white" style={{ outline: '2px dashed rgba(0,128,255,0.45)' }}>
         {/* Heading Section (mobile) */}
         <div className="px-6 py-6 text-center bg-white">
           <p className="mb-2" style={mobileBuiltForStyle}>
@@ -292,7 +328,7 @@ const VerticalScrollingSection = () => {
           </div>
         </div>
         </div>
-      )}
+      </> )}
 
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {

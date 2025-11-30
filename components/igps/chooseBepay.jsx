@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 // 1. Next.js Image component imported
 import Image from 'next/image'; 
 import { AnalyticsService } from '@/services/analyticsService';
@@ -10,10 +10,27 @@ import GetStartedPopup from '@/components/popups/getStartedPopup';
 // Assuming c1.png, c2.png, c3.png, and c4.png are accessible via the public folder
 
 export default function BepayLanding() {
-  useEffect(() => {
-    AnalyticsService.sendEvent('IGPS Component View', { component: 'BepayLanding', page: 'igps' });
-  }, []);
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          try { AnalyticsService.sendEvent('BepayLanding IGPS viewed'); } catch (e) {}
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const current = sectionRef.current;
+    if (current) observer.observe(current);
+
+    return () => { if (current) observer.unobserve(current); };
+  }, [hasTrackedView]);
   
   // Utility component to render the image tile
   // 2. Modified FeatureImage to use <Image /> component
@@ -37,7 +54,7 @@ export default function BepayLanding() {
   );
 
   return (
-    <div className="min-h-screen bg-[#F9F9F9] py-16 px-4">
+    <div ref={sectionRef} className="min-h-screen bg-[#F9F9F9] py-16 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-11">
@@ -144,7 +161,7 @@ export default function BepayLanding() {
         </h2>
 
           <button
-            onClick={() => setIsPopupOpen(true)}
+            onClick={() => { setIsPopupOpen(true); try { AnalyticsService.sendEvent('BepayLanding Get Started Clicked'); } catch(e) {} }}
             className="flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto"
           >
             

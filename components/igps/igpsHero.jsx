@@ -6,9 +6,45 @@ import { AnalyticsService } from "@/services/analyticsService";
 import GetStartedPopup from "@/components/popups/getStartedPopup";
 
 const IgpsHero = () => {
+  const sectionRef = useRef(null);
+  const [hasTrackedView, setHasTrackedView] = useState(false);
+
+  // track view when section is in viewport (matches merchant-section pattern)
   useEffect(() => {
-    AnalyticsService.sendEvent("IGPS Component View", { component: "IgpsHero", page: "igps" });
-  }, []);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          AnalyticsService.sendEvent("IGPS Hero section viewed");
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = sectionRef.current;
+    if (currentRef) observer.observe(currentRef);
+
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, [hasTrackedView]);
+
+  // helper to track and open popups
+  const handleOpenPopup = (type, eventName) => {
+    try {
+      if (eventName) {
+        AnalyticsService.sendEvent(eventName, { component: 'IgpsHero', popup: type });
+      } else {
+        AnalyticsService.sendEvent('IGPS popup opened', { component: 'IgpsHero', popup: type });
+      }
+    } catch (e) {
+      // fail silently in client
+    }
+    setPopup(type);
+  };
+
+  const handleGetStarted = () => handleOpenPopup('getstarted', 'IGPS Get Started Clicked');
   const [popup, setPopup] = useState(null);
   const pillRef = useRef(null);
   const textRef = useRef(null);
@@ -52,7 +88,7 @@ const IgpsHero = () => {
   }, [popup]);
   return (
     // 1. Mobile BG is white (bg-white), Desktop BG is the original gray (lg:bg-[#F9F9F9])
-    <section className="bg-white lg:bg-[#F9F9F9] text-black py-20 md:py-20"> 
+    <section ref={sectionRef} className="bg-white lg:bg-[#F9F9F9] text-black py-20 md:py-20"> 
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="text-center -mt-10 lg:-mt-20 mb-8 md:mb-16">
           <h1 className="text-gray-800 lg:-mt-15 text-[26px] md:text-[44px]" style={{ fontFamily: 'Montserrat', fontWeight: 500, lineHeight: '100%', letterSpacing: '-0.1em', textTransform: 'uppercase' }}>
@@ -172,7 +208,7 @@ const IgpsHero = () => {
                 
                 {/* Get Started Button */}
                 <button
-                  onClick={() => setPopup('getstarted')}
+                  onClick={handleGetStarted}
                   // Reduced height and padding for mobile
                   className="flex items-center justify-center gap-2 bg-black text-[#F9F9F9] px-6 py-4 h-[56px] rounded-[100px] text-xs font-medium md:w-[180px] md:text-[14px] md:h-[66px]"
                 >
@@ -185,7 +221,7 @@ const IgpsHero = () => {
                 {/* Telegram/WhatsApp Button (56x56 on mobile, 66x66 on md) */}
                 <Button 
                   variant="outline" 
-                  onClick={() => setPopup('whatsapp')}
+                  onClick={() => handleOpenPopup('whatsapp', 'IGPS WhatsApp Clicked')}
                   // Reduced size and padding for mobile
                   className="rounded-full w-[56px] h-[56px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border border-gray-300"
                   style={{ borderColor: 'rgba(192, 192, 192, 0.4)' }} 
@@ -202,7 +238,7 @@ const IgpsHero = () => {
                 <Button 
                   variant="outline" 
                    // Reduced size and padding for mobile
-                  onClick={() => setPopup('call')}
+                  onClick={() => handleOpenPopup('call', 'IGPS Call Clicked')}
                   className="rounded-full w-[56px] h-[56px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border border-gray-300"
                   style={{ borderColor: 'rgba(192, 192, 192, 0.4)' }} 
                 >
@@ -218,7 +254,7 @@ const IgpsHero = () => {
                 <Button 
                   variant="outline" 
                    // Reduced size and padding for mobile
-                  onClick={() => setPopup('email')}
+                  onClick={() => handleOpenPopup('email', 'IGPS Email Clicked')}
                   className="rounded-full w-[56px] h-[56px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border border-gray-300"
                   style={{ borderColor: 'rgba(192, 192, 192, 0.4)' }} 
                 >
@@ -251,6 +287,9 @@ const IgpsHero = () => {
                   <span className="igps-contact-text" ref={textRef}>{popup === 'email' ? 'info@bepay.money' : '+918-200-000-000'}</span>
                   <button className="igps-pill-copy" ref={iconRef} onClick={() => {
                     const text = popup === 'email' ? 'info@bepay.money' : '+918-200-000-000';
+                    try {
+                      AnalyticsService.sendEvent('IGPS Copy Contact Clicked', { component: 'IgpsHero', method: popup, value: text });
+                    } catch(e) {}
                     if (navigator && navigator.clipboard) navigator.clipboard.writeText(text);
                   }} aria-label="Copy contact">
                     <svg width="17.35" height="19.66" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -263,6 +302,10 @@ const IgpsHero = () => {
 
               {popup !== 'call' && (
                 <button className="igps-action-btn" onClick={() => {
+                    try {
+                      const action = popup === 'whatsapp' ? 'open_whatsapp' : 'open_email';
+                      AnalyticsService.sendEvent('IGPS Popup Action', { component: 'IgpsHero', popup, action });
+                    } catch(e) {}
                   if (popup === 'whatsapp') window.open('https://wa.me/919820000000', '_blank');
                   if (popup === 'email') window.location.href = 'mailto:info@bepay.money';
                 }}>

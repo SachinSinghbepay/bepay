@@ -4,10 +4,31 @@ import { AnalyticsService } from '@/services/analyticsService';
 
 const GlobalNetworkCoverage = ({ globeImagePath }) => {
   const [isMobile, setIsMobile] = React.useState(false);
+  const sectionRef = React.useRef(null);
+  const [hasTrackedView, setHasTrackedView] = React.useState(false);
 
+  // use IntersectionObserver to track when the section enters viewport (consistent with merchant-section)
   React.useEffect(() => {
-    AnalyticsService.sendEvent('IGPS Component View', { component: 'GlobalNetworkCoverage', page: 'igps' });
-  }, []);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasTrackedView) {
+          try {
+            AnalyticsService.sendEvent('Global Network IGPS viewed');
+          } catch (e) {}
+          setHasTrackedView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const current = sectionRef.current;
+    if (current) observer.observe(current);
+
+    return () => {
+      if (current) observer.unobserve(current);
+    };
+  }, [hasTrackedView]);
 
   React.useEffect(() => {
     const checkMobile = () => {
@@ -167,7 +188,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
   // --- JSX Structure ---
 
   return (
-    <div style={mainContainerStyle}>
+    <div ref={sectionRef} style={mainContainerStyle}>
       <style>{mobileStyles}</style>
       
       {/* Title */}
@@ -183,12 +204,14 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
           <img
             src="/globe.png" 
             alt="Global Network Globe with Flags"
+            onClick={() => { try { AnalyticsService.sendEvent('Global Globe Clicked'); } catch (e) {} }}
             style={{
               width: isMobile ? '90%' : '480px',
               maxWidth: '100%',
               height: 'auto',
               display: 'block',
-              margin: isMobile ? '0 auto' : undefined
+              margin: isMobile ? '0 auto' : undefined,
+              cursor: 'pointer'
             }}
           />
 
@@ -257,12 +280,14 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
               <img
                 src="/global_flag.png"
                 alt="Global flags"
+                onClick={() => { try { AnalyticsService.sendEvent('Global Flags Clicked'); } catch (e) {} }}
                 style={{
                   width: '180px',
                   maxWidth: '100%',
                   height: '30px',
                   objectFit: 'contain',
-                  display: 'block'
+                  display: 'block',
+                  cursor: 'pointer'
                 }}
               />
             </div>

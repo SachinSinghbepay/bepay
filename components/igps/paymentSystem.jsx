@@ -92,6 +92,8 @@ const Card = ({ title, description, visual, index }) => {
 const PaymentSystemUI = () => {
     const scrollerRef = useRef(null);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const sectionRef = useRef(null);
+    const [hasTrackedView, setHasTrackedView] = useState(false);
 
     // Common props for the visual Image components
     // The parent div size is w-[200px] h-[200px], so using fill or setting width/height near 200px is appropriate.
@@ -108,7 +110,7 @@ const PaymentSystemUI = () => {
             title: <>Multi-currency<br />Bank Accounts</>,
             description: "Look like a local business, anywhere across US, EU, UAE, CHINA, UK & more",
             // Corrected: Replaced <img> with <Image />
-            visual: <Image src="/p1.png" alt="Multi-currency visual" {...imageProps} /> 
+            visual: <Image src="/p1.png" alt="Multi-currency visual" {...imageProps} />
         },
         {
             title: <>Free<br />settlement</>,
@@ -121,7 +123,7 @@ const PaymentSystemUI = () => {
             title: <>Near Real-time<br />Settlement</>,
             description: "Achieve near real-time payment in key markets.",
             // Corrected: Replaced <img> with <Image />
-            visual: <Image src="/p3.png" alt="Settlement visual" {...imageProps} /> 
+            visual: <Image src="/p3.png" alt="Settlement visual" {...imageProps} />
         },
         {
             title: <>Automated<br />Compliance</>,
@@ -161,11 +163,23 @@ const PaymentSystemUI = () => {
     }, []);
 
     useEffect(() => {
-        AnalyticsService.sendEvent('IGPS Component View', { component: 'PaymentSystemUI', page: 'igps' });
-    }, []);
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && !hasTrackedView) {
+                    try { AnalyticsService.sendEvent('Payment System IGPS viewed'); } catch (e) {}
+                    setHasTrackedView(true);
+                    observer.unobserve(entry.target);
+                }
+            },
+            { threshold: 0.1 }
+        );
+        const current = sectionRef.current;
+        if (current) observer.observe(current);
+        return () => { if (current) observer.unobserve(current); };
+    }, [hasTrackedView]);
 
     return (
-        <div className="font-sans py-12 bg-gray-50 text-center flex flex-col justify-center PaymentSystemUI">
+        <div ref={sectionRef} className="font-sans py-12 bg-gray-50 text-center flex flex-col justify-center PaymentSystemUI">
             
             <h1
                 className="
@@ -217,7 +231,10 @@ const PaymentSystemUI = () => {
                     style={{ scrollSnapType: typeof window !== 'undefined' && window.innerWidth >= 768 ? 'x mandatory' : 'none' }}
                 >
                     {cardsData.map((card, index) => (
-                        <div key={index} className={index === 0 ? 'md:ml-11' : index === cardsData.length - 1 ? 'md:mr-11' : ''}>
+                        <div 
+                            key={index} 
+                            className={index === 0 ? 'md:ml-11' : index === cardsData.length - 1 ? 'md:mr-11' : ''}
+                        >
                             <Card
                                 index={index}
                                 title={card.title}
@@ -234,7 +251,7 @@ const PaymentSystemUI = () => {
             </p>
             <button
                 type="button"
-                onClick={() => { setIsPopupOpen(true); AnalyticsService.sendEvent('get_started_popup_opened'); }}
+                onClick={() => { setIsPopupOpen(true); try { AnalyticsService.sendEvent('PaymentSystem Explore IGPS Clicked'); } catch (e) {} }}
                 className="flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto"
             >
             

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnalyticsService } from "@/services/analyticsService";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
@@ -333,7 +333,7 @@ const StepContent = ({ step, isMobile, onOpenPopup }) => {
             >
                 <button
                     onClick={() => {
-                        AnalyticsService.sendEvent("Get your global account Clicked");
+                        try { AnalyticsService.sendEvent('Global Account Get Started Clicked'); } catch (e) {}
                         if (typeof onOpenPopup === 'function') onOpenPopup();
                     }}
                     className={`bg-black ${isMobile ? 'w-full' : 'w-[250px]'} h-[56px] text-white text-[14px] font-medium rounded-full flex items-center justify-center gap-2 py-4 px-6 cursor-pointer whitespace-nowrap hover:bg-gray-800 transition-colors`}
@@ -372,13 +372,30 @@ const SetupGlobalAccount = () => {
     const isMobile = useMediaQuery('(max-width: 640px)');
     const [activeStep, setActiveStep] = useState(1);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const viewRef = useRef(null);
+    const [hasTrackedView, setHasTrackedView] = useState(false);
     const currentStepData = steps.find(s => s.number === activeStep);
 
     const openPopup = () => setIsPopupOpen(true);
 
     useEffect(() => {
-        AnalyticsService.sendEvent('IGPS Component View', { component: 'SetupGlobalAccount', page: 'igps' });
-    }, []);
+        const target = viewRef.current;
+        if (!target) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && !hasTrackedView) {
+                    try { AnalyticsService.sendEvent('IGPS Global Account viewed'); } catch (e) {}
+                    setHasTrackedView(true);
+                    observer.unobserve(entry.target);
+                }
+            },
+            { threshold: 0.05, rootMargin: '0px 0px -30% 0px' }
+        );
+
+        observer.observe(target);
+        return () => observer.disconnect();
+    }, [hasTrackedView]);
 
     // Dynamic number styling
     const getNumberStyle = (num) => {
@@ -414,7 +431,7 @@ const SetupGlobalAccount = () => {
         : styles.numberIndicatorsContainer;
 
     return (
-        <div style={styles.setupWrapper}>
+        <div ref={viewRef} style={styles.setupWrapper}>
             {/* Header Section */}
             <header style={styles.pageHeader}>
                 {/* Apply dynamic style to the main heading */}
