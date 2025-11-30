@@ -306,7 +306,7 @@ const IgpsHero = () => {
                       const action = popup === 'whatsapp' ? 'open_whatsapp' : 'open_email';
                       AnalyticsService.sendEvent('IGPS Popup Action', { component: 'IgpsHero', popup, action });
                     } catch(e) {}
-                  if (popup === 'whatsapp') window.open('https://wa.me/919820000000', '_blank');
+                  if (popup === 'whatsapp') window.open('https://wa.me/91820000000', '_blank');
                   if (popup === 'email') window.location.href = 'mailto:info@bepay.money';
                 }}>
                   {popup === 'whatsapp' ? 'Open whatsapp' : 'Open email'}

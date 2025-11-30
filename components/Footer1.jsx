@@ -858,7 +858,7 @@ const Footer = ({
                 {/* IGPS: contact pills (whatsapp / call / email) - centered and spanning both columns on mobile */}
                 <div className="col-span-2 flex items-center justify-center gap-4 mt-8">
                   <a
-                    href="https://wa.me/919820000000"
+                    href="https://wa.me/91820000000"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="WhatsApp"
