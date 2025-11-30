@@ -1,13 +1,16 @@
-"use client";
-import { useEffect } from "react";
-import Lenis from "@studio-freight/lenis";
+
+'use client';
+import { useLayoutEffect } from 'react';
+import Lenis from '@studio-freight/lenis';
+import { usePathname } from 'next/navigation';
 
 const SmoothScroll = ({ children }) => {
-  useEffect(() => {
+  const pathname = usePathname();
+
+  useLayoutEffect(() => {
     // 🚫 Prevent browser auto-restoring scroll
-    if ("scrollRestoration" in history) {
-      console.log('called ______________________________________')
-      history.scrollRestoration = "manual";
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
     }
 
     const lenis = new Lenis({
@@ -17,56 +20,58 @@ const SmoothScroll = ({ children }) => {
       smoothTouch: true,
       touchMultiplier: 2,
       infinite: false,
-      gestureOrientation: "vertical",
+      gestureOrientation: 'vertical',
       normalizeWheel: false,
       wheelMultiplier: 1,
       autoResize: true,
       wrapper: window,
       content: document.documentElement,
       lerp: 0.1,
-      orientation: "vertical",
+      orientation: 'vertical',
       smoothWheel: true,
       wheelEventsTarget: document,
-      ignoredElements: (el) => el.hasAttribute("data-lenis-prevent"),
+      ignoredElements: (el) => el.hasAttribute('data-lenis-prevent'),
     });
 
+    let animationFrameId;
     // Animation loop
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      animationFrameId = requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
+    animationFrameId = requestAnimationFrame(raf);
 
     // Keyboard scroll support
     const handleKeyDown = (e) => {
       const scrollAmount = 500; // px per key press (adjust if you want faster/slower)
-      if (e.key === "ArrowDown") {
+      if (e.key === 'ArrowDown') {
         e.preventDefault();
         lenis.scrollTo(window.scrollY + scrollAmount);
       }
-      if (e.key === "ArrowUp") {
+      if (e.key === 'ArrowUp') {
         e.preventDefault();
         lenis.scrollTo(window.scrollY - scrollAmount);
       }
-      if (e.key === "PageDown") {
+      if (e.key === 'PageDown') {
         e.preventDefault();
         lenis.scrollTo(window.scrollY + window.innerHeight * 0.9);
       }
-      if (e.key === "PageUp") {
+      if (e.key === 'PageUp') {
         e.preventDefault();
         lenis.scrollTo(window.scrollY - window.innerHeight * 0.9);
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('keydown', handleKeyDown);
       lenis.destroy();
     };
-  }, []);
+  }, [pathname]);
 
-  return <>{children}</>;
+  return <div key={pathname}>{children}</div>;
 };
 
 export default SmoothScroll;

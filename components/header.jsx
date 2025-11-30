@@ -8,28 +8,33 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import WaitlistTriggerButton from "./waitlist-trigger-button";
+import GetStartedPopup from "./popups/getStartedPopup";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isGetStartedOpen, setIsGetStartedOpen] = useState(false);
   const pathname = usePathname();
 
   // 💥 UPDATED: Conditional check to hide the component on /dapps OR /allNetworks route
  if (
-    pathname.startsWith("/dapps") || // CHECK if path starts with /dapps
-    pathname === "/allNetworks" ||
-    pathname === "/airdrops"
-  ) {
-    return null; // Do not render the header on these routes
-  }
+    pathname.startsWith("/dapps") || // CHECK if path starts with /dapps
+    pathname === "/allNetworks" ||
+    pathname === "/airdrops"
+  ) {
+    return null; // Do not render the header on these routes
+  }
 
-  // --- END OF UPDATED CODE ---
+  // --- END OF UPDATED CODE --
 
   // New: Calculate the correct button location identifier
   const calculatedButtonLocation = pathname === "/" ? "personal" : pathname;
 
   // Check if current page is contact us
   const isContactPage = pathname === "/contact" || pathname === "/contact-us";
+
+  // Make header background white on the IGPS page
+  const isIgpsPage = pathname === "/igps" || pathname.startsWith("/igps");
 
   // Helper function to determine if a link is active
   const isActivePage = (path) => {
@@ -66,8 +71,13 @@ export default function Header() {
   };
 
   // Conditional header classes
+  // - Contact pages: transparent (absolute)
+  // - IGPS mobile: white background, but on md+ fall back to the regular bg
+  // - Other pages: original light gray background
   const headerClasses = isContactPage
     ? "w-full absolute top-0 left-0 right-0 bg-transparent z-50"
+    : isIgpsPage
+    ? "w-full relative bg-white md:bg-[#F9F9F9] z-50"
     : "w-full relative bg-[#F9F9F9] z-50";
 
   return (
@@ -91,6 +101,18 @@ export default function Header() {
 
           {/* Navigation - Hidden on mobile */}
           <nav className="hidden md:flex items-center space-x-8 lg:space-x-14">
+            <Link
+              href="/igps"
+              className={getLinkClasses(
+                "/igps",
+                "text-sm lg:text-[14px] tracking-wide uppercase"
+              )}
+              onClick={() => {
+                AnalyticsService.sendEvent("igps_nav_clicked");
+              }}
+            >
+              IGPS
+            </Link>
             <Link
               href="/?personal=true"
               className={getLinkClasses(
@@ -131,24 +153,51 @@ export default function Header() {
 
           {/* Download Button - Hidden on small screens */}
           {/* UPDATED: buttonLocation now uses the calculated value */}
-          <WaitlistTriggerButton
-            triggerSource="'Download bepay app' button"
-            buttonLocation={calculatedButtonLocation} 
-          >
-            <Button
-              // UPDATED: onClick now uses the calculated value
-              onClick={() => handleDownloadAppClick(calculatedButtonLocation)}
-              variant="outline"
-              className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
-            >
-              <div className="flex gap-2">
-                <Smartphone className="w-4 h-4 lg:w-5 lg:h-9" />
-                <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">
-                  Download bepay app
+          {pathname === "/igps" ? (
+            <div className="hidden lg:flex items-center gap-4">
+              <Button
+                onClick={() => setIsGetStartedOpen(true)}
+                variant="outline"
+                className="hidden lg:flex cursor-pointer lg:w-[130px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
+              >
+                <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">Get in touch</span>
+              </Button>
+              <Button
+                disabled
+                aria-disabled="true"
+                className="hidden lg:flex lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-not-allowed"
+              >
+                <span
+                  className="font-semibold text-[12px] lg:text-[12px] whitespace-nowrap text-[#080808] leading-[100%] text-center"
+                  style={{ fontFamily: 'Montserrat, sans-serif' }}
+                >
+                  Login
                 </span>
-              </div>
-            </Button>
-          </WaitlistTriggerButton>
+              </Button>
+              {isGetStartedOpen && (
+                <GetStartedPopup isOpen={true} onClose={() => setIsGetStartedOpen(false)} />
+              )}
+            </div>
+          ) : (
+            <WaitlistTriggerButton
+              triggerSource="'Download bepay app' button"
+              buttonLocation={calculatedButtonLocation}
+            >
+              <Button
+                // UPDATED: onClick now uses the calculated value
+                onClick={() => handleDownloadAppClick(calculatedButtonLocation)}
+                variant="outline"
+                className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
+              >
+                <div className="flex gap-2">
+                  <Smartphone className="w-4 h-4 lg:w-5 lg:h-9" />
+                  <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">
+                    Download bepay app
+                  </span>
+                </div>
+              </Button>
+            </WaitlistTriggerButton>
+          )}
 
           {/* Animated Mobile menu button */}
           <button
@@ -223,6 +272,16 @@ export default function Header() {
               delay: isMobileMenuOpen ? 0.1 : 0,
             }}
           >
+            <Link
+              href="/igps"
+              className={getLinkClasses(
+                "/igps",
+                "text-sm uppercase tracking-wide py-2"
+              )}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              IGPS
+            </Link>
             <Link
               href="/?personal=true"
               className={getLinkClasses(

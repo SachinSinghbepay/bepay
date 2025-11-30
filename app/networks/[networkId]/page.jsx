@@ -243,8 +243,8 @@ const DappCard = ({ name, category, description, icon, link }) => {
 
 
 // --- Main Page Component ---
-const NetworkDetailPage = ({ params }) => {
-  const { networkId } = params;
+const NetworkDetailPage = async ({ params }) => {
+  const { networkId } = await params;
   const dapps = DAPPS_BY_NETWORK[networkId] || [];
 
   return (

@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 export default function LocomotiveProvider({ children }) {
   useEffect(() => {
     let loco;
+    let handleResize;
 
     import('locomotive-scroll').then((mod) => {
       const L = mod.default;
@@ -41,13 +42,28 @@ export default function LocomotiveProvider({ children }) {
 
       ScrollTrigger.addEventListener('refresh', () => loco.update());
       ScrollTrigger.refresh();
+
+      // set up resize handler that we can remove later
+      handleResize = () => loco?.update();
+      window.addEventListener('resize', handleResize);
     });
 
-    window.addEventListener('resize', () => loco?.update());
-
     return () => {
-      ScrollTrigger.killAll();
-      loco?.destroy();
+      try {
+        ScrollTrigger.killAll();
+      } catch (e) {
+        console.warn('ScrollTrigger.killAll failed during cleanup', e);
+      }
+      try {
+        if (typeof handleResize === 'function') window.removeEventListener('resize', handleResize);
+      } catch (e) {
+        console.warn('removeEventListener failed', e);
+      }
+      try {
+        loco?.destroy();
+      } catch (err) {
+        console.warn('loco.destroy() failed during cleanup', err);
+      }
     };
   }, []);
 
