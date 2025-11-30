@@ -100,7 +100,7 @@ const IgpsHero = () => {
 
               
               {/* Checkmark List (Hidden on Mobile, block on Desktop) */}
-              <div className="mt-7 space-y-4 lg:space-y-0 lg:block lg:divide-y lg:divide-gray-200">
+              <div className="mt-4 space-y-4 lg:space-y-0 lg:block lg:divide-y lg:divide-gray-200">
                 <div className="flex items-center justify-between lg:py-4">
                   <div className="flex items-center flex-1">
                     <Image src="/icons/h1.png" alt="globe icon" width={20} height={20} />
@@ -161,7 +161,7 @@ const IgpsHero = () => {
               
               {/* Compliance Text (Original spacing kept, except for overall flow) */}
               <div className="mt-6 pl-3 border-l-4 border-black">
-                <p className="text-[11px] mt-13 md:text-sm text-gray-500" style={{ fontFamily: 'Montserrat', fontWeight: 600, lineHeight: '100%', letterSpacing: '0%', textTransform: 'uppercase' }}>
+                <p className="text-[11px] mt-8 md:text-sm text-gray-500" style={{ fontFamily: 'Montserrat', fontWeight: 600, lineHeight: '100%', letterSpacing: '0%', textTransform: 'uppercase' }}>
                 100% SAFE AND COMPLIANT • POWERED BY LEADING BANKS •
                 <span className="hidden lg:inline"> <br/></span> RBI APPROVED • PA-CB AUTHORISED • MADE IN INDIA
                 </p>

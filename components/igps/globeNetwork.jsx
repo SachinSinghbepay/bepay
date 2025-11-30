@@ -54,7 +54,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
   // --- Styles for the main component ---
 
   const mainContainerStyle = {
-    fontFamily: 'Arial, sans-serif', // Using Arial as a general fallback for the rest of the page elements
+    fontFamily: 'var(--font-montserrat)', // Use global Montserrat variable so headings inherit Montserrat
     padding: isMobile ? '0px 0px' : '60px 40px',
     backgroundColor: globalBackgroundColor,
     minHeight: '100vh',
@@ -250,7 +250,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
           {/* Bottom text box with flags and stablecoins */}
           <div className='text-box' style={{...textBoxBaseStyle, padding: '40px'}}>{/* Adjusted padding to help meet the 282px height visually */}
             <p style={isMobile ? {...cardMobileTextStyle, marginBottom: '20px'} : {...textStyle, marginBottom: '20px'}}>
-              USD, EUR, GBP, AED, CNY, INR + other major business currencies & other global stablecoins supported.
+            USD, EUR, GBP, AED, CNY, INR + other major business currencies supported.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', alignItems: 'center' }}>
               {/* Replace the flag emojis and stablecoin icon with a single global image */}

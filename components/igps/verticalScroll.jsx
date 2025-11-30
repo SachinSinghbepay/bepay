@@ -114,8 +114,8 @@ const VerticalScrollingSection = () => {
   const staticTextStyle = {
     fontFamily: 'Montserrat, sans-serif',
     fontWeight: 600,
-    fontSize: '60px',
-    lineHeight: '60px',
+    fontSize: '50px',
+    lineHeight: '45px',
     letterSpacing: '-0.02em',
     wordSpacing: '0em',
     textTransform: 'capitalize',
@@ -132,8 +132,9 @@ const VerticalScrollingSection = () => {
   const titleStyle = {
     ...staticTextStyle,
     color: '#333333',
-    display: 'inline-block',
+    display: 'block',
     padding: '6px 10px',
+    maxWidth: '480px',
   };
 
   // Mobile heading styles
@@ -206,7 +207,7 @@ const VerticalScrollingSection = () => {
               <p className="mb-2" style={builtForStyle}>
                 Built For
               </p>
-              <h1 className="leading-tight mt-0" style={titleStyle}>
+              <h1 className="leading-tight mt-0 desktop-heading" style={{...titleStyle, lineClamp: 3, WebkitLineClamp: 3}}>
                 Global Businesses & Merchants
               </h1>
             </div>
@@ -296,6 +297,19 @@ const VerticalScrollingSection = () => {
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
+        }
+        /* Desktop-only 3-line clamp for the heading */
+        .desktop-heading {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          -webkit-line-clamp: 3;
+          line-clamp: 3;
+          /* Force exactly 3 lines using line-height from staticTextStyle (60px) */
+          max-height: 180px;
+          line-height: 60px !important;
+          word-break: normal;
+          hyphens: none;
         }
       `}</style>
     </>

@@ -102,6 +102,18 @@ export default function Header() {
           {/* Navigation - Hidden on mobile */}
           <nav className="hidden md:flex items-center space-x-8 lg:space-x-14">
             <Link
+              href="/igps"
+              className={getLinkClasses(
+                "/igps",
+                "text-sm lg:text-[14px] tracking-wide uppercase"
+              )}
+              onClick={() => {
+                AnalyticsService.sendEvent("igps_nav_clicked");
+              }}
+            >
+              IGPS
+            </Link>
+            <Link
               href="/?personal=true"
               className={getLinkClasses(
                 "/",
@@ -137,18 +149,6 @@ export default function Header() {
             >
               UPI
             </Link>
-            <Link
-              href="/igps"
-              className={getLinkClasses(
-                "/igps",
-                "text-sm lg:text-[14px] tracking-wide uppercase"
-              )}
-              onClick={() => {
-                AnalyticsService.sendEvent("igps_nav_clicked");
-              }}
-            >
-              IGPS
-            </Link>
           </nav>
 
           {/* Download Button - Hidden on small screens */}
@@ -158,17 +158,21 @@ export default function Header() {
               <Button
                 onClick={() => setIsGetStartedOpen(true)}
                 variant="outline"
-                className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
+                className="hidden lg:flex cursor-pointer lg:w-[130px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
               >
                 <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">Get in touch</span>
               </Button>
               <Button
                 disabled
                 aria-disabled="true"
-                variant="outline"
-                className="hidden lg:flex lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black bg-transparent rounded-full transition-all duration-200 opacity-60 cursor-not-allowed"
+                className="hidden lg:flex lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-not-allowed"
               >
-                <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">Login</span>
+                <span
+                  className="font-semibold text-[12px] lg:text-[12px] whitespace-nowrap text-[#080808] leading-[100%] text-center"
+                  style={{ fontFamily: 'Montserrat, sans-serif' }}
+                >
+                  Login
+                </span>
               </Button>
               {isGetStartedOpen && (
                 <GetStartedPopup isOpen={true} onClose={() => setIsGetStartedOpen(false)} />
@@ -269,6 +273,16 @@ export default function Header() {
             }}
           >
             <Link
+              href="/igps"
+              className={getLinkClasses(
+                "/igps",
+                "text-sm uppercase tracking-wide py-2"
+              )}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              IGPS
+            </Link>
+            <Link
               href="/?personal=true"
               className={getLinkClasses(
                 "/",
@@ -298,16 +312,6 @@ export default function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               UPI
-            </Link>
-            <Link
-              href="/igps"
-              className={getLinkClasses(
-                "/igps",
-                "text-sm uppercase tracking-wide py-2"
-              )}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              IGPS
             </Link>
 
             {/* Mobile Download Button */}
