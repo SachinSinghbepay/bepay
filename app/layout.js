@@ -59,7 +59,7 @@ export default function RootLayout({ children }) {
           <SmoothScroll>
             <Header />
             <CookieConsentProvider />
-            <CampaignTracker /> {/* 👈 Add here */}
+            <CampaignTracker />
             <AuthProvider>{children}</AuthProvider>
             <ConditionalFooter />
           </SmoothScroll>
