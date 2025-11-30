@@ -1,10 +1,11 @@
 "use client"
 import React from 'react';
 import { useEffect } from 'react';
+// 1. Import the Next.js Image component
+import Image from 'next/image'; 
 import { AnalyticsService } from '@/services/analyticsService';
 
 // Assuming your image is hosted at a publicly accessible URL 
-// OR placed in your project's public folder.
 const TABLE_IMAGE_URL = '/table.png'; 
 
 const ImageComparisonTable = () => {
@@ -14,8 +15,8 @@ const ImageComparisonTable = () => {
   return (
     <>
       {/* 1. Import Montserrat font from Google Fonts.
-        2. Define custom CSS classes to achieve the exact styling requested 
-           (especially for precise pixel sizes, line height, and letter spacing).
+          2. Define custom CSS classes to achieve the exact styling requested 
+            (especially for precise pixel sizes, line height, and letter spacing).
       */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&display=swap');
@@ -24,7 +25,7 @@ const ImageComparisonTable = () => {
           font-family: 'Montserrat', sans-serif;
         }
 
-        /* Primary title: "Keep Your Margins." */
+        /* Primary title: "Improve Your Margins on Every International Settlement" */
         .title-primary {
           font-weight: 600;
           font-size: 54px;
@@ -36,21 +37,10 @@ const ImageComparisonTable = () => {
           margin: 0;
         }
 
-        /* Highlight title: "Stop Paying Hidden FX." */
-        .title-highlight {
-          font-weight: 600;
-          font-size: 54px;
-          line-height: 1; /* 100% */
-          leading-trim: cap-height;
-          letter-spacing: -0.06em; /* -6% */
-          text-align: center;
-          color: #BC4242;
-          margin: 0;
-        }
-
-        /* New color helpers (used for the IGPS heading) */
+        /* Highlight color (Green for "Improve Your Margins") */
         .title-green { color: #0E7630; }
         .title-black { color: #333333; }
+        
         /* Desktop-only forced line break helper: inline on mobile, block on desktop */
         .desktop-break { display: inline; }
 
@@ -72,8 +62,7 @@ const ImageComparisonTable = () => {
 
         /* Mobile styles */
         @media (max-width: 640px) {
-          .title-primary,
-          .title-highlight {
+          .title-primary {
             font-size: 25px;
             line-height: 30px;
             leading-trim: cap-height;
@@ -100,7 +89,7 @@ const ImageComparisonTable = () => {
           scroll-snap-type: x proximity;
         }
 
-        .image-scroll img {
+        .image-scroll img, .image-scroll .next-image-container > span {
           display: block;
           width: 100%;
           max-width: 1024px; /* keep desktop responsive and contained */
@@ -116,16 +105,15 @@ const ImageComparisonTable = () => {
           }
 
           /* Use the exact requested dimensions on mobile; allow horizontal scrolling to view full width */
-          .image-scroll img {
-            width: 921px;
-            height: 680px; /* increased for more vertical space on mobile */
-            max-width: none;
-            display: block;
+          /* Note: When using Next.js Image with fixed w/h for the image, the surrounding div handles overflow. */
+          .image-scroll > span {
+            width: 921px !important;
+            height: 680px !important;
+            max-width: none !important;
           }
         }
 
         /* Desktop: center the image container and keep subheading centered */
-
         @media (min-width: 641px) {
           .subheading-style {
             /* Reinforce desktop-specific typography */
@@ -152,14 +140,15 @@ const ImageComparisonTable = () => {
             padding-right: 0;
           }
 
-          .image-scroll img {
-            width: 100%;
-            height: auto;
+          .image-scroll > span {
+            width: 100% !important;
+            height: auto !important;
             margin-left: auto;
             margin-right: auto;
             display: block;
           }
         }
+        
         /* Larger desktop adjustments: push content further down for spacious layout */
         @media (min-width: 1024px) {
           .hero-section {
@@ -203,16 +192,21 @@ const ImageComparisonTable = () => {
           max-w-3xl 
           mx-auto
         ">
-          Businesses lose time and money to complex cross-border processes. bepay IGPS simplifies it, offering <span className="text-[#080808]">free international settlements, faster transfers, and a reliable experience built for modern trade.</span>
+          Businesses lose time and money to complex cross-border processes. bepay IGPS simplifies it, offering <span className="text-[#080808]">**free international settlements, faster transfers, and a reliable experience built for modern trade.**</span>
         </p>
 
         {/* --- Image Table Replacement --- */}
         <div className="flex justify-center w-full">
           <div className="image-scroll w-full">
-            <img 
-              src="/table.png"
+            {/* 2. Changed <img> to <Image /> with explicit dimensions */}
+            <Image 
+              src={TABLE_IMAGE_URL} // uses '/table.png'
               alt="Comparison table of fees for Traditional Banks, Payment Gateways, and bepay IGPS"
-              className="h-auto block"
+              // Setting width and height based on the CSS for mobile (921px x 680px)
+              width={921}
+              height={680}
+              priority={true} // High-priority since it's a critical hero image
+              className="h-auto block" // Tailwind classes
             />
           </div>
         </div>

@@ -165,7 +165,7 @@ const RecentlyVisitedPage = () => {
             Recently Visited
           </h1>
           <p className="text-gray-600">
-            Your browsing history of dApps you've visited
+            Your browsing history of dApps you&apos;ve visited
           </p>
         </div>
 
@@ -196,7 +196,7 @@ const RecentlyVisitedPage = () => {
                 No Recently Visited dApps
               </h3>
               <p className="text-gray-600 mb-6">
-                Start exploring dApps and they'll appear here
+                Start exploring dApps and they&apos;ll appear here
               </p>
               <Link 
                 href="/dapps"

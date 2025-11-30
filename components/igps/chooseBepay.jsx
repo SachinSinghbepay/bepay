@@ -1,26 +1,36 @@
 "use client"
 import React, { useEffect, useState } from 'react';
+// 1. Next.js Image component imported
+import Image from 'next/image'; 
 import { AnalyticsService } from '@/services/analyticsService';
 import GetStartedPopup from '@/components/popups/getStartedPopup';
 // Removed unused imports: Globe, Route, Percent, FileCheck, ArrowUpRight
+// Note: ArrowUpRight icon is used via an inline SVG, which is fine.
 
 // Assuming c1.png, c2.png, c3.png, and c4.png are accessible via the public folder
-// If these are locally imported files (e.g., import c1 from './c1.png'), you would need to adjust the import statements.
 
 export default function BepayLanding() {
   useEffect(() => {
     AnalyticsService.sendEvent('IGPS Component View', { component: 'BepayLanding', page: 'igps' });
   }, []);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  
   // Utility component to render the image tile
+  // 2. Modified FeatureImage to use <Image /> component
   const FeatureImage = ({ src }) => (
     <div className="flex justify-center mb-6">
-      {/* Increased size for better visibility */}
       <div className="w-21 h-21 flex items-center justify-center overflow-hidden">
-        <img
+        <Image
           src={src}
           alt="Feature Icon"
-          className="w-25 h-25 object-contain" // Adjusted size and object-fit for the image
+          // Next.js Image requires width and height.
+          // Since the surrounding div controls the visual size (w-21/h-21 in the parent, w-25/h-25 via className),
+          // we use fill or set a large explicit size with object-contain.
+          // Using explicit w/h with 'object-contain' for best practice:
+          width={100} // Set an appropriate intrinsic size
+          height={100} // Set an appropriate intrinsic size
+          className="w-25 h-25 object-contain" // The Tailwind classes control the actual display size
+          priority={true} // Since these are above the fold, setting priority is beneficial
         />
       </div>
     </div>
@@ -32,24 +42,24 @@ export default function BepayLanding() {
         {/* Header */}
         <div className="text-center mb-11">
         <h1
-  className="
-    text-[30px] leading-[30px] font-semibold text-[#C0C0C0]
-    tracking-[-0.04em] text-center md:whitespace-nowrap
-    md:text-[54px] md:leading-[54px] md:tracking-[-0.06em]
-    font-montserrat
-  "
->
-  Why Businesses Choose <span className="text-[#080808]">bepay IGPS</span>
-</h1>
+          className="
+            text-[30px] leading-[30px] font-semibold text-[#C0C0C0]
+            tracking-[-0.04em] text-center md:whitespace-nowrap
+            md:text-[54px] md:leading-[54px] md:tracking-[-0.06em]
+            font-montserrat
+          "
+        >
+          Why Businesses Choose <span className="text-[#080808]">bepay IGPS</span>
+        </h1>
 
           <p className="text-[#080808] text-[14px] md:text-[24px] mt-5" style={{
             fontFamily: 'Montserrat',
             fontWeight: 500,
-           
+            
             lineHeight: '100%',
             letterSpacing: '-2%',
             textAlign: 'center',
-          }}>
+            }}>
             The Operating System for Borderless Business
           </p>
         </div>
@@ -62,8 +72,8 @@ export default function BepayLanding() {
             lineHeight: '20px',
             letterSpacing: '-2%',
             textAlign: 'center',
-          }}>
-           A single platform that bridges traditional banking with intelligent payment rails, delivering near real-time settlements, cost savings, and easy compliance for global enterprises.
+            }}>
+            A single platform that bridges traditional banking with intelligent payment rails, delivering near real-time settlements, cost savings, and easy compliance for global enterprises.
           </p>
         </div>
 
@@ -118,20 +128,20 @@ export default function BepayLanding() {
         {/* CTA Section */}
         <div className="text-center">
         <h2
-  className="
-    font-semibold text-[#080808] mb-8 mt-10
-    md:text-[24px] md:font-semibold   /* Desktop stays same */
-    text-center                      /* Mobile: center */
-    text-[16px] leading-[24px]       /* Mobile: font-size + line-height */
-    tracking-[-0.02em]               /* Mobile: letter-spacing -2% */
-    font-[600]                       /* Mobile: font-weight 600 */
-  "
-  style={{
-    fontFamily: "Montserrat",
-  }}
->
-  Ready to Receive International Payments?
-</h2>
+          className="
+            font-semibold text-[#080808] mb-8 mt-10
+            md:text-[24px] md:font-semibold   /* Desktop stays same */
+            text-center                       /* Mobile: center */
+            text-[16px] leading-[24px]        /* Mobile: font-size + line-height */
+            tracking-[-0.02em]                /* Mobile: letter-spacing -2% */
+            font-[600]                        /* Mobile: font-weight 600 */
+          "
+          style={{
+            fontFamily: "Montserrat",
+          }}
+        >
+          Ready to Receive International Payments?
+        </h2>
 
           <button
             onClick={() => setIsPopupOpen(true)}
@@ -139,7 +149,7 @@ export default function BepayLanding() {
           >
             
             <span>Get Started</span>
-            {/* Keeping ArrowUpRight from lucide-react for the button icon */}
+            {/* Keeping ArrowUpRight icon as inline SVG for simplicity */}
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-7 flex-shrink-0">
               <path d="M7 17l10-10M7 7h10v10"/>
             </svg>
