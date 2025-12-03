@@ -34,7 +34,8 @@ export default function ConditionalFooter() {
       />;
   }
 
-  if (pathname === '/igps') {
+  // Landing page and /igps use the same footer with IGPS disclaimer
+  if (pathname === '/igps' || pathname === '/') {
     return <Footer
         heading="Ready to accept international payments?"
         // Mark this as the IGPS page so Footer renders IGPS-specific copy/CTA
