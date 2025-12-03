@@ -499,14 +499,14 @@ const VerticalScrollingSection = () => {
                   className="flex items-center justify-center w-14 h-14 rounded-[14px] bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors shadow-md"
                   aria-label="Previous slide"
                 >
-                  <ChevronLeft className="w-5 h-5 text-gray-800" />
+                  <ChevronLeft className="w-5 h-5 text-gray-100" />
                 </button>
                 <button
                   onClick={handleNextSlide}
                   className="flex items-center justify-center w-14 h-14 rounded-[14px] bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors shadow-md"
                   aria-label="Next slide"
                 >
-                  <ChevronRight className="w-5 h-5 text-gray-800" />
+                  <ChevronRight className="w-5 h-5 text-gray-100" />
                 </button>
               </div>
             </div>
