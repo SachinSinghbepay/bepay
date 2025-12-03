@@ -213,16 +213,14 @@ export default function FAQSection() {
         </motion.h2>
 
         <motion.div
-          key={showAll ? "expanded" : "collapsed"}
           className="space-y-4 lg:space-y-8"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {(
-            showAll ? faqData : faqData.slice(0, 8)
-          ).map((faq) => {
+          {/* Always render first 7 items */}
+          {faqData.slice(0, 7).map((faq) => {
             const isOpen = openItems.includes(faq.id);
 
             return (
@@ -279,13 +277,99 @@ export default function FAQSection() {
             );
           })}
 
+          {/* Render remaining items with animation */}
+          <AnimatePresence>
+            {showAll && (
+              <motion.div
+                key="extra-faqs"
+                variants={{
+                  hidden: { height: 0, opacity: 0 },
+                  visible: {
+                    height: "auto",
+                    opacity: 1,
+                    transition: {
+                      duration: 0.5,
+                      ease: "easeInOut",
+                      staggerChildren: 0.1
+                    }
+                  }
+                }}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                className="space-y-4 lg:space-y-8 overflow-hidden"
+              >
+                {faqData.slice(7).map((faq) => {
+                  const isOpen = openItems.includes(faq.id);
+
+                  return (
+                    <motion.div
+                      key={faq.id}
+                      variants={itemVariants}
+                      className="border-b border-gray-200 pb-4 lg:pb-6"
+                    >
+                      <button
+                        onClick={() => toggleItem(faq)}
+                        className="w-full flex items-center justify-between text-left group focus:outline-none"
+                      >
+                        <h3 className="text-xl md:text-2xl lg:text-[32px] font-medium text-black leading-tight pr-4 group-hover:text-gray-700 transition-colors duration-200">
+                          {faq.question}
+                        </h3>
+
+                        <motion.div
+                          className="flex-shrink-0 w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center"
+                          animate={{ rotate: isOpen ? 45 : 0 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                        >
+                          {isOpen ? (
+                            <X
+                              className="w-6 h-6 rotate-45  lg:w-[64px] lg:h-[64px] text-[#6A6A6A]"
+                              strokeWidth={1}
+                            />
+                          ) : (
+                            <Plus
+                              className="w-6 h-6 lg:w-[64px] lg:h-[64px] text-[#C0C0C0]"
+                              strokeWidth={1}
+                            />
+                          )}
+                        </motion.div>
+                      </button>
+
+                      <AnimatePresence>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.4, ease: "easeInOut" }}
+                            className="overflow-hidden"
+                          >
+                            <div className="pt-4 lg:pt-6 pr-12 lg:pr-16">
+                              <p className="text-sm md:text-base lg:text-[16px] text-gray-600 leading-relaxed">
+                                {faq.answer}
+                              </p>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* View all / View less toggle */}
-          {faqData.length > 8 && (
+          {faqData.length > 7 && (
             <div className="pt-4 flex justify-center">
               <button
                 onClick={() => {
                   const willShowAll = !showAll;
-                  AnalyticsService.sendEvent(willShowAll ? "igps_faqs_view_all_clicked" : "igps_faqs_view_less_clicked");
+                  AnalyticsService.sendEvent(
+                    willShowAll
+                      ? "igps_faqs_view_all_clicked"
+                      : "igps_faqs_view_less_clicked"
+                  );
                   setShowAll(willShowAll);
                 }}
                 className="text-sm md:text-base text-[#080808] hover:underline focus:outline-none"

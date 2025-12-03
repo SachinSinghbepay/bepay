@@ -33,8 +33,8 @@ export default function Header() {
   // Check if current page is contact us
   const isContactPage = pathname === "/contact" || pathname === "/contact-us";
 
-  // Make header background white on the IGPS page
-  const isIgpsPage = pathname === "/igps" || pathname.startsWith("/igps");
+  // Make header background white on the IGPS page (now the home page)
+  const isIgpsPage = pathname === "/";
 
   // Helper function to determine if a link is active
   const isActivePage = (path) => {
@@ -102,9 +102,9 @@ export default function Header() {
           {/* Navigation - Hidden on mobile */}
           <nav className="hidden md:flex items-center space-x-8 lg:space-x-14">
             <Link
-              href="/igps"
+              href="/"
               className={getLinkClasses(
-                "/igps",
+                "/",
                 "text-sm lg:text-[14px] tracking-wide uppercase"
               )}
               onClick={() => {
@@ -114,9 +114,9 @@ export default function Header() {
               IGPS
             </Link>
             <Link
-              href="/?personal=true"
+              href="/personal"
               className={getLinkClasses(
-                "/",
+                "/personal",
                 "text-sm lg:text-[14px] tracking-wide uppercase"
               )}
               onClick={() => {
@@ -153,7 +153,7 @@ export default function Header() {
 
           {/* Download Button - Hidden on small screens */}
           {/* UPDATED: buttonLocation now uses the calculated value */}
-          {pathname === "/igps" ? (
+          {pathname === "/" ? (
             <div className="hidden lg:flex items-center gap-4">
               <Button
                 onClick={() => setIsGetStartedOpen(true)}
@@ -273,9 +273,9 @@ export default function Header() {
             }}
           >
             <Link
-              href="/igps"
+              href="/"
               className={getLinkClasses(
-                "/igps",
+                "/",
                 "text-sm uppercase tracking-wide py-2"
               )}
               onClick={() => setIsMobileMenuOpen(false)}
@@ -283,9 +283,9 @@ export default function Header() {
               IGPS
             </Link>
             <Link
-              href="/?personal=true"
+              href="/personal"
               className={getLinkClasses(
-                "/",
+                "/personal",
                 "text-sm uppercase tracking-wide py-2"
               )}
               onClick={() => setIsMobileMenuOpen(false)}
