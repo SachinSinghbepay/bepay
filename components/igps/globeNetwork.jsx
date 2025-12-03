@@ -296,7 +296,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
             whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
           > 
             <p style={isMobile ? cardMobileTextStyle : textStyle}>
-            Trade like a local. Get virtual account details in key economic zones to collect payments  without cross-border friction.
+            Trade like a local. Get virtual account details in key economic zones to collect payments Near real time without cross-border friction.
             </p>
           </motion.div>
 
