@@ -757,6 +757,8 @@ const Footer = ({
             className={`w-full mt-8 text-[14px] ${
               isUpiPage
                 ? "grid grid-cols-2 gap-8 md:grid-cols-4"
+                : isIGPSPage
+                ? "flex flex-col items-center"
                 : "grid grid-cols-2 gap-8 md:flex md:justify-between"
             }`}
             variants={itemVariants}
