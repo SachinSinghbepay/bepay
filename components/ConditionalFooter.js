@@ -10,9 +10,12 @@ export default function ConditionalFooter() {
   if (
     pathname === '/cookie-policy' || 
     pathname === '/bepay-foundations' || 
-    // ✅ ADDITION: Exclude /dapps and /allNetworks
+    // Exclude /dapps and /allNetworks
     pathname.startsWith('/dapps') ||
-    pathname === '/allNetworks' || pathname === '/airdrops'
+    pathname === '/allNetworks' || 
+    pathname === '/airdrops' ||
+    // Exclude admin routes
+    pathname.startsWith('/admin')
   ) {
     return null;
   }

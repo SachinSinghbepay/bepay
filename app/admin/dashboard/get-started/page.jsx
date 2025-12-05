@@ -6,10 +6,25 @@ import AdminLayout from "@/components/admin/AdminLayout"
 import { formatDate } from "@/lib/utils"
 import { Trash2, Download, Eye, X } from "lucide-react"
 
-export default function ContactsPage() {
+export default function GetStartedPage() {
   const [contacts, setContacts] = useState([])
   const [loading, setLoading] = useState(true)
   const [deleteId, setDeleteId] = useState(null)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [viewContact, setViewContact] = useState(null)
+  const [showViewModal, setShowViewModal] = useState(false)
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      const data = await getAllContactSubmissions()
+      // Filter for get-started submissions
+      const filteredData = data.filter(contact => contact.source === "get-started")
+      setContacts(filteredData)
+      setLoading(false)
+    }
+
+    fetchContacts()
+  }, [])
 
   const handleDelete = async () => {
     if (!deleteId) return
@@ -44,18 +59,17 @@ export default function ContactsPage() {
     if (contacts.length === 0) return
 
     // Create CSV content
-    const headers = ["Name", "Email", "Phone Number", "Country Code", "Subject", "Message", "Submitted At", "Status"]
+    const headers = ["Name", "Email", "Phone Number", "Company", "Message", "Submitted At", "Status"]
     const csvRows = [headers.join(",")]
 
     contacts.forEach((contact) => {
       const row = [
         `"${contact.name || ""}"`,
         `"${contact.email || ""}"`,
-        `"${contact.phoneNumber || ""}"`,
-        `"${contact.countryCode || ""}"`,
-        `"${contact.subject || ""}"`,
+        `"${contact.phone || ""}"`,
+        `"${contact.company || ""}"`,
         `"${contact.message?.replace(/"/g, '""') || ""}"`,
-        `"${formatDate(contact.timestamp) || ""}"`,
+        `"${formatDate(contact.timestamp || contact.submittedAt) || ""}"`,
         `"${contact.status || "new"}"`,
       ]
       csvRows.push(row.join(","))
@@ -68,7 +82,7 @@ export default function ContactsPage() {
     const url = URL.createObjectURL(blob)
     const link = document.createElement("a")
     link.setAttribute("href", url)
-    link.setAttribute("download", `contact-submissions-${new Date().toISOString().split("T")[0]}.csv`)
+    link.setAttribute("download", `get-started-submissions-${new Date().toISOString().split("T")[0]}.csv`)
     link.style.visibility = "hidden"
     document.body.appendChild(link)
     link.click()
@@ -94,7 +108,7 @@ export default function ContactsPage() {
   return (
     <AdminLayout>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-        <h1 className="text-2xl font-bold">Contact Form Submissions</h1>
+        <h1 className="text-2xl font-bold">Get Started Submissions</h1>
         <button
           onClick={exportToCSV}
           disabled={contacts.length === 0}
@@ -111,8 +125,8 @@ export default function ContactsPage() {
         </div>
       ) : contacts.length === 0 ? (
         <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <h3 className="text-xl font-medium">No contact submissions yet</h3>
-          <p className="text-gray-500 mt-2">Contact form submissions will appear here when people get in touch</p>
+          <h3 className="text-xl font-medium">No submissions yet</h3>
+          <p className="text-gray-500 mt-2">Get Started submissions will appear here</p>
         </div>
       ) : (
         <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -130,7 +144,7 @@ export default function ContactsPage() {
                     Phone
                   </th>
                   <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">
-                    Subject
+                    Company
                   </th>
                   <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
                     Submitted At
@@ -155,17 +169,14 @@ export default function ContactsPage() {
                     </td>
                     <td className="px-4 sm:px-6 py-4 whitespace-nowrap hidden md:table-cell">
                       <div className="text-sm text-gray-900">
-                        {contact.countryCode && contact.phoneNumber 
-                          ? `${contact.countryCode} ${contact.phoneNumber}`
-                          : contact.phoneNumber || contact.countryCode || '-'
-                        }
+                        {contact.phone || '-'}
                       </div>
                     </td>
                     <td className="px-4 sm:px-6 py-4 whitespace-nowrap hidden lg:table-cell">
-                      <div className="text-sm text-gray-900">{contact.subject || '-'}</div>
+                      <div className="text-sm text-gray-900">{contact.company || '-'}</div>
                     </td>
                     <td className="px-4 sm:px-6 py-4 whitespace-nowrap hidden md:table-cell">
-                      <div className="text-sm text-gray-900">{formatDate(contact.timestamp)}</div>
+                      <div className="text-sm text-gray-900">{formatDate(contact.timestamp || contact.submittedAt)}</div>
                     </td>
                     <td className="px-4 sm:px-6 py-4 whitespace-nowrap">{getStatusBadge(contact.status)}</td>
                     <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -200,7 +211,7 @@ export default function ContactsPage() {
           <div className="bg-white p-6 rounded-lg max-w-md w-full">
             <h3 className="text-lg font-medium mb-4">Confirm Deletion</h3>
             <p className="text-gray-600 mb-6">
-              Are you sure you want to delete this contact submission? This action cannot be undone.
+              Are you sure you want to delete this submission? This action cannot be undone.
             </p>
             <div className="flex justify-end gap-2">
               <button onClick={() => setShowDeleteModal(false)} className="px-4 py-2 border border-gray-300 rounded">
@@ -219,7 +230,7 @@ export default function ContactsPage() {
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white p-6 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-medium">Contact Details</h3>
+              <h3 className="text-lg font-medium">Submission Details</h3>
               <button onClick={() => setShowViewModal(false)} className="text-gray-500 hover:text-gray-700">
                 <X className="h-5 w-5" />
               </button>
@@ -237,16 +248,13 @@ export default function ContactsPage() {
               <div>
                 <h4 className="text-sm font-medium text-gray-500">Phone Number</h4>
                 <p className="text-base">
-                  {viewContact.countryCode && viewContact.phoneNumber 
-                    ? `${viewContact.countryCode} ${viewContact.phoneNumber}`
-                    : viewContact.phoneNumber || viewContact.countryCode || '-'
-                  }
+                  {viewContact.phone || '-'}
                 </p>
               </div>
-              {viewContact.subject && (
+              {viewContact.company && (
                 <div>
-                  <h4 className="text-sm font-medium text-gray-500">Subject</h4>
-                  <p className="text-base">{viewContact.subject}</p>
+                  <h4 className="text-sm font-medium text-gray-500">Company</h4>
+                  <p className="text-base">{viewContact.company}</p>
                 </div>
               )}
               <div>
@@ -255,7 +263,7 @@ export default function ContactsPage() {
               </div>
               <div>
                 <h4 className="text-sm font-medium text-gray-500">Submitted At</h4>
-                <p className="text-base">{formatDate(viewContact.timestamp)}</p>
+                <p className="text-base">{formatDate(viewContact.timestamp || viewContact.submittedAt)}</p>
               </div>
               <div>
                 <h4 className="text-sm font-medium text-gray-500">Status</h4>

@@ -17,7 +17,7 @@ export default function Header() {
   const pathname = usePathname();
 
   // 💥 UPDATED: Conditional check to hide the component on /dapps OR /allNetworks route
- if (
+  if (
     pathname.startsWith("/dapps") || // CHECK if path starts with /dapps
     pathname === "/allNetworks" ||
     pathname === "/airdrops"
@@ -35,6 +35,9 @@ export default function Header() {
 
   // Make header background white on the IGPS page (now the home page)
   const isIgpsPage = pathname === "/";
+
+  // Check if it is the blogs page
+  const isBlogsPage = pathname.startsWith("/blogs") || pathname.startsWith("/admin");
 
   // Helper function to determine if a link is active
   const isActivePage = (path) => {
@@ -101,102 +104,122 @@ export default function Header() {
 
           {/* Navigation - Hidden on mobile */}
           <nav className="hidden md:flex items-center space-x-8 lg:space-x-14">
-            <Link
-              href="/"
-              className={getLinkClasses(
-                "/",
-                "text-sm lg:text-[14px] tracking-wide uppercase"
-              )}
-              onClick={() => {
-                AnalyticsService.sendEvent("igps_nav_clicked");
-              }}
-            >
-              IGPS
-            </Link>
-            <Link
-              href="/personal"
-              className={getLinkClasses(
-                "/personal",
-                "text-sm lg:text-[14px] tracking-wide uppercase"
-              )}
-              onClick={() => {
-                AnalyticsService.sendEvent("personal_nav_clicked");
-              }}
-            >
-              PERSONAL
-            </Link>
-            <Link
-              href="/business"
-              className={getLinkClasses(
-                "/business",
-                "text-sm lg:text-[14px] tracking-wide uppercase"
-              )}
-              onClick={() => {
-                AnalyticsService.sendEvent("business_nav_clicked");
-              }}
-            >
-              BUSINESS
-            </Link>
-            <Link
-              href="/upi"
-              className={getLinkClasses(
-                "/upi",
-                "text-sm lg:text-[14px] tracking-wide uppercase"
-              )}
-              onClick={() => {
-                AnalyticsService.sendEvent("upi_nav_clicked");
-              }}
-            >
-              UPI
-            </Link>
+            {isBlogsPage ? (
+              // Hide Home link on blog slug pages (e.g. /blogs/some-slug)
+              (pathname === "/blogs" || pathname.startsWith("/admin")) ? (
+                <Link
+                  href="/"
+                  className={getLinkClasses(
+                    "/",
+                    "text-sm lg:text-[14px] tracking-wide uppercase"
+                  )}
+                >
+                  Home
+                </Link>
+              ) : null
+            ) : (
+              <>
+                <Link
+                  href="/"
+                  className={getLinkClasses(
+                    "/",
+                    "text-sm lg:text-[14px] tracking-wide uppercase"
+                  )}
+                  onClick={() => {
+                    AnalyticsService.sendEvent("igps_nav_clicked");
+                  }}
+                >
+                  IGPS
+                </Link>
+                <Link
+                  href="/personal"
+                  className={getLinkClasses(
+                    "/personal",
+                    "text-sm lg:text-[14px] tracking-wide uppercase"
+                  )}
+                  onClick={() => {
+                    AnalyticsService.sendEvent("personal_nav_clicked");
+                  }}
+                >
+                  PERSONAL
+                </Link>
+                <Link
+                  href="/business"
+                  className={getLinkClasses(
+                    "/business",
+                    "text-sm lg:text-[14px] tracking-wide uppercase"
+                  )}
+                  onClick={() => {
+                    AnalyticsService.sendEvent("business_nav_clicked");
+                  }}
+                >
+                  BUSINESS
+                </Link>
+                <Link
+                  href="/upi"
+                  className={getLinkClasses(
+                    "/upi",
+                    "text-sm lg:text-[14px] tracking-wide uppercase"
+                  )}
+                  onClick={() => {
+                    AnalyticsService.sendEvent("upi_nav_clicked");
+                  }}
+                >
+                  UPI
+                </Link>
+              </>
+            )}
           </nav>
 
           {/* Download Button - Hidden on small screens */}
           {/* UPDATED: buttonLocation now uses the calculated value */}
-          {pathname === "/" ? (
-            <div className="hidden lg:flex items-center gap-4">
-              <Button
-                onClick={() => setIsGetStartedOpen(true)}
-                variant="outline"
-                className="hidden lg:flex cursor-pointer lg:w-[130px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
-              >
-                <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">Get in touch</span>
-              </Button>
-              <Button
-                disabled
-                aria-disabled="true"
-                className="hidden lg:flex lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-not-allowed"
-              >
-                <span
-                  className="font-semibold text-[12px] lg:text-[12px] whitespace-nowrap text-[#080808] leading-[100%] text-center"
-                  style={{ fontFamily: 'Montserrat, sans-serif' }}
+          {/* Hide buttons on Blogs Page */}
+          {!isBlogsPage && (
+            pathname === "/" ? (
+              <div className="hidden lg:flex items-center gap-4">
+                <Button
+                  onClick={() => setIsGetStartedOpen(true)}
+                  variant="outline"
+                  className="hidden lg:flex cursor-pointer lg:w-[130px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
                 >
-                  Login
-                </span>
-              </Button>
-              {isGetStartedOpen && (
-                <GetStartedPopup isOpen={true} onClose={() => setIsGetStartedOpen(false)} />
-              )}
-            </div>
-          ) : (
-            <WaitlistTriggerButton
-              triggerSource="'Download bepay app' button"
-              buttonLocation={calculatedButtonLocation}
-            >
-              <Button
-                // UPDATED: onClick now uses the calculated value
-                onClick={() => handleDownloadAppClick(calculatedButtonLocation)}
-                variant="outline"
-                className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
-              >
-                <div className="flex gap-2">
-                  <Smartphone className="w-4 h-4 lg:w-5 lg:h-9" />
-                  <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">
-                    Download bepay app
+                  <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">Get in touch</span>
+                </Button>
+                <Button
+                  disabled
+                  aria-disabled="true"
+                  className="hidden lg:flex lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-not-allowed"
+                >
+                  <span
+                    className="font-semibold text-[12px] lg:text-[12px] whitespace-nowrap text-[#080808] leading-[100%] text-center"
+                    style={{ fontFamily: 'Montserrat, sans-serif' }}
+                  >
+                    Login
                   </span>
-                </div>
-              </Button>
-            </WaitlistTriggerButton>
+                </Button>
+                {isGetStartedOpen && (
+                  <GetStartedPopup isOpen={true} onClose={() => setIsGetStartedOpen(false)} />
+                )}
+              </div>
+            ) : (
+              <WaitlistTriggerButton
+                triggerSource="'Download bepay app' button"
+                buttonLocation={calculatedButtonLocation}
+              >
+                <Button
+                  // UPDATED: onClick now uses the calculated value
+                  onClick={() => handleDownloadAppClick(calculatedButtonLocation)}
+                  variant="outline"
+                  className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
+                >
+                  <div className="flex gap-2">
+                    <Smartphone className="w-4 h-4 lg:w-5 lg:h-9" />
+                    <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">
+                      Download bepay app
+                    </span>
+                  </div>
+                </Button>
+              </WaitlistTriggerButton>
+            )
           )}
 
           {/* Animated Mobile menu button */}
@@ -272,66 +295,81 @@ export default function Header() {
               delay: isMobileMenuOpen ? 0.1 : 0,
             }}
           >
-            <Link
-              href="/"
-              className={getLinkClasses(
-                "/",
-                "text-sm uppercase tracking-wide py-2"
-              )}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              IGPS
-            </Link>
-            <Link
-              href="/personal"
-              className={getLinkClasses(
-                "/personal",
-                "text-sm uppercase tracking-wide py-2"
-              )}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              PERSONAL
-            </Link>
-            <Link
-              href="/business"
-              className={getLinkClasses(
-                "/business",
-                "text-sm uppercase tracking-wide py-2"
-              )}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              BUSINESS
-            </Link>
-
-            <Link
-              href="/upi"
-              className={getLinkClasses(
-                "/upi",
-                "text-sm uppercase tracking-wide py-2"
-              )}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              UPI
-            </Link>
-
-            {/* Mobile Download Button */}
-            {/* UPDATED: buttonLocation now uses the calculated value */}
-            <WaitlistTriggerButton
-              triggerSource="'download bepay app' button"
-              buttonLocation={calculatedButtonLocation}
-            >
-              <Button
-                variant="outline"
-                className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2 border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
-                // UPDATED: onClick now uses the calculated value
-                onClick={() => handleDownloadAppClick(calculatedButtonLocation)}
+            {isBlogsPage ? (
+              <Link
+                href="/"
+                className={getLinkClasses(
+                  "/",
+                  "text-sm uppercase tracking-wide py-2"
+                )}
+                onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Smartphone className="w-4 h-4" />
-                <span className="font-semibold text-xs">
-                  Download bepay app
-                </span>
-              </Button>
-            </WaitlistTriggerButton>
+                Home
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/"
+                  className={getLinkClasses(
+                    "/",
+                    "text-sm uppercase tracking-wide py-2"
+                  )}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  IGPS
+                </Link>
+                <Link
+                  href="/personal"
+                  className={getLinkClasses(
+                    "/personal",
+                    "text-sm uppercase tracking-wide py-2"
+                  )}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  PERSONAL
+                </Link>
+                <Link
+                  href="/business"
+                  className={getLinkClasses(
+                    "/business",
+                    "text-sm uppercase tracking-wide py-2"
+                  )}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  BUSINESS
+                </Link>
+
+                <Link
+                  href="/upi"
+                  className={getLinkClasses(
+                    "/upi",
+                    "text-sm uppercase tracking-wide py-2"
+                  )}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  UPI
+                </Link>
+
+                {/* Mobile Download Button */}
+                {/* UPDATED: buttonLocation now uses the calculated value */}
+                <WaitlistTriggerButton
+                  triggerSource="'download bepay app' button"
+                  buttonLocation={calculatedButtonLocation}
+                >
+                  <Button
+                    variant="outline"
+                    className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2 border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
+                    // UPDATED: onClick now uses the calculated value
+                    onClick={() => handleDownloadAppClick(calculatedButtonLocation)}
+                  >
+                    <Smartphone className="w-4 h-4" />
+                    <span className="font-semibold text-xs">
+                      Download bepay app
+                    </span>
+                  </Button>
+                </WaitlistTriggerButton>
+              </>
+            )}
           </motion.nav>
         </motion.div>
       </div>

@@ -86,6 +86,7 @@ function PortalContent({ onClose }) {
         phone: `${country.dial_code} ${phone}`,
         company,
         message,
+        source: "get-started",
       };
       const res = await addContactSubmission(payload);
       if (res && res.success) {

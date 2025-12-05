@@ -88,7 +88,16 @@ export default function AdminLayout({ children }) {
       icon: <MessageSquare className="h-5 w-5" />,
       label: "Contact Messages",
     },
- 
+    {
+      href: "/admin/dashboard/get-started",
+      icon: <MessageSquare className="h-5 w-5" />,
+      label: "Get Started",
+    },
+    {
+      href: "/admin/dashboard/waitlist",
+      icon: <Users className="h-5 w-5" />,
+      label: "Waitlist",
+    },
   ];
 
   return (

@@ -211,26 +211,36 @@ const Footer = ({
 
     setIsSubmitting(true);
     try {
-      await addDoc(collection(db, "newsletter_subscribers"), {
+      // Use the centralized function
+      const { addSubscriber } = await import("@/lib/newsletter");
+      const result = await addSubscriber({
         email: email.trim(),
-        subscribedAt: new Date(),
         timestamp: Date.now(),
       });
 
-      // --- FIX APPLIED HERE ---
-      // 1. Event now triggers only on success.
-      // 2. Event now includes the email address.
-      AnalyticsService.sendEvent("Newsletter submission successful", {
-        email: email.trim(),
-      });
-      // --- END FIX ---
+      if (result.success) {
+        // --- FIX APPLIED HERE ---
+        // 1. Event now triggers only on success.
+        // 2. Event now includes the email address.
+        AnalyticsService.sendEvent("Newsletter submission successful", {
+          email: email.trim(),
+        });
+        // --- END FIX ---
 
-      setSubscribedEmail(email.trim());
-      setShowModal(true);
-      setEmail("");
-      setTimeout(() => {
-        setIsSubscribed(true);
-      }, 100);
+        setSubscribedEmail(email.trim());
+        setShowModal(true);
+        setEmail("");
+        setTimeout(() => {
+          setIsSubscribed(true);
+        }, 100);
+      } else {
+        // Handle duplicate or other errors
+        setError(result.message || "Something went wrong. Please try again.");
+        AnalyticsService.sendEvent("Newsletter submission failed", {
+          reason: result.error,
+          error_message: result.message,
+        });
+      }
     } catch (error) {
       console.error("Error adding email to newsletter:", error);
       setError("Something went wrong. Please try again.");
