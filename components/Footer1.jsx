@@ -130,6 +130,7 @@ const Footer = ({
   headingSize = "text-[24px]",
   isUpiPage = false,
   isIGPSPage = false,
+  isLandingPage = false,
 }) => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -1046,7 +1047,7 @@ const Footer = ({
         </motion.div>
 
         <p className="text-[8px] font-[400] lg:tracking-[2%] lg:leading-[20px] max-w-[1359px] mx-auto lg:text-[10px] text-[#6A6A6A]">
-          {isUpiPage ? (
+          {isUpiPage || isLandingPage ? (
             <>
               bepay operates under the brand name “bepay money”, with its
               registered legal entity Bepay Technologies Private Limited.

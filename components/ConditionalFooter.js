@@ -46,6 +46,11 @@ export default function ConditionalFooter() {
       />;
   }
   
+  // Check for Landing Page
+  if (pathname === '/') {
+    return <Footer isLandingPage={true} />;
+  }
+
   // For all other pages, render the default Footer (no special heading)
   return <Footer />;
 }
