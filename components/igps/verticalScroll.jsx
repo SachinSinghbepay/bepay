@@ -15,7 +15,16 @@ const PhotoCardItem = ({ imageSrc, altText, index, progress, totalImages, cardCo
   const end = start + segmentDuration
 
   // Use viewport height for smooth scrolling
-  const travelDistance = typeof window !== "undefined" && window.innerHeight ? window.innerHeight : 900
+  const [travelDistance, setTravelDistance] = useState(900)
+
+  useEffect(() => {
+    const updateHeight = () => {
+      setTravelDistance(window.innerHeight)
+    }
+    updateHeight()
+    window.addEventListener("resize", updateHeight)
+    return () => window.removeEventListener("resize", updateHeight)
+  }, [])
   const fixedTransformDistance = 0.4
 
   let inputRange = []
