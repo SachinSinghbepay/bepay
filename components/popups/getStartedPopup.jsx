@@ -75,6 +75,12 @@ function PortalContent({ onClose }) {
       setError("Please enter a valid email.");
       return;
     }
+    
+    // Validate phone number: must be between 7 and 15 digits
+    if (!phone || phone.length < 7 || phone.length > 15) {
+      setError("Please enter a valid phone number (7-15 digits).");
+      return;
+    }
 
     setIsSubmitting(true);
     setError("");
@@ -163,7 +169,17 @@ function PortalContent({ onClose }) {
                     </select>
                   </div>
                   <div className="gs-phone-divider" aria-hidden="true" />
-                  <input id="gs-phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Enter phone number" className="gs-phone-input" />
+                  <input 
+                    id="gs-phone" 
+                    value={phone} 
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, '');
+                      if (val.length <= 15) setPhone(val);
+                    }} 
+                    placeholder="Enter phone number" 
+                    className="gs-phone-input" 
+                    type="tel"
+                  />
                 </div>
               </div>
 
