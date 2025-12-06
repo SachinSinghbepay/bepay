@@ -12,81 +12,13 @@ const PLAY_STORE_URL =
 "https://play.google.com/store/apps/details?id=com.bepay.user";
 const APP_STORE_URL = "https://apps.apple.com/app/6749352458"; // Replace with your actual App Store ID
 
-// In-memory cache for geo detection (prevents rate limiting)
-const geoCache = new Map();
-const CACHE_DURATION = 60 * 60 * 1000; // 1 hour cache
+
 
 export async function middleware(request) {
   const { pathname, search } = request.nextUrl;
   const userAgent = request.headers.get("user-agent") || "";
 
-  // ─────────────────────────────────────────────
-  // 🌍 COUNTRY DETECTION (works both locally and on Vercel)
-  // ─────────────────────────────────────────────
-  
-  // Try multiple methods to get country code
-  let country = 
-    request.geo?.country ||           // Vercel's geo object
-    request.headers.get("x-vercel-ip-country") || // Vercel header fallback
-    "";
 
-  // Fallback for local development (with caching to avoid rate limits)
-  if (!country) {
-    const clientIP = request.ip || request.headers.get("x-forwarded-for") || "unknown";
-    
-    // Check cache first
-    const cached = geoCache.get(clientIP);
-    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-      country = cached.country;
-      console.log("Using cached country:", country);
-    } else {
-      // Only make API call if not cached
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3000); // 3s timeout
-        
-        const res = await fetch("https://ipapi.co/json/", {
-          signal: controller.signal,
-        });
-        clearTimeout(timeoutId);
-        
-        if (res.ok) {
-          const data = await res.json();
-          country = data.country_code || "";
-          
-          // Cache the result
-          geoCache.set(clientIP, {
-            country,
-            timestamp: Date.now(),
-          });
-          
-          console.log("Detected country (via API - cached):", country);
-        }
-      } catch (error) {
-        console.log("Geo detection skipped (using fallback):", error.message);
-        // Silently fail - don't break the site
-      }
-    }
-  } else {
-    console.log("Detected country (via Vercel):", country);
-  }
-
-  // ─────────────────────────────────────────────
-  // 🌏 COUNTRY-BASED REDIRECT SECTION (MODIFIED)
-  // Ensures redirect to /upi happens EVERY time for IN users
-  // Unless they manually navigate to personal page via ?personal=true
-  // ─────────────────────────────────────────────
-  if (pathname === "/" || pathname === "/index.html") {
-    const url = new URL(request.url);
-    const isPersonalPage = url.searchParams.get("personal") === "true";
-    
-    if (country === "IN" && !isPersonalPage) {
-      // **Redirect Indian users to /upi by default**
-      // They can access personal page via /?personal=true
-      return NextResponse.redirect(new URL("/upi", request.url));
-    }
-    
-  }
 
   // ─────────────────────────────────────────────
   // 📱 APP DEEP LINK HANDLING SECTION
@@ -103,7 +35,7 @@ export async function middleware(request) {
     if (isMobile) {
       const deepLinkUrl = `bepay://${pathname}${search}`;
 
-      // (The rest of your HTML/JS deep-linking logic remains the same)
+     
       const html = `
         <!DOCTYPE html>
         <html lang="en">
@@ -186,7 +118,7 @@ export async function middleware(request) {
 // Configure which routes the middleware applies to
 export const config = {
   matcher: [
-    "/", // Root for country redirect
+
     "/transactions-screen/:path*",
     "/explore-screen/:path*",
     "/app/:path*",
