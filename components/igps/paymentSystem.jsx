@@ -63,7 +63,7 @@ const Card = ({ title, description, visual, index, isActive }) => {
         opacity: isActive ? 1 : 0.85,
       }}
     >
-      <div className="absolute top-6 left-6 opacity-75 w-[200px] h-[200px] flex items-center justify-center card-visual">
+      <div className="absolute top-6 left-6  opacity-75 w-[200px] h-[200px] flex items-center justify-center card-visual">
         {visual}
       </div>
       <div className="z-10 card-content">

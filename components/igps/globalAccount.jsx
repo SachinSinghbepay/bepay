@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { AnalyticsService } from "@/services/analyticsService";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import GetStartedPopup from "@/components/popups/getStartedPopup";
 
@@ -129,7 +130,8 @@ const styles = {
     flexGrow: 1,
   },
   numberIndicatorsContainer: {
-    width: "600px",
+    width: "100%",
+    maxWidth: "600px",
     height: "190px",
     backgroundColor: "#EFEFEF",
     borderRadius: "25px",
@@ -141,20 +143,24 @@ const styles = {
     boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
   },
   numberIndicatorsContainerMobile: {
-    width: "353.125px",
+    width: "100%",
     height: "121.38671875px",
+    padding: "0 8px",
+    boxSizing: "border-box",
     borderRadius: "25px",
     marginBottom: "26px",
   },
   numberIndicators: {
     display: "flex",
-    gap: "20px",
+    gap: "16px",
     justifyContent: "space-around",
     height: "100%",
     width: "100%",
+    alignItems: "center",
   },
   numberBox: {
     width: "180px",
+    minWidth: "0",
     height: "100%",
     display: "flex",
     alignItems: "center",
@@ -173,7 +179,8 @@ const styles = {
     transition: "all 0.3s ease-in-out",
   },
   numberBoxMobile: {
-    fontSize: "66px",
+    fontSize: "48px",
+    width: "30%",
     lineHeight: "100%",
     letterSpacing: "-0.06em",
   },
@@ -323,9 +330,7 @@ const StepContent = ({ step, isMobile, onOpenPopup }) => {
     ? { ...styles.stepTitle, ...styles.stepTitleMobile }
     : styles.stepTitle;
 
-  if (isMobile && step.number === 1) {
-    stepTitleStyle = { ...stepTitleStyle, whiteSpace: "nowrap" };
-  }
+  // Avoid forcing nowrap on mobile titles — allow wrapping so text doesn't overflow
 
   const stepDescriptionStyle = isMobile
     ? { ...styles.stepDescription, ...styles.stepDescriptionMobile }
@@ -339,13 +344,16 @@ const StepContent = ({ step, isMobile, onOpenPopup }) => {
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      <motion.img
-        src={step.imageSrc}
-        alt={step.altText}
-        style={stepImageStyle}
-        whileHover={{ scale: 1.05 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-      />
+      <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.3, ease: "easeOut" }}>
+        <Image
+          src={step.imageSrc}
+          alt={step.altText}
+          width={isMobile ? 200 : 300}
+          height={isMobile ? 200 : 300}
+          style={stepImageStyle}
+          priority={false}
+        />
+      </motion.div>
     </motion.div>
   );
 

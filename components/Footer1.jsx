@@ -918,7 +918,7 @@ const Footer = ({
                 <div className="space-y-4">
                   <div className="space-y-4 lg:space-y-6">
                     <Link
-                      href="/"
+                      href="/personal"
                       onClick={() => handleLinkClick("Personal")}
                       className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
                     >

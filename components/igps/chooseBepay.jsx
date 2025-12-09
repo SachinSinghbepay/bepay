@@ -123,7 +123,7 @@ export default function BepayLanding() {
             style={{
               width: "100%",
               maxWidth: "480px",
-              height: "393px",
+              height: "293px",
               borderRadius: "54px",
             }}
             variants={{
@@ -150,7 +150,7 @@ export default function BepayLanding() {
             style={{
               width: "100%",
               maxWidth: "480px",
-              height: "393px",
+              height: "293px",
               borderRadius: "54px",
             }}
             variants={{
@@ -178,7 +178,7 @@ export default function BepayLanding() {
             style={{
               width: "100%",
               maxWidth: "480px",
-              height: "393px",
+              height: "293px",
               borderRadius: "54px",
             }}
             variants={{
@@ -205,7 +205,7 @@ export default function BepayLanding() {
             style={{
               width: "100%",
               maxWidth: "480px",
-              height: "393px",
+             height: "293px",
               borderRadius: "54px",
             }}
             variants={{

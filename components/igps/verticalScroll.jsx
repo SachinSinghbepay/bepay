@@ -55,7 +55,7 @@ const PhotoCardItem = ({ imageSrc, altText, index, progress, totalImages, cardCo
 
   return (
     <motion.div style={{ y }} className="absolute inset-0 flex items-center justify-end pr-0">
-      <div className="relative block h-full w-[70%]">
+      <div className="relative block h-full w-[90%]">
         <Image src={imageSrc || "/placeholder.svg"} alt={altText} fill className="h-full w-full object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
         {cardContent && (
           <div className="absolute inset-0 flex flex-col justify-end p-8 bg-gradient-to-t from-black/70 via-black/20 to-transparent">

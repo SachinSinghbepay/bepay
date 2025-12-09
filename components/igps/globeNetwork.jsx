@@ -214,7 +214,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
       <style>{mobileStyles}</style>
       
       {/* Title */}
-      <h1 className='main-title md:-mt-10 mt-12 whitespace-nowrap' style={{ fontSize: '60px', fontWeight: 'bold', color: '#333', marginBottom: '2px' }}>
+      <h1 className='main-title md:-mt-10 mt-12 md:whitespace-nowrap' style={{ fontSize: '60px', fontWeight: 'bold', color: '#333', marginBottom: '2px' }}>
         Global Network <span style={{ color: '#ccc' }}>Coverage</span>
       </h1>
 
