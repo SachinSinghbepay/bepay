@@ -5,7 +5,7 @@ import SmoothScroll from "@/components/smoothScroll";
 import Header from "@/components/header";
 import { AuthProvider } from "@/lib/auth";
 import ConditionalFooter from "@/components/ConditionalFooter";
-import CookieConsentProvider from "@/components/cookie-consent-provider";
+import ConditionalCookieConsent from "@/components/ConditionalCookieConsent";
 import MixpanelProvider from '@/components/MixpanelProvider';
 import CampaignTracker from '@/components/campaignTracker';
 
@@ -58,7 +58,7 @@ export default function RootLayout({ children }) {
         <MixpanelProvider>
           <SmoothScroll>
             <Header />
-            <CookieConsentProvider />
+            <ConditionalCookieConsent />
             <CampaignTracker />
             <AuthProvider>{children}</AuthProvider>
             <ConditionalFooter />
