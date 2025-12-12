@@ -392,7 +392,7 @@ const VerticalScrollingSection = () => {
         clearInterval(autoPlayRef.current)
       }
     }
-  }, [isMobile, cardData.length])
+  }, [isMobile, cardData.length, resetAutoPlay])
 
   // Update active slide when scrolling manually
   useEffect(() => {

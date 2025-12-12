@@ -203,7 +203,7 @@ const IgpsHero = () => {
             <div className="space-y-0 mt-0 lg:-mt-10">
               <div className="w-full mb-6">
                 <p className="igps-intro text-left">
-                  India's first platform offering free <br />
+                  India&apos;s first platform offering free <br />
                   international settlements for businesses
                 </p>
 
