@@ -1,5 +1,6 @@
 'use client'
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { AnalyticsService } from '@/services/analyticsService';
 
@@ -223,9 +224,11 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
 
         {/* Left side: Globe Image */}
         <div className="globe-container mt-10" style={globeContainerStyle}>
-          <img
+          <Image
             src="/globe.png" 
             alt="Global Network Globe with Flags"
+            width={480}
+            height={480}
             onClick={() => { try { AnalyticsService.sendEvent('Global Globe Clicked'); } catch (e) {} }}
             style={{
               width: isMobile ? '90%' : '480px',
@@ -315,9 +318,11 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', alignItems: 'center' }}>
               {/* Replace the flag emojis and stablecoin icon with a single global image */}
-              <img
+              <Image
                 src="/global_flag.png"
                 alt="Global flags"
+                width={180}
+                height={30}
                 onClick={() => { try { AnalyticsService.sendEvent('Global Flags Clicked'); } catch (e) {} }}
                 style={{
                   width: '180px',

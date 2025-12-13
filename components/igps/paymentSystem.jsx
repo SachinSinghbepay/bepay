@@ -447,7 +447,7 @@ const PaymentSystemUI = () => {
         clearInterval(autoScrollIntervalRef.current);
       }
     };
-  }, [isPaused]);
+  }, [isPaused, startAutoScroll]);
 
   useEffect(() => {
     const scroller = scrollerRef.current;
@@ -455,7 +455,7 @@ const PaymentSystemUI = () => {
       scroller.addEventListener("scroll", updateActiveCard);
       return () => scroller.removeEventListener("scroll", updateActiveCard);
     }
-  }, []);
+  }, [updateActiveCard]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
