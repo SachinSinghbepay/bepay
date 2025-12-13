@@ -765,13 +765,12 @@ const Footer = ({
           {/* === MODIFICATION START: Conditional link rendering for mobile UPI view === */}
           <motion.div
             // Default to flex-col (vertical list) on mobile. Use md:flex (row) on desktop.
-            className={`w-full mt-8 text-[14px] ${
-              isUpiPage
+            className={`w-full mt-8 text-[14px] ${isUpiPage
                 ? "grid grid-cols-2 gap-8 md:grid-cols-4"
-                : isIGPSPage
-                ? "flex flex-col items-center"
-                : "grid grid-cols-2 gap-8 md:flex md:justify-between"
-            }`}
+                : isIGPSPage && !isLandingPage
+                  ? "flex flex-col items-center"
+                  : "grid grid-cols-2 gap-8 md:flex md:justify-between"
+              }`}
             variants={itemVariants}
           >
             {isUpiPage ? (
@@ -841,7 +840,7 @@ const Footer = ({
                   </Link>
                 </div>
               </>
-            ) : isIGPSPage ? (
+            ) : isIGPSPage && !isLandingPage ? (
               /* IGPS minimal footer: COMPANY links + Get in touch icons (matches screenshot) */
               <>
                 <div className="w-full flex flex-col md:flex-row items-center justify-center gap-12">

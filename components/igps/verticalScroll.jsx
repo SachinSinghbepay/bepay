@@ -62,21 +62,21 @@ const PhotoCardItem = ({ imageSrc, altText, index, progress, totalImages, cardCo
             <h2 className="text-white leading-[42px] text-[40px] font-semibold mb-3">
               {Array.isArray(cardContent.title?.lines)
                 ? cardContent.title.lines.map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      {i < cardContent.title.lines.length - 1 && <br />}
-                    </span>
-                  ))
+                  <span key={i}>
+                    {line}
+                    {i < cardContent.title.lines.length - 1 && <br />}
+                  </span>
+                ))
                 : cardContent.title?.text || cardContent.title}
             </h2>
             <p className="text-[#F6F6F6] text-[16px] font-medium mb-6 max-w-sm">
               {Array.isArray(cardContent.description?.lines)
                 ? cardContent.description.lines.map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      {i < cardContent.description.lines.length - 1 && <br />}
-                    </span>
-                  ))
+                  <span key={i}>
+                    {line}
+                    {i < cardContent.description.lines.length - 1 && <br />}
+                  </span>
+                ))
                 : cardContent.description?.text || cardContent.description}
             </p>
             {cardContent.cta && (
@@ -84,15 +84,15 @@ const PhotoCardItem = ({ imageSrc, altText, index, progress, totalImages, cardCo
                 onClick={() => {
                   try {
                     AnalyticsService.sendEvent("VerticalScrolling Get Started Clicked")
-                  } catch (e) {}
+                  } catch (e) { }
                   if (onOpenPopup) onOpenPopup()
                 }}
                 className="flex items-center justify-center whitespace-nowrap gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full text-xs font-medium md:w-[180px] md:text-[14px] "
               >
                 {cardContent.cta}
-                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-7 flex-shrink-0">
-              <path d="M7 17l10-10M7 7h10v10"/>
-            </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-7 flex-shrink-0">
+                  <path d="M7 17l10-10M7 7h10v10" />
+                </svg>
               </button>
             )}
           </div>
@@ -121,21 +121,21 @@ const MobileCard = ({ imageSrc, altText, cardContent, onOpenPopup, isActive }) =
                 <h2 className="text-white text-2xl font-bold mb-2">
                   {Array.isArray(cardContent.title?.lines)
                     ? cardContent.title.lines.map((line, i) => (
-                        <span key={i}>
-                          {line}
-                          {i < cardContent.title.lines.length - 1 && <br />}
-                        </span>
-                      ))
+                      <span key={i}>
+                        {line}
+                        {i < cardContent.title.lines.length - 1 && <br />}
+                      </span>
+                    ))
                     : cardContent.title?.text || cardContent.title}
                 </h2>
                 <p className="text-gray-200 text-sm mb-4">
                   {Array.isArray(cardContent.description?.lines)
                     ? cardContent.description.lines.map((line, i) => (
-                        <span key={i}>
-                          {line}
-                          {i < cardContent.description.lines.length - 1 && <br />}
-                        </span>
-                      ))
+                      <span key={i}>
+                        {line}
+                        {i < cardContent.description.lines.length - 1 && <br />}
+                      </span>
+                    ))
                     : cardContent.description?.text || cardContent.description}
                 </p>
                 {cardContent.cta && (
@@ -143,14 +143,14 @@ const MobileCard = ({ imageSrc, altText, cardContent, onOpenPopup, isActive }) =
                     onClick={() => {
                       try {
                         AnalyticsService.sendEvent("VerticalScrolling Get Started Clicked")
-                      } catch (e) {}
+                      } catch (e) { }
                       if (onOpenPopup) onOpenPopup()
                     }}
                     className="flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full  text-xs font-medium md:w-[180px] md:text-[14px] "
                   >
                     {cardContent.cta}
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-7 flex-shrink-0">
-                      <path d="M7 17l10-10M7 7h10v10"/>
+                      <path d="M7 17l10-10M7 7h10v10" />
                     </svg>
                   </button>
                 )}
@@ -183,7 +183,7 @@ const VerticalScrollingSection = () => {
         if (entry.isIntersecting && !hasTrackedView) {
           try {
             AnalyticsService.sendEvent("Vertical Scrolling viewed")
-          } catch (e) {}
+          } catch (e) { }
           setHasTrackedView(true)
           observer.unobserve(entry.target)
         }
@@ -209,7 +209,7 @@ const VerticalScrollingSection = () => {
       description: {
         lines: [
           "Get paid faster for your international trade. Receive payments from global buyers without long settlement delays or extra charges.",
-         
+
         ],
       },
     },
@@ -217,7 +217,7 @@ const VerticalScrollingSection = () => {
       title: { lines: ["SMEs & Enterprises"] },
       description: {
         lines: [
-         "Collect payments from clients across borders easily. Manage all your international receivables from one dashboard."
+          "Collect payments from clients across borders easily. Manage all your international receivables from one dashboard."
         ],
       },
     },
@@ -233,7 +233,7 @@ const VerticalScrollingSection = () => {
       title: { lines: ["Marketplace Sellers"] },
       description: {
         lines: [
-         "Collect payouts from platforms like Amazon or Shopify directly into your account. Withdraw anytime with full visibility."
+          "Collect payouts from platforms like Amazon or Shopify directly into your account. Withdraw anytime with full visibility."
         ],
       },
     },
@@ -246,10 +246,10 @@ const VerticalScrollingSection = () => {
       },
     },
     {
-      title: { lines: [ "Freelancers & Agencies"] },
+      title: { lines: ["Freelancers & Agencies"] },
       description: {
         lines: [
-       
+
           "Get paid from clients on platforms like Upwork, Fiverr, and global marketplaces with faster settlements and no hidden deductions.",
         ],
       },
@@ -339,7 +339,7 @@ const VerticalScrollingSection = () => {
         const elapsed = currentTime - startTime
         const progress = Math.min(elapsed / duration, 1)
         const easedProgress = easeOutCubic(progress)
-        
+
         mobileScrollRef.current.scrollLeft = startPosition + distance * easedProgress
 
         if (progress < 1) {
@@ -417,7 +417,7 @@ const VerticalScrollingSection = () => {
   const openGetStartedPopup = () => {
     try {
       AnalyticsService.sendEvent("VerticalScrolling Get Started Clicked")
-    } catch (e) {}
+    } catch (e) { }
     setIsPopupOpen(true)
   }
 
@@ -502,7 +502,7 @@ const VerticalScrollingSection = () => {
 
             {/* Navigation Arrows */}
             <div className="absolute right-4 top-6">
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-row gap-1">
                 <button
                   onClick={handlePrevSlide}
                   className="flex items-center justify-center w-14 h-14 rounded-[14px] bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors shadow-md"
@@ -523,10 +523,10 @@ const VerticalScrollingSection = () => {
         </div>
       )}
 
-        {/* Get Started popup (reuse same popup as BepayLanding) */}
-        {typeof window !== "undefined" && (
-          <GetStartedPopup isOpen={isPopupOpen} onClose={closeGetStartedPopup} />
-        )}
+      {/* Get Started popup (reuse same popup as BepayLanding) */}
+      {typeof window !== "undefined" && (
+        <GetStartedPopup isOpen={isPopupOpen} onClose={closeGetStartedPopup} />
+      )}
 
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {

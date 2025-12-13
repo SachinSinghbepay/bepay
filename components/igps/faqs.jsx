@@ -97,9 +97,9 @@ const faqData = [
   },
   {
     id: 16,
-    question: "How do I integrate bepay with my systems (APIs, webhooks)?",
+    question: "Is bepay safe & regulated ?",
     answer:
-      "bepay offers integration options (APIs and webhooks) for payment flows and notifications — contact your account manager or support for developer docs and onboarding.",
+      "Yes, licensed as  RBI’s PA-CB(Payment Aggregator Cross Border), FEMA,  MSB (USA), VASP (EU), and compliant with DORA, MiCA, DPDP & CFT.",
   },
 ];
 
@@ -143,7 +143,7 @@ export default function FAQSection() {
   const [openItems, setOpenItems] = useState([1]);
   const [showAll, setShowAll] = useState(false);
   const sectionRef = useRef(null);
-  const [hasTrackedView, setHasTrackedView] = useState(false); 
+  const [hasTrackedView, setHasTrackedView] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -163,7 +163,7 @@ export default function FAQSection() {
 
     return () => observer.disconnect();
   }, [hasTrackedView]);
-  
+
   const formatQuestionForEvent = (question) => {
     return question
       .toLowerCase()
@@ -172,29 +172,29 @@ export default function FAQSection() {
   };
 
   const toggleItem = (faq) => {
-  const questionIsCurrentlyOpen = openItems.includes(faq.id);
-  const formattedQuestion = formatQuestionForEvent(faq.question);
+    const questionIsCurrentlyOpen = openItems.includes(faq.id);
+    const formattedQuestion = formatQuestionForEvent(faq.question);
 
-  if (questionIsCurrentlyOpen) {
-    const eventName = `on_faq_${formattedQuestion}_closed`;
-    AnalyticsService.sendEvent(eventName, {
-      faq_id: faq.id,
-      question: faq.question,
-    });
-  } else {
-    const eventName = `on_faq_${formattedQuestion}_opened`;
-    AnalyticsService.sendEvent(eventName, {
-      faq_id: faq.id,
-      question: faq.question,
-    });
-  }
+    if (questionIsCurrentlyOpen) {
+      const eventName = `on_faq_${formattedQuestion}_closed`;
+      AnalyticsService.sendEvent(eventName, {
+        faq_id: faq.id,
+        question: faq.question,
+      });
+    } else {
+      const eventName = `on_faq_${formattedQuestion}_opened`;
+      AnalyticsService.sendEvent(eventName, {
+        faq_id: faq.id,
+        question: faq.question,
+      });
+    }
 
-  setOpenItems((prev) =>
-    prev.includes(faq.id)
-      ? prev.filter((item) => item !== faq.id)
-      : [...prev, faq.id]
-  );
-};
+    setOpenItems((prev) =>
+      prev.includes(faq.id)
+        ? prev.filter((item) => item !== faq.id)
+        : [...prev, faq.id]
+    );
+  };
 
 
   return (
