@@ -33,9 +33,9 @@ const faqData = [
   },
   {
     id: 5,
-    question: "Is bepay regulated?",
+    question: "Is bepay safe & regulated ?",
     answer:
-      "Yes — bepay is licensed as an MSB (USA), VASP (EU), and compliant with frameworks including DORA, MiCA, DPDP, CFT, RBI’s PA-CB & FEMA.",
+      "Yes, licensed as  RBI’s PA-CB(Payment Aggregator Cross Border), FEMA,  MSB (USA), VASP (EU), and compliant with DORA, MiCA, DPDP & CFT.",
   },
   {
     id: 6,
@@ -95,12 +95,7 @@ const faqData = [
     answer:
       "bepay uses banking-grade security and compliance controls (encryption, KYC/AML, monitoring, and regulatory oversight) to protect funds and data.",
   },
-  {
-    id: 16,
-    question: "Is bepay safe & regulated ?",
-    answer:
-      "Yes, licensed as  RBI’s PA-CB(Payment Aggregator Cross Border), FEMA,  MSB (USA), VASP (EU), and compliant with DORA, MiCA, DPDP & CFT.",
-  },
+
 ];
 
 const titleVariants = {
