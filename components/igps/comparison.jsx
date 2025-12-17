@@ -118,8 +118,8 @@ const ImageComparisonTable = () => {
           position: relative;
           display: block;
           width: 100%;
-          max-width: 1024px; /* keep desktop responsive and contained */
-          height: 600px; /* explicit desktop height so a sizing context */
+          max-width: 1224px; /* keep desktop responsive and contained */
+          height: 700px; /* explicit desktop height so a sizing context */
           aspect-ratio: 16/9; /* hint for modern browsers (keeps proportions) */
         }
 
@@ -140,8 +140,8 @@ const ImageComparisonTable = () => {
           /* Note: When using Next.js Image with fixed w/h for the image, the surrounding div handles overflow. */
           /* On mobile, make the inner wrapper wider than viewport to enable horizontal panning */
           .image-inner {
-            min-width: 1280px !important; /* wider than most mobile viewports to enable horizontal panning */
-            height: 900px !important; /* taller to preserve aspect */
+            min-width: 900px !important; 
+            height: 630px !important; 
             max-width: none !important;
             display: block !important;
           }

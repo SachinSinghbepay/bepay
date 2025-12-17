@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { createBlog, updateBlog } from "@/lib/blogs"
+import { getCategories } from "@/lib/categories"
 import { slugify } from "@/lib/utils"
 import Image from "next/image"
 import dynamic from "next/dynamic"
@@ -34,7 +35,19 @@ export default function BlogForm({ blog = null }) {
     metaTitle: blog?.metaTitle || "",
     metaDescription: blog?.metaDescription || "",
     readTime: blog?.readTime || "",
+    category: blog?.category || "",
+    isFeatured: blog?.isFeatured || false,
   })
+
+  const [categories, setCategories] = useState([])
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const data = await getCategories()
+      setCategories(data)
+    }
+    fetchCategories()
+  }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -45,6 +58,11 @@ export default function BlogForm({ blog = null }) {
         ...formData,
         title: value,
         slug: slugify(value),
+      })
+    } else if (name === "isFeatured") {
+      setFormData({
+        ...formData,
+        [name]: e.target.checked,
       })
     } else {
       setFormData({
@@ -220,6 +238,42 @@ export default function BlogForm({ blog = null }) {
             required
             className="w-full p-2 border border-black rounded"
           />
+        </div>
+        </div>
+
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label htmlFor="category" className="block text-lg font-bold text-black mb-1">
+            Category
+          </label>
+          <select
+            id="category"
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            className="w-full p-2 border border-black rounded"
+          >
+            <option value="">Select a category</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.name}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex items-center h-full pt-8">
+          <label className="flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              name="isFeatured"
+              checked={formData.isFeatured}
+              onChange={handleChange}
+              className="w-5 h-5 text-black border-black rounded focus:ring-black"
+            />
+            <span className="ml-2 text-lg font-bold text-black">Mark as Featured Post</span>
+          </label>
         </div>
       </div>
 

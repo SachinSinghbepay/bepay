@@ -131,6 +131,7 @@ export default function ContactForm() {
         timestamp: new Date(),
         submittedAt: new Date().toISOString(),
         status: "new",
+        source: "contact-us",
       })
 
       setPopupType("success")

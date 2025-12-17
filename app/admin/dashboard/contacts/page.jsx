@@ -11,18 +11,8 @@ export default function ContactsPage() {
   const [loading, setLoading] = useState(true)
   const [deleteId, setDeleteId] = useState(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [viewContact, setViewContact] = useState(null)
   const [showViewModal, setShowViewModal] = useState(false)
-
-  useEffect(() => {
-    const fetchContacts = async () => {
-      const data = await getAllContactSubmissions()
-      setContacts(data)
-      setLoading(false)
-    }
-
-    fetchContacts()
-  }, [])
+  const [viewContact, setViewContact] = useState(null)
 
   const handleDelete = async () => {
     if (!deleteId) return
