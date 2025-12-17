@@ -48,10 +48,10 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className=" min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className=" min-h-[660px] flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
-            <div className="flex border-[1px] mx-auto w-[100px] border-black rounded-full p-6 justify-center">
+            <div className="flex mx-auto w-[100px]  justify-center">
               <Image
                 src="/logo.png"
                 alt="bepay money"
@@ -64,7 +64,7 @@ export default function LoginPage() {
               Admin Login
             </h2>
             <p className="mt-2 text-sm text-black">
-              Sign in to access the blog management dashboard
+              Sign in to access the blog and  forms data management dashboard
             </p>
           </div>
 
@@ -88,7 +88,7 @@ export default function LoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none rounded-full relative block w-full px-3 py-2 border border-black placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-full relative block w-full px-3 py-2 border border-black/40 placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm"
                   placeholder="Email address"
                 />
               </div>
@@ -104,7 +104,7 @@ export default function LoginPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none  relative block w-full px-3 py-2 border rounded-full border-black placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm"
+                  className="appearance-none  relative block w-full px-3 py-2 border rounded-full border-black/40 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm"
                   placeholder="Password"
                 />
               </div>

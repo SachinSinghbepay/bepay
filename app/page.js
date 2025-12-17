@@ -1,37 +1,30 @@
-import ScrollTextAnimation from "@/components/crypto/scroll-text-animation";
-import CryptoHeroSection from "@/components/crypto/CryptoHero";
-import CryptoWalletSection from "@/components/crypto/crypto-wallet-section";
-import OneWallet from "@/components/crypto/OneWallet";
-import { PaymentProofSection } from "@/components/crypto/payment-proof-section";
-import { SecuritySection } from "@/components/crypto/security-section";
-import { UtilitySection } from "@/components/crypto/utility-section";
-import { FinancialServicesSection } from "@/components/crypto/financial-services-section";
-import CryptoScrollSection from "@/components/crypto/crypto-scroll-section";
-import InvestmentSuite from "@/components/crypto/investment-suite";
-import DefiYieldSection from "@/components/crypto/DefiYieldSection ";
-import WaitlistPopup from "@/components/waitlist-popup";
-import ScrollTextMobile from "@/components/crypto/ScrollTextMobile";
+import React from 'react';
+import IgpsHero from '@/components/igps/igpsHero';
+import GlobalNetworkCoverage from '@/components/igps/globeNetwork';
+import ImageComparisonTable from '@/components/igps/comparison';
+import App from '@/components/igps/transfer';
+import BepayLanding from '@/components/igps/chooseBepay';
+import ComplianceSection from '@/components/igps/compliance';
+import FAQSection from '@/components/igps/faqs';
+import PaymentSystemUI from '@/components/igps/paymentSystem';
+import SetupGlobalAccount from '@/components/igps/globalAccount';
+import VerticalScrollingSection from '@/components/igps/verticalScroll';
 
-const page = () => {
+const IgpsPage = () => {
   return (
-    <>
-      <main>
-        <WaitlistPopup />
-        <CryptoHeroSection />
-        <CryptoWalletSection />
-        <OneWallet /> 
-        {/* <ScrollTextAnimation /> */}
-        <ScrollTextMobile />
-        <DefiYieldSection />
-        <InvestmentSuite />
-        <UtilitySection />
-        <FinancialServicesSection />
-        <SecuritySection />
-        <CryptoScrollSection />
-        <PaymentProofSection />
-      </main>
-    </>
+    <div>
+      <IgpsHero />
+      <GlobalNetworkCoverage/>
+      <ImageComparisonTable/>
+      {/* <App/> */}
+      <PaymentSystemUI/>
+      <BepayLanding/>
+      <VerticalScrollingSection/>
+      <SetupGlobalAccount/>
+      <ComplianceSection/>
+      <FAQSection/>
+    </div>
   );
 };
 
-export default page;
+export default IgpsPage;
