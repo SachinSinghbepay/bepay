@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AnalyticsService } from "@/services/analyticsService";
@@ -158,7 +158,7 @@ const PaymentSystemUI = () => {
     },
   ];
 
-  const updateActiveCard = () => {
+  const updateActiveCard = useCallback(() => {
     if (!scrollerRef.current) return;
 
     const scrollLeft = scrollerRef.current.scrollLeft;
@@ -167,7 +167,7 @@ const PaymentSystemUI = () => {
     const gap = 16;
     const index = Math.round(scrollLeft / (cardWidth + gap));
     setActiveIndex(Math.min(index, cardsData.length - 1));
-  };
+  }, [cardsData.length]);
 
   const handleScroll = (direction) => {
     if (!scrollerRef.current) return;
@@ -214,7 +214,7 @@ const PaymentSystemUI = () => {
     }
   };
 
-  const startAutoScroll = () => {
+  const startAutoScroll = useCallback(() => {
     if (autoScrollIntervalRef.current) {
       clearInterval(autoScrollIntervalRef.current);
     }
@@ -269,7 +269,7 @@ const PaymentSystemUI = () => {
         requestAnimationFrame(animateScroll);
       }
     }, 4000);
-  };
+  }, [isPaused]);
 
   useEffect(() => {
     const style = document.createElement("style");
