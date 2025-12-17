@@ -1,5 +1,7 @@
 'use client'
 import React from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { AnalyticsService } from '@/services/analyticsService';
 
 const GlobalNetworkCoverage = ({ globeImagePath }) => {
@@ -99,7 +101,28 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
     .desktop-only { display: block; }
     .mobile-only { display: none; }
 
-    @media (max-width: 768px) {
+  
+
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .content-wrapper {
+        margin-top: 80px !important;
+      }
+      
+      .globe-container {
+        margin-top: 0 !important;
+      }
+      
+      .bottom-text {
+        margin-top: 30px !important;
+        margin-bottom: 40px !important;
+        font-size: 18px !important;
+        line-height: 26px !important;
+        width: 80% !important;
+        max-width: 600px !important;
+      }
+    }
+
+    @media (max-width: 1023px) {
       .content-wrapper {
         flex-direction: column !important;
         align-items: center !important;
@@ -192,7 +215,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
       <style>{mobileStyles}</style>
       
       {/* Title */}
-      <h1 className='main-title md:-mt-10 mt-12 whitespace-nowrap' style={{ fontSize: '60px', fontWeight: 'bold', color: '#333', marginBottom: '2px' }}>
+      <h1 className='main-title md:-mt-10 mt-12 md:whitespace-nowrap' style={{ fontSize: '60px', fontWeight: 'bold', color: '#333', marginBottom: '2px' }}>
         Global Network <span style={{ color: '#ccc' }}>Coverage</span>
       </h1>
 
@@ -200,10 +223,12 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
       <div className="content-wrapper" style={contentWrapperStyle}>
 
         {/* Left side: Globe Image */}
-        <div className="globe-container" style={globeContainerStyle}>
-          <img
+        <div className="globe-container mt-10" style={globeContainerStyle}>
+          <Image
             src="/globe.png" 
             alt="Global Network Globe with Flags"
+            width={480}
+            height={480}
             onClick={() => { try { AnalyticsService.sendEvent('Global Globe Clicked'); } catch (e) {} }}
             style={{
               width: isMobile ? '90%' : '480px',
@@ -217,7 +242,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
 
           {/* Desktop-only caption centered below the globe image */}
           <div
-            className="desktop-caption desktop-only"
+            className="desktop-caption lg:whitespace-nowrap  desktop-only"
             style={{
               position: 'absolute',
               bottom: isMobile ? 'auto' : '-56px',
@@ -229,7 +254,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
               fontFamily: 'Montserrat, sans-serif',
               lineHeight: '24px',
               letterSpacing: '-0.02em',
-              whiteSpace: 'nowrap', // keep caption on one line on desktop
+              // whiteSpace: 'nowrap', // keep caption on one line on desktop
               textAlign: 'center',
               width: 'auto'
             }}
@@ -264,22 +289,40 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
         {/* Right side: Text content */}
         <div className="right-content" style={rightContentStyle}>
           {/* Top text box */}
-          <div className='text-box mt-0 md:-mt-10' style={{ ...textBoxBaseStyle,padding: '40px' }}> {/* Adjusted padding to help meet the 282px height visually */}
+          <motion.div 
+            className='text-box mt-0 md:-mt-10' 
+            style={{ ...textBoxBaseStyle,padding: '40px' }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+          > 
             <p style={isMobile ? cardMobileTextStyle : textStyle}>
-            Trade like a local. Get virtual account details in key economic zones to collect payments instantly without cross-border friction.
+            Trade like a local. Get virtual account details in key economic zones to collect payments Near real time without cross-border friction.
             </p>
-          </div>
+          </motion.div>
 
           {/* Bottom text box with flags and stablecoins */}
-          <div className='text-box' style={{...textBoxBaseStyle, padding: '40px'}}>{/* Adjusted padding to help meet the 282px height visually */}
+          <motion.div 
+            className='text-box' 
+            style={{...textBoxBaseStyle, padding: '40px'}}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
+            whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+          >
             <p style={isMobile ? {...cardMobileTextStyle, marginBottom: '20px'} : {...textStyle, marginBottom: '20px'}}>
             USD, EUR, GBP, AED, CNY, INR + other major business currencies supported.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', alignItems: 'center' }}>
               {/* Replace the flag emojis and stablecoin icon with a single global image */}
-              <img
+              <Image
                 src="/global_flag.png"
                 alt="Global flags"
+                width={180}
+                height={30}
                 onClick={() => { try { AnalyticsService.sendEvent('Global Flags Clicked'); } catch (e) {} }}
                 style={{
                   width: '180px',
@@ -291,7 +334,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
                 }}
               />
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 

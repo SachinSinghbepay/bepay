@@ -47,13 +47,21 @@ export default function AdminDashboardPage() {
       <AdminLayout>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
           <h1 className="text-2xl font-bold">Blog Posts</h1>
-          <Link
-            href="/admin/dashboard/new"
-            className="flex items-center gap-2 hover:bg-transparent hover:text-black border border-black bg-black text-white px-4 py-2 rounded  transition-colors"
-          >
-            <Plus className="h-4 w-4" />
-            <span>New Post</span>
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              href="/admin/dashboard/categories"
+              className="flex items-center gap-2 hover:bg-transparent hover:text-black border border-black bg-white text-black px-4 py-2 rounded transition-colors"
+            >
+              <span>Manage Categories</span>
+            </Link>
+            <Link
+              href="/admin/dashboard/new"
+              className="flex items-center gap-2 hover:bg-transparent hover:text-black border border-black bg-black text-white px-4 py-2 rounded transition-colors"
+            >
+              <Plus className="h-4 w-4" />
+              <span>New Post</span>
+            </Link>
+          </div>
         </div>
 
         {loading ? (

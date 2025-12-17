@@ -503,3 +503,23 @@ body {
 .animate-slide-up {
   animation: slideUp 0.3s ease-out;
 }
+
+/* Fix for prose list styling */
+.prose ul {
+  list-style-type: disc !important;
+  padding-left: 1.5em !important;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.prose ol {
+  list-style-type: decimal !important;
+  padding-left: 1.5em !important;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.prose li {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}

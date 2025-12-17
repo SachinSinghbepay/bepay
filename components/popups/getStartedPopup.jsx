@@ -59,7 +59,7 @@ function PortalContent({ onClose }) {
   };
 
   const modalStyle = {
-    width: "100%", maxWidth: "46rem", backgroundColor: "#ffffff", borderRadius: "24px", boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.2)", overflow: "hidden", zIndex: 2147483647, padding: "1.5rem",
+    width: "100%", maxWidth: "46rem", backgroundColor: "#ffffff", borderRadius: "24px", boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.2)", overflow: "visible", zIndex: 2147483647, padding: "1.5rem",
     position: "relative",
   };
 
@@ -76,6 +76,12 @@ function PortalContent({ onClose }) {
       return;
     }
 
+    // Validate phone number: must be between 7 and 15 digits
+    if (!phone || phone.length < 7 || phone.length > 15) {
+      setError("Please enter a valid phone number (7-15 digits).");
+      return;
+    }
+
     setIsSubmitting(true);
     setError("");
     AnalyticsService.sendEvent("get_started_submit_clicked");
@@ -86,6 +92,7 @@ function PortalContent({ onClose }) {
         phone: `${country.dial_code} ${phone}`,
         company,
         message,
+        source: "get-started",
       };
       const res = await addContactSubmission(payload);
       if (res && res.success) {
@@ -109,96 +116,111 @@ function PortalContent({ onClose }) {
   return (
     <>
       <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        style={overlayStyle}
-        onClick={onClose}
-      >
         <motion.div
-          initial={{ scale: 0.95, opacity: 0, y: 10 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.95, opacity: 0, y: 10 }}
-          transition={{ type: "spring", duration: 0.3 }}
-          style={modalStyle}
-          onClick={(e) => e.stopPropagation()}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          style={overlayStyle}
+          onClick={onClose}
         >
-          <button aria-label="Close" onClick={onClose} style={{ position: "absolute", right: 12, top: 12, background: "transparent", border: "none", cursor: "pointer" }}>
-            <X color="#6B7280" />
-          </button>
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0, y: 10 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 10 }}
+            transition={{ type: "spring", duration: 0.3 }}
+            style={modalStyle}
+            className="gs-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button aria-label="Close" onClick={onClose} style={{ position: "absolute", right: 12, top: 12, background: "transparent", border: "none", cursor: "pointer" }}>
+              <X color="#6B7280" />
+            </button>
 
-          <div style={{ textAlign: "left", padding: "0 0 0.5rem" }}>
-            <h2 className="gs-title" style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 600, fontSize: "24px", margin: 0 }}>Leave us a message</h2>
-            <p className="gs-subtitle" style={{ fontSize: "14px", color: "#6B7280", marginTop: "6px" }}>Share your details, and our team will get back to you within 24 hours.</p>
-          </div>
-
-          <form onSubmit={handleSubmit} style={{ marginTop: "1rem" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "0.75rem" }}>
-              <div>
-                <label htmlFor="gs-name" className="gs-field-label">Name*</label>
-                <input id="gs-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your name" style={{ width: '100%', height: 44, padding: "0 1rem", borderRadius: 8, border: "1px solid #E5E7EB" }} />
-              </div>
-
-              <div>
-                <label htmlFor="gs-email" className="gs-field-label">Email*</label>
-                <input id="gs-email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" style={{ width: '100%', height: 44, padding: "0 1rem", borderRadius: 8, border: "1px solid #E5E7EB" }} />
-              </div>
-
-              <div>
-                <label htmlFor="gs-phone" className="gs-field-label">Phone number*</label>
-                <div className="gs-phone-control" role="group" aria-label="Phone input">
-                  <div className="gs-phone-left">
-                    <span className="gs-dial-code-display">{country.dial_code}</span>
-                    <select 
-                      className="gs-country-select"
-                      value={country.iso2} 
-                      onChange={(e) => setCountry(countries.find(c => c.iso2 === e.target.value))} 
-                      aria-label="Country code"
-                    >
-                      {countries.map((c) => (
-                        <option key={c.iso2} value={c.iso2}>{`${c.name} (${c.dial_code})`}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="gs-phone-divider" aria-hidden="true" />
-                  <input id="gs-phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Enter phone number" className="gs-phone-input" />
+            <div className="gs-modal-inner">
+              <div className="gs-modal-body">
+                <div style={{ textAlign: "left", padding: "0 0 0.5rem" }}>
+                  <h2 className="gs-title" style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 600, fontSize: "24px", margin: 0 }}>Leave us a message</h2>
+                  <p className="gs-subtitle" style={{ fontSize: "14px", color: "#6B7280", marginTop: "6px" }}>Share your details, and our team will get back to you within 24 hours.</p>
                 </div>
+
+                <form onSubmit={handleSubmit} style={{ marginTop: "1rem" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "0.75rem" }}>
+                    <div>
+                      <label htmlFor="gs-name" className="gs-field-label">Name*</label>
+                      <input id="gs-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your name" className="gs-input-field" style={{ width: '100%', maxWidth: '100%', height: 44, padding: "0 1rem", borderRadius: 8, border: "1px solid #E5E7EB", boxSizing: "border-box" }} />
+                    </div>
+
+                    <div>
+                      <label htmlFor="gs-email" className="gs-field-label">Email*</label>
+                      <input id="gs-email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" className="gs-input-field" style={{ width: '100%', maxWidth: '100%', height: 44, padding: "0 1rem", borderRadius: 8, border: "1px solid #E5E7EB", boxSizing: "border-box" }} />
+                    </div>
+
+                    <div>
+                      <label htmlFor="gs-phone" className="gs-field-label">Phone number*</label>
+                      <div className="gs-phone-control" role="group" aria-label="Phone input">
+                        <div className="gs-phone-left">
+                          <span className="gs-dial-code-display">{country.dial_code}</span>
+                          <select
+                            className="gs-country-select"
+                            value={country.iso2}
+                            onChange={(e) => setCountry(countries.find(c => c.iso2 === e.target.value))}
+                            aria-label="Country code"
+                          >
+                            {countries.map((c) => (
+                              <option key={c.iso2} value={c.iso2}>{`${c.name} (${c.dial_code})`}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="gs-phone-divider" aria-hidden="true" />
+                        <input
+                          id="gs-phone"
+                          value={phone}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/\D/g, '');
+                            if (val.length <= 15) setPhone(val);
+                          }}
+                          placeholder="Enter phone number"
+                          className="gs-phone-input"
+                          type="tel"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="gs-company" className="gs-field-label">Company name*</label>
+                      <input id="gs-company" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Tell us your company's name" className="gs-input-field" style={{ width: '100%', maxWidth: '100%', height: 44, padding: "0 1rem", borderRadius: 8, border: "1px solid #E5E7EB", boxSizing: "border-box" }} />
+                    </div>
+
+                    <div>
+                      <label htmlFor="gs-message" className="gs-field-label">Message*</label>
+                      <textarea id="gs-message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Write your message here...." rows={5} className="gs-input-field" style={{ width: '100%', maxWidth: '100%', padding: "0.75rem 1rem", borderRadius: 8, border: "1px solid #E5E7EB", resize: "vertical", boxSizing: "border-box" }} />
+                    </div>
+
+                    <div style={{ fontSize: 11, color: "#6B7280" }}>
+                      By submitting this form, you agree to be contacted by our team. We respect your privacy; please read our Privacy Policy. If you wish to opt-out of future communications, please let us know via email.              </div>
+
+                    {error && <div style={{ color: "#ef4444", fontSize: 13 }}>{error}</div>}
+
+                    <button type="submit" disabled={isSubmitting} className="gs-submit-btn" style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", background: "#000", color: "#fff", height: 48, borderRadius: 999, border: "none", cursor: isSubmitting ? "not-allowed" : "pointer" }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M22 2L11 13" />
+                        <path d="M22 2l-7 20-4-9-9-4 20-7z" />
+                      </svg>
+                      <span>{isSubmitting ? "Sending..." : "Send message"}</span>
+                    </button>
+                  </div>
+                </form>
+
+                {isSuccess && (
+                  <div style={{ marginTop: 12, textAlign: "center", color: "#10B981" }}>Thanks — we will get back to you soon.</div>
+                )}
               </div>
-
-              <div>
-                <label htmlFor="gs-company" className="gs-field-label">Company name*</label>
-                <input id="gs-company" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Tell us your company's name" style={{ width: '100%', height: 44, padding: "0 1rem", borderRadius: 8, border: "1px solid #E5E7EB" }} />
-              </div>
-
-              <div>
-                <label htmlFor="gs-message" className="gs-field-label">Message*</label>
-                <textarea id="gs-message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Write your message here...." rows={5} style={{ width: '100%', padding: "0.75rem 1rem", borderRadius: 8, border: "1px solid #E5E7EB", resize: "vertical" }} />
-              </div>
-
-              <div style={{ fontSize: 11, color: "#6B7280" }}>
-              By submitting this form, you agree to be contacted by our team. We respect your privacy; please read our Privacy Policy. If you wish to opt-out of future communications, please let us know via email.              </div>
-
-              {error && <div style={{ color: "#ef4444", fontSize: 13 }}>{error}</div>}
-
-              <button type="submit" disabled={isSubmitting} style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", background: "#000", color: "#fff", height: 48, borderRadius: 999, border: "none", cursor: isSubmitting ? "not-allowed" : "pointer" }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M22 2L11 13" />
-                  <path d="M22 2l-7 20-4-9-9-4 20-7z" />
-                </svg>
-                <span>{isSubmitting ? "Sending..." : "Send message"}</span>
-              </button>
             </div>
-          </form>
-
-          {isSuccess && (
-            <div style={{ marginTop: 12, textAlign: "center", color: "#10B981" }}>Thanks — we will get back to you soon.</div>
-          )}
+          </motion.div>
         </motion.div>
-      </motion.div>
-    </AnimatePresence>
+      </AnimatePresence>
 
-    <style jsx>{`
+      <style jsx>{`
       @media (min-width: 1024px) {
         .gs-title {
           font-family: 'Montserrat', sans-serif;
@@ -294,6 +316,86 @@ function PortalContent({ onClose }) {
       .gs-phone-input::placeholder { 
         color: #BDBDBD;
       }
+
+      /* Modal responsive scrolling helpers */
+      .gs-modal {
+        width: 100%;
+        max-width: 46rem;
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px -10px rgba(0,0,0,0.2);
+        z-index: 2147483647;
+        padding: 1.5rem;
+        position: relative;
+        overflow: visible;
+        box-sizing: border-box;
+      }
+
+      .gs-modal-inner {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .gs-modal-body {
+        width: 100%;
+      }
+
+      @media (max-width: 1023px) {
+        .gs-modal { max-height: 80vh; }
+        .gs-modal-inner { max-height: 80vh; overflow: hidden; }
+        .gs-modal-body { overflow-y: auto; -webkit-overflow-scrolling: touch; padding-right: 8px; }
+      }
+
+      @media (max-width: 400px) {
+        .gs-modal {
+          padding: 1rem !important; 
+          width: 90% !important;
+          margin: 0 auto;
+        }
+        /* Fix for x-axis scroll on small devices */
+        .gs-modal-inner, .gs-modal-body {
+          width: 100%;
+          max-width: 100%;
+          overflow-x: hidden;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .gs-input-field {
+          width: 90% !important;
+          margin-left: 0 !important;
+        }
+        .gs-phone-control {
+          width: 90% !important;
+          margin-left: 0 !important;
+        }
+        .gs-submit-btn {
+          width: 90% !important;
+          margin-left: 0 !important;
+        }
+        .gs-input-field::placeholder {
+          font-size: 10px;
+        }
+        .gs-phone-input::placeholder {
+          font-size: 10px;
+        }
+      }
+      
+      @media (max-width: 332px) {
+        .gs-input-field {
+          width: 85% !important;
+        }
+        .gs-phone-control {
+          width: 85% !important;
+        }
+        .gs-submit-btn {
+          width: 85% !important;
+        }
+      }
+
+
+    
     `}</style>
     </>
   );

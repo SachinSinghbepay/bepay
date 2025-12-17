@@ -16,8 +16,6 @@ export class AnalyticsService {
 
     this.isInitialized = true;
     console.log("Mixpanel Initialized");
-
-    
   }
 
   /**
@@ -55,22 +53,28 @@ export class AnalyticsService {
       return null;
     }
   }
+
   static createWaitlistUser(email, extraData = {}) {
-  const distinctId = mixpanel.get_distinct_id() || email; // fallback to email if no ID
+    if (!this.isInitialized) return;
 
-  // 1. Identify this user with distinct_id
-  mixpanel.identify(distinctId);
+    try {
+      const distinctId = mixpanel.get_distinct_id() || email; // fallback to email if no ID
 
-  // 2. Create / update their Mixpanel People profile (Users tab)
-  mixpanel.people.set({
-    $email: email,                        // reserved property
-    created_at: new Date().toISOString(), // join timestamp
-    source: "waitlist",                       
-  });
+      // 1. Identify this user with distinct_id
+      mixpanel.identify(distinctId);
 
-  console.log(`[Analytics] Waitlist user created: ${email}, distinctId: ${distinctId}`);
-}
+      // 2. Create / update their Mixpanel People profile (Users tab)
+      mixpanel.people.set({
+        $email: email,                        // reserved property
+        created_at: new Date().toISOString(), // join timestamp
+        source: "waitlist",                       
+      });
 
+      console.log(`[Analytics] Waitlist user created: ${email}, distinctId: ${distinctId}`);
+    } catch (error) {
+      console.error("[Analytics] Error creating waitlist user:", error);
+    }
+  }
 
   /**
    * Tracks an event and automatically includes the sessionId.
@@ -83,37 +87,43 @@ export class AnalyticsService {
       return;
     }
 
-    var distinctId = await mixpanel?.get_distinct_id();
+    try {
+      var distinctId = await mixpanel?.get_distinct_id();
 
-    const { sessionId } = this.getSessionData();
-    const eventProperties = {
-      ...params,
-      sessionId: sessionId,
-    };
+      const { sessionId } = this.getSessionData();
+      const eventProperties = {
+        ...params,
+        sessionId: sessionId,
+      };
 
-    this.checkcampaignId()
+      this.checkcampaignId()
 
-    console.log(`[Analytics Event]: ${eventName}`, eventProperties);
-    mixpanel.track(eventName, eventProperties);
-  }
-
-  static checkcampaignId() {
-    const campaignId = localStorage.getItem("campaignId");
-    
-    if (campaignId) {
-      if (mixpanel.get_property("campaignId") !== campaignId) {
-        mixpanel.register({ campaignId });
-        console.log("✅ campaignId registered:", campaignId);
-      }
-    } else {
-      if (mixpanel.get_property("campaignId")) {
-        mixpanel.unregister("campaignId");
-        console.log("🗑️ campaignId unregistered");
-      }
+      console.log(`[Analytics Event]: ${eventName}`, eventProperties);
+      mixpanel.track(eventName, eventProperties);
+    } catch (error) {
+      console.error("[Analytics] Error sending event:", error);
     }
   }
 
-  
+  static checkcampaignId() {
+    try {
+      const campaignId = localStorage.getItem("campaignId");
+      
+      if (campaignId) {
+        if (mixpanel.get_property("campaignId") !== campaignId) {
+          mixpanel.register({ campaignId });
+          console.log("✅ campaignId registered:", campaignId);
+        }
+      } else {
+        if (mixpanel.get_property("campaignId")) {
+          mixpanel.unregister("campaignId");
+          console.log("🗑️ campaignId unregistered");
+        }
+      }
+    } catch (error) {
+      console.error("[Analytics] Error checking campaignId:", error);
+    }
+  }
 
   /**
    * Ends the current session, calculating duration and sending a final event.
@@ -132,7 +142,6 @@ export class AnalyticsService {
         sessionDuration_seconds: durationInSeconds,
       };
       
-
       // Use `sendBeacon` for reliability when the page is closing.
       mixpanel.track("Session End", eventProperties, { transport: 'sendBeacon' });
 

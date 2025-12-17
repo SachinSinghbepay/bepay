@@ -40,10 +40,47 @@ const Footer = () => {
     AnalyticsService.sendEvent("on_newsletter_email_field_focused");
   };
 
-  const handleNewsletterSubmit = (e) => {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleNewsletterSubmit = async (e) => {
     e.preventDefault();
-    AnalyticsService.sendEvent("on_newsletter_submit_button_clicked"); // FIXED event name
-    // Actual submit logic here
+    AnalyticsService.sendEvent("on_newsletter_submit_button_clicked");
+    setError("");
+    setIsSuccess(false);
+
+    if (!email.trim()) {
+        setError("Email is required");
+        return;
+    }
+
+    setIsSubmitting(true);
+    try {
+        const { addSubscriber } = await import("@/lib/newsletter");
+        const result = await addSubscriber({
+            email: email.trim(),
+            timestamp: Date.now(),
+            source: "business_footer"
+        });
+
+        if (result.success) {
+            setIsSuccess(true);
+            setEmail("");
+            AnalyticsService.sendEvent("Newsletter submission successful", {
+                email: email.trim(),
+                source: "business_footer"
+            });
+        } else {
+            setError(result.message || "Something went wrong.");
+        }
+    } catch (err) {
+        console.error(err);
+        setError("Something went wrong.");
+    } finally {
+        setIsSubmitting(false);
+    }
   };
 
   const handleSocialClick = (platform) => {
@@ -165,22 +202,28 @@ const Footer = () => {
           <p className="text-gray-400 text-center mb-6">
             Sign-up to our newsletter for exclusive updates!
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+          <div className="flex flex-col items-center justify-center gap-2">
               <form onSubmit={handleNewsletterSubmit} className="flex items-center gap-2 border border-white/20 rounded-full p-1 pr-2">
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 onFocus={handleNewsletterFocus}
                 className="bg-transparent px-4 py-1 text-white placeholder-gray-500 focus:outline-none w-48"
                 aria-label="Email for newsletter"
+                disabled={isSubmitting}
               />
               <button
                 type="submit"
-                className="bg-white text-black px-5 py-1.5 rounded-full font-medium hover:bg-gray-200 transition-colors text-sm shrink-0"
+                disabled={isSubmitting}
+                className="bg-white text-black px-5 py-1.5 rounded-full font-medium hover:bg-gray-200 transition-colors text-sm shrink-0 disabled:opacity-50"
               >
-                Submit
+                {isSubmitting ? "..." : "Submit"}
               </button>
             </form>
+            {error && <p className="text-red-400 text-xs mt-1">{error}</p>}
+            {isSuccess && <p className="text-green-400 text-xs mt-1">Thanks for subscribing!</p>}
           </div>
         </motion.div>
 
