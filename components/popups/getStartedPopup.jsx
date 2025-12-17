@@ -201,7 +201,7 @@ function PortalContent({ onClose }) {
 
                     {error && <div style={{ color: "#ef4444", fontSize: 13 }}>{error}</div>}
 
-                    <button type="submit" disabled={isSubmitting} style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", background: "#000", color: "#fff", height: 48, borderRadius: 999, border: "none", cursor: isSubmitting ? "not-allowed" : "pointer" }}>
+                    <button type="submit" disabled={isSubmitting} className="gs-submit-btn" style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "center", background: "#000", color: "#fff", height: 48, borderRadius: 999, border: "none", cursor: isSubmitting ? "not-allowed" : "pointer" }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M22 2L11 13" />
                         <path d="M22 2l-7 20-4-9-9-4 20-7z" />
@@ -370,11 +370,27 @@ function PortalContent({ onClose }) {
           width: 90% !important;
           margin-left: 0 !important;
         }
+        .gs-submit-btn {
+          width: 90% !important;
+          margin-left: 0 !important;
+        }
         .gs-input-field::placeholder {
           font-size: 10px;
         }
         .gs-phone-input::placeholder {
           font-size: 10px;
+        }
+      }
+      
+      @media (max-width: 332px) {
+        .gs-input-field {
+          width: 85% !important;
+        }
+        .gs-phone-control {
+          width: 85% !important;
+        }
+        .gs-submit-btn {
+          width: 85% !important;
         }
       }
 
