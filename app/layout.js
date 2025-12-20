@@ -8,6 +8,7 @@ import ConditionalFooter from "@/components/ConditionalFooter";
 import ConditionalCookieConsent from "@/components/ConditionalCookieConsent";
 import MixpanelProvider from '@/components/MixpanelProvider';
 import CampaignTracker from '@/components/campaignTracker';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 // Load Open Sans as the main font
 const openSans = Open_Sans({
@@ -64,6 +65,7 @@ export default function RootLayout({ children }) {
             <ConditionalFooter />
           </SmoothScroll>
         </MixpanelProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
