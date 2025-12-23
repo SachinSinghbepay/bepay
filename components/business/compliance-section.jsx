@@ -14,12 +14,12 @@ const complianceData = [
   {
     icon: "/images/business/licensed.svg",
     title: "Licensed",
-    badges: ["MSB (USA)", "VASP (EU)", "","","" ],
+    badges: ["MSB (USA)", "VASP (EU)", "MSB (Canada)", "", ""],
   },
   {
     icon: "/images/business/compliant.svg",
     title: "Compliant",
-    badges: ["DORA", "DPDP", "AML/KYC automation", "CFT","MiCA (EU)"],
+    badges: ["DORA", "DPDP", "AML/KYC automation", "CFT", "MiCA (EU)"],
   },
   {
     icon: "/images/business/protected.svg",
@@ -131,17 +131,15 @@ export default function ComplianceSection() {
                 )}
               </div>
               <div
-                className={`${
-                  index === complianceData.length - 1 ? "md:-mt-8" : ""
-                }`}
+                className={`${index === complianceData.length - 1 ? "md:-mt-8" : ""
+                  }`}
               >
                 <div className="flex flex-wrap gap-3">
                   {item.badges.map((badge, badgeIndex) => (
                     <span
                       key={badgeIndex}
-                      className={`px-6 py-3 border text-[#080808] text-sm lg:text-[16px] 3xl:text-[20px] rounded-[24px] font-medium ${
-                        badge === "" ? "invisible" : ""
-                      }`}
+                      className={`px-6 py-3 border text-[#080808] text-sm lg:text-[16px] 3xl:text-[20px] rounded-[24px] font-medium ${badge === "" ? "invisible" : ""
+                        }`}
                     >
                       {badge || "placeholder"}
                     </span>
