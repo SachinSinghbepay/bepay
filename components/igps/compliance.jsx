@@ -14,7 +14,7 @@ const complianceData = [
   {
     icon: "/images/business/licensed.svg",
     title: "Licensed",
-    badges: ["MSB (USA)", "VASP (EU)", "", "", ""],
+    badges: ["MSB (USA)", "VASP (EU)", "MSB(Canada)", "", ""],
   },
   {
     icon: "/images/business/compliant.svg",
