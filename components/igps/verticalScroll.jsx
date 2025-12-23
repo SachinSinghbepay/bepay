@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef, useState, useEffect } from "react"
+import React, { useRef, useState, useEffect, useCallback } from "react"
 import Image from "next/image"
 import { AnalyticsService } from "@/services/analyticsService"
 import GetStartedPopup from "@/components/popups/getStartedPopup"
@@ -321,11 +321,8 @@ const VerticalScrollingSection = () => {
 
   const resolvedIsMobile = isMobile === null ? false : isMobile
 
-  // Easing function for smooth animation
-  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3)
-
   // Mobile scroll functions with custom smooth animation
-  const scrollToSlide = (index) => {
+  const scrollToSlide = useCallback((index) => {
     if (mobileScrollRef.current && !isScrollingRef.current) {
       isScrollingRef.current = true
       const scrollWidth = mobileScrollRef.current.scrollWidth
@@ -334,6 +331,9 @@ const VerticalScrollingSection = () => {
       const distance = targetPosition - startPosition
       const duration = 800 // ms
       const startTime = performance.now()
+      
+      // Easing function for smooth animation
+      const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3)
 
       const animateScroll = (currentTime) => {
         const elapsed = currentTime - startTime
@@ -352,7 +352,7 @@ const VerticalScrollingSection = () => {
 
       requestAnimationFrame(animateScroll)
     }
-  }
+  }, [cardData.length, setCurrentSlide])
 
   const handlePrevSlide = () => {
     resetAutoPlay()
@@ -367,7 +367,7 @@ const VerticalScrollingSection = () => {
   }
 
   // Auto-play functionality
-  const resetAutoPlay = () => {
+  const resetAutoPlay = useCallback(() => {
     if (autoPlayRef.current) {
       clearInterval(autoPlayRef.current)
     }
@@ -380,7 +380,7 @@ const VerticalScrollingSection = () => {
         })
       }, 4000)
     }
-  }
+  }, [isMobile, cardData.length, scrollToSlide])
 
   // Start auto-play on mount for mobile
   useEffect(() => {
