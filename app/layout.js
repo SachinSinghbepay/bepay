@@ -1,5 +1,6 @@
 // src/app/layout.js
 import { Open_Sans, Montserrat } from 'next/font/google';
+import Script from 'next/script';
 import "./globals.css";
 import SmoothScroll from "@/components/smoothScroll";
 import Header from "@/components/header";
@@ -65,7 +66,10 @@ export default function RootLayout({ children }) {
             <ConditionalFooter />
           </SmoothScroll>
         </MixpanelProvider>
-        <SpeedInsights />
+        <Script 
+          src={`https://voice-widget-saas.vercel.app/embed.js?key=${process.env.NEXT_PUBLIC_VOICE_WIDGET_KEY}`}
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );
