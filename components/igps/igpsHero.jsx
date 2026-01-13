@@ -116,11 +116,11 @@ const IgpsHero = () => {
     },
     {
       icon: "/icons/h2.png",
-      text: "USD, EUR, GBP, AED, CNY & 40+ Major Currencies accepted!",
+      text: "Accept payments in USD, EUR, GBP, CNY, ZAR, MAD  & 40+ Major Currencies",
     },
     {
       icon: "/icons/h3.png",
-      text: "US, UK, Europe, China, UAE, Canada, & 100+ Countries supported!",
+      text: "Accept payments from US, UK, Europe, Africa, China, UAE & 100+ Countries supported!",
     },
     {
       icon: "/icons/h4.png",
