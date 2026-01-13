@@ -57,11 +57,10 @@ export default function Header() {
   // Helper function to get link classes
   const getLinkClasses = (path, baseClasses) => {
     const isActive = isActivePage(path);
-    return `${baseClasses} ${
-      isActive
-        ? "text-black font-[700]" // Active → bold black
-        : "text-[#6A6A6A] hover:text-black font-[400]" // Inactive → thin gray
-    } transition-colors duration-200`;
+    return `${baseClasses} ${isActive
+      ? "text-black font-[700]" // Active → bold black
+      : "text-[#6A6A6A] hover:text-black font-[400]" // Inactive → thin gray
+      } transition-colors duration-200`;
   };
 
   // FIXED: Changed onPage to buttonLocation
@@ -80,8 +79,8 @@ export default function Header() {
   const headerClasses = isContactPage
     ? "w-full absolute top-0 left-0 right-0 bg-transparent z-50"
     : isIgpsPage
-    ? "w-full relative bg-white md:bg-[#F9F9F9] z-50"
-    : "w-full relative bg-[#F9F9F9] z-50";
+      ? "w-full relative bg-white md:bg-[#F9F9F9] z-50"
+      : "w-full relative bg-[#F9F9F9] z-50";
 
   return (
     <header className={headerClasses}>
@@ -185,9 +184,8 @@ export default function Header() {
                   <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">Get in touch</span>
                 </Button>
                 <Button
-                  disabled
-                  aria-disabled="true"
-                  className="hidden lg:flex lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-not-allowed"
+                  onClick={() => window.location.href = "https://stage-bepay.briskpe.com/auth?redirect=/"}
+                  className="hidden lg:flex lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-pointer hover:scale-105"
                 >
                   <span
                     className="font-semibold text-[12px] lg:text-[12px] whitespace-nowrap text-[#080808] leading-[100%] text-center"
