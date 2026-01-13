@@ -144,7 +144,7 @@ const IgpsHero = () => {
     <section ref={sectionRef} className="bg-[#F9F9F9] text-black pt-12 pb-16 md:pt-4 md:pb-20">
       <div className="container mx-auto px-4 max-w-7xl">
         <div
-          className={`text-center -mt-16 lg:-mt-28 mb-4 md:mb-6 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          className={`text-center mb-4 md:mb-6 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
         >
           <h1
@@ -177,9 +177,9 @@ const IgpsHero = () => {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-stretch gap-4 lg:gap-6 justify-center">
+        <div className="flex flex-col lg:flex-row items-stretch gap-6 lg:gap-8 justify-center">
           <div
-            className={`lg:w-1/2 w-full flex justify-center -mx-4 lg:mx-0 mt-0 lg:-mt-14 transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
+            className={`lg:w-auto w-full flex flex-col transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
               }`}
           >
             <div className="relative w-full max-w-[28rem] mx-auto lg:mx-0 pb-6">
