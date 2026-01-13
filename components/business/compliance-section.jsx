@@ -14,7 +14,7 @@ const complianceData = [
   {
     icon: "/images/business/licensed.svg",
     title: "Licensed",
-    badges: ["MSB (USA)", "VASP (EU)", "MSB (Canada)", "", ""],
+    badges: ["MSB (USA)", "MSB (Canada)", "PSP (Canada)", "VASP (EU)", ""],
   },
   {
     icon: "/images/business/compliant.svg",
@@ -24,7 +24,7 @@ const complianceData = [
   {
     icon: "/images/business/protected.svg",
     title: "Protected",
-    badges: ["Multi-sig wallets", "fraud detection", "GDPR", ""],
+    badges: ["GDPR", "Multi-Factor Authentication", "24/7 Monitoring", "End-to-End Encryption", "Real-time Fraud Detection"],
   },
 ];
 
@@ -150,12 +150,12 @@ export default function ComplianceSection() {
               {/* Desktop-only flag image */}
               {item.title === "Licensed" && (
                 <Image
-                  src="/flags.png"
+                  src="/igps_flag.png"
                   alt="Flag"
                   width={70}
                   height={63}
-                  className="absolute bottom-8 right-8 lg:bottom-12 lg:right-12 pointer-events-none hidden lg:block"
-                  loading="lazy" // <-- ADDED
+                  className="absolute bottom-8 right-12 lg:bottom-12 lg:right-12 pointer-events-none hidden lg:block"
+                  loading="lazy"
                 />
               )}
             </motion.div>

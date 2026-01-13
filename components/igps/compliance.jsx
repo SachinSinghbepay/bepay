@@ -14,7 +14,7 @@ const complianceData = [
   {
     icon: "/images/business/licensed.svg",
     title: "Licensed",
-    badges: ["MSB (USA)", "VASP (EU)", "MSB(Canada)", "", ""],
+    badges: ["MSB (USA)", "MSB (Canada)", "PSP (Canada)", "VASP (EU)", ""],
   },
   {
     icon: "/images/business/compliant.svg",
@@ -150,17 +150,15 @@ export default function ComplianceSection() {
                 )}
               </div>
               <div
-                className={`${
-                  index === complianceData.length - 1 ? "md:-mt-8" : ""
-                }`}
+                className={`${index === complianceData.length - 1 ? "md:-mt-8" : ""
+                  }`}
               >
                 <div className="flex flex-wrap gap-3">
                   {item.badges.map((badge, badgeIndex) => (
                     <span
                       key={badgeIndex}
-                      className={`px-6 py-3 border text-[#080808] text-sm lg:text-[16px] 3xl:text-[20px] rounded-[24px] font-medium ${
-                        badge === "" ? "invisible" : ""
-                      }`}
+                      className={`px-6 py-3 border text-[#080808] text-sm lg:text-[16px] 3xl:text-[20px] rounded-[24px] font-medium ${badge === "" ? "invisible" : ""
+                        }`}
                     >
                       {badge || "placeholder"}
                     </span>
@@ -175,8 +173,8 @@ export default function ComplianceSection() {
                   alt="Flag"
                   width={70}
                   height={63}
-                  className="absolute bottom-8 left-12 lg:bottom-12 lg:right-12 pointer-events-none hidden lg:block"
-                  loading="lazy" // <-- ADDED
+                  className="absolute bottom-8 right-12 lg:bottom-12 lg:right-12 pointer-events-none hidden lg:block"
+                  loading="lazy"
                 />
               )}
             </motion.div>

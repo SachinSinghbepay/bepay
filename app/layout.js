@@ -1,5 +1,6 @@
 // src/app/layout.js
 import { Open_Sans, Montserrat } from 'next/font/google';
+import Script from 'next/script';
 import "./globals.css";
 import SmoothScroll from "@/components/smoothScroll";
 import Header from "@/components/header";
@@ -8,6 +9,7 @@ import ConditionalFooter from "@/components/ConditionalFooter";
 import ConditionalCookieConsent from "@/components/ConditionalCookieConsent";
 import MixpanelProvider from '@/components/MixpanelProvider';
 import CampaignTracker from '@/components/campaignTracker';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 // Load Open Sans as the main font
 const openSans = Open_Sans({
@@ -64,6 +66,10 @@ export default function RootLayout({ children }) {
             <ConditionalFooter />
           </SmoothScroll>
         </MixpanelProvider>
+        <Script 
+          src={`https://voice-widget-saas.vercel.app/embed.js?key=${process.env.NEXT_PUBLIC_VOICE_WIDGET_KEY}`}
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );
