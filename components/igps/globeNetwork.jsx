@@ -16,7 +16,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
         if (entry.isIntersecting && !hasTrackedView) {
           try {
             AnalyticsService.sendEvent('Global Network IGPS viewed');
-          } catch (e) {}
+          } catch (e) { }
           setHasTrackedView(true);
           observer.unobserve(entry.target);
         }
@@ -36,10 +36,10 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -201,7 +201,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
     boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
     position: 'relative',
     // Using the specified width for consistency, adjusting only slightly for visual flow
-    width: isMobile ? '98%' : '467px', 
+    width: isMobile ? '98%' : '467px',
     minHeight: isMobile ? 'auto' : '282px', // Use minHeight for flexible content, or adjust padding to hit the target height
     display: 'flex',
     flexDirection: 'column',
@@ -213,7 +213,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
   return (
     <div ref={sectionRef} style={mainContainerStyle}>
       <style>{mobileStyles}</style>
-      
+
       {/* Title */}
       <h1 className='main-title md:-mt-10 mt-12 md:whitespace-nowrap' style={{ fontSize: '60px', fontWeight: 'bold', color: '#333', marginBottom: '2px' }}>
         Global Network <span style={{ color: '#ccc' }}>Coverage</span>
@@ -225,11 +225,11 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
         {/* Left side: Globe Image */}
         <div className="globe-container mt-10" style={globeContainerStyle}>
           <Image
-            src="/globe.png" 
+            src="/globe.png"
             alt="Global Network Globe with Flags"
             width={480}
             height={480}
-            onClick={() => { try { AnalyticsService.sendEvent('Global Globe Clicked'); } catch (e) {} }}
+            onClick={() => { try { AnalyticsService.sendEvent('Global Globe Clicked'); } catch (e) { } }}
             style={{
               width: isMobile ? '90%' : '480px',
               maxWidth: '100%',
@@ -289,32 +289,32 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
         {/* Right side: Text content */}
         <div className="right-content" style={rightContentStyle}>
           {/* Top text box */}
-          <motion.div 
-            className='text-box mt-0 md:-mt-10' 
-            style={{ ...textBoxBaseStyle,padding: '40px' }}
+          <motion.div
+            className='text-box mt-0 md:-mt-10'
+            style={{ ...textBoxBaseStyle, padding: '40px' }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, ease: "easeOut" }}
             whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-          > 
+          >
             <p style={isMobile ? cardMobileTextStyle : textStyle}>
-            Trade like a local. Get virtual account details in key economic zones to collect payments Near real time without cross-border friction.
+              Trade like a local. Get virtual account details in key economic zones to collect payments Near real time without cross-border friction.
             </p>
           </motion.div>
 
           {/* Bottom text box with flags and stablecoins */}
-          <motion.div 
-            className='text-box' 
-            style={{...textBoxBaseStyle, padding: '40px'}}
+          <motion.div
+            className='text-box'
+            style={{ ...textBoxBaseStyle, padding: '40px' }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
             whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
           >
-            <p style={isMobile ? {...cardMobileTextStyle, marginBottom: '20px'} : {...textStyle, marginBottom: '20px'}}>
-            USD, EUR, GBP, AED, CNY, INR + other major business currencies supported.
+            <p style={isMobile ? { ...cardMobileTextStyle, marginBottom: '20px' } : { ...textStyle, marginBottom: '20px' }}>
+              USD, EUR, GBP, AED, CNY, INR, ZAR, NGN, MAD +  other major business currencies & other global stablecoins supported.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', alignItems: 'center' }}>
               {/* Replace the flag emojis and stablecoin icon with a single global image */}
@@ -323,7 +323,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
                 alt="Global flags"
                 width={180}
                 height={30}
-                onClick={() => { try { AnalyticsService.sendEvent('Global Flags Clicked'); } catch (e) {} }}
+                onClick={() => { try { AnalyticsService.sendEvent('Global Flags Clicked'); } catch (e) { } }}
                 style={{
                   width: '180px',
                   maxWidth: '100%',

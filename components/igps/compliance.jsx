@@ -14,7 +14,7 @@ const complianceData = [
   {
     icon: "/images/business/licensed.svg",
     title: "Licensed",
-    badges: ["MSB (USA)", "VASP (EU)", "", "", ""],
+    badges: ["MSB (USA)", "MSB (CANADA)", "PSP (CANADA)", "VASP (EU)", ""],
   },
   {
     icon: "/images/business/compliant.svg",
@@ -175,8 +175,8 @@ export default function ComplianceSection() {
                   alt="Flag"
                   width={70}
                   height={63}
-                  className="absolute bottom-8 left-12 lg:bottom-12 lg:right-12 pointer-events-none hidden lg:block"
-                  loading="lazy" // <-- ADDED
+                  className="absolute bottom-8 right-12 lg:bottom-12 lg:right-12 pointer-events-none hidden lg:block"
+                  loading="lazy"
                 />
               )}
             </motion.div>
