@@ -116,11 +116,11 @@ const IgpsHero = () => {
     },
     {
       icon: "/icons/h2.png",
-      text: "USD, EUR, GBP, CNY, ZAR, MAD  & 40+ Major Currencies",
+      text: "USD, EUR, GBP, AED, CNY & 40+ Major Currencies accepted!",
     },
     {
       icon: "/icons/h3.png",
-      text: "US, UK, Europe, Africa, China, UAE & 100+ Countries Supported!",
+      text: "US, UK, Europe, China, UAE, Canada, & 100+ Countries supported!",
     },
     {
       icon: "/icons/h4.png",
@@ -144,7 +144,7 @@ const IgpsHero = () => {
     <section ref={sectionRef} className="bg-[#F9F9F9] text-black pt-12 pb-16 md:pt-4 md:pb-20">
       <div className="container mx-auto px-4 max-w-7xl">
         <div
-          className={`text-center -mt-10 lg:-mt-20 mb-4 md:mb-6 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          className={`text-center -mt-16 lg:-mt-28 mb-4 md:mb-6 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
         >
           <h1
@@ -177,9 +177,9 @@ const IgpsHero = () => {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-stretch gap-6 lg:gap-8 justify-center">
+        <div className="flex flex-col lg:flex-row items-stretch gap-4 lg:gap-6 justify-center">
           <div
-            className={`lg:w-1/2 w-full flex justify-center -mx-4 lg:mx-0 mt-0 lg:-mt-10 transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
+            className={`lg:w-1/2 w-full flex justify-center -mx-4 lg:mx-0 mt-0 lg:-mt-14 transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
               }`}
           >
             <div className="relative w-full max-w-[28rem] mx-auto lg:mx-0 pb-6">
@@ -316,8 +316,11 @@ const IgpsHero = () => {
             </div>
           </div>
         </div>
+      </div>
 
-        {popup && popup !== "getstarted" && (
+
+      {
+        popup && popup !== "getstarted" && (
           <div className="igps-popup-overlay" onClick={() => setPopup(null)}>
             <div className="igps-popup" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
               <button className="igps-popup-close" onClick={() => setPopup(null)} aria-label="Close popup">
@@ -326,8 +329,6 @@ const IgpsHero = () => {
               <div className="igps-popup-content">
                 <h3 className="igps-popup-title">
                   {popup === "email" && "Leave us a message on email and we'll get back\nto you within 24 hours"}
-                  {popup === "whatsapp" && "Leave us a message on whatsapp on this number\nand we'll get back to you within 24 hours"}
-                  {popup === "call" && "Give us a call on this number if you\nhave any query"}
                 </h3>
                 <div className="igps-popup-contact">
                   <div className="igps-contact-pill" ref={pillRef}>
@@ -407,20 +408,20 @@ const IgpsHero = () => {
                         action,
                       })
                     } catch (e) { }
-                    if (popup === "whatsapp") window.open("https://wa.me/91820000000", "_blank")
-                    if (popup === "email") window.location.href = "mailto:info@bepay.money"
+                    window.location.href = "mailto:info@bepay.money"
                   }}
                 >
-                  {popup === "email" ? "Open email" : "Open action"}
+                  Open email
                 </button>
               </div>
             </div>
           </div>
-        )}
+        )
+      }
 
-        {popup === "getstarted" && <GetStartedPopup isOpen={true} onClose={() => setPopup(null)} />}
+      {popup === "getstarted" && <GetStartedPopup isOpen={true} onClose={() => setPopup(null)} />}
 
-        <style jsx>{`
+      <style jsx>{`
         @media (max-width: 1023px) {
           .igps-pointer-text {
             font-family: "Montserrat", sans-serif;
