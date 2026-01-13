@@ -14,7 +14,7 @@ const complianceData = [
   {
     icon: "/images/business/licensed.svg",
     title: "Licensed",
-    badges: ["MSB (USA)", "MSB (CANADA)", "PSP (CANADA)", "VASP (EU)", ""],
+    badges: ["MSB (USA)", "MSB (Canada)", "PSP (Canada)", "VASP (EU)", ""],
   },
   {
     icon: "/images/business/compliant.svg",
@@ -24,7 +24,7 @@ const complianceData = [
   {
     icon: "/images/business/protected.svg",
     title: "Protected",
-    badges: ["Multi-sig wallets", "fraud detection", "GDPR", ""],
+    badges: ["GDPR", "Multi-Factor Authentication", "24/7 Monitoring", "End-to-End Encryption", "Real-time Fraud Detection"],
   },
 ];
 

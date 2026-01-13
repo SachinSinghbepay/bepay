@@ -30,7 +30,7 @@ const securityData = {
     icon: "/images/crypto/icon4.png",
     title: "Regulatory Compliance",
     description:
-      "Licensed by VASP (EU), MiCA (EU), DORA (EU), MSME (India) and MSB (USA)",
+      "Licensed by VASP (EU), MiCA (EU), DORA (EU), MSME (India), MSB (Canada) and MSB (USA)",
   },
   encryption: {
     title: "End-to-End Encryption",
