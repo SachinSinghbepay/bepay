@@ -62,7 +62,7 @@ const IgpsHero = () => {
           popup: type,
         })
       }
-    } catch (e) {}
+    } catch (e) { }
     setPopup(type)
   }
 
@@ -79,7 +79,7 @@ const IgpsHero = () => {
       if (!pillRef.current || !textRef.current || !iconRef.current) return
 
       if (window.innerWidth <= 480) {
-        ;(pillRef.current).style.width = ""
+        ; (pillRef.current).style.width = ""
         return
       }
 
@@ -97,7 +97,7 @@ const IgpsHero = () => {
       const maxAllowed = Math.max(vw90 - 40, 200)
 
       if (totalTarget > maxAllowed) totalTarget = maxAllowed
-      ;(pillRef.current).style.width = `${totalTarget}px`
+        ; (pillRef.current).style.width = `${totalTarget}px`
     }
 
     if (popup) {
@@ -115,11 +115,11 @@ const IgpsHero = () => {
     },
     {
       icon: "/icons/h2.png",
-      text: "USD, EUR, GBP, AED, CNY & 40+ Major Currencies accepted!",
+      text: "USD, EUR, GBP, CNY, ZAR, MAD  & 40+ Major Currencies",
     },
     {
       icon: "/icons/h3.png",
-      text: "US, UK, Europe, China, UAE, Canada, & 100+ Countries supported!",
+      text: "US, UK, Europe, Africa, China, UAE & 100+ Countries Supported!",
     },
     {
       icon: "/icons/h4.png",
@@ -143,9 +143,8 @@ const IgpsHero = () => {
     <section ref={sectionRef} className="bg-[#F9F9F9] text-black py-20 md:py-20">
       <div className="container mx-auto px-4 max-w-7xl">
         <div
-          className={`text-center -mt-10 lg:-mt-20 mb-8 md:mb-16 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
+          className={`text-center -mt-10 lg:-mt-20 mb-8 md:mb-16 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            }`}
         >
           <h1
             className="text-gray-800 lg:-mt-15 text-[26px] md:text-[44px]"
@@ -179,9 +178,8 @@ const IgpsHero = () => {
 
         <div className="flex flex-col md:flex-row items-center gap-8">
           <div
-            className={`lg:w-1/2 w-full flex justify-center -mx-4 lg:mx-0 mt-0 lg:-mt-10 transition-all duration-700 delay-200 ${
-              isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
-            }`}
+            className={`lg:w-1/2 w-full flex justify-center -mx-4 lg:mx-0 mt-0 lg:-mt-10 transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
+              }`}
           >
             <div className="relative w-full  max-w-[35rem] aspect-square">
               {/* <Image
@@ -196,14 +194,13 @@ const IgpsHero = () => {
           </div>
 
           <div
-            className={`lg:w-1/2 w-full lg:pl-8 transition-all duration-700 delay-200 ${
-              isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
-            }`}
+            className={`lg:w-1/2 w-full lg:pl-8 transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
+              }`}
           >
             <div className="space-y-0 mt-0 lg:-mt-10">
               <div className="w-full mb-6">
                 <p className="igps-intro text-left">
-                  India&apos;s first platform offering free <br />
+                  Global first platform offering free <br />
                   international settlements for businesses
                 </p>
 
@@ -211,9 +208,8 @@ const IgpsHero = () => {
                   {checklistItems.map((item, idx) => (
                     <div
                       key={idx}
-                      className={`flex items-center justify-between lg:py-4 transition-all duration-500 ${
-                        itemsInView.includes(idx) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-                      }`}
+                      className={`flex items-center justify-between lg:py-4 transition-all duration-500 ${itemsInView.includes(idx) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                        }`}
                       style={{
                         transitionDelay: `${idx * 50}ms`,
                       }}
@@ -244,9 +240,8 @@ const IgpsHero = () => {
               </div>
 
               <div
-                className={`mt-6 pl-3 border-l-4 border-black transition-all duration-700 delay-500 ${
-                  isVisible ? "opacity-100" : "opacity-0"
-                }`}
+                className={`mt-6 pl-3 border-l-4 border-black transition-all duration-700 delay-500 ${isVisible ? "opacity-100" : "opacity-0"
+                  }`}
               >
                 <p
                   className="text-[11px] mt-8 md:text-sm text-gray-500"
@@ -270,9 +265,8 @@ const IgpsHero = () => {
               <div className="flex items-center mt-8 space-x-[10px]">
                 <button
                   onClick={handleGetStarted}
-                  className={`flex items-center cursor-pointer justify-center gap-2 bg-black text-[#F9F9F9] px-6 py-4 h-[56px] rounded-[100px] text-xs font-medium md:w-[180px] md:text-[14px] md:h-[66px] transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 delay-600 ${
-                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                  }`}
+                  className={`flex items-center cursor-pointer justify-center gap-2 bg-black text-[#F9F9F9] px-6 py-4 h-[56px] rounded-[100px] text-xs font-medium md:w-[180px] md:text-[14px] md:h-[66px] transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 delay-600 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                    }`}
                 >
                   <span>Get Started</span>
                   <svg
@@ -294,9 +288,8 @@ const IgpsHero = () => {
                 <Button
                   variant="outline"
                   onClick={() => handleOpenPopup("email", "IGPS Email Clicked")}
-                  className={`rounded-full w-[56px] h-[56px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border border-gray-300 transition-all duration-300 hover:scale-110 hover:shadow-md active:scale-95 delay-700 ${
-                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                  }`}
+                  className={`rounded-full w-[56px] h-[56px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border border-gray-300 transition-all duration-300 hover:scale-110 hover:shadow-md active:scale-95 delay-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                    }`}
                   style={{ borderColor: "rgba(192, 192, 192, 0.4)" }}
                 >
                   <Image src="/icons/mail.png" alt="mail icon" width={26} height={26} />
@@ -336,7 +329,7 @@ const IgpsHero = () => {
                           method: popup,
                           value: text,
                         })
-                      } catch (e) {}
+                      } catch (e) { }
                       if (navigator && navigator.clipboard) navigator.clipboard.writeText(text)
                     }}
                     aria-label="Copy contact"
@@ -390,7 +383,7 @@ const IgpsHero = () => {
                         popup,
                         action,
                       })
-                    } catch (e) {}
+                    } catch (e) { }
                     if (popup === "whatsapp") window.open("https://wa.me/91820000000", "_blank")
                     if (popup === "email") window.location.href = "mailto:info@bepay.money"
                   }}
