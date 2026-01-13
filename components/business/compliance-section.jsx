@@ -14,12 +14,12 @@ const complianceData = [
   {
     icon: "/images/business/licensed.svg",
     title: "Licensed",
-    badges: ["MSB (USA)", "MSB (CANADA)", "PSP (CANADA)", "VASP (EU)", ""],
+    badges: ["MSB (USA)", "MSB (Canada)", "PSP (Canada)", "VASP (EU)", ""],
   },
   {
     icon: "/images/business/compliant.svg",
     title: "Compliant",
-    badges: ["DORA", "DPDP", "CFT", "MiCA (EU)"],
+    badges: ["DORA", "DPDP", "AML/KYC automation", "CFT", "MiCA (EU)"],
   },
   {
     icon: "/images/business/protected.svg",

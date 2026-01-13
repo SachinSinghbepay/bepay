@@ -10,8 +10,6 @@ const securityData = {
     icon: "/images/crypto/icon1.png",
     title: "Security Certifications",
     items: [
-      "SOC2",
-      "PCI DSS",
       "ISO 27001 Information Security Management",
       "GDPR Privacy Protection Compliance",
       "ISO 9001 Quality Management Systems (QMS)",
@@ -32,7 +30,7 @@ const securityData = {
     icon: "/images/crypto/icon4.png",
     title: "Regulatory Compliance",
     description:
-      "Licensed as MSB (USA), MSB (Canada), PSP (Canada), VASP (EU) and Compliant with DORA (EU), DPDP, CFT, MiCA (EU)",
+      "Licensed by VASP (EU), MiCA (EU), DORA (EU), MSME (India), MSB (Canada) and MSB (USA)",
   },
   encryption: {
     title: "End-to-End Encryption",

@@ -185,10 +185,10 @@ export default function Header() {
                 </Button>
                 <Button
                   onClick={() => window.location.href = "https://stage-bepay.briskpe.com/auth?redirect=/"}
-                  className="hidden lg:flex lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-pointer hover:scale-105"
+                  className="hidden lg:flex lg:w-[120px] lg:h-[56px] items-center bg-[#080808] text-white  rounded-full transition-all duration-200 opacity-100 cursor-pointer hover:scale-105"
                 >
                   <span
-                    className="font-semibold text-[12px] lg:text-[12px] whitespace-nowrap text-[#080808] leading-[100%] text-center"
+                    className="font-semibold text-[12px] lg:text-[12px] whitespace-nowrap   leading-[100%] text-center"
                     style={{ fontFamily: 'Montserrat, sans-serif' }}
                   >
                     Login
