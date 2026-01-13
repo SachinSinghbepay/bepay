@@ -217,7 +217,7 @@ const IgpsHero = () => {
             <div className="flex flex-col h-full justify-between py-2">
               <div className="w-full">
                 <p className="igps-intro text-left mb-4">
-                  India&apos;s first platform offering free <br className="hidden lg:block" />
+                  Global first platform offering free <br className="hidden lg:block" />
                   international settlements for businesses
                 </p>
 
