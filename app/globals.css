@@ -1,0 +1,525 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+    }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+    }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+  --font-open-sans: "Open Sans", sans-serif;
+  --font-montserrat: "Montserrat", sans-serif;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+body {
+  font-family: var(--font-montserrat);
+  overscroll-behavior: none;
+  
+}
+
+/* Smooth scrolling and animation optimizations */
+html {
+  scroll-behavior: auto;
+  overflow: visible;
+
+}
+
+body {
+  font-family: var(--font-montserrat);
+  overscroll-behavior: none; /* optional: prevents rubber banding on touch devices */
+}
+
+/* Optimize animations for better performance */
+.hero-animation * {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Ensure smooth transitions */
+.phone-container {
+  transform-style: preserve-3d;
+}
+
+/* Prevent layout shifts during animations */
+.hero-section {
+  contain: layout style paint;
+}
+
+@layer utilities {
+  .custom-shadow {
+    box-shadow: 127.25px 127.25px 127.25px 0px #0000000A;
+  }
+
+  .custom-blur {
+    backdrop-filter: blur(12.725351333618164px);
+    -webkit-backdrop-filter: blur(12.725351333618164px);
+  }
+}
+
+/* Privacy Policy Page Specific Styles */
+/* Only targets the privacy policy content container */
+
+/* Main container spacing adjustments */
+.max-w-\[979px\].py-8.space-y-12 {
+  padding-top: 3rem !important; /* Increased from py-8 */
+  padding-bottom: 3rem !important;
+  gap: 4rem !important; /* Increased from space-y-12 (3rem) to 4rem */
+}
+
+/* Section spacing adjustments */
+.max-w-\[979px\].py-8.space-y-12 > section {
+  margin-bottom: 4rem !important;
+}
+
+/* Subsection spacing within sections */
+.max-w-\[979px\].py-8.space-y-12 section .space-y-6 {
+  gap: 3rem !important; /* Increased from 1.5rem to 2rem */
+}
+
+.max-w-\[979px\].py-8.space-y-12 section .space-y-4 {
+  gap: 3rem !important; /* Increased from 1rem to 1.5rem */
+}
+
+/* Paragraph and content spacing */
+.max-w-\[979px\].py-8.space-y-12 p {
+  font-size: 16px !important; /* Desktop: 24px */
+  line-height: 1.6 !important;
+  margin-bottom: 1.5rem !important;
+}
+
+/* List spacing */
+.max-w-\[979px\].py-8.space-y-12 ul,
+.max-w-\[979px\].py-8.space-y-12 ol {
+  margin-bottom: 3rem !important;
+}
+
+.max-w-\[979px\].py-8.space-y-12 li {
+  font-size: 16px !important; /* Desktop: 24px */
+  line-height: 1.6 !important;
+  margin-bottom: 0.75rem !important;
+}
+
+/* Disc bullet points gray color and smaller size */
+.max-w-\[979px\].py-8.space-y-12 ul li::marker {
+
+  font-size: 0.75em !important; /* Smaller bullet points */
+}
+
+.max-w-\[979px\].py-8.space-y-12 .list-disc li::marker {
+
+  font-size: 0.75em !important; /* Smaller bullet points */
+}
+
+/* Nested list items */
+.max-w-\[979px\].py-8.space-y-12 li li {
+  margin-bottom: 0.5rem !important;
+}
+
+/* Header spacing */
+.max-w-\[979px\].py-8.space-y-12 h2 {
+  margin-bottom: 2.5rem !important; /* Increased spacing after main headers */
+  margin-top: 3rem !important; /* Increased spacing before main headers */
+}
+
+.max-w-\[979px\].py-8.space-y-12 h3 {
+  margin-bottom: 1.5rem !important;
+  margin-top: 2rem !important;
+}
+
+.max-w-\[979px\].py-8.space-y-12 h4 {
+  margin-bottom: 1rem !important;
+  margin-top: 1.5rem !important;
+}
+
+/* Contact section specific styling */
+.max-w-\[979px\].py-8.space-y-12 section.border-t {
+  padding-top: 3rem !important; /* Increased border-top section padding */
+  margin-top: 4rem !important;
+}
+
+/* Background box in contact section */
+.max-w-\[979px\].py-8.space-y-12 .bg-gray-50 {
+  padding: 2rem !important; /* Increased padding */
+  margin: 1.5rem 0 !important;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  /* Main container mobile adjustments */
+  .max-w-\[979px\].py-8.space-y-12 {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+    gap: 2.5rem !important;
+  }
+
+  /* Section spacing for mobile */
+  .max-w-\[979px\].py-8.space-y-12 > section {
+    margin-bottom: 2.5rem !important;
+  }
+
+  /* Subsection spacing for mobile */
+  .max-w-\[979px\].py-8.space-y-12 section .space-y-6 {
+    gap: 1.5rem !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 section .space-y-4 {
+    gap: 1rem !important;
+  }
+
+  /* Mobile paragraph and content styling */
+  .max-w-\[979px\].py-8.space-y-12 p {
+    font-size: 16px !important; /* Mobile: 16px */
+    line-height: 1.7 !important; /* Slightly increased line height for mobile readability */
+    margin-bottom: 1.25rem !important;
+  }
+
+  /* Mobile list styling */
+  .max-w-\[979px\].py-8.space-y-12 ul,
+  .max-w-\[979px\].py-8.space-y-12 ol {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 li {
+    font-size: 16px !important; /* Mobile: 16px */
+    line-height: 1.7 !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Mobile header spacing */
+  .max-w-\[979px\].py-8.space-y-12 h2 {
+    margin-bottom: 1.5rem !important;
+    margin-top: 2rem !important;
+    font-size: 1.75rem !important; /* Slightly smaller on mobile */
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 h3 {
+    margin-bottom: 1rem !important;
+    margin-top: 1.5rem !important;
+    font-size: 1.5rem !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 h4 {
+    margin-bottom: 0.75rem !important;
+    margin-top: 1rem !important;
+    font-size: 1.25rem !important;
+  }
+
+  /* Mobile contact section */
+  .max-w-\[979px\].py-8.space-y-12 section.border-t {
+    padding-top: 2rem !important;
+    margin-top: 2.5rem !important;
+  }
+
+  /* Mobile background box */
+  .max-w-\[979px\].py-8.space-y-12 .bg-gray-50 {
+    padding: 1.5rem !important;
+    margin: 1rem 0 !important;
+  }
+}
+
+/* Tablet Responsive Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .max-w-\[979px\].py-8.space-y-12 p {
+    font-size: 16px !important; /* Tablet: 20px */
+    line-height: 1.65 !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 li {
+    font-size: 16px !important; /* Tablet: 20px */
+    line-height: 1.65 !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 h2 {
+    font-size: 2rem !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 h3 {
+    font-size: 1.75rem !important;
+  }
+}
+
+/* Additional spacing utilities for better readability */
+.max-w-\[979px\].py-8.space-y-12 strong {
+  font-weight: 600 !important;
+}
+
+.max-w-\[979px\].py-8.space-y-12 .font-semibold {
+  font-weight: 600 !important;
+}
+
+.max-w-\[979px\].py-8.space-y-12 .font-bold {
+  font-weight: 700 !important;
+}
+
+/* Ensure proper spacing between different content types */
+.max-w-\[979px\].py-8.space-y-12 p + ul,
+.max-w-\[979px\].py-8.space-y-12 p + ol {
+  margin-top: 1rem !important;
+}
+
+.max-w-\[979px\].py-8.space-y-12 ul + p,
+.max-w-\[979px\].py-8.space-y-12 ol + p {
+  margin-top: 1.5rem !important;
+}
+
+/* Mobile spacing adjustments for content transitions */
+@media (max-width: 768px) {
+  .max-w-\[979px\].py-8.space-y-12 p + ul,
+  .max-w-\[979px\].py-8.space-y-12 p + ol {
+    margin-top: 0.75rem !important;
+  }
+
+  .max-w-\[979px\].py-8.space-y-12 ul + p,
+  .max-w-\[979px\].py-8.space-y-12 ol + p {
+    margin-top: 1rem !important;
+  }
+}
+
+
+/* Add TipTap editor styles */
+.ProseMirror {
+  min-height: 300px;
+  padding: 0.5rem;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Heading styles for the editor */
+.ProseMirror h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 0.83em;
+  margin-bottom: 0.83em;
+}
+
+.ProseMirror h3 {
+  font-size: 1.17em;
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+/* Add styles for the content display */
+.prose img {
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem 0;
+}
+
+.prose blockquote {
+  border-left: 4px solid #000;
+  padding-left: 1rem;
+  font-style: italic;
+  color: #4b5563;
+}
+
+.prose hr {
+  margin: 2rem 0;
+  border-top: 2px solid #e5e7eb;
+}
+
+/* Heading styles for the blog display */
+.prose h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+}
+
+.prose h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 0.83em;
+  margin-bottom: 0.83em;
+}
+
+.prose h3 {
+  font-size: 1.17em;
+  font-weight: bold;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+/* Slide up animation for modal */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Fix for prose list styling */
+.prose ul {
+  list-style-type: disc !important;
+  padding-left: 1.5em !important;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.prose ol {
+  list-style-type: decimal !important;
+  padding-left: 1.5em !important;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.prose li {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
