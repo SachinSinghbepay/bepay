@@ -61,9 +61,7 @@ export default function RootLayout({ children }) {
             <Header />
             <ConditionalCookieConsent />
             <CampaignTracker />
-            <AuthProvider>
-            {children}
-            </AuthProvider>
+            <AuthProvider>{children}</AuthProvider>
             <ConditionalFooter />
           </SmoothScroll>
         </MixpanelProvider>

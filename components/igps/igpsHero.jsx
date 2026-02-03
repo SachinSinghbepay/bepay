@@ -250,7 +250,7 @@ const IgpsHero = () => {
                     fontWeight: 600,
                     lineHeight: "100%",
                     letterSpacing: "0%",
-                    textTransform: "uppercase", 
+                    textTransform: "uppercase",
                   }}
                 >
                   100% SAFE AND COMPLIANT • POWERED BY LEADING BANKS •
