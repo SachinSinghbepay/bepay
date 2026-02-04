@@ -6,47 +6,70 @@ import { AnalyticsService } from "@/services/analyticsService";
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
+// Points for the piecewise linear scale: [percentage, value]
+const scalePoints = [
+  { p: 0, v: 0 },
+  { p: 20, v: 10000 },
+  { p: 40, v: 100000 },
+  { p: 60, v: 500000 },
+  { p: 80, v: 1000000 },
+  { p: 100, v: 10000000 }
+];
+
+const percentageToValue = (percentage) => {
+  if (percentage <= 0) return 0;
+  if (percentage >= 100) return 10000000;
+
+  // Find the segment
+  const index = scalePoints.findIndex(point => point.p > percentage);
+  const upper = scalePoints[index];
+  const lower = scalePoints[index - 1];
+
+  // Interpolate
+  const ratio = (percentage - lower.p) / (upper.p - lower.p);
+  return Math.round(lower.v + ratio * (upper.v - lower.v));
+};
+
+const valueToPercentage = (value) => {
+  if (value <= 0) return 0;
+  if (value >= 10000000) return 100;
+
+  // Find the segment
+  const index = scalePoints.findIndex(point => point.v >= value);
+  if (index === -1) return 100; // Should not happen if max is correct
+  if (index === 0) return 0; // Should not happen if min is 0
+
+  const upper = scalePoints[index];
+  const lower = scalePoints[index - 1];
+
+  // Interpolate
+  const ratio = (value - lower.v) / (upper.v - lower.v);
+  return lower.p + ratio * (upper.p - lower.p);
+};
+
 function Calculator() {
   const trackRef = useRef(null);
   const knobRef = useRef(null);
 
-  // Define tick marks with their values and positions
-  // Helper functions for logarithmic slider
-  const linearToLog = (linearValue, min = 1, max = 10000000) => {
-    if (linearValue === 0) return 0;
-    const minLog = Math.log(min);
-    const maxLog = Math.log(max);
-    const scale = (maxLog - minLog) / 100;
-    return Math.round(Math.exp(minLog + scale * linearValue));
-  };
-
-  const logToLinear = (logValue, min = 1, max = 10000000) => {
-    if (logValue === 0) return 0;
-    const minLog = Math.log(min);
-    const maxLog = Math.log(max);
-    const scale = (maxLog - minLog) / 100;
-    return (Math.log(logValue) - minLog) / scale;
-  };
-
   // State initialization
   const [usd, setUsd] = useState(10000);
-  const [sliderValue, setSliderValue] = useState(() => logToLinear(10000));
+  const [sliderValue, setSliderValue] = useState(() => valueToPercentage(10000));
 
   // Tick marks
-// Tick marks - calculate their actual logarithmic positions
-const tickMarks = [
-  { value: 0, label: "$0", position: 0 },
-  { value: 10000, label: "$10K", position: logToLinear(10000) / 100 },
-  { value: 100000, label: "$100K", position: logToLinear(100000) / 100 },
-    { value: 500000, label: "$500K", position: logToLinear(500000) / 100 },
-  { value: 1000000, label: "$1M", position: logToLinear(1000000) / 100 },
-  { value: 10000000, label: "$10M", position: 1 },
-];
+  const tickMarks = [
+    { value: 0, label: "$0", position: 0 },
+    { value: 10000, label: "$10K", position: 0.2 },
+    { value: 100000, label: "$100K", position: 0.4 },
+    { value: 500000, label: "$500K", position: 0.6 },
+    { value: 1000000, label: "$1M", position: 0.8 },
+    { value: 10000000, label: "$10M", position: 1 },
+  ];
 
 
 
   const [liveRate, setLiveRate] = useState(null);
   const [rateLoading, setRateLoading] = useState(false);
+  const [rateError, setRateError] = useState(null); // Added state for error handling
 
   // for currencies
   const [currencies, setCurrencies] = useState([]);
@@ -93,7 +116,7 @@ const tickMarks = [
     const fetchCurrencies = async () => {
       setCurrenciesLoading(true);
       try {
-        const res = await fetch("https://ddhvx9gk-5001.inc1.devtunnels.ms/api/forex/currencies");
+        const res = await fetch("https://dev.bepay.money/api/forex/currencies");
         const data = await res.json();
         if (data.success && data.data.currencies) {
           setCurrencies(data.data.currencies);
@@ -138,7 +161,7 @@ const tickMarks = [
 
       setCalculationLoading(true);
       try {
-        const response = await fetch("https://ddhvx9gk-5001.inc1.devtunnels.ms/api/forex/calculate", {
+        const response = await fetch("https://dev.bepay.money/api/forex/calculate", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -198,16 +221,16 @@ const tickMarks = [
   }, []);
 
   // Function to update position and USD value
-  const updatePosition = (newSliderValue) => {
+  const updatePosition = React.useCallback((newSliderValue) => {
     setSliderValue(newSliderValue);
-    const newUsd = linearToLog(newSliderValue);
+    const newUsd = percentageToValue(newSliderValue);
     setUsd(newUsd);
-  };
+  }, []);
 
   // Click handler for tick marks
   const handleTickClick = (tickValue) => {
     setUsd(tickValue);
-    setSliderValue(tickValue === 0 ? 0 : logToLinear(tickValue));
+    setSliderValue(valueToPercentage(tickValue));
   };
 
   useEffect(() => {
@@ -256,7 +279,7 @@ const tickMarks = [
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
     };
-  }, []);
+  }, [updatePosition]);
 
 
   const onKey = (e) => {
@@ -290,7 +313,7 @@ const tickMarks = [
                   const v = Number(e.target.value || 0);
                   const clamped = clamp(v, 0, 10000000);
                   setUsd(clamped);
-                  setSliderValue(clamped === 0 ? 0 : logToLinear(clamped));
+                  setSliderValue(valueToPercentage(clamped));
                 }}
                 className="text-3xl font-extrabold bg-transparent outline-none w-auto max-w-full"
                 style={{ appearance: "textfield", MozAppearance: "textfield", lineHeight: 1, verticalAlign: 'middle', padding: 0 }}
