@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { AnalyticsService } from "@/services/analyticsService";
+import { fetchCurrencies, calculateForex } from "@/lib/calculate";
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
@@ -66,7 +67,6 @@ function Calculator() {
   ];
 
 
-
   const [liveRate, setLiveRate] = useState(null);
   const [rateLoading, setRateLoading] = useState(false);
   const [rateError, setRateError] = useState(null); // Added state for error handling
@@ -112,20 +112,21 @@ function Calculator() {
   }, []);
 
   // calling  currencies API
-  useEffect(() => {
-    const fetchCurrencies = async () => {
+useEffect(() => {
+  const loadCurrencies = async () => {
       setCurrenciesLoading(true);
       try {
-        const res = await fetch("https://dev.bepay.money/api/forex/currencies");
-        const data = await res.json();
-        if (data.success && data.data.currencies) {
-          setCurrencies(data.data.currencies);
-          // Set USD as default if it exists in the list
-          const usdCurrency = data.data.currencies.find(c => c.code === "USD");
-          if (usdCurrency) {
-            setSelectedCurrency(usdCurrency);
+        try {
+          const data = await fetchCurrencies();
+          if (data.currencies) {
+            setCurrencies(data.currencies);
+            const usdCurrency = data.currencies.find(c => c.code === "USD");
+            if (usdCurrency) setSelectedCurrency(usdCurrency);
           }
+        } catch (err) {
+          console.error("Failed to fetch currencies", err);
         }
+
       } catch (err) {
         console.error("Failed to fetch currencies", err);
       } finally {
@@ -133,7 +134,7 @@ function Calculator() {
       }
     };
 
-    fetchCurrencies();
+    loadCurrencies();;
   }, []);
 
   // to close the drop down
@@ -161,29 +162,28 @@ function Calculator() {
 
       setCalculationLoading(true);
       try {
-        const response = await fetch("https://dev.bepay.money/api/forex/calculate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+        try {
+          const data = await calculateForex({
             from: selectedCurrency.code,
             to: "INR",
-            amount: usd
-          })
-        });
+            amount: usd,
+          });
 
-        const result = await response.json();
-
-        if (result.success && result.data) {
-          setFinalAmount(result.data.finalAmount);
-          setCardAmount(result.data.comparisons.methods.card.finalAmount);
-          setBankAmount(result.data.comparisons.methods.bank.finalAmount);
-          setPgAmount(result.data.comparisons.methods.payment_gateway.finalAmount);
-          setlessForGateway(result.data.comparisons.methods.payment_gateway.youGetLess);
-          setlessForBank(result.data.comparisons.methods.bank.youGetLess);
-          setlessForCard(result.data.comparisons.methods.card.youGetLess);
+          setFinalAmount(data.finalAmount);
+          setCardAmount(data.comparisons.methods.card.finalAmount);
+          setBankAmount(data.comparisons.methods.bank.finalAmount);
+          setPgAmount(data.comparisons.methods.payment_gateway.finalAmount);
+          setlessForGateway(data.comparisons.methods.payment_gateway.youGetLess);
+          setlessForBank(data.comparisons.methods.bank.youGetLess);
+          setlessForCard(data.comparisons.methods.card.youGetLess);
+        } catch (error) {
+          console.error("Failed to calculate amount:", error);
+          setFinalAmount(null);
+          setCardAmount(null);
+          setBankAmount(null);
+          setPgAmount(null);
         }
+
       } catch (error) {
         console.error("Failed to calculate amount:", error);
         setFinalAmount(null);
