@@ -112,8 +112,8 @@ function Calculator() {
   }, []);
 
   // calling  currencies API
-useEffect(() => {
-  const loadCurrencies = async () => {
+  useEffect(() => {
+    const loadCurrencies = async () => {
       setCurrenciesLoading(true);
       try {
         try {
@@ -134,7 +134,8 @@ useEffect(() => {
       }
     };
 
-    loadCurrencies();;
+    loadCurrencies();
+    ;
   }, []);
 
   // to close the drop down
@@ -151,24 +152,31 @@ useEffect(() => {
 
   // for final amounts after currency conversion
   useEffect(() => {
+    let cancelled = false; // 👈 Track if this effect was cancelled
+
     const calculateAmount = async () => {
-      if (!usd || usd === 0) {
-        setFinalAmount(null);
-        setCardAmount(null);
-        setBankAmount(null);
-        setPgAmount(null);
+      if (usd === 0 || usd === null || usd === undefined || isNaN(usd)) {
+        setFinalAmount(0);
+        setCardAmount(0);
+        setBankAmount(0);
+        setPgAmount(0);
+        setlessForGateway(0);
+        setlessForBank(0);
+        setlessForCard(0);
+        setCalculationLoading(false);
         return;
       }
 
       setCalculationLoading(true);
       try {
-        try {
-          const data = await calculateForex({
-            from: selectedCurrency.code,
-            to: "INR",
-            amount: usd,
-          });
+        const data = await calculateForex({
+          from: selectedCurrency.code,
+          to: "INR",
+          amount: usd,
+        });
 
+        // 👇 Only update if this effect hasn't been cancelled
+        if (!cancelled) {
           setFinalAmount(data.finalAmount);
           setCardAmount(data.comparisons.methods.card.finalAmount);
           setBankAmount(data.comparisons.methods.bank.finalAmount);
@@ -176,26 +184,28 @@ useEffect(() => {
           setlessForGateway(data.comparisons.methods.payment_gateway.youGetLess);
           setlessForBank(data.comparisons.methods.bank.youGetLess);
           setlessForCard(data.comparisons.methods.card.youGetLess);
-        } catch (error) {
-          console.error("Failed to calculate amount:", error);
+        }
+      } catch (error) {
+        console.error("Failed to calculate amount:", error);
+        if (!cancelled) {
           setFinalAmount(null);
           setCardAmount(null);
           setBankAmount(null);
           setPgAmount(null);
         }
-
-      } catch (error) {
-        console.error("Failed to calculate amount:", error);
-        setFinalAmount(null);
-        setCardAmount(null);
-        setBankAmount(null);
-        setPgAmount(null);
       } finally {
-        setCalculationLoading(false);
+        if (!cancelled) {
+          setCalculationLoading(false);
+        }
       }
     };
 
     calculateAmount();
+
+    // 👇 Cleanup function: runs when usd changes again
+    return () => {
+      cancelled = true; // Mark this effect as cancelled
+    };
   }, [usd, selectedCurrency.code]);
 
 
@@ -301,7 +311,7 @@ useEffect(() => {
           <label className="text-sm text-gray-500">Your client pays</label>
           <div className="mt-2">
             <div className="flex items-center min-w-0">
-              <span className="text-3xl font-extrabold mr-2" style={{ lineHeight: 1, verticalAlign: 'middle' }}>$</span>
+              <span className="text-3xl font-extrabold mr-2" style={{ lineHeight: 1, verticalAlign: 'middle' }}></span>
               <input
                 aria-label="Amount in USD"
                 type="number"
@@ -339,8 +349,8 @@ useEffect(() => {
             </div>
             <span className="font-medium text-sm">{selectedCurrency.code}</span>
             <svg
-              width="12"
-              height="12"
+              width="24"
+              height="24"
               viewBox="0 0 24 24"
               className={`text-gray-500 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
             >
@@ -350,7 +360,29 @@ useEffect(() => {
 
           {/* Dropdown menu */}
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 max-h-80 overflow-y-auto z-50">
+            <div
+              className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 max-h-80 overflow-y-auto z-50"
+              onWheel={(e) => {
+                const element = e.currentTarget;
+                const atTop = element.scrollTop === 0;
+                const atBottom = element.scrollHeight - element.scrollTop === element.clientHeight;
+
+                // If scrolling up and already at top, prevent page scroll
+                if (atTop && e.deltaY < 0) {
+                  e.preventDefault();
+                  return;
+                }
+
+                // If scrolling down and already at bottom, prevent page scroll
+                if (atBottom && e.deltaY > 0) {
+                  e.preventDefault();
+                  return;
+                }
+
+                // Otherwise, stop propagation but allow dropdown to scroll
+                e.stopPropagation();
+              }}
+            >
               {currenciesLoading ? (
                 <div className="p-4 text-center text-gray-500">Loading...</div>
               ) : currencies.length === 0 ? (
@@ -431,10 +463,12 @@ useEffect(() => {
         </div>
       </div>
 
+      <br />
+      <br />
       {/* Payment method image */}
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <Image src="/t1.png" alt="Payment method" width={700} height={100} className="w-full rounded-lg object-cover" />
-      </div>
+      </div> */}
 
       {/* Receive summary card */}
       <div className="mt-6 flex justify-center">
@@ -462,7 +496,7 @@ useEffect(() => {
           <div className="mt-2 font-extrabold" style={{ lineHeight: 1 }}>
             {calculationLoading ? (
               <div className="text-gray-400 text-lg">Calculating...</div>
-            ) : finalAmount ? (
+            ) : finalAmount !== null ? (
               (() => {
                 const display = `₹${Math.round(finalAmount).toLocaleString('en-IN')}`;
                 const fontSize = getFontSizeForAmount(finalAmount, { mobile: 14.52, desktop: 36 });
@@ -483,7 +517,8 @@ useEffect(() => {
           </div>
         </div>
       </div>
-
+      <br />
+      <br />
       {/* Other methods panel */}
       <div className="grid grid-cols-3 gap-0 rounded-lg overflow-hidden">
         {/* Card/IGPS */}
@@ -496,10 +531,10 @@ useEffect(() => {
           <div className="receive-amount" style={{ color: '#080808', whiteSpace: 'nowrap', display: 'inline-block', maxWidth: '100%' }}>
             {calculationLoading ? (
               <div className="text-gray-400 text-lg">Calculating...</div>
-            ) : cardAmount ? (
+            ) : cardAmount !== null ? (
               (() => {
-                const display = `₹${Math.round(cardAmount).toLocaleString('en-IN')}`;
-                const fontSize = getFontSizeForAmount(cardAmount, { mobile: 14.52, desktop: 36 });
+                const display = `₹${Math.round(finalAmount).toLocaleString('en-IN')}`;
+                const fontSize = getFontSizeForAmount(finalAmount, { mobile: 14.52, desktop: 36 });
                 return (
                   <div style={{ fontSize, whiteSpace: 'nowrap', display: 'inline-block', maxWidth: '100%' }}>
                     {display}
@@ -532,7 +567,7 @@ useEffect(() => {
           <div className="receive-amount" style={{ color: '#080808', whiteSpace: 'nowrap', display: 'inline-block', maxWidth: '100%' }}>
             {calculationLoading ? (
               <div className="text-gray-400 text-lg">Calculating...</div>
-            ) : bankAmount ? (
+            ) : bankAmount !== null ? (
               (() => {
                 const display = `₹${Math.round(bankAmount).toLocaleString('en-IN')}`;
                 const fontSize = getFontSizeForAmount(bankAmount, { mobile: 14.52, desktop: 36 });
@@ -568,7 +603,7 @@ useEffect(() => {
           <div className="receive-amount" style={{ color: '#080808', whiteSpace: 'nowrap', display: 'inline-block', maxWidth: '100%' }}>
             {calculationLoading ? (
               <div className="text-gray-400 text-lg">Calculating...</div>
-            ) : pgAmount ? (
+            ) : pgAmount !== null ? (
               (() => {
                 const display = `₹${Math.round(pgAmount).toLocaleString('en-IN')}`;
                 const fontSize = getFontSizeForAmount(pgAmount, { mobile: 14.52, desktop: 36 });
