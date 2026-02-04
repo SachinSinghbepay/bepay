@@ -766,10 +766,10 @@ const Footer = ({
           <motion.div
             // Default to flex-col (vertical list) on mobile. Use md:flex (row) on desktop.
             className={`w-full mt-8 text-[14px] ${isUpiPage
-                ? "grid grid-cols-2 gap-8 md:grid-cols-4"
-                : isIGPSPage && !isLandingPage
-                  ? "flex flex-col items-center"
-                  : "grid grid-cols-2 gap-8 md:flex md:justify-between"
+              ? "grid grid-cols-2 gap-8 md:grid-cols-4"
+              : isIGPSPage && !isLandingPage
+                ? "flex flex-col items-center"
+                : "grid grid-cols-2 gap-8 md:flex md:justify-between"
               }`}
             variants={itemVariants}
           >
@@ -1078,25 +1078,7 @@ const Footer = ({
             </>
           ) : (
             <>
-              bepay operates under the brand name bepay through its legal
-              entities registered across multiple jurisdictions worldwide: Bepay
-              Fintech Products Holding LTD, British Virgin Islands (Registration
-              No: 2185015); Bepay Money Europe S.R.L, Romania (Registration No:
-              52474864); Bepay Money Fintech UAB, Lithuania, European Union
-              (Registration No: 306999867); and Bepay Fintech Inc, United States
-              (Registration No: 31000294520372). The information and services
-              presented on this website are provided for informational purposes
-              only and do not constitute financial, investment, or legal advice.
-              bepay does not operate as a bank, financial institution, or
-              digital asset exchange. All wallet and payment-related services
-              are provided in a non-custodial capacity, leveraging public
-              distributed ledger technologies and open-source data from
-              integrated platforms and partners. Cryptocurrency trading is
-              highly volatile, and users may lose their entire investment; all
-              activities are undertaken at your own risk. bepay holds ISO 9001,
-              ISO 20022, and ISO 27001 certifications, and is
-              licensed/registered under applicable frameworks including MSB,
-              DORA, MiCA, VASP, and DPDP.
+              bepay operates under the brand name bepay money through its legal entities registered across multiple jurisdictions worldwide: Bepay Fintech Products Holding LTD, British Virgin Islands (Registration No: 2185015); Bepay Money Europe S.R.L, Romania (Registration No: 52474864); Bepay Money Fintech UAB, Lithuania, European Union (Registration No: 306999867); Bepay Fintech Inc, United States (Registration No: 31000294520372) and Canada (Registration No: 1001340184). The information and services presented on this website are provided for informational purposes only and do not constitute financial, investment, or legal advice. bepay does not operate as a bank, financial institution, or digital asset exchange. All wallet and payment-related services are provided in a non-custodial capacity, leveraging public distributed ledger technologies and open-source data from integrated platforms and partners. Cryptocurrency trading is highly volatile, and users may lose their entire investment; all activities are undertaken at your own risk. bepay holds ISO 9001, ISO 20022, and ISO 27001 certifications, and is licensed/registered under applicable frameworks including MSB, DORA, MiCA, VASP, and DPDP.
             </>
           )}
         </p>

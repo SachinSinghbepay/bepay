@@ -19,12 +19,12 @@ const complianceData = [
   {
     icon: "/images/business/compliant.svg",
     title: "Compliant",
-    badges: ["DORA", "DPDP", "AML/KYC automation", "CFT", "MiCA (EU)"],
+    badges: ["DORA", "DPDP", "CFT", "MiCA (EU)"],
   },
   {
     icon: "/images/business/protected.svg",
     title: "Protected",
-    badges: ["Multi-sig wallets", "fraud detection", "GDPR", ""],
+    badges: ["GDPR", "Multi-Factor Authentication", "24/7 Monitoring", "End-to-End Encryption", "Real-time Fraud Detection"],
   },
 ];
 
