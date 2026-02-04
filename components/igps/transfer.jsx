@@ -226,7 +226,7 @@ function Calculator() {
 
   // for final amounts after currency conversion
   useEffect(() => {
-    let cancelled = false; // 👈 Track if this effect was cancelled
+    let cancelled = false;
 
     const calculateAmount = async () => {
       if (usd === 0 || usd === null || usd === undefined || isNaN(usd)) {
@@ -388,17 +388,34 @@ function Calculator() {
               <span className="text-3xl font-extrabold mr-2" style={{ lineHeight: 1, verticalAlign: 'middle' }}></span>
               <input
                 aria-label="Amount in USD"
-                type="number"
-                min={0}
-                max={10000000}
-                step={1}
-                value={usd}
+                type="text"  // Changed from "number" to "text"
+                value={usd === 0 ? '' : usd}  // Show empty string instead of 0
                 onChange={(e) => {
-                  const v = Number(e.target.value || 0);
+                  const inputValue = e.target.value;
+
+                  // Handle empty input
+                  if (inputValue === '' || inputValue === null || inputValue === undefined) {
+                    setUsd(0);
+                    setSliderValue(0);
+                    return;
+                  }
+
+                  // Remove non-numeric characters except for leading digits
+                  const numericValue = inputValue.replace(/[^0-9]/g, '');
+
+                  // Parse the value
+                  const v = Number(numericValue);
+
+                  // Handle invalid numbers (NaN)
+                  if (isNaN(v)) {
+                    return;
+                  }
+
                   const clamped = clamp(v, 0, 10000000);
                   setUsd(clamped);
                   setSliderValue(valueToPercentage(clamped));
                 }}
+                placeholder="0"  // Add placeholder so users know it's for entering amount
                 className="text-3xl font-extrabold bg-transparent outline-none w-auto max-w-full"
                 style={{ appearance: "textfield", MozAppearance: "textfield", lineHeight: 1, verticalAlign: 'middle', padding: 0 }}
               />
