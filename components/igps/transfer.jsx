@@ -51,6 +51,8 @@ const valueToPercentage = (value) => {
 function Calculator() {
   const trackRef = useRef(null);
   const knobRef = useRef(null);
+  const searchBuffer = useRef("");
+  const searchTimeout = useRef(null);
 
   // State initialization
   const [usd, setUsd] = useState(10000);
@@ -149,6 +151,78 @@ function Calculator() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isDropdownOpen]);
+
+  const dropdownRef = useRef(null);
+
+  // Robust scroll handling: prevent parent scroll when scrolling inside dropdown
+  useEffect(() => {
+    const dropdown = dropdownRef.current;
+    if (!isDropdownOpen || !dropdown) return;
+
+    const handleWheel = (e) => {
+      const { scrollTop, scrollHeight, clientHeight } = dropdown;
+      const isAtTop = scrollTop === 0;
+      const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 1;
+
+      if ((isAtTop && e.deltaY < 0) || (isAtBottom && e.deltaY > 0)) {
+        // Prevent scrolling parent if at edges
+        e.preventDefault();
+      } else {
+        // Allow scrolling dropdown, but stop propagation just in case
+        e.stopPropagation();
+      }
+    };
+
+    // Passive: false is crucial to be able to call preventDefault
+    dropdown.addEventListener('wheel', handleWheel, { passive: false });
+
+    // Also prevent touchmove chaining on mobile
+    const handleTouchMove = (e) => {
+      if (e.cancelable) e.stopPropagation();
+    };
+    dropdown.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+    return () => {
+      dropdown.removeEventListener('wheel', handleWheel);
+      dropdown.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [isDropdownOpen]);
+
+  // Keyboard navigation for dropdown
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsDropdownOpen(false);
+        return;
+      }
+
+      if (e.key.length === 1 && /[a-zA-Z]/.test(e.key)) {
+        if (searchTimeout.current) clearTimeout(searchTimeout.current);
+
+        searchBuffer.current += e.key.toLowerCase();
+
+        const match = currencies.find(c =>
+          c.code.toLowerCase().startsWith(searchBuffer.current)
+        );
+
+        if (match) {
+          const el = document.getElementById(`currency-option-${match.code}`);
+          if (el) {
+            el.scrollIntoView({ block: 'nearest' });
+          }
+        }
+
+        searchTimeout.current = setTimeout(() => {
+          searchBuffer.current = "";
+        }, 1000);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isDropdownOpen, currencies]);
 
   // for final amounts after currency conversion
   useEffect(() => {
@@ -361,27 +435,8 @@ function Calculator() {
           {/* Dropdown menu */}
           {isDropdownOpen && (
             <div
-              className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 max-h-80 overflow-y-auto z-50"
-              onWheel={(e) => {
-                const element = e.currentTarget;
-                const atTop = element.scrollTop === 0;
-                const atBottom = element.scrollHeight - element.scrollTop === element.clientHeight;
-
-                // If scrolling up and already at top, prevent page scroll
-                if (atTop && e.deltaY < 0) {
-                  e.preventDefault();
-                  return;
-                }
-
-                // If scrolling down and already at bottom, prevent page scroll
-                if (atBottom && e.deltaY > 0) {
-                  e.preventDefault();
-                  return;
-                }
-
-                // Otherwise, stop propagation but allow dropdown to scroll
-                e.stopPropagation();
-              }}
+              ref={dropdownRef}
+              className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 max-h-80 overflow-y-auto z-50 overscroll-contain"
             >
               {currenciesLoading ? (
                 <div className="p-4 text-center text-gray-500">Loading...</div>
@@ -391,6 +446,7 @@ function Calculator() {
                 currencies.map((currency) => (
                   <button
                     key={currency.code}
+                    id={`currency-option-${currency.code}`}
                     onClick={() => {
                       setSelectedCurrency(currency);
                       setIsDropdownOpen(false);
