@@ -16,7 +16,7 @@ const IgpsPage = () => {
       <IgpsHero />
       <GlobalNetworkCoverage/>
       <ImageComparisonTable/>
-      {/* <App/> */}
+      <App/>
       <PaymentSystemUI/>
       <BepayLanding/>
       <VerticalScrollingSection/>
