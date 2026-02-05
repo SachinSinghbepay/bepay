@@ -606,8 +606,8 @@ function Calculator() {
               <div className="text-gray-400 text-lg">Calculating...</div>
             ) : cardAmount !== null ? (
               (() => {
-                const display = `₹${Math.round(finalAmount).toLocaleString('en-IN')}`;
-                const fontSize = getFontSizeForAmount(finalAmount, { mobile: 14.52, desktop: 36 });
+                const display = `₹${Math.round(cardAmount).toLocaleString('en-IN')}`;
+                const fontSize = getFontSizeForAmount(cardAmount, { mobile: 14.52, desktop: 36 });
                 return (
                   <div style={{ fontSize, whiteSpace: 'nowrap', display: 'inline-block', maxWidth: '100%' }}>
                     {display}
