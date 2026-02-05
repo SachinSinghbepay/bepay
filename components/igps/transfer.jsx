@@ -61,11 +61,11 @@ function Calculator() {
   // Tick marks
   const tickMarks = [
     { value: 0, label: "$0", position: 0 },
-    { value: 10000, label: "$10K", position: 0.2 },
-    { value: 100000, label: "$100K", position: 0.4 },
-    { value: 500000, label: "$500K", position: 0.6 },
-    { value: 1000000, label: "$1M", position: 0.8 },
-    { value: 10000000, label: "$10M", position: 1 },
+    { value: 10000, label: "10K", position: 0.2 },
+    { value: 100000, label: "100K", position: 0.4 },
+    { value: 500000, label: "500K", position: 0.6 },
+    { value: 1000000, label: "1M", position: 0.8 },
+    { value: 10000000, label: "10M", position: 1 },
   ];
 
 
@@ -78,6 +78,8 @@ function Calculator() {
   const [selectedCurrency, setSelectedCurrency] = useState({ code: "USD", name: "US Dollar", logoUrl: "/us_flag.png" });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currenciesLoading, setCurrenciesLoading] = useState(false);
+  const [currentSymbol, setcurrentSymbol] = useState(null);
+
 
   // For final prices
   const [finalAmount, setFinalAmount] = useState(null);
@@ -249,15 +251,15 @@ function Calculator() {
           amount: usd,
         });
 
-        // 👇 Only update if this effect hasn't been cancelled
+        // updating values with API call
         if (!cancelled) {
           setFinalAmount(data.finalAmount);
           setCardAmount(data.comparisons.methods.card.finalAmount);
           setBankAmount(data.comparisons.methods.bank.finalAmount);
           setPgAmount(data.comparisons.methods.payment_gateway.finalAmount);
-          setlessForGateway(data.comparisons.methods.payment_gateway.youGetLess);
-          setlessForBank(data.comparisons.methods.bank.youGetLess);
-          setlessForCard(data.comparisons.methods.card.youGetLess);
+          setlessForGateway(data.comparisons.methods.payment_gateway.youGetLessPercent);
+          setlessForBank(data.comparisons.methods.bank.youGetLessPercent);
+          setlessForCard(data.comparisons.methods.card.youGetLessPercent);
         }
       } catch (error) {
         console.error("Failed to calculate amount:", error);
@@ -385,7 +387,12 @@ function Calculator() {
           <label className="text-sm text-gray-500">Your client pays</label>
           <div className="mt-2">
             <div className="flex items-center min-w-0">
-              <span className="text-3xl font-extrabold mr-2" style={{ lineHeight: 1, verticalAlign: 'middle' }}></span>
+              <span
+                className="text-3xl font-bold mr-2"
+                style={{ lineHeight: 1, verticalAlign: 'middle' }}
+              >
+                {selectedCurrency?.symbol}
+              </span>
               <input
                 aria-label="Amount in USD"
                 type="text"  // Changed from "number" to "text"
@@ -416,11 +423,10 @@ function Calculator() {
                   setSliderValue(valueToPercentage(clamped));
                 }}
                 placeholder="0"  // Add placeholder so users know it's for entering amount
-                className="text-3xl font-extrabold bg-transparent outline-none w-auto max-w-full"
+                className="text-3xl font-bold bg-transparent outline-none w-auto max-w-full"
                 style={{ appearance: "textfield", MozAppearance: "textfield", lineHeight: 1, verticalAlign: 'middle', padding: 0 }}
               />
             </div>
-            <div className="text-xs text-gray-500 mt-1">Range: $0 — $10,000,000</div>
           </div>
         </div>
 
@@ -566,7 +572,7 @@ function Calculator() {
             You&apos;ll receive <span className="text-xs text-gray-400">(By {formattedDelivery})</span>
           </div>
 
-          <div className="mt-2 font-extrabold" style={{ lineHeight: 1 }}>
+          <div className="mt-2 font-medium" style={{ lineHeight: 1 }}>
             {calculationLoading ? (
               <div className="text-gray-400 text-lg">Calculating...</div>
             ) : finalAmount !== null ? (
@@ -585,7 +591,6 @@ function Calculator() {
           </div>
 
           <div className="mt-3 text-sm text-green-600 flex items-center gap-2">
-            <svg width="14" height="14" viewBox="0 0 24 24" className="text-green-600"><path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             <span className="font-medium">Best rate guaranteed!</span>
           </div>
         </div>
@@ -601,7 +606,7 @@ function Calculator() {
             <div className="text-[8px] md:text-sm font-medium" style={{ fontFamily: 'Montserrat', fontWeight: 600, lineHeight: '100%', letterSpacing: '0em' }}>Card</div>
           </div>
 
-          <div className="receive-amount" style={{ color: '#080808', whiteSpace: 'nowrap', display: 'inline-block', maxWidth: '100%' }}>
+          <div className="receive-amount font-light" style={{ color: '#080808', whiteSpace: 'nowrap', display: 'inline-block', maxWidth: '100%' }}>
             {calculationLoading ? (
               <div className="text-gray-400 text-lg">Calculating...</div>
             ) : cardAmount !== null ? (
@@ -609,7 +614,17 @@ function Calculator() {
                 const display = `₹${Math.round(cardAmount).toLocaleString('en-IN')}`;
                 const fontSize = getFontSizeForAmount(cardAmount, { mobile: 14.52, desktop: 36 });
                 return (
-                  <div style={{ fontSize, whiteSpace: 'nowrap', display: 'inline-block', maxWidth: '100%' }}>
+                  <div
+                    className="font-ligh"
+                    style={{
+                      fontSize,
+                      whiteSpace: 'nowrap',
+                      display: 'inline-block',
+                      maxWidth: '100%',
+                      fontFamily: 'Montserrat',
+                      fontWeight: 400
+                    }}
+                  >
                     {display}
                   </div>
                 );
@@ -623,7 +638,7 @@ function Calculator() {
             {calculationLoading ? (
               "Calculating..."
             ) : lessForCard !== null && lessForCard !== undefined ? (
-              `₹${lessForCard} less`
+              `${lessForCard}% less`
             ) : (
               "Can't Calculate"
             )}
@@ -645,7 +660,17 @@ function Calculator() {
                 const display = `₹${Math.round(bankAmount).toLocaleString('en-IN')}`;
                 const fontSize = getFontSizeForAmount(bankAmount, { mobile: 14.52, desktop: 36 });
                 return (
-                  <div style={{ fontSize, whiteSpace: 'nowrap', display: 'inline-block', maxWidth: '100%' }}>
+                  <div
+                    className="font-ligh"
+                    style={{
+                      fontSize,
+                      whiteSpace: 'nowrap',
+                      display: 'inline-block',
+                      maxWidth: '100%',
+                      fontFamily: 'Montserrat',
+                      fontWeight: 400
+                    }}
+                  >
                     {display}
                   </div>
                 );
@@ -659,7 +684,7 @@ function Calculator() {
             {calculationLoading ? (
               "Calculating..."
             ) : lessForBank !== null && lessForBank !== undefined ? (
-              `₹${lessForBank} less`
+              `${lessForBank}% less`
             ) : (
               "Can't Calculate"
             )}
@@ -669,7 +694,7 @@ function Calculator() {
         {/* Payment Gateway */}
         <div className="flex flex-col items-center justify-center p-6 text-center min-h-[120px] border-l border-gray-200">
           <div className="flex items-center justify-center gap-3 mb-2">
-            <Image src="/pg.png" alt="Payment Gateway" width={32} height={32} className="object-contain" />
+            <Image src="/icons/gateway.png" alt="Payment Gateway" width={42} height={42} className="object-contain" />
             <div className="text-[8px] md:text-sm font-medium" style={{ fontFamily: 'Montserrat', fontWeight: 600, lineHeight: '100%', letterSpacing: '0em' }}>Payment Gateway</div>
           </div>
 
@@ -681,7 +706,17 @@ function Calculator() {
                 const display = `₹${Math.round(pgAmount).toLocaleString('en-IN')}`;
                 const fontSize = getFontSizeForAmount(pgAmount, { mobile: 14.52, desktop: 36 });
                 return (
-                  <div style={{ fontSize, whiteSpace: 'nowrap', display: 'inline-block', maxWidth: '100%' }}>
+                  <div
+                    className="font-ligh"
+                    style={{
+                      fontSize,
+                      whiteSpace: 'nowrap',
+                      display: 'inline-block',
+                      maxWidth: '100%',
+                      fontFamily: 'Montserrat',
+                      fontWeight: 400
+                    }}
+                  >
                     {display}
                   </div>
                 );
@@ -695,7 +730,7 @@ function Calculator() {
             {calculationLoading ? (
               "Calculating..."
             ) : lessForGateway !== null && lessForGateway !== undefined ? (
-              `₹${lessForGateway} less`
+              `${lessForGateway}% less`
             ) : (
               "Can't Calculate"
             )}
