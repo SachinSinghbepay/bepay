@@ -72,6 +72,7 @@ const IgpsHero = () => {
   const pillRef = useRef(null)
   const textRef = useRef(null)
   const iconRef = useRef(null)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     function adjustWidth() {
@@ -115,11 +116,11 @@ const IgpsHero = () => {
     },
     {
       icon: "/icons/h2.png",
-      text: "USD, EUR, GBP, CNY, ZAR, MAD  & 40+ Major Currencies",
+      text: "Accept payments in USD, EUR, GBP, CNY, ZAR, MAD  & 40+ Major Currencies",
     },
     {
       icon: "/icons/h3.png",
-      text: "US, UK, Europe, Africa, China, UAE & 100+ Countries Supported!",
+      text: "Accept payments from US, UK, Europe, Africa, China, UAE & 100+ Countries supported!",
     },
     {
       icon: "/icons/h4.png",
@@ -140,14 +141,14 @@ const IgpsHero = () => {
   ]
 
   return (
-    <section ref={sectionRef} className="bg-[#F9F9F9] text-black py-20 md:py-20">
+    <section ref={sectionRef} className="bg-[#F9F9F9] text-black pt-12 pb-16 md:pt-4 md:pb-20">
       <div className="container mx-auto px-4 max-w-7xl">
         <div
-          className={`text-center -mt-10 lg:-mt-20 mb-8 md:mb-16 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          className={`text-center mb-4 md:mb-6 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
         >
           <h1
-            className="text-gray-800 lg:-mt-15 text-[26px] md:text-[44px]"
+            className="text-gray-800 text-[26px] md:text-[44px]"
             style={{
               fontFamily: "Montserrat",
               fontWeight: 500,
@@ -176,42 +177,58 @@ const IgpsHero = () => {
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center gap-8">
+        <div className="flex flex-col lg:flex-row items-stretch gap-6 lg:gap-8 justify-center">
           <div
-            className={`lg:w-1/2 w-full flex justify-center -mx-4 lg:mx-0 mt-0 lg:-mt-10 transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
+            className={`lg:w-auto w-full flex flex-col transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
               }`}
           >
-            <div className="relative w-full  max-w-[35rem] aspect-square">
-              {/* <Image
-                src="/hero1.png"
-                alt="IGPS Hero Image"
-                width={800}
-                height={600}
-                className="lg:hidden w-full h-auto"
-              /> */}
-              <Image src="/hero.png" alt="IGPS Hero Image" fill className="rounded-lg object-contain " />
+            <div className="relative w-full max-w-[28rem] mx-auto lg:mx-0 pb-6">
+              {/* Main Video Card */}
+              <div className="relative w-full aspect-[4/5] rounded-[52px] overflow-hidden shadow-lg border border-gray-100 bg-white">
+                <video
+                  src="https://assets.bepay.money/website_assets/merchant_video.mp4"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Overlapping Bottom Image */}
+              <div className="absolute -bottom-1 lg:-bottom-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[85%] lg:w-[105%] z-10">
+                <div className="relative shadow-[0_20px_50px_rgba(0,0,0,0.12)] rounded-t-2xl md:rounded-t-none rounded-b-[32px] md:rounded-[52px] overflow-hidden">
+                  <Image
+                    src="/landingimg.png"
+                    alt="IGPS Rates"
+                    width={600}
+                    height={200}
+                    className="w-full h-auto"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
           <div
-            className={`lg:w-1/2 w-full lg:pl-8 transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
+            className={`flex-1 w-full max-w-[32rem] lg:max-w-[35rem] lg:pl-0 flex flex-col justify-between transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
               }`}
           >
-            <div className="space-y-0 mt-0 lg:-mt-10">
-              <div className="w-full mb-6">
-                <p className="igps-intro text-left">
-                  Global first platform offering free <br />
+            <div className="flex flex-col h-full justify-between py-2">
+              <div className="w-full">
+                <p className="igps-intro text-left mb-4">
+                  Global first platform offering free <br className="hidden lg:block" />
                   international settlements for businesses
                 </p>
 
-                <div className="mt-4 space-y-4 lg:space-y-0 lg:block lg:divide-y lg:divide-gray-200">
+                <div className="space-y-4 lg:space-y-0 lg:block lg:divide-y lg:divide-gray-200">
                   {checklistItems.map((item, idx) => (
                     <div
                       key={idx}
-                      className={`flex items-center justify-between lg:py-4 transition-all duration-500 ${itemsInView.includes(idx) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                      className={`flex items-center justify-between lg:py-3 transition-all duration-500 ${itemsInView.includes(idx) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
                         }`}
                       style={{
-                        transitionDelay: `${idx * 50}ms`,
+                        transitionDelay: `${idx * 40}ms`,
                       }}
                     >
                       <div className="flex items-center flex-1">
@@ -239,162 +256,168 @@ const IgpsHero = () => {
                 </div>
               </div>
 
-              <div
-                className={`mt-6 pl-3 border-l-4 border-black transition-all duration-700 delay-500 ${isVisible ? "opacity-100" : "opacity-0"
-                  }`}
-              >
-                <p
-                  className="text-[11px] mt-8 md:text-sm text-gray-500"
-                  style={{
-                    fontFamily: "Montserrat",
-                    fontWeight: 600,
-                    lineHeight: "100%",
-                    letterSpacing: "0%",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  100% SAFE AND COMPLIANT • POWERED BY LEADING BANKS •
-                  <span className="hidden lg:inline">
-                    {" "}
-                    <br />
-                  </span>{" "}
-                  RBI APPROVED • PA-CB AUTHORISED • MADE IN INDIA
-                </p>
-              </div>
-
-              <div className="flex items-center mt-8 space-x-[10px]">
-                <button
-                  onClick={handleGetStarted}
-                  className={`flex items-center cursor-pointer justify-center gap-2 bg-black text-[#F9F9F9] px-6 py-4 h-[56px] rounded-[100px] text-xs font-medium md:w-[180px] md:text-[14px] md:h-[66px] transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 delay-600 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              <div className="mt-4">
+                <div
+                  className={`pl-3 border-l-2 border-gray-400 transition-all duration-700 delay-500 ${isVisible ? "opacity-100" : "opacity-0"
                     }`}
                 >
-                  <span>Get Started</span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="w-5 h-5 md:h-7 flex-shrink-0 transition-transform group-hover:translate-x-1"
+                  <p
+                    className="text-[11px] md:text-sm text-gray-500"
+                    style={{
+                      fontFamily: "Montserrat",
+                      fontWeight: 600,
+                      lineHeight: "100%",
+                      letterSpacing: "0%",
+                      textTransform: "uppercase",
+                    }}
                   >
-                    <path d="M7 17l10-10M7 7h10v10" />
-                  </svg>
-                </button>
+                    100% SAFE AND COMPLIANT • POWERED BY LEADING BANKS •
+                    <span className="hidden lg:inline">
+                      {" "}
+                      <br />
+                    </span>{" "}
+                    RBI APPROVED • PA-CB AUTHORISED • MADE IN INDIA
+                  </p>
+                </div>
 
-                <Button
-                  variant="outline"
-                  onClick={() => handleOpenPopup("email", "IGPS Email Clicked")}
-                  className={`rounded-full w-[56px] h-[56px] p-3 md:w-[66px] md:h-[66px] md:p-[20px] border border-gray-300 transition-all duration-300 hover:scale-110 hover:shadow-md active:scale-95 delay-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                    }`}
-                  style={{ borderColor: "rgba(192, 192, 192, 0.4)" }}
-                >
-                  <Image src="/icons/mail.png" alt="mail icon" width={26} height={26} />
-                </Button>
+                <div className="flex items-center mt-4 space-x-[12px]">
+                  <button
+                    onClick={handleGetStarted}
+                    className={`flex items-center cursor-pointer justify-center gap-2 bg-black text-[#F9F9F9] px-8 py-4 h-[56px] rounded-full text-xs font-medium md:text-[14px] md:h-[66px] transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95 delay-600 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                      }`}
+                  >
+                    <span>Get started</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="w-5 h-7 flex-shrink-0 transition-transform group-hover:translate-x-1"
+                    >
+                      <path d="M7 17l10-10M7 7h10v10" />
+                    </svg>
+                  </button>
+
+                  <Button
+                    variant="outline"
+                    onClick={() => handleOpenPopup("email", "IGPS Email Clicked")}
+                    className={`rounded-full w-[56px] h-[56px] p-3 md:w-[66px] md:h-[66px] bg-gray-100 border-0 transition-all duration-300 hover:scale-110 hover:shadow-md active:scale-95 delay-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                      }`}
+                  >
+                    <Image src="/icons/mail.png" alt="mail icon" width={26} height={26} className="opacity-60" />
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {popup && popup !== "getstarted" && (
-        <div className="igps-popup-overlay" onClick={() => setPopup(null)}>
-          <div className="igps-popup" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
-            <button className="igps-popup-close" onClick={() => setPopup(null)} aria-label="Close popup">
-              ×
-            </button>
-            <div className="igps-popup-content">
-              <h3 className="igps-popup-title">
-                {popup === "whatsapp" &&
-                  "Leave us a message on whatsapp on this number\nand we'll get back to you within 24 hours"}
-                {popup === "call" && "Give us a call on this number if you\nhave any query"}
-                {popup === "email" && "Leave us a message on email and we'll get back\nto you within 24 hours"}
-              </h3>
-              <div className="igps-popup-contact">
-                <div className="igps-contact-pill" ref={pillRef}>
-                  <span className="igps-contact-text" ref={textRef}>
-                    {popup === "email" ? "info@bepay.money" : "+918-200-000-000"}
-                  </span>
-                  <button
-                    className="igps-pill-copy"
-                    ref={iconRef}
-                    onClick={() => {
-                      const text = popup === "email" ? "info@bepay.money" : "+918-200-000-000"
-                      try {
-                        AnalyticsService.sendEvent("IGPS Copy Contact Clicked", {
-                          component: "IgpsHero",
-                          method: popup,
-                          value: text,
-                        })
-                      } catch (e) { }
-                      if (navigator && navigator.clipboard) navigator.clipboard.writeText(text)
-                    }}
-                    aria-label="Copy contact"
-                  >
-                    <svg
-                      width="17.35"
-                      height="19.66"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      focusable="false"
+
+      {
+        popup && popup !== "getstarted" && (
+          <div className="igps-popup-overlay" onClick={() => setPopup(null)}>
+            <div className="igps-popup" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+              <button className="igps-popup-close" onClick={() => setPopup(null)} aria-label="Close popup">
+                ×
+              </button>
+              <div className="igps-popup-content">
+                <h3 className="igps-popup-title">
+                  {popup === "email" && "Leave us a message on email and we'll get back\nto you within 24 hours"}
+                </h3>
+                <div className="igps-popup-contact">
+                  <div className="igps-contact-pill" ref={pillRef}>
+                    <span className="igps-contact-text" ref={textRef}>
+                      {popup === "email" ? "info@bepay.money" : "+918-200-000-000"}
+                    </span>
+                    <button
+                      className="igps-pill-copy"
+                      ref={iconRef}
+                      onClick={() => {
+                        const text = popup === "email" ? "info@bepay.money" : "+918-200-000-000"
+                        try {
+                          AnalyticsService.sendEvent("IGPS Copy Contact Clicked", {
+                            component: "IgpsHero",
+                            method: popup,
+                            value: text,
+                          })
+                        } catch (e) { }
+                        if (navigator && navigator.clipboard) {
+                          navigator.clipboard.writeText(text)
+                          setCopied(true)
+                          setTimeout(() => setCopied(false), 2000)
+                        }
+                      }}
+                      aria-label="Copy contact"
                     >
-                      <rect
-                        x="3"
-                        y="2"
-                        width="11"
-                        height="12"
-                        rx="2"
-                        fill="none"
-                        stroke="#6A6A6A"
-                        strokeWidth="1.2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeOpacity="0.32"
-                      />
-                      <rect
-                        x="6"
-                        y="6"
-                        width="11"
-                        height="12"
-                        rx="2"
-                        fill="none"
-                        stroke="#6A6A6A"
-                        strokeWidth="1.2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
+                      {copied ? (
+                        <span className="text-[10px] text-green-600 font-bold uppercase transition-all duration-300">Copied!</span>
+                      ) : (
+                        <svg
+                          width="17.35"
+                          height="19.66"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          aria-hidden="true"
+                          focusable="false"
+                        >
+                          <rect
+                            x="3"
+                            y="2"
+                            width="11"
+                            height="12"
+                            rx="2"
+                            fill="none"
+                            stroke="#6A6A6A"
+                            strokeWidth="1.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeOpacity="0.32"
+                          />
+                          <rect
+                            x="6"
+                            y="6"
+                            width="11"
+                            height="12"
+                            rx="2"
+                            fill="none"
+                            stroke="#6A6A6A"
+                            strokeWidth="1.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
-              </div>
-              {popup !== "call" && (
                 <button
                   className="igps-action-btn"
                   onClick={() => {
                     try {
-                      const action = popup === "whatsapp" ? "open_whatsapp" : "open_email"
+                      const action = "open_email"
                       AnalyticsService.sendEvent("IGPS Popup Action", {
                         component: "IgpsHero",
                         popup,
                         action,
                       })
                     } catch (e) { }
-                    if (popup === "whatsapp") window.open("https://wa.me/91820000000", "_blank")
-                    if (popup === "email") window.location.href = "mailto:info@bepay.money"
+                    window.location.href = "mailto:info@bepay.money"
                   }}
                 >
-                  {popup === "whatsapp" ? "Open whatsapp" : "Open email"}
+                  Open email
                 </button>
-              )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {popup === "getstarted" && <GetStartedPopup isOpen={true} onClose={() => setPopup(null)} />}
 
@@ -635,7 +658,7 @@ const IgpsHero = () => {
           }
         }
       `}</style>
-    </section>
+    </section >
   )
 }
 

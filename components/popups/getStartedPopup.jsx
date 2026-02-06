@@ -55,7 +55,7 @@ function PortalContent({ onClose }) {
   const [error, setError] = useState("");
 
   const overlayStyle = {
-    position: "fixed", inset: 0, width: "100vw", height: "100vh", zIndex: 2147483647, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem", backgroundColor: "rgba(0, 0, 0, 0.6)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
+    position: "fixed", inset: 0, width: "100vw", height: "100dvh", zIndex: 2147483647, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem", backgroundColor: "rgba(0, 0, 0, 0.6)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", overflowY: "auto",
   };
 
   const modalStyle = {
