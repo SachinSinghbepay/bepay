@@ -183,12 +183,12 @@ export default function CryptoHeroSection() {
 
     // 📱 MOBILE → redirect immediately
     if (isAndroid) {
-      window.location.href = "https://play.google.com/store/apps/details?id=com.bepay.user"
+      window.location.href = process.env.NEXT_PUBLIC_ANDROID_APP_URL
       return
     }
 
     if (isIOS) {
-      window.location.href = "https://testflight.apple.com/join/51JVNh5g"
+      window.location.href = process.env.NEXT_PUBLIC_IOS_APP_URL
       return
     }
 
