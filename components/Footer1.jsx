@@ -955,6 +955,13 @@ const Footer = ({
                     >
                       CONTACT US
                     </Link>
+                     <Link
+                      href="/blogs"
+                      onClick={() => handleLinkClick("Contact Us")}
+                      className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                    >
+                      BLOGS
+                    </Link>
                     <Link
                       href="/privacy-policy"
                       onClick={() => handleLinkClick("Privacy Policy")}
