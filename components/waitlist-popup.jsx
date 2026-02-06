@@ -26,15 +26,15 @@ export default function WaitlistPopup({
   const pathname = usePathname();
 
   // Delay popup open
-  useEffect(() => {
-    history.scrollRestoration = "manual";
-    if (externalIsOpen === undefined) {
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [externalIsOpen]);
+  // useEffect(() => {
+  //   history.scrollRestoration = "manual";
+  //   if (externalIsOpen === undefined) {
+  //     const timer = setTimeout(() => {
+  //       setIsOpen(true);
+  //     }, 2000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [externalIsOpen]);
 
   useEffect(() => {
     const submittedEmail = localStorage.getItem(

@@ -35,39 +35,43 @@ const Redirect = () => {
     }
   }, [queryParams]);
 
-  useEffect(() => {
-    // Ensure navigator is defined for client-side execution
-    if (typeof navigator === 'undefined') return;
+useEffect(() => {
+  if (typeof navigator === 'undefined') return;
 
-    const userAgent = navigator.userAgent || navigator.vendor;
-    const androidUrl = 'https://play.google.com/store/apps/details?id=com.bepay.user';
-    // iOS app is not live yet, so we'll handle it differently
+  const userAgent = navigator.userAgent || navigator.vendor;
+  const androidUrl = 'https://play.google.com/store/apps/details?id=com.bepay.user';
 
-    // Capture device and user details
-    const deviceDetails = {
-      userAgent,
-      platform: navigator.platform,
-      language: navigator.language,
-    };
+  const deviceDetails = {
+    userAgent,
+    platform: navigator.platform,
+    language: navigator.language,
+  };
 
-    if (/android/i.test(userAgent)) {
-      AnalyticsService.sendEvent('bepay_redirect_to_android', { ...deviceDetails, ...queryParams });
-      window.location.href = androidUrl;
-    } else if (/iPad|iPhone|iPod/.test(userAgent)) {
-      AnalyticsService.sendEvent('bepay_redirect_to_ios_not_available', { ...deviceDetails, ...queryParams });
-      setIsIos(true);
-    } else {
-      AnalyticsService.sendEvent('bepay_redirect_to_unsupported_device', { ...deviceDetails, ...queryParams });
+  const isAndroid = /android/i.test(userAgent);
 
-      // Redirect unsupported devices to the homepage after 5 seconds
-      const timer = setTimeout(() => {
-        router.push('/');
-      }, 5000);
+  const isIOS =
+    /iPad|iPhone|iPod/.test(userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
-      // Cleanup timer on component unmount
-      return () => clearTimeout(timer);
-    }
-  }, [router, queryParams]);
+  if (isAndroid) {
+    AnalyticsService.sendEvent('bepay_redirect_to_android', { ...deviceDetails, ...queryParams });
+    window.location.href = androidUrl;
+  } 
+  else if (isIOS) {
+    AnalyticsService.sendEvent('bepay_redirect_to_ios_not_available', { ...deviceDetails, ...queryParams });
+    setIsIos(true);
+  } 
+  else {
+    AnalyticsService.sendEvent('bepay_redirect_to_unsupported_device', { ...deviceDetails, ...queryParams });
+
+    const timer = setTimeout(() => {
+      router.push('/');
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }
+}, [router, queryParams]);
+
 
   useEffect(() => {
     if (emailSubmitted) {
@@ -156,4 +160,4 @@ const styles: { container: CSSProperties; message: CSSProperties; input: CSSProp
   },
 };
 
-export default Redirect;
+export default Redirect; 
