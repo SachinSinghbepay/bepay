@@ -2,7 +2,9 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export default function BlogCardSkeleton() {
   return (
-    <div className="flex flex-col w-full max-w-[400px] h-[379px] bg-white rounded-[24px] overflow-hidden border border-gray-100 shadow-sm">
+<div className="flex flex-col w-[400px] h-[379px] bg-white rounded-[24px]
+  overflow-hidden border border-gray-100 shadow-sm
+  flex-shrink-0 snap-start">
       {/* Image Skeleton */}
       <div className="w-full h-[200px] relative">
         <Skeleton className="w-full h-full" />

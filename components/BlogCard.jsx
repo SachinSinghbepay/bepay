@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 
 export default function BlogCard({ blog }) {
@@ -9,23 +8,22 @@ export default function BlogCard({ blog }) {
   const readingTime = Math.ceil(words / 200);
 
   return (
-    <div className="flex flex-col w-full max-w-[400px] h-[379px] bg-white rounded-[24px] overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 flex-shrink-0 snap-center">
+    <div className="flex flex-col w-[400px] h-[379px] bg-white rounded-[24px]
+  overflow-hidden border border-gray-100 shadow-sm
+  hover:shadow-md transition-shadow duration-300
+  flex-shrink-0 snap-start">
       {/* Featured Image */}
       <div className="w-full h-[200px] relative">
-        <Link href={`/blogs/${blog.slug}`} className="block w-full h-full">
           <div className="relative w-full h-full">
             <Image
-              src={
-                blog.featuredImage ||
-                "/placeholder.svg?height=400&width=600&query=blog"
-              }
+              src={blog.featuredImage || blog.thumbnail || "/placeholder.svg"}
               alt={blog.title}
               fill
+              unoptimized
               className="object-cover rounded-[24px] p-2"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           </div>
-        </Link>
       </div>
 
       {/* Blog Details */}
@@ -41,11 +39,9 @@ export default function BlogCard({ blog }) {
         </div>
 
         {/* Title */}
-        <Link href={`/blogs/${blog.slug}`} className="block mb-auto">
           <h2 className="text-[18px] leading-[1.4] font-bold text-[#1A1A1A] line-clamp-3 hover:text-gray-700 transition-colors">
             {blog.title}
           </h2>
-        </Link>
 
         {/* Date */}
         <div className="mt-4 flex justify-end">
