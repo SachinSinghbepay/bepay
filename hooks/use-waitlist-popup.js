@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 
 const STORAGE_KEY = "waitlist_popup_state"
 const CLOSE_DURATION = 24 * 60 * 60 * 1000 // 1 day in milliseconds
-
+ 
 
 
 export const useWaitlistPopup = () => {

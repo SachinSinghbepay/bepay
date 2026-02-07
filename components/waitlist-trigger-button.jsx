@@ -21,7 +21,7 @@ export default function WaitlistTriggerButton({
     <>
       <div onClick={() => setIsPopupOpen(true)} className={`${className}`}>
         {children}
-      </div>
+      </div> 
 
       <WaitlistPopup
         isOpen={isPopupOpen}
