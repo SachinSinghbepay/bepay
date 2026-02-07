@@ -11,51 +11,74 @@ const parser = new Parser({
   timeout: 10000,
 });
 
+// ✅ Cache variables
+let cachedBlogs = null;
+let cacheTime = 0;
+
+// Optional helper to parse RSS feed
+async function parseRSS() {
+  const feed = await parser.parseURL("https://medium.com/feed/@bepaymoney");
+
+  return feed.items.map((item) => {
+    const fullContentEncoded =
+      item["content:encoded"] || item.content || "<p>No content found.</p>";
+
+    // 🔓 Decode HTML entities
+    const fullContent = fullContentEncoded
+      .replace(/\\u003C/g, "<")
+      .replace(/\\u003E/g, ">")
+      .replace(/\\u002F/g, "/");
+
+    // 🖼 Extract first image
+    const imgMatch = fullContent.match(/<img[^>]+src="([^">]+)"/);
+    const firstImage = imgMatch ? imgMatch[1] : null;
+
+    // ❌ Remove the first image from content
+    let cleanedContent = fullContent;
+    if (firstImage) {
+      cleanedContent = cleanedContent
+        .replace(/<figure>.*?<img[^>]+>.*?<\/figure>/i, "")
+        .replace(/<img[^>]+>/i, "");
+    }
+
+    return {
+      id: item.guid || item.link,
+      title: item.title,
+      slug: item.link.split("/").pop().split("?")[0],
+      link: item.link,
+      publishedAt: item.pubDate,
+      thumbnail: firstImage,
+      content: cleanedContent,
+      author: item.creator || "bepay team",
+    };
+  });
+}
+
 export async function GET() {
   try {
-    const feed = await parser.parseURL("https://medium.com/feed/@bepaymoney");
+    const now = Date.now();
 
-    const blogs = feed.items.map((item) => {
-      const fullContentEncoded =
-        item["content:encoded"] || item.content || "<p>No content found.</p>";
+    // ✅ Return cached blogs if cache is valid (10 min)
+    if (cachedBlogs && now - cacheTime < 1000 * 60 * 10) {
+      return new Response(JSON.stringify(cachedBlogs), {
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
-      // 🔓 Decode HTML entities (turn \u003C into <)
-      const fullContent = fullContentEncoded
-        .replace(/\\u003C/g, "<")
-        .replace(/\\u003E/g, ">")
-        .replace(/\\u002F/g, "/");
+    // Parse fresh RSS feed
+    const blogs = await parseRSS();
 
-      // 🖼 Extract first image
-      const imgMatch = fullContent.match(/<img[^>]+src="([^">]+)"/);
-      const firstImage = imgMatch ? imgMatch[1] : null;
+    cachedBlogs = blogs;
+    cacheTime = now;
 
-      // ❌ Remove the FIRST image (usually wrapped in <figure>)
-      let cleanedContent = fullContent;
-
-      if (firstImage) {
-        cleanedContent = cleanedContent
-          // remove figure wrapper with image
-          .replace(/<figure>.*?<img[^>]+>.*?<\/figure>/i, "")
-          // fallback: remove standalone first img if no figure
-          .replace(/<img[^>]+>/i, "");
-      }
-
-      return {
-        id: item.guid || item.link,
-        title: item.title,
-        slug: item.link.split("/").pop().split("?")[0],
-        link: item.link,
-        publishedAt: item.pubDate,
-        thumbnail: firstImage,
-        content: cleanedContent, // ✅ image removed from body
-        author: item.creator || "bepay team",
-
-      };
+    return new Response(JSON.stringify(blogs), {
+      headers: { "Content-Type": "application/json" },
     });
-
-    return Response.json(blogs);
   } catch (error) {
     console.error("Medium fetch error:", error);
-    return Response.json({ error: "Failed to fetch blogs" }, { status: 500 });
+    return new Response(
+      JSON.stringify({ error: "Failed to fetch blogs" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   }
 }

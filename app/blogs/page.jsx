@@ -14,7 +14,8 @@ export default function BlogsPage() {
   const [loading, setLoading] = useState(true)
 
   // const [categories, setCategories] = useState([])
-  const [selectedFilter, setSelectedFilter] = useState("All")
+  // const [selectedFilter, setSelectedFilter] = useState("All")
+ const [selectedFilter, setSelectedFilter] = useState("Latest")
 
   // Infinite Scroll State
   const [displayedBlogs, setDisplayedBlogs] = useState([])
@@ -156,16 +157,19 @@ export default function BlogsPage() {
 
   const blogsSource = blogs
 
-  const normalizedBlogs = blogsSource.map(blog => ({
+const normalizedBlogs = blogsSource.map(blog => {
+  const slug = blog.slug || blog.link?.split("/").pop()
+  return {
     id: blog.id,
     title: blog.title,
-    slug: blog.slug || blog.link.split("/").pop(),
+    slug,
     featuredImage: blog.thumbnail,
     category: "Latest",
     isFeatured: false,
     createdAt: blog.publishedAt,
     content: blog.content || "",
-  }))
+  }
+})
 
 
   // useEffect(() => {
@@ -287,14 +291,14 @@ export default function BlogsPage() {
 
   const sections = [
     { name: "Latest", title: "Latest" },
-    { name: "Featured", title: "Featured" },
-    { name: "Crypto & stablecoins", title: "Crypto & stablecoins" },
-    { name: "Payments", title: "Payments" },
-    { name: "Multi-currency accounts", title: "Multi-currency accounts" },
-    { name: "Discussion", title: "Discussion" },
-    { name: "Tech", title: "Tech" },
-    { name: "Product updates", title: "Product updates" },
-    { name: "Compliance/tax", title: "Compliance/tax" },
+    // { name: "Featured", title: "Featured" },
+    // { name: "Crypto & stablecoins", title: "Crypto & stablecoins" },
+    // { name: "Payments", title: "Payments" },
+    // { name: "Multi-currency accounts", title: "Multi-currency accounts" },
+    // { name: "Discussion", title: "Discussion" },
+    // { name: "Tech", title: "Tech" },
+    // { name: "Product updates", title: "Product updates" },
+    // { name: "Compliance/tax", title: "Compliance/tax" },
     // ...categories.map(c => ({ name: c.name, title: c.name }))
   ]
 

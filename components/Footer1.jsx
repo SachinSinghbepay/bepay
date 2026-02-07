@@ -9,6 +9,8 @@ import { db } from "@/lib/firebase";
 import Link from "next/link";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 import GetStartedPopup from "@/components/popups/getStartedPopup";
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 const AppStoreButton = (
   { iconSrc, iconAlt, line1, line2, onClick } // ANALYTICS: Added onClick prop
@@ -143,6 +145,48 @@ const Footer = ({
   const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
   const footerRef = useRef(null); // For intersection observer
 
+
+  const {
+    setIsQRPopupOpen,
+    setSelectedOS,
+    isQRPopupOpen,
+    setIsOSPopupOpen,
+    isOSPopupOpen,
+    selectedOS,
+  } = useAppDownload()
+
+  const openSmartDownload = (targetOS) => {
+    const ua = navigator.userAgent || navigator.vendor || window.opera
+
+    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream
+    const isAndroid = /android/i.test(ua)
+    const isMobile = isIOS || isAndroid
+
+    const links = {
+      ios: process.env.NEXT_PUBLIC_IOS_APP_URL,
+      android: process.env.NEXT_PUBLIC_ANDROID_APP_URL,
+      gallery: process.env.NEXT_PUBLIC_GALLERY_APP_URL,
+    }
+
+    //If mobile AND OS matches → redirect to store
+    if (isMobile) {
+      if ((isIOS && targetOS === "ios") || (isAndroid && targetOS === "android")) {
+        window.location.href = links[targetOS]
+        return
+      }
+    }
+
+    //Otherwise show QR
+    setSelectedOS(targetOS)
+    setIsOSPopupOpen(false)
+    setIsQRPopupOpen(true)
+  }
+
+  const openQR = (os) => {
+    setSelectedOS(os)      // "ios" | "android" | "gallery"
+    setIsOSPopupOpen(false) // ensure OS selector never shows
+    setIsQRPopupOpen(true)  // open QR popup directly
+  }
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 767);
     checkMobile();
@@ -545,26 +589,29 @@ const Footer = ({
               variants={containerVariants}
             >
               <AppStoreButton
-                onClick={handleAppStoreClick}
+                onClick={() => openSmartDownload("ios")}
                 iconSrc="/apple.png"
                 iconAlt="Apple Store"
                 line1="Download on the "
                 line2=" App Store!"
               />
+
               <AppStoreButton
-                onClick={handleGooglePlayClick}
+                onClick={() => openSmartDownload("android")}
                 iconSrc="/playstore.png"
                 iconAlt="Google Play"
                 line1="Get the App on "
                 line2="Google Play!"
               />
+
+
               <AppStoreButton
-                onClick={handleAppGalleryClick}
                 iconSrc="/huawei.png"
                 iconAlt="Huawei App Gallery"
                 line1="Get it on the App "
                 line2=" Gallery!"
               />
+
             </motion.div>
           )}
 
@@ -955,7 +1002,7 @@ const Footer = ({
                     >
                       CONTACT US
                     </Link>
-                     <Link
+                    <Link
                       href="/blogs"
                       onClick={() => handleLinkClick("Contact Us")}
                       className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
@@ -1100,6 +1147,14 @@ const Footer = ({
       )}
 
       <NewsletterModal isOpen={showModal} onClose={() => setShowModal(false)} />
+      <AppDownloadPopups
+        isOSPopupOpen={false}
+        setIsOSPopupOpen={() => { }}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
+        selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
+      />
     </>
   );
 };

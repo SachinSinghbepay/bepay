@@ -5,6 +5,8 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 const steps = [
   {
@@ -73,6 +75,17 @@ export default function CryptoScrollSection() {
   //const cryptoScrollSectionViewedRef = useRef(false); // ANALYTICS: Ref to track if the section has been viewed
   const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
 
+
+      const {
+      handleDownloadClick,
+      isOSPopupOpen,
+      setIsOSPopupOpen,
+      isQRPopupOpen,
+      setIsQRPopupOpen,
+      selectedOS,
+      setSelectedOS,
+    } = useAppDownload()
+  
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -256,24 +269,25 @@ export default function CryptoScrollSection() {
                   delay: 0.5,
                 }}
               >
-                <WaitlistTriggerButton
-                  triggerSource="'get started' button clicked"
-                  buttonLocation="Crypto Get Started Section Mobile"
+
+                <button
+                  onClick={() => {
+                    handleStartEarningClick()
+                    handleDownloadClick()
+                  }}
+
+                  className="bg-black cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
                 >
-                  <button
-                    onClick={handleStartEarningClick}
-                    className="bg-black cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
-                  >
-                    <Image
-                      src="/vector.svg"
-                      alt="Get Started Icon"
-                      width={20}
-                      height={20}
-                      className="w-5 h-5"
-                    />
-                    <span>Get Started</span>
-                  </button>
-                </WaitlistTriggerButton>
+                  <Image
+                    src="/vector.svg"
+                    alt="Get Started Icon"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                  <span>Get Started</span>
+                </button>
+
               </motion.div>
             </motion.div>
 
@@ -341,9 +355,8 @@ export default function CryptoScrollSection() {
                           <motion.h3
                             className="text-xl font-bold text-black mb-4"
                             style={{
-                              transform: `translateY(${
-                                step.headingOffsetMobile || 0
-                              }px)`,
+                              transform: `translateY(${step.headingOffsetMobile || 0
+                                }px)`,
                             }}
                             initial={{ opacity: 0, y: 50 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -413,11 +426,9 @@ export default function CryptoScrollSection() {
                                   <div
                                     className="absolute"
                                     style={{
-                                      transform: `translate(${
-                                        step.additionalImage.offsetX || 0
-                                      }px, ${
-                                        step.additionalImage.offsetY || 0
-                                      }px)`,
+                                      transform: `translate(${step.additionalImage.offsetX || 0
+                                        }px, ${step.additionalImage.offsetY || 0
+                                        }px)`,
                                     }}
                                   >
                                     <Image
@@ -443,6 +454,8 @@ export default function CryptoScrollSection() {
       </div>
     );
   }
+
+
 
   // Desktop version JSX
   return (
@@ -648,24 +661,24 @@ export default function CryptoScrollSection() {
                           </div>
 
                           {step.hasCTA && (
-                            <WaitlistTriggerButton
-                              triggerSource="'get started' button clicked"
-                              buttonLocation="Crypto Get Started Section Mobile"
+
+                            <motion.div
+                              initial={{
+                                opacity: isInView ? 0 : 0,
+                                y: isInView ? 20 : 40,
+                              }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{
+                                duration: isInView ? 0.6 : 0.8,
+                                delay: isInView ? 0.4 : 1.5,
+                              }}
                             >
-                              <motion.div
-                                initial={{
-                                  opacity: isInView ? 0 : 0,
-                                  y: isInView ? 20 : 40,
+                              <button
+                                onClick={() => {
+                                  handleStartEarningClick()
+                                  handleDownloadClick()
                                 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{
-                                  duration: isInView ? 0.6 : 0.8,
-                                  delay: isInView ? 0.4 : 1.5,
-                                }}
-                              >
-                                <button
-                                  onClick={handleStartEarningClick}
-                                  className="
+                                className="
                                   group relative inline-flex items-center justify-center
                                   cursor-pointer text-white bg-black font-semibold 
                                   transition-all duration-300 hover:bg-black/90 hover:scale-105 hover:shadow-lg active:scale-95
@@ -675,35 +688,42 @@ export default function CryptoScrollSection() {
                                   px-6 py-4 gap-[10px]
                                   text-sm
                                 "
+                              >
+                                <span>Get started</span>
+                                <svg
+                                  className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
                                 >
-                                  <span>Get started</span>
-                                  <svg
-                                    className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      d="M7 17L17 7M17 7H7M17 7V17"
-                                      stroke="currentColor"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                  </svg>
-                                </button>
-                              </motion.div>
-                            </WaitlistTriggerButton>
-                          )}
-                        </motion.div>
-                      )
+                                  <path
+                                    d="M7 17L17 7M17 7H7M17 7V17"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </button>
+                            </motion.div>
+                      )}
+                </motion.div>
+                )
                   )}
-                </AnimatePresence>
-              </div>
-            </motion.div>
+              </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
+      </div >
+         <AppDownloadPopups
+        isOSPopupOpen={isOSPopupOpen}
+        setIsOSPopupOpen={setIsOSPopupOpen}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
+        selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
+      />
+    </div >
   );
 }
