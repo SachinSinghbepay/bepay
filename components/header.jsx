@@ -10,41 +10,24 @@ import { motion } from "framer-motion";
 import WaitlistTriggerButton from "./waitlist-trigger-button";
 import GetStartedPopup from "./popups/getStartedPopup";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
-import { OSSelectionPopup } from "./popups/os-selection-popup";
-import { QRCodePopup } from "./popups/qr-code-popup";
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isGetStartedOpen, setIsGetStartedOpen] = useState(false);
   const pathname = usePathname();
 
-  // for download app popups
-  const [isOSPopupOpen, setIsOSPopupOpen] = useState(false);
-  const [isQRPopupOpen, setIsQRPopupOpen] = useState(false);
-  const [selectedOS, setSelectedOS] = useState(null);
 
-  const handleHeaderDownloadClick = (pageIdentifier) => {
-    AnalyticsService.sendEvent("Download App Clicked", { buttonLocation: pageIdentifier });
-
-    if (typeof navigator === "undefined") return;
-
-    const userAgent = navigator.userAgent || navigator.vendor;
-    const isAndroid = /android/i.test(userAgent);
-    const isIOS =
-      /iPad|iPhone|iPod/.test(userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-    // Mobile → redirect immediately
-    if (isAndroid) {
-      window.location.href = process.env.NEXT_PUBLIC_ANDROID_APP_URL
-      return;
-    }
-    if (isIOS) {
-      window.location.href = process.env.NEXT_PUBLIC_IOS_APP_URL
-      return;
-    }
-    // Desktop → open OS popup
-    setIsOSPopupOpen(true);
-  };
+  const {
+    handleDownloadClick,
+    isOSPopupOpen,
+    setIsOSPopupOpen,
+    isQRPopupOpen,
+    setIsQRPopupOpen,
+    selectedOS,
+    setSelectedOS,
+  } = useAppDownload()
 
 
   // 💥 UPDATED: Conditional check to hide the component on /dapps OR /allNetworks route
@@ -78,6 +61,7 @@ export default function Header() {
     return pathname.startsWith(path);
   };
 
+  
   // 1. Determine if it's the business page
   const isBusinessPage = isActivePage("/business");
 
@@ -231,8 +215,10 @@ export default function Header() {
               </div>
             ) : (
               <Button
-                onClick={() => handleHeaderDownloadClick(calculatedButtonLocation)}
-                variant="outline"
+                onClick={() => {
+              
+                  handleDownloadClick()
+                }} variant="outline"
                 className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
               >
                 <div className="flex gap-2">
@@ -377,36 +363,28 @@ export default function Header() {
                 {/* Mobile Download Button */}
                 {/* UPDATED: buttonLocation now uses the calculated value */}
                 <Button
-                  onClick={() => handleHeaderDownloadClick(calculatedButtonLocation)}
-                  variant="outline"
+                  onClick={() => {
+           
+                    handleDownloadClick()
+                  }} variant="outline"
                   className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2 border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
                 >
                   <Smartphone className="w-4 h-4" />
                   <span className="font-semibold text-xs">Download bepay app</span>
                 </Button>
 
-
-
-
               </>
             )}
           </motion.nav>
         </motion.div>
       </div>
-
-      <OSSelectionPopup
-        isVisible={isOSPopupOpen}
-        onClose={() => setIsOSPopupOpen(false)}
-        onOSSelected={(os) => {
-          setSelectedOS(os);
-          setIsOSPopupOpen(false);
-          setIsQRPopupOpen(true);
-        }}
-      />
-      <QRCodePopup
-        isVisible={isQRPopupOpen}
-        onClose={() => setIsQRPopupOpen(false)}
+      <AppDownloadPopups
+        isOSPopupOpen={isOSPopupOpen}
+        setIsOSPopupOpen={setIsOSPopupOpen}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
         selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
       />
     </header>
   );

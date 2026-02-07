@@ -5,21 +5,22 @@ import TableOfContents from "@/components/TableOfContents"
 /* ---------------- FETCH BLOG ---------------- */
 async function getBlog(slug) {
   try {
-    const res = await fetch('http://bepay.money/api/blogs', {
-      cache: "no-store",
-    })
-
-    if (!res.ok) throw new Error("Failed to fetch blogs")
+    const res = await fetch('http://localhost:3000/api/blogs', { cache: "no-store" })
+    if (!res.ok) return null
 
     const data = await res.json()
     if (!Array.isArray(data)) return null
 
-    return data.find((blog) => blog.slug === slug) || null
+    // normalize slugs same way as blogs page
+    return data.find(
+      (blog) => blog.slug === slug || blog.link?.split("/").pop() === slug
+    ) || null
   } catch (err) {
     console.error("Blog fetch error:", err)
     return null
   }
 }
+
 
 /* ---------------- HELPERS ---------------- */
 function formatDate(dateString) {
@@ -90,8 +91,8 @@ export default async function BlogPostPage({ params }) {
       {/* ---------------- BLOG CONTENT ---------------- */}
       <div className="flex-1 max-w-3xl lg:max-w-4xl">
         <h1 className="text-3xl md:text-4xl font-bold mb-8 leading-tight">
-  {blog.title}
-</h1>
+          {blog.title}
+        </h1>
         {blog.thumbnail && (
           <img
             src={blog.thumbnail}
@@ -123,8 +124,8 @@ export default async function BlogPostPage({ params }) {
         </div>
 
         {/* BLOG BODY */}
-   <article
-  className="
+        <article
+          className="
     max-w-none blog-content
 
     /* MAIN SECTION HEADINGS (H2 — sidebar linked) */
@@ -159,8 +160,8 @@ export default async function BlogPostPage({ params }) {
     [&_img]:shadow-md
     [&_img]:my-12
   "
-  dangerouslySetInnerHTML={{ __html: contentWithIds }}
-/>
+          dangerouslySetInnerHTML={{ __html: contentWithIds }}
+        />
 
 
 

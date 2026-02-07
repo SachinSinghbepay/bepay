@@ -10,8 +10,8 @@ import {
 import Image from "next/image";
 import { SmartphoneIcon as DeviceMobile } from "lucide-react";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
-import { OSSelectionPopup } from "../../components/popups/os-selection-popup";
-import { QRCodePopup } from "../../components/popups/qr-code-popup";
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 const iconsData = [
   {
@@ -56,9 +56,6 @@ export default function CryptoHeroSection() {
   const containerRef = useRef(null);
   const heroSectionRef = useRef(null); // For intersection observer
 
-  const [isOSPopupOpen, setIsOSPopupOpen] = useState(false)
-  const [isQRPopupOpen, setIsQRPopupOpen] = useState(false)
-  const [selectedOS, setSelectedOS] = useState(null)
 
   // ANALYTICS: Track when the hero section is actually viewed
   useEffect(() => {
@@ -171,30 +168,15 @@ export default function CryptoHeroSection() {
     opacityTransform3,
   ];
 
-  const handleDownloadClick = () => {
-    if (typeof navigator === "undefined") return
-
-    const userAgent = navigator.userAgent || navigator.vendor
-
-    const isAndroid = /android/i.test(userAgent)
-    const isIOS =
-      /iPad|iPhone|iPod/.test(userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
-
-    // 📱 MOBILE → redirect immediately
-    if (isAndroid) {
-      window.location.href = process.env.NEXT_PUBLIC_ANDROID_APP_URL
-      return
-    }
-
-    if (isIOS) {
-      window.location.href = process.env.NEXT_PUBLIC_IOS_APP_URL
-      return
-    }
-
-    // 💻 DESKTOP → show OS selection popup
-    setIsOSPopupOpen(true)
-  }
+  const {
+    handleDownloadClick,
+    isOSPopupOpen,
+    setIsOSPopupOpen,
+    isQRPopupOpen,
+    setIsQRPopupOpen,
+    selectedOS,
+    setSelectedOS,
+  } = useAppDownload()
 
 
   useEffect(() => {
@@ -437,7 +419,10 @@ export default function CryptoHeroSection() {
                   </div>
                   <div className="relative z-50 pointer-events-auto mt-10 lg:mt-12">
                     <motion.button
-                      onClick={handleDownloadClick}
+                      onClick={() => {
+                        handleButtonClick()
+                        handleDownloadClick()
+                      }}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       initial={{ opacity: 0, y: 100 }}
@@ -456,20 +441,13 @@ export default function CryptoHeroSection() {
           </motion.div>
         </div>
       </div >
-      <OSSelectionPopup
-        isVisible={isOSPopupOpen}
-        onClose={() => setIsOSPopupOpen(false)}
-        onOSSelected={(os) => {
-          setSelectedOS(os)      
-          setIsOSPopupOpen(false)
-          setIsQRPopupOpen(true)  
-        }}
-      />
-
-      <QRCodePopup
-        isVisible={isQRPopupOpen}
-        onClose={() => setIsQRPopupOpen(false)}
-        selectedOS={selectedOS}   
+      <AppDownloadPopups
+        isOSPopupOpen={isOSPopupOpen}
+        setIsOSPopupOpen={setIsOSPopupOpen}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
+        selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
       />
     </div >
   );

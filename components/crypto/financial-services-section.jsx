@@ -5,6 +5,8 @@ import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 // Mock WaitlistTriggerButton component
 const WaitlistTriggerButton = ({ children }) => children;
@@ -82,13 +84,13 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
   const isLast = index === totalServices - 1;
 
   if (isFirst) {
-    inputRange = [ 0, end - segmentDuration * fixedTransformDistance, end + segmentDuration * fixedTransformDistance, ];
+    inputRange = [0, end - segmentDuration * fixedTransformDistance, end + segmentDuration * fixedTransformDistance,];
     outputRange = [0, 0, -travelDistance];
   } else if (isLast) {
-    inputRange = [ start - segmentDuration * fixedTransformDistance, start + segmentDuration * fixedTransformDistance, 1, ];
+    inputRange = [start - segmentDuration * fixedTransformDistance, start + segmentDuration * fixedTransformDistance, 1,];
     outputRange = [travelDistance, 0, 0];
   } else {
-    inputRange = [ start - segmentDuration * fixedTransformDistance, start + segmentDuration * fixedTransformDistance, end - segmentDuration * fixedTransformDistance, end + segmentDuration * fixedTransformDistance, ];
+    inputRange = [start - segmentDuration * fixedTransformDistance, start + segmentDuration * fixedTransformDistance, end - segmentDuration * fixedTransformDistance, end + segmentDuration * fixedTransformDistance,];
     outputRange = [travelDistance, 0, 0, -travelDistance];
   }
 
@@ -100,7 +102,7 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
 
     const unsubscribe = progress.on("change", (latest) => {
       const isVisible = latest >= start && latest <= end;
-      
+
       if (videoRef.current) {
         if (isVisible) {
           videoRef.current.play().catch(console.error);
@@ -157,7 +159,7 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
               text-[#6A6A6A] 
               mb-3
               ${service.title === "Bitcoin backed loans" ? "leading-tight" : ""}
-              ${service.title === "Savings Products" || service.title === "Insurance Products" || service.title ==="DeFi Marketplace" || service.title ==="Remittance Services"? "whitespace-nowrap" : ""}
+              ${service.title === "Savings Products" || service.title === "Insurance Products" || service.title === "DeFi Marketplace" || service.title === "Remittance Services" ? "whitespace-nowrap" : ""}
             `}
           >
             {service.title}
@@ -179,7 +181,7 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
   );
 };
 
-const MobileView = () => {
+const MobileView = ({ onDownloadClick }) => {
   const mobileContainerRef = useRef(null);
   const cardWrapperRef = useRef(null);
   const videoRefs = useRef([]);
@@ -193,7 +195,7 @@ const MobileView = () => {
   useEffect(() => {
     // Initialize video refs array
     videoRefs.current = new Array(servicesData.length);
-    
+
     const unsubscribe = scrollYProgress.on("change", (latest) => {
       const cardWrapper = cardWrapperRef.current;
       if (!cardWrapper) return;
@@ -206,7 +208,7 @@ const MobileView = () => {
       // Handle video play/pause for mobile (only for videos)
       const totalCards = servicesData.length;
       const currentCardIndex = Math.floor(latest * totalCards);
-      
+
       videoRefs.current.forEach((video, index) => {
         if (video && servicesData[index].video) { // Only control videos, not images
           if (index === currentCardIndex) {
@@ -249,8 +251,10 @@ const MobileView = () => {
             <span className="block">all in one comprehensive platform</span>
           </motion.p>
 
-          <motion.button 
-            onClick={handleExploreFeaturesClick} // ANALYTICS: Added onClick handler
+          <motion.button
+            onClick={() => {
+              onDownloadClick();
+            }}
             className="flex items-center justify-center gap-2 bg-black text-white px-6 h-[56px] rounded-full mt-6 hover:bg-gray-800 transition-colors text-xs font-medium">
             <span>Explore all features</span>
             <ArrowUpRight size={20} />
@@ -289,12 +293,12 @@ const MobileView = () => {
                         Your browser does not support the video tag.
                       </video>
                     ) : (
-                      <Image 
-                        src={service.image || "/placeholder.svg"} 
-                        alt={service.title} 
-                        fill 
-                        className="object-cover" 
-                        loading="lazy" 
+                      <Image
+                        src={service.image || "/placeholder.svg"}
+                        alt={service.title}
+                        fill
+                        className="object-cover"
+                        loading="lazy"
                       />
                     )}
                   </div>
@@ -353,6 +357,17 @@ export const FinancialServicesSection = () => {
     AnalyticsService.sendEvent("'Explore all features' button clicked");
   };
 
+  const {
+    handleDownloadClick,
+    isOSPopupOpen,
+    setIsOSPopupOpen,
+    isQRPopupOpen,
+    setIsQRPopupOpen,
+    selectedOS,
+    setSelectedOS,
+  } = useAppDownload()
+
+
   return (
     <section>
       {/* Desktop View */}
@@ -365,7 +380,7 @@ export const FinancialServicesSection = () => {
               whileInView="visible"
               viewport={{ once: true, amount: 0.2 }}
             >
-              <motion.h2 className="text-[80px] lg:text-5xl xl:text-6xl font-[400]"style={{ lineHeight: "0.9" }}>
+              <motion.h2 className="text-[80px] lg:text-5xl xl:text-6xl font-[400]" style={{ lineHeight: "0.9" }}>
                 <span className="text-gray-400">COMPLETE</span>
                 <br />
                 FINANCIAL
@@ -379,12 +394,14 @@ export const FinancialServicesSection = () => {
                 <span className="block">all in one comprehensive platform</span>
               </motion.p>
 
-              <WaitlistTriggerButton triggerSource="'financial service section' button clicked" buttonLocation="Crypto Financial Services Section">
-                <motion.button
-                  onClick={handleExploreFeaturesClick} // ANALYTICS: Added onClick handler
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="
+              <motion.button
+                onClick={() => {
+                  handleExploreFeaturesClick
+                  handleDownloadClick()
+                }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="
                     bg-black cursor-pointer whitespace-nowrap text-white 
                     flex items-center justify-center transition-colors 
                     hover:bg-gray-800 rounded-full mt-7
@@ -398,11 +415,11 @@ export const FinancialServicesSection = () => {
                     md:text-sm md:font-medium 
                     md:rounded-[100px]
                   "
-                >
-                  Explore all features
-                  <ArrowUpRight size={18} className="w-5 h-5 md:w-6 md:h-6" />
-                </motion.button>
-              </WaitlistTriggerButton>
+              >
+                Explore all features
+                <ArrowUpRight size={18} className="w-5 h-5 md:w-6 md:h-6" />
+              </motion.button>
+
 
             </motion.div>
           </div>
@@ -421,7 +438,16 @@ export const FinancialServicesSection = () => {
       </div>
 
       {/* Mobile View */}
-      <MobileView />
+      <MobileView onDownloadClick={handleDownloadClick} />
+      <AppDownloadPopups
+        isOSPopupOpen={isOSPopupOpen}
+        setIsOSPopupOpen={setIsOSPopupOpen}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
+        selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
+      />
+
     </section>
   );
 };
