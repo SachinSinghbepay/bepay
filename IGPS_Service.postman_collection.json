@@ -1,0 +1,1108 @@
+{
+  "info": {
+    "name": "IGPS Service — BePay Global Payments",
+    "description": "Full API collection for @bepay/igps-service.\n\nSetup:\n1. Run the \"Signup\" or \"Login\" request first\n2. Tokens are auto-saved to collection variables\n3. All authenticated requests use {{accessToken}} automatically\n\nBase URL: http://localhost:3002",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3002" },
+    { "key": "apiBase", "value": "http://localhost:3002/api/igps" },
+    { "key": "accessToken", "value": "" },
+    { "key": "refreshToken", "value": "" },
+    { "key": "orgId", "value": "" },
+    { "key": "userId", "value": "" },
+    { "key": "testEmail", "value": "merchant@bepay-test.com" },
+    { "key": "testPassword", "value": "TestPass123!" },
+    { "key": "inviteToken", "value": "" },
+    { "key": "memberId", "value": "" },
+    { "key": "apiKeyId", "value": "" },
+    { "key": "senderId", "value": "" },
+    { "key": "beneficiaryId", "value": "" },
+    { "key": "quoteId", "value": "" },
+    { "key": "orderId", "value": "" },
+    { "key": "claimId", "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{accessToken}}" }]
+  },
+  "item": [
+    {
+      "name": "0. Health & Info",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/health",
+            "auth": { "type": "noauth" }
+          }
+        },
+        {
+          "name": "Ready Check",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/ready",
+            "auth": { "type": "noauth" }
+          }
+        },
+        {
+          "name": "Server Info",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/info",
+            "auth": { "type": "noauth" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "1. Auth",
+      "item": [
+        {
+          "name": "Signup",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  const d = body.data || body;",
+                  "  const tokens = d.tokens || d;",
+                  "  if (tokens.accessToken) pm.collectionVariables.set('accessToken', tokens.accessToken);",
+                  "  if (tokens.refreshToken) pm.collectionVariables.set('refreshToken', tokens.refreshToken);",
+                  "  if (d.user) pm.collectionVariables.set('userId', d.user.id);",
+                  "  if (d.organization) pm.collectionVariables.set('orgId', d.organization.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/auth/signup",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{testEmail}}\",\n  \"password\": \"{{testPassword}}\",\n  \"organizationName\": \"My Test Org\",\n  \"organizationSlug\": \"my-test-org\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  const d = body.data || body;",
+                  "  const tokens = d.tokens || d;",
+                  "  if (tokens.accessToken) pm.collectionVariables.set('accessToken', tokens.accessToken);",
+                  "  if (tokens.refreshToken) pm.collectionVariables.set('refreshToken', tokens.refreshToken);",
+                  "  if (d.user) pm.collectionVariables.set('userId', d.user.id);",
+                  "  if (d.organization) pm.collectionVariables.set('orgId', d.organization.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/auth/login",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{testEmail}}\",\n  \"password\": \"{{testPassword}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Profile (me)",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/auth/me"
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PATCH",
+            "url": "{{apiBase}}/auth/me",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Nikhil\",\n  \"lastName\": \"Gupta\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/auth/change-password",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"{{testPassword}}\",\n  \"newPassword\": \"NewPass456!\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  const d = body.data || body;",
+                  "  const tokens = d.tokens || d;",
+                  "  if (tokens.accessToken) pm.collectionVariables.set('accessToken', tokens.accessToken);",
+                  "  if (tokens.refreshToken) pm.collectionVariables.set('refreshToken', tokens.refreshToken);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/auth/refresh",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/auth/verify-email",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"<verification-token-from-email>\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Resend Verification Email",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/auth/resend-verification",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{testEmail}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/auth/forgot-password",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{testEmail}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/auth/reset-password",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"<reset-token-from-email>\",\n  \"newPassword\": \"NewPass456!\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/auth/logout",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Logout All Sessions",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/auth/logout-all"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Team Management",
+      "item": [
+        {
+          "name": "Invite Team Member",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  const d = body.data || body;",
+                  "  if (d.token) pm.collectionVariables.set('inviteToken', d.token);",
+                  "  if (d.id) pm.collectionVariables.set('memberId', d.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/team/invites",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teammate@bepay-test.com\",\n  \"role\": \"member\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Pending Invites",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/team/invites"
+          }
+        },
+        {
+          "name": "Cancel Invite",
+          "request": {
+            "method": "DELETE",
+            "url": "{{apiBase}}/team/invites/{{memberId}}"
+          }
+        },
+        {
+          "name": "Accept Invite (Public)",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/team/invites/{{inviteToken}}/accept",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teammate@bepay-test.com\",\n  \"password\": \"TeamPass123!\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Team Members",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/team/members"
+          }
+        },
+        {
+          "name": "Update Member Role",
+          "request": {
+            "method": "PATCH",
+            "url": "{{apiBase}}/team/members/{{memberId}}/role",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"admin\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Remove Team Member",
+          "request": {
+            "method": "DELETE",
+            "url": "{{apiBase}}/team/members/{{memberId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. API Keys",
+      "item": [
+        {
+          "name": "Create API Key",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  const d = body.data || body;",
+                  "  if (d.id) pm.collectionVariables.set('apiKeyId', d.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/api-keys",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Production Key\",\n  \"permissions\": [\"payments:read\", \"payments:write\"]\n}"
+            }
+          }
+        },
+        {
+          "name": "List API Keys",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/api-keys"
+          }
+        },
+        {
+          "name": "Regenerate API Key Secret",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/api-keys/{{apiKeyId}}/regenerate-secret"
+          }
+        },
+        {
+          "name": "Delete API Key",
+          "request": {
+            "method": "DELETE",
+            "url": "{{apiBase}}/api-keys/{{apiKeyId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Currencies & Validation",
+      "item": [
+        {
+          "name": "List Supported Currencies",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/currencies"
+          }
+        },
+        {
+          "name": "Get Payment Types (India)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{apiBase}}/payment-types/IN?ownerType=individual",
+              "host": ["{{apiBase}}"],
+              "path": ["payment-types", "IN"],
+              "query": [
+                { "key": "ownerType", "value": "individual" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Payment Types (US)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{apiBase}}/payment-types/US?ownerType=individual",
+              "host": ["{{apiBase}}"],
+              "path": ["payment-types", "US"],
+              "query": [
+                { "key": "ownerType", "value": "individual" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Validation Rules (Sender)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{apiBase}}/validation-rules?type=sender&country=IN&ownerType=individual",
+              "host": ["{{apiBase}}"],
+              "path": ["validation-rules"],
+              "query": [
+                { "key": "type", "value": "sender" },
+                { "key": "country", "value": "IN" },
+                { "key": "ownerType", "value": "individual" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Validation Rules (Beneficiary)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{apiBase}}/validation-rules?type=beneficiary&country=IN&paymentType=bank_account&ownerType=individual",
+              "host": ["{{apiBase}}"],
+              "path": ["validation-rules"],
+              "query": [
+                { "key": "type", "value": "beneficiary" },
+                { "key": "country", "value": "IN" },
+                { "key": "paymentType", "value": "bank_account" },
+                { "key": "ownerType", "value": "individual" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Banks (India)",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/banks/IN"
+          }
+        },
+        {
+          "name": "Get Banks (US)",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/banks/US"
+          }
+        },
+        {
+          "name": "Get Banks (Brazil)",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/banks/BR"
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Senders (KYC)",
+      "item": [
+        {
+          "name": "Create Sender (Individual)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  const d = body.data || body;",
+                  "  if (d.id) pm.collectionVariables.set('senderId', d.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/senders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"individual\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"+919876543210\",\n  \"birthDate\": \"1990-01-15\",\n  \"gender\": \"male\",\n  \"occupation\": \"software_developer\",\n  \"address\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"Mumbai\",\n    \"state\": \"MH\",\n    \"country\": \"IN\",\n    \"postalCode\": \"400001\"\n  },\n  \"identity\": {\n    \"countryCode\": \"IN\",\n    \"documentType\": \"NATIONAL_ID\",\n    \"documentNumber\": \"ABCDE1234F\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Sender (Business)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  const d = body.data || body;",
+                  "  if (d.id) pm.collectionVariables.set('senderId', d.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/senders",
+            "description": "Create a business sender. Only ONE sender (individual or business) allowed per account.\n\nAfter creation, you must:\n1. Upload documents (business_registration_proof + address_proof)\n2. Create UBO (Ultimate Beneficial Owner)\n3. Trigger verification\n\nNote: Use US-CA format for state codes. Business type: corporation, sole proprietorship, limited liability company, partnership, other.",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"business\",\n  \"fullName\": \"Acme Corp Ltd\",\n  \"email\": \"finance@acme.com\",\n  \"phone\": \"+14155551234\",\n  \"identificationNumber\": \"REG123456\",\n  \"registrationDate\": \"2020-01-01\",\n  \"businessType\": \"corporation\",\n  \"address\": {\n    \"street\": \"456 Business Rd\",\n    \"city\": \"San Francisco\",\n    \"state\": \"US-CA\",\n    \"country\": \"US\",\n    \"postalCode\": \"94105\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Get My Sender Profile",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/senders/me"
+          }
+        },
+        {
+          "name": "Get Sender by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/senders/{{senderId}}"
+          }
+        },
+        {
+          "name": "Upload Document (Business Registration Proof)",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/senders/{{senderId}}/documents",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fileName\": \"business_registration.pdf\",\n  \"type\": \"business_registration_proof\",\n  \"blob\": \"<base64-encoded-PDF-or-image-content>\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Upload Document (Address Proof)",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/senders/{{senderId}}/documents",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fileName\": \"address_proof.pdf\",\n  \"type\": \"address_proof\",\n  \"blob\": \"<base64-encoded-PDF-or-image-content>\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create UBO (Business Sender)",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/senders/{{senderId}}/ubo",
+            "description": "Create Ultimate Beneficial Owner for a business sender. Required before sender verification.\n\nRequired fields: firstName, lastName, email, phone, birthDate, ownershipPercent, address, identity.\n\nUS senders: identity.documentType must be SSN4, SSN9, or TAX_ID.\nTotal ownershipPercent across all UBOs cannot exceed 100%.\nMultiple UBOs can be added by calling this endpoint multiple times.",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john@company.com\",\n  \"phone\": \"+14155551234\",\n  \"ownershipPercent\": 100,\n  \"birthDate\": \"1985-06-20\",\n  \"address\": {\n    \"street\": \"456 Business Rd\",\n    \"city\": \"San Francisco\",\n    \"state\": \"US-CA\",\n    \"country\": \"US\",\n    \"postalCode\": \"94105\"\n  },\n  \"identity\": {\n    \"countryCode\": \"US\",\n    \"documentType\": \"SSN9\",\n    \"documentNumber\": \"123456789\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Verify Sender",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/senders/{{senderId}}/verify"
+          }
+        },
+        {
+          "name": "Refresh Sender Status",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/senders/{{senderId}}/refresh-status"
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Beneficiaries",
+      "item": [
+        {
+          "name": "Create Beneficiary (India Bank)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  const d = body.data || body;",
+                  "  if (d.id) pm.collectionVariables.set('beneficiaryId', d.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/beneficiaries",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"individual\",\n  \"firstName\": \"Priya\",\n  \"lastName\": \"Sharma\",\n  \"email\": \"priya@example.com\",\n  \"phone\": \"+919876543210\",\n  \"address\": {\n    \"street\": \"456 MG Road\",\n    \"city\": \"Bengaluru\",\n    \"state\": \"KA\",\n    \"country\": \"IN\",\n    \"postalCode\": \"560001\"\n  },\n  \"paymentInfo\": {\n    \"paymentType\": \"bank_account\",\n    \"accountNumber\": \"1234567890\",\n    \"accountType\": \"savings\",\n    \"bankId\": \"1300\",\n    \"ifscCode\": \"SBIN0001234\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Beneficiary (US Bank)",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/beneficiaries",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"individual\",\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith\",\n  \"email\": \"jane@example.com\",\n  \"address\": {\n    \"street\": \"789 Oak Ave\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"country\": \"US\",\n    \"postalCode\": \"10001\"\n  },\n  \"paymentInfo\": {\n    \"paymentType\": \"bank_account\",\n    \"accountNumber\": \"9876543210\",\n    \"routingNumber\": \"021000021\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Beneficiary (Brazil PIX)",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/beneficiaries",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"individual\",\n  \"firstName\": \"Carlos\",\n  \"lastName\": \"Silva\",\n  \"email\": \"carlos@example.com\",\n  \"address\": {\n    \"street\": \"Rua ABC 123\",\n    \"city\": \"São Paulo\",\n    \"state\": \"SP\",\n    \"country\": \"BR\",\n    \"postalCode\": \"01001-000\"\n  },\n  \"paymentInfo\": {\n    \"paymentType\": \"pix\",\n    \"pixKeyId\": \"carlos@example.com\",\n    \"taxId\": \"12345678901\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "List Beneficiaries",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/beneficiaries"
+          }
+        },
+        {
+          "name": "Get Beneficiary by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/beneficiaries/{{beneficiaryId}}"
+          }
+        },
+        {
+          "name": "Verify Beneficiary",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/beneficiaries/{{beneficiaryId}}/verify"
+          }
+        },
+        {
+          "name": "Create Beneficiary (Crypto Wallet)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  const d = body.data || body;",
+                  "  if (d.id) pm.collectionVariables.set('beneficiaryId', d.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/beneficiaries",
+            "description": "Create a beneficiary with a crypto wallet address (for fiat-to-stablecoin flows).\n\nRequired paymentInfo fields:\n- paymentType: crypto_wallet\n- address: blockchain wallet address\n- chain: ethereum, polygon, solana, or tron\n\nSupported tokens: USDC (ETH, SOL, POL), USDT (ETH, SOL, POL, TRX)",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"individual\",\n  \"firstName\": \"Alex\",\n  \"lastName\": \"Walker\",\n  \"address\": {\n    \"street\": \"123 Blockchain Ave\",\n    \"city\": \"Mumbai\",\n    \"state\": \"IN-MH\",\n    \"country\": \"IN\",\n    \"postalCode\": \"400001\"\n  },\n  \"paymentType\": \"crypto_wallet\",\n  \"paymentInfo\": {\n    \"paymentType\": \"crypto_wallet\",\n    \"address\": \"0xYOUR_WALLET_ADDRESS_HERE\",\n    \"chain\": \"ethereum\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Beneficiary",
+          "request": {
+            "method": "DELETE",
+            "url": "{{apiBase}}/beneficiaries/{{beneficiaryId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Quotes & Orders",
+      "item": [
+        {
+          "name": "Create Quote (USDC_ETH → INR)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  const d = body.data || body;",
+                  "  if (d.id) pm.collectionVariables.set('quoteId', d.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/quotes",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sourceCurrency\": \"USDC\",\n  \"targetCurrency\": \"INR\",\n  \"targetAmount\": 1000,\n  \"network\": \"ETH\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Quote (USDT → BRL)",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/quotes",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sourceCurrency\": \"USDT\",\n  \"targetCurrency\": \"BRL\",\n  \"targetAmount\": 500,\n  \"network\": \"TRX\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Quote (USD → INR, Fiat→Fiat)",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/quotes",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sourceCurrency\": \"USD\",\n  \"targetCurrency\": \"INR\",\n  \"targetAmount\": 5000,\n  \"transferType\": \"wire\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const body = pm.response.json();",
+                  "  const d = body.data || body;",
+                  "  if (d.id) pm.collectionVariables.set('orderId', d.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/orders",
+            "description": "Create a payment order. For B2B orders to India (and other listed countries), an invoice document is REQUIRED.\\n\\nThe documents array accepts objects with:\\n- type: 'invoice'\\n- blob: base64-encoded PDF content\\n\\nFor testing, you can generate a minimal base64 PDF or use a real invoice.\",",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"acceptedQuoteId\": \"{{quoteId}}\",\n  \"senderId\": \"{{senderId}}\",\n  \"beneficiaryId\": \"{{beneficiaryId}}\",\n  \"purpose\": \"payment_for_goods_and_services\",\n  \"sourceOfFunds\": \"salary\",\n  \"beneficiaryRelationship\": \"customer\",\n  \"documents\": [\n    {\n      \"type\": \"invoice\",\n      \"fileName\": \"invoice.pdf\",\n      \"blob\": \"<base64-encoded-PDF-content>\"\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "List Orders",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{apiBase}}/orders?page=1&limit=20",
+              "host": ["{{apiBase}}"],
+              "path": ["orders"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "status", "value": "", "disabled": true },
+                { "key": "corridor", "value": "", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/orders/{{orderId}}"
+          }
+        },
+        {
+          "name": "Get Deposit Address",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/orders/{{orderId}}/deposit-address"
+          }
+        },
+        {
+          "name": "Get Deposit Info",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/orders/{{orderId}}/deposit-info"
+          }
+        },
+        {
+          "name": "Refresh Order (Sync from Mesta)",
+          "description": "Syncs order status, deposit info (wallet address or bank account), transfer type, and payout reference from Mesta. Use this to populate null fields or check for status updates.",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/orders/{{orderId}}/refresh"
+          }
+        },
+        {
+          "name": "Cancel Order",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/orders/{{orderId}}/cancel"
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Merchant",
+      "item": [
+        {
+          "name": "Get Merchant Info",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/merchant/info"
+          }
+        },
+        {
+          "name": "Get Merchant Accounts",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/merchant/accounts"
+          }
+        },
+        {
+          "name": "Get Merchant Balances",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/merchant/balances"
+          }
+        },
+        {
+          "name": "Get Merchant Balances (Force Refresh)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{apiBase}}/merchant/balances?refresh=true",
+              "host": ["{{apiBase}}"],
+              "path": ["merchant", "balances"],
+              "query": [{ "key": "refresh", "value": "true" }]
+            }
+          }
+        },
+        {
+          "name": "Get Balance Summary",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/merchant/balances/summary"
+          }
+        },
+        {
+          "name": "List Merchant Transactions",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{apiBase}}/merchant/transactions?page=1&limit=20",
+              "host": ["{{apiBase}}"],
+              "path": ["merchant", "transactions"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "status", "value": "", "disabled": true },
+                { "key": "type", "value": "", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Merchant Transaction by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/merchant/transactions/<transaction-id>"
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Payouts (Pay-to-Email / Bank)",
+      "item": [
+        {
+          "name": "Send to Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const body = pm.response.json();",
+                  "  const d = body.data || body;",
+                  "  if (d.id) pm.collectionVariables.set('claimId', d.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/payouts/send-to-email",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"recipient@example.com\",\n  \"amount\": 50,\n  \"currency\": \"USDC\",\n  \"message\": \"Payment for services\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Send to Bank",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/payouts/send-to-bank",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"beneficiaryId\": \"{{beneficiaryId}}\",\n  \"amount\": 100,\n  \"currency\": \"USDC\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Claims",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/payouts/claims"
+          }
+        },
+        {
+          "name": "Get Claim by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/payouts/claims/{{claimId}}"
+          }
+        },
+        {
+          "name": "Claim Payout (Public)",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/payouts/claims/{{claimId}}/claim",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"recipient@example.com\",\n  \"bankDetails\": {\n    \"accountNumber\": \"1234567890\",\n    \"ifscCode\": \"SBIN0001234\"\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Cancel Claim",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/payouts/claims/{{claimId}}/cancel"
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Wallets & Deposits",
+      "item": [
+        {
+          "name": "List Wallets",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/wallets"
+          }
+        },
+        {
+          "name": "Get Deposit Address",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{apiBase}}/wallets/deposit-address?network=ethereum&currency=USDC",
+              "host": ["{{apiBase}}"],
+              "path": ["wallets", "deposit-address"],
+              "query": [
+                { "key": "network", "value": "ethereum" },
+                { "key": "currency", "value": "USDC" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Wallet Balances",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/wallets/balances"
+          }
+        },
+        {
+          "name": "List Stablecoin Deposits",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{apiBase}}/wallets/deposits/stablecoin?page=1&limit=20",
+              "host": ["{{apiBase}}"],
+              "path": ["wallets", "deposits", "stablecoin"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Fiat Deposits",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{apiBase}}/wallets/deposits/fiat?page=1&limit=20",
+              "host": ["{{apiBase}}"],
+              "path": ["wallets", "deposits", "fiat"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Wallet Transactions",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{apiBase}}/wallets/transactions?page=1&limit=20",
+              "host": ["{{apiBase}}"],
+              "path": ["wallets", "transactions"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Wallet Transaction by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{apiBase}}/wallets/transactions/<transaction-id>"
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Webhooks (Mesta Callbacks)",
+      "item": [
+        {
+          "name": "Simulate Webhook (Test Only)",
+          "request": {
+            "method": "POST",
+            "url": "{{apiBase}}/webhooks/test",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventType\": \"order.status.updated\",\n  \"data\": {\n    \"orderId\": \"{{orderId}}\",\n    \"status\": \"funds_received\"\n  }\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
