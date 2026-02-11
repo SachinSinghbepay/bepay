@@ -38,6 +38,20 @@ export class IgpsService {
 
     constructor(baseUrl: string = 'http://localhost:3002/api/igps') {
         this.baseUrl = baseUrl;
+
+        // Auto-load tokens from cookies if in browser
+        if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+            const getCookie = (name: string) => {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop()?.split(';').shift();
+                return null;
+            }
+            const token = getCookie('igps_token');
+            const refresh = getCookie('igps_refresh');
+            if (token) this.accessToken = token;
+            if (refresh) this.refreshToken = refresh;
+        }
     }
 
     setTokens(accessToken: string, refreshToken: string) {
