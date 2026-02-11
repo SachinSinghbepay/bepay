@@ -41,6 +41,19 @@ export default function OnboardingPage() {
     // Load initial user data (to pre-fill email/name/org)
     useEffect(() => {
         const fetchProfile = async () => {
+            // Ensure tokens are loaded from cookies explicitly here to handle client-side nav
+            const getCookie = (name) => {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop()?.split(';').shift();
+                return null;
+            }
+            const token = getCookie('igps_token');
+            const refresh = getCookie('igps_refresh');
+            if (token && refresh) {
+                igpsService.setTokens(token, refresh);
+            }
+
             try {
                 const response = await igpsService.getProfile();
                 if (response.success) {
@@ -56,6 +69,7 @@ export default function OnboardingPage() {
                     }));
                 } else {
                     // If fetching profile fails (likely auth), redirect to login
+                    console.warn("Profile fetch failed, redirecting to login", response);
                     router.push('/igps/login');
                 }
             } catch (error) {
@@ -77,6 +91,8 @@ export default function OnboardingPage() {
 
     const submitOnboarding = async () => {
         setLoading(true);
+        console.log("Submitting Onboarding Data...", formData);
+
         try {
             // 1. Create Sender
             const senderData = {
@@ -101,34 +117,50 @@ export default function OnboardingPage() {
             if (!senderRes.success) throw new Error(senderRes.message || "Failed to create sender profile");
 
             const senderId = senderRes.data.id;
+            console.log("Sender Created:", senderId);
 
             // 2. Upload Documents
-            for (const doc of formData.documents) {
-                // Assuming doc has { buffer (base64 subset), fileName, type }
-                // In a real app we'd likely use FormData or a pre-signed URL. 
-                // The Service expects { fileName, type, blob (base64) }
-                await igpsService.uploadSenderDocument(senderId, {
-                    fileName: doc.fileName,
-                    type: doc.type,
-                    blob: doc.base64 // Ensure this is the raw base64 string
-                });
+            if (formData.documents && formData.documents.length > 0) {
+                console.log(`Uploading ${formData.documents.length} documents...`);
+                for (const doc of formData.documents) {
+                    console.log(`Uploading doc: ${doc.fileName}`);
+                    const docRes = await igpsService.uploadSenderDocument(senderId, {
+                        fileName: doc.fileName,
+                        type: doc.type,
+                        blob: doc.base64 // Ensure this is the raw base64 string
+                    });
+                    if (!docRes.success) {
+                        console.error("Document upload failed", docRes);
+                        throw new Error(`Failed to upload ${doc.fileName}: ${docRes.message}`);
+                    }
+                }
+            } else {
+                console.log("No documents to upload.");
             }
 
             // 3. Create UBOs (if Business)
             if (formData.type === 'business' && formData.ubos.length > 0) {
+                console.log(`Creating ${formData.ubos.length} UBOs...`);
                 for (const ubo of formData.ubos) {
-                    await igpsService.createUBO(senderId, ubo);
+                    const uboRes = await igpsService.createUBO(senderId, ubo);
+                    if (!uboRes.success) {
+                        console.error("UBO creation failed", uboRes);
+                        throw new Error(`Failed to add UBO ${ubo.firstName}: ${uboRes.message}`);
+                    }
                 }
             }
 
             // 4. Verify (Trigger backend verification process)
-            await igpsService.verifySender(senderId);
+            console.log("Triggering verification...");
+            const verifyRes = await igpsService.verifySender(senderId);
+            if (!verifyRes.success) console.warn("Verification trigger warning:", verifyRes.message); // Don't block flow on verification trigger failure if sender is created
 
             // Success -> Dashboard
+            console.log("Onboarding Complete. Redirecting...");
             router.push('/igps/dashboard');
 
         } catch (error) {
-            console.error(error);
+            console.error("Onboarding Error:", error);
             alert(`Onboarding failed: ${error.message}`);
         } finally {
             setLoading(false);
