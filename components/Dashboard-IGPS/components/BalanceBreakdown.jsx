@@ -1,9 +1,29 @@
+/* eslint-disable @next/next/no-img-element */
 import { useState, useRef, useEffect } from "react";
 import BalanceDropdown from "./BalanceDropdown";
 
-export default function BalanceBreakdown() {
+export default function BalanceBreakdown({ wallets = [] }) {
     const [open, setOpen] = useState(false);
     const wrapperRef = useRef(null);
+
+    const visibleWallets = wallets.slice(0, 3);
+
+    // Helper to get icons
+    const getTokenIcon = (currency) => {
+        const c = currency?.toLowerCase();
+        if (c === 'usdc') return "/icons/usdc.svg";
+        if (c === 'usdt') return "/icons/usdt.svg";
+        return "/icons/usdc.svg"; // default
+    }
+
+    const getChainIcon = (chain) => {
+        const c = chain?.toLowerCase();
+        if (c === 'polygon') return "/icons/polygon.png";
+        if (c === 'solana') return "/icons/solana.svg";
+        if (c === 'tron') return "/icons/tron.svg";
+        if (c === 'ethereum') return "/icons/ethereum.png";
+        return "/icons/polygon.png";
+    }
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -27,13 +47,11 @@ export default function BalanceBreakdown() {
 
                 <div className="grid grid-cols-[1fr_1fr_auto] gap-x-16 items-start">
 
-                    {/* FIAT COLUMN */}
+                    {/* FIAT COLUMN - Keeping static for now as API returns crypto wallets */}
                     <div className="px-6 py-5">
                         <p className="text-sm text-gray-500 mb-5">Fiat</p>
                         <div className="space-y-5">
-                            <FiatRow img="/icons/usa.png" label="USD" value="80.00" />
-                            <FiatRow img="/icons/india.png" label="INR" value="1000.00" />
-                            <FiatRow img="/icons/europe.png" label="EUR" value="2.50" />
+                            <FiatRow img="/icons/usa.png" label="USD" value="0.00" />
                         </div>
                     </div>
 
@@ -41,24 +59,19 @@ export default function BalanceBreakdown() {
                     <div className="px-6 py-5">
                         <p className="text-sm text-gray-500 mb-5">Cryptocurrencies</p>
                         <div className="space-y-5">
-                            <CryptoRow
-                                main="/icons/usdc.svg"
-                                chain="/icons/polygon.png"
-                                label="USDC (POL)"
-                                value="2.00"
-                            />
-                            <CryptoRow
-                                main="/icons/usdt.svg"
-                                chain="/icons/solana.svg"
-                                label="USDT (SOL)"
-                                value="4.00"
-                            />
-                            <CryptoRow
-                                main="/icons/usdt.svg"
-                                chain="/icons/tron.svg"
-                                label="USDT (TRX)"
-                                value="1.50"
-                            />
+                            {wallets.length === 0 ? (
+                                <p className="text-sm text-gray-400">No wallets found</p>
+                            ) : (
+                                visibleWallets.map((w, i) => (
+                                    <CryptoRow
+                                        key={i}
+                                        main={getTokenIcon(w.currency)}
+                                        chain={getChainIcon(w.chain)}
+                                        label={`${w.currency} (${w.chain?.substring(0, 3).toUpperCase()})`}
+                                        value={w.balance || "0.00"}
+                                    />
+                                ))
+                            )}
                         </div>
                     </div>
 
@@ -91,7 +104,7 @@ export default function BalanceBreakdown() {
 
             </div>
 
-            {open && <BalanceDropdown onClose={() => setOpen(false)} />}
+            {open && <BalanceDropdown wallets={wallets} onClose={() => setOpen(false)} />}
         </div>
     );
 }

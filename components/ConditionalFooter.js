@@ -15,7 +15,9 @@ export default function ConditionalFooter() {
     pathname === '/allNetworks' ||
     pathname === '/airdrops' ||
     // Exclude admin routes
-    pathname.startsWith('/admin')
+    pathname.startsWith('/admin') ||
+    // Exclude IGPS routes
+    pathname.startsWith('/igps')
   ) {
     return null;
   }
@@ -34,15 +36,6 @@ export default function ConditionalFooter() {
       heading="Tired of being charged to use your own money?"
       // Highlight this specific page to control link rendering in Footer.jsx
       isUpiPage={true}
-    />;
-  }
-
-  // /igps uses the footer with IGPS disclaimer
-  if (pathname === '/igps') {
-    return <Footer
-      heading="Ready to Accept International Payments?"
-      // Mark this as the IGPS page so Footer renders IGPS-specific copy/CTA
-      isIGPSPage={true}
     />;
   }
 

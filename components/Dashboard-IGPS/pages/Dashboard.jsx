@@ -1,39 +1,107 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ProfileMenu from "../components/ProfileMenu";
 import BalanceBreakdown from "../components/BalanceBreakdown";
 import Image from "next/image";
+import { useAuth } from "../context/AuthContext";
 
 export default function Dashboard({ onOpenModal }) {
+  const { user, igpsService } = useAuth();
+  const [transactions, setTransactions] = useState([]);
+  const [wallets, setWallets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [totalBalance, setTotalBalance] = useState(0);
+  const [activeFilter, setActiveFilter] = useState("All");
 
-  const transactions = [
-    {
-      id: 1,
-      amount: -10,
-      currency: "USD",
-      date: "Jan 31, 2026, 09:35 PM",
-      status: "Sent",
-      email: "adarsh@bepay.money",
-      type: "sent",
-    },
-    {
-      id: 2,
-      amount: 129,
-      currency: "USD",
-      date: "Jan 31, 2026, 09:35 PM",
-      status: "Received",
-      email: "adarsh@bepay.money",
-      type: "received",
-    },
-    {
-      id: 3,
-      amount: 300,
-      currency: "USD",
-      date: "Jan 31, 2026, 09:35 PM",
-      status: "Deposited",
-      email: "0x8cki...8hyt56gv",
-      type: "deposit",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        let currentWallets = [];
+
+        // 1. Try Local Cache (SWR)
+        if (igpsService.getLocalBalances) {
+          const cached = igpsService.getLocalBalances();
+          if (cached && cached.success && Array.isArray(cached.data?.wallets)) {
+            const sorted = cached.data.wallets.sort((a, b) => (parseFloat(b.balance) || 0) - (parseFloat(a.balance) || 0));
+            currentWallets = sorted;
+            setWallets(sorted);
+            setTotalBalance(sorted.reduce((acc, w) => acc + (parseFloat(w.balance || 0)), 0));
+          }
+        }
+
+        // 2. Fetch Fresh Balances
+        try {
+          const balRes = await igpsService.getWalletBalances();
+          if (balRes.success) {
+            console.log("Full Balance Response:", balRes.data);
+            const wData = balRes.data.wallets || [];
+
+            if (Array.isArray(wData)) {
+              currentWallets = wData.sort((a, b) => {
+                return (parseFloat(b.balance) || 0) - (parseFloat(a.balance) || 0);
+              });
+              setWallets(currentWallets);
+              setTotalBalance(currentWallets.reduce((acc, w) => acc + (parseFloat(w.balance || 0)), 0));
+            } else {
+              console.warn("Expected array in data.wallets", balRes.data);
+            }
+          }
+        } catch (e) {
+          console.error("Failed to fetch balances", e);
+        }
+
+        setWallets(currentWallets);
+
+        // Fetch Transactions
+        let queryParams = { limit: 5 };
+        if (activeFilter !== "All") {
+          if (activeFilter !== "All") {
+            const f = activeFilter.toLowerCase();
+            if (f === 'onramp') queryParams.status = 'fiat_to_crypto';
+            else if (f === 'offramp') queryParams.status = 'crypto_to_fiat';
+            else queryParams.status = f;
+          }
+        }
+
+        const txnRes = await igpsService.getTransactions(queryParams);
+        if (txnRes.success) {
+          const txns = txnRes.data.transactions || [];
+          const mapped = txns.map(tx => {
+            const isSent = tx.from?.type === 'user';
+
+            let otherParty = isSent
+              ? (tx.to?.name || tx.to?.email || "Beneficiary")
+              : (tx.from?.name || "Sender");
+
+            return {
+              id: tx.id,
+              amount: tx.amount,
+              currency: tx.currency,
+              type: isSent ? "sent" : "received",
+              status: (tx.status || "Unknown").charAt(0).toUpperCase() + (tx.status || "").slice(1),
+              date: new Date(tx.createdAt).toLocaleString(),
+              email: otherParty,
+              raw: tx
+            };
+          });
+          setTransactions(mapped);
+        }
+
+        // Calculate Total Balance
+        const total = currentWallets.reduce((acc, w) => acc + (parseFloat(w.balance || 0)), 0);
+        setTotalBalance(total);
+
+      } catch (err) {
+        console.error("Dashboard fetch error", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (user) {
+      fetchData();
+    }
+  }, [user, igpsService, activeFilter]);
 
   return (
     <div className="px-8 py-4 space-y-8">
@@ -48,13 +116,13 @@ export default function Dashboard({ onOpenModal }) {
             </p>
             <p className="text-[#6A6A6A] text-[12px]">(Fiat + stablecoins)</p>
             <p className="text-[54px] font-bold text-gray-900 mt-2">
-              $100<span className="text-[#C0C0C0]">.00</span>
+              ${totalBalance.toFixed(2)}
             </p>
           </div>
 
           {/* RIGHT: currencies */}
           <div className="rounded-[32px] bg-[#FAFAFA] p-4 shadow-sm w-[630px] max-w-full">
-            <BalanceBreakdown />
+            <BalanceBreakdown wallets={wallets} />
           </div>
         </div>
 
@@ -119,15 +187,19 @@ export default function Dashboard({ onOpenModal }) {
 
         {/* FILTERS */}
         <div className="flex items-center gap-3">
-          <Filter active label="All" />
-          <Filter label="Deposit" />
-          <Filter label="Sent" />
-          <Filter label="Received" />
-          <Filter label="Onramp" />
-          <Filter label="Offramp" />
+          {["All", "Deposit", "Sent", "Received", "Onramp", "Offramp"].map(f => (
+            <Filter
+              key={f}
+              label={f}
+              active={activeFilter === f}
+              onClick={() => setActiveFilter(f)}
+            />
+          ))}
         </div>
 
-        {transactions.length === 0 ? (
+        {loading ? (
+          <div className="text-center py-10">Loading...</div>
+        ) : transactions.length === 0 ? (
           /* EMPTY STATE */
           <div className="text-center py-16 space-y-4">
             <p className="text-sm text-gray-500">
@@ -157,8 +229,8 @@ export default function Dashboard({ onOpenModal }) {
                 className="grid grid-cols-5 items-center py-3 border-b text-sm"
               >
                 {/* Amount */}
-                <span className={`font-medium ${tx.amount < 0 ? "text-red-500" : "text-[#6A6A6A]"}`}>
-                  {tx.amount > 0 ? "+" : ""}
+                <span className={`font-medium ${tx.type === 'sent' ? "text-red-500" : "text-green-500"}`}>
+                  {tx.type === 'sent' ? "-" : "+"}
                   {tx.amount} {tx.currency}
                 </span>
 
@@ -216,7 +288,7 @@ export default function Dashboard({ onOpenModal }) {
 
     </div >
   );
-};
+}
 
 /* -------- SUB COMPONENTS (local & fine) -------- */
 
@@ -256,9 +328,10 @@ function SecondaryCard({ title, desc, icons }) {
   );
 }
 
-function Filter({ label, active }) {
+function Filter({ label, active, onClick }) {
   return (
     <button
+      onClick={onClick}
       className={`px-4 py-1.5 rounded-full text-sm ${active ? "bg-black text-white" : "border text-gray-600"
         }`}
     >

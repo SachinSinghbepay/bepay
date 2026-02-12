@@ -1,7 +1,24 @@
-import { useState, useRe, useEffect } from "react";
+/* eslint-disable @next/next/no-img-element */
+import React from "react";
 
-export default function BalanceDropdown({ onClose }) {
+export default function BalanceDropdown({ wallets = [], onClose }) {
 
+    // Helper to get icons
+    const getTokenIcon = (currency) => {
+        const c = currency?.toLowerCase();
+        if (c === 'usdc') return "/icons/usdc.svg";
+        if (c === 'usdt') return "/icons/usdt.svg";
+        return "/icons/usdc.svg"; // default
+    }
+
+    const getChainIcon = (chain) => {
+        const c = chain?.toLowerCase();
+        if (c === 'polygon') return "/icons/polygon.png";
+        if (c === 'solana') return "/icons/solana.svg";
+        if (c === 'tron') return "/icons/tron.svg";
+        if (c === 'ethereum') return "/icons/ethereum.png";
+        return "/icons/polygon.png";
+    }
 
     return (
         <div className="balance-wrapper absolute -right-5 top-[72px] z-50">
@@ -18,49 +35,25 @@ export default function BalanceDropdown({ onClose }) {
 
                     {/* FIAT COLUMN */}
                     <div className="space-y-8">
-                        <FiatRow img="/icons/usa.png" label="USD" value="80.00" />
-                        <FiatRow img="/icons/india.png" label="INR" value="1000.00" />
-                        <FiatRow img="/icons/europe.png" label="EUR" value="2.50" />
+                        <FiatRow img="/icons/usa.png" label="USD" value="0.00" />
                     </div>
 
                     {/* CRYPTO COLUMN */}
-                    <div className="space-y-8">
-                        <CryptoRow
-                            main="/icons/usdc.svg"
-                            chain="/icons/polygon.png"
-                            label="USDC"
-                            subLabel=" (POL)"
-                            value="2.00"
-                        />
-                        <CryptoRow
-                            main="/icons/usdt.svg"
-                            chain="/icons/solana.svg"
-                            label="USDT"
-                            subLabel=" (SOL)"
-                            value="4.00"
-                        />
-                        <CryptoRow
-                            main="/icons/usdt.svg"
-                            chain="/icons/tron.svg"
-                            label="USDT"
-                            subLabel=" (TRX)"
-                            value="1.50"
-                        />
-                        <CryptoRow
-                            main="/icons/solana.svg"
-                            label="Polygon"
-                            value="1.50"
-                        />
-                        <CryptoRow
-                            main="/icons/eth.svg"
-                            label="Ethereum"
-                            action="Create account"
-                        />
-                        <CryptoRow
-                            main="/icons/polygon.png"
-                            label="Polygon"
-                            value="1.50"
-                        />
+                    <div className="space-y-8 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                        {wallets.length === 0 ? (
+                            <p className="text-sm text-gray-400">No wallets found</p>
+                        ) : (
+                            wallets.map((w, i) => (
+                                <CryptoRow
+                                    key={i}
+                                    main={getTokenIcon(w.currency)}
+                                    chain={getChainIcon(w.chain)}
+                                    label={w.currency}
+                                    subLabel={` (${w.chain?.substring(0, 3).toUpperCase()})`}
+                                    value={w.balance || "0.00"}
+                                />
+                            ))
+                        )}
                     </div>
 
                 </div>

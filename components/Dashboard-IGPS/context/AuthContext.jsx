@@ -10,6 +10,7 @@ const igpsService = new IgpsService();
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
+    const [organization, setOrganization] = useState(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
     const pathname = usePathname();
@@ -22,15 +23,23 @@ export function AuthProvider({ children }) {
                 // If not, it might fail or return 401
                 const res = await igpsService.getProfile();
                 if (res.success) {
-                    setUser(res.data);
+                    // Handle wrapped response { user, organization }
+                    if (res.data.user) {
+                        setUser(res.data.user);
+                        setOrganization(res.data.organization || null);
+                    } else {
+                        // Handle flat User response
+                        setUser(res.data);
+                        setOrganization(null);
+                    }
                 } else {
-                    // If public route, don't redirect yet, just set user null
-                    // If protected route, layout handles redirect, but we can double check
                     setUser(null);
+                    setOrganization(null);
                 }
             } catch (err) {
                 console.error("Session check failed", err);
                 setUser(null);
+                setOrganization(null);
             } finally {
                 setLoading(false);
             }
@@ -49,7 +58,7 @@ export function AuthProvider({ children }) {
                 // The service.login returns AuthResponse.
 
                 // In our updated service plan, we set cookies in refresh, let's verify login
-                const { user, tokens } = res.data;
+                const { user, tokens, organization } = res.data;
                 const { accessToken, refreshToken } = tokens;
 
                 if (typeof window !== 'undefined') {
@@ -59,6 +68,7 @@ export function AuthProvider({ children }) {
                 igpsService.setTokens(accessToken, refreshToken);
 
                 setUser(user);
+                setOrganization(organization || null);
                 return { success: true };
             } else {
                 return { success: false, error: res.error || res.message };
@@ -80,6 +90,7 @@ export function AuthProvider({ children }) {
 
         // Clear local
         setUser(null);
+        setOrganization(null);
         igpsService.setTokens("", "");
         if (typeof window !== 'undefined') {
             document.cookie = "igps_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
@@ -90,7 +101,7 @@ export function AuthProvider({ children }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout, igpsService }}>
+        <AuthContext.Provider value={{ user, organization, loading, login, logout, igpsService }}>
             {children}
         </AuthContext.Provider>
     );

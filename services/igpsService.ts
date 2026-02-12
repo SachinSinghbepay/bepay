@@ -29,6 +29,7 @@ import {
     Order,
     ApiResponse,
     PaginatedResponse,
+    PaginationParams,
 } from './igpsTypes';
 
 export class IgpsService {
@@ -151,9 +152,9 @@ export class IgpsService {
                     this.isRefreshing = false;
                     // Clear session
                     this.setTokens("", "");
+                    IgpsService.clearAllCaches();
+
                     if (typeof window !== 'undefined') {
-                        document.cookie = "igps_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
-                        document.cookie = "igps_refresh=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
                         window.location.href = "/igps/login";
                     }
                     throw new Error("Session expired. Please login again.");
@@ -205,8 +206,26 @@ export class IgpsService {
         return this.request<AuthResponse>('POST', '/auth/refresh', data, true);
     }
 
+    static clearAllCaches() {
+        IgpsService.balanceCache = null;
+        IgpsService.beneficiaryCache = null;
+        IgpsService.walletCache = null;
+
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('igps_balances');
+            localStorage.removeItem('igps_beneficiaries');
+            localStorage.removeItem('onboarding_progress');
+
+            // Clear cookies explicitly
+            document.cookie = "igps_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+            document.cookie = "igps_refresh=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+        }
+    }
+
     async logout(refreshToken: string): Promise<ApiResponse<any>> {
-        return this.request<any>('POST', '/auth/logout', { refreshToken }, true); // often treated as public or requires only refresh logic
+        IgpsService.clearAllCaches();
+        this.setTokens("", "");
+        return this.request<any>('POST', '/auth/logout', { refreshToken }, true);
     }
 
     async logoutAll(): Promise<ApiResponse<any>> {
@@ -288,6 +307,41 @@ export class IgpsService {
         return response;
     }
 
+    private static balanceCache: ApiResponse<any> | null = null;
+
+    getLocalBalances(): ApiResponse<any> | null {
+        // 1. Check memory cache
+        if (IgpsService.balanceCache) {
+            return IgpsService.balanceCache;
+        }
+        // 2. Check localStorage
+        if (typeof window !== 'undefined') {
+            const cached = localStorage.getItem('igps_balances');
+            if (cached) {
+                try {
+                    const parsed = JSON.parse(cached);
+                    IgpsService.balanceCache = parsed;
+                    return parsed;
+                } catch (e) {
+                    console.error("Failed to parse balance cache", e);
+                    localStorage.removeItem('igps_balances');
+                }
+            }
+        }
+        return null;
+    }
+
+    async getWalletBalances(): Promise<ApiResponse<any>> {
+        const response = await this.request<any>('GET', '/wallets/balances');
+        if (response.success) {
+            IgpsService.balanceCache = response;
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('igps_balances', JSON.stringify(response));
+            }
+        }
+        return response;
+    }
+
     // 5. Senders (KYC)
     async createSender(data: CreateSenderRequest): Promise<ApiResponse<Sender>> {
         return this.request<Sender>('POST', '/senders', data);
@@ -322,14 +376,14 @@ export class IgpsService {
         return this.request<Beneficiary>('POST', '/beneficiaries', data);
     }
 
-    async listBeneficiaries(): Promise<ApiResponse<Beneficiary[]>> {
-        // 1. Check memory cache
-        if (IgpsService.beneficiaryCache) {
+    async listBeneficiaries(forceRefresh: boolean = false): Promise<ApiResponse<Beneficiary[]>> {
+        // 1. Check memory cache (skip if forceRefresh)
+        if (!forceRefresh && IgpsService.beneficiaryCache) {
             return Promise.resolve(IgpsService.beneficiaryCache);
         }
 
-        // 2. Check localStorage (persist cache on reload)
-        if (typeof window !== 'undefined') {
+        // 2. Check localStorage (skip if forceRefresh)
+        if (!forceRefresh && typeof window !== 'undefined') {
             const cached = localStorage.getItem('igps_beneficiaries');
             if (cached) {
                 try {
@@ -374,5 +428,30 @@ export class IgpsService {
 
     async createOrder(data: CreateOrderRequest): Promise<ApiResponse<Order>> {
         return this.request<Order>('POST', '/orders', data);
+    }
+
+    async getTransactions(params?: any): Promise<ApiResponse<any>> {
+        let path = '/transactions';
+        if (params) {
+            const query = new URLSearchParams();
+            Object.keys(params).forEach(key => {
+                if (params[key] !== undefined && params[key] !== null) {
+                    query.append(key, params[key].toString());
+                }
+            });
+            const queryString = query.toString();
+            if (queryString) {
+                path += `?${queryString}`;
+            }
+        }
+        return this.request<any>('GET', path);
+    }
+
+    async listOrders(params?: PaginationParams): Promise<ApiResponse<PaginatedResponse<Order>>> {
+        let path = '/orders';
+        if (params) {
+            path += `?page=${params.page || 1}&limit=${params.limit || 10}`;
+        }
+        return this.request<PaginatedResponse<Order>>('GET', path);
     }
 }

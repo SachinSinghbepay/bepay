@@ -16,6 +16,7 @@ export default function OnboardingPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [currentStep, setCurrentStep] = useState(1);
+    const [senderId, setSenderId] = useState(null);
     const [formData, setFormData] = useState({
         type: '', // 'individual' or 'business'
         // Common
@@ -38,10 +39,39 @@ export default function OnboardingPage() {
         ubos: []
     });
 
-    // Load initial user data (to pre-fill email/name/org)
+    const saveProgress = (data, pSenderId, step, createdUboIndices = []) => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('onboarding_progress', JSON.stringify({
+                formData: data,
+                senderId: pSenderId,
+                step: step,
+                createdUboIndices
+            }));
+        }
+    };
+
+    // Load initial user data (from Storage or Profile)
     useEffect(() => {
-        const fetchProfile = async () => {
-            // Ensure tokens are loaded from cookies explicitly here to handle client-side nav
+        const initData = async () => {
+            // 1. Check LocalStorage first
+            if (typeof window !== 'undefined') {
+                const saved = localStorage.getItem('onboarding_progress');
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        if (parsed.senderId) setSenderId(parsed.senderId);
+                        if (parsed.formData) setFormData(parsed.formData);
+                        if (parsed.step) setCurrentStep(parsed.step);
+                        setLoading(false);
+                        return; // Resume from saved state
+                    } catch (e) {
+                        console.error("Invalid saved progress", e);
+                        localStorage.removeItem('onboarding_progress');
+                    }
+                }
+            }
+
+            // 2. Fetch Profile from API
             const getCookie = (name) => {
                 const value = `; ${document.cookie}`;
                 const parts = value.split(`; ${name}=`);
@@ -78,7 +108,7 @@ export default function OnboardingPage() {
                 setLoading(false);
             }
         };
-        fetchProfile();
+        initData();
     }, [router]);
 
 
@@ -93,38 +123,51 @@ export default function OnboardingPage() {
         setLoading(true);
         console.log("Submitting Onboarding Data...", formData);
 
+        let currentSenderId = senderId; // Use state if available
+        let savedProgress = {};
+        if (typeof window !== 'undefined') {
+            savedProgress = JSON.parse(localStorage.getItem('onboarding_progress') || '{}');
+        }
+        let createdUboIndices = savedProgress.createdUboIndices || [];
+
         try {
-            // 1. Create Sender
-            const senderData = {
-                type: formData.type,
-                email: formData.email,
-                phone: formData.phone,
-                address: formData.address,
-                ...(formData.type === 'individual' ? {
-                    firstName: formData.firstName,
-                    lastName: formData.lastName,
-                    birthDate: formData.birthDate,
-                    occupation: formData.occupation
-                } : {
-                    fullName: formData.organizationName, // Use Org Name as Full Name for Business
-                    identificationNumber: formData.identificationNumber,
-                    registrationDate: formData.registrationDate,
-                    businessType: formData.businessType
-                })
-            };
+            // 1. Create Sender (if not exists)
+            if (!currentSenderId) {
+                const senderData = {
+                    type: formData.type,
+                    email: formData.email,
+                    phone: formData.phone,
+                    address: formData.address,
+                    ...(formData.type === 'individual' ? {
+                        firstName: formData.firstName,
+                        lastName: formData.lastName,
+                        birthDate: formData.birthDate,
+                        occupation: formData.occupation
+                    } : {
+                        fullName: formData.organizationName, // Use Org Name as Full Name for Business
+                        identificationNumber: formData.identificationNumber,
+                        registrationDate: formData.registrationDate,
+                        businessType: formData.businessType
+                    })
+                };
 
-            const senderRes = await igpsService.createSender(senderData);
-            if (!senderRes.success) throw new Error(senderRes.message || "Failed to create sender profile");
+                const senderRes = await igpsService.createSender(senderData);
+                if (!senderRes.success) throw new Error(senderRes.message || "Failed to create sender profile");
 
-            const senderId = senderRes.data.id;
-            console.log("Sender Created:", senderId);
+                currentSenderId = senderRes.data.id;
+                setSenderId(currentSenderId);
+                saveProgress(formData, currentSenderId, currentStep, createdUboIndices);
+                console.log("Sender Created:", currentSenderId);
+            } else {
+                console.log("Skipping Sender Creation (already exists):", currentSenderId);
+            }
 
             // 2. Upload Documents
             if (formData.documents && formData.documents.length > 0) {
                 console.log(`Uploading ${formData.documents.length} documents...`);
                 for (const doc of formData.documents) {
                     console.log(`Uploading doc: ${doc.fileName}`);
-                    const docRes = await igpsService.uploadSenderDocument(senderId, {
+                    const docRes = await igpsService.uploadSenderDocument(currentSenderId, {
                         fileName: doc.fileName,
                         type: doc.type,
                         blob: doc.base64 // Ensure this is the raw base64 string
@@ -141,27 +184,44 @@ export default function OnboardingPage() {
             // 3. Create UBOs (if Business)
             if (formData.type === 'business' && formData.ubos.length > 0) {
                 console.log(`Creating ${formData.ubos.length} UBOs...`);
-                for (const ubo of formData.ubos) {
-                    const uboRes = await igpsService.createUBO(senderId, ubo);
+
+                for (let i = 0; i < formData.ubos.length; i++) {
+                    if (createdUboIndices.includes(i)) {
+                        console.log(`Skipping UBO ${i} (already created)`);
+                        continue;
+                    }
+
+                    const ubo = formData.ubos[i];
+                    console.log(`Creating UBO ${i}: ${ubo.firstName}`);
+
+                    const uboRes = await igpsService.createUBO(currentSenderId, ubo);
+
                     if (!uboRes.success) {
+                        saveProgress(formData, currentSenderId, currentStep, createdUboIndices);
                         console.error("UBO creation failed", uboRes);
                         throw new Error(`Failed to add UBO ${ubo.firstName}: ${uboRes.message}`);
                     }
+
+                    // Mark as done
+                    createdUboIndices.push(i);
+                    saveProgress(formData, currentSenderId, currentStep, createdUboIndices);
                 }
             }
 
             // 4. Verify (Trigger backend verification process)
             console.log("Triggering verification...");
-            const verifyRes = await igpsService.verifySender(senderId);
-            if (!verifyRes.success) console.warn("Verification trigger warning:", verifyRes.message); // Don't block flow on verification trigger failure if sender is created
+            const verifyRes = await igpsService.verifySender(currentSenderId);
+            if (!verifyRes.success) console.warn("Verification trigger warning:", verifyRes.message);
 
             // Success -> Dashboard
             console.log("Onboarding Complete. Redirecting...");
+            localStorage.removeItem('onboarding_progress');
             router.push('/igps/dashboard');
 
         } catch (error) {
             console.error("Onboarding Error:", error);
-            alert(`Onboarding failed: ${error.message}`);
+            saveProgress(formData, currentSenderId, currentStep, createdUboIndices);
+            alert(`Onboarding failed: ${error.message}. You can try again to resume.`);
         } finally {
             setLoading(false);
         }

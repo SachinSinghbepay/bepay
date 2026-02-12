@@ -1,11 +1,15 @@
-"use client";
-
+/* eslint-disable @next/next/no-img-element */
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import { useAuth } from "../context/AuthContext";
 
 export default function ProfileMenu({ onProfile }) {
+    const { user, organization, logout } = useAuth();
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
+
+    // Display Name Logic: Organization Name or First Last Name
+    const displayName = organization?.name || user?.organizationName || (user?.firstName ? `${user.firstName} ${user.lastName}` : "User");
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -37,8 +41,8 @@ export default function ProfileMenu({ onProfile }) {
                         </div>
                     </div>
 
-                    <span className="text-sm font-semibold text-[#414141] whitespace-nowrap">
-                        bepay money europe S.R.L
+                    <span className="text-sm font-semibold text-[#414141] whitespace-nowrap truncate max-w-[200px]">
+                        {displayName}
                     </span>
                 </div>
 
@@ -65,14 +69,14 @@ export default function ProfileMenu({ onProfile }) {
 
             {/* DROPDOWN */}
             {open && (
-                <div className="absolute right-0 mt-4 w-[342px] h-[328px] rounded-3xl bg-white shadow-xl px-4 py-8 z-50">
+                <div className="absolute right-0 mt-4 w-[342px] h-auto rounded-3xl bg-white shadow-xl px-4 py-8 z-50">
                     <div className="flex items-center gap-3 mb-4">
                         <div>
-                            <p className="font-medium text-[18px] text-[#080808] mb-2">
-                                bepay money europe S.R.L
+                            <p className="font-medium text-[18px] text-[#080808] mb-2 truncate max-w-[300px]">
+                                {displayName}
                             </p>
-                            <p className="text-[16px] text-[#6A6A6A] mb-2">
-                                info@bepay.money
+                            <p className="text-[16px] text-[#6A6A6A] mb-2 truncate max-w-[300px]">
+                                {user?.email}
                             </p>
                         </div>
                     </div>
@@ -93,7 +97,7 @@ export default function ProfileMenu({ onProfile }) {
                             danger
                             onClick={() => {
                                 setOpen(false);
-                                // logout logic later
+                                logout();
                             }}
                         />
                     </div>

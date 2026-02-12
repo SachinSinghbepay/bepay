@@ -170,6 +170,8 @@ export interface IdentityDocument {
     countryCode: string;
     documentType: string; // e.g., "NATIONAL_ID", "PASSPORT", "SSN9"
     documentNumber: string;
+    documentFront?: string; // Base64
+    documentBack?: string; // Base64
 }
 
 export interface CreateSenderRequest {

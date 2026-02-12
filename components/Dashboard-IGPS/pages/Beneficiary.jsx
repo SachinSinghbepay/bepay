@@ -11,10 +11,10 @@ export default function Beneficiary({ onOpenModal }) {
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState("All");
 
-    const fetchBeneficiaries = async () => {
+    const fetchBeneficiaries = async (force = false) => {
         setLoading(true);
         try {
-            const res = await igpsService.listBeneficiaries();
+            const res = await igpsService.listBeneficiaries(force);
             if (res.success) {
                 setBeneficiaries(res.data);
             }
@@ -65,7 +65,7 @@ export default function Beneficiary({ onOpenModal }) {
 
                     <div className="flex gap-2">
                         <button
-                            onClick={fetchBeneficiaries}
+                            onClick={() => fetchBeneficiaries(true)}
                             className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition"
                             title="Refresh list"
                         >

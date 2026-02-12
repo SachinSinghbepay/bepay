@@ -28,6 +28,24 @@ export default function StepUBO({ ubos, onChange, onSubmit, onBack, isSubmitting
         }
     };
 
+    const handleFileChange = async (e, field) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                // Store base64 without prefix if API expects raw base64, usually APIs expect the full string or just content.
+                // The error said "should not be empty", let's assume raw base64 content.
+                // IgpsService usually expects Base64.
+                const base64String = reader.result.includes(',') ? reader.result.split(',')[1] : reader.result;
+                setNewUbo(prev => ({
+                    ...prev,
+                    identity: { ...prev.identity, [field]: base64String }
+                }));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const addUbo = (e) => {
         e.preventDefault();
         onChange([...ubos, { ...newUbo, ownershipPercent: Number(newUbo.ownershipPercent) }]);
@@ -37,6 +55,15 @@ export default function StepUBO({ ubos, onChange, onSubmit, onBack, isSubmitting
             identity: { countryCode: '', documentType: 'NATIONAL_ID', documentNumber: '' }
         });
         setShowForm(false);
+    };
+
+    const editUbo = (index) => {
+        setNewUbo(ubos[index]);
+        // Remove from list so it can be re-added after editing
+        const updated = [...ubos];
+        updated.splice(index, 1);
+        onChange(updated);
+        setShowForm(true);
     };
 
     const removeUbo = (index) => {
@@ -57,12 +84,20 @@ export default function StepUBO({ ubos, onChange, onSubmit, onBack, isSubmitting
             {/* List of Added UBOs */}
             <div className="space-y-3">
                 {ubos.map((ubo, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <div
+                        key={idx}
+                        onClick={() => editUbo(idx)}
+                        className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm cursor-pointer hover:bg-gray-50 transition-colors"
+                    >
                         <div>
                             <p className="font-medium text-gray-900">{ubo.firstName} {ubo.lastName}</p>
                             <p className="text-sm text-gray-500">{ubo.ownershipPercent}% Ownership • {ubo.email}</p>
                         </div>
-                        <button type="button" onClick={() => removeUbo(idx)} className="text-red-500 hover:text-red-700">
+                        <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); removeUbo(idx); }}
+                            className="text-red-500 hover:text-red-700 p-2"
+                        >
                             <Trash2 className="h-5 w-5" />
                         </button>
                     </div>
@@ -84,6 +119,8 @@ export default function StepUBO({ ubos, onChange, onSubmit, onBack, isSubmitting
                         {/* Address */}
                         <input type="text" name="address.street" placeholder="Street" required value={newUbo.address.street} onChange={handleInputChange} className="p-2 border rounded sm:col-span-2" />
                         <input type="text" name="address.city" placeholder="City" required value={newUbo.address.city} onChange={handleInputChange} className="p-2 border rounded" />
+                        <input type="text" name="address.state" placeholder="State/Province" required value={newUbo.address.state} onChange={handleInputChange} className="p-2 border rounded" />
+                        <input type="text" name="address.postalCode" placeholder="Postal Code" required value={newUbo.address.postalCode} onChange={handleInputChange} className="p-2 border rounded" />
                         <input type="text" name="address.country" placeholder="Country Code (e.g. US)" required value={newUbo.address.country} onChange={handleInputChange} className="p-2 border rounded" />
 
                         {/* Identity */}
@@ -96,6 +133,30 @@ export default function StepUBO({ ubos, onChange, onSubmit, onBack, isSubmitting
                                     <option value="PASSPORT">Passport</option>
                                 </select>
                                 <input type="text" name="identity.documentNumber" placeholder="Doc Number" required value={newUbo.identity.documentNumber} onChange={handleInputChange} className="p-2 border rounded" />
+                            </div>
+
+                            {/* File Uploads */}
+                            <div className="grid grid-cols-2 gap-4 mt-3">
+                                <div>
+                                    <label className="block text-xs font-medium text-gray-700">Document Front</label>
+                                    <input
+                                        type="file"
+                                        accept="image/*,.pdf"
+                                        onChange={(e) => handleFileChange(e, 'documentFront')}
+                                        className="mt-1 text-xs"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-medium text-gray-700">Document Back</label>
+                                    <input
+                                        type="file"
+                                        accept="image/*,.pdf"
+                                        onChange={(e) => handleFileChange(e, 'documentBack')}
+                                        className="mt-1 text-xs"
+                                        required
+                                    />
+                                </div>
                             </div>
                         </div>
 
