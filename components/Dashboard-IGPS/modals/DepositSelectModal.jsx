@@ -103,24 +103,28 @@ export default function DepositSelectModal({
 function DepositRow({ main, network, label, sub, onSelect }) {
   return (
     <div
-      onClick={() => onSelect(label)}
-      className="flex items-center justify-between bg-gray-50 rounded-2xl px-6 py-4 cursor-pointer hover:bg-gray-100">
+      onClick={() =>
+        onSelect({
+          currency: label,
+          network: sub.replace(/[()]/g, ""), // removes brackets
+          currencyLogo: main,
+          networkLogo: network,
+        })
+      }
+      className="flex items-center justify-between bg-gray-50 rounded-2xl px-6 py-4 cursor-pointer hover:bg-gray-100"
+    >
       <div className="flex items-center gap-4">
         {/* ICON STACK */}
         <div className="relative">
-          <img
-            src={main}
-            className="h-10 w-10 rounded-full"
-            alt=""
-          />
+          <img src={main} className="h-10 w-10 rounded-full" alt="" />
           <img
             src={network}
-            className="h-5 w-5 rounded-full absolute -bottom-0 -right-0 border p-0"
+            className="h-5 w-5 rounded-full absolute -bottom-0 -right-0"
             alt=""
           />
         </div>
 
-        <div className="text-gray-800" >
+        <div className="text-gray-800">
           <span className="font-medium">{label}</span>{" "}
           <span className="text-gray-500">{sub}</span>
         </div>

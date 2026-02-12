@@ -1,8 +1,9 @@
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useState, useEffect, useRef } from "react";
-
-export default function PayToEmailModal({ onClose, onBack }) {
+import MultiSelect from "../components/MultiSelect";
+export default function PayToEmailModal({ onClose, onBack, beneficiary,
+    onOpenModal }) {
     const scrollRef = useRef(null);
 
     useEffect(() => {
@@ -25,13 +26,13 @@ export default function PayToEmailModal({ onClose, onBack }) {
         return () => el.removeEventListener("wheel", onWheel);
     }, []);
 
-    const [email, setEmail] = useState("");
+    const [emails, setEmails] = useState([]);
     const [currency, setCurrency] = useState("");
     const [purpose, setPurpose] = useState("");
     const [amount, setAmount] = useState("");
 
     const isFormValid =
-        email.trim() &&
+        emails.length > 0 &&
         currency.trim() &&
         purpose.trim() &&
         Number(amount) > 0;
@@ -78,15 +79,17 @@ export default function PayToEmailModal({ onClose, onBack }) {
                             </button>
                         </div>
 
-                        <CustomSelect
+                        <MultiSelect
                             options={[
-                                "john@email.com",
-                                "alice@email.com",
-                                "sarah@email.com"
+                                "Adarsh Mohan (adarsh@bepay.money)",
+                                "Chahat Soni (chahatsoni9@gmail.com)",
+                                "Rahul Yadav (rahulyadav12@gmail.com)",
+                                "Priya Dhapa (priya321@gmail.com)",
+                                "Arjun (arjunsharma@gmail.com)",
                             ]}
                             placeholder="Select an email contact"
-                            value={email}
-                            onChange={setEmail}
+                            value={emails}
+                            onChange={setEmails}
                         />
 
 
@@ -197,6 +200,12 @@ export default function PayToEmailModal({ onClose, onBack }) {
                     {/* FOOTER */}
                     <div className=" py-6 bg-white">
                         <button
+                            onClick={() =>
+                                onOpenModal("confirm-globalpayout", {
+                                    onBack: () => onOpenModal("pay-to-email"),
+                                    onConfirm: () => onOpenModal("payment-sent")
+                                })
+                            }
                             disabled={!isFormValid}
                             className={`w-full py-4 rounded-2xl transition-colors duration-200
                     ${isFormValid

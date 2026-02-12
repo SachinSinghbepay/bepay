@@ -1,15 +1,7 @@
 import { useState, useRe, useEffect } from "react";
 
 export default function BalanceDropdown({ onClose }) {
-    useEffect(() => {
-        const onClick = (e) => {
-            if (!e.target.closest(".balance-wrapper")) {
-                onClose();
-            }
-        };
-        document.addEventListener("mousedown", onClick);
-        return () => document.removeEventListener("mousedown", onClick);
-    }, [onClose]);
+
 
     return (
         <div className="balance-wrapper absolute -right-5 top-[72px] z-50">

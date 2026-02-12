@@ -1,6 +1,6 @@
 import ModalFrame from "./ModalFrame";
 
-export default function GlobalPayoutModal({
+export default function PayToSwiftModal({
   onClose,
   onBack,
   onAddBeneficiary,
@@ -45,7 +45,7 @@ export default function GlobalPayoutModal({
           <img src="/icons/back.svg" alt="" />
         </button>
 
-        <h2 className="text-lg font-semibold">Global payout</h2>
+        <h2 className="text-lg font-semibold">Pay USD via SWIFT</h2>
 
         <button
           onClick={onClose}
@@ -59,9 +59,9 @@ export default function GlobalPayoutModal({
       {!hasBeneficiaries ? (
         /* ========== EMPTY STATE ========== */
         <div className="flex flex-col items-center justify-center text-center py-24 space-y-6 h-full">
-          <p className="text-gray-600">No beneficiaries yet</p>
+          <p className="text-gray-600">No SWIFT beneficiaries yet</p>
           <p className="text-sm text-gray-500">
-            Add employees, vendors, or freelancers to start sending payments quickly.
+            Add a new SWIFT bank account to get started.
           </p>
 
           <button

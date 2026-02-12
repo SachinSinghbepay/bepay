@@ -1,14 +1,30 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import BalanceDropdown from "./BalanceDropdown";
 
 export default function BalanceBreakdown() {
     const [open, setOpen] = useState(false);
     const wrapperRef = useRef(null);
 
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (
+                wrapperRef.current &&
+                !wrapperRef.current.contains(e.target)
+            ) {
+                setOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () =>
+            document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+
     return (
         <div className="relative  w-full" ref={wrapperRef}>
             <div className="rounded-[28px] bg-[#FAFAFA]  ">
- 
+
                 <div className="grid grid-cols-[1fr_1fr_auto] gap-x-16 items-start">
 
                     {/* FIAT COLUMN */}

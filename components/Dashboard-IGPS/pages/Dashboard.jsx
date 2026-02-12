@@ -4,6 +4,37 @@ import BalanceBreakdown from "../components/BalanceBreakdown";
 import Image from "next/image";
 
 export default function Dashboard({ onOpenModal }) {
+
+  const transactions = [
+    {
+      id: 1,
+      amount: -10,
+      currency: "USD",
+      date: "Jan 31, 2026, 09:35 PM",
+      status: "Sent",
+      email: "adarsh@bepay.money",
+      type: "sent",
+    },
+    {
+      id: 2,
+      amount: 129,
+      currency: "USD",
+      date: "Jan 31, 2026, 09:35 PM",
+      status: "Received",
+      email: "adarsh@bepay.money",
+      type: "received",
+    },
+    {
+      id: 3,
+      amount: 300,
+      currency: "USD",
+      date: "Jan 31, 2026, 09:35 PM",
+      status: "Deposited",
+      email: "0x8cki...8hyt56gv",
+      type: "deposit",
+    },
+  ];
+
   return (
     <div className="px-8 py-4 space-y-8">
       {/* BALANCE CARD */}
@@ -35,6 +66,14 @@ export default function Dashboard({ onOpenModal }) {
         <ActionCard
           title="Deposit"
           bg="bg-[#eaf4f8]"
+          onClick={() =>
+            onOpenModal("deposit-select", {
+              showOtherTokens: true,
+              showBackButton: false,
+              heading: "Deposit",
+              previousModal: null
+            })
+          }
           icon={
             <PlusIcon className="h-22 w-22 text-[#B0CDD8] group-hover:text-[#5A8EA8] transition-colors" />
           }
@@ -42,6 +81,7 @@ export default function Dashboard({ onOpenModal }) {
         <ActionCard
           title="Get paid"
           bg="bg-[#eef4e4]"
+          onClick={() => onOpenModal("get-paid")}
           icon={
             <ArrowDownLeftIcon className="h-22 w-22 text-[#C8D7B5] group-hover:text-[#8FA66E]" />
           }
@@ -50,6 +90,7 @@ export default function Dashboard({ onOpenModal }) {
         <ActionCard
           title="Send"
           bg="bg-[#f5eee6]"
+          onClick={() => onOpenModal("new-transfer")}
           icon={
             <ArrowUpRightIcon className="h-22 w-22 text-[#DBCAB6] group-hover:text-[#B79A72]" />
           }
@@ -73,7 +114,10 @@ export default function Dashboard({ onOpenModal }) {
       </div>
 
       {/* TRANSACTIONS */}
+
       <div className="bg-white rounded-3xl p-6 shadow-sm space-y-6">
+
+        {/* FILTERS */}
         <div className="flex items-center gap-3">
           <Filter active label="All" />
           <Filter label="Deposit" />
@@ -83,22 +127,93 @@ export default function Dashboard({ onOpenModal }) {
           <Filter label="Offramp" />
         </div>
 
-        <div className="text-center py-16 space-y-4">
-          <p className="text-sm text-gray-500">
-            No transactions yet.
-          </p>
-          <button className="px-6 py-2 rounded-full bg-black text-white text-sm">
-            Deposit
-          </button>
-          <button
-            onClick={() =>
-              onOpenModal("add-new-swift")}
+        {transactions.length === 0 ? (
+          /* EMPTY STATE */
+          <div className="text-center py-16 space-y-4">
+            <p className="text-sm text-gray-500">
+              No transactions yet.
+            </p>
+            <button className="px-6 py-2 rounded-full bg-black text-white text-sm">
+              Deposit
+            </button>
+          </div>
+        ) : (
+          /* TABLE */
+          <div className="space-y-4">
 
-          >
-            View transaction
-          </button>
-        </div>
+            {/* TABLE HEADER */}
+            <div className="grid grid-cols-5 text-sm text-[#6A6A6A] border-b pb-3">
+              <span>Amount</span>
+              <span>Date</span>
+              <span>Status</span>
+              <span>To/From</span>
+              <span className="text-right">Txn. details</span>
+            </div>
+
+            {/* TABLE ROWS */}
+            {transactions.map((tx) => (
+              <div
+                key={tx.id}
+                className="grid grid-cols-5 items-center py-3 border-b text-sm"
+              >
+                {/* Amount */}
+                <span className={`font-medium ${tx.amount < 0 ? "text-red-500" : "text-[#6A6A6A]"}`}>
+                  {tx.amount > 0 ? "+" : ""}
+                  {tx.amount} {tx.currency}
+                </span>
+
+                {/* Date */}
+                <span className="text-[#6A6A6A]">
+                  {tx.date}
+                </span>
+
+                {/* Status */}
+                <span className="flex items-center gap-2 text-[#6A6A6A]">
+                  {tx.status}
+
+                  <div
+                    className={`h-7 w-7 flex items-center justify-center
+      ${tx.type === "sent"
+                        ? "bg-red-100"
+                        : "bg-green-100"
+                      }
+      rounded-lg
+    `}
+                  >
+                    <img
+                      src={
+                        tx.type === "sent"
+                          ? "/icons/redaero.svg"
+                          : "/icons/greenaero.svg"
+                      }
+                      alt=""
+                      className="h-4 w-4"
+                    />
+                  </div>
+                </span>
+
+
+                {/* Email / Address */}
+                <span className="text-[#6A6A6A]  truncate">
+                  {tx.email}
+                </span>
+
+                {/* View */}
+                <button
+                  onClick={() =>
+                    onOpenModal("txn-details", { transaction: tx })
+                  }
+                  className="text-right underline text-[#6A6A6A] hover:text-black"
+                >
+                  View txn. details
+                </button>
+              </div>
+            ))}
+
+          </div>
+        )}
       </div>
+
     </div >
   );
 };
@@ -154,9 +269,10 @@ function Filter({ label, active }) {
 
 
 
-function ActionCard({ title, bg, icon }) {
+function ActionCard({ title, bg, icon, onClick }) {
   return (
     <div
+      onClick={onClick}
       className={`
         ${bg}
         h-[270px]

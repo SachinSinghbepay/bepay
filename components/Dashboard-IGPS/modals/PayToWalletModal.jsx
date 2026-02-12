@@ -2,7 +2,7 @@ import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useState, useEffect, useRef } from "react";
 
-export default function PayToWalletModal({ onClose, onBack }) {
+export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
     const scrollRef = useRef(null);
 
     useEffect(() => {
@@ -27,13 +27,12 @@ export default function PayToWalletModal({ onClose, onBack }) {
 
     const [email, setEmail] = useState("");
     const [currency, setCurrency] = useState("");
-    const [purpose, setPurpose] = useState("");
     const [amount, setAmount] = useState("");
 
     const isFormValid =
         email.trim() &&
         currency.trim() &&
-        purpose.trim() &&
+
         Number(amount) > 0;
 
     return (
@@ -73,16 +72,23 @@ export default function PayToWalletModal({ onClose, onBack }) {
                     <div>
                         <div className="flex justify-between mb-2">
                             <label className="text-sm font-medium text-[#6A6A6A]">Beneficiary wallet</label>
-                            <button className="text-sm underline">
+                            <button
+                                className="text-sm underline"
+                                onClick={() =>
+                                    onOpenModal("add-new-wallet", {
+                                        previousModal: "pay-to-wallet"
+                                    })
+                                }
+                            >
                                 Add new wallet beneficiary +
                             </button>
                         </div>
 
                         <CustomSelect
                             options={[
-                                "john@email.com",
-                                "alice@email.com",
-                                "sarah@email.com"
+                                "fsadfsdfsdfsd54fdfdsf",
+                                "fsf4sd56f4dfsdfsdfsd54fdfdsf,",
+                                "edfdfsdf54612"
                             ]}
                             placeholder="Select an email contact"
                             value={email}
@@ -91,9 +97,9 @@ export default function PayToWalletModal({ onClose, onBack }) {
 
 
                         <div className="flex gap-1 justify-start items-start p-0 text-[#C07417]">
-                            <img src="/icons/i.svg" alt="" className="w-4 h-4 mt-2"/>
+                            <img src="/icons/i.svg" alt="" className="w-4 h-4 mt-2" />
                             <p className="text-xs  mt-2">
-                               Please verify the wallet address and network carefully before sending funds to ensure a successful transfer. bepay IGPS will not be responsible for any errors or loss of funds.
+                                Please verify the wallet address and network carefully before sending funds to ensure a successful transfer. bepay IGPS will not be responsible for any errors or loss of funds.
                             </p>
                         </div>
                     </div>
@@ -188,15 +194,22 @@ export default function PayToWalletModal({ onClose, onBack }) {
                     {/* FOOTER */}
                     <div className=" py-6 bg-white">
                         <button
+                            onClick={() =>
+                                onOpenModal("confirm-globalpayout", {
+                                    onBack: () => onOpenModal("pay-to-wallet"),
+                                    onConfirm: () => onOpenModal("payment-sent"),
+                                })
+                            }
                             disabled={!isFormValid}
                             className={`w-full py-4 rounded-2xl transition-colors duration-200
-                    ${isFormValid
+                            ${isFormValid
                                     ? "bg-black text-white"
                                     : "bg-[#6A6A6A] text-white cursor-not-allowed"
                                 }`}
                         >
                             Send payment
                         </button>
+
 
                         <p className="text-xs text-center text-gray-500 mt-3">
                             Once your payment is sent, we'll automatically notify the recipient by email.

@@ -1,12 +1,13 @@
 import { useEffect, useRef } from "react";
 import ModalFrame from "./ModalFrame";
 
-export default function TransactionDetails({ onClose }) {
+export default function TransactionDetails({ transaction, onClose, onBack }) {
     const scrollRef = useRef(null);
 
-    const status = "pending";
+    const status = transaction?.status?.toLowerCase() || "pending";
 
-    const details = [
+    // Dummy data if transaction prop is missing
+    const dummyDetails = [
         { label: "Amount", value: "10 USDC" },
         { label: "Recipient get", value: "9.50 USDC" },
         { label: "Exchange rate", value: "1 USDC = 1.00 USDC" },
@@ -17,7 +18,63 @@ export default function TransactionDetails({ onClose }) {
         { label: "ID", value: "d46798...4448", copy: true },
     ];
 
+    // from props 
+    const dynamicDetails = transaction
+        ? [
+            {
+                label: "Amount",
+                value: `${transaction?.amount} ${transaction?.currency}`,
+            },
+            {
+                label: "Recipient get",
+                value: transaction?.recipientAmount || "9.50 USDC",
+            },
+            {
+                label: "Exchange rate",
+                value: transaction?.exchangeRate || "1 USDC = 1.00 USDC",
+            },
+            {
+                label: "Network fees",
+                value: transaction?.networkFee || "0.50 USDC",
+            },
+            {
+                label: "Destination",
+                value: transaction?.destination || transaction?.email || "0xce40...j6gf270",
+                copy: true,
+            },
+            {
+                label: "Type",
+                value: transaction?.type || "Transfer",
+            },
+            {
+                label: "Hash",
+                value: transaction?.hash || "0x7hgt40...j6gf40i",
+                copy: true,
+                share: true,
+            },
+            {
+                label: "ID",
+                value: transaction?.id || "d46798...4448",
+                copy: true,
+            },
+        ]
+        : null;
 
+    // from props or fallback to dummy data
+    const details = dynamicDetails || dummyDetails;
+
+    // examples of how to use the transaction prop:
+    // transaction?.amount
+    // transaction?.date
+    // transaction?.email
+    // transaction?.status
+    // transaction?.currency
+    // Example:
+
+
+    // <p>{transaction?.amount} {transaction?.currency}</p>
+    // <p>{transaction?.date}</p>
+    // <p>{transaction?.email}</p>
 
     //  stop scroll chaining
     useEffect(() => {
@@ -85,36 +142,35 @@ export default function TransactionDetails({ onClose }) {
                 </div>
 
                 <div className="mx-auto max-w-[720px] space-y-4">
-                    <div className="bg-gray-50 rounded-2xl px-6 py-4 flex justify-between">
-                        <span className="text-gray-500">Status</span>
-                        <span
-                            className={`font-medium ${status === "successful"
-                                ? "text-green-600"
-                                : status === "pending"
-                                    ? "text-yellow-600"
-                                    : "text-red-600"
-                                }`}
-                        >
-                            {status.charAt(0).toUpperCase() + status.slice(1)}
-                        </span>
-                        {status === "pending" && (
-                            <div className="bg-red-50 border border-red-200 rounded-2xl px-6 py-4 text-sm text-red-600">
-                                This transaction is currently pending. You may cancel it before it is confirmed on the network.
-                            </div>
-                        )}
+                    <div className="px-20 space-y-4">
+                        <div className="bg-gray-50 rounded-2xl px-6 py-4 flex justify-between ">
+                            <span className="text-gray-500">Status</span>
+                            <span
+                                className={`font-medium ${status === "successful"
+                                    ? "text-green-600"
+                                    : status === "pending"
+                                        ? "text-yellow-600"
+                                        : "text-red-600"
+                                    }`}
+                            >
+                                {status.charAt(0).toUpperCase() + status.slice(1)}
+                            </span>
+                            {status === "pending" && (
+                                <div className="bg-red-50 border border-red-200 rounded-2xl px-6 py-4 text-sm text-red-600">
+                                    This transaction is currently pending. You may cancel it before it is confirmed on the network.
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="bg-gray-50 rounded-2xl px-6 py-6 space-y-6">
+                            {details.map((item, i) => (
+                                <DetailRow key={i} {...item} />
+                            ))}
+                        </div>
+
+
                     </div>
 
-                    <div className="bg-gray-50 rounded-2xl px-6 py-6 space-y-6">
-                        {details.map((item, i) => (
-                            <DetailRow key={i} {...item} />
-                        ))}
-                    </div>
-
-                    <div className="bg-gray-50 rounded-2xl px-6 py-6 space-y-6">
-                        {details.map((item, i) => (
-                            <DetailRow key={i} {...item} />
-                        ))}
-                    </div>
                     {/* Button stays part of scroll */}
                     {status === "pending" ? (
                         <button className="w-full h-14 rounded-2xl bg-red-600 text-white text-base font-medium mt-8">

@@ -1,9 +1,44 @@
 import ModalFrame from "./ModalFrame";
 import { useState, useEffect, useRef } from "react";
+import CustomSelect from "../components/CustomSelect";
 
-
-export default function SendGlobalPayoutModal({ onClose, onBack }) {
+export default function SendGlobalPayoutModal({
+    onClose,
+    onBack,
+    beneficiary,
+    onOpenModal
+}) {
     const scrollRef = useRef(null);
+    const [uploadedFile, setUploadedFile] = useState(null);
+    const [sourceOfFunds, setSourceOfFunds] = useState("Business income");
+    const [purposeCode, setPurposeCode] = useState("Gift");
+
+    const sourceOptions = [
+        "Business income",
+        "Salary",
+        "Investment returns",
+        "Savings",
+        "Gift",
+        "Loan",
+    ];
+    const purposeOptions = [
+        "Self",
+        "Salary",
+        "Gift",
+        "Income",
+        "Savings",
+        "Educational support",
+        "Payment",
+    ];
+    // we can use the data it is getting passed, for example:
+    // beneficiary = {
+    //   name: "Nordek Fintech INC",
+    //   bank: "Cross River bank - 9755",
+    //   countryIcon: "/icons/usa.svg",
+    //   verified: true,
+    // or
+    {/* <p>{beneficiary?.name}</p> */ }
+
 
     // same scroll lock pattern
     useEffect(() => {
@@ -90,15 +125,25 @@ export default function SendGlobalPayoutModal({ onClose, onBack }) {
 
                 {/* PURPOSE */}
                 <label className="text-sm text-gray-500">Purpose code</label>
-                <PurposeCodeSelect />
+                <CustomSelect
+                    options={purposeOptions}
+                    value={purposeCode}
+                    onChange={setPurposeCode}
+                    placeholder="Select purpose code"
+                />
 
                 {/* SOURCE OF FUNDS */}
                 <Section title="Source of funds">
-                    <Select value="Business income" />
+                    <CustomSelect
+                        options={sourceOptions}
+                        value={sourceOfFunds}
+                        onChange={setSourceOfFunds}
+                        placeholder="Select source of funds"
+                    />
                 </Section>
 
                 {/* DOCUMENT */}
-                <div className="rounded-2xl bg-[#F7F7F7] p-4 flex items-center justify-between">
+                {/* <div className="rounded-2xl bg-[#F7F7F7] p-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <span>📎</span>
                         <span className="text-sm font-medium">
@@ -106,12 +151,56 @@ export default function SendGlobalPayoutModal({ onClose, onBack }) {
                         </span>
                     </div>
                     <button className="text-xl text-gray-400">✕</button>
-                </div>
+                </div> */}
+                {/* SOURCE OF FUNDS DOCUMENT */}
+                <Section title="Upload invoice or proof of funds">
 
-                <p className="text-xs text-[#BC4242] -mt-5">
-                    Source of funds document is required for business-to-business transfers
-                    to comply with regulatory requirements.
-                </p>
+                    {!uploadedFile ? (
+                        /* ===== Upload Box ===== */
+                        <label className="w-full h-14 rounded-2xl bg-[#F7F7F7] flex items-center justify-center gap-3 cursor-pointer border">
+                            <img src="/icons/upload.svg" className="h-5 w-5" alt="" />
+                            <span className="text-sm font-medium">
+                                Upload invoice or proof of funds
+                            </span>
+
+                            <input
+                                type="file"
+                                className="hidden"
+                                onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (file) setUploadedFile(file);
+                                }}
+                            />
+                        </label>
+                    ) : (
+                        /* ===== Uploaded File Row ===== */
+                        <div className="rounded-2xl bg-[#F7F7F7] p-4 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <img src="/icons/file.svg" className="h-5 w-5" alt="" />
+                                <span className="text-sm font-medium">
+                                    {uploadedFile.name}
+                                </span>
+                            </div>
+
+                            <button
+                                onClick={() => setUploadedFile(null)}
+                                className="text-xl text-gray-400 hover:text-gray-600"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Warning text (show only if file uploaded OR always, your choice) */}
+                    {uploadedFile && (
+                        <p className="text-xs text-[#BC4242] mt-2">
+                            Source of funds document is required for business-to-business transfers
+                            to comply with regulatory requirements.
+                        </p>
+                    )}
+
+                </Section>
+
 
                 <hr />
                 {/* SUMMARY */}
@@ -121,7 +210,7 @@ export default function SendGlobalPayoutModal({ onClose, onBack }) {
                         label="Exchange rate"
                         value="USDC 1 ≈ 1 USD"
                     />
-                    
+
                     <SummaryRow
                         label="Processing fee"
                         value="USD 10.50"
@@ -140,7 +229,20 @@ export default function SendGlobalPayoutModal({ onClose, onBack }) {
                 </div>
 
                 {/* CTA */}
-                <button className="w-full h-14 rounded-xl bg-black text-white text-base">
+                <button
+                    onClick={() =>
+                        onOpenModal("confirm-globalpayout", {
+                            onBack: () =>
+                                onOpenModal("send-globalpayout", {
+                                    beneficiary,
+                                    onBack,
+                                }),
+                            onConfirm: () =>
+                                onOpenModal("transfer-request-submitted")
+                        })
+                    }
+                    className="w-full h-14 rounded-xl bg-black text-white text-base"
+                >
                     Send payment
                 </button>
 

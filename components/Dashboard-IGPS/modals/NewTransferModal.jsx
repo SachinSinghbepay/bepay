@@ -1,6 +1,6 @@
 import ModalFrame from "./ModalFrame";
 
-export default function NewTransferModal({ onClose, onGlobalPayout }) {
+export default function NewTransferModal({ onClose, onGlobalPayout, onPayToEmail, onPayToWallet, onPayToSwift }) {
   return (
     <ModalFrame size="lg">
       {/* HEADER */}
@@ -24,9 +24,9 @@ export default function NewTransferModal({ onClose, onGlobalPayout }) {
             title="Global payouts"
             desc="Pay anyone globally via local payment rails"
             flags={[
-              "/icons/usa.png",
+              "/icons/usa.svg",
               "/icons/europe.png",
-              "/icons/india.png",
+              "/icons/india.svg",
               "/icons/china.svg",
             ]}
             onClick={onGlobalPayout}
@@ -36,6 +36,7 @@ export default function NewTransferModal({ onClose, onGlobalPayout }) {
             title="Pay USD via SWIFT"
             desc="Pay anyone globally with SWIFT payments"
             icon="/icons/swift.svg"
+            onClick={onPayToSwift}
           />
 
           <TransferCard
@@ -43,12 +44,14 @@ export default function NewTransferModal({ onClose, onGlobalPayout }) {
             desc="Send money using an email address. Works just like PayPal. (Money will be transferred directly to the bepay account linked to that email)."
             icon="/icons/email.svg"
             badge="Free"
+            onClick={onPayToEmail}
           />
 
           <TransferCard
             title="Pay to wallet"
             desc="Send stablecoins directly to a wallet address (Onchain transfer)."
             icon="/icons/wallet.svg"
+            onClick={onPayToWallet}
           />
         </div>
       </div>
