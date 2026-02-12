@@ -61,7 +61,7 @@ export default function Header() {
     return pathname.startsWith(path);
   };
 
-  
+
   // 1. Determine if it's the business page
   const isBusinessPage = isActivePage("/business");
 
@@ -199,7 +199,7 @@ export default function Header() {
                   <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">Get in touch</span>
                 </Button>
                 <Button
-                  onClick={() => window.location.href = "https://stage-bepay.briskpe.com/auth?redirect=/"}
+                  onClick={() => window.location.href = `/igps?v=${Date.now()}`}
                   className="hidden lg:flex lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-pointer hover:scale-105"
                 >
                   <span
@@ -216,7 +216,7 @@ export default function Header() {
             ) : (
               <Button
                 onClick={() => {
-              
+
                   handleDownloadClick()
                 }} variant="outline"
                 className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
@@ -364,7 +364,7 @@ export default function Header() {
                 {/* UPDATED: buttonLocation now uses the calculated value */}
                 <Button
                   onClick={() => {
-           
+
                     handleDownloadClick()
                   }} variant="outline"
                   className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2 border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
