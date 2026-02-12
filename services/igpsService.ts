@@ -1,4 +1,4 @@
- 
+
 import {
     AuthResponse,
     LoginRequest,
@@ -63,34 +63,109 @@ export class IgpsService {
         return { accessToken: this.accessToken, refreshToken: this.refreshToken };
     }
 
+    private isRefreshing = false;
+    private refreshSubscribers: ((token: string) => void)[] = [];
+
+    private onRefreshed(token: string) {
+        this.refreshSubscribers.forEach((cb) => cb(token));
+        this.refreshSubscribers = [];
+    }
+
+    private addRefreshSubscriber(cb: (token: string) => void) {
+        this.refreshSubscribers.push(cb);
+    }
+
     private async request<T>(method: string, path: string, body?: any, isPublic: boolean = false): Promise<ApiResponse<T>> {
         const url = `${this.baseUrl}${path}`;
-        const headers: Record<string, string> = {
-            'Content-Type': 'application/json',
-        };
-
-        if (!isPublic && this.accessToken) {
-            headers['Authorization'] = `Bearer ${this.accessToken}`;
+        const getHeaders = () => {
+            const headers: Record<string, string> = {
+                'Content-Type': 'application/json',
+            };
+            if (!isPublic && this.accessToken) {
+                headers['Authorization'] = `Bearer ${this.accessToken}`;
+            }
+            return headers;
         }
 
         const options: RequestInit = {
             method,
-            headers,
+            headers: getHeaders(),
             body: body ? JSON.stringify(body) : undefined,
         };
 
         try {
-            const response = await fetch(url, options);
+            let response = await fetch(url, options);
+
+            // Handle 401 Unauthorized (Token Expiry)
+            if (response.status === 401 && !isPublic && this.refreshToken) {
+                if (this.isRefreshing) {
+                    // If already refreshing, wait for it to finish
+                    return new Promise((resolve) => {
+                        this.addRefreshSubscriber(async (token) => {
+                            // Retry original request with new token
+                            options.headers = {
+                                ...options.headers,
+                                'Authorization': `Bearer ${token}`
+                            };
+                            const retryResponse = await fetch(url, options);
+                            const retryData = await retryResponse.json();
+                            resolve({
+                                success: true, // Assuming retry succeeds or we handle it standard way
+                                data: retryData.data || retryData,
+                                message: retryData.message
+                            });
+                        });
+                    });
+                }
+
+                this.isRefreshing = true;
+
+                try {
+                    const refreshRes = await this.refreshTokenCall({ refreshToken: this.refreshToken });
+
+                    if (refreshRes.success && refreshRes.data?.tokens?.accessToken) {
+                        const newAccessToken = refreshRes.data.tokens.accessToken;
+                        const newRefreshToken = refreshRes.data.tokens.refreshToken;
+
+                        this.setTokens(newAccessToken, newRefreshToken);
+
+                        // Update cookies if client-side
+                        if (typeof window !== 'undefined') {
+                            document.cookie = `igps_token=${newAccessToken}; path=/; max-age=86400`; // 1 day
+                            document.cookie = `igps_refresh=${newRefreshToken}; path=/; max-age=604800`; // 7 days
+                        }
+
+                        this.isRefreshing = false;
+                        this.onRefreshed(newAccessToken);
+
+                        // Retry original request
+                        options.headers = {
+                            ...options.headers,
+                            'Authorization': `Bearer ${newAccessToken}`
+                        };
+                        response = await fetch(url, options);
+                    } else {
+                        throw new Error("Refresh failed");
+                    }
+                } catch (refreshErr) {
+                    this.isRefreshing = false;
+                    // Clear session
+                    this.setTokens("", "");
+                    if (typeof window !== 'undefined') {
+                        document.cookie = "igps_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+                        document.cookie = "igps_refresh=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+                        window.location.href = "/igps/login";
+                    }
+                    throw new Error("Session expired. Please login again.");
+                }
+            }
+
             const data = await response.json();
 
             if (!response.ok) {
                 throw new Error(data.message || data.error || `Request failed with status ${response.status}`);
             }
 
-            // Check if response is wrapped in { success: true, data: T } or just T
-            // The integration tests suggest standardized response: { success, data: { ... } } or { data: ... }
-            // Postman scripts handle: const d = body.data || body;
-            // We will normalize to ApiResponse<T>
             return {
                 success: true,
                 data: data.data || data,
@@ -199,6 +274,20 @@ export class IgpsService {
         return this.request<ValidationRule[]>('GET', path);
     }
 
+    private static walletCache: ApiResponse<any> | null = null;
+
+    async listWallets(): Promise<ApiResponse<any>> {
+        if (IgpsService.walletCache) {
+            return Promise.resolve(IgpsService.walletCache);
+        }
+
+        const response = await this.request<any>('GET', '/wallets');
+        if (response.success) {
+            IgpsService.walletCache = response;
+        }
+        return response;
+    }
+
     // 5. Senders (KYC)
     async createSender(data: CreateSenderRequest): Promise<ApiResponse<Sender>> {
         return this.request<Sender>('POST', '/senders', data);
@@ -224,13 +313,44 @@ export class IgpsService {
         return this.request<Sender>('POST', `/senders/${senderId}/verify`);
     }
 
+    private static beneficiaryCache: ApiResponse<Beneficiary[]> | null = null;
+
     // 6. Beneficiaries
     async createBeneficiary(data: CreateBeneficiaryRequest): Promise<ApiResponse<Beneficiary>> {
+        IgpsService.beneficiaryCache = null;
+        if (typeof window !== 'undefined') localStorage.removeItem('igps_beneficiaries');
         return this.request<Beneficiary>('POST', '/beneficiaries', data);
     }
 
     async listBeneficiaries(): Promise<ApiResponse<Beneficiary[]>> {
-        return this.request<Beneficiary[]>('GET', '/beneficiaries');
+        // 1. Check memory cache
+        if (IgpsService.beneficiaryCache) {
+            return Promise.resolve(IgpsService.beneficiaryCache);
+        }
+
+        // 2. Check localStorage (persist cache on reload)
+        if (typeof window !== 'undefined') {
+            const cached = localStorage.getItem('igps_beneficiaries');
+            if (cached) {
+                try {
+                    const parsed = JSON.parse(cached);
+                    IgpsService.beneficiaryCache = parsed;
+                    return Promise.resolve(parsed);
+                } catch (e) {
+                    console.error("Failed to parse beneficiary cache", e);
+                    localStorage.removeItem('igps_beneficiaries');
+                }
+            }
+        }
+
+        const response = await this.request<Beneficiary[]>('GET', '/beneficiaries');
+        if (response.success) {
+            IgpsService.beneficiaryCache = response;
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('igps_beneficiaries', JSON.stringify(response));
+            }
+        }
+        return response;
     }
 
     async getBeneficiary(id: string): Promise<ApiResponse<Beneficiary>> {
@@ -242,6 +362,8 @@ export class IgpsService {
     }
 
     async deleteBeneficiary(id: string): Promise<ApiResponse<any>> {
+        IgpsService.beneficiaryCache = null;
+        if (typeof window !== 'undefined') localStorage.removeItem('igps_beneficiaries');
         return this.request<any>('DELETE', `/beneficiaries/${id}`);
     }
 

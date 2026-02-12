@@ -1,147 +1,161 @@
 import ModalFrame from "./ModalFrame";
+import { useState, useEffect } from "react";
+import { IgpsService } from "../../../services/igpsService";
+
+const igpsService = new IgpsService();
 
 export default function PayToSwiftModal({
   onClose,
   onBack,
   onAddBeneficiary,
-  onPay,
+  onPay
 }) {
-  const beneficiaries = [
-    {
-      id: 1,
-      name: "Nordek Fintech INC",
-      bank: "Cross River bank - 9755",
-      countryIcon: "/icons/usa.svg",
-      verified: true,
-    },
-    {
-      id: 2,
-      name: "Alibaba ecom",
-      bank: "JP Morgan Chase - 1024",
-      countryIcon: "/icons/usa.svg",
-      verified: true,
-    },
-    {
-      id: 3,
-      name: "Soulstore pvt ltd",
-      bank: "State Bank of India - 4997",
-      countryIcon: "/icons/india.svg",
-      verified: false,
-    },
-  ];
+  const [beneficiaries, setBeneficiaries] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // const beneficiaries = [];
+  useEffect(() => {
+    fetchBeneficiaries();
+  }, []);
 
-  const hasBeneficiaries = beneficiaries.length > 0;
+  const fetchBeneficiaries = async () => {
+    try {
+      setLoading(true);
+      const response = await igpsService.listBeneficiaries();
+      if (response.success) {
+        setBeneficiaries(response.data);
+      } else {
+        console.error("Failed to fetch beneficiaries:", response.error);
+      }
+    } catch (error) {
+      console.error("Error fetching beneficiaries:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Helper to format address
+  const formatAddress = (b) => {
+    if (!b.address) return "";
+    return `${b.address.city}, ${b.address.country}`;
+  };
+
+  // Helper to get bank name
+  const getBankName = (b) => {
+    if (b.paymentInfo?.paymentType === 'bank_account') {
+      return b.paymentInfo.bankName || "Bank Account";
+    }
+    return "Wallet";
+  };
 
   return (
-    <ModalFrame size="lg">
-      {/* HEADER */}
-      <div className="relative flex items-center justify-center p-6 mb-6">
-        <button
-          onClick={onBack}
-          className="absolute left-6 text-xl text-gray-500"
-        >
-          <img src="/icons/back.svg" alt="" />
-        </button>
-
-        <h2 className="text-lg font-semibold">Pay USD via SWIFT</h2>
-
-        <button
-          onClick={onClose}
-          className="absolute right-6 text-2xl text-gray-400"
-        >
-          ✕
-        </button>
-      </div>
-
-      {/* BODY */}
-      {!hasBeneficiaries ? (
-        /* ========== EMPTY STATE ========== */
-        <div className="flex flex-col items-center justify-center text-center py-24 space-y-6 h-full">
-          <p className="text-gray-600">No SWIFT beneficiaries yet</p>
-          <p className="text-sm text-gray-500">
-            Add a new SWIFT bank account to get started.
-          </p>
-
-          <button
-            onClick={onAddBeneficiary}
-            className="rounded-full bg-black px-6 py-3 text-white text-sm"
-          >
-            Add beneficiary
+    <ModalFrame>
+      <div className="p-8">
+        {/* HEADER */}
+        <div className="flex items-center justify-between mb-8">
+          <button onClick={onBack} className="text-gray-400 hover:text-gray-600">
+            <img src="/icons/arrow-left.svg" alt="Back" className="w-6 h-6" />
+          </button>
+          <h2 className="text-xl font-medium">Pay USD via SWIFT</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <img src="/icons/close.svg" alt="Close" className="w-6 h-6" />
           </button>
         </div>
-      ) : (
-        /* ========== BENEFICIARY LIST ========== */
-        <div className="px-10 py-6 space-y-6">
-          <div className="flex items-center justify-between">
-            <p className="text-gray-600">
-              Beneficiaries with bank details
-            </p>
 
+        {/* LOADING STATE */}
+        {loading && (
+          <div className="flex justify-center py-10">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          </div>
+        )}
+
+        {/* EMPTY STATE */}
+        {!loading && beneficiaries.length === 0 && (
+          <div className="text-center py-10 space-y-4">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+              <span className="text-2xl">?</span>
+            </div>
+            <h3 className="text-lg font-medium">No beneficiaries found</h3>
+            <p className="text-gray-500 max-w-xs mx-auto">
+              You haven't added any beneficiaries yet. Add one to start sending payments.
+            </p>
             <button
               onClick={onAddBeneficiary}
-              className="text-sm underline"
+              className="mt-4 px-6 py-3 bg-black text-white rounded-xl font-medium"
             >
               Add new beneficiary +
             </button>
           </div>
+        )}
 
+        {/* LIST */}
+        {!loading && beneficiaries.length > 0 && (
           <div className="space-y-4">
-            {beneficiaries.map((b) => (
-              <BeneficiaryRow key={b.id}
-                {...b}
-                onPay={() => onPay(b)} />
-            ))}
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-sm font-medium text-gray-500">Beneficiaries with bank details</h3>
+              <button
+                onClick={onAddBeneficiary}
+                className="text-sm font-medium underline"
+              >
+                Add new beneficiary +
+              </button>
+            </div>
+
+            <div className="max-h-[400px] overflow-y-auto space-y-3 pr-2">
+              {beneficiaries.map((b) => (
+                <BeneficiaryRow
+                  key={b.id}
+                  id={b.id}
+                  name={b.type === 'business' ? b.fullName : `${b.firstName} ${b.lastName}`}
+                  bank={getBankName(b)}
+                  country={b.addressCountry || b.address?.country}
+                  status={b.status}
+                  flag={getCountryFlag(b.addressCountry || b.address?.country)}
+                  onPay={() => onPay(b)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+
+      </div>
     </ModalFrame>
   );
 }
 
-
-function BeneficiaryRow({
-  name,
-  bank,
-  countryIcon,
-  verified,
-  onPay
-}) {
+function BeneficiaryRow({ id, name, bank, country, status = "active", flag, onPay }) {
   return (
-    <div className="flex items-center justify-between rounded-2xl bg-[#FAFAFA] p-5">
+    <div className="flex items-center justify-between p-4 bg-[#F9F9F9] rounded-2xl">
       <div className="flex items-center gap-4">
-        <img
-          src={countryIcon}
-          alt=""
-          className="h-10 w-10 rounded-full"
-        />
-
+        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border shadow-sm overflow-hidden">
+          {/* Placeholder or Flag */}
+          <span className="text-xs font-bold">{country?.substring(0, 2).toUpperCase()}</span>
+        </div>
         <div>
-          <p className="font-medium text-gray-900">{name}</p>
-          <p className="text-sm text-gray-500">{bank}</p>
-
-          {!verified && (
-            <p className="text-sm text-orange-600 mt-3">
-              Bank verification in progress
-            </p>
+          <p className="font-medium">{name}</p>
+          <p className="text-sm text-gray-500">{bank} - {country}</p>
+          {status === "verification_in_progress" && (
+            <p className="text-xs text-orange-500 mt-0.5">Bank verification in progress</p>
           )}
         </div>
       </div>
 
       <button
-        onClick={verified ? onPay : undefined}
-        disabled={!verified}
-        className={`
-          h-12 px-8 rounded-full text-sm font-medium
-          ${verified
-            ? "bg-black text-white"
-            : "bg-gray-300 text-white cursor-not-allowed"
-          }
-        `}
+        onClick={onPay}
+        disabled={status !== "verified" && status !== "active" && status !== "pending"} // Allow pending for now based on rules
+        className={`px-6 py-2 rounded-full text-sm font-medium transition-colors
+          ${status === "verification_in_progress"
+            ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+            : "bg-black text-white hover:bg-gray-800"
+          }`}
       >
         Pay
       </button>
     </div>
   );
+}
+
+function getCountryFlag(countryName) {
+  // Simple mock map or logic provided here
+  // In a real app, use a library or the existing icon system
+  return null;
 }

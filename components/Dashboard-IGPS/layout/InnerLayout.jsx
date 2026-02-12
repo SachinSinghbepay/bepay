@@ -110,6 +110,7 @@ export default function InnerLayout() {
                   currency: selection.currency,
                   currencyLogo: selection.currencyLogo,
                   networkLogo: selection.networkLogo,
+                  address: selection.address
                 })
               }
               showOtherTokens={modalProps?.showOtherTokens}
@@ -178,6 +179,7 @@ export default function InnerLayout() {
             <AddBeneficiaryModal
               onClose={closeModal}
               onBack={() => openModal("global-payout")}
+              onOpenModal={openModal}
             />
           )}
 
@@ -207,6 +209,7 @@ export default function InnerLayout() {
 
           {modal === "confirm-globalpayout" && (
             <ConfirmGlobalPayoutModal
+              {...modalProps}
               onClose={closeModal}
               onBack={modalProps?.onBack}
               onConfirm={modalProps?.onConfirm}
@@ -287,7 +290,10 @@ export default function InnerLayout() {
 
 
           {modal === "add-new-swift" && (
-            <AddSwiftBeneficiaryModal onClose={closeModal} />
+            <AddSwiftBeneficiaryModal
+              onClose={closeModal}
+              onBack={() => openModal("pay-to-swift")}
+            />
           )}
 
           {modal === "pay-to-swift" && (
@@ -300,7 +306,7 @@ export default function InnerLayout() {
               }
               onAddBeneficiary={() => openModal("add-new-swift")}
               onPay={(beneficiary) =>
-                openModal("confirm-globalpayout", {
+                openModal("send-globalpayout", {
                   beneficiary,
                   onBack: () => openModal("pay-to-swift")
                 })

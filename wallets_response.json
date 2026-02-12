@@ -1,0 +1,63 @@
+{
+    "success": true,
+    "data": {
+        "wallets": [
+            {
+                "address": "TPyfz1nTBpDvoDTQ6EoDMbq75LAshqPEuw",
+                "chain": "tron",
+                "currency": "USDT",
+                "fullCurrency": "USDT_TRX",
+                "tokenUrl": "https://assets.bepay.money/nework_assets/token_logos/usdt.png",
+                "networkUrl": "https://assets.bepay.money/nework_assets/tron/tron/trx_tron.png"
+            },
+            {
+                "address": "2uzh9p6KGTTLFC8gHnmKtHjQyeM9bYHinFNuXm6nDnRy",
+                "chain": "solana",
+                "currency": "USDT",
+                "fullCurrency": "USDT_SOL",
+                "tokenUrl": "https://assets.bepay.money/nework_assets/token_logos/usdt.png",
+                "networkUrl": "https://assets.bepay.money/nework_assets/solana/solana/sol_solana.png"
+            },
+            {
+                "address": "0x89Ead6f29e02C11EBE29244a8facB942BDA8E55B",
+                "chain": "polygon",
+                "currency": "USDT",
+                "fullCurrency": "USDT_POL",
+                "tokenUrl": "https://assets.bepay.money/nework_assets/token_logos/usdt.png",
+                "networkUrl": "https://assets.bepay.money/nework_assets/evm/polygon/pol_polygon.png"
+            },
+            {
+                "address": "0x89Ead6f29e02C11EBE29244a8facB942BDA8E55B",
+                "chain": "ethereum",
+                "currency": "USDT",
+                "fullCurrency": "USDT_ETH",
+                "tokenUrl": "https://assets.bepay.money/nework_assets/token_logos/usdt.png",
+                "networkUrl": "https://assets.bepay.money/nework_assets/evm/ethereum/eth_ethereum.png"
+            },
+            {
+                "address": "2uzh9p6KGTTLFC8gHnmKtHjQyeM9bYHinFNuXm6nDnRy",
+                "chain": "solana",
+                "currency": "USDC",
+                "fullCurrency": "USDC_SOL",
+                "tokenUrl": "https://assets.bepay.money/nework_assets/token_logos/usdc.png",
+                "networkUrl": "https://assets.bepay.money/nework_assets/solana/solana/sol_solana.png"
+            },
+            {
+                "address": "0x89Ead6f29e02C11EBE29244a8facB942BDA8E55B",
+                "chain": "polygon",
+                "currency": "USDC",
+                "fullCurrency": "USDC_POL",
+                "tokenUrl": "https://assets.bepay.money/nework_assets/token_logos/usdc.png",
+                "networkUrl": "https://assets.bepay.money/nework_assets/evm/polygon/pol_polygon.png"
+            },
+            {
+                "address": "0x89Ead6f29e02C11EBE29244a8facB942BDA8E55B",
+                "chain": "ethereum",
+                "currency": "USDC",
+                "fullCurrency": "USDC_ETH",
+                "tokenUrl": "https://assets.bepay.money/nework_assets/token_logos/usdc.png",
+                "networkUrl": "https://assets.bepay.money/nework_assets/evm/ethereum/eth_ethereum.png"
+            }
+        ]
+    }
+}

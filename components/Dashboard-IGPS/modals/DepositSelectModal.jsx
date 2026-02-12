@@ -1,4 +1,8 @@
 import ModalFrame from "./ModalFrame";
+import { useState, useEffect } from "react";
+import { IgpsService } from "../../../services/igpsService";
+
+const igpsService = new IgpsService();
 
 export default function DepositSelectModal({
   onClose,
@@ -8,6 +12,25 @@ export default function DepositSelectModal({
   onBack,
   heading = "Deposit"
 }) {
+  const [wallets, setWallets] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchWallets = async () => {
+      try {
+        const res = await igpsService.listWallets();
+        if (res.success && res.data && Array.isArray(res.data.wallets)) {
+          setWallets(res.data.wallets);
+        }
+      } catch (error) {
+        console.error("Failed to fetch wallets", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchWallets();
+  }, []);
+
   return (
     <ModalFrame size="md">
       {/* HEADER */}
@@ -32,55 +55,37 @@ export default function DepositSelectModal({
       </div>
 
       {/* CONTENT */}
-      <div className="px-10 pb-10 space-y-8">
+      <div className="px-10 pb-10 space-y-8 max-h-[60vh] overflow-y-auto">
         {/* SECTION */}
         <div className="space-y-4">
           <p className="text-gray-500 text-sm">
             Select a stablecoin to deposit
           </p>
 
-          <DepositRow
-            main="/icons/usdc.svg"
-            network="/icons/polygon.png"
-            label="USDC"
-            sub="(Polygon)"
-            onSelect={onSelect}
-          />
-          <DepositRow
-            main="/icons/usdc.svg"
-            network="/icons/solana.svg"
-            label="USDC"
-            sub="(Solana)"
-            onSelect={onSelect}
-          />
-          <DepositRow
-            main="/icons/usdc.svg"
-            network="/icons/tron.svg"
-            label="USDC"
-            sub="(TRON)"
-            onSelect={onSelect}
-          />
-          <DepositRow
-            main="/icons/usdc.svg"
-            network="/icons/eth.svg"
-            label="USDC"
-            sub="(ETH)"
-            onSelect={onSelect}
-          />
-          <DepositRow
-            main="/icons/usdt.svg"
-            network="/icons/solana.svg"
-            label="USDT"
-            sub="(Solana)"
-            onSelect={onSelect}
-          />
-          <DepositRow
-            main="/icons/usdt.svg"
-            network="/icons/tron.svg"
-            label="USDT"
-            sub="(TRON)"
-            onSelect={onSelect}
-          />
+          {loading ? (
+            <div className="text-center py-4 text-gray-500">Loading wallets...</div>
+          ) : (
+            wallets.map((wallet, index) => (
+              <DepositRow
+                key={index}
+                main={wallet.tokenUrl || "/icons/usdc.svg"}
+                network={wallet.networkUrl || "/icons/polygon.png"}
+                label={wallet.currency}
+                sub={`(${wallet.chain})`} // Format chain name if needed, e.g. title case
+                onSelect={() => onSelect({
+                  currency: wallet.currency,
+                  network: wallet.chain, // pass chain name/slug
+                  currencyLogo: wallet.tokenUrl,
+                  networkLogo: wallet.networkUrl,
+                  address: wallet.address // Pass address!
+                })}
+              />
+            ))
+          )}
+
+          {!loading && wallets.length === 0 && (
+            <div className="text-center py-4 text-gray-400">No wallets found</div>
+          )}
         </div>
 
         {/* SECOND SECTION */}
@@ -103,14 +108,7 @@ export default function DepositSelectModal({
 function DepositRow({ main, network, label, sub, onSelect }) {
   return (
     <div
-      onClick={() =>
-        onSelect({
-          currency: label,
-          network: sub.replace(/[()]/g, ""), // removes brackets
-          currencyLogo: main,
-          networkLogo: network,
-        })
-      }
+      onClick={onSelect}
       className="flex items-center justify-between bg-gray-50 rounded-2xl px-6 py-4 cursor-pointer hover:bg-gray-100"
     >
       <div className="flex items-center gap-4">
