@@ -7,8 +7,11 @@ import { AuthProvider } from '../../../components/Dashboard-IGPS/context/AuthCon
 export default async function IgpsDashboardLayout({ children }) {
     const cookieStore = await cookies();
     const token = cookieStore.get('igps_token');
+    const refresh = cookieStore.get('igps_refresh');
 
-    if (!token || !token.value) {
+    // Only redirect if BOTH tokens are missing
+    // or if the refresh token is missing (session truly dead)
+    if ((!token || !token.value) && (!refresh || !refresh.value)) {
         redirect('/igps/login');
     }
 
