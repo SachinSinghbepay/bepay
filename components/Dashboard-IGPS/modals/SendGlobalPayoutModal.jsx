@@ -13,6 +13,27 @@ export default function SendGlobalPayoutModal({
 }) {
 
     const scrollRef = useRef(null);
+    // same scroll lock pattern
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+
+        const onWheel = (e) => {
+            const { scrollTop, scrollHeight, clientHeight } = el;
+            const atTop = scrollTop === 0;
+            const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+            if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+                e.preventDefault();
+            } else {
+                e.stopPropagation();
+            }
+        };
+
+        el.addEventListener("wheel", onWheel, { passive: false });
+        return () => el.removeEventListener("wheel", onWheel);
+    }, []);
+
 
     // Form State
     const [selectedBeneficiary, setSelectedBeneficiary] = useState(beneficiary || null);
@@ -52,6 +73,7 @@ export default function SendGlobalPayoutModal({
         // Backend returns flattened addressCountry sometimes (e.g. "IN") or nested address.country
         const country = selectedBeneficiary.addressCountry || selectedBeneficiary.address?.country;
         console.log("Beneficiary Country (Resolved):", country);
+        console.log("BENEFICIARY FULL:", selectedBeneficiary);
 
         // Simple mapping - in real app, better to have country info object
         const map = {
@@ -77,7 +99,7 @@ export default function SendGlobalPayoutModal({
     const [quoteError, setQuoteError] = useState("");
 
     // Fetch beneficiaries & currencies
-    // Fetch beneficiaries & currencies
+
     useEffect(() => {
         const loadData = async () => {
             try {
@@ -136,7 +158,13 @@ export default function SendGlobalPayoutModal({
 
             setLoadingQuote(true);
             setQuoteError("");
-
+            console.log("QUOTE REQUEST:", {
+                sourceCurrency: reqSourceCurrency,
+                targetCurrency,
+                sourceAmount: parseFloat(amount),
+                network: reqNetwork
+            });
+            console.log("SELECTED WALLET:", selectedWallet);
             try {
                 const res = await igpsService.createQuote({
                     sourceCurrency: reqSourceCurrency,
@@ -228,95 +256,110 @@ export default function SendGlobalPayoutModal({
                 <div ref={scrollRef} className="flex-1 overflow-y-auto px-8 pb-8 space-y-6">
 
                     {/* BENEFICIARY SELECT */}
-                    <div className="space-y-2">
-                        <label className="text-sm text-gray-500">Beneficiary</label>
+                    <Section
+                        title="Beneficiary"
+                        right={
+                            selectedBeneficiary && (
+                                <button
+                                    onClick={() => setSelectedBeneficiary(null)}
+                                    className="text-sm underline"
+                                >
+                                    Change
+                                </button>
+                            )
+                        }
+                    >
                         {selectedBeneficiary ? (
-                            <div className="flex items-center justify-between p-4 border rounded-xl bg-gray-50">
-                                <div className="font-medium">{selectedBeneficiary.type === 'business' ? selectedBeneficiary.fullName : selectedBeneficiary.firstName + ' ' + selectedBeneficiary.lastName}</div>
-                                <button onClick={() => setSelectedBeneficiary(null)} className="text-sm text-red-500">Change</button>
+                            <div className="flex items-center gap-4 bg-[#F7F7F7] rounded-2xl p-4">
+                                <div className="p-[1.5px] rounded-xl bg-[#CECECE]">
+                                    <div className="bg-[#F5F5F5] rounded-xl p-2">
+                                        <img
+                                            src={
+                                                selectedBeneficiary.countryIcon ||
+                                                "/icons/usa.svg"
+                                            }
+                                            className="h-7 w-7 rounded-full"
+                                            alt=""
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <p className="font-medium">
+                                        {selectedBeneficiary.type === "business"
+                                            ? selectedBeneficiary.fullName
+                                            : `${selectedBeneficiary.firstName} ${selectedBeneficiary.lastName}`}
+                                    </p>
+
+                                    <p className="text-sm text-gray-500">
+                                        {selectedBeneficiary.bankName || "Bank"}{" "}
+                                        {selectedBeneficiary.accountNumber
+                                            ? `- ${selectedBeneficiary.accountNumber.slice(-4)}`
+                                            : ""}
+                                    </p>
+                                </div>
                             </div>
                         ) : (
-                            <div className="space-y-2">
+                            <div className="space-y-3">
                                 <select
                                     className="w-full h-12 rounded-xl border px-4 outline-none"
                                     onChange={(e) => {
-                                        const b = beneficiaries.find(x => x.id === e.target.value);
+                                        const b = beneficiaries.find(
+                                            (x) => x.id === e.target.value
+                                        );
                                         setSelectedBeneficiary(b);
                                     }}
-                                    value=""
+                                    defaultValue=""
                                 >
-                                    <option value="" disabled>Select a beneficiary</option>
-                                    {beneficiaries.map(b => (
+                                    <option value="" disabled>
+                                        Select a beneficiary
+                                    </option>
+
+                                    {beneficiaries.map((b) => (
                                         <option key={b.id} value={b.id}>
-                                            {b.type === 'business' ? b.fullName : `${b.firstName} ${b.lastName}`}
+                                            {b.type === "business"
+                                                ? b.fullName
+                                                : `${b.firstName} ${b.lastName}`}
                                         </option>
                                     ))}
                                 </select>
+
                                 <button
                                     onClick={() => onOpenModal("add-new-swift")}
-                                    className="text-sm text-blue-600 font-medium pl-1"
+                                    className="text-sm text-blue-600 font-medium"
                                 >
                                     + Add new beneficiary
                                 </button>
                             </div>
                         )}
-                    </div>
+                    </Section>
+
 
                     {/* AMOUNT */}
-                    <div className="space-y-2">
-                        <label className="text-sm text-gray-500">You send</label>
-                        <div className="relative">
-                            <input
-                                type="number"
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
-                                placeholder="0.00"
-                                className="w-full h-14 rounded-xl border px-4 text-lg outline-none pr-32"
-                            />
-                            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                                <select
-                                    value={currency}
-                                    onChange={(e) => setCurrency(e.target.value)}
-                                    className="bg-transparent font-medium text-gray-700 outline-none cursor-pointer appearance-none pr-4 text-right"
-                                    style={{ textAlignLast: 'right' }}
-                                >
-                                    {Array.isArray(sourceCurrencies) && sourceCurrencies.map(c => (
-                                        <option key={c.fullCurrency} value={c.fullCurrency}>
-                                            {c.currency} ({c.chain})
-                                        </option>
-                                    ))}
-                                    {(!Array.isArray(sourceCurrencies) || sourceCurrencies.length === 0) && <option value="USDC">USDC (Loading...)</option>}
-                                </select>
-                                {/* We could dynamic load icons, for now keep static or simple */}
-                                {/* <img src="/icons/usdc.svg" className="w-6 h-6" alt="USDC" /> */}
-                            </div>
-                        </div>
-                    </div>
+                    <Section
+                        title="Amount"
+                        right={
+                            <p className="text-sm text-gray-500">
+                                Available balance: <b>$100.00</b>
+                            </p>
+                        }
+                    >
+                        <AmountBox
+                            amount={amount}
+                            setAmount={setAmount}
+                            quote={quote}
+                            currency={currency}
+                            setCurrency={setCurrency}
+                            targetCurrency={targetCurrency}
+                            sourceCurrencies={sourceCurrencies}
+                        />
+                    </Section>
 
-                    {/* QUOTE SUMMARY */}
-                    {(loadingQuote || quote) && (
-                        <div className="bg-gray-50 p-4 rounded-xl space-y-2 text-sm">
-                            {loadingQuote ? (
-                                <p className="text-center text-gray-500">Fetching rate...</p>
-                            ) : quote ? (
-                                <>
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-500">Exchange Rate</span>
-                                        <span className="font-medium">1 {quote.sourceCurrency} = {quote.exchangeRate} {quote.targetCurrency}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-500">Fees</span>
-                                        <span className="font-medium">{quote.fee} {quote.sourceCurrency}</span>
-                                    </div>
-                                    <div className="flex justify-between border-t pt-2 mt-2">
-                                        <span className="text-gray-900 font-medium">Recipient gets</span>
-                                        <span className="font-bold text-lg">{quote.targetAmount} {quote.targetCurrency}</span>
-                                    </div>
-                                </>
-                            ) : null}
-                        </div>
+
+
+                    {quoteError && (
+                        <p className="text-red-500 text-sm">{quoteError}</p>
                     )}
-                    {quoteError && <p className="text-red-500 text-sm">{quoteError}</p>}
 
                     {/* PURPOSE */}
                     <div className="space-y-2">
@@ -352,28 +395,89 @@ export default function SendGlobalPayoutModal({
                     </div>
 
                     {/* INVOICE UPLOAD */}
-                    <div className="space-y-2">
-                        <label className="text-sm text-gray-500">Invoice (Required for Goods & Services)</label>
-                        <div className="border border-dashed border-gray-300 rounded-xl p-4 flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer relative">
-                            <input
-                                type="file"
-                                onChange={handleFileChange}
-                                className="absolute inset-0 opacity-0 cursor-pointer"
-                                accept=".pdf,.png,.jpg,.jpeg"
-                            />
-                            {invoice ? (
-                                <div className="flex items-center gap-2 text-green-600 font-medium">
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span className="truncate max-w-[200px]">{invoice.fileName}</span>
+                    <Section title="Upload invoice or proof of funds">
+
+                        {!invoice ? (
+                            /* ===== Upload Box ===== */
+                            <label className="w-full h-14 rounded-2xl bg-[#F7F7F7] flex items-center justify-center gap-3 cursor-pointer border">
+                                <img src="/icons/upload.svg" className="h-5 w-5" alt="" />
+                                <span className="text-sm font-medium">
+                                    Upload invoice or proof of funds
+                                </span>
+
+                                <input
+                                    type="file"
+                                    className="hidden"
+                                    accept=".pdf,.png,.jpg,.jpeg"
+                                    onChange={handleFileChange}
+                                />
+                            </label>
+                        ) : (
+                            /* ===== Uploaded File Row ===== */
+                            <div className="rounded-2xl bg-[#F7F7F7] p-4 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <img src="/icons/file.svg" className="h-5 w-5" alt="" />
+                                    <span className="text-sm font-medium">
+                                        {invoice.fileName}
+                                    </span>
                                 </div>
-                            ) : (
-                                <div className="flex flex-col items-center text-gray-400">
-                                    <span className="text-2xl mb-1">+</span>
-                                    <span className="text-sm">Upload Invoice</span>
+
+                                <button
+                                    onClick={() => setInvoice(null)}
+                                    className="text-xl text-gray-400 hover:text-gray-600"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        )}
+
+                        {invoice && (
+                            <p className="text-xs text-[#BC4242] mt-2">
+                                Source of funds document is required for business-to-business transfers
+                                to comply with regulatory requirements.
+                            </p>
+                        )}
+
+                    </Section>
+
+                    {/* SUMMARY */}
+
+                    {(loadingQuote || quote) && (
+                        <div className="grid grid-cols-2 gap-y-4 text-sm pt-4 p-20">
+
+                            {loadingQuote ? (
+                                <div className="col-span-2 text-center text-gray-500 py-4">
+                                    Fetching rate...
                                 </div>
-                            )}
+                            ) : quote ? (
+                                <>
+                                    <SummaryRow
+                                        label="Exchange rate"
+                                        value={`1 ${quote.sourceCurrency} ≈ ${quote.exchangeRate} ${quote.targetCurrency}`}
+                                    />
+
+                                    <SummaryRow
+                                        label="Processing fee"
+                                        value={`${quote.fee} ${quote.sourceCurrency}`}
+                                        info={<FeeInfo />}
+                                    />
+
+                                    <SummaryRow
+                                        label="Total receivable"
+                                        value={`≈ ${quote.targetAmount} ${quote.targetCurrency}`}
+                                        bold
+                                    />
+
+                                    <SummaryRow
+                                        label="Processing time"
+                                        value="1–3 business days"
+                                    />
+                                </>
+                            ) : null}
+
                         </div>
-                    </div>
+                    )}
+
                 </div>
 
                 {/* FOOTER */}
@@ -390,5 +494,322 @@ export default function SendGlobalPayoutModal({
                 </div>
             </div>
         </ModalFrame>
+    );
+}
+
+function Section({ title, right, children }) {
+    return (
+        <div className="space-y-3">
+            <div className="flex items-center justify-between">
+                <p className="text-sm text-gray-600">{title}</p>
+                {right}
+            </div>
+            {children}
+        </div>
+    );
+}
+
+
+function AmountBox({
+    amount,
+    setAmount,
+    quote,
+    currency,
+    setCurrency,
+    targetCurrency,
+    sourceCurrencies
+}) {
+    const networkIcons = {
+        ethereum: "/icons/eth.svg",
+        polygon: "/icons/polygon.svg",
+        solana: "/icons/solana.svg",
+        tron: "/icons/trx.svg"
+    };
+    return (
+        <div className="rounded-2xl space-y-6">
+
+            {/* TOP: Amount */}
+            <div className="flex justify-between items-start bg-[#F7F7F7] p-5 rounded-xl pl-6">
+                <div className="flex-1">
+                    <div className="flex justify-start gap-8 items-center">
+                        <p className="text-sm text-gray-500 mb-2 font-medium">
+                            Amount you want to send
+                        </p>
+
+                        <div className="flex gap-4 text-sm text-gray-400 pb-1 font-medium">
+                            <button onClick={() => setAmount((amount * 0.1).toFixed(2))}>
+                                10%
+                            </button>
+
+                            <button onClick={() => setAmount((amount * 0.25).toFixed(2))}>
+                                25%
+                            </button>
+
+                            <button onClick={() => setAmount((amount * 0.5).toFixed(2))}>
+                                50%
+                            </button>
+
+                            <button className="font-medium">
+                                MAX
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="flex items-end gap-4">
+                        <input
+                            type="number"
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
+                            className="
+                                w-[140px]
+                                bg-transparent
+                                text-[32px]
+                                font-semibold
+                                outline-none
+                            "
+                        />
+                    </div>
+                </div>
+
+                <div className="relative">
+                    <div className="flex items-center gap-3 bg-[#EBEBEB] py-2 px-2 rounded-xl">
+
+                        {/* TOKEN + NETWORK ICONS */}
+                        {sourceCurrencies
+                            .filter(w => w.fullCurrency === currency)
+                            .map(w => (
+                                <div
+                                    key={w.fullCurrency}
+                                    className="relative h-10 w-10 "
+                                >
+                                    {/* BIG TOKEN ICON */}
+                                    {w.tokenUrl && (
+                                        <img
+                                                 src={w.networkUrl}
+                                            onError={(e) => (e.target.style.display = "none")}
+                                            className="h-8 w-8 rounded-full"
+                                            alt="token"
+                                        />
+                                    )}
+
+                                    {/* SMALL NETWORK ICON (OVERLAP) */}
+                                    {/* {w.networkUrl && (
+                                        <img
+                                            src={w.networkUrl}
+                                            onError={(e) => (e.target.style.display = "none")}
+                                            className="absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-white"
+                                            alt="network"
+                                        />
+                                    )} */}
+                                </div>
+                            ))}
+                        {/* SELECT DROPDOWN */}
+                        <select
+                            value={currency}
+                            onChange={(e) => setCurrency(e.target.value)}
+                            className="rounded-xl px-4 py-3 border shadow-sm text-[18px] font-semibold appearance-none cursor-pointer"
+                        >
+                            {sourceCurrencies.length > 0 ? (
+                                sourceCurrencies.map((c) => (
+                                    <option
+                                        key={c.fullCurrency}
+                                        value={c.fullCurrency}
+                                    >
+                                        {c.currency} ({c.chain})
+                                    </option>
+                                ))
+                            ) : (
+                                <option value="">Loading...</option>
+                            )}
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {/* CENTER ARROW */}
+            <div className="flex justify-center">
+                <div className="h-14 w-14 -mt-12 rounded-full bg-white shadow-md flex items-center justify-center text-lg">
+                    <img src="/icons/back.svg" alt="" className="rotate-90" />
+                </div>
+            </div>
+
+            {/* BOTTOM: Recipient */}
+            <div className="flex justify-between items-end bg-[#F7F7F7] px-5 py-6 rounded-xl pl-6 -mt-10">
+                <div>
+                    <p className="text-sm text-gray-500 mb-1">
+                        Recipient receives
+                    </p>
+
+                    <p className="text-3xl font-semibold">
+                        {quote ? quote.targetAmount : "0.00"}
+                    </p>
+                </div>
+
+                <CurrencyPill
+                    label={targetCurrency || "USD"}
+                    icon="/icons/india.svg"
+                />
+            </div>
+        </div>
+    );
+}
+
+function CurrencyDropdown({ label, icon }) {
+    const [open, setOpen] = useState(false);
+    const ref = useRef(null);
+
+    // close on outside click
+    useEffect(() => {
+        const handler = (e) => {
+            if (ref.current && !ref.current.contains(e.target)) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handler);
+        return () => document.removeEventListener("mousedown", handler);
+    }, []);
+
+    return (
+        <div ref={ref} className="relative">
+            {/* BUTTON */}
+            <button
+                onClick={() => setOpen((v) => !v)}
+                className="
+                flex items-center gap-2
+                rounded-xl bg-[#EBEBEB] px-3 py-3
+                border shadow-sm w-[160px]
+                "
+            >
+                <img src={icon} alt="" className="h-8 w-8 flex justify-center items-center pt-1" />
+                <span className="text-[20px] font-bold ">{label}</span>
+                <span className="text-gray-400 ">
+                    <svg
+
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    >
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </span>
+            </button>
+
+            {/* DROPDOWN */}
+            {open && (
+                <div
+                    className="
+            absolute right-0 mt-2 w-36
+            rounded-xl bg-white border shadow-lg
+            overflow-hidden z-50
+          "
+                >
+                    <DropdownItem label="USDC" icon="/icons/usdc.png" />
+                    <DropdownItem label="USDT" icon="/icons/usdt.png" />
+                    <DropdownItem label="DAI" icon="/icons/dai.png" />
+                </div>
+            )}
+        </div>
+    );
+}
+
+function CurrencyPill({ label, icon }) {
+    return (
+        <div className="flex justify-center items-center gap-2 bg-[#EBEBEB] border rounded-xl px-3 py-3 w-[160px]">
+            <img src={icon} className="h-5 w-5 rounded-full" alt="" />
+            <span className="text-[20px] font-bold">{label}</span>
+        </div>
+    );
+}
+
+function DropdownItem({ label, icon }) {
+    return (
+        <button
+            className="
+        w-full flex items-center gap-2
+        px-4 py-2 text-sm
+        hover:bg-gray-100
+      "
+        >
+            <img src={icon} alt="" className="h-4 w-4" />
+            {label}
+        </button>
+    );
+}
+
+const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+        const base64Data = reader.result.split(',')[1];
+        setInvoice({
+            fileName: file.name,
+            blob: base64Data,
+            type: "invoice"
+        });
+    };
+    reader.readAsDataURL(file);
+};
+
+
+function SummaryRow({ label, value, bold, info }) {
+    return (
+        <>
+            <span className="text-gray-500 text-[16px]">{label}</span>
+
+            <span
+                className={`text-right flex items-center justify-end gap-2
+        ${bold ? "font-semibold" : "font-medium"}`}
+            >
+                {value}
+                {info && info}
+            </span>
+        </>
+    );
+}
+
+function FeeInfo() {
+    const [open, setOpen] = useState(false);
+    const ref = useRef(null);
+
+    useEffect(() => {
+        const close = (e) => {
+            if (!ref.current?.contains(e.target)) setOpen(false);
+        };
+        document.addEventListener("mousedown", close);
+        return () => document.removeEventListener("mousedown", close);
+    }, []);
+
+    return (
+        <div ref={ref} className="relative inline-block ">
+            {/* i BUTTON */}
+            <button onClick={() => setOpen(v => !v)}>
+                <img src="/icons/i.svg" alt="info" />
+            </button>
+
+            {/* POPUP */}
+            {open && (
+                <div className="w-[320px] absolute  top-10 right-full  -translate-y-1/2 ml-4 bg-white rounded-2xl shadow-xl p-4">
+                    <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">Fixed cost per transaction</span>
+                        <span className="font-medium">USD 10</span>
+                    </div>
+
+                    <div className="flex justify-between text-sm mt-2">
+                        <span className="text-gray-500">Payout fee (0.50%)</span>
+                        <span className="font-medium">USD 0.45</span>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }

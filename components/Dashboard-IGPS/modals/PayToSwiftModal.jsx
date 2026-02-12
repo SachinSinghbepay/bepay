@@ -1,5 +1,5 @@
 import ModalFrame from "./ModalFrame";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IgpsService } from "../../../services/igpsService";
 
 const igpsService = new IgpsService();
@@ -12,6 +12,26 @@ export default function PayToSwiftModal({
 }) {
   const [beneficiaries, setBeneficiaries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const scrollRef = useRef(null);
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const onWheel = (e) => {
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      const atTop = scrollTop === 0;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+        e.preventDefault();
+      } else {
+        e.stopPropagation();
+      }
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
 
   useEffect(() => {
     fetchBeneficiaries();
@@ -49,73 +69,75 @@ export default function PayToSwiftModal({
 
   return (
     <ModalFrame>
-      <div className="p-8">
+      <div className="flex flex-col max-h-[80vh] h-full">
         {/* HEADER */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between p-8 pb-4 shrink-0">
           <button onClick={onBack} className="text-gray-400 hover:text-gray-600">
-            <img src="/icons/arrow-left.svg" alt="Back" className="w-6 h-6" />
+            <img src="/icons/back.svg" alt="Back" className="w-6 h-6" />
           </button>
           <h2 className="text-xl font-medium">Pay USD via SWIFT</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <img src="/icons/close.svg" alt="Close" className="w-6 h-6" />
+              ✕
           </button>
         </div>
 
-        {/* LOADING STATE */}
-        {loading && (
-          <div className="flex justify-center py-10">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-          </div>
-        )}
-
-        {/* EMPTY STATE */}
-        {!loading && beneficiaries.length === 0 && (
-          <div className="text-center py-10 space-y-4">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
-              <span className="text-2xl">?</span>
+        <div ref={scrollRef} className="flex-1 overflow-y-auto px-8 pb-8 min-h-0">
+          {/* LOADING STATE */}
+          {loading && (
+            <div className="flex justify-center py-10">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
             </div>
-            <h3 className="text-lg font-medium">No beneficiaries found</h3>
-            <p className="text-gray-500 max-w-xs mx-auto">
-              You haven't added any beneficiaries yet. Add one to start sending payments.
-            </p>
-            <button
-              onClick={onAddBeneficiary}
-              className="mt-4 px-6 py-3 bg-black text-white rounded-xl font-medium"
-            >
-              Add new beneficiary +
-            </button>
-          </div>
-        )}
+          )}
 
-        {/* LIST */}
-        {!loading && beneficiaries.length > 0 && (
-          <div className="space-y-4">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-sm font-medium text-gray-500">Beneficiaries with bank details</h3>
+          {/* EMPTY STATE */}
+          {!loading && beneficiaries.length === 0 && (
+            <div className="text-center py-10 space-y-4">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+                <span className="text-2xl">?</span>
+              </div>
+              <h3 className="text-lg font-medium">No beneficiaries found</h3>
+              <p className="text-gray-500 max-w-xs mx-auto">
+                You haven't added any beneficiaries yet. Add one to start sending payments.
+              </p>
               <button
                 onClick={onAddBeneficiary}
-                className="text-sm font-medium underline"
+                className="mt-4 px-6 py-3 bg-black text-white rounded-xl font-medium"
               >
                 Add new beneficiary +
               </button>
             </div>
+          )}
 
-            <div className="max-h-[400px] overflow-y-auto space-y-3 pr-2">
-              {beneficiaries.map((b) => (
-                <BeneficiaryRow
-                  key={b.id}
-                  id={b.id}
-                  name={b.type === 'business' ? b.fullName : `${b.firstName} ${b.lastName}`}
-                  bank={getBankName(b)}
-                  country={b.addressCountry || b.address?.country}
-                  status={b.status}
-                  flag={getCountryFlag(b.addressCountry || b.address?.country)}
-                  onPay={() => onPay(b)}
-                />
-              ))}
+          {/* LIST */}
+          {!loading && beneficiaries.length > 0 && (
+            <div className="space-y-3">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-sm font-medium text-gray-500">Beneficiaries with bank details</h3>
+                <button
+                  onClick={onAddBeneficiary}
+                  className="text-sm font-medium underline"
+                >
+                  Add new beneficiary +
+                </button>
+              </div>
+
+              <div className="space-y-3 pr-2">
+                {beneficiaries.map((b) => (
+                  <BeneficiaryRow
+                    key={b.id}
+                    id={b.id}
+                    name={b.type === 'business' ? b.fullName : `${b.firstName} ${b.lastName}`}
+                    bank={getBankName(b)}
+                    country={b.addressCountry || b.address?.country}
+                    status={b.status}
+                    flag={getCountryFlag(b.addressCountry || b.address?.country)}
+                    onPay={() => onPay(b)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
       </div>
     </ModalFrame>
@@ -159,3 +181,4 @@ function getCountryFlag(countryName) {
   // In a real app, use a library or the existing icon system
   return null;
 }
+

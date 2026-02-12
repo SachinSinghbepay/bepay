@@ -1,5 +1,5 @@
 import ModalFrame from "./ModalFrame";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IgpsService } from "../../../services/igpsService";
 
 const igpsService = new IgpsService();
@@ -31,73 +31,100 @@ export default function DepositSelectModal({
     fetchWallets();
   }, []);
 
+
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const onWheel = (e) => {
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      const atTop = scrollTop === 0;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+        e.preventDefault();
+      } else {
+        e.stopPropagation();
+      }
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
+
+
   return (
     <ModalFrame size="md">
       {/* HEADER */}
-      <div className="relative px-10 pt-8 pb-4 mb-4 text-center">
-        {showBackButton && (
+      <div className="flex flex-col max-h-[80vh] h-full">
+        <div className="relative px-10 pt-8 pb-4 mb-4 text-center">
+          {showBackButton && (
+            <button
+              onClick={onBack}
+              className="absolute left-6 text-xl text-gray-500"
+            >
+              <img src="/icons/back.svg" alt="" />
+            </button>
+          )}
+
+          <h2 className="text-lg font-medium text-gray-900">{heading}</h2>
+
           <button
-            onClick={onBack}
-            className="absolute left-6 text-xl text-gray-500"
+            onClick={onClose}
+            className="absolute right-10 top-8 text-gray-400 hover:text-gray-600 text-xl"
           >
-            <img src="/icons/back.svg" alt="" />
+            ✕
           </button>
-        )}
-
-        <h2 className="text-lg font-medium text-gray-900">{heading}</h2>
-
-        <button
-          onClick={onClose}
-          className="absolute right-10 top-8 text-gray-400 hover:text-gray-600 text-xl"
-        >
-          ✕
-        </button>
-      </div>
-
-      {/* CONTENT */}
-      <div className="px-10 pb-10 space-y-8 max-h-[60vh] overflow-y-auto">
-        {/* SECTION */}
-        <div className="space-y-4">
-          <p className="text-gray-500 text-sm">
-            Select a stablecoin to deposit
-          </p>
-
-          {loading ? (
-            <div className="text-center py-4 text-gray-500">Loading wallets...</div>
-          ) : (
-            wallets.map((wallet, index) => (
-              <DepositRow
-                key={index}
-                main={wallet.tokenUrl || "/icons/usdc.svg"}
-                network={wallet.networkUrl || "/icons/polygon.png"}
-                label={wallet.currency}
-                sub={`(${wallet.chain})`} // Format chain name if needed, e.g. title case
-                onSelect={() => onSelect({
-                  currency: wallet.currency,
-                  network: wallet.chain, // pass chain name/slug
-                  currencyLogo: wallet.tokenUrl,
-                  networkLogo: wallet.networkUrl,
-                  address: wallet.address // Pass address!
-                })}
-              />
-            ))
-          )}
-
-          {!loading && wallets.length === 0 && (
-            <div className="text-center py-4 text-gray-400">No wallets found</div>
-          )}
         </div>
 
-        {/* SECOND SECTION */}
-        {showOtherTokens && (
+        {/* CONTENT */}
+        <div
+          ref={scrollRef}
+          className="px-10 pb-10 space-y-8 max-h-[60vh] overflow-y-auto">
+          {/* SECTION */}
           <div className="space-y-4">
             <p className="text-gray-500 text-sm">
-              Deposit using another token
+              Select a stablecoin to deposit
             </p>
 
-            <OtherTokensRow />
+            {loading ? (
+              <div className="text-center py-4 text-gray-500">Loading wallets...</div>
+            ) : (
+              wallets.map((wallet, index) => (
+                <DepositRow
+                  key={index}
+                  main={wallet.tokenUrl || "/icons/usdc.svg"}
+                  network={wallet.networkUrl || "/icons/polygon.png"}
+                  label={wallet.currency}
+                  sub={`(${wallet.chain})`} // Format chain name if needed, e.g. title case
+                  onSelect={() => onSelect({
+                    currency: wallet.currency,
+                    network: wallet.chain, // pass chain name/slug
+                    currencyLogo: wallet.tokenUrl,
+                    networkLogo: wallet.networkUrl,
+                    address: wallet.address // Pass address!
+                  })}
+                />
+              ))
+            )}
+
+            {!loading && wallets.length === 0 && (
+              <div className="text-center py-4 text-gray-400">No wallets found</div>
+            )}
           </div>
-        )}
+
+          {/* SECOND SECTION */}
+          {showOtherTokens && (
+            <div className="space-y-4">
+              <p className="text-gray-500 text-sm">
+                Deposit using another token
+              </p>
+
+              <OtherTokensRow />
+            </div>
+          )}
+        </div>
       </div>
     </ModalFrame>
   );

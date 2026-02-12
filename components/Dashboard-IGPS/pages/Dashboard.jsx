@@ -178,6 +178,7 @@ export default function Dashboard({ onOpenModal }) {
           icons="/icons/beneficiaries.svg"
           title="Add Beneficiaries"
           desc="Add employees, vendors, or freelancers"
+          onClick={() => onOpenModal("add-beneficiary")}
         />
       </div>
 
@@ -303,9 +304,11 @@ function CurrencyRow({ label, value }) {
 
 
 
-function SecondaryCard({ title, desc, icons }) {
+function SecondaryCard({ title, desc, icons, onClick }) {
   return (
-    <div className="rounded-3xl bg-white p-3 border border-[#D9D9D9] flex justify-between items-center h-[140px]">
+    <div
+      onClick={onClick}
+      className="rounded-3xl bg-white p-3 border border-[#D9D9D9] flex justify-between items-center h-[140px]">
       <div className="bg-[#EBEBEB] h-full w-[80px] rounded-2xl flex items-center justify-center">
         <Image
           src={icons}
