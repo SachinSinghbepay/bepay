@@ -1,4 +1,4 @@
-
+ 
 import {
     AuthResponse,
     LoginRequest,
@@ -36,7 +36,7 @@ export class IgpsService {
     private accessToken: string | null = null;
     private refreshToken: string | null = null;
 
-    constructor(baseUrl: string = 'http://localhost:3002/api/igps') {
+    constructor(baseUrl: string = 'https://ddhvx9gk-5001.inc1.devtunnels.ms/api/igps') {
         this.baseUrl = baseUrl;
     }
 

@@ -92,14 +92,14 @@ export default function Dashboard({ onOpenModal }) {
           </button>
           <button
             onClick={() =>
-              onOpenModal("transfer-request-submitted")
-            }
+              onOpenModal("add-new-swift")}
+
           >
             View transaction
           </button>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

@@ -25,7 +25,7 @@ export default function DepositAddressModal({
                 </button>
 
                 <h2 className="text-lg font-semibold text-gray-900">
-                    Deposit USDC
+                    Deposit  {network}
                 </h2>
 
                 {/* Close */}

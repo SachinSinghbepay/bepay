@@ -1,37 +1,84 @@
-import React from "react";
+"use client";
 
-const menuItems = [
-  { id: "dashboard", label: "Dashboard" },
-  { id: "banking", label: "Banking" },
-  { id: "beneficiary", label: "Beneficiary" },
-  { id: "team", label: "Team" },
-  { id: "invite", label: "Invite" },
-];
+import { Copy } from "lucide-react";
 
-export default function Sidebar({ active, onChange }) {
+export default function Invite() {
+  const referralLink = "https://bepay.igps/referrals/4F8CG7";
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(referralLink);
+  };
+
   return (
-    <aside className="w-64 bg-[#f1f1f1] p-6 flex flex-col gap-8">
-      
-      {/* Logo placeholder */}
-      <div className="h-10 w-32 bg-gray-300 rounded-md" />
+    <div className="flex-1 px-10 py-10">
+      <div className="max-w-3xl mx-auto flex flex-col items-center text-center space-y-8">
 
-      {/* Menu */}
-      <nav className="flex flex-col gap-2">
-        {menuItems.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => onChange(item.id)}
-            className={`text-left px-4 py-3 rounded-xl text-sm font-medium transition
-              ${
-                active === item.id
-                  ? "bg-[#2b2b2b] text-white"
-                  : "text-gray-600 hover:bg-gray-200"
-              }`}
-          >
-            {item.label}
-          </button>
-        ))}
-      </nav>
-    </aside>
+        {/* Top Card Image + Logo */}
+        <div className="w-[420px] h-[220px] bg-white rounded-3xl overflow-hidden shadow-sm flex">
+          
+          {/* Image Left */}
+          <div className="w-[65%]">
+            <img
+              src="/icons/invite.png" 
+              alt="Invite"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          {/* Logo Right */}
+          <div className="w-1/2 flex items-center justify-center bg-gray-50">
+            <img
+              src="/bepayicon.png"
+              alt="logo"
+              className="w-14 h-14"
+            />
+          </div>
+        </div>
+
+        {/* Heading */}
+        <div className="space-y-3">
+          <h1 className="text-4xl font-semibold">
+            Invite your friends
+          </h1>
+          <p className="text-gray-500">
+            Share your referral link with friends and start earning rewards.
+          </p>
+        </div>
+
+        {/* Referral Count Card */}
+        <div className="w-full bg-[#F4F4F4] rounded-3xl py-10">
+          <p className="text-sm text-gray-500">Your referrals</p>
+          <p className="text-5xl font-medium mt-2">0</p>
+        </div>
+
+        {/* Referral Link */}
+        <div className="w-full text-left space-y-2">
+          <p className="text-sm text-gray-500">
+            Your unique referral link
+          </p>
+
+          <div className="relative">
+            <input
+              value={referralLink}
+              readOnly
+              className="w-full h-14 rounded-2xl border px-6 pr-14 bg-white text-center"
+            />
+
+            <button
+              onClick={handleCopy}
+              className="absolute right-1 top-1/2 -translate-y-1/2 p-2 rounded-lg hover:bg-gray-100"
+            >
+             <img src="/icons/copy.svg" alt="" />
+            </button>
+          </div>
+        </div>
+
+        {/* Invite Button */}
+        <button className="w-full h-14 rounded-2xl bg-black text-white text-base font-medium hover:opacity-90 transition">
+          Invite friends
+        </button>
+
+      </div>
+    </div>
   );
 }

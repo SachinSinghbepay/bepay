@@ -5,7 +5,7 @@ import ProfileMenu from "../components/ProfileMenu";
 export default function TopHeader({ title, onProfileClick }) {
     const titleMap = {
         dashboard: "Overview",
-        banking: "Banking",
+        banking: "Virtual Account",
         beneficiary: "Beneficiaries",
         team: "Team",
         invite: "Invite",

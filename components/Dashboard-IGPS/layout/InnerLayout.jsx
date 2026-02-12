@@ -22,6 +22,13 @@ import BeneficiarySuccessModal from "../modals/BeneficiarySuccessModal";
 import SendGlobalPayoutModal from "../modals/SendGlobalPayoutModal";
 import ConfirmGlobalPayoutModal from "../modals/ConfirmGlobalPayoutModal";
 import TransferRequestSubmittedModal from "../modals/TransferRequestSubmittedModal";
+import GetPaidModal from "../modals/GetPaidModal";
+import PayToEmailModal from "../modals/PayToEmailModal";
+import AddNewEmail from "../modals/AddNewEmail";
+import PaymentSent from "../modals/PaymentSent";
+import PayToWalletModal from "../modals/PayToWalletModal";
+import AddNewWalletBeneficiary from "../modals/AddNewWalletBeneficiary";
+import AddSwiftBeneficiaryModal from "../modals/AddSwiftBeneficiaryModal";
 
 
 export default function InnerLayout() {
@@ -94,7 +101,20 @@ export default function InnerLayout() {
             <DepositSelectModal
               onClose={closeModal}
               onSelect={(network) =>
-                openModal("deposit-address", { network })
+                openModal("deposit-address", {
+                  network,
+                  showOtherTokens: modalProps?.showOtherTokens,
+                  showBackButton: modalProps?.showBackButton,
+                  heading: modalProps?.heading
+                })
+              }
+              showOtherTokens={modalProps?.showOtherTokens}
+              showBackButton={modalProps?.showBackButton}
+              heading={modalProps?.heading}
+              onBack={() =>
+                modalProps?.showBackButton
+                  ? openModal("get-paid")
+                  : closeModal()
               }
             />
           )}
@@ -103,7 +123,13 @@ export default function InnerLayout() {
             <DepositAddressModal
               {...modalProps}
               onClose={closeModal}
-              onBack={() => openModal("deposit-select")}
+              onBack={() =>
+                openModal("deposit-select", {
+                  showOtherTokens: modalProps?.showOtherTokens,
+                  showBackButton: modalProps?.showBackButton,
+                  heading: modalProps?.heading
+                })
+              }
             />
           )}
 
@@ -157,6 +183,49 @@ export default function InnerLayout() {
               onSendAnother={() => openModal("send-globalpayout")}
             />
           )}
+
+          {modal === "get-paid" && (
+            <GetPaidModal
+              onClose={closeModal}
+              onShowWallet={() =>
+                openModal("deposit-select", {
+                  showOtherTokens: false,
+                  showBackButton: true,
+                  heading: "Get Paid"
+                })
+              }
+              onShowBank={() => openModal("bank-transfer")}
+            />
+          )}
+
+          {modal === "pay-to-email" && (
+            <PayToEmailModal onClose={closeModal} />
+          )}
+
+          {modal === "add-new-email" && (
+            <AddNewEmail onClose={closeModal} />
+          )}
+
+          {modal === "payment-sent" && (
+            <PaymentSent onClose={closeModal} />
+          )}
+
+
+          {modal === "pay-to-wallet" && (
+            <PayToWalletModal onClose={closeModal} />
+          )}
+
+          {modal === "add-new-wallet" && (
+            <AddNewWalletBeneficiary onClose={closeModal} />
+          )}
+
+
+          {modal === "add-new-swift" && (
+            <AddSwiftBeneficiaryModal onClose={closeModal} />
+          )}
+
+
+
 
 
 
