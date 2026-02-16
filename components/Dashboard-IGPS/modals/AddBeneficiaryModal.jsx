@@ -8,24 +8,24 @@ const igpsService = new IgpsService();
 export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
     const scrollRef = useRef(null);
 
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el) return;
 
-    const onWheel = (e) => {
-      const { scrollTop, scrollHeight, clientHeight } = el;
-      const atTop = scrollTop === 0;
-      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+        const onWheel = (e) => {
+            const { scrollTop, scrollHeight, clientHeight } = el;
+            const atTop = scrollTop === 0;
+            const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
 
-      if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
-        e.preventDefault();
-      } else {
-        e.stopPropagation();
-      }
-    };
+            if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+                e.preventDefault();
+            } else {
+                e.stopPropagation();
+            }
+        };
         el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, []);
+        return () => el.removeEventListener("wheel", onWheel);
+    }, []);
 
 
     const [loading, setLoading] = useState(false);
@@ -47,6 +47,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
     const [state, setState] = useState("");
     const [zip, setZip] = useState("");
 
+
     const countryOptions = ["United States", "United Kingdom", "Germany", "India"];
 
     // --- WALLET STATE ---
@@ -63,20 +64,40 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
 
     // Bank Details
     const [accountNumber, setAccountNumber] = useState("");
-    const [swiftCode, setSwiftCode] = useState("");
+
     const [routingNumber, setRoutingNumber] = useState(""); // US
     const [sortCode, setSortCode] = useState(""); // UK
     const [ifscCode, setIfscCode] = useState(""); // IN
     const [bankId, setBankId] = useState(""); // IN
+    const [beneficiaryType, setBeneficiaryType] = useState("individual");
+    const [accountType, setAccountType] = useState("");
+    const [phoneCode, setPhoneCode] = useState("+91");
+    const [phoneNumber, setPhoneNumber] = useState("");
+
+    const beneficiaryTypeOptions = [
+        { label: "Individual", value: "individual" },
+        { label: "Business", value: "business" }
+    ];
+
+    const accountTypeOptions = [
+        { label: "Savings", value: "savings" },
+        { label: "Checking / Current account", value: "current" }
+    ];
+
+    const phoneCodeOptions = [
+        { label: "+91 (India)", value: "+91" },
+        { label: "+1 (USA)", value: "+1" },
+        { label: "+44 (UK)", value: "+44" },
+        { label: "+49 (Germany)", value: "+49" },
+        { label: "+971 (UAE)", value: "+971" }
+    ];
 
     // Switcher Logic
     const handleBankChange = () => {
         setAddBank(v => !v);
-        if (!addBank) setAddWallet(false);
     };
     const handleWalletChange = () => {
         setAddWallet(v => !v);
-        if (!addWallet) setAddBank(false);
     };
 
     // --- HANDLERS ---
@@ -97,7 +118,20 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
     };
 
     const isBankFormValid = () => {
-        if (!firstName.trim() || !country || !accountNumber) return false;
+        if (!beneficiaryType) return false;
+
+        if (beneficiaryType === "individual") {
+            if (!firstName.trim()) return false;
+            if (!lastName.trim()) return false;
+        }
+
+        if (!email.trim()) return false;
+        if (!country) return false;
+        if (!accountNumber.trim()) return false;
+        if (!accountType) return false;
+        if (!bankId.trim()) return false;
+        if (!ifscCode.trim()) return false;
+
         return true;
     };
 
@@ -105,6 +139,9 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
         if (loading) return;
         setLoading(true);
         setError("");
+
+    const fullPhone =
+        phoneNumber.trim() ? `${phoneCode}${phoneNumber}` : undefined;
 
         try {
             let payload = {};
@@ -139,18 +176,23 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                 if (!isBankFormValid()) throw new Error("Please fill all required bank fields.");
 
                 payload = {
-                    type: 'individual', // Defaulting to individual for consistency with common fields
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
+                    type: beneficiaryType,
+                    ...(beneficiaryType === "individual" && {
+                        firstName,
+                        lastName
+                    }),
+                    ...(beneficiaryType === "business" && {
+                        businessName: `${firstName} ${lastName}`
+                    }),
+                    email,
+                    ...(fullPhone && { phone: fullPhone }),
                     address: commonAddress,
                     paymentInfo: {
-                        paymentType: 'bank_account',
-                        accountNumber: accountNumber,
-                        swiftCode: swiftCode,
-                        ...(country === "United States" && { routingNumber }),
-                        ...(country === "United Kingdom" && { sortCode }),
-                        ...(country === "India" && { ifscCode, bankId }),
+                        paymentType: "bank_account",
+                        accountNumber,
+                        accountType,
+                        bankId,
+                        ifscCode
                     }
                 };
             }
@@ -220,63 +262,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                         />
                     </div>
 
-                    {/* Address Section */}
-                    <div className="space-y-4 pt-2">
-                        <h3 className="text-sm font-medium text-gray-900">Address</h3>
 
-                        <div className="space-y-2">
-                            <label className="text-sm text-[#6A6A6A]">Country</label>
-                            <select
-                                value={country}
-                                onChange={(e) => setCountry(e.target.value)}
-                                className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black bg-white"
-                            >
-                                <option value="">Select Country</option>
-                                {countryOptions.map(c => <option key={c} value={c}>{c}</option>)}
-                            </select>
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-sm text-[#6A6A6A]">Street Address</label>
-                            <input
-                                value={addressLine1}
-                                onChange={(e) => setAddressLine1(e.target.value)}
-                                placeholder="123 Main St"
-                                className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <label className="text-sm text-[#6A6A6A]">City</label>
-                                <input
-                                    value={city}
-                                    onChange={(e) => setCity(e.target.value)}
-                                    placeholder="New York"
-                                    className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm text-[#6A6A6A]">State</label>
-                                <input
-                                    value={state}
-                                    onChange={(e) => setState(e.target.value)}
-                                    placeholder="NY"
-                                    className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-sm text-[#6A6A6A]">Postal Code</label>
-                            <input
-                                value={zip}
-                                onChange={(e) => setZip(e.target.value)}
-                                placeholder="10001"
-                                className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
-                            />
-                        </div>
-                    </div>
 
                     {/* SELECTOR */}
                     <div className="grid grid-cols-2 gap-4 pt-4">
@@ -297,19 +283,139 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                     {/* --- BANK FORM --- */}
                     {addBank && (
                         <div className="pt-8 space-y-6">
-                            <div className="p-4 bg-gray-50 border rounded-xl text-sm text-gray-600">
-                                Bank Account Fields
-                            </div>
-                            {/* Render Simplified Bank Fields */}
                             <div className="space-y-4">
-                                <input placeholder="Account Number / IBAN" value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)} className="w-full h-12 border rounded-xl px-4" />
-                                <input placeholder="SWIFT / BIC" value={swiftCode} onChange={(e) => setSwiftCode(e.target.value)} className="w-full h-12 border rounded-xl px-4" />
-                                {country === "United States" &&
-                                    <input placeholder="Routing Number" value={routingNumber} onChange={(e) => setRoutingNumber(e.target.value)} className="w-full h-12 border rounded-xl px-4" />
-                                }
+
+                                {/* Account Number */}
+                                <div className="space-y-2">
+                                    <label className="text-sm text-gray-500">Beneficiary type</label>
+                                    <CustomSelect
+                                        options={beneficiaryTypeOptions}
+                                        value={beneficiaryType}
+                                        onChange={setBeneficiaryType}
+                                        placeholder="Select beneficiary type"
+                                    />
+                                </div>
+                                <input
+                                    placeholder="Account Number"
+                                    value={accountNumber}
+                                    onChange={(e) => setAccountNumber(e.target.value)}
+                                    className="w-full h-12 border rounded-xl px-4"
+                                />
+
+                                {/* Account Type */}
+                                <div className="space-y-2">
+                                    <label className="text-sm text-gray-500">Account type</label>
+                                    <CustomSelect
+                                        options={accountTypeOptions}
+                                        value={accountType}
+                                        onChange={setAccountType}
+                                        placeholder="Select account type"
+                                    />
+                                </div>
+
+                                {/* Bank ID */}
+                                <input
+                                    placeholder="Bank ID"
+                                    value={bankId}
+                                    onChange={(e) => setBankId(e.target.value)}
+                                    className="w-full h-12 border rounded-xl px-4"
+                                />
+
+                                {/* IFSC Code (India example) */}
+                                <input
+                                    placeholder="IFSC Code"
+                                    value={ifscCode}
+                                    onChange={(e) => setIfscCode(e.target.value)}
+                                    className="w-full h-12 border rounded-xl px-4"
+                                />
+
+                                <div className="space-y-2">
+                                    <label className="text-sm text-[#6A6A6A]">
+                                        Phone number (optional)
+                                    </label>
+
+                                    <div className="flex gap-3">
+
+                                        {/* Country Code Select */}
+                                        <div className="w-[130px]">
+                                            <CustomSelect
+                                                options={phoneCodeOptions}
+                                                value={phoneCode}
+                                                onChange={setPhoneCode}
+                                            />
+                                        </div>
+
+                                        {/* Phone Number Input */}
+                                        <input
+                                            value={phoneNumber}
+                                            onChange={(e) => setPhoneNumber(e.target.value)}
+                                            placeholder="Enter beneficiary phone number"
+                                            className="flex-1 h-12 rounded-xl border px-4 outline-none focus:border-black"
+                                        />
+
+                                    </div>
+                                </div>
+                            </div>
+                            {/* Address Section */}
+                            <div className="space-y-4 pt-2">
+                                <h3 className="text-sm font-medium text-gray-900">Address</h3>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm text-[#6A6A6A]">Country</label>
+                                    <select
+                                        value={country}
+                                        onChange={(e) => setCountry(e.target.value)}
+                                        className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black bg-white"
+                                    >
+                                        <option value="">Select Country</option>
+                                        {countryOptions.map(c => <option key={c} value={c}>{c}</option>)}
+                                    </select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm text-[#6A6A6A]">Street Address</label>
+                                    <input
+                                        value={addressLine1}
+                                        onChange={(e) => setAddressLine1(e.target.value)}
+                                        placeholder="123 Main St"
+                                        className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                    />
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-[#6A6A6A]">City</label>
+                                        <input
+                                            value={city}
+                                            onChange={(e) => setCity(e.target.value)}
+                                            placeholder="New York"
+                                            className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-[#6A6A6A]">State</label>
+                                        <input
+                                            value={state}
+                                            onChange={(e) => setState(e.target.value)}
+                                            placeholder="NY"
+                                            className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-sm text-[#6A6A6A]">Postal Code</label>
+                                    <input
+                                        value={zip}
+                                        onChange={(e) => setZip(e.target.value)}
+                                        placeholder="10001"
+                                        className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                    />
+                                </div>
                             </div>
                         </div>
                     )}
+
 
                     {/* --- WALLET FORM --- */}
                     {addWallet && (

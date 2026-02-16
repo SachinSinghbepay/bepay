@@ -35,6 +35,7 @@ export default function SendGlobalPayoutModal({
     }, []);
 
 
+
     // Form State
     const [selectedBeneficiary, setSelectedBeneficiary] = useState(beneficiary || null);
     const [amount, setAmount] = useState("");
@@ -107,7 +108,20 @@ export default function SendGlobalPayoutModal({
                     igpsService.listBeneficiaries(),
                     igpsService.listWallets()
                 ]);
+                console.log("========== FULL BENEFICIARIES RESPONSE ==========");
+                console.dir(benRes, { depth: null });
 
+                console.log("========== FULL WALLETS RESPONSE ==========");
+                console.dir(walletRes, { depth: null });
+
+                console.log("WALLET RESPONSE STRUCTURE:", {
+                    hasData: !!walletRes.data,
+                    dataKeys: walletRes.data ? Object.keys(walletRes.data) : [],
+                    fullData: walletRes.data
+                })
+                // Optional: JSON stringify version
+                console.log("BEN JSON:", JSON.stringify(benRes, null, 2));
+                console.log("WALLET JSON:", JSON.stringify(walletRes, null, 2));
                 if (benRes.success && Array.isArray(benRes.data)) {
                     setBeneficiaries(benRes.data);
                 }
@@ -519,6 +533,19 @@ function AmountBox({
     targetCurrency,
     sourceCurrencies
 }) {
+
+    const [open, setOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
     const networkIcons = {
         ethereum: "/icons/eth.svg",
         polygon: "/icons/polygon.svg",
@@ -585,7 +612,7 @@ function AmountBox({
                                     {/* BIG TOKEN ICON */}
                                     {w.tokenUrl && (
                                         <img
-                                                 src={w.networkUrl}
+                                            src={w.networkUrl}
                                             onError={(e) => (e.target.style.display = "none")}
                                             className="h-8 w-8 rounded-full"
                                             alt="token"
@@ -593,35 +620,70 @@ function AmountBox({
                                     )}
 
                                     {/* SMALL NETWORK ICON (OVERLAP) */}
-                                    {/* {w.networkUrl && (
+                                    {w.networkUrl && (
                                         <img
                                             src={w.networkUrl}
                                             onError={(e) => (e.target.style.display = "none")}
                                             className="absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-white"
                                             alt="network"
                                         />
-                                    )} */}
+                                    )}
                                 </div>
                             ))}
                         {/* SELECT DROPDOWN */}
-                        <select
-                            value={currency}
-                            onChange={(e) => setCurrency(e.target.value)}
-                            className="rounded-xl px-4 py-3 border shadow-sm text-[18px] font-semibold appearance-none cursor-pointer"
-                        >
-                            {sourceCurrencies.length > 0 ? (
-                                sourceCurrencies.map((c) => (
-                                    <option
-                                        key={c.fullCurrency}
-                                        value={c.fullCurrency}
-                                    >
-                                        {c.currency} ({c.chain})
-                                    </option>
-                                ))
-                            ) : (
-                                <option value="">Loading...</option>
+                        <div ref={dropdownRef} className="relative">
+
+                            {/* BUTTON */}
+                            <button
+                                onClick={() => setOpen(v => !v)}
+                                className="flex items-center gap-3 bg-[#EBEBEB] px-4 py-3 rounded-xl border text-[18px] font-semibold"
+                            >
+                                <span>
+                                    {
+                                        sourceCurrencies.find(c => c.fullCurrency === currency)?.currency
+                                    }
+                                    {" "}
+                                    (
+                                    {
+                                        sourceCurrencies.find(c => c.fullCurrency === currency)?.chain
+                                    }
+                                    )
+                                </span>
+
+                                {/* Arrow */}
+                                <svg
+                                    className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path d="M6 9l6 6 6-6" />
+                                </svg>
+                            </button>
+
+                            {/* DROPDOWN */}
+                            {open && (
+                                <div className="absolute mt-2 w-full bg-white border rounded-xl shadow-lg z-50">
+                                    {sourceCurrencies.map((c) => (
+                                        <button
+                                            key={c.fullCurrency}
+                                            onClick={() => {
+                                                setCurrency(c.fullCurrency);
+                                                setOpen(false);
+                                            }}
+                                            className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm"
+                                        >
+                                            {c.currency}{" "}
+                                            <span className="font-light">
+                                                ({c.chain})
+                                            </span>
+                                        </button>
+                                    ))}
+                                </div>
                             )}
-                        </select>
+                        </div>
+
 
                     </div>
 

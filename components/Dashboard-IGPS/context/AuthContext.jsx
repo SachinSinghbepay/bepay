@@ -82,23 +82,33 @@ export function AuthProvider({ children }) {
 
     const logout = async () => {
         setLoading(true);
+
         try {
-            await igpsService.logout(); // Best effort
-        } catch (e) {
-            console.error(e);
+            // Call backend logout (optional but good practice)
+            await igpsService.logout();
+        } catch (error) {
+            console.error("Logout API failed:", error);
         }
 
-        // Clear local
+        // 🔥 Clear service memory tokens
+        igpsService.setTokens("", "");
+
+        // 🔥 Delete cookies properly
+        if (typeof window !== "undefined") {
+            document.cookie = "igps_token=; path=/; max-age=0; SameSite=Strict";
+            document.cookie = "igps_refresh=; path=/; max-age=0; SameSite=Strict";
+        }
+
+        // 🔥 Clear local React state
         setUser(null);
         setOrganization(null);
-        igpsService.setTokens("", "");
-        if (typeof window !== 'undefined') {
-            document.cookie = "igps_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
-            document.cookie = "igps_refresh=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
-        }
+
+        // 🔥 Redirect to login
         router.push("/igps/login");
+
         setLoading(false);
     };
+
 
     return (
         <AuthContext.Provider value={{ user, organization, loading, login, logout, igpsService }}>

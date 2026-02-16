@@ -1,6 +1,13 @@
 import Image from "next/image";
-
+import { useAuth } from "../context/AuthContext";
 export default function Profile() {
+
+    const { user, organization, loading } = useAuth();
+    if (loading) return <div>Loading...</div>;
+
+        const displayName = organization?.name || user?.organizationName || (user?.firstName ? `${user.firstName} ${user.lastName}` : "User");
+        const email = user?.email || "user@example.com"
+        const status = user?.isActive ? 'active' : "unverified";
     return (
         <div className="px-8 space-y-8 max-w-full">
 
@@ -21,10 +28,10 @@ export default function Profile() {
 
                     <div>
                         <p className="text-lg font-semibold text-gray-900">
-                            bepay money europe S.R.L
+                         {displayName}
                         </p>
                         <p className="text-sm text-gray-500">
-                            info@bepay.money
+                         {email}
                         </p>
                     </div>
                 </div>
@@ -44,7 +51,7 @@ export default function Profile() {
                         </svg>
                     </span>
 
-                    KYC Verified
+                   {status}
                 </div>
 
             </div>

@@ -1,7 +1,7 @@
 export default function ModalFrame({ size = "lg", children }) {
   const sizes = {
-    lg: "w-[842px] h-[850px]",
-    md: "w-[650px] h-[850px]",
+    lg: "w-[842px] h-[90vh]",
+    md: "w-[650px] h-[90vh]",
   };
 
   return (

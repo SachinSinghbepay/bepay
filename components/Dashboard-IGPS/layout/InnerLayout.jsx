@@ -10,6 +10,7 @@ import Beneficiary from "../pages/Beneficiary";
 import Team from "../pages/Team";
 import Invite from "../pages/Invite";
 import Profile from "../pages/Profile";
+import LegalPolicy from "../pages/Legal";
 
 import ModalRoot from "../layout/ModalRoot";
 import TransactionDetails from "../modals/TransactionDetails";
@@ -30,7 +31,11 @@ import PayToWalletModal from "../modals/PayToWalletModal";
 import AddNewWalletBeneficiary from "../modals/AddNewWalletBeneficiary";
 import AddSwiftBeneficiaryModal from "../modals/AddSwiftBeneficiaryModal";
 import PayToSwiftModal from "../modals/PayToSwiftModal";
-
+import LearnAboutRolesModal from "../modals/LearnAboutRolesModal";
+import AddTeamMemberModal from "../modals/AddTeamMemberModal";
+import InviteSuccessModal from "../modals/InviteSuccessModal";
+import EditTeamMemberModal from "../modals/EditTeamMemberModal";
+import RemoveMemberModal from "../modals/RemoveMemberModal";
 
 export default function InnerLayout() {
   const [activePage, setActivePage] = useState("dashboard");
@@ -61,6 +66,8 @@ export default function InnerLayout() {
         return <Invite onOpenModal={openModal} />;
       case "profile":
         return <Profile onOpenModal={openModal} />;
+      case "privacy-policies":
+        return <LegalPolicy onOpenModal={openModal} />;
       default:
         return <Dashboard onOpenModal={openModal} />;
     }
@@ -313,6 +320,44 @@ export default function InnerLayout() {
               }
             />
           )}
+
+          {modal === "learn-about-roles" && (
+            <LearnAboutRolesModal
+              onClose={closeModal}
+            />
+          )}
+
+          {modal === "add-new-member" && (
+            <AddTeamMemberModal
+              onClose={closeModal}
+            />
+          )}
+
+
+          {modal === "invite-success" && (
+            <InviteSuccessModal
+              onClose={closeModal}
+              name={modalProps?.name}
+              email={modalProps?.email}
+              role={modalProps?.role}
+            />
+          )}
+
+          {modal === "edit-member" && (
+            <EditTeamMemberModal
+              onClose={closeModal}
+              member={modalProps}
+            />
+          )}
+
+
+          {modal === "remove-member" && (
+            <RemoveMemberModal
+              onClose={closeModal}
+              member={modalProps}
+            />
+          )}
+
 
 
 
