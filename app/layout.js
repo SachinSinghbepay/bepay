@@ -6,6 +6,7 @@ import SmoothScroll from "@/components/smoothScroll";
 import Header from "@/components/header";
 import { AuthProvider } from "@/lib/auth";
 import ConditionalFooter from "@/components/ConditionalFooter";
+import ConditionalHeader from "@/components/ConditionalHeader";
 import ConditionalCookieConsent from "@/components/ConditionalCookieConsent";
 import MixpanelProvider from '@/components/MixpanelProvider';
 import CampaignTracker from '@/components/campaignTracker';
@@ -59,7 +60,7 @@ export default function RootLayout({ children }) {
       <body className={`${openSans.variable} ${montserrat.variable} antialiased`}>
         <MixpanelProvider>
           <SmoothScroll>
-            <Header />
+            <ConditionalHeader  />
             <ConditionalCookieConsent />
             <CampaignTracker />
             <AuthProvider>{children}</AuthProvider>

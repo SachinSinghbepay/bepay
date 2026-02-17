@@ -1,7 +1,50 @@
+"use client";
 import ModalFrame from "./ModalFrame";
+import { IgpsService } from "../../../services/igpsService";
+import { useState } from "react";
 
-export default function RemoveMemberModal({ onClose, member }) {
+const igpsService = new IgpsService();
+
+
+
+export default function RemoveMemberModal({ onClose, member, refresh }) {
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
     const initial = member?.name?.charAt(0).toUpperCase();
+    const isInvite = member?.type === "invite";
+    const handleRemove = async () => {
+        if (!member?.id) return;
+
+        try {
+            setLoading(true);
+            setError("");
+
+            let res;
+
+            if (member.type === "invite") {
+                // Pending invite → cancel invite
+                res = await igpsService.cancelInvite(member.id);
+                console.log("REMOVE RESPONSE:", res);
+            } else {
+                // Active member → remove member
+                res = await igpsService.removeMember(member.id);
+                console.log("REMOVE RESPONSE:", res);
+            }
+
+            if (res.success) {
+                refresh?.();
+                onClose();
+            } else {
+                setError(res.error || "Failed to remove");
+            }
+
+        } catch (err) {
+            setError("Something went wrong");
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <ModalFrame size="sm">
@@ -24,7 +67,7 @@ export default function RemoveMemberModal({ onClose, member }) {
 
                 {/* Title */}
                 <h2 className="text-2xl font-semibold mb-4">
-                    Remove {member?.name}?
+                    {isInvite ? "Cancel invite for" : "Remove"} {member?.name}?
                 </h2>
 
                 {/* Description */}
@@ -35,11 +78,14 @@ export default function RemoveMemberModal({ onClose, member }) {
                 </p>
 
                 <p className="text-red-600 text-sm mb-10">
-                    This action is cannot be undone. The user will lose access to your organisation.
+                    {isInvite
+                        ? "This invitation will be cancelled."
+                        : "This action cannot be undone. The user will lose access to your organisation."
+                    }
                 </p>
 
                 {/* Buttons */}
-                <div className="flex gap-4">
+                <div className="flex gap-4 mt-30">
                     <button
                         onClick={onClose}
                         className="flex-1 h-14 rounded-2xl border text-gray-700 hover:bg-gray-50 transition"
@@ -48,16 +94,19 @@ export default function RemoveMemberModal({ onClose, member }) {
                     </button>
 
                     <button
+                        disabled={loading}
                         className="flex-1 h-14 rounded-2xl bg-black text-white hover:bg-gray-900 transition"
-                        onClick={() => {
-                            console.log("Remove member:", member?.id);
-                            onClose();
-                        }}
+                        onClick={handleRemove}
                     >
-                        Remove
+                        {loading ? "Removing..." : "Remove"}
                     </button>
-                </div>
 
+                </div>
+                {error && (
+                    <p className="text-red-600 text-sm mt-8 ">
+                        {error}
+                    </p>
+                )}
             </div>
         </ModalFrame>
     );

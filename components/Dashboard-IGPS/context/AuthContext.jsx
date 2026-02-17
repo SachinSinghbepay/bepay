@@ -109,9 +109,21 @@ export function AuthProvider({ children }) {
         setLoading(false);
     };
 
+    const refreshUser = async () => {
+    try {
+        const res = await igpsService.getProfile();
+        if (res.success) {
+            setUser(res.data.user);
+            setOrganization(res.data.organization || null);
+        }
+    } catch (err) {
+        console.error("Refresh user failed", err);
+    }
+};
+
 
     return (
-        <AuthContext.Provider value={{ user, organization, loading, login, logout, igpsService }}>
+        <AuthContext.Provider value={{ user, organization, loading, login, logout, igpsService,  refreshUser, }}>
             {children}
         </AuthContext.Provider>
     );

@@ -36,6 +36,9 @@ import AddTeamMemberModal from "../modals/AddTeamMemberModal";
 import InviteSuccessModal from "../modals/InviteSuccessModal";
 import EditTeamMemberModal from "../modals/EditTeamMemberModal";
 import RemoveMemberModal from "../modals/RemoveMemberModal";
+import ChangePasswordModal from "../modals/ChangePasswordModal";
+import EnableTwoFactorModal from "../modals/EnableTwoFactorModal";
+import BackupCodesModal from "../modals/BackupCodesModal";
 
 export default function InnerLayout() {
   const [activePage, setActivePage] = useState("dashboard");
@@ -197,13 +200,6 @@ export default function InnerLayout() {
             />
           )}
 
-          {/* {modal === "send-globalpayout" && (
-            <SendGlobalPayoutModal
-              onClose={closeModal}
-              onAddAnother={() => openModal("global-payout")}
-              beneficiary={modalProps?.beneficiary}
-            />
-          )} */}
 
           {modal === "send-globalpayout" && (
             <SendGlobalPayoutModal
@@ -326,10 +322,15 @@ export default function InnerLayout() {
               onClose={closeModal}
             />
           )}
-
           {modal === "add-new-member" && (
             <AddTeamMemberModal
               onClose={closeModal}
+              onSubmit={(data) =>
+                openModal("invite-success", {
+                  type: "success",
+                  ...data,
+                })
+              }
             />
           )}
 
@@ -337,29 +338,51 @@ export default function InnerLayout() {
           {modal === "invite-success" && (
             <InviteSuccessModal
               onClose={closeModal}
-              name={modalProps?.name}
-              email={modalProps?.email}
-              role={modalProps?.role}
+              {...modalProps}
             />
           )}
 
           {modal === "edit-member" && (
             <EditTeamMemberModal
               onClose={closeModal}
-              member={modalProps}
+              member={modalProps?.member}
+              refresh={modalProps?.refresh}
             />
           )}
-
 
           {modal === "remove-member" && (
             <RemoveMemberModal
               onClose={closeModal}
-              member={modalProps}
+              member={modalProps?.member}
+              refresh={modalProps?.refresh}
             />
           )}
 
+          {modal === "change-password" && (
+            <ChangePasswordModal
+              onClose={closeModal}
+            />
+          )}
 
+          {modal === "enable-two-factor" && (
+            <EnableTwoFactorModal
+              onClose={closeModal}
+              qrCode={modalProps?.qrCode}
+              secret={modalProps?.secret}
+              backupCodes={modalProps?.backupCodes}
+              onConfirm={(codes) =>
+                openModal("backup-codes", { codes })
+              }
+            />
+          )}
 
+          {modal === "backup-codes" && (
+            <BackupCodesModal
+              onClose={closeModal}
+              codes={modalProps?.codes}
+              onContinue={closeModal}
+            />
+          )}
 
 
 

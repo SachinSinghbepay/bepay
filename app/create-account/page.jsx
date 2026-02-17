@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-
+import CreateAccountLayout from "./Layout";
 import StepEmail from "./StepEmail";
 import StepVerifyCode from "./StepVerifyCode";
 import StepPersonalDetails from "./StepPersonalDetails";
 import StepBusinessDetails from "./StepBusinessDetails";
-import StepComplete from "./StepComplete";
 
 export default function CreateAccountPage() {
   const [step, setStep] = useState(1);
@@ -16,53 +15,39 @@ export default function CreateAccountPage() {
     code: "",
     firstName: "",
     lastName: "",
-    password: "",
-    accountType: "", // business or individual
-    usageType: "",
-    referralSource: ""
   });
 
   const next = () => setStep((prev) => prev + 1);
   const back = () => setStep((prev) => prev - 1);
 
+  const renderStep = () => {
+    switch (step) {
+      case 1:
+        return <StepEmail data={formData} setData={setFormData} onNext={next} />;
+      case 2:
+        return <StepVerifyCode data={formData} setData={setFormData} onNext={next} onBack={back} />;
+      case 3:
+        return <StepPersonalDetails data={formData} setData={setFormData} onNext={next} onBack={back} />;
+      default:
+      case 4:
+        return (
+          <StepBusinessDetails
+            data={formData}
+            setData={setFormData}
+            onNext={() => {
+              console.log("FINAL DATA:", formData);
+
+            }}
+            onBack={back}
+          />
+        );
+        return null;
+    }
+  };
+
   return (
-    <>
-      {step === 1 && (
-        <StepEmail
-          data={formData}
-          setData={setFormData}
-          onNext={next}
-        />
-      )}
-
-      {step === 2 && (
-        <StepVerifyCode
-          data={formData}
-          setData={setFormData}
-          onNext={next}
-          onBack={back}
-        />
-      )}
-
-      {step === 3 && (
-        <StepPersonalDetails
-          data={formData}
-          setData={setFormData}
-          onNext={next}
-          onBack={back}
-        />
-      )}
-
-      {step === 4 && (
-        <StepBusinessDetails
-          data={formData}
-          setData={setFormData}
-          onNext={next}
-          onBack={back}
-        />
-      )}
-
-      {step === 5 && <StepComplete />}
-    </>
+    <CreateAccountLayout stepKey={step}>
+      {renderStep()}
+    </CreateAccountLayout>
   );
 }

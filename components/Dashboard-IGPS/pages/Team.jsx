@@ -2,47 +2,113 @@
 
 import { Trash2, Mail, Landmark, Wallet } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { IgpsService } from "../../../services/igpsService";
+
+const igpsService = new IgpsService();
+
 
 export default function Team({ onOpenModal }) {
     // 🔥 Toggle this to test empty vs populated
-    const members = [
-        {
-            id: 1,
-            name: "bepay money europe SRL",
-            email: "info@bepay.money",
-            role: "Owner",
-            status: "Active"
-        },
-        {
-            id: 2,
-            name: "Chahat soni",
-            email: "Chahatsoni9@gmail.com",
-            role: "Employee",
-            status: "Invited"
-        },
-        {
-            id: 3,
-            name: "Chahat soni",
-            email: "Chahatsoni9@gmail.com",
-            role: "Bookkeeper",
-            status: "Invited"
-        },
-        {
-            id: 4,
-            name: "Chahat soni",
-            email: "Chahatsoni9@gmail.com",
-            role: "Admin",
-            status: "Invited"
-        },
-        {
-            id: 5,
-            name: "Chahat soni",
-            email: "Chahatsoni9@gmail.com",
-            role: "Manager",
-            status: "Invited"
-        },
+    // const members = [
+    //     {
+    //         id: 1,
+    //         name: "bepay money europe SRL",
+    //         email: "info@bepay.money",
+    //         role: "Owner",
+    //         status: "Active"
+    //     },
+    //     {
+    //         id: 2,
+    //         name: "Chahat soni",
+    //         email: "Chahatsoni9@gmail.com",
+    //         role: "Employee",
+    //         status: "Invited"
+    //     },
+    //     {
+    //         id: 3,
+    //         name: "Chahat soni",
+    //         email: "Chahatsoni9@gmail.com",
+    //         role: "Bookkeeper",
+    //         status: "Invited"
+    //     },
+    //     {
+    //         id: 4,
+    //         name: "Chahat soni",
+    //         email: "Chahatsoni9@gmail.com",
+    //         role: "Admin",
+    //         status: "Invited"
+    //     },
+    //     {
+    //         id: 5,
+    //         name: "Chahat soni",
+    //         email: "Chahatsoni9@gmail.com",
+    //         role: "Manager",
+    //         status: "Invited"
+    //     },
 
-    ];
+    // ];
+    const [members, setMembers] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+
+    // fetching team members 
+    const fetchMembers = async () => {
+        try {
+            setLoading(true);
+
+            const [membersRes, invitesRes] = await Promise.all([
+                igpsService.listMembers(),
+                igpsService.listInvites(),
+            ]);
+
+            let activeMembers = [];
+            let pendingInvites = [];
+
+            // ACTIVE MEMBERS
+            if (membersRes.success && Array.isArray(membersRes.data)) {
+                activeMembers = membersRes.data.map((m) => ({
+                    id: m.id,
+                    name: m.email,
+                    email: m.email,
+                    role: m.role,
+                    status: "Active",
+                    type: "member",
+                }));
+            }
+
+            // PENDING INVITES
+            if (invitesRes.success && Array.isArray(invitesRes.data)) {
+                pendingInvites = invitesRes.data.map((i) => ({
+                    id: i.id,
+                    name: i.email,
+                    email: i.email,
+                    role: i.role,
+                    status: "Invited",
+                    type: "invite",
+                }));
+            }
+
+            // MERGE BOTH
+            setMembers([...activeMembers, ...pendingInvites]);
+
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchMembers();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="flex-1 px-8 py-8">
+                <p className="text-gray-500">Loading team members...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="flex-1 px-8 py-8 pb-22">
@@ -52,24 +118,27 @@ export default function Team({ onOpenModal }) {
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <h1 className="text-2xl font-semibold">Manage Teams</h1>
-                    <div>
+                    <div className="flex items-center gap-4">
                         <button
-                            className=" text-[#080808] px-6 py-3 rounded-full text-sm"
-                            onClick={() => onOpenModal("learn-about-roles")}>
-                            Learn more about roles
-                            <span className="ml-2 text-blue-500">→</span>
-
+                            className="flex items-center gap-2 text-[#080808] px-6 py-3 rounded-full text-sm"
+                            onClick={() => onOpenModal("learn-about-roles")}
+                        >
+                            <span>Learn more about roles</span>
+                            <img
+                                src="/icons/back.svg"
+                                alt=""
+                                className="rotate-180 w-4 h-4"
+                            />
                         </button>
                         {members.length > 0 && (
                             <button
-                                onClick={() => onOpenModal("add-new-member")}
+                                onClick={() => onOpenModal("add-new-member", { refresh: fetchMembers, })}
                                 className="mt-4 px-8 py-3 rounded-full bg-black text-white">
                                 Add team member
                             </button>
                         )}
                     </div>
                 </div>
-
                 {/* CONDITIONAL RENDER */}
                 {members.length === 0 ? (
                     <EmptyState onOpenModal={onOpenModal} />
@@ -108,18 +177,44 @@ export default function Team({ onOpenModal }) {
                                 {/* ACTION */}
                                 <div className="flex justify-end">
                                     <ActionMenu
-                                        onResend={() =>
-                                            onOpenModal("invite-success", {
-                                                name: member.name,
-                                                email: member.email,
-                                                role: member.role.toLowerCase(),
+                                        onResend={async () => {
+                                            try {
+                                                const res = await igpsService.inviteMember({
+                                                    email: member.email,
+                                                    role: member.role,
+                                                });
+
+                                                if (res.success) {
+                                                    onOpenModal("invite-success", {
+                                                        type: "success",
+                                                        name: member.name,
+                                                        email: member.email,
+                                                        role: member.role,
+                                                    });
+                                                } else {
+                                                    onOpenModal("invite-success", {
+                                                        type: "error",
+                                                        message: res.error || "Failed to resend invite",
+                                                    });
+                                                }
+                                            } catch (err) {
+                                                onOpenModal("invite-success", {
+                                                    type: "error",
+                                                    message: "Something went wrong",
+                                                });
+                                            }
+                                        }}
+                                        onEdit={() =>
+                                            onOpenModal("edit-member", {
+                                                member,
+                                                refresh: fetchMembers,
                                             })
                                         }
-                                        onEdit={() =>
-                                            onOpenModal("edit-member", member)
-                                        }
                                         onRemove={() =>
-                                            onOpenModal("remove-member", member)
+                                            onOpenModal("remove-member", {
+                                                member,
+                                                refresh: fetchMembers,
+                                            })
                                         }
                                     />
                                 </div>
@@ -141,7 +236,7 @@ function EmptyState({ onOpenModal }) {
                 Invite your team to collaborate on your IGPS account. Assign roles and control access permissions securely.
             </p>
             <button
-                onClick={() => onOpenModal("add-new-member")}
+                onClick={() => onOpenModal("add-new-member", { refresh: fetchMembers, })}
                 className="mt-4 px-8 py-3 rounded-full bg-black text-white">
                 Add team member
             </button>

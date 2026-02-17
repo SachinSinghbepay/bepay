@@ -1,22 +1,59 @@
-import { useState } from "react";
+"use client";
+import { useState, useEffect} from "react";
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
+import { IgpsService } from "../../../services/igpsService";
+
+const igpsService = new IgpsService();
 
 const roleOptions = [
-  { label: "Owner", value: "Owner" },
-  { label: "Admin", value: "Admin" },
-  { label: "Manager", value: "Manager" },
-  { label: "Bookkeeper", value: "Bookkeeper" },
-  { label: "Employee", value: "Employee" },
+  { label: "Owner", value: "owner" },
+  { label: "Admin", value: "admin" },
+  { label: "Manager", value: "manager" },
+  { label: "Bookkeeper", value: "bookkeeper" },
+  { label: "Employee", value: "employee" },
 ];
 
-export default function EditTeamMemberModal({ onClose, member }) {
-  const [firstName, setFirstName] = useState(member?.name?.split(" ")[0] || "");
-  const [lastName, setLastName] = useState(member?.name?.split(" ")[1] || "");
-  const [role, setRole] = useState(member?.role || "");
+export default function EditTeamMemberModal({ onClose, member: data, refresh }) {
+  const [firstName, setFirstName] = useState(data?.name?.split(" ")[0] || "");
+  const [lastName, setLastName] = useState(data?.name?.split(" ")[1] || "");
+  const [role, setRole] = useState("");
 
   const isValid = firstName && lastName && role;
+  const [loading, setLoading] = useState(false);
 
+  const handleUpdate = async () => {
+    if (!isValid) return;
+
+    try {
+      setLoading(true);
+
+      const res = await igpsService.updateMemberRole(data.id, {
+        role: role,
+      });
+
+      console.log("Update response:", res);
+
+      if (res.success) {
+        refresh?.();
+        onClose();
+      }
+    } catch (err) {
+      console.error("Failed to update member", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  useEffect(() => {
+    if (data?.role) {
+      setRole(data.role);
+    }
+  }, [data]);
+
+  const currentRoleLabel =
+    roleOptions.find(r => r.value === data?.role)?.label || data?.role;
   return (
     <ModalFrame size="sm">
       <div className="relative bg-white rounded-3xl">
@@ -24,7 +61,7 @@ export default function EditTeamMemberModal({ onClose, member }) {
         {/* HEADER */}
         <div className="flex items-center justify-between px-8 pt-8 pb-6 border-b">
           <h2 className="text-lg font-medium">
-            Edit {member?.email}
+            Edit {data?.email}
           </h2>
 
           <button onClick={onClose} className="text-gray-500">
@@ -37,13 +74,13 @@ export default function EditTeamMemberModal({ onClose, member }) {
           {/* INFO CARD */}
           <div className="bg-[#F7F7F7] rounded-3xl p-6 space-y-3">
             <p className="text-sm text-gray-500">Team member</p>
-            <p className="font-semibold text-lg">{member?.name}</p>
-            <p className="text-gray-600">{member?.email}</p>
+            <p className="font-semibold text-lg">{data?.name}</p>
+            <p className="text-gray-600">{data?.email}</p>
 
             <div className="flex items-center gap-3 pt-3">
               <span className="text-gray-500">Current role:</span>
               <span className="px-4 py-2 rounded-full bg-[#ECECEC] text-sm font-medium">
-                {member?.role}
+                {currentRoleLabel}
               </span>
             </div>
           </div>
@@ -82,12 +119,13 @@ export default function EditTeamMemberModal({ onClose, member }) {
           {/* ACTIONS */}
           <div className="pt-4 space-y-4">
             <button
-              disabled={!isValid}
+              onClick={handleUpdate}
+              disabled={!isValid || loading}
               className={`w-full h-14 rounded-2xl text-white font-medium
-                ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-400"}
-              `}
+    ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-400"}
+  `}
             >
-              Update
+              {loading ? "Updating..." : "Update"}
             </button>
 
             <button

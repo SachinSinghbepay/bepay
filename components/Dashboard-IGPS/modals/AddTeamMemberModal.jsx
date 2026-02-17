@@ -1,21 +1,21 @@
+"use client";
 import { useState } from "react";
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { IgpsService } from "../../../services/igpsService";
 
 const igpsService = new IgpsService();
-const roles = [
-    "Owner",
-    "Admin",
-    "Manager",
-    "Bookkeeper",
-    "Employee"
+const roleOptions = [
+    { label: "Owner", value: "owner" },
+    { label: "Admin", value: "admin" },
+    { label: "Member", value: "member" },
 ];
 
 export default function AddTeamMemberModal({
     onClose,
     onBack,
-    onSubmit
+    onSubmit,
+    refresh
 }) {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -28,9 +28,9 @@ export default function AddTeamMemberModal({
     const [error, setError] = useState("");
 
     const roleOptions = [
-        { label: "Owner", value: "OWNER" },
-        { label: "Admin", value: "ADMIN" },
-        { label: "Member", value: "MEMBER" },
+        { label: "Owner", value: "owner" },
+        { label: "Admin", value: "admin" },
+        { label: "Member", value: "member" },
     ];
 
     const handleInvite = async () => {
@@ -41,18 +41,24 @@ export default function AddTeamMemberModal({
 
         try {
             const payload = {
+                email: email.trim(),
+                role: role,
                 firstName: firstName.trim(),
                 lastName: lastName.trim(),
-                email: email.trim(),
-                role: role, // already lowercase from select
             };
 
             const res = await igpsService.inviteMember(payload);
 
             if (res.success) {
-                onClose(); // or open success modal
+                  refresh?.(); 
+                   onClose();   
+                onSubmit?.({
+                    name: `${firstName} ${lastName}`,
+                    email,
+                    role,
+                });
             } else {
-                setError(res.error || res.message || "Failed to send invitation");
+                setError(res.error || "Failed to send invitation");
             }
         } catch (err) {
             setError("Something went wrong. Please try again.");
