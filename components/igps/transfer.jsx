@@ -287,14 +287,29 @@ function Calculator() {
 
 
 
-  const getFontSizeForAmount = (value, { mobile = 14.52, desktop = 36 } = {}) => {
-    const n = Math.abs(Math.round(Number(value) || 0));
-    const digits = String(n).length;
-    if (digits <= 3) return `${desktop}px`;
-    if (digits <= 6) return `${Math.max(16, Math.round(desktop * 0.8))}px`;
-    if (digits <= 9) return `${Math.max(14, Math.round(desktop * 0.55))}px`;
-    return `${Math.max(12, Math.round(desktop * 0.45))}px`;
-  };
+const getFontSizeForAmount = (value, { mobile = 12, desktop = 36 } = {}) => {
+  const n = Math.abs(Math.round(Number(value) || 0));
+  const digits = String(n).length;
+
+  // Desktop font size based on number of digits
+  let sizeDesktop;
+  if (digits <= 3) sizeDesktop = desktop;
+  else if (digits <= 6) sizeDesktop = Math.round(desktop * 0.9);
+  else if (digits <= 9) sizeDesktop = Math.round(desktop * 0.85);
+  else sizeDesktop = Math.round(desktop * 0.55);
+
+  // Mobile font size based on number of digits
+  let sizeMobile;
+  if (digits <= 3) sizeMobile = mobile;
+  else if (digits <= 6) sizeMobile = Math.round(mobile * 0.8);
+  else if (digits <= 9) sizeMobile = Math.round(mobile * 0.6);
+  else sizeMobile = Math.round(mobile * 0.5);
+
+  // Use clamp with a scaling middle value
+  const scale = (sizeDesktop / 100) * 12; 
+  return `clamp(${sizeMobile}px, ${scale}vw, ${sizeDesktop}px)`;
+};
+
 
 
 
@@ -383,37 +398,32 @@ function Calculator() {
     <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6">
       {/* Top row */}
       <div className="mt-2 w-full bg-[#F6F6F6] rounded-2xl p-4 flex items-center justify-between">
-        <div className="flex-1">
-          <label className="text-sm text-gray-500">Your client pays</label>
+        <div className="flex-1 min-w-0">
+          <label className="text-xs sm:text-sm text-gray-500">Your client pays</label>
           <div className="mt-2">
             <div className="flex items-center min-w-0">
               <span
-                className="text-3xl font-bold mr-2"
+                className="text-2xl sm:text-3xl font-bold mr-1 sm:mr-2 flex-shrink-0"
                 style={{ lineHeight: 1, verticalAlign: 'middle' }}
               >
                 {selectedCurrency?.symbol}
               </span>
               <input
                 aria-label="Amount in USD"
-                type="text"  // Changed from "number" to "text"
-                value={usd === 0 ? '' : usd}  // Show empty string instead of 0
+                type="text"
+                value={usd === 0 ? '' : usd}
                 onChange={(e) => {
                   const inputValue = e.target.value;
 
-                  // Handle empty input
                   if (inputValue === '' || inputValue === null || inputValue === undefined) {
                     setUsd(0);
                     setSliderValue(0);
                     return;
                   }
 
-                  // Remove non-numeric characters except for leading digits
                   const numericValue = inputValue.replace(/[^0-9]/g, '');
-
-                  // Parse the value
                   const v = Number(numericValue);
 
-                  // Handle invalid numbers (NaN)
                   if (isNaN(v)) {
                     return;
                   }
@@ -422,20 +432,20 @@ function Calculator() {
                   setUsd(clamped);
                   setSliderValue(valueToPercentage(clamped));
                 }}
-                placeholder="0"  // Add placeholder so users know it's for entering amount
-                className="text-3xl font-bold bg-transparent outline-none w-auto max-w-full"
+                placeholder="0"
+                className="text-2xl sm:text-3xl font-bold bg-transparent outline-none w-full min-w-0"
                 style={{ appearance: "textfield", MozAppearance: "textfield", lineHeight: 1, verticalAlign: 'middle', padding: 0 }}
               />
             </div>
           </div>
         </div>
 
-        <div className="ml-4 relative">
+        <div className="ml-2 sm:ml-4 relative flex-shrink-0">
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-3 bg-[#EEEEEE] rounded-2xl px-4 py-2 shadow-sm hover:bg-gray-200 transition-colors"
+            className="flex items-center gap-2 sm:gap-3 bg-[#EEEEEE] rounded-2xl px-2 sm:px-4 py-2 shadow-sm hover:bg-gray-200 transition-colors"
           >
-            <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center overflow-hidden">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-md flex items-center justify-center overflow-hidden">
               <Image
                 src={selectedCurrency.logoUrl}
                 alt={selectedCurrency.code}
@@ -444,12 +454,12 @@ function Calculator() {
                 className="object-cover"
               />
             </div>
-            <span className="font-medium text-sm">{selectedCurrency.code}</span>
+            <span className="font-medium text-xs sm:text-sm">{selectedCurrency.code}</span>
             <svg
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
-              className={`text-gray-500 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+              className={`text-gray-500 transition-transform hidden sm:block ${isDropdownOpen ? 'rotate-180' : ''}`}
             >
               <path d="M7 10l5 5 5-5z" fill="currentColor" />
             </svg>
@@ -499,6 +509,7 @@ function Calculator() {
       </div>
 
       {/* Slider with tick marks */}
+
       <div className="mt-6">
         <div className="relative">
           {/* Tick marks - now clickable */}
@@ -544,53 +555,49 @@ function Calculator() {
 
       <br />
       <br />
-      {/* Payment method image */}
-      {/* <div className="mt-6">
-        <Image src="/t1.png" alt="Payment method" width={700} height={100} className="w-full rounded-lg object-cover" />
-      </div> */}
 
       {/* Receive summary card */}
       <div className="mt-6 flex justify-center">
-        <div className="w-full bg-white border border-gray-100 rounded-xl py-4 px-5 text-left shadow-sm">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Image src="/bepayicon.png" alt="bepay" width={28} height={28} className="object-contain" />
-              <div className="text-sm font-semibold">bepay IGPS</div>
-              <div className="ml-3 inline-flex items-center gap-2 bg-gray-100 text-xs text-gray-700 rounded-full px-3 py-1">
+        <div className="w-full bg-white border border-gray-100 rounded-xl py-3 sm:py-4 px-3 sm:px-5 text-left shadow-sm">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+              <Image src="/bepayicon.png" alt="bepay" width={24} height={24} className="object-contain sm:w-7 sm:h-7 flex-shrink-0" />
+              <div className="text-xs sm:text-sm font-semibold whitespace-nowrap">bepay IGPS</div>
+              <div className="hidden sm:inline-flex items-center gap-2 bg-gray-100 text-xs text-gray-700 rounded-full px-3 py-1">
                 <svg width="12" height="12" viewBox="0 0 24 24" className="text-yellow-500"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" fill="currentColor" /></svg>
                 <span>Within 24 hrs</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <Image src="/india_flag.png" alt="INR" width={28} height={28} className="rounded-full" />
-              <div className="text-sm font-semibold">INR</div>
+            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+              <Image src="/india_flag.png" alt="INR" width={24} height={24} className="rounded-full sm:w-7 sm:h-7" />
+              <div className="text-xs sm:text-sm font-semibold">INR</div>
             </div>
           </div>
 
-          <div className="mt-4 text-sm text-gray-500">
-            You&apos;ll receive <span className="text-xs text-gray-400">(By {formattedDelivery})</span>
+          <div className="mt-3 sm:mt-4 text-xs sm:text-sm text-gray-500">
+            You&apos;ll receive <span className="text-[10px] sm:text-xs text-gray-400">(By {formattedDelivery})</span>
           </div>
 
           <div className="mt-2 font-medium" style={{ lineHeight: 1 }}>
             {calculationLoading ? (
-              <div className="text-gray-400 text-lg">Calculating...</div>
+              <div className="text-gray-400 text-base sm:text-lg">Calculating...</div>
             ) : finalAmount !== null ? (
               (() => {
                 const display = `₹${Math.round(finalAmount).toLocaleString('en-IN')}`;
                 const fontSize = getFontSizeForAmount(finalAmount, { mobile: 14.52, desktop: 36 });
                 return (
-                  <div style={{ fontSize, whiteSpace: 'nowrap', display: 'inline-block', maxWidth: '100%' }}>
+                  <div style={{ fontSize, whiteSpace: 'nowrap', display: 'inline-block', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {display}
                   </div>
                 );
               })()
             ) : (
-              <div className="text-gray-400 text-lg">Enter amount</div>
+              <div className="text-gray-400 text-base sm:text-lg">Enter amount</div>
             )}
           </div>
 
-          <div className="mt-3 text-sm text-green-600 flex items-center gap-2">
+          <div className="mt-2 sm:mt-3 text-xs sm:text-sm text-green-600 flex items-center gap-2">
             <span className="font-medium">Best rate guaranteed!</span>
           </div>
         </div>
@@ -608,14 +615,14 @@ function Calculator() {
 
           <div className="receive-amount font-light" style={{ color: '#080808', whiteSpace: 'nowrap', display: 'inline-block', maxWidth: '100%' }}>
             {calculationLoading ? (
-              <div className="text-gray-400 text-lg">Calculating...</div>
+              <div className="text-gray-400 sm:text-lg text-sm">Calculating...</div>
             ) : cardAmount !== null ? (
               (() => {
                 const display = `₹${Math.round(cardAmount).toLocaleString('en-IN')}`;
                 const fontSize = getFontSizeForAmount(cardAmount, { mobile: 14.52, desktop: 36 });
                 return (
                   <div
-                    className="font-ligh"
+                    className="font-light"
                     style={{
                       fontSize,
                       whiteSpace: 'nowrap',
@@ -661,7 +668,7 @@ function Calculator() {
                 const fontSize = getFontSizeForAmount(bankAmount, { mobile: 14.52, desktop: 36 });
                 return (
                   <div
-                    className="font-ligh"
+                    className="font-light"
                     style={{
                       fontSize,
                       whiteSpace: 'nowrap',
@@ -707,7 +714,7 @@ function Calculator() {
                 const fontSize = getFontSizeForAmount(pgAmount, { mobile: 14.52, desktop: 36 });
                 return (
                   <div
-                    className="font-ligh"
+                    className="font-light"
                     style={{
                       fontSize,
                       whiteSpace: 'nowrap',
@@ -743,7 +750,7 @@ function Calculator() {
 
 const App = () => {
   return (
-    <div className="min-h-screen w-full flex flex-col items-center p-4 bg-gray-50 font-sans">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center p-2 sm:p-4 bg-gray-50 font-sans">
       <style>{`
         @media (min-width: 768px) {
           .responsive-heading span {
@@ -770,16 +777,16 @@ const App = () => {
         }
       `}</style>
 
-      <h1 className="responsive-heading text-center mt-12 mb-8 select-none" style={{ fontFamily: "Montserrat", fontWeight: 600, textTransform: "uppercase" }}>
-        <span className="block" style={{ fontSize: "41.41px", lineHeight: "34px", letterSpacing: "-0.06em" }}>
+      <h1 className="responsive-heading text-center mt-6 sm:mt-12 mb-4 sm:mb-8 select-none px-2" style={{ fontFamily: "Montserrat", fontWeight: 600, textTransform: "uppercase" }}>
+        <span className="block text-[32px] sm:text-[41.41px]" style={{ lineHeight: "1.2", letterSpacing: "-0.06em" }}>
           <span className="text-[#C0C0C0] opacity-90">IGPS </span>
           <span className="text-[#0E7630]">SAVINGS </span>
         </span>
-        <span className="block" style={{ fontSize: "41.41px", lineHeight: "34px", letterSpacing: "-0.06em" }}>
+        <span className="block text-[32px] sm:text-[41.41px]" style={{ lineHeight: "1.2", letterSpacing: "-0.06em" }}>
           <span className="text-[#C0C0C0] opacity-80">CALCULATOR</span>
         </span>
       </h1>
-      <div className="relative md:-mt-12 z-10">
+      <div className="relative sm:md:-mt-12 z-10  flex items-center justify-center w-full px-2 sm:px-0">
         <Calculator />
       </div>
     </div>

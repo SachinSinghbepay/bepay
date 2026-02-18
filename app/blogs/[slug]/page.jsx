@@ -1,76 +1,172 @@
-import { getBlogBySlug, getLatestBlogs } from "@/lib/blogs"
 import { notFound } from "next/navigation"
-import BlogList from "@/components/BlogList"
-import MaxWidthWrapper from "@/components/global/max-width-wrapper"
-import BlogArticle from "@/components/blog/BlogArticle"
+import SharePopup from "@/components/SharePopup"
+import TableOfContents from "@/components/TableOfContents"
 
-// Helper to serialize Firestore timestamps
-const serializeBlog = (blog) => {
-  if (!blog) return null
-  return {
-    ...blog,
-    createdAt: blog.createdAt?.toDate ? blog.createdAt.toDate().toISOString() : blog.createdAt,
-    updatedAt: blog.updatedAt?.toDate ? blog.updatedAt.toDate().toISOString() : blog.updatedAt,
+/* ---------------- FETCH BLOG ---------------- */
+async function getBlog(slug) {
+  try {
+    const res = await fetch('http://localhost:3000/api/blogs', { cache: "no-store" })
+    if (!res.ok) return null
+
+    const data = await res.json()
+    if (!Array.isArray(data)) return null
+
+    // normalize slugs same way as blogs page
+    return data.find(
+      (blog) => blog.slug === slug || blog.link?.split("/").pop() === slug
+    ) || null
+  } catch (err) {
+    console.error("Blog fetch error:", err)
+    return null
   }
 }
 
-export async function generateMetadata({ params }) {
-  const blog = await getBlogBySlug(params.slug)
 
-  if (!blog) {
-    return {
-      title: "Blog Not Found | Invest Digital Asset Forum",
-      description: "The requested blog post could not be found.",
-    }
-  }
-
-  return {
-    title: blog.metaTitle || blog.title,
-    description: blog.metaDescription || blog.excerpt,
-    openGraph: {
-      title: blog.metaTitle || blog.title,
-      description: blog.metaDescription || blog.excerpt,
-      images: [
-        {
-          url: blog.featuredImage,
-          width: 1200,
-          height: 630,
-          alt: blog.title,
-        },
-      ],
-    },
-  }
+/* ---------------- HELPERS ---------------- */
+function formatDate(dateString) {
+  return new Date(dateString).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  })
 }
 
-export default async function BlogPage({ params }) {
-  const rawBlog = await getBlogBySlug(params.slug)
+function calculateReadingTime(html) {
+  const text = html.replace(/<[^>]*>/g, "")
+  const words = text.split(/\s+/).length
+  return Math.max(1, Math.ceil(words / 200))
+}
 
-  if (!rawBlog) {
-    notFound()
+// Add IDs to every H2 so we can scroll to them
+function addIdsToHeadings(html) {
+  let index = 0
+  return html.replace(/<(h2|h3)>(.*?)<\/\1>/g, (_, tag, text) => {
+    const cleanText = text.replace(/<[^>]*>/g, "")
+    const id =
+      cleanText
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "") + `-${index++}`
+
+    return `<${tag} id="${id}">${text}</${tag}>`
+  })
+}
+
+// Extract headings for sidebar
+function extractHeadings(html) {
+  const regex = /<(h2|h3) id="(.*?)">(.*?)<\/\1>/g
+  const headings = []
+  let match
+
+  while ((match = regex.exec(html)) !== null) {
+    headings.push({
+      id: match[2],
+      text: match[3].replace(/<[^>]*>/g, ""),
+      level: match[1], // h2 or h3
+    })
   }
 
-  const blog = serializeBlog(rawBlog)
+  return headings
+}
 
-  // Get related blogs (excluding current blog)
-  const rawRelatedBlogs = await getLatestBlogs(4)
-  const relatedBlogs = rawRelatedBlogs
-    .filter((relatedBlog) => relatedBlog.id !== blog.id)
-    .slice(0, 3)
-    .map(serializeBlog)
+/* ---------------- PAGE ---------------- */
+export default async function BlogPostPage({ params }) {
+  const { slug } = await params
+  const blog = await getBlog(slug)
+
+  if (!blog) return notFound()
+
+  const contentWithIds = addIdsToHeadings(blog.content)
+  const headings = extractHeadings(contentWithIds)
+  const readingTime = calculateReadingTime(blog.content)
 
   return (
-    <main className="bg-[#f9f9f9]">
-      <BlogArticle blog={blog} />
+    <main className="max-w-7xl mx-auto px-6 py-16 flex gap-12 scroll-smooth">
 
-      {/* Related Posts */}
-      {relatedBlogs.length > 0 && (
-        <div className="py-12 border-t border-gray-200">
-          <MaxWidthWrapper>
-            <h2 className="text-2xl md:text-3xl font-bold mb-8 text-[#1A1A1A]">Related Posts</h2>
-            <BlogList blogs={relatedBlogs} />
-          </MaxWidthWrapper>
+      {/* ---------------- LEFT SIDEBAR (TABLE OF CONTENTS) ---------------- */}
+      <aside className="hidden lg:block w-64 sticky top-24 self-start">
+        <TableOfContents headings={headings} />
+      </aside>
+
+      {/* ---------------- BLOG CONTENT ---------------- */}
+      <div className="flex-1 max-w-3xl lg:max-w-4xl">
+        <h1 className="text-3xl md:text-4xl font-bold mb-8 leading-tight">
+          {blog.title}
+        </h1>
+        {blog.thumbnail && (
+          <img
+            src={blog.thumbnail}
+            alt={blog.title}
+            className="w-full rounded-xl mb-8"
+          />
+        )}
+
+        {/* DATE + READING TIME + SHARE */}
+        <div className="flex items-center gap-4 mt-6">
+          <p className="text-gray-500 text-sm">
+            {formatDate(blog.publishedAt)} &emsp; | &emsp; {readingTime} min read
+          </p>
+
+          <SharePopup
+            url={`${process.env.NEXT_PUBLIC_SITE_URL}/blogs/${blog.slug}`}
+            title={blog.title}
+          />
         </div>
-      )}
+
+        {/* AUTHOR */}
+        <p className="text-sm text-gray-500 mt-8 mb-2">Written By</p>
+        <div className="flex items-center gap-3 mb-12">
+          <div className="w-10 h-10 rounded-full bg-gray-300" />
+          <div>
+            <p className="font-semibold">{blog.author || "bepay team"}</p>
+            <p className="text-sm text-gray-500">Author</p>
+          </div>
+        </div>
+
+        {/* BLOG BODY */}
+        <article
+          className="
+    max-w-none blog-content
+
+    /* MAIN SECTION HEADINGS (H2 — sidebar linked) */
+    [&_h2]:text-3xl
+    [&_h2]:font-bold
+    [&_h2]:mt-20
+    [&_h2]:mb-8
+    [&_h2]:leading-snug
+    [&_h2]:scroll-mt-32
+
+    /* SUB-SECTIONS (H3) */
+    [&_h3]:text-2xl
+    [&_h3]:font-semibold
+    [&_h3]:mt-14
+    [&_h3]:mb-6
+    [&_h3]:leading-snug
+    [&_h3]:scroll-mt-32
+
+    /* PARAGRAPHS */
+    [&_p]:text-[17px]
+    [&_p]:leading-8
+    [&_p]:mb-6
+    [&_p]:text-gray-700
+
+    /* LISTS */
+    [&_ul]:my-6
+    [&_ol]:my-6
+    [&_li]:my-2
+
+    /* IMAGES */
+    [&_img]:rounded-xl
+    [&_img]:shadow-md
+    [&_img]:my-12
+  "
+          dangerouslySetInnerHTML={{ __html: contentWithIds }}
+        />
+
+
+
+
+      </div>
     </main>
   )
 }

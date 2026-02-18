@@ -4,6 +4,9 @@ import WaitlistTriggerButton from "@/components/waitlist-trigger-button";
 import { ChevronDown, GripVertical } from "lucide-react";
 import Image from "next/image";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
+import { motion, useTransform } from "framer-motion";
 
 
 const accounts = [
@@ -13,10 +16,23 @@ const accounts = [
   { name: "YUAN", code: "cn", balance: "¥49", sub: "$60" },
 ];
 const handleButtonClick = () => {
-        AnalyticsService.sendEvent("Get a free swiss bank account Clicked");
-      }
+  AnalyticsService.sendEvent("Get a free swiss bank account Clicked");
+}
+
+
 
 export function BankAccountView({ setActiveView }) {
+  const {
+  handleDownloadClick,
+  isOSPopupOpen,
+  setIsOSPopupOpen,
+  isQRPopupOpen,
+  setIsQRPopupOpen,
+  selectedOS,
+  setSelectedOS,
+} = useAppDownload()
+
+
   return (
     <div className="flex h-full flex-col bg-white p-4">
       {/* Toggle */}
@@ -78,11 +94,23 @@ export function BankAccountView({ setActiveView }) {
       </div>
 
       {/* CTA */}
-      <WaitlistTriggerButton triggerSource="'Swiss bank account view' button" buttonLocation="Crypto Bank Account View">
-        <button onClick={handleButtonClick} className="mt-auto mx-auto flex items-center justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white">
-          Get a free swiss bank account
-        </button>
-      </WaitlistTriggerButton>
+     <motion.button
+        onClick={() => {
+          handleButtonClick();   // analytics
+          handleDownloadClick(); // open popup
+        }}
+        className="mt-auto mx-auto flex items-center justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white"
+      >
+        Get a free swiss bank account
+      </motion.button>
+      <AppDownloadPopups
+        isOSPopupOpen={isOSPopupOpen}
+        setIsOSPopupOpen={setIsOSPopupOpen}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
+        selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
+      />
     </div>
   );
 }

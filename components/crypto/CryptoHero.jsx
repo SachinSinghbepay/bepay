@@ -9,8 +9,9 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 import { SmartphoneIcon as DeviceMobile } from "lucide-react";
-import WaitlistTriggerButton from "../waitlist-trigger-button";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 const iconsData = [
   {
@@ -54,6 +55,7 @@ export default function CryptoHeroSection() {
   const words = ["Save", "Send", "Earn", "Grow"];
   const containerRef = useRef(null);
   const heroSectionRef = useRef(null); // For intersection observer
+
 
   // ANALYTICS: Track when the hero section is actually viewed
   useEffect(() => {
@@ -166,6 +168,17 @@ export default function CryptoHeroSection() {
     opacityTransform3,
   ];
 
+  const {
+    handleDownloadClick,
+    isOSPopupOpen,
+    setIsOSPopupOpen,
+    isQRPopupOpen,
+    setIsQRPopupOpen,
+    selectedOS,
+    setSelectedOS,
+  } = useAppDownload()
+
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024); // lg breakpoint
@@ -190,7 +203,7 @@ export default function CryptoHeroSection() {
     console.log("Main hero button clicked!");
   };
 
-  // ANALYTICS: Handler for the bepay icon click
+  // // ANALYTICS: Handler for the bepay icon click
   const handleBepayIconClick = () => {
     AnalyticsService.sendEvent("bepay icon clicked", {
       bepay_icon: "icon",
@@ -404,31 +417,38 @@ export default function CryptoHeroSection() {
                       className="object-contain h-16 w-auto"
                     />
                   </div>
-
                   <div className="relative z-50 pointer-events-auto mt-10 lg:mt-12">
-                    <WaitlistTriggerButton triggerSource="'Download app and start earning' button" buttonLocation="Crypto Hero Section">
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        initial={{ opacity: 0, y: 100 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: 0.3 }}
-                        viewport={{ once: false, amount: 0.5 }}
-                        onClick={handleButtonClick} // ANALYTICS: This handler now tracks the click
-                        className="bg-black cursor-pointer h-[56px] whitespace-nowrap text-white rounded-full flex items-center justify-center gap-2 px-4 py-2 text-[12px] font-medium select-none hover:bg-black/90 transition-colors active:scale-95 font-montserrat lg:w-[298px] lg:h-[56px] lg:gap-[10px] lg:px-6 lg:py-4 lg:text-[14px] lg:font-medium lg:leading-[100%]"
-                        style={{ pointerEvents: "auto" }}
-                      >
-                        <DeviceMobile className="w-3 h-3 -mt-[1px] lg:w-4 lg:h-4" />
-                        Download App & Start Earning
-                      </motion.button>
-                    </WaitlistTriggerButton>
+                    <motion.button
+                      onClick={() => {
+                        handleButtonClick()
+                        handleDownloadClick()
+                      }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      initial={{ opacity: 0, y: 100 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: 0.3 }}
+                      viewport={{ once: false, amount: 0.5 }}
+                      className="bg-black cursor-pointer h-[56px] whitespace-nowrap text-white rounded-full flex items-center justify-center gap-2 px-4 py-2 text-[12px] font-medium select-none hover:bg-black/90 transition-colors active:scale-95 font-montserrat lg:w-[298px] lg:h-[56px] lg:gap-[10px] lg:px-6 lg:py-4 lg:text-[14px] lg:font-medium lg:leading-[100%]"
+                    >
+                      <DeviceMobile className="w-3 h-3 -mt-[1px] lg:w-4 lg:h-4" />
+                      Download App & Start Earning
+                    </motion.button>
                   </div>
                 </div>
               </motion.div>
             </div>
           </motion.div>
         </div>
-      </div>
-    </div>
+      </div >
+      <AppDownloadPopups
+        isOSPopupOpen={isOSPopupOpen}
+        setIsOSPopupOpen={setIsOSPopupOpen}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
+        selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
+      />
+    </div >
   );
 }

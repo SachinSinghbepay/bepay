@@ -5,6 +5,8 @@ import { ArrowUpRight } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 const DefiYieldSection = () => {
   const sectionRef = useRef(null);
@@ -18,6 +20,18 @@ const DefiYieldSection = () => {
 
   const [isMobile, setIsMobile] = useState(false);
 
+
+    const {
+    handleDownloadClick,
+    isOSPopupOpen,
+    setIsOSPopupOpen,
+    isQRPopupOpen,
+    setIsQRPopupOpen,
+    selectedOS,
+    setSelectedOS,
+  } = useAppDownload()
+
+  
   // ANALYTICS: Track when the main DeFi Yield section is actually viewed
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -83,7 +97,7 @@ const DefiYieldSection = () => {
     [animationStart, animationEnd],
     [1, 1]
   );
-  
+
   // Updated image animations - images now exit completely off-screen
   const image1Y = useTransform(
     scrollYProgress,
@@ -145,7 +159,7 @@ const DefiYieldSection = () => {
     [imageStart + intervalSize * 5, imageStart + intervalSize * 6],
     [1, 1.1]
   );
-  
+
   // Content animations remain the same
   const content1Y = useTransform(
     scrollYProgress,
@@ -493,12 +507,14 @@ const DefiYieldSection = () => {
                       Monetize your hardware resources{" "}
                     </p>
                     <div className="flex items-center justify-center mt-6">
-                      <WaitlistTriggerButton triggerSource="'Start earning' button clicked" buttonLocation="Crypto Defi Yield Section">
-                        <motion.button
-                          onClick={handleStartEarningClick}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          className="
+                      <motion.button
+                        onClick={() => {
+                          handleStartEarningClick
+                          handleDownloadClick()
+                        }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="
                                     bg-black cursor-pointer text-white 
                                     flex items-center justify-center 
                                     rounded-full font-medium transition-colors 
@@ -510,17 +526,17 @@ const DefiYieldSection = () => {
                                     md:gap-[10px] 
                                     md:text-sm md:rounded-[100px]
                                 "
-                        >
-                          <Image
-                            src="/start.svg"
-                            alt="Start Icon"
-                            width={20}
-                            height={20}
-                            className="w-5 h-5"
-                          />
-                          <span>Start earning</span>
-                        </motion.button>
-                      </WaitlistTriggerButton>
+                      >
+                        <Image
+                          src="/start.svg"
+                          alt="Start Icon"
+                          width={20}
+                          height={20}
+                          className="w-5 h-5"
+                        />
+                        <span>Start earning</span>
+                      </motion.button>
+
                     </div>
                   </motion.div>
                 </div>
@@ -529,6 +545,16 @@ const DefiYieldSection = () => {
           </div>
         </div>
       </section>
+
+      <AppDownloadPopups
+        isOSPopupOpen={isOSPopupOpen}
+        setIsOSPopupOpen={setIsOSPopupOpen}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
+        selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
+      />
+
     </div>
   );
 };

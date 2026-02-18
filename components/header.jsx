@@ -10,11 +10,25 @@ import { motion } from "framer-motion";
 import WaitlistTriggerButton from "./waitlist-trigger-button";
 import GetStartedPopup from "./popups/getStartedPopup";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isGetStartedOpen, setIsGetStartedOpen] = useState(false);
   const pathname = usePathname();
+
+
+  const {
+    handleDownloadClick,
+    isOSPopupOpen,
+    setIsOSPopupOpen,
+    isQRPopupOpen,
+    setIsQRPopupOpen,
+    selectedOS,
+    setSelectedOS,
+  } = useAppDownload()
+
 
   // 💥 UPDATED: Conditional check to hide the component on /dapps OR /allNetworks route
   if (
@@ -46,6 +60,7 @@ export default function Header() {
     }
     return pathname.startsWith(path);
   };
+
 
   // 1. Determine if it's the business page
   const isBusinessPage = isActivePage("/business");
@@ -184,7 +199,7 @@ export default function Header() {
                   <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">Get in touch</span>
                 </Button>
                 <Button
-                  onClick={() => window.location.href = "https://stage-bepay.briskpe.com/auth?redirect=/"}
+                  onClick={() => window.location.href = `/igps?v=${Date.now()}`}
                   className="hidden lg:flex lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-pointer hover:scale-105"
                 >
                   <span
@@ -199,24 +214,21 @@ export default function Header() {
                 )}
               </div>
             ) : (
-              <WaitlistTriggerButton
-                triggerSource="'Download bepay app' button"
-                buttonLocation={calculatedButtonLocation}
+              <Button
+                onClick={() => {
+
+                  handleDownloadClick()
+                }} variant="outline"
+                className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
               >
-                <Button
-                  // UPDATED: onClick now uses the calculated value
-                  onClick={() => handleDownloadAppClick(calculatedButtonLocation)}
-                  variant="outline"
-                  className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
-                >
-                  <div className="flex gap-2">
-                    <Smartphone className="w-4 h-4 lg:w-5 lg:h-9" />
-                    <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">
-                      Download bepay app
-                    </span>
-                  </div>
-                </Button>
-              </WaitlistTriggerButton>
+                <div className="flex gap-2">
+                  <Smartphone className="w-4 h-4 lg:w-5 lg:h-9" />
+                  <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">
+                    Download bepay app
+                  </span>
+                </div>
+              </Button>
+
             )
           )}
 
@@ -350,27 +362,30 @@ export default function Header() {
 
                 {/* Mobile Download Button */}
                 {/* UPDATED: buttonLocation now uses the calculated value */}
-                <WaitlistTriggerButton
-                  triggerSource="'download bepay app' button"
-                  buttonLocation={calculatedButtonLocation}
+                <Button
+                  onClick={() => {
+
+                    handleDownloadClick()
+                  }} variant="outline"
+                  className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2 border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
                 >
-                  <Button
-                    variant="outline"
-                    className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2 border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
-                    // UPDATED: onClick now uses the calculated value
-                    onClick={() => handleDownloadAppClick(calculatedButtonLocation)}
-                  >
-                    <Smartphone className="w-4 h-4" />
-                    <span className="font-semibold text-xs">
-                      Download bepay app
-                    </span>
-                  </Button>
-                </WaitlistTriggerButton>
+                  <Smartphone className="w-4 h-4" />
+                  <span className="font-semibold text-xs">Download bepay app</span>
+                </Button>
+
               </>
             )}
           </motion.nav>
         </motion.div>
       </div>
+      <AppDownloadPopups
+        isOSPopupOpen={isOSPopupOpen}
+        setIsOSPopupOpen={setIsOSPopupOpen}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
+        selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
+      />
     </header>
   );
 }

@@ -14,6 +14,8 @@ import { CryptoWalletView } from "./mocup-views/crypto-wallet-view";
 import { IconDeviceMobile } from "@tabler/icons-react";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 export default function CryptoWalletSection() {
   const sectionRef = useRef(null);
@@ -29,6 +31,18 @@ export default function CryptoWalletSection() {
   const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
   const hasTrackedViewForSwissBank = useRef(false); // Track if we've already sent the view event
   const hasTrackedViewForSecureWallet = useRef(false); // Track if we've already sent the view event
+
+
+  const {
+    handleDownloadClick,
+    isOSPopupOpen,
+    setIsOSPopupOpen,
+    isQRPopupOpen,
+    setIsQRPopupOpen,
+    selectedOS,
+    setSelectedOS,
+  } = useAppDownload()
+
 
   // ANALYTICS: Track when the section is actually viewed (not just mounted)
   useEffect(() => {
@@ -53,20 +67,20 @@ export default function CryptoWalletSection() {
   const featureData = [
     {
       id: "debit-card",
-      title: ( <> A VIRTUAL <span className="text-[#333333]">CRYPTO DEBIT CARD</span>{" "} </> ),
-      mobileTitle: ( <> VIRTUAL <span className="text-[#333333]">CRYPTO</span> <br /> <span className="text-[#333333]">DEBIT CARD</span> </> ),
-      component: ( <DebitCardView setActiveView={setActiveView} scrollYProgress={scrollYProgress} /> ),
+      title: (<> A VIRTUAL <span className="text-[#333333]">CRYPTO DEBIT CARD</span>{" "} </>),
+      mobileTitle: (<> VIRTUAL <span className="text-[#333333]">CRYPTO</span> <br /> <span className="text-[#333333]">DEBIT CARD</span> </>),
+      component: (<DebitCardView setActiveView={setActiveView} scrollYProgress={scrollYProgress} />),
     },
     {
       id: "bank-account",
-      title: ( <> A <span className="text-[#333333]">SWISS BANK</span> ACCOUNT </> ),
-      mobileTitle: ( <> <span className="text-[#333333]">SWISS BANK</span> <br /> ACCOUNT </> ),
+      title: (<> A <span className="text-[#333333]">SWISS BANK</span> ACCOUNT </>),
+      mobileTitle: (<> <span className="text-[#333333]">SWISS BANK</span> <br /> ACCOUNT </>),
       component: <BankAccountView setActiveView={setActiveView} />,
     },
     {
       id: "crypto-wallet",
-      title: ( <> A SECURE <span className="text-[#333333]">SELF CUSTODY CRYPTO</span>{" "} WALLET </> ),
-      mobileTitle: ( <> SECURE <span className="text-[#333333]">SELF CUSTODY</span> <br /> <span className="text-[#333333]">CRYPTO</span> WALLET </> ),
+      title: (<> A SECURE <span className="text-[#333333]">SELF CUSTODY CRYPTO</span>{" "} WALLET </>),
+      mobileTitle: (<> SECURE <span className="text-[#333333]">SELF CUSTODY</span> <br /> <span className="text-[#333333]">CRYPTO</span> WALLET </>),
       component: <CryptoWalletView />,
     },
   ];
@@ -87,7 +101,7 @@ export default function CryptoWalletSection() {
       } else if (latest >= 0.8) {
         newActiveView = "crypto-wallet";
       }
-      
+
       setActiveView(newActiveView);
 
       // Fire view event only when the view changes
@@ -95,18 +109,18 @@ export default function CryptoWalletSection() {
         switch (newActiveView) {
           case "bank-account":
             if (!hasTrackedViewForSwissBank.current) {
-                AnalyticsService.sendEvent("Swiss bank account card viewed", {
-                    card_name: "Swiss_bank_account_card",
-                });
-                hasTrackedViewForSwissBank.current = true;
+              AnalyticsService.sendEvent("Swiss bank account card viewed", {
+                card_name: "Swiss_bank_account_card",
+              });
+              hasTrackedViewForSwissBank.current = true;
             }
             break;
           case "crypto-wallet":
             if (!hasTrackedViewForSecureWallet.current) {
-                AnalyticsService.sendEvent("secure self custody wallet viewed", {
-                    card_name: "secure_self_custody_wallet",
-                });
-                hasTrackedViewForSecureWallet.current = true;
+              AnalyticsService.sendEvent("secure self custody wallet viewed", {
+                card_name: "secure_self_custody_wallet",
+              });
+              hasTrackedViewForSecureWallet.current = true;
             }
             break;
         }
@@ -178,9 +192,9 @@ export default function CryptoWalletSection() {
                     </AnimatePresence>
                   </div>
                   <div className="mt-auto flex justify-around border-t-[1px] pt-2">
-                    <BottomNavItem icon={ <Wallet strokeWidth={1} size={isMobile ? 18 : 20} /> } label="Wallet" active={activeView === "crypto-wallet"} onClick={() => handleFeatureClick("crypto-wallet")} />
-                    <BottomNavItem icon={ <CreditCard strokeWidth={1} size={isMobile ? 18 : 20} /> } label="Card" active={activeView === "debit-card"} onClick={() => handleFeatureClick("debit-card")} />
-                    <BottomNavItem icon={ <ScanLine strokeWidth={1} size={isMobile ? 18 : 20} /> } label="Scan & Pay" />
+                    <BottomNavItem icon={<Wallet strokeWidth={1} size={isMobile ? 18 : 20} />} label="Wallet" active={activeView === "crypto-wallet"} onClick={() => handleFeatureClick("crypto-wallet")} />
+                    <BottomNavItem icon={<CreditCard strokeWidth={1} size={isMobile ? 18 : 20} />} label="Card" active={activeView === "debit-card"} onClick={() => handleFeatureClick("debit-card")} />
+                    <BottomNavItem icon={<ScanLine strokeWidth={1} size={isMobile ? 18 : 20} />} label="Scan & Pay" />
                     <BottomNavItem icon={<Globe strokeWidth={1} size={isMobile ? 18 : 20} />} label="Explore" />
                     <BottomNavItem icon={<Plus strokeWidth={1} size={isMobile ? 18 : 20} />} label="SWISS" active={activeView === "bank-account"} onClick={() => handleFeatureClick("bank-account")} />
                   </div>
@@ -204,30 +218,38 @@ export default function CryptoWalletSection() {
                     <div className="flex h-6 w-6 items-center justify-center">
                       <motion.div className="h-2 w-2 bg-black" style={{ clipPath: "polygon(0 0, 100% 50%, 0 100%)" }} animate={{ opacity: activeView === feature.id ? 1 : 0, scale: activeView === feature.id ? 1.5 : 0.5, x: activeView === feature.id ? 5 : 0 }} transition={{ duration: 0.4, ease: "easeOut" }} />
                     </div>
-                    <span className={`text-base md:text-lg lg:tracking-tighter text-[#6A6A6A] font-semibold max-w-[400px] lg:text-[32px] transition-all duration-500 ${ activeView === feature.id ? "opacity-100" : "opacity-40" }`}>
+                    <span className={`text-base md:text-lg lg:tracking-tighter text-[#6A6A6A] font-semibold max-w-[400px] lg:text-[32px] transition-all duration-500 ${activeView === feature.id ? "opacity-100" : "opacity-40"}`}>
                       {feature.title}
                     </span>
                   </button>
                 ))}
               </div>
-              <WaitlistTriggerButton triggerSource="Download App & Get Bitcoin Reward button clicked" buttonLocation="Crypto Wallet Section">
-                <button 
-                  onClick={handleDownloadRewardClick} // ANALYTICS: Added onClick handler
+              <motion.button
+                onClick={() => {
+                  handleDownloadClick()
+                }}            
                   className="flex drop-shadow-2xl items-center lg:ml-16 gap-2 lg:h-[56px] text-[12px] whitespace-nowrap rounded-full bg-black px-6 py-3 text-white transition-transform hover:scale-105 active:scale-100 mt-4 md:mt-0">
                   <IconDeviceMobile className="h-5 w-5" />
                   <span>Download App & Get Bitcoin Reward</span>
-                </button>
-              </WaitlistTriggerButton>
+              </motion.button>
             </motion.div>
           </div>
         </div>
       </div>
+      <AppDownloadPopups
+        isOSPopupOpen={isOSPopupOpen}
+        setIsOSPopupOpen={setIsOSPopupOpen}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
+        selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
+      />
     </section>
   );
 }
 
 const BottomNavItem = ({ icon, label, active = false, onClick }) => (
-  <button onClick={onClick} className={`flex flex-col items-center gap-1 text-[7px] md:text-[8px] transition-colors hover:text-black ${ active ? "text-black" : "text-gray-400" }`}>
+  <button onClick={onClick} className={`flex flex-col items-center gap-1 text-[7px] md:text-[8px] transition-colors hover:text-black ${active ? "text-black" : "text-gray-400"}`}>
     {icon}
     <span>{label}</span>
   </button>

@@ -2,7 +2,7 @@
 const nextConfig = {
   images: {
     dangerouslyAllowSVG: true,
-    contentDispositionType: 'attachment',
+    contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       {
@@ -37,50 +37,54 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "cdn-images-1.medium.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "miro.medium.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
   experimental: {
-    scrollRestoration: false
+    scrollRestoration: false,
   },
   async headers() {
     return [
       {
-        source: '/.well-known/apple-app-site-association',
+        source: "/.well-known/apple-app-site-association",
         headers: [
           {
-            key: 'Content-Type',
-            value: 'application/json',
+            key: "Content-Type",
+            value: "application/json",
           },
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600, must-revalidate',
+            key: "Cache-Control",
+            value: "public, max-age=3600, must-revalidate",
           },
         ],
       },
       {
-        source: '/.well-known/assetlinks.json',
+        source: "/.well-known/assetlinks.json",
         headers: [
           {
-            key: 'Content-Type',
-            value: 'application/json',
+            key: "Content-Type",
+            value: "application/json",
           },
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=3600, must-revalidate',
+            key: "Cache-Control",
+            value: "public, max-age=3600, must-revalidate",
           },
         ],
       },
     ];
   },
-  async redirects() {
-    return [
-      {
-        source: '/igps',
-        destination: '/',
-        permanent: true,
-      },
-    ];
-  },
+
 };
 
 export default nextConfig;

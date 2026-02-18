@@ -1,0 +1,308 @@
+
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { IgpsService } from '@/services/igpsService';
+import StepTypeSelection from '@/components/igps/onboarding/StepTypeSelection';
+import StepBasicDetails from '@/components/igps/onboarding/StepBasicDetails';
+import StepDocuments from '@/components/igps/onboarding/StepDocuments';
+import StepUBO from '@/components/igps/onboarding/StepUBO';
+import { Loader2 } from 'lucide-react';
+
+const igpsService = new IgpsService();
+
+export default function OnboardingPage() {
+    const router = useRouter();
+    const [loading, setLoading] = useState(true);
+    const [currentStep, setCurrentStep] = useState(1);
+    const [senderId, setSenderId] = useState(null);
+    const [formData, setFormData] = useState({
+        type: '', // 'individual' or 'business'
+        // Common
+        email: '',
+        phone: '',
+        address: { street: '', city: '', state: '', postalCode: '', country: '' },
+        // Individual
+        firstName: '',
+        lastName: '',
+        birthDate: '',
+        occupation: '',
+        // Business
+        organizationName: '', // Usually pre-filled from signup
+        identificationNumber: '',
+        registrationDate: '',
+        businessType: '',
+        // Docs
+        documents: [],
+        // UBO (Array of UBOs)
+        ubos: []
+    });
+
+    const saveProgress = (data, pSenderId, step, createdUboIndices = []) => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('onboarding_progress', JSON.stringify({
+                formData: data,
+                senderId: pSenderId,
+                step: step,
+                createdUboIndices
+            }));
+        }
+    };
+
+    // Load initial user data (from Storage or Profile)
+    useEffect(() => {
+        const initData = async () => {
+            // 1. Check LocalStorage first
+            if (typeof window !== 'undefined') {
+                const saved = localStorage.getItem('onboarding_progress');
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        if (parsed.senderId) setSenderId(parsed.senderId);
+                        if (parsed.formData) setFormData(parsed.formData);
+                        if (parsed.step) setCurrentStep(parsed.step);
+                        setLoading(false);
+                        return; // Resume from saved state
+                    } catch (e) {
+                        console.error("Invalid saved progress", e);
+                        localStorage.removeItem('onboarding_progress');
+                    }
+                }
+            }
+
+            // 2. Fetch Profile from API
+            const getCookie = (name) => {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop()?.split(';').shift();
+                return null;
+            }
+            const token = getCookie('igps_token');
+            const refresh = getCookie('igps_refresh');
+            if (token && refresh) {
+                igpsService.setTokens(token, refresh);
+            }
+
+            try {
+                const response = await igpsService.getProfile();
+                if (response.success) {
+                    const user = response.data.user;
+                    const org = response.data.organization;
+
+                    setFormData(prev => ({
+                        ...prev,
+                        email: user.email,
+                        firstName: user.firstName || '',
+                        lastName: user.lastName || '',
+                        organizationName: org?.name || ''
+                    }));
+                } else {
+                    // If fetching profile fails (likely auth), redirect to login
+                    console.warn("Profile fetch failed, redirecting to login", response);
+                    router.push('/igps/login');
+                }
+            } catch (error) {
+                console.error("Error loading profile", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        initData();
+    }, [router]);
+
+
+    const nextStep = () => setCurrentStep(prev => prev + 1);
+    const prevStep = () => setCurrentStep(prev => prev - 1);
+
+    const updateFormData = (newData) => {
+        setFormData(prev => ({ ...prev, ...newData }));
+    };
+
+    const submitOnboarding = async () => {
+        setLoading(true);
+        console.log("Submitting Onboarding Data...", formData);
+
+        let currentSenderId = senderId; // Use state if available
+        let savedProgress = {};
+        if (typeof window !== 'undefined') {
+            savedProgress = JSON.parse(localStorage.getItem('onboarding_progress') || '{}');
+        }
+        let createdUboIndices = savedProgress.createdUboIndices || [];
+
+        try {
+            // 1. Create Sender (if not exists)
+            if (!currentSenderId) {
+                const senderData = {
+                    type: formData.type,
+                    email: formData.email,
+                    phone: formData.phone,
+                    address: formData.address,
+                    ...(formData.type === 'individual' ? {
+                        firstName: formData.firstName,
+                        lastName: formData.lastName,
+                        birthDate: formData.birthDate,
+                        occupation: formData.occupation
+                    } : {
+                        fullName: formData.organizationName, // Use Org Name as Full Name for Business
+                        identificationNumber: formData.identificationNumber,
+                        registrationDate: formData.registrationDate,
+                        businessType: formData.businessType
+                    })
+                };
+
+                const senderRes = await igpsService.createSender(senderData);
+                if (!senderRes.success) throw new Error(senderRes.message || "Failed to create sender profile");
+
+                currentSenderId = senderRes.data.id;
+                setSenderId(currentSenderId);
+                saveProgress(formData, currentSenderId, currentStep, createdUboIndices);
+                console.log("Sender Created:", currentSenderId);
+            } else {
+                console.log("Skipping Sender Creation (already exists):", currentSenderId);
+            }
+
+            // 2. Upload Documents
+            if (formData.documents && formData.documents.length > 0) {
+                console.log(`Uploading ${formData.documents.length} documents...`);
+                for (const doc of formData.documents) {
+                    console.log(`Uploading doc: ${doc.fileName}`);
+                    const docRes = await igpsService.uploadSenderDocument(currentSenderId, {
+                        fileName: doc.fileName,
+                        type: doc.type,
+                        blob: doc.base64 // Ensure this is the raw base64 string
+                    });
+                    if (!docRes.success) {
+                        console.error("Document upload failed", docRes);
+                        throw new Error(`Failed to upload ${doc.fileName}: ${docRes.message}`);
+                    }
+                }
+            } else {
+                console.log("No documents to upload.");
+            }
+
+            // 3. Create UBOs (if Business)
+            if (formData.type === 'business' && formData.ubos.length > 0) {
+                console.log(`Creating ${formData.ubos.length} UBOs...`);
+
+                for (let i = 0; i < formData.ubos.length; i++) {
+                    if (createdUboIndices.includes(i)) {
+                        console.log(`Skipping UBO ${i} (already created)`);
+                        continue;
+                    }
+
+                    const ubo = formData.ubos[i];
+                    console.log(`Creating UBO ${i}: ${ubo.firstName}`);
+
+                    const uboRes = await igpsService.createUBO(currentSenderId, ubo);
+
+                    if (!uboRes.success) {
+                        saveProgress(formData, currentSenderId, currentStep, createdUboIndices);
+                        console.error("UBO creation failed", uboRes);
+                        throw new Error(`Failed to add UBO ${ubo.firstName}: ${uboRes.message}`);
+                    }
+
+                    // Mark as done
+                    createdUboIndices.push(i);
+                    saveProgress(formData, currentSenderId, currentStep, createdUboIndices);
+                }
+            }
+
+            // 4. Verify (Trigger backend verification process)
+            console.log("Triggering verification...");
+            const verifyRes = await igpsService.verifySender(currentSenderId);
+            if (!verifyRes.success) console.warn("Verification trigger warning:", verifyRes.message);
+
+            // Success -> Dashboard
+            console.log("Onboarding Complete. Redirecting...");
+            localStorage.removeItem('onboarding_progress');
+            router.push('/igps/dashboard');
+
+        } catch (error) {
+            console.error("Onboarding Error:", error);
+            saveProgress(formData, currentSenderId, currentStep, createdUboIndices);
+            alert(`Onboarding failed: ${error.message}. You can try again to resume.`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    if (loading) {
+        return (
+            <div className="flex h-screen items-center justify-center bg-gray-50">
+                <Loader2 className="animate-spin h-8 w-8 text-black" />
+            </div>
+        );
+    }
+
+    // Calculate generic progress
+    const steps = formData.type === 'business' ? 4 : 3;
+    // Business: Type -> Details -> Docs -> UBO
+    // Indiv: Type -> Details -> Docs
+
+    const progress = (currentStep / steps) * 100;
+
+    return (
+        <div className="min-h-screen bg-gray-50 flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 font-sans">
+            <div className="w-full max-w-3xl space-y-8">
+
+                {/* Header/Stepper */}
+                <div className="text-center">
+                    <h2 className="mt-6 text-3xl font-bold text-gray-900">Complete your profile</h2>
+                    <p className="mt-2 text-sm text-gray-600">
+                        Step {currentStep} of {steps}
+                    </p>
+                    {/* Progress Bar */}
+                    <div className="mt-4 w-full bg-gray-200 rounded-full h-2.5">
+                        <div className="bg-black h-2.5 rounded-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
+                    </div>
+                </div>
+
+                {/* Card */}
+                <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+
+                    {currentStep === 1 && (
+                        <StepTypeSelection
+                            selected={formData.type}
+                            onSelect={(type) => updateFormData({ type })}
+                            onNext={nextStep}
+                        />
+                    )}
+
+                    {currentStep === 2 && (
+                        <StepBasicDetails
+                            type={formData.type}
+                            data={formData}
+                            onChange={updateFormData}
+                            onNext={nextStep}
+                            onBack={prevStep}
+                        />
+                    )}
+
+                    {currentStep === 3 && (
+                        <StepDocuments
+                            type={formData.type}
+                            documents={formData.documents}
+                            onChange={(docs) => updateFormData({ documents: docs })}
+                            onNext={() => formData.type === 'business' ? nextStep() : submitOnboarding()}
+                            onBack={prevStep}
+                            isSubmitting={loading && formData.type === 'individual'}
+                        />
+                    )}
+
+                    {currentStep === 4 && formData.type === 'business' && (
+                        <StepUBO
+                            ubos={formData.ubos}
+                            onChange={(ubos) => updateFormData({ ubos })}
+                            onSubmit={submitOnboarding}
+                            onBack={prevStep}
+                            isSubmitting={loading}
+                        />
+                    )}
+
+                </div>
+            </div>
+        </div>
+    );
+}

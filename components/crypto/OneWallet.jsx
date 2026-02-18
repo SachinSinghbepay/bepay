@@ -6,7 +6,8 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import WaitlistTriggerButton from "../waitlist-trigger-button";
 import { AnalyticsService } from "@/services/analyticsService";
-
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 gsap.registerPlugin(ScrollTrigger);
 
 // Utility function for debouncing
@@ -33,7 +34,7 @@ const useIsMobile = () => {
 };
 
 // Component for the original Desktop/Tablet animation
-const DesktopView = () => {
+const DesktopView = ({ onDownloadClick }) => {
   const [hasTrackedView, setHasTrackedView] = useState(false);
   const sectionRef = useRef(null);
   const textLine1Ref = useRef(null);
@@ -97,7 +98,7 @@ const DesktopView = () => {
           }
         });
       },
-      { threshold: 0.1}
+      { threshold: 0.1 }
     );
 
     refs.forEach(({ ref, id }) => {
@@ -109,6 +110,7 @@ const DesktopView = () => {
 
     return () => observer.disconnect();
   }, []);
+
 
   const handleCreateWalletClick = () =>
     AnalyticsService.sendEvent("Create your wallet button clicked");
@@ -202,7 +204,7 @@ const DesktopView = () => {
         });
 
 
-        tl.to(cardRef.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }) .to( mockupImageRef.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( cardRef.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card2Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage2_1Ref.current, { y: getResponsiveValue("7%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( mockupImage2_2Ref.current, { y: getResponsiveValue("17%", "17.5%", "20%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( mockupImage2_3Ref.current, { y: getResponsiveValue("27%", "27.5%", "30%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card2Ref.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card3Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage3Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card3Ref.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card4Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage4Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card4Ref.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card5Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage5Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( card5Ref.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1" ) .to( card6Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1" ) .to( mockupImage6_1Ref.current, { y: getResponsiveValue("7%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" ) .to( mockupImage6_2Ref.current, { y: getResponsiveValue("17%", "17.5%", "20%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3" );
+        tl.to(cardRef.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }).to(mockupImageRef.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3").to(cardRef.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1").to(card2Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1").to(mockupImage2_1Ref.current, { y: getResponsiveValue("7%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3").to(mockupImage2_2Ref.current, { y: getResponsiveValue("17%", "17.5%", "20%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3").to(mockupImage2_3Ref.current, { y: getResponsiveValue("27%", "27.5%", "30%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3").to(card2Ref.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1").to(card3Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1").to(mockupImage3Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3").to(card3Ref.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1").to(card4Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1").to(mockupImage4Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3").to(card4Ref.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1").to(card5Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1").to(mockupImage5Ref.current, { y: getResponsiveValue("5%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3").to(card5Ref.current, { x: "-100vw", duration: getResponsiveValue(0.8, 1, 1.2), ease: "power2.inOut", }, "+=1").to(card6Ref.current, { x: getResponsiveValue("0%", "0%", "0%"), y: 0, duration: getResponsiveValue(1, 1.25, 1.5), ease: "power2.inOut", }, "-=1").to(mockupImage6_1Ref.current, { y: getResponsiveValue("7%", "7.5%", "10%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3").to(mockupImage6_2Ref.current, { y: getResponsiveValue("17%", "17.5%", "20%"), duration: getResponsiveValue(0.6, 0.8, 1), ease: "power3.out", }, "-=0.3");
 
       };
 
@@ -228,7 +230,7 @@ const DesktopView = () => {
           {/* ///- MODIFICATION: Removed top padding (pt-5) to move heading up significantly -/// */}
           <div className="flex flex-col items-center justify-start min-h-[100vh]">
             <h2
-             
+
               className="font-montserrat font-normal text-4xl sm:text-5xl lg:text-[60px] leading-tight tracking-[-0.08em] text-center mb-4"
             >
               <span className="text-[#9e9e9e]">Everything you need in </span>
@@ -236,7 +238,7 @@ const DesktopView = () => {
             </h2>
 
             <p
-              
+
               className="font-montserrat font-normal text-lg sm:text-xl leading-relaxed tracking-normal text-black max-w-3xl"
             >
               <span className="text-[#9e9e9e]">
@@ -250,113 +252,113 @@ const DesktopView = () => {
 
         {/* Card 1: Self-Custody Wallet */}
         <div
-  ref={cardRef}
-  className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden h-[75vh] lg:h-[58.6vh]"
->
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2 h-full">
-    <div className="relative w-full h-full bg-[#f2f2f2] rounded-[26px] overflow-hidden">
-      <div ref={mockupImageRef} className="relative w-full h-full">
-        <Image
-          src="/businessnew/mockupImage.png"
-          alt="Wallet Mockup"
-          fill
-          className="object-contain p-4 sm:p-5 lg:p-6"
-        />
-      </div>
-    </div>
-    <div className="flex flex-col justify-center gap-5 p-4 sm:p-6 lg:p-8">
-      <div className="space-y-3">
-        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl -mt-10 font-semibold text-black">
-          Self-Custody Wallet
-        </h1>
-        <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-          Complete control over your crypto assets with
-          military-grade security.
-        </p>
-      </div>
-      <div className="space-y-4">
-        <div className="flex items-center space-x-4">
-          <div className="w-7 h-7 flex-shrink-0">
-            <Image
-              width={28}
-              height={28}
-              src="/businessnew/Self1.svg"
-              alt="Keys and Crypto"
-            />
-          </div>
-          <h3 className="text-sm font-medium text-black">
-            100% Private Key Ownership. Your keys, your Crypto.
-          </h3>
-        </div>
-        <div className="flex items-center space-x-4">
-          <div className="w-7 h-7 flex-shrink-0">
-            <Image
-              src="/businessnew/self4.svg"
-              width={28}
-              height={28}
-              alt="Cryptocurrency icons"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <h3 className="text-sm font-medium text-black">
-              100+ cryptocurrencies <br /> supported!
-            </h3>
-            <Image
-              src="/businessnew/self2.svg"
-              width={90}
-              height={40}
-              alt="Supported cryptocurrency logos"
-              className="ml-2 mt-[-12px]"
-            />
-          </div>
-        </div>
-        <div className="flex items-center space-x-4">
-          <div className="w-7 h-7 flex-shrink-0">
-            <Image
-              src="/businessnew/self5.svg"
-              width={28}
-              height={28}
-              alt="Login icon"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <h3 className="text-sm font-medium text-black">
-              Social login integration
-            </h3>
-            <Image
-              src="/businessnew/self3.svg"
-              width={18}
-              height={10}
-              alt="Google login icon"
-              className="ml-1 mt-[-2px]"
-            />
-            <Image
-              src="/businessnew/self6.svg"
-              width={18}
-              height={10}
-              alt="Apple login icon"
-              className="ml-1 mt-[-5px]"
-            />
-          </div>
-        </div>
-      </div>
-      <WaitlistTriggerButton triggerSource="'create your wallet' button clicked" buttonLocation="Crypto One Wallet Section">
-        <button
-          onClick={handleCreateWalletClick}
-          className="flex items-center justify-center cursor-pointer bg-black text-white w-[220px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
+          ref={cardRef}
+          className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[89vw] sm:w-[90vw] md:w-[85vw] lg:w-[80vw] xl:max-w-[1100px] bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-lg overflow-hidden h-[75vh] lg:h-[58.6vh]"
         >
-          <Image
-            src="/businessnew/buttonIcon.png"
-            alt="Create Wallet"
-            width={24}
-            height={24}
-          />
-          <span>Create your wallet</span>
-        </button>
-      </WaitlistTriggerButton>
-    </div>
-  </div>
-</div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-2 h-full">
+            <div className="relative w-full h-full bg-[#f2f2f2] rounded-[26px] overflow-hidden">
+              <div ref={mockupImageRef} className="relative w-full h-full">
+                <Image
+                  src="/businessnew/mockupImage.png"
+                  alt="Wallet Mockup"
+                  fill
+                  className="object-contain p-4 sm:p-5 lg:p-6"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col justify-center gap-5 p-4 sm:p-6 lg:p-8">
+              <div className="space-y-3">
+                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl -mt-10 font-semibold text-black">
+                  Self-Custody Wallet
+                </h1>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                  Complete control over your crypto assets with
+                  military-grade security.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image
+                      width={28}
+                      height={28}
+                      src="/businessnew/Self1.svg"
+                      alt="Keys and Crypto"
+                    />
+                  </div>
+                  <h3 className="text-sm font-medium text-black">
+                    100% Private Key Ownership. Your keys, your Crypto.
+                  </h3>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image
+                      src="/businessnew/self4.svg"
+                      width={28}
+                      height={28}
+                      alt="Cryptocurrency icons"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-medium text-black">
+                      100+ cryptocurrencies <br /> supported!
+                    </h3>
+                    <Image
+                      src="/businessnew/self2.svg"
+                      width={90}
+                      height={40}
+                      alt="Supported cryptocurrency logos"
+                      className="ml-2 mt-[-12px]"
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="w-7 h-7 flex-shrink-0">
+                    <Image
+                      src="/businessnew/self5.svg"
+                      width={28}
+                      height={28}
+                      alt="Login icon"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-medium text-black">
+                      Social login integration
+                    </h3>
+                    <Image
+                      src="/businessnew/self3.svg"
+                      width={18}
+                      height={10}
+                      alt="Google login icon"
+                      className="ml-1 mt-[-2px]"
+                    />
+                    <Image
+                      src="/businessnew/self6.svg"
+                      width={18}
+                      height={10}
+                      alt="Apple login icon"
+                      className="ml-1 mt-[-5px]"
+                    />
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  onDownloadClick();
+                }}
+                className="flex items-center justify-center cursor-pointer bg-black text-white w-[220px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
+              >
+                <Image
+                  src="/businessnew/buttonIcon.png"
+                  alt="Create Wallet"
+                  width={24}
+                  height={24}
+                />
+                <span>Create your wallet</span>
+              </button>
+            </div>
+          </div>
+        </div>
 
         {/* Card 2: Virtual Crypto Debit Card */}
         <div
@@ -463,20 +465,20 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton triggerSource="Get your crypto debit card now button clicked" buttonLocation="Crypto One Wallet Section">
-                <button
-                  onClick={handleGetDebitCardClick}
-                  className="flex items-center justify-center cursor-pointer bg-black text-white w-full max-w-[308px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0 mt-2"
-                >
-                  <Image
-                    src="/businessnew/virtual5.svg"
-                    alt="Get Card icon"
-                    width={24}
-                    height={24}
-                  />
-                  <span>Get your crypto debit card now</span>
-                </button>
-              </WaitlistTriggerButton>
+              <button
+                onClick={() => {
+                  onDownloadClick();
+                }}
+                className="flex items-center justify-center cursor-pointer bg-black text-white w-full max-w-[308px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0 mt-2"
+              >
+                <Image
+                  src="/businessnew/virtual5.svg"
+                  alt="Get Card icon"
+                  width={24}
+                  height={24}
+                />
+                <span>Get your crypto debit card now</span>
+              </button>
             </div>
           </div>
         </div>
@@ -571,20 +573,20 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton triggerSource="Get a Swiss bank account button clicked" buttonLocation="Crypto One Wallet Section">
-                <button
-                  onClick={handleGetSwissAccountClick}
-                  className="flex items-center justify-center cursor-pointer bg-black text-white w-[268px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
-                >
-                  <Image
-                    src="/businessnew/IBAN6.svg"
-                    alt="Get account icon"
-                    width={24}
-                    height={24}
-                  />
-                  <span>Get a Swiss bank account</span>
-                </button>
-              </WaitlistTriggerButton>
+              <button
+                onClick={() => {
+                  onDownloadClick();
+                }}
+                className="flex items-center justify-center cursor-pointer bg-black text-white w-[268px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
+              >
+                <Image
+                  src="/businessnew/IBAN6.svg"
+                  alt="Get account icon"
+                  width={24}
+                  height={24}
+                />
+                <span>Get a Swiss bank account</span>
+              </button>
             </div>
           </div>
         </div>
@@ -660,20 +662,20 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton triggerSource="Start paying with crypto button clicked" buttonLocation="Crypto One Wallet Section">
-                <button
-                  onClick={handleStartPayingClick}
-                  className="flex items-center justify-center cursor-pointer bg-black text-white w-[260px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
-                >
-                  <Image
-                    src="/businessnew/buttonIcon.png"
-                    alt="Start paying icon"
-                    width={24}
-                    height={24}
-                  />
-                  <span>Start paying with crypto</span>
-                </button>
-              </WaitlistTriggerButton>
+              <button
+                onClick={() => {
+                  onDownloadClick();
+                }}
+                className="flex items-center justify-center cursor-pointer bg-black text-white w-[260px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
+              >
+                <Image
+                  src="/businessnew/buttonIcon.png"
+                  alt="Start paying icon"
+                  width={24}
+                  height={24}
+                />
+                <span>Start paying with crypto</span>
+              </button>
             </div>
           </div>
         </div>
@@ -748,20 +750,20 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton triggerSource="Start spending your crypto button clicked" buttonLocation="Crypto One Wallet Section">
-                <button
-                  onClick={handleStartSpendingClick}
-                  className="flex items-center justify-center cursor-pointer bg-black text-white w-[278px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
-                >
-                  <Image
-                    src="/businessnew/qr5.svg"
-                    alt="Start spending icon"
-                    width={24}
-                    height={24}
-                  />
-                  <span>Start spending your crypto</span>
-                </button>
-              </WaitlistTriggerButton>
+              <button
+                onClick={() => {
+                  onDownloadClick();
+                }}
+                className="flex items-center justify-center cursor-pointer bg-black text-white w-[278px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
+              >
+                <Image
+                  src="/businessnew/qr5.svg"
+                  alt="Start spending icon"
+                  width={24}
+                  height={24}
+                />
+                <span>Start spending your crypto</span>
+              </button>
             </div>
           </div>
         </div>
@@ -857,9 +859,10 @@ const DesktopView = () => {
                   </h3>
                 </div>
               </div>
-              <WaitlistTriggerButton triggerSource="Download app and get started button clicked " buttonLocation="Crypto One Wallet Section">
                 <button
-                  onClick={handleDownloadAndStartClick}
+                    onClick={() => {
+                      onDownloadClick();
+                    }}
                   className="flex items-center justify-center cursor-pointer bg-black text-white w-[310px] h-[56px] rounded-full gap-[10px] text-sm font-medium px-6 hover:bg-black/90 transition-colors flex-shrink-0"
                 >
                   <Image
@@ -870,7 +873,7 @@ const DesktopView = () => {
                   />
                   <span>Download app and get started</span>
                 </button>
-              </WaitlistTriggerButton>
+   
             </div>
           </div>
         </div>
@@ -880,7 +883,7 @@ const DesktopView = () => {
 };
 
 // Component for the new Mobile horizontal scroll animation
-const MobileView = () => {
+const MobileView = ({ onDownloadClick }) => {
   const sectionRef = useRef(null);
   const [hasTrackedView, setHasTrackedView] = useState(false);
   const stickyContainerRef = useRef(null);
@@ -1315,7 +1318,7 @@ const MobileView = () => {
               <div className="relative w-[95%] h-[40%] bg-[#f2f2f2] m-2 rounded-xl ml-2 overflow-hidden">
                 <div className="w-full h-full relative flex justify-center">
                   <div ref={mobileImg1_1Ref}>
-                    
+
                     <Image
                       src="/businessnew/mockupImage.png"
                       alt="Wallet Mockup"
@@ -1325,7 +1328,7 @@ const MobileView = () => {
                     />
                   </div>
                   <div ref={mobileImg1_2Ref}>
-                    
+
                     <Image
                       src="/businessnew/updated.svg"
                       alt="Wallet Mockup Updated"
@@ -1338,19 +1341,19 @@ const MobileView = () => {
               </div>
               <div className="flex flex-col p-4 pb-8 flex-grow space-y-3">
                 <div className="space-y-2 -mt-3">
-                  
+
                   <h1 className="text-xl font-semibold text-black ">
-                    
+
                     Self-Custody Wallet
                   </h1>
                   <p className="text-sm text-gray-600 leading-snug">
-                    
+
                     Complete control over your crypto assets with
                     military-grade security.
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  
+
                   <Image
                     width={20}
                     height={20}
@@ -1358,12 +1361,12 @@ const MobileView = () => {
                     alt="Keys and Crypto"
                   />
                   <p className="text-xs font-medium text-black">
-                    
+
                     100% Private Key Ownership. Your keys, your Crypto.
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
-                  
+
                   <Image
                     src="/businessnew/self4.svg"
                     width={20}
@@ -1371,7 +1374,7 @@ const MobileView = () => {
                     alt="Cryptocurrency icons"
                   />
                   <p className="text-xs font-medium text-black">
-                    
+
                     100+ cryptocurrencies <br /> supported!
                   </p>
                   <Image
@@ -1383,7 +1386,7 @@ const MobileView = () => {
                   />
                 </div>
                 <div className="flex items-center gap-2 mt-0">
-                  
+
                   <Image
                     src="/businessnew/self5.svg"
                     width={20}
@@ -1392,7 +1395,7 @@ const MobileView = () => {
                     className="mt-[-5px]"
                   />
                   <p className="text-xs font-medium text-black">
-                    
+
                     Social login integration
                   </p>
                   <Image
@@ -1411,21 +1414,21 @@ const MobileView = () => {
                   />
                 </div>
                 <div className="mt-8">
-                  <WaitlistTriggerButton triggerSource="'create your wallet' button clicked" buttonLocation="Crypto One Wallet Section">
-                    <button
-                      onClick={handleCreateWalletClick}
-                      className="bg-black cursor-pointer -mt-5 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
-                    >
-                      <Image
-                        src="/businessnew/buttonIcon.png"
-                        alt="Create Wallet"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5"
-                      />
-                      <span>Create your wallet</span>
-                    </button>
-                  </WaitlistTriggerButton>
+                  <button
+                    onClick={() => {
+                      onDownloadClick();
+                    }}
+                    className="bg-black cursor-pointer -mt-5 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
+                  >
+                    <Image
+                      src="/businessnew/buttonIcon.png"
+                      alt="Create Wallet"
+                      width={20}
+                      height={20}
+                      className="w-5 h-5"
+                    />
+                    <span>Create your wallet</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -1437,7 +1440,7 @@ const MobileView = () => {
                   ref={mobileImg2_1Ref}
                   className="absolute transform -translate-x-8 w-full h-full z-[2]"
                 >
-                  
+
                   <Image
                     src="/businessnew/cardImage_single.png"
                     alt="Card Mockup"
@@ -1446,7 +1449,7 @@ const MobileView = () => {
                   />
                 </div>
                 <div ref={mobileImg2_2Ref} className="absolute w-full h-full z-[1]">
-                  
+
                   <Image
                     src="/businessnew/cardImage_single.png"
                     alt="Card Mockup"
@@ -1458,7 +1461,7 @@ const MobileView = () => {
                   ref={mobileImg2_3Ref}
                   className="absolute transform translate-x-8 w-full h-full z-[0]"
                 >
-                  
+
                   <Image
                     src="/businessnew/cardImage_single.png"
                     alt="Card Mockup"
@@ -1469,21 +1472,21 @@ const MobileView = () => {
               </div>
               <div className="flex flex-col p-4 pb-8 flex-grow space-y-3 mt-2">
                 <div className="space-y-2 -mt-4">
-                  
+
                   <h1 className="text-xl font-semibold text-black leading-none pt-1">
-                    
+
                     Virtual Crypto Debit Card
                   </h1>
                   <p className="text-sm text-gray-600 leading-snug">
-                    
+
                     Spend your crypto anywhere with our instant virtual debit
                     card. No waiting. No approval.
                   </p>
                 </div>
                 <div className="flex items-center space-x-3 -mt-0">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       width={28}
                       height={28}
@@ -1492,17 +1495,17 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       Instant Activation & Global Acceptance.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       width={28}
                       height={28}
@@ -1511,17 +1514,17 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       Instant crypto-to-fiat conversion at competitive rates.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       width={28}
                       height={28}
@@ -1530,17 +1533,17 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       bepay App Integration & Advanced Security.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       width={28}
                       height={28}
@@ -1549,29 +1552,29 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       Cashback rewards on every purchase.
                     </p>
                   </div>
                 </div>
                 <div className="mt-0">
-                  <WaitlistTriggerButton triggerSource="'virtual crypto debit card' button clicked" buttonLocation="Crypto One Wallet Section">
-                    <button
-                      onClick={handleGetDebitCardClick}
-                      className="bg-black mt-2 cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
-                    >
-                      <Image
-                        src="/businessnew/virtual5.svg"
-                        alt="Get Card"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5"
-                      />
-                      <span>Get your crypto debit card</span>
-                    </button>
-                  </WaitlistTriggerButton>
+                  <button
+                    onClick={() => {
+                      onDownloadClick();
+                    }}
+                    className="bg-black mt-2 cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
+                  >
+                    <Image
+                      src="/businessnew/virtual5.svg"
+                      alt="Get Card"
+                      width={20}
+                      height={20}
+                      className="w-5 h-5"
+                    />
+                    <span>Get your crypto debit card</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -1579,9 +1582,9 @@ const MobileView = () => {
           <div className="mobile-card w-[90vw] h-[88vh] flex-shrink-0 bg-white rounded-[1.5rem] shadow-lg overflow-hidden">
             <div className="flex flex-col h-full">
               <div className="relative w-[95%] h-[40%] bg-[#f2f2f2] m-2 rounded-xl ml-2 overflow-hidden">
-                
+
                 <div ref={mobileImg3Ref} className="relative">
-                  
+
                   <Image
                     src="/businessnew/IBAN0.svg"
                     alt="Swiss IBAN Mockup"
@@ -1593,21 +1596,21 @@ const MobileView = () => {
               </div>
               <div className="flex flex-col p-4 pb-8 flex-grow space-y-3">
                 <div className="space-y-2 -mt-3">
-                  
+
                   <h1 className="text-xl font-semibold text-black">
-                    
+
                     Swiss IBAN Account
                   </h1>
                   <p className="text-sm text-gray-600 leading-snug">
-                    
+
                     Multi-currency on-chain banking for seamless cross-border
                     transfers.
                   </p>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/IBAN1.svg"
                       alt="currency icon"
@@ -1617,14 +1620,14 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       CHF, EUR, USD, CNY & more.
                     </p>
                   </div>
                   <div className="h-5 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/IBAN2.svg"
                       alt="flags icon"
@@ -1635,9 +1638,9 @@ const MobileView = () => {
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/IBAN3.svg"
                       alt="fee icon"
@@ -1647,17 +1650,17 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       No transfer fee.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/IBAN4.svg"
                       alt="settlements icon"
@@ -1667,17 +1670,17 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       Instant settlements.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/IBAN5.svg"
                       alt="security icon"
@@ -1687,29 +1690,29 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       Bank-grade security.
                     </p>
                   </div>
                 </div>
                 <div className="mt-8">
-                  <WaitlistTriggerButton triggerSource="Get a Swiss bank account button clicked" buttonLocation="Crypto One Wallet Section">
-                    <button
-                      onClick={handleGetSwissAccountClick}
-                      className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
-                    >
-                      <Image
-                        src="/businessnew/IBAN6.svg"
-                        alt="Get account"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5"
-                      />
-                      <span>Get a Swiss bank account</span>
-                    </button>
-                  </WaitlistTriggerButton>
+                  <button
+                    onClick={() => {
+                      onDownloadClick();
+                    }}
+                    className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
+                  >
+                    <Image
+                      src="/businessnew/IBAN6.svg"
+                      alt="Get account"
+                      width={20}
+                      height={20}
+                      className="w-5 h-5"
+                    />
+                    <span>Get a Swiss bank account</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -1717,9 +1720,9 @@ const MobileView = () => {
           <div className="mobile-card w-[90vw] h-[88vh] flex-shrink-0 bg-white rounded-[1.5rem] shadow-lg overflow-hidden">
             <div className="flex flex-col h-full">
               <div className="relative w-[95%] h-[40%] bg-[#f2f2f2] m-2 rounded-xl ml-2 overflow-hidden">
-                
+
                 <div ref={mobileImg4Ref} className="relative">
-                  
+
                   <Image
                     src="/businessnew/p2p1.svg"
                     alt="P2P Mockup"
@@ -1731,21 +1734,21 @@ const MobileView = () => {
               </div>
               <div className="flex flex-col p-4 pb-8 flex-grow space-y-3">
                 <div className="space-y-2 -mt-2">
-                  
+
                   <h1 className="text-xl font-semibold text-black">
-                    
+
                     P2P Transactions
                   </h1>
                   <p className="text-sm text-gray-600 leading-snug">
-                    
+
                     Send and receive money instantly with friends and family
                     worldwide.
                   </p>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/p2p2.svg"
                       alt="transfer icon"
@@ -1755,17 +1758,17 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       Instant P2P transfers.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/p2p3.svg"
                       alt="qr icon"
@@ -1775,17 +1778,17 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       QR code payments.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/p2p4.svg"
                       alt="split icon"
@@ -1795,29 +1798,29 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       Split payment options.
                     </p>
                   </div>
                 </div>
                 <div className="mt-8">
-                  <WaitlistTriggerButton triggerSource="Start paying with crypto button clicked" buttonLocation="Crypto One Wallet Section">
-                    <button
-                      onClick={handleStartPayingClick}
-                      className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
-                    >
-                      <Image
-                        src="/businessnew/buttonIcon.png"
-                        alt="Start paying"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5"
-                      />
-                      <span>Start paying with crypto</span>
-                    </button>
-                  </WaitlistTriggerButton>
+                  <button
+                    onClick={() => {
+                      onDownloadClick();
+                    }}
+                    className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
+                  >
+                    <Image
+                      src="/businessnew/buttonIcon.png"
+                      alt="Start paying"
+                      width={20}
+                      height={20}
+                      className="w-5 h-5"
+                    />
+                    <span>Start paying with crypto</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -1825,9 +1828,9 @@ const MobileView = () => {
           <div className="mobile-card w-[90vw] h-[88vh] flex-shrink-0 bg-white rounded-[1.5rem] shadow-lg overflow-hidden">
             <div className="flex flex-col h-full">
               <div className="relative w-[95%] h-[40%] bg-[#f2f2f2] m-2 rounded-xl ml-2 overflow-hidden">
-                
+
                 <div ref={mobileImg5Ref} className="relative">
-                  
+
                   <Image
                     src="/businessnew/qr1.svg"
                     alt="QR Payment Mockup"
@@ -1839,21 +1842,21 @@ const MobileView = () => {
               </div>
               <div className="flex flex-col p-4 pb-8 flex-grow space-y-3">
                 <div className="space-y-2 -mt-2">
-                  
+
                   <h1 className="text-xl font-semibold text-black">
-                    
+
                     QR Code Payments
                   </h1>
                   <p className="text-sm text-gray-600 leading-snug">
-                    
+
                     Pay with crypto or fiat using simple QR codes at any
                     merchant.
                   </p>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/qr2.svg"
                       alt="qr icon"
@@ -1863,17 +1866,17 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       Fiat & crypto QR codes.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/qr3.svg"
                       alt="offline icon"
@@ -1883,17 +1886,17 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       Offline payment capability.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/qr4.svg"
                       alt="merchant icon"
@@ -1903,17 +1906,18 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       Merchant integration.
                     </p>
                   </div>
                 </div>
                 <div className="mt-8">
-                  <WaitlistTriggerButton triggerSource="Start spending your crypto button clicked" buttonLocation="Crypto One Wallet Section">
-                    <button
-                      onClick={handleStartSpendingClick}
+               <button
+                    onClick={() => {
+                      onDownloadClick();
+                    }}
                       className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
                     >
                       <Image
@@ -1925,7 +1929,6 @@ const MobileView = () => {
                       />
                       <span>Start spending your crypto</span>
                     </button>
-                  </WaitlistTriggerButton>
                 </div>
               </div>
             </div>
@@ -1937,7 +1940,7 @@ const MobileView = () => {
                   ref={mobileImg6_1Ref}
                   className="absolute -top-[5%] left-[2.5%] w-[50%] h-[50%] z-[2]"
                 >
-                  
+
                   <Image
                     src="/businessnew/ai1.png"
                     alt="AI Mockup 1"
@@ -1950,7 +1953,7 @@ const MobileView = () => {
                   ref={mobileImg6_2Ref}
                   className="absolute bottom-[8%] right-[2%] w-[50%] h-[50%] z-[1]"
                 >
-                  
+
                   <Image
                     src="/businessnew/ai2.png"
                     alt="AI Mockup 2"
@@ -1962,21 +1965,21 @@ const MobileView = () => {
               </div>
               <div className="flex flex-col p-4 pb-8 flex-grow space-y-3">
                 <div className="space-y-2 -mt-1">
-                  
+
                   <h1 className="text-xl font-semibold text-black">
-                    
+
                     AI Personalization
                   </h1>
                   <p className="text-sm text-gray-600 leading-snug">
-                    
+
                     AI-powered insights and personalized financial
                     recommendations.
                   </p>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/ai3.svg"
                       alt="insights icon"
@@ -1986,17 +1989,17 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       Smart spending insights.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/ai4.svg"
                       alt="advice icon"
@@ -2006,17 +2009,17 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       Personalized investment advice.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  
+
                   <div className="w-6 h-6 rounded-full flex-shrink-0">
-                    
+
                     <Image
                       src="/businessnew/ai6.svg"
                       alt="agent icon"
@@ -2026,17 +2029,18 @@ const MobileView = () => {
                     />
                   </div>
                   <div>
-                    
+
                     <p className="text-xs font-medium text-black">
-                      
+
                       AI agent assistance.
                     </p>
                   </div>
                 </div>
                 <div className="mt-8">
-                  <WaitlistTriggerButton triggerSource="Download app and get started button clicked" buttonLocation="Crypto One Wallet Section">
-                    <button
-                      onClick={handleDownloadAndStartClick}
+                <button
+                    onClick={() => {
+                      onDownloadClick();
+                    }}
                       className="bg-black cursor-pointer -mt-6 whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
                     >
                       <Image
@@ -2048,7 +2052,6 @@ const MobileView = () => {
                       />
                       <span>Download app and get started</span>
                     </button>
-                  </WaitlistTriggerButton>
                 </div>
               </div>
             </div>
@@ -2064,6 +2067,16 @@ export default function OneWallet() {
   const [isMounted, setIsMounted] = useState(false);
   const isMobile = useIsMobile();
 
+  const {
+    handleDownloadClick,
+    isOSPopupOpen,
+    setIsOSPopupOpen,
+    isQRPopupOpen,
+    setIsQRPopupOpen,
+    selectedOS,
+    setSelectedOS,
+  } = useAppDownload();
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -2072,6 +2085,24 @@ export default function OneWallet() {
     return null;
   }
 
-  return isMobile ? <MobileView /> : <DesktopView />;
+  return (
+    <>
+      {isMobile ? (
+        <MobileView onDownloadClick={handleDownloadClick} />
+      ) : (
+        <DesktopView onDownloadClick={handleDownloadClick} />
+      )}
+
+      <AppDownloadPopups
+        isOSPopupOpen={isOSPopupOpen}
+        setIsOSPopupOpen={setIsOSPopupOpen}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
+        selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
+      />
+    </>
+  );
 }
+
 //this is a comment
