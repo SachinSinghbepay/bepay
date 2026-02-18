@@ -86,6 +86,7 @@ export default function Profile({ onOpenModal }) {
             <TwoFactorCard
                 enabled={user?.twoFactorEnabled}
                 onEnable={handleEnable2FA}
+                onDisable={() => onOpenModal("disable-two-factor")}
             />
 
 
@@ -168,7 +169,7 @@ function Divider() {
     return <div className="border-t" />;
 }
 
-function TwoFactorCard({ enabled, onEnable }) {
+function TwoFactorCard({ enabled, onEnable, onDisable }) {
     return (
         <div className="bg-[#F7F7F7] border border-gray-200 rounded-3xl px-8 py-8 space-y-6">
 
@@ -201,6 +202,7 @@ function TwoFactorCard({ enabled, onEnable }) {
             <div className="flex justify-end">
                 {enabled ? (
                     <button
+                        onClick={onDisable}
                         className="px-8 py-3 rounded-full border border-red-500 text-red-500 text-base font-medium hover:bg-red-50 transition"
                     >
                         Disable 2FA

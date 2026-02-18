@@ -39,10 +39,12 @@ import RemoveMemberModal from "../modals/RemoveMemberModal";
 import ChangePasswordModal from "../modals/ChangePasswordModal";
 import EnableTwoFactorModal from "../modals/EnableTwoFactorModal";
 import BackupCodesModal from "../modals/BackupCodesModal";
+import DisableTwoFactorModal from "../modals/DisableTwoFactorModal";
+
 
 export default function InnerLayout() {
   const [activePage, setActivePage] = useState("dashboard");
-
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   // 🔴 MODAL STATE (ONLY HERE)
   const [modal, setModal] = useState(null);
   const [modalProps, setModalProps] = useState({});
@@ -384,6 +386,9 @@ export default function InnerLayout() {
             />
           )}
 
+          {modal === "disable-two-factor" && (
+            <DisableTwoFactorModal onClose={closeModal} />
+          )}
 
 
 

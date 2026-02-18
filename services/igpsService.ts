@@ -275,6 +275,10 @@ export class IgpsService {
   );
 }
 
+async disableTwoFactor(password: string): Promise<ApiResponse<any>> {
+  return this.request<any>("POST", "/auth/2fa/disable", { password });
+}
+
   // 2. Team Methods
   async inviteMember(
     data: InviteMemberRequest,

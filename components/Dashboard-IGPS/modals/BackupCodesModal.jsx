@@ -12,6 +12,28 @@ export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
     const [allCopied, setAllCopied] = useState(false);
     const [mode, setMode] = useState("codes");
 
+    const scrollRef = useRef(null);
+
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+
+        const onWheel = (e) => {
+            const { scrollTop, scrollHeight, clientHeight } = el;
+            const atTop = scrollTop === 0;
+            const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+            if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+                e.preventDefault();
+            } else {
+                e.stopPropagation();
+            }
+        };
+
+        el.addEventListener("wheel", onWheel, { passive: false });
+        return () => el.removeEventListener("wheel", onWheel);
+    }, []);
+
     // Example codes (normally from backend)
     // const codes = [
     //     "KZJNOK1V",
@@ -70,9 +92,10 @@ export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
         printWindow.print();
     };
 
+
     return (
         <ModalFrame size={mode === "success" ? "sm" : "lg"}>
-            <div className="flex flex-col bg-white rounded-3xl p-8 max-h-[80vh]">
+            <div className="flex flex-col bg-white rounded-3xl p-8 max-h-[80vh] min-h-0">
                 {mode === "codes" ? (
                     <>
                         {/* HEADER */}
@@ -99,7 +122,10 @@ export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
                         </div>
 
                         {/* SCROLLABLE CODE LIST */}
-                        <div className="flex-1 overflow-y-auto space-y-3 pr-2 mb-6">
+                        <div
+                            ref={scrollRef}
+                            className="flex-1 min-h-0 overflow-y-auto space-y-3 pr-2 mb-6"
+                        >
                             {codes.map((code, index) => (
                                 <div
                                     key={index}
