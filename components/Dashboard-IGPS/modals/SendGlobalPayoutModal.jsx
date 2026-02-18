@@ -1,6 +1,6 @@
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { IgpsService } from "../../../services/igpsService";
 
 const igpsService = new IgpsService();
@@ -98,21 +98,42 @@ export default function SendGlobalPayoutModal({
     const [quote, setQuote] = useState(null);
     const [loadingQuote, setLoadingQuote] = useState(false);
     const [quoteError, setQuoteError] = useState("");
+    const [walletBalances, setWalletBalances] = useState([]);
+
+
+    const selectedWalletBalance = useMemo(() => {
+        const chainMap = {
+            solana: "SOL",
+            ethereum: "ETH",
+            polygon: "POL",
+            tron: "TRX"
+        };
+
+        return walletBalances.find(w => {
+            const normalized = `${w.currency}_${chainMap[w.chain]}`;
+            return normalized === currency;
+        });
+    }, [walletBalances, currency]);
+
 
     // Fetch beneficiaries & currencies
 
     useEffect(() => {
         const loadData = async () => {
             try {
-                const [benRes, walletRes] = await Promise.all([
+                const [benRes, walletRes, balanceRes] = await Promise.all([
                     igpsService.listBeneficiaries(),
-                    igpsService.listWallets()
+                    igpsService.listWallets(),
+                    igpsService.getWalletBalances()
                 ]);
                 console.log("========== FULL BENEFICIARIES RESPONSE ==========");
                 console.dir(benRes, { depth: null });
 
                 console.log("========== FULL WALLETS RESPONSE ==========");
                 console.dir(walletRes, { depth: null });
+
+                // console.log("========== FULL WALLETS BALANCE   ==========");
+                // console.dir(balanceRes, { depth: null });
 
                 console.log("WALLET RESPONSE STRUCTURE:", {
                     hasData: !!walletRes.data,
@@ -126,12 +147,19 @@ export default function SendGlobalPayoutModal({
                     setBeneficiaries(benRes.data);
                 }
 
-                if (walletRes.success && walletRes.data && Array.isArray(walletRes.data.wallets)) {
+                if (walletRes.success && Array.isArray(walletRes.data?.wallets)) {
                     setSourceCurrencies(walletRes.data.wallets);
+
                     if (walletRes.data.wallets.length > 0) {
                         setCurrency(walletRes.data.wallets[0].fullCurrency);
                     }
-                } else {
+                }
+
+                if (balanceRes.success && Array.isArray(balanceRes.data?.wallets)) {
+                    setWalletBalances(balanceRes.data.wallets);
+                }
+
+                else {
                     // Fallback defaults
                     setSourceCurrencies([]);
                 }
@@ -354,7 +382,12 @@ export default function SendGlobalPayoutModal({
                         title="Amount"
                         right={
                             <p className="text-sm text-gray-500">
-                                Available balance: <b>$100.00</b>
+                                Available balance: <b>
+                                    {selectedWalletBalance
+                                        ? `${parseFloat(selectedWalletBalance.balance || 0).toFixed(2)} ${selectedWalletBalance.currency}`
+                                        : `0.00 ${currency.split('_')[0]}`
+                                    }
+                                </b>
                             </p>
                         }
                     >
@@ -599,7 +632,7 @@ function AmountBox({
                 </div>
 
                 <div className="relative">
-                    <div className="flex items-center gap-3 bg-[#EBEBEB] py-2 px-2 rounded-xl">
+                    <div className="flex items-center gap-3 bg-[#EBEBEB] py-2 px-2 rounded-xl w-fit lg:w-50">
 
                         {/* TOKEN + NETWORK ICONS */}
                         {sourceCurrencies
@@ -607,14 +640,14 @@ function AmountBox({
                             .map(w => (
                                 <div
                                     key={w.fullCurrency}
-                                    className="relative h-10 w-10 "
+                                    className="relative h-10 w-10 pl-2"
                                 >
                                     {/* BIG TOKEN ICON */}
                                     {w.tokenUrl && (
                                         <img
-                                            src={w.networkUrl}
+                                            src={w.tokenUrl}
                                             onError={(e) => (e.target.style.display = "none")}
-                                            className="h-8 w-8 rounded-full"
+                                            className="h-8 w-8 rounded-full mt-1"
                                             alt="token"
                                         />
                                     )}
@@ -624,7 +657,7 @@ function AmountBox({
                                         <img
                                             src={w.networkUrl}
                                             onError={(e) => (e.target.style.display = "none")}
-                                            className="absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-white"
+                                            className="absolute -bottom-1 -right-2 h-4 w-4 rounded-full border-2 border-white "
                                             alt="network"
                                         />
                                     )}
@@ -643,11 +676,7 @@ function AmountBox({
                                         sourceCurrencies.find(c => c.fullCurrency === currency)?.currency
                                     }
                                     {" "}
-                                    (
-                                    {
-                                        sourceCurrencies.find(c => c.fullCurrency === currency)?.chain
-                                    }
-                                    )
+                                    
                                 </span>
 
                                 {/* Arrow */}
@@ -664,7 +693,7 @@ function AmountBox({
 
                             {/* DROPDOWN */}
                             {open && (
-                                <div className="absolute mt-2 w-full bg-white border rounded-xl shadow-lg z-50">
+                                <div className="absolute mt-2 -right-2 bg-white border rounded-xl shadow-lg z-50 w-45">
                                     {sourceCurrencies.map((c) => (
                                         <button
                                             key={c.fullCurrency}
@@ -694,7 +723,7 @@ function AmountBox({
             {/* CENTER ARROW */}
             <div className="flex justify-center">
                 <div className="h-14 w-14 -mt-12 rounded-full bg-white shadow-md flex items-center justify-center text-lg">
-                    <img src="/icons/back.svg" alt="" className="rotate-90" />
+                    <img src="/icons/back.svg" alt="" className="rotate-270" />
                 </div>
             </div>
 
@@ -784,9 +813,9 @@ function CurrencyDropdown({ label, icon }) {
 
 function CurrencyPill({ label, icon }) {
     return (
-        <div className="flex justify-center items-center gap-2 bg-[#EBEBEB] border rounded-xl px-3 py-3 w-[160px]">
-            <img src={icon} className="h-5 w-5 rounded-full" alt="" />
-            <span className="text-[20px] font-bold">{label}</span>
+        <div className="flex justify-center items-center gap-2 bg-[#EBEBEB] border rounded-xl px-3 py-4 w-fit lg:w-50">
+            <img src={icon} className="h-6 w-6 rounded-full" alt="" />
+            <span className="text-[20px] font-semibold">{label}</span>
         </div>
     );
 }

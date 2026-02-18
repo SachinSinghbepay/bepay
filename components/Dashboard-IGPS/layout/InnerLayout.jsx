@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import TopHeader from "./TopHeader";
 
@@ -43,11 +43,23 @@ import DisableTwoFactorModal from "../modals/DisableTwoFactorModal";
 
 
 export default function InnerLayout() {
+
+
   const [activePage, setActivePage] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
   // 🔴 MODAL STATE (ONLY HERE)
   const [modal, setModal] = useState(null);
   const [modalProps, setModalProps] = useState({});
+
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [sidebarOpen]);
+
 
   const openModal = (type, props = {}) => {
     setModal(type);
@@ -81,15 +93,31 @@ export default function InnerLayout() {
   return (
     <>
       {/* ===== MAIN LAYOUT ===== */}
-      <div className="min-h-screen bg-[#F9F9F9] p-6">
-        <div className="mx-auto max-w-full bg-[#fafafa] rounded-3xl flex overflow-hidden">
+      <div className="min-h-screen bg-[#F9F9F9] p-2 sm:p-4 lg:p-6">
+        <div className="relative mx-auto max-w-full bg-[#fafafa] rounded-2xl lg:rounded-3xl flex overflow-hidden">
 
-          <Sidebar active={activePage} onChange={setActivePage} />
+          {/* Mobile Overlay */}
+          {sidebarOpen && (
+            <div
+              className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
 
-          <div className="flex-1 flex flex-col">
+          <Sidebar
+            active={activePage}
+            onChange={(page) => {
+              setActivePage(page);
+              setSidebarOpen(false);
+            }}
+            isOpen={sidebarOpen}
+          />
+
+          <div className="flex-1 flex flex-col min-w-0">
             <TopHeader
               title={activePage}
               onProfileClick={() => setActivePage("profile")}
+              onMenuClick={() => setSidebarOpen(true)}
             />
 
             <div className="flex-1 overflow-y-auto">

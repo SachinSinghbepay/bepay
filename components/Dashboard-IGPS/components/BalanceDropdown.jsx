@@ -21,17 +21,17 @@ export default function BalanceDropdown({ wallets = [], onClose }) {
     }
 
     return (
-        <div className="balance-wrapper absolute -right-5 top-[72px] z-50">
-            <div className="w-[630px] rounded-[28px] bg-white shadow-xl p-6">
+        <div className="absolute right-0 top-[72px] z-50 w-full px-4 sm:px-0 sm:w-auto">
+            <div className="w-full sm:w-[630px] max-w-full rounded-[28px] bg-white shadow-xl p-4 sm:p-6">
 
                 {/* HEADERS */}
-                <div className="grid grid-cols-2 gap-x-16 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-x-16 mb-4">
                     <span className="text-sm text-gray-500">Fiat</span>
                     <span className="text-sm text-gray-500">Cryptocurrencies</span>
                 </div>
 
                 {/* CONTENT */}
-                <div className="grid grid-cols-2 gap-x-16 ">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-x-16">
 
                     {/* FIAT COLUMN */}
                     <div className="space-y-8">
@@ -63,7 +63,7 @@ export default function BalanceDropdown({ wallets = [], onClose }) {
 }
 function FiatRow({ img, label, value }) {
     return (
-        <div className="grid grid-cols-[auto_80px] items-center">
+        <div className="grid grid-cols-[1fr_auto] items-center">
             {/* LEFT */}
             <div className="flex items-center gap-2">
                 <img src={img} className="h-6 w-6 rounded-full" alt="" />
@@ -82,7 +82,7 @@ function FiatRow({ img, label, value }) {
 
 function CryptoRow({ main, chain, label, value, action, subLabel }) {
     return (
-        <div className="grid grid-cols-[auto_100px] items-center">
+        <div className="grid grid-cols-[1fr_auto] items-center">
             {/* LEFT */}
             <div className="flex items-center gap-2">
                 <div className="relative">

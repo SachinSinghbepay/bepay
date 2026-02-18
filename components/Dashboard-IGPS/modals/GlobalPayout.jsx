@@ -69,9 +69,9 @@ export default function GlobalPayoutModal({
 
   return (
     <ModalFrame>
-      <div className="flex flex-col max-h-[80vh] h-full">
+      <div className="flex flex-col max-h-[80vh] h-full lg:px-4">
         {/* HEADER */}
-        <div className="flex items-center justify-between p-8 pb-4 shrink-0">
+        <div className="flex items-center justify-between  p-8 pb-4 shrink-0">
           <button onClick={onBack} className="text-gray-400 hover:text-gray-600">
             <img src="/icons/back.svg" alt="Back" className="w-6 h-6" />
           </button>
@@ -146,7 +146,7 @@ export default function GlobalPayoutModal({
 
 function BeneficiaryRow({ id, name, bank, country, status = "active", flag, onPay }) {
   return (
-    <div className="flex items-center justify-between p-4 bg-[#F9F9F9] rounded-2xl">
+    <div className="flex items-center justify-between p-4 md:gap-30 lg:gap-60 bg-[#F9F9F9] rounded-2xl">
       <div className="flex items-center gap-4">
         <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border shadow-sm overflow-hidden">
           {/* Placeholder or Flag */}

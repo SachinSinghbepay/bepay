@@ -104,33 +104,35 @@ export default function Dashboard({ onOpenModal }) {
   }, [user, igpsService, activeFilter]);
 
   return (
-    <div className="px-8 py-4 space-y-8">
+    <div className="px-4 sm:px-6 lg:px-8 py-4 space-y-6 lg:space-y-8 overflow-x-hidden">
       {/* BALANCE CARD */}
       <div className="rounded-3xl bg-white p-6 shadow-sm">
-        <div className="flex justify-between items-start mb-6">
+        <div className="flex flex-col xl:flex-row gap-6 xl:gap-0 justify-between items-start mb-6">
 
-          {/* LEFT: total balance */}
-          <div className="col-span-2 p-8">
+
+          {/* LEFT */}
+          <div className="p-4 lg:p-8 flex-1 min-w-0">
             <p className="text-[16px] text-[#6A6A6A] font-medium">
               Total available balance
             </p>
-            <p className="text-[#6A6A6A] text-[12px]">(Fiat + stablecoins)</p>
-            <p className="text-[54px] font-bold text-gray-900 mt-2">
+            <p className="text-[#6A6A6A] text-[12px]">
+              (Fiat + stablecoins)
+            </p>
+            <p className="text-3xl sm:text-4xl lg:text-[54px] font-bold text-gray-900 mt-2">
               ${totalBalance.toFixed(2)}
             </p>
           </div>
 
-          {/* RIGHT: currencies */}
-          <div className="rounded-[32px] bg-[#FAFAFA] p-4 shadow-sm w-[630px] max-w-full">
+          {/* RIGHT */}
+          <div className="rounded-[32px] bg-[#FAFAFA] p-4 shadow-sm w-full xl:max-w-[630px]">
             <BalanceBreakdown wallets={wallets} />
           </div>
         </div>
-
       </div>
 
 
       {/* ACTION CARDS */}
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
         <ActionCard
           title="Deposit"
           bg="bg-[#eaf4f8]"
@@ -143,7 +145,7 @@ export default function Dashboard({ onOpenModal }) {
             })
           }
           icon={
-            <PlusIcon className="h-22 w-22 text-[#B0CDD8] group-hover:text-[#5A8EA8] transition-colors" />
+            <PlusIcon className="h-14 w-14 sm:h-16 sm:w-16 lg:h-20 lg:w-20 text-[#B0CDD8] group-hover:text-[#5A8EA8] transition-colors" />
           }
         />
         <ActionCard
@@ -151,7 +153,7 @@ export default function Dashboard({ onOpenModal }) {
           bg="bg-[#eef4e4]"
           onClick={() => onOpenModal("get-paid")}
           icon={
-            <ArrowDownLeftIcon className="h-22 w-22 text-[#C8D7B5] group-hover:text-[#8FA66E]" />
+            <ArrowDownLeftIcon className="h-14 w-14 sm:h-16 sm:w-16 lg:h-20 lg:w-20 text-[#C8D7B5] group-hover:text-[#8FA66E]" />
           }
         />
 
@@ -168,7 +170,7 @@ export default function Dashboard({ onOpenModal }) {
 
 
       {/* SECONDARY ACTIONS */}
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 auto-rows-fr w-full">
         <SecondaryCard
           icons="/icons/members.svg"
           title="Pay team members"
@@ -187,7 +189,7 @@ export default function Dashboard({ onOpenModal }) {
       <div className="bg-white rounded-3xl p-6 shadow-sm space-y-6">
 
         {/* FILTERS */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 overflow-x-auto pb-2">
           {["All", "Deposit", "Sent", "Received", "Onramp", "Offramp"].map(f => (
             <Filter
               key={f}
@@ -215,7 +217,7 @@ export default function Dashboard({ onOpenModal }) {
           <div className="space-y-4">
 
             {/* TABLE HEADER */}
-            <div className="grid grid-cols-5 text-sm text-[#6A6A6A] border-b pb-3">
+            <div className="hidden lg:grid lg:grid-cols-5 text-sm text-[#6A6A6A] border-b pb-3">
               <span>Amount</span>
               <span>Date</span>
               <span>Status</span>
@@ -227,7 +229,7 @@ export default function Dashboard({ onOpenModal }) {
             {transactions.map((tx) => (
               <div
                 key={tx.id}
-                className="grid grid-cols-5 items-center py-3 border-b text-sm"
+                className="hidden lg:grid lg:grid-cols-5 items-center py-3 border-b text-sm"
               >
                 {/* Amount */}
                 <span className={`font-medium ${tx.type === 'sent' ? "text-red-500" : "text-green-500"}`}>
@@ -283,6 +285,36 @@ export default function Dashboard({ onOpenModal }) {
               </div>
             ))}
 
+            <div className="lg:hidden space-y-4">
+              {transactions.map((tx) => (
+                <div
+                  key={tx.id}
+                  className="border rounded-2xl p-4 bg-white shadow-sm"
+                >
+                  <div className="flex justify-between text-sm font-medium">
+                    <span className={tx.type === 'sent' ? "text-red-500" : "text-green-500"}>
+                      {tx.type === 'sent' ? "-" : "+"}
+                      {tx.amount} {tx.currency}
+                    </span>
+                    <span className="text-gray-500 text-xs">
+                      {tx.date}
+                    </span>
+                  </div>
+
+                  <div className="text-sm text-gray-600 mt-2">
+                    {tx.email}
+                  </div>
+
+                  <button
+                    onClick={() => onOpenModal("txn-details", { transaction: tx })}
+                    className="mt-2 text-xs underline text-gray-600"
+                  >
+                    View details
+                  </button>
+                </div>
+              ))}
+            </div>
+
           </div>
         )}
       </div>
@@ -308,8 +340,15 @@ function SecondaryCard({ title, desc, icons, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="rounded-3xl bg-white p-3 border border-[#D9D9D9] flex justify-between items-center h-[140px]">
-      <div className="bg-[#EBEBEB] h-full w-[80px] rounded-2xl flex items-center justify-center">
+      className="
+      w-full
+      rounded-3xl bg-white
+      p-3 sm:p-4 lg:p-6
+      border border-[#D9D9D9]
+      flex items-center justify-between
+      h-[110px] sm:h-[120px] lg:h-[140px] min-w-0
+      ">
+      <div className="bg-[#EBEBEB] h-full w-[60px] sm:w-[70px] lg:w-[80px] rounded-2xl flex items-center justify-center">
         <Image
           src={icons}
           alt={title}
@@ -318,11 +357,11 @@ function SecondaryCard({ title, desc, icons, onClick }) {
           className="h-8 w-8"
         />
       </div>
-      <div>
-        <p className="font-semibold text-[#333333] text-[20px]">{title}</p>
-        <p className="text-[14px]  text-[#6A6A6A]">{desc}</p>
+      <div className="flex-1 min-w-0 px-2 sm:px-3">
+        <p className="font-semibold text-[#333333] text-base sm:text-lg lg:text-[20px] ml-2">{title}</p>
+        <p className="text-xs sm:text-sm lg:text-[14px]  text-[#6A6A6A] ml-2">{desc}</p>
       </div>
-      <div className="h-12 w-12  flex justify-center items-center p-2" >
+      <div className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12  flex justify-center items-center p-2" >
         <svg width="30" height="30" viewBox="0 0 26  26" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg" className="text-[#6A6A6A]">
           <polyline points="9 18 15 12 9 6"></polyline>
         </svg>
@@ -351,9 +390,9 @@ function ActionCard({ title, bg, icon, onClick }) {
       onClick={onClick}
       className={`
         ${bg}
-        h-[270px]
+        h-[180px] sm:h-[220px] lg:h-[270px]
         rounded-[32px]
-        p-6
+        p-4 sm:p-5 lg:p-6
         flex
         flex-col
         justify-between
@@ -366,7 +405,7 @@ function ActionCard({ title, bg, icon, onClick }) {
       </div>
 
       {/* TITLE */}
-      <div className="text-xl font-semibold text-gray-800">
+      <div className="text-lg lg:text-xl font-semibold text-gray-800">
         {title}
       </div>
     </div>

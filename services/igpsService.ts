@@ -433,6 +433,10 @@ async disableTwoFactor(password: string): Promise<ApiResponse<any>> {
     return this.request<Sender>("GET", `/senders/${id}`);
   }
 
+  async getDepositAccounts(senderId: string): Promise<ApiResponse<any>> {
+  return this.request("GET", `/senders/${senderId}/deposit-accounts`);
+}
+
   async uploadSenderDocument(
     senderId: string,
     data: UploadDocumentRequest,

@@ -25,7 +25,7 @@ export default function ProfileMenu({ onProfile }) {
         <div className="relative" ref={ref}>
 
             {/* TRIGGER WRAPPER (NOT CLICKABLE) */}
-            <div className="flex justify-around items-center bg-[#EBEBEB]  py-2 rounded-2xl shadow-sm w-[342px]">
+            <div className="flex justify-around items-center bg-[#EBEBEB]  py-2 rounded-2xl shadow-sm w-[170px] md:w-[342px]">
 
                 {/* LEFT GROUP */}
                 <div className="flex items-center gap-3">
@@ -41,7 +41,7 @@ export default function ProfileMenu({ onProfile }) {
                         </div>
                     </div>
 
-                    <span className="text-sm font-semibold text-[#414141] whitespace-nowrap truncate max-w-[200px]">
+                    <span className="text-sm font-semibold text-[#414141] truncate max-w-[140px] sm:max-w-[200px]">
                         {displayName}
                     </span>
                 </div>
@@ -69,7 +69,7 @@ export default function ProfileMenu({ onProfile }) {
 
             {/* DROPDOWN */}
             {open && (
-                <div className="absolute right-0 mt-4 w-[342px] h-auto rounded-3xl bg-white shadow-xl px-4 py-8 z-50">
+                <div className="absolute right-0 mt-4 w-[200px] md:w-[342px] h-auto rounded-3xl bg-white shadow-xl px-4 py-8 z-50">
                     <div className="flex items-center gap-3 mb-4">
                         <div>
                             <p className="font-medium text-[18px] text-[#080808] mb-2 truncate max-w-[300px]">

@@ -43,8 +43,9 @@ export default function IgpsLoginPage() {
         document.cookie = `igps_refresh=${refreshToken}; path=/; max-age=86400; SameSite=Strict`;
 
         igpsService.setTokens(accessToken, refreshToken);
-
+        
         router.push("/igps/dashboard");
+        router.refresh();
       } else {
         setError(
           response.error ||
@@ -104,6 +105,7 @@ export default function IgpsLoginPage() {
         igpsService.setTokens(accessToken, refreshToken);
 
         router.push("/igps/dashboard");
+        router.refresh();
       } else {
         setError(response.message || "Invalid code");
       }

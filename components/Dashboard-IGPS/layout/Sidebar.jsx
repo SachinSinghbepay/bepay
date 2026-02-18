@@ -18,9 +18,23 @@ const menuItems = [
   { id: "invite", label: "Invite", icon: UserPlus },
 ];
 
-export default function Sidebar({ active, onChange }) {
+export default function Sidebar({ active, onChange, isOpen }) {
   return (
-    <aside className="w-[300px] bg-[#C0C0C026] p-6 flex flex-col gap-8 rounded-3xl">
+    <aside
+      className={`
+    fixed lg:relative
+    z-50 lg:z-auto
+top-0 left-0 h-screen lg:h-auto
+    w-[260px] max-w-[80vw] lg:w-[300px]
+   bg-white lg:bg-[#C0C0C026]
+    p-4 lg:p-6
+    flex flex-col gap-8
+    rounded-none lg:rounded-3xl
+    transform transition-transform duration-300
+    ${isOpen ? "translate-x-0" : "-translate-x-full"}
+    lg:translate-x-0
+  `}
+    >
 
       {/* Logo */}
       <div className="flex justify-center items-center gap-4 my-6">
@@ -57,11 +71,10 @@ function SidebarItem({ label, Icon, active, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-3 px-4 py-6 rounded-2xl text-sm font-medium transition
-        ${
-          active
-            ? "bg-[#2b2b2b] text-white"
-            : "text-gray-600 hover:bg-gray-200"
+      className={`flex items-center gap-3 px-3 py-3 lg:px-4 lg:py-6 rounded-2xl text-sm font-medium transition
+        ${active
+          ? "bg-[#2b2b2b] text-white"
+          : "text-gray-600 hover:bg-gray-200"
         }`}
     >
       <Icon className="w-5 h-5" />
