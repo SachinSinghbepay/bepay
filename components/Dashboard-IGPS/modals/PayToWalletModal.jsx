@@ -212,7 +212,7 @@ export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
 
 
                         <p className="text-xs text-center text-gray-500 mt-3">
-                            Once your payment is sent, we'll automatically notify the recipient by email.
+                            Once your payment is sent, we&apos;ll automatically notify the recipient by email.
                         </p>
                     </div>
                 </div>
