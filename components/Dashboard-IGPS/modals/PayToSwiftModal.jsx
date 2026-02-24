@@ -77,7 +77,7 @@ export default function PayToSwiftModal({
           </button>
           <h2 className="text-xl font-medium">Pay USD via SWIFT</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-              ✕
+            ✕
           </button>
         </div>
 
@@ -97,7 +97,7 @@ export default function PayToSwiftModal({
               </div>
               <h3 className="text-lg font-medium">No beneficiaries found</h3>
               <p className="text-gray-500 max-w-xs mx-auto">
-                You haven't added any beneficiaries yet. Add one to start sending payments.
+                You haven&apos;t added any beneficiaries yet. Add one to start sending payments.
               </p>
               <button
                 onClick={onAddBeneficiary}
