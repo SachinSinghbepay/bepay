@@ -1,6 +1,0 @@
-// Nikhil Gupta, 2 min
-
-// curl --location 'http://localhost:3002/api/igps/banks/IN' \
-// --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhNTEwMjg3Mi1lMzRmLTRkMzMtYjM0OS1iNWJhNzgwNDBiYjMiLCJlbWFpbCI6Im5pa2hpbC1pQGJlcGF5LXRlc3QuY29tIiwib3JnSWQiOiJjMWFjY2VmZS0xZjVmLTQwNzItYjMyYy1kNjE2ZDUzZGQxZmQiLCJvcmdTbHVnIjoibXktdGVzdC1vcmctMzE1OTI5Iiwicm9sZSI6Im93bmVyIiwidHlwZSI6Im1lcmNoYW50IiwiaWF0IjoxNzcxMjIyODM1LCJleHAiOjE3NzEyMjM3MzUsImlzcyI6ImJlcGF5LWlncHMifQ.g6JowksP8MCcSYBdCulQPtMhUaxkcfTYBq7p2DdLJD4
-
-

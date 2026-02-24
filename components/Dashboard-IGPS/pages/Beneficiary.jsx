@@ -56,11 +56,11 @@ export default function Beneficiary({ onOpenModal }) {
     });
 
     return (
-        <div className="flex-1 px-10 py-8">
+        <div className="flex-1 px-2 sm:px-10 py-8">
             <div className="max-w-6xl mx-auto space-y-8">
 
                 {/* Header */}
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <h1 className="text-2xl font-semibold">Beneficiaries</h1>
 
                     <div className="flex gap-2">
@@ -133,37 +133,41 @@ function BeneficiaryRow({ item, index, onDelete }) {
     const type = item.paymentInfo?.paymentType;
 
     return (
-        <div className="grid grid-cols-3 items-center bg-white rounded-2xl px-6 py-5 shadow-sm hover:shadow-md transition">
+        <div className="overflow-x-auto">
+            <div className="min-w-[600px]">
+                <div className="grid grid-cols-3 items-center bg-white rounded-2xl px-2 sm:px-6 py-5 shadow-sm hover:shadow-md transition">
 
-            {/* Name + Avatar */}
-            <div className="flex items-center gap-4">
-                <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center font-medium text-lg ${avatarColors[index % avatarColors.length]}`}
-                >
-                    {name.charAt(0).toUpperCase()}
+                    {/* Name + Avatar */}
+                    <div className="flex items-center gap-4">
+                        <div
+                            className={`w-12 h-12 rounded-xl flex items-center justify-center font-medium text-lg ${avatarColors[index % avatarColors.length]}`}
+                        >
+                            {name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                            <div className="font-medium">{name}</div>
+                            <div className="text-xs text-gray-400">{item.email}</div>
+                        </div>
+                    </div>
+
+                    {/* Pay Via Pills */}
+                    <div className="flex gap-3 ml-3">
+                        {type === "bank_account" && <MethodPill icon={<Landmark size={16} />} label="Bank" />}
+                        {type === "crypto_wallet" && <MethodPill icon={<Wallet size={16} />} label="Wallet" />}
+                        {!type && <MethodPill icon={<Mail size={16} />} label="Email" />}
+                    </div>
+
+                    {/* Delete */}
+                    <div className="flex justify-end">
+                        <button
+                            onClick={onDelete}
+                            className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-red-500 hover:bg-red-50 transition"
+                            title="Delete beneficiary"
+                        >
+                            <Trash2 size={18} />
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <div className="font-medium">{name}</div>
-                    <div className="text-xs text-gray-400">{item.email}</div>
-                </div>
-            </div>
-
-            {/* Pay Via Pills */}
-            <div className="flex gap-3">
-                {type === "bank_account" && <MethodPill icon={<Landmark size={16} />} label="Bank" />}
-                {type === "crypto_wallet" && <MethodPill icon={<Wallet size={16} />} label="Wallet" />}
-                {!type && <MethodPill icon={<Mail size={16} />} label="Email" />}
-            </div>
-
-            {/* Delete */}
-            <div className="flex justify-end">
-                <button
-                    onClick={onDelete}
-                    className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-red-500 hover:bg-red-50 transition"
-                    title="Delete beneficiary"
-                >
-                    <Trash2 size={18} />
-                </button>
             </div>
         </div>
     );

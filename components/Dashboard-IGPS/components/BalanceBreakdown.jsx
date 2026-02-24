@@ -74,7 +74,7 @@ export default function BalanceBreakdown({ wallets = [] }) {
                     {/* FIAT COLUMN - Keeping static for now as API returns crypto wallets */}
                     <div className="px-4 sm:px-6 py-4 sm:py-5">
                         <p className="text-sm text-gray-500 mb-5">Fiat</p>
-                        <div className="space-y-5">
+                        <div className="space-y-5 max-h-64 overflow-y-auto pr-2">
                             <FiatRow img="/icons/usa.png" label="USD" value="0.00" />
                         </div>
                     </div>
@@ -82,7 +82,7 @@ export default function BalanceBreakdown({ wallets = [] }) {
                     {/* CRYPTO COLUMN */}
                     <div className="px-4 sm:px-6 py-4 sm:py-5">
                         <p className="text-sm text-gray-500 mb-5">Cryptocurrencies</p>
-                        <div className="space-y-5">
+                        <div className="space-y-5 max-h-64 overflow-y-auto pr-2">
                             {wallets.length === 0 ? (
                                 <p className="text-sm text-gray-400">No wallets found</p>
                             ) : (

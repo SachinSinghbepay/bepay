@@ -18,17 +18,44 @@ export default function CustomSelect({
         }
         return opt;
     });
+    const dropdownRef = useRef(null);
     const [open, setOpen] = useState(false);
     const [direction, setDirection] = useState("down");
     const wrapperRef = useRef(null);
     const selected = normalizedOptions.find(o => o.value === value);;
 
+    useEffect(() => {
+        const el = dropdownRef.current;
+        if (!el) return;
+
+        const handler = (e) => {
+            const { scrollTop, scrollHeight, clientHeight } = el;
+            const atTop = scrollTop === 0 && e.deltaY < 0;
+            const atBottom = scrollTop + clientHeight >= scrollHeight && e.deltaY > 0;
+
+            if (!atTop && !atBottom) {
+                e.stopPropagation();
+                e.preventDefault();
+                el.scrollTop += e.deltaY;
+            }
+        };
+
+        if (open) {
+            el.addEventListener("wheel", handler, { passive: false });
+        }
+        return () => el.removeEventListener("wheel", handler);
+    }, [open]);
+
+
     const toggle = () => {
-        const rect = wrapperRef.current.getBoundingClientRect();
-        setDirection(rect.top > window.innerHeight / 2 ? "up" : "down");
+        if (!open) {
+            const rect = wrapperRef.current.getBoundingClientRect();
+            const spaceBelow = window.innerHeight - rect.bottom;
+            const spaceAbove = rect.top;
+            setDirection(spaceAbove > spaceBelow ? "up" : "down");
+        }
         setOpen((v) => !v);
     };
-
     useEffect(() => {
         const handler = (e) => {
             if (!wrapperRef.current?.contains(e.target)) {
@@ -70,29 +97,30 @@ export default function CustomSelect({
                 </svg>
             </button>
 
-            {
-                open && (
-                    <div
-                        className={`absolute left-0 w-full bg-white rounded-xl shadow-lg border z-50
-          ${direction === "down" ? "top-[110%]" : "bottom-[110%]"}`}
-                    >
-                        {normalizedOptions.map((opt) => (
-                            <div
-                                key={opt.value}
-                                className="px-4 py-3 flex items-center gap-3 hover:bg-gray-100 cursor-pointer"
-                                onClick={() => {
-                                    onChange(opt.value);
-                                    setOpen(false);
-                                }}
-                            >
-                                {opt.icon && (
-                                    <img src={opt.icon} alt="" className="w-5 h-5" />
-                                )}
-                                <span>{opt.label}</span>
-                            </div>
-                        ))}
-                    </div>
-                )
+            {open && (
+                <div
+                    ref={dropdownRef}
+                    className={`absolute left-0 w-full bg-white rounded-xl shadow-lg border z-50
+            ${direction === "down" ? "top-[110%]" : "bottom-[110%]"}
+            max-h-[40vh] overflow-y-auto`}
+                >
+                    {normalizedOptions.map((opt) => (
+                        <div
+                            key={opt.value}
+                            className="px-4 py-3 flex items-center gap-3 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => {
+                                onChange(opt.value);
+                                setOpen(false);
+                            }}
+                        >
+                            {opt.icon && (
+                                <img src={opt.icon} alt="" className="w-5 h-5" />
+                            )}
+                            <span>{opt.label}</span>
+                        </div>
+                    ))}
+                </div>
+            )
             }
         </div >
     );

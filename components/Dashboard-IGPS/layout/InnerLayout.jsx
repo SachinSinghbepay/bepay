@@ -40,6 +40,9 @@ import ChangePasswordModal from "../modals/ChangePasswordModal";
 import EnableTwoFactorModal from "../modals/EnableTwoFactorModal";
 import BackupCodesModal from "../modals/BackupCodesModal";
 import DisableTwoFactorModal from "../modals/DisableTwoFactorModal";
+import ShareInviteModal from "../modals/ShareInviteModal";
+import Payments from "../pages/Payments";
+
 
 
 export default function InnerLayout() {
@@ -82,9 +85,16 @@ export default function InnerLayout() {
       case "invite":
         return <Invite onOpenModal={openModal} />;
       case "profile":
-        return <Profile onOpenModal={openModal} />;
+        return (
+          <Profile
+            onOpenModal={openModal}
+            setActivePage={setActivePage}
+          />
+        );
       case "privacy-policies":
         return <LegalPolicy onOpenModal={openModal} />;
+      case "payment":
+        return <Payments onOpenModal={openModal} />;
       default:
         return <Dashboard onOpenModal={openModal} />;
     }
@@ -294,7 +304,10 @@ export default function InnerLayout() {
                   previousModal: "get-paid"
                 })
               }
-              onShowBank={() => openModal("bank-transfer")}
+              onShowBank={() => {
+                closeModal();
+                setActivePage("banking");
+              }}
             />
           )}
 
@@ -418,6 +431,9 @@ export default function InnerLayout() {
             <DisableTwoFactorModal onClose={closeModal} />
           )}
 
+          {modal === "invite-friends" && (
+            <ShareInviteModal onClose={closeModal} />
+          )}
 
 
 

@@ -1,0 +1,33 @@
+   1. images sometimes loading sometimes not for currencies and networks (on deposit, currency breakdown)
+  ✓   2. add loading state on banking page
+  ✓   3. login logout state managment issue (like not loading data immidiatly after loggin in)
+  ✓   4. remove transactions widget from banking page
+  ✓   5. Bank ACH or wire transfer (Accept USD, get paid in a stablecoin) won't take user to banking menu page 
+  ✓   6. Adding pdf options and copy options in banking page
+       7. more UI fixes for popups and pages 
+   ✓  8. Adding video to the login page
+   
+
+
+
+   today
+
+   1. added password change apis
+   2. edited privacy-policy page rendering
+   3. 
+
+
+8BE744D6
+DB9BD84F
+F778E25F
+11AB6224
+B9F21230
+A3080F6F
+87E1B8A8
+3E5452F3
+
+
+1. refresh propfile issues
+2. state code isuue for rest of countries
+3. add country code for mobile numbers
+4. polygon image on add wallet beneficiary

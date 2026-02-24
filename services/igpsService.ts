@@ -262,22 +262,22 @@ export class IgpsService {
   }
 
   async verifyTwoFactorLogin(data: {
-  userId: string;
-  token: string;
-  twoFactorToken: string;
-  isBackupCode: boolean;
-}): Promise<ApiResponse<AuthResponse>> {
-  return this.request<AuthResponse>(
-    "POST",
-    "/auth/2fa/verify-login",
-    data,
-    true // IMPORTANT: this is public, no access token yet
-  );
-}
+    userId: string;
+    token: string;
+    twoFactorToken: string;
+    isBackupCode: boolean;
+  }): Promise<ApiResponse<AuthResponse>> {
+    return this.request<AuthResponse>(
+      "POST",
+      "/auth/2fa/verify-login",
+      data,
+      true, // IMPORTANT: this is public, no access token yet
+    );
+  }
 
-async disableTwoFactor(password: string): Promise<ApiResponse<any>> {
-  return this.request<any>("POST", "/auth/2fa/disable", { password });
-}
+  async disableTwoFactor(password: string): Promise<ApiResponse<any>> {
+    return this.request<any>("POST", "/auth/2fa/disable", { password });
+  }
 
   // 2. Team Methods
   async inviteMember(
@@ -434,8 +434,8 @@ async disableTwoFactor(password: string): Promise<ApiResponse<any>> {
   }
 
   async getDepositAccounts(senderId: string): Promise<ApiResponse<any>> {
-  return this.request("GET", `/senders/${senderId}/deposit-accounts`);
-}
+    return this.request("GET", `/senders/${senderId}/deposit-accounts`);
+  }
 
   async uploadSenderDocument(
     senderId: string,
@@ -459,13 +459,116 @@ async disableTwoFactor(password: string): Promise<ApiResponse<any>> {
   private static beneficiaryCache: ApiResponse<Beneficiary[]> | null = null;
 
   // 6. Beneficiaries
+  private async hmacSha256(message: string, secret: string): Promise<string> {
+    // Use Node crypto on server, Web Crypto API on client
+    if (typeof window === "undefined") {
+      const { createHmac } = await import("crypto");
+      return createHmac("sha256", secret).update(message).digest("hex");
+    }
+
+    const encoder = new TextEncoder();
+    const keyData = encoder.encode(secret);
+    const msgData = encoder.encode(message);
+
+    const cryptoKey = await window.crypto.subtle.importKey(
+      "raw",
+      keyData,
+      { name: "HMAC", hash: "SHA-256" },
+      false,
+      ["sign"],
+    );
+
+    const signatureBuffer = await window.crypto.subtle.sign(
+      "HMAC",
+      cryptoKey,
+      msgData,
+    );
+    const byteArray = Array.from(new Uint8Array(signatureBuffer));
+    return byteArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
   async createBeneficiary(
     data: CreateBeneficiaryRequest,
   ): Promise<ApiResponse<Beneficiary>> {
+    console.log("=== CREATE BENEFICIARY START ===");
+
     IgpsService.beneficiaryCache = null;
-    if (typeof window !== "undefined")
+    if (typeof window !== "undefined") {
       localStorage.removeItem("igps_beneficiaries");
-    return this.request<Beneficiary>("POST", "/beneficiaries", data);
+    }
+
+    const method = "POST";
+    const signaturePath = "/api/igps/beneficiaries";
+    const bodyStr = JSON.stringify(data);
+    const timestamp = new Date().toISOString();
+    const stringToSign = method + signaturePath + timestamp + bodyStr;
+
+    console.log("METHOD:", method);
+    console.log("PATH:", signaturePath);
+    console.log("TIMESTAMP:", timestamp);
+    console.log("BODY:", bodyStr);
+    console.log("STRING TO SIGN:", stringToSign);
+
+    const secret = process.env.NEXT_PUBLIC_HMAC_SECRET!;
+    console.log("SECRET EXISTS:", !!secret);
+
+    let signature = "";
+    try {
+      signature = await this.hmacSha256(stringToSign, secret);
+      console.log("SIGNATURE:", signature);
+    } catch (err) {
+      console.error("HMAC ERROR:", err);
+      throw err;
+    }
+
+    const url = `${this.baseUrl}/beneficiaries`;
+    console.log("FINAL URL:", url);
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${this.accessToken}`,
+      "X-Date": timestamp,
+      "X-Signature": signature,
+    };
+
+    console.log("HEADERS:", headers);
+
+    try {
+      console.log("ABOUT TO FETCH...");
+
+      const response = await fetch(url, {
+        method,
+        headers,
+        body: bodyStr,
+      });
+
+      console.log("FETCH COMPLETED");
+      console.log("STATUS:", response.status);
+
+      const result = await response.json();
+      console.log("RESPONSE BODY:", result);
+
+      if (!response.ok) {
+        throw new Error(
+          result.message ||
+            result.error ||
+            `Request failed with status ${response.status}`,
+        );
+      }
+
+      return {
+        success: true,
+        data: result.data || result,
+        message: result.message,
+      };
+    } catch (error: any) {
+      console.error("FETCH ERROR:", error);
+      return {
+        success: false,
+        data: null as any,
+        error: error.message || "Unknown error occurred",
+      };
+    }
   }
 
   async listBeneficiaries(
@@ -499,6 +602,17 @@ async disableTwoFactor(password: string): Promise<ApiResponse<any>> {
       }
     }
     return response;
+  }
+
+  async getCountries(): Promise<ApiResponse<{ code: string; name: string }[]>> {
+    return this.request<{ code: string; name: string }[]>("GET", "/countries");
+  }
+
+  async getStates(countryCode: string) {
+    return this.request<{
+      countryCode: string;
+      data: { code: string; name: string }[];
+    }>("GET", `/states/${countryCode}`);
   }
 
   async getBeneficiary(id: string): Promise<ApiResponse<Beneficiary>> {

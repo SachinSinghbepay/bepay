@@ -5,7 +5,7 @@ import { useState } from "react";
 import { IgpsService } from "../../../services/igpsService";
 
 const igpsService = new IgpsService();
-export default function Profile({ onOpenModal }) {
+export default function Profile({ onOpenModal, setActivePage }) {
 
     const { user, organization, loading } = useAuth();
     if (loading) return <div>Loading...</div>;
@@ -99,7 +99,10 @@ export default function Profile({ onOpenModal }) {
 
             {/* LEGAL */}
             <Section title="Legal">
-                <SimpleRow title="Privacy policy" />
+                <SimpleRow
+                    title="Privacy policy"
+                    onClick={() => setActivePage("privacy-policies")}
+                />
                 <SimpleRow title="Terms of service" />
             </Section>
 
@@ -157,9 +160,11 @@ function ExportRow({ title, desc }) {
     );
 }
 
-function SimpleRow({ title }) {
+function SimpleRow({ title, onClick }) {
     return (
-        <div className="bg-gray-50 rounded-2xl p-4 font-medium text-gray-900">
+        <div
+            onClick={onClick}
+            className="bg-gray-50 rounded-2xl p-4 font-medium text-gray-900">
             {title}
         </div>
     );

@@ -4,11 +4,13 @@ import { Copy } from "lucide-react";
 import { SlidersHorizontal } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
+import jsPDF from "jspdf";
 
 export default function Banking() {
   const [tab, setTab] = useState(null);
   const { igpsService } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [copiedAll, setCopiedAll] = useState(false);
   // const accountDetails = [
   //   {
   //     label: "Beneficiary name",
@@ -34,6 +36,24 @@ export default function Banking() {
   const [accounts, setAccounts] = useState([]);
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
+  };
+
+  const handleDownloadPDF = () => {
+    if (!selectedAccount) return;
+
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("Bank Account Details", 20, 20);
+
+    doc.setFontSize(12);
+    doc.text(`Beneficiary name: ${selectedAccount?.name || ""}`, 20, 40);
+    doc.text(`Account number: ${selectedAccount?.accountNumber || ""}`, 20, 50);
+    doc.text(`BIC: ${selectedAccount?.bic || ""}`, 20, 60);
+    doc.text(`Bank name: ${selectedAccount?.bankDetails?.name || ""}`, 20, 70);
+    doc.text(`Bank address: ${selectedAccount?.bankDetails?.address || ""}`, 20, 80);
+
+    doc.save("bank-details.pdf");
   };
 
   useEffect(() => {
@@ -79,7 +99,7 @@ export default function Banking() {
 
 
   return (
-    <div className="flex-1 px-10 py-8">
+    <div className="flex-1 px-2 sm:px-10 py-8">
       <div className="mx-auto w-full max-w-[772px]">
         {/* Tabs */}
         <div className="flex gap-8 mb-6 text-base">
@@ -98,11 +118,11 @@ export default function Banking() {
         </div>
 
         {/* Account Card */}
-        <div className="bg-[#FDFDFD] rounded-3xl p-8 max-w-[820px]">
+        <div className="bg-[#FDFDFD] rounded-3xl  p-2 sm:p-8 max-w-[820px]">
 
           {/* Top Info Box */}
           {selectedAccount && (
-            <div className="bg-[#F6F6F6] rounded-2xl px-6 py-8 flex justify-between items-center mb-8">
+            <div className="bg-[#F6F6F6] rounded-2xl px-6 py-8 flex flex-col sm:flex-row  justify-between items-center mb-8">
               <div>
                 <h3 className="font-semibold text-lg">
                   Your USD account details
@@ -112,7 +132,7 @@ export default function Banking() {
                 </p>
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex gap-3 mt-2 sm:mt-0">
                 <div className="bg-[#F2E6DA] text-sm px-4 py-2 rounded-full font-semibold">
                   Minimum transfer $2
                 </div>
@@ -126,14 +146,27 @@ export default function Banking() {
 
 
           {/* Details List */}
+          {/* Details List */}
           <div className="space-y-6">
-            {!selectedAccount ? (
+
+            {loading ? (
+              /* LOADING STATE */
+              <div className="flex justify-center py-12">
+                <h2 className="text-md text-gray-500 animate-pulse">
+                  Loading banking details...
+                </h2>
+              </div>
+
+            ) : !selectedAccount ? (
+              /* KYC PENDING STATE */
               <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 text-center">
                 <p className="text-sm text-yellow-700 font-medium">
                   KYC is in processing. Banking details will appear once verification is completed.
                 </p>
               </div>
+
             ) : (
+              /* ACCOUNT DETAILS */
               [
                 { label: "Beneficiary name", value: selectedAccount?.name || "-" },
                 { label: "Account number", value: selectedAccount?.accountNumber || "-" },
@@ -162,29 +195,39 @@ export default function Banking() {
             )}
           </div>
 
+
           {/* Buttons */}
           <div className="flex gap-4 mt-8">
-            <button className="flex-1 h-14 rounded-2xl border border-[#C0C0C0] text-sm font-medium hover:bg-gray-100 transition">
+            <button
+              onClick={handleDownloadPDF}
+              className="flex-1 h-14 rounded-2xl border border-[#C0C0C0] text-sm font-medium hover:bg-gray-100 transition"
+            >
               Download PDF
             </button>
 
             <button
-              onClick={() => {
+              onClick={async () => {
                 if (!selectedAccount) return;
 
                 const text = [
-                  `Beneficiary name: ${selectedAccount?.name || "-"}`,
-                  `Account number: ${selectedAccount?.accountNumber || "-"}`,
-                  `BIC: ${selectedAccount?.bic || "-"}`,
-                  `Bank name: ${selectedAccount?.bankDetails?.name || "-"}`,
-                  `Bank address: ${selectedAccount?.bankDetails?.address || "-"}`
+                  `Beneficiary name: ${selectedAccount?.name || ""}`,
+                  `Account number: ${selectedAccount?.accountNumber || ""}`,
+                  `BIC: ${selectedAccount?.bic || ""}`,
+                  `Bank name: ${selectedAccount?.bankDetails?.name || ""}`,
+                  `Bank address: ${selectedAccount?.bankDetails?.address || ""}`
                 ].join("\n");
 
-                handleCopy(text);
+                try {
+                  await navigator.clipboard.writeText(text);
+                  setCopiedAll(true);
+                  setTimeout(() => setCopiedAll(false), 2000);
+                } catch (err) {
+                  console.error("Copy failed", err);
+                }
               }}
               className="flex-1 h-14 rounded-2xl border border-[#C0C0C0] text-sm font-medium hover:bg-gray-100 transition"
             >
-              Copy all details
+              {copiedAll ? "Copied ✓" : "Copy all details"}
             </button>
 
           </div>
@@ -192,44 +235,7 @@ export default function Banking() {
         </div>
 
       </div>
-      {/* TRANSACTIONS */}
-      <div className="rounded-3xl p-6 space-y-6">
 
-        {/* Header Row */}
-        <div className="flex items-center justify-between">
-
-          {/* Left side */}
-          <div className="flex items-center gap-3">
-            <p className="font-semibold text-[#333333]">
-              Recent transactions
-            </p>
-
-            <Filter active label="All" />
-            <Filter label="Deposit" />
-            <Filter label="Sent" />
-            <Filter label="Received" />
-            <Filter label="Onramp" />
-            <Filter label="Offramp" />
-          </div>
-
-          {/* Right side filter icon */}
-          <button className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition">
-            <img src="/icons/filter.svg" alt="filter" className='h-5 w-5' />
-          </button>
-
-        </div>
-
-        {/* Empty State */}
-        <div className="text-center py-16 space-y-4">
-          <p className="text-sm text-gray-500">
-            No transactions yet.
-          </p>
-          <button className="px-6 py-2 rounded-full bg-black text-white text-sm">
-            Deposit
-          </button>
-        </div>
-
-      </div>
 
     </div >
   );
