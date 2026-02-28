@@ -98,6 +98,24 @@ export default function StepPersonalDetails({ data, setData, onNext, onBack }) {
                         />
                     </div>
 
+                    {/* Organization Name */}
+                    <div>
+                        <label className="block text-sm mb-2">
+                            Organization Name
+                        </label>
+                        <input
+                            value={data.organizationName || ""}
+                            onChange={(e) =>
+                                setData((prev) => ({
+                                    ...prev,
+                                    organizationName: e.target.value
+                                }))
+                            }
+                            placeholder="Enter your organization name"
+                            className="w-full h-14 rounded-2xl border px-4 outline-none focus:border-black transition"
+                        />
+                    </div>
+
                     {/* Password */}
                     <div>
                         <label className="block text-sm mb-2">

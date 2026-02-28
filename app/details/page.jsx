@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { FiChevronLeft } from "react-icons/fi";
 import CustomSelect from "@/components/Dashboard-IGPS/components/CustomSelect";
+import DummyProfileMenu from "./DummyProfileMenu";
+import Image from "next/image";
 
-export default function StepBusinessDetails({ data, setData, onNext, onBack }) {
+export default function StepBusinessDetails({ data, setData, onNext, onBack, onProfileClick }) {
     const [accountType, setAccountType] = useState("business");
-    const [country, setCountry] = useState("");
+    const [country, setCountry] = useState("India");
     const [heardFrom, setHeardFrom] = useState("");
     const [services, setServices] = useState([]);
 
@@ -82,10 +84,20 @@ export default function StepBusinessDetails({ data, setData, onNext, onBack }) {
     };
 
     return (
-        <div className="flex flex-col h-[630px] p-10 pr-0">
-
+        <div className="min-h-screen w-full bg-[#F6F6F6] flex flex-col justify-between items-start md:flex-row p-10">
+            {/* TOP BAR */}
+              <div className="flex justify-center items-center gap-4 my-6">
+                   <Image
+                     src={"/bepayicon.png"}
+                     height={40}
+                     width={41}
+                     alt="logo"
+                     className="object-cover h-[40px] w-[42px]"
+                   />
+                   <h2 className="font-semibold">bepay IGPS</h2>
+                 </div>
             {/* SCROLL AREA */}
-            <div className="flex-1 overflow-y-auto pr-2 space-y-8">
+            <div className="bg-white  p-8 flex-1 overflow-y-auto  space-y-8 max-w-2xl rounded-2xl">
 
                 <div>
                     <h2 className="text-xl font-semibold">
@@ -157,7 +169,7 @@ export default function StepBusinessDetails({ data, setData, onNext, onBack }) {
 
                     <CustomSelect
                         options={countryOptions}
-                        value={data.country}
+                        value={data?.country}
                         onChange={(value) =>
                             setData((prev) => ({
                                 ...prev,
@@ -206,7 +218,7 @@ export default function StepBusinessDetails({ data, setData, onNext, onBack }) {
 
                     <CustomSelect
                         options={hearAboutOptions}
-                        value={data.hearAbout}
+                        value={data?.hearAbout}
                         onChange={(value) =>
                             setData((prev) => ({
                                 ...prev,
@@ -222,7 +234,7 @@ export default function StepBusinessDetails({ data, setData, onNext, onBack }) {
                     <button
                         onClick={handleSubmit}
                         disabled={!isValid}
-                        className={`w-full h-14 rounded-full text-white font-medium transition
+                        className={`w-full h-10 md:h-16 rounded-xl text-white font-medium transition
                             ${isValid
                                 ? "bg-black hover:bg-gray-800"
                                 : "bg-gray-300 cursor-not-allowed"}
@@ -231,16 +243,10 @@ export default function StepBusinessDetails({ data, setData, onNext, onBack }) {
                         Continue
                     </button>
 
-                    <div
-                        onClick={onBack}
-                        className="flex items-center justify-center gap-1 text-sm text-gray-500 hover:text-black transition mt-6 cursor-pointer"
-                    >
-                        <FiChevronLeft size={16} />
-                        Back
-                    </div>
                 </div>
 
             </div>
+            <DummyProfileMenu />
         </div>
     );
 }

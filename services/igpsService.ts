@@ -66,6 +66,10 @@ export class IgpsService {
   private isRefreshing = false;
   private refreshSubscribers: ((token: string) => void)[] = [];
 
+  // Token storage keys for localStorage fallback
+  private static ACCESS_TOKEN_KEY = "igps_access_token";
+  private static REFRESH_TOKEN_KEY = "igps_refresh_token";
+
   private onRefreshed(token: string) {
     this.refreshSubscribers.forEach((cb) => cb(token));
     this.refreshSubscribers = [];
@@ -192,6 +196,33 @@ export class IgpsService {
   }
 
   // 1. Auth Methods
+  async signupInitiate(email: string): Promise<ApiResponse<any>> {
+    return this.request<any>("POST", "/auth/signup/initiate", { email }, true);
+  }
+
+  async verifySignupCode(
+    email: string,
+    otp: string,
+  ): Promise<ApiResponse<any>> {
+    return this.request<any>(
+      "POST",
+      "/auth/signup/verify-otp",
+      { email, otp },
+      true,
+    );
+  }
+
+  async completeSignup(
+    data: SignupRequest,
+  ): Promise<ApiResponse<AuthResponse>> {
+    return this.request<AuthResponse>(
+      "POST",
+      "/auth/signup/complete",
+      data,
+      true,
+    );
+  }
+
   async signup(data: SignupRequest): Promise<ApiResponse<AuthResponse>> {
     return this.request<AuthResponse>("POST", "/auth/signup", data, true);
   }
@@ -225,15 +256,26 @@ export class IgpsService {
     IgpsService.walletCache = null;
 
     if (typeof window !== "undefined") {
+      // ✅ Clear ALL localStorage data including token backup keys
       localStorage.removeItem("igps_balances");
       localStorage.removeItem("igps_beneficiaries");
       localStorage.removeItem("onboarding_progress");
+      localStorage.removeItem("kyc_verification_progress");
+      localStorage.removeItem("sessionId");
+      localStorage.removeItem("sessionStartTime");
+      // Clear token backup keys
+      localStorage.removeItem("igps_access_token");
+      localStorage.removeItem("igps_refresh_token");
 
-      // Clear cookies explicitly
+      // ✅ Clear ALL cookies with multiple path variants
       document.cookie =
-        "igps_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+        "igps_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Strict";
       document.cookie =
-        "igps_refresh=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+        "igps_refresh=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT; SameSite=Strict";
+
+      // Force cookie deletion by setting to empty with max-age=0
+      document.cookie = "igps_token=; max-age=0; path=/";
+      document.cookie = "igps_refresh=; max-age=0; path=/";
     }
   }
 
@@ -421,8 +463,85 @@ export class IgpsService {
   }
 
   // 5. Senders (KYC)
+  //   async createSender(data: CreateSenderRequest): Promise<ApiResponse<Sender>> {
+  // return this.request<Sender>("POST", "/senders", data);
+  // }
+
   async createSender(data: CreateSenderRequest): Promise<ApiResponse<Sender>> {
-    return this.request<Sender>("POST", "/senders", data);
+    console.log("=== CREATE SENDER START ===");
+
+    const method = "POST";
+    const signaturePath = "/api/igps/senders";
+    const bodyStr = JSON.stringify(data);
+    const timestamp = new Date().toISOString();
+    const stringToSign = method + signaturePath + timestamp + bodyStr;
+
+    console.log("METHOD:", method);
+    console.log("PATH:", signaturePath);
+    console.log("TIMESTAMP:", timestamp);
+    console.log("BODY:", bodyStr);
+    console.log("STRING TO SIGN:", stringToSign);
+
+    const secret = process.env.NEXT_PUBLIC_HMAC_SECRET!;
+    console.log("SECRET EXISTS:", !!secret);
+
+    let signature = "";
+    try {
+      signature = await this.hmacSha256(stringToSign, secret);
+      console.log("SIGNATURE:", signature);
+    } catch (err) {
+      console.error("HMAC ERROR:", err);
+      throw err;
+    }
+
+    const url = `${this.baseUrl}/senders`;
+    console.log("FINAL URL:", url);
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${this.accessToken}`,
+      "X-Date": timestamp,
+      "X-Signature": signature,
+    };
+
+    console.log("HEADERS:", headers);
+
+    try {
+      console.log("ABOUT TO FETCH...");
+
+      const response = await fetch(url, {
+        method,
+        headers,
+        body: bodyStr,
+      });
+
+      console.log("FETCH COMPLETED");
+      console.log("STATUS:", response.status);
+
+      const result = await response.json();
+      console.log("RESPONSE BODY:", result);
+
+      if (!response.ok) {
+        throw new Error(
+          result.message ||
+            result.error ||
+            `Request failed with status ${response.status}`,
+        );
+      }
+
+      return {
+        success: true,
+        data: result.data || result,
+        message: result.message,
+      };
+    } catch (error: any) {
+      console.error("FETCH ERROR:", error);
+      return {
+        success: false,
+        data: null as any,
+        error: error.message || "Unknown error occurred",
+      };
+    }
   }
 
   async getSenderProfile(): Promise<ApiResponse<Sender>> {
@@ -441,19 +560,260 @@ export class IgpsService {
     senderId: string,
     data: UploadDocumentRequest,
   ): Promise<ApiResponse<any>> {
-    return this.request<any>("POST", `/senders/${senderId}/documents`, data);
+    console.log("=== UPLOAD SENDER DOCUMENT START ===");
+
+    const method = "POST";
+    const signaturePath = `/api/igps/senders/${senderId}/documents`;
+    const bodyStr = JSON.stringify(data);
+    const timestamp = new Date().toISOString();
+    const stringToSign = method + signaturePath + timestamp + bodyStr;
+
+    console.log("METHOD:", method);
+    console.log("PATH:", signaturePath);
+    console.log("TIMESTAMP:", timestamp);
+    console.log("BODY:", bodyStr);
+    console.log("STRING TO SIGN:", stringToSign);
+
+    const secret = process.env.NEXT_PUBLIC_HMAC_SECRET!;
+    console.log("SECRET EXISTS:", !!secret);
+
+    let signature = "";
+    try {
+      signature = await this.hmacSha256(stringToSign, secret);
+      console.log("SIGNATURE:", signature);
+    } catch (err) {
+      console.error("HMAC ERROR:", err);
+      throw err;
+    }
+
+    const url = `${this.baseUrl}/senders/${senderId}/documents`;
+    console.log("FINAL URL:", url);
+
+    // ✅ Include BOTH Bearer token AND HMAC signature
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${this.accessToken}`, // ✅ Bearer token
+      "X-Date": timestamp, // ✅ Timestamp
+      "X-Signature": signature, // ✅ HMAC signature
+    };
+
+    console.log("HEADERS:", headers);
+
+    try {
+      console.log("ABOUT TO FETCH...");
+
+      const response = await fetch(url, {
+        method,
+        headers,
+        body: bodyStr,
+      });
+
+      console.log("FETCH COMPLETED");
+      console.log("STATUS:", response.status);
+
+      const result = await response.json();
+      console.log("RESPONSE BODY:", result);
+
+      if (!response.ok) {
+        throw new Error(
+          result.message ||
+            result.error ||
+            `Request failed with status ${response.status}`,
+        );
+      }
+
+      return {
+        success: true,
+        data: result.data || result,
+        message: result.message,
+      };
+    } catch (error: any) {
+      console.error("FETCH ERROR:", error);
+      return {
+        success: false,
+        data: null as any,
+        error: error.message || "Unknown error occurred",
+      };
+    }
   }
 
   async createUBO(
     senderId: string,
     data: CreateUBORequest,
   ): Promise<ApiResponse<any>> {
-    // UBO response type not strictly defined yet, assuming generic
-    return this.request<any>("POST", `/senders/${senderId}/ubo`, data);
+    console.log("=== CREATE UBO START ===");
+
+    const method = "POST";
+    const signaturePath = `/api/igps/senders/${senderId}/ubo`;
+    const bodyStr = JSON.stringify(data);
+    const timestamp = new Date().toISOString();
+    const stringToSign = method + signaturePath + timestamp + bodyStr;
+
+    console.log("METHOD:", method);
+    console.log("PATH:", signaturePath);
+    console.log("TIMESTAMP:", timestamp);
+    console.log("BODY:", bodyStr);
+    console.log("STRING TO SIGN:", stringToSign);
+
+    const secret = process.env.NEXT_PUBLIC_HMAC_SECRET!;
+    console.log("SECRET EXISTS:", !!secret);
+
+    let signature = "";
+    try {
+      signature = await this.hmacSha256(stringToSign, secret);
+      console.log("SIGNATURE:", signature);
+    } catch (err) {
+      console.error("HMAC ERROR:", err);
+      throw err;
+    }
+
+    const url = `${this.baseUrl}/senders/${senderId}/ubo`;
+    console.log("FINAL URL:", url);
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${this.accessToken}`,
+      "X-Date": timestamp,
+      "X-Signature": signature,
+    };
+
+    console.log("HEADERS:", headers);
+
+    try {
+      console.log("ABOUT TO FETCH...");
+
+      const response = await fetch(url, {
+        method,
+        headers,
+        body: bodyStr,
+      });
+
+      console.log("FETCH COMPLETED");
+      console.log("STATUS:", response.status);
+
+      const result = await response.json();
+      console.log("RESPONSE BODY:", result);
+
+      if (!response.ok) {
+        throw new Error(
+          result.message ||
+            result.error ||
+            `Request failed with status ${response.status}`,
+        );
+      }
+
+      return {
+        success: true,
+        data: result.data || result,
+        message: result.message,
+      };
+    } catch (error: any) {
+      console.error("FETCH ERROR:", error);
+      return {
+        success: false,
+        data: null as any,
+        error: error.message || "Unknown error occurred",
+      };
+    }
   }
 
   async verifySender(senderId: string): Promise<ApiResponse<Sender>> {
-    return this.request<Sender>("POST", `/senders/${senderId}/verify`);
+    console.log("=== VERIFY SENDER START ===");
+
+    const method = "POST";
+    const signaturePath = `/api/igps/senders/${senderId}/verify`;
+    const bodyStr = JSON.stringify({});
+    const timestamp = new Date().toISOString();
+    const stringToSign = method + signaturePath + timestamp + bodyStr;
+
+    console.log("METHOD:", method);
+    console.log("PATH:", signaturePath);
+    console.log("TIMESTAMP:", timestamp);
+    console.log("BODY:", bodyStr);
+    console.log("STRING TO SIGN:", stringToSign);
+
+    const secret = process.env.NEXT_PUBLIC_HMAC_SECRET!;
+    console.log("SECRET EXISTS:", !!secret);
+
+    let signature = "";
+    try {
+      signature = await this.hmacSha256(stringToSign, secret);
+      console.log("SIGNATURE:", signature);
+    } catch (err) {
+      console.error("HMAC ERROR:", err);
+      throw err;
+    }
+
+    const url = `${this.baseUrl}/senders/${senderId}/verify`;
+    console.log("FINAL URL:", url);
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${this.accessToken}`,
+      "X-Date": timestamp,
+      "X-Signature": signature,
+    };
+
+    console.log("HEADERS:", headers);
+
+    try {
+      console.log("ABOUT TO FETCH...");
+
+      const response = await fetch(url, {
+        method,
+        headers,
+        body: bodyStr,
+      });
+
+      console.log("FETCH COMPLETED");
+      console.log("STATUS:", response.status);
+
+      const result = await response.json();
+      console.log("RESPONSE BODY:", result);
+
+      if (!response.ok) {
+        throw new Error(
+          result.message ||
+            result.error ||
+            `Request failed with status ${response.status}`,
+        );
+      }
+
+      return {
+        success: true,
+        data: result.data || result,
+        message: result.message,
+      };
+    } catch (error: any) {
+      console.error("FETCH ERROR:", error);
+      return {
+        success: false,
+        data: null as any,
+        error: error.message || "Unknown error occurred",
+      };
+    }
+  }
+
+  async getKYCStatus(): Promise<
+    ApiResponse<{
+      kycStep: string;
+      senderStatus: string;
+      senderType: string;
+      senderId: string;
+      nextAction: string;
+      completedSteps: string[];
+      remainingSteps: string[];
+    }>
+  > {
+    return this.request<{
+      kycStep: string;
+      senderStatus: string;
+      senderType: string;
+      senderId: string;
+      nextAction: string;
+      completedSteps: string[];
+      remainingSteps: string[];
+    }>("GET", "/senders/me/kyc-status");
   }
 
   private static beneficiaryCache: ApiResponse<Beneficiary[]> | null = null;
@@ -632,11 +992,91 @@ export class IgpsService {
 
   // 7. Quotes & Orders
   async createQuote(data: QuoteRequest): Promise<ApiResponse<Quote>> {
-    return this.request<Quote>("POST", "/quotes", data);
+    const method = "POST";
+    const signaturePath = "/api/igps/quotes";
+    const bodyStr = JSON.stringify(data);
+    const timestamp = new Date().toISOString();
+    const stringToSign = method + signaturePath + timestamp + bodyStr;
+
+    const secret = process.env.NEXT_PUBLIC_HMAC_SECRET!;
+    const signature = await this.hmacSha256(stringToSign, secret);
+
+    const url = `${this.baseUrl}/quotes`;
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${this.accessToken}`,
+      "X-Date": timestamp,
+      "X-Signature": signature,
+    };
+
+    try {
+      const response = await fetch(url, { method, headers, body: bodyStr });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          result.message ||
+            result.error ||
+            `Request failed with status ${response.status}`,
+        );
+      }
+
+      return {
+        success: true,
+        data: result.data || result,
+        message: result.message,
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        data: null as any,
+        error: error.message || "Unknown error occurred",
+      };
+    }
   }
 
   async createOrder(data: CreateOrderRequest): Promise<ApiResponse<Order>> {
-    return this.request<Order>("POST", "/orders", data);
+    const method = "POST";
+    const signaturePath = "/api/igps/orders";
+    const bodyStr = JSON.stringify(data);
+    const timestamp = new Date().toISOString();
+    const stringToSign = method + signaturePath + timestamp + bodyStr;
+
+    const secret = process.env.NEXT_PUBLIC_HMAC_SECRET!;
+    const signature = await this.hmacSha256(stringToSign, secret);
+
+    const url = `${this.baseUrl}/orders`;
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${this.accessToken}`,
+      "X-Date": timestamp,
+      "X-Signature": signature,
+    };
+
+    try {
+      const response = await fetch(url, { method, headers, body: bodyStr });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          result.message ||
+            result.error ||
+            `Request failed with status ${response.status}`,
+        );
+      }
+
+      return {
+        success: true,
+        data: result.data || result,
+        message: result.message,
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        data: null as any,
+        error: error.message || "Unknown error occurred",
+      };
+    }
   }
 
   async getTransactions(params?: any): Promise<ApiResponse<any>> {

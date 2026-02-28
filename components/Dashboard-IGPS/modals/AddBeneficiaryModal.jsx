@@ -37,8 +37,10 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
     const [addWallet, setAddWallet] = useState(false);
 
     // Common State
+    const [beneficiaryType, setBeneficiaryType] = useState("individual");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [businessName, setBusinessName] = useState("");
     const [email, setEmail] = useState("");
 
     // Address State
@@ -71,7 +73,6 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
     const [sortCode, setSortCode] = useState(""); // UK
     const [ifscCode, setIfscCode] = useState(""); // IN
     const [bankId, setBankId] = useState(""); // IN
-    const [beneficiaryType, setBeneficiaryType] = useState("individual");
     const [accountType, setAccountType] = useState("");
 
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -93,8 +94,9 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
 
     const accountTypeOptions = [
         { label: "Savings", value: "savings" },
-        { label: "Checking / Current account", value: "current" }
+        { label: "Checking / Current account", value: "checking" }
     ];
+
     // Replace the phoneCodeOptions useMemo
     const phoneCodeOptions = useMemo(() => {
         const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
@@ -165,7 +167,12 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
 
     const isWalletFormValid = () => {
         // Validate fields
-        if (!firstName.trim() || !lastName.trim() || !email.trim()) return false;
+        if (beneficiaryType === "individual") {
+            if (!firstName.trim() || !lastName.trim()) return false;
+        } else if (beneficiaryType === "business") {
+            if (!businessName.trim()) return false;
+        }
+        if (!email.trim()) return false;
         if (!country || !addressLine1.trim() || !city.trim() || !selectedState.trim() || !zip.trim()) return false;
         return wallets.every(w => w.address.trim() && w.network);
     };
@@ -174,8 +181,9 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
         if (!beneficiaryType) return false;
 
         if (beneficiaryType === "individual") {
-            if (!firstName.trim()) return false;
-            if (!lastName.trim()) return false;
+            if (!firstName.trim() || !lastName.trim()) return false;
+        } else if (beneficiaryType === "business") {
+            if (!businessName.trim()) return false;
         }
 
         if (!email.trim()) return false;
@@ -288,9 +296,14 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                 const w = wallets[0];
 
                 payload = {
-                    type: 'individual',
-                    firstName: firstName,
-                    lastName: lastName,
+                    type: beneficiaryType,
+                    ...(beneficiaryType === "individual" && {
+                        firstName: firstName,
+                        lastName: lastName
+                    }),
+                    ...(beneficiaryType === "business" && {
+                        fullName: businessName
+                    }),
                     email: email,
                     address: commonAddress,
                     paymentInfo: {
@@ -309,7 +322,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                         lastName
                     }),
                     ...(beneficiaryType === "business" && {
-                        businessName: `${firstName} ${lastName}`
+                        fullName: businessName
                     }),
                     email,
                     ...(fullPhone && { phone: fullPhone }),
@@ -357,27 +370,50 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                 <div ref={scrollRef} className="flex-1 overflow-y-auto md:px-8 py-6 space-y-6 pb-40">
                     {error && <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">{error}</div>}
 
-                    {/* Common Fields */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <label className="text-sm text-[#6A6A6A]">First Name</label>
-                            <input
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                placeholder="John"
-                                className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm text-[#6A6A6A]">Last Name</label>
-                            <input
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                placeholder="Doe"
-                                className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
-                            />
-                        </div>
+                    {/* Beneficiary Type Selector */}
+                    <div className="space-y-2">
+                        <label className="text-sm text-[#6A6A6A]">Beneficiary type</label>
+                        <CustomSelect
+                            options={beneficiaryTypeOptions}
+                            value={beneficiaryType}
+                            onChange={setBeneficiaryType}
+                            placeholder="Select beneficiary type"
+                        />
                     </div>
+
+                    {/* Common Fields - Conditional based on Beneficiary Type */}
+                    {beneficiaryType === "individual" ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-sm text-[#6A6A6A]">First Name</label>
+                                <input
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    placeholder="John"
+                                    className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm text-[#6A6A6A]">Last Name</label>
+                                <input
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    placeholder="Doe"
+                                    className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                />
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="space-y-2">
+                            <label className="text-sm text-[#6A6A6A]">Business Name</label>
+                            <input
+                                value={businessName}
+                                onChange={(e) => setBusinessName(e.target.value)}
+                                placeholder="Your Business Name"
+                                className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                            />
+                        </div>
+                    )}
 
                     <div className="space-y-2">
                         <label className="text-sm text-[#6A6A6A]">Email</label>
@@ -413,15 +449,6 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                             <div className="space-y-4">
 
                                 {/* Account Number */}
-                                <div className="space-y-2">
-                                    <label className="text-sm text-gray-500">Beneficiary type</label>
-                                    <CustomSelect
-                                        options={beneficiaryTypeOptions}
-                                        value={beneficiaryType}
-                                        onChange={setBeneficiaryType}
-                                        placeholder="Select beneficiary type"
-                                    />
-                                </div>
                                 <input
                                     placeholder="Account Number"
                                     value={accountNumber}

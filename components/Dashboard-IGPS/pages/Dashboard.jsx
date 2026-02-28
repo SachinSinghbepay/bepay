@@ -4,13 +4,21 @@ import BalanceBreakdown from "../components/BalanceBreakdown";
 import Image from "next/image";
 import { useAuth } from "../context/AuthContext";
 
-export default function Dashboard({ onOpenModal }) {
+export default function Dashboard({ onOpenModal, setActivePage }) {
   const { user, igpsService } = useAuth();
   const [transactions, setTransactions] = useState([]);
   const [wallets, setWallets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalBalance, setTotalBalance] = useState(0);
   const [activeFilter, setActiveFilter] = useState("All");
+const [kycDone, setKycDone] = useState(null);
+
+  // Function to check KYC completion status
+  const checkKYCCompletion = (remainingSteps) => {
+    const kycRequiredSteps = ["sender_details_submitted", "documents_uploaded", "ubo_submitted"];
+    const needsKYC = kycRequiredSteps.some(step => remainingSteps.includes(step));
+    return !needsKYC;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,6 +59,17 @@ export default function Dashboard({ onOpenModal }) {
         }
 
         setWallets(currentWallets);
+
+        // 3. Fetch KYC Status
+        try {
+          const kycRes = await igpsService.getKYCStatus();
+          if (kycRes.success) {
+            const isKYCComplete = checkKYCCompletion(kycRes.data.remainingSteps);
+            setKycDone(isKYCComplete);
+          }
+        } catch (e) {
+          console.error("Failed to fetch KYC status", e);
+        }
 
         // Fetch Transactions
         let queryParams = { limit: 5 };
@@ -105,6 +124,47 @@ export default function Dashboard({ onOpenModal }) {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-4 space-y-6 lg:space-y-8 overflow-x-hidden">
+    {kycDone === false && (
+        <div className="w-full bg-[#E7DED1] rounded-[40px] px-6 py-8 flex flex-col  items-start justify-between gap-3">
+
+          {/* LEFT SIDE */}
+          <div className="flex items-center justify-center gap-4">
+            <div className="w-10 h-10 rounded-xl  flex items-center justify-center">
+              <Image
+                width={10}
+                height={10}
+                src='/icons/kyc.svg'
+                alt="kyc"
+                className="w-10"
+              />
+            </div>
+            <div>
+              <p className="text-[14px] sm:text-[16px]  font-medium text-black">
+                Complete your KYB/KYC verification to enable bank withdrawals,
+                global payouts & full account access.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-6 mt-6 flex-wrap">
+
+            <button
+              onClick={() => setActivePage("kyc")}
+              className="px-8 py-4 rounded-full bg-black text-white font-medium hover:bg-gray-900 transition"
+            >
+              Complete verification
+            </button>
+            {/* 
+            <button className="text-gray-700 hover:text-black transition flex items-center gap-2">
+              See what you can do without verification
+              <span>›</span>
+            </button> */}
+
+          </div>
+
+
+
+        </div>
+      )}
       {/* BALANCE CARD */}
       <div className="rounded-3xl bg-white p-6 shadow-sm">
         <div className="flex flex-col xl:flex-row gap-6 xl:gap-0 justify-between items-start mb-6">

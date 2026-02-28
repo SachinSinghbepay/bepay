@@ -13,23 +13,22 @@ export default function BackupCode({
         <div className="w-full max-w-xl flex flex-col justify-between">
 
             {/* Back button */}
-            <div className="text-start px-10 py-4 mt-6">
-                <button
-                    onClick={onBack}
-                    className="text-sm text-gray-500 flex items-center gap-1"
-                >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M15 6L9 12L15 18"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
-                    Back
-                </button>
-            </div>
+           <div className="text-start px-10 py-4 mt-6">
+        <button
+          onClick={onBack}
+          className="text-sm text-gray-500 flex "
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M15 6L9 12L15 18"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg> Back
+        </button> 
+      </div>
 
             {/* Main content */}
             <div className="rounded-3xl p-10">

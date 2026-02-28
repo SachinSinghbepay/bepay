@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import TopHeader from "./TopHeader";
+import { useAuth } from "../context/AuthContext";
 
 import Dashboard from "../pages/Dashboard";
 import Banking from "../pages/Banking";
@@ -12,7 +13,11 @@ import Invite from "../pages/Invite";
 import Profile from "../pages/Profile";
 import LegalPolicy from "../pages/Legal";
 
+
+
 import ModalRoot from "../layout/ModalRoot";
+import KycRequiredModal from "../modals/KycRequiredModal";
+import KycVerificationForm from "../pages/KycVerificationFormNew";
 import TransactionDetails from "../modals/TransactionDetails";
 import DepositSelectModal from "../modals/DepositSelectModal";
 import DepositAddressModal from "../modals/DepositAddressModal";
@@ -47,6 +52,17 @@ import Payments from "../pages/Payments";
 
 export default function InnerLayout() {
 
+  const { kycStatus } = useAuth();
+
+  const KYC_REQUIRED_MODALS = [
+    "deposit-select",
+    "new-transfer",
+    "global-payout",
+    "add-beneficiary",
+    "pay-to-wallet",
+    "pay-to-email",
+    "pay-to-swift"
+  ];
 
   const [activePage, setActivePage] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -65,6 +81,22 @@ export default function InnerLayout() {
 
 
   const openModal = (type, props = {}) => {
+
+    const requiresKyc = KYC_REQUIRED_MODALS.includes(type);
+
+    // If KYC still loading → show loading state
+    if (requiresKyc && kycStatus === "loading") {
+      setModal("kyc-loading");
+      return;
+    }
+
+    // If KYC incomplete → block
+    if (requiresKyc && kycStatus === "incomplete") {
+      setModal("kyc-required");
+      return;
+    }
+
+    // Otherwise allow
     setModal(type);
     setModalProps(props);
   };
@@ -84,6 +116,10 @@ export default function InnerLayout() {
         return <Team onOpenModal={openModal} />;
       case "invite":
         return <Invite onOpenModal={openModal} />;
+      case "kyc":
+        return <KycVerificationForm onOpenModal={openModal}
+          setActivePage={setActivePage}
+        />;
       case "profile":
         return (
           <Profile
@@ -96,7 +132,11 @@ export default function InnerLayout() {
       case "payment":
         return <Payments onOpenModal={openModal} />;
       default:
-        return <Dashboard onOpenModal={openModal} />;
+        return (<Dashboard
+          onOpenModal={openModal}
+          setActivePage={setActivePage}
+        />
+        )
     }
   };
 
@@ -141,6 +181,27 @@ export default function InnerLayout() {
       {/* ===== 🔥 MODALS RENDER HERE (ONCE) ===== */}
       {modal && (
         <ModalRoot onClose={closeModal}>
+
+          {modal === "kyc-required" && (
+
+            <KycRequiredModal
+              onClose={closeModal}
+              onGoToKyc={() => {
+                closeModal();
+                setActivePage("kyc");
+              }}
+            />
+          )}
+
+          {modal === "kyc-loading" && (
+            <ModalFrame size="sm">
+              <div className="p-8 text-center">
+                <p className="text-sm text-gray-600">
+                  Checking verification status...
+                </p>
+              </div>
+            </ModalFrame>
+          )}
 
           {modal === "txn-details" && (
             <TransactionDetails

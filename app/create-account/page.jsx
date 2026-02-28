@@ -5,7 +5,7 @@ import CreateAccountLayout from "./Layout";
 import StepEmail from "./StepEmail";
 import StepVerifyCode from "./StepVerifyCode";
 import StepPersonalDetails from "./StepPersonalDetails";
-import StepBusinessDetails from "./StepBusinessDetails";
+// import StepBusinessDetails from "../details/StepBusinessDetails";
 
 export default function CreateAccountPage() {
   const [step, setStep] = useState(1);
@@ -29,18 +29,18 @@ export default function CreateAccountPage() {
       case 3:
         return <StepPersonalDetails data={formData} setData={setFormData} onNext={next} onBack={back} />;
       default:
-      case 4:
-        return (
-          <StepBusinessDetails
-            data={formData}
-            setData={setFormData}
-            onNext={() => {
-              console.log("FINAL DATA:", formData);
+      // case 4:
+      //   return (
+      //     <StepBusinessDetails
+      //       data={formData}
+      //       setData={setFormData}
+      //       onNext={() => {
+      //         console.log("FINAL DATA:", formData);
 
-            }}
-            onBack={back}
-          />
-        );
+      //       }}
+      //       onBack={back}
+      //     />
+      //   );
         return null;
     }
   };

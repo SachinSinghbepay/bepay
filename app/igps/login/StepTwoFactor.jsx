@@ -28,7 +28,7 @@ export default function StepTwoFactor({
               strokeLinejoin="round"
             />
           </svg> Back
-        </button>
+        </button> 
       </div>
       <div className="rounded-3xl p-10">
 
@@ -61,7 +61,7 @@ export default function StepTwoFactor({
 
 
       </div>
-      <div className="rounded-3xl p-10 ">
+      <div className="rounded-3xl p-10 pb-6">
         <button
           onClick={onSubmit}
           disabled={loading || otp.join("").length !== 6}
