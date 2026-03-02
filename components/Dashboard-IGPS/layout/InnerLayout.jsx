@@ -16,6 +16,7 @@ import LegalPolicy from "../pages/Legal";
 
 
 import ModalRoot from "../layout/ModalRoot";
+import ModalFrame from "../modals/ModalFrame";
 import KycRequiredModal from "../modals/KycRequiredModal";
 import KycVerificationForm from "../pages/KycVerificationFormNew";
 import TransactionDetails from "../modals/TransactionDetails";

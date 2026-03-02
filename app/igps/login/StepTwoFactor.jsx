@@ -70,7 +70,7 @@ export default function StepTwoFactor({
           {loading ? "Verifying..." : "Verify & Login"}
         </button>
         <p className="text-[#080808] mt-8 text-center text-sm">
-          Can't access your authenticator?{" "}
+          Can&apos;t access your authenticator?{" "}
           <button
             type="button"
             onClick={onUseBackup}

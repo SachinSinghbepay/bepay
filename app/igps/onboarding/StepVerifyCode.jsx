@@ -54,7 +54,7 @@ export default function StepVerifyCode({ data, setData, onNext, onBack }) {
                 </h2>
 
                 <p className="text-sm text-gray-500 mb-8">
-                    We've sent a 6-digit authentication code to{" "}
+                    We&apos;ve sent a 6-digit authentication code to{" "}
                     <span className="font-medium text-black">
                         {data.email?.replace(/(.{2}).+(@.+)/, "$1*****$2")}
                     </span>.
@@ -95,7 +95,7 @@ export default function StepVerifyCode({ data, setData, onNext, onBack }) {
                     </p>
 
                     <p className="text-sm text-gray-500">
-                        Didn't receive the code?{" "}
+                        Didn&apos;t receive the code?{" "}
                         <span className="text-black font-medium cursor-pointer">
                             Resend in 59 s
                         </span>
