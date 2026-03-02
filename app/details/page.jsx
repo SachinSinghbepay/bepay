@@ -5,12 +5,15 @@ import { FiChevronLeft } from "react-icons/fi";
 import CustomSelect from "@/components/Dashboard-IGPS/components/CustomSelect";
 import DummyProfileMenu from "./DummyProfileMenu";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-export default function StepBusinessDetails({ data, setData, onNext, onBack, onProfileClick }) {
+export default function StepBusinessDetails() {
+    const router = useRouter();
     const [accountType, setAccountType] = useState("business");
     const [country, setCountry] = useState("India");
     const [heardFrom, setHeardFrom] = useState("");
     const [services, setServices] = useState([]);
+    const [formData, setFormData] = useState({});
 
     const toggleService = (service) => {
         setServices((prev) =>
@@ -26,15 +29,18 @@ export default function StepBusinessDetails({ data, setData, onNext, onBack, onP
         e.preventDefault();
         if (!isValid) return;
 
-        setData((prev) => ({
-            ...prev,
+        const updatedData = {
+            ...formData,
             accountType,
             country,
             services,
             heardFrom
-        }));
-
-        onNext();
+        };
+        setFormData(updatedData);
+        
+        // Navigate or handle form submission
+        console.log("Form submitted:", updatedData);
+        // router.push("/next-step");
     };
 
     const countryOptions = [
@@ -169,13 +175,8 @@ export default function StepBusinessDetails({ data, setData, onNext, onBack, onP
 
                     <CustomSelect
                         options={countryOptions}
-                        value={data?.country}
-                        onChange={(value) =>
-                            setData((prev) => ({
-                                ...prev,
-                                country: value
-                            }))
-                        }
+                        value={country}
+                        onChange={(value) => setCountry(value)}
                         placeholder="Select country"
                     />
                 </div>
@@ -218,13 +219,8 @@ export default function StepBusinessDetails({ data, setData, onNext, onBack, onP
 
                     <CustomSelect
                         options={hearAboutOptions}
-                        value={data?.hearAbout}
-                        onChange={(value) =>
-                            setData((prev) => ({
-                                ...prev,
-                                hearAbout: value
-                            }))
-                        }
+                        value={heardFrom}
+                        onChange={(value) => setHeardFrom(value)}
                         placeholder="Select an option"
                     />
                 </div>
