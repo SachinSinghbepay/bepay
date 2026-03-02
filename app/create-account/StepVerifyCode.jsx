@@ -106,7 +106,7 @@ export default function StepVerifyCode({ data, setData, onNext, onBack }) {
                 <button
                     onClick={handleSubmit}
                     disabled={!isValid}
-                    className={`w-full h-12 rounded-xl text-white font-medium transition
+                    className={` w-full h-10 md:h-16 rounded-xl text-white font-medium transition mt-20 md:mt-30
                         ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-300 cursor-not-allowed"}
                     `}
                 >

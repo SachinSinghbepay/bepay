@@ -1,7 +1,15 @@
 
 import React from 'react';
-
-export default function StepBasicDetails({ type, data, onChange, onNext, onBack }) {
+import CustomSelect from '@/components/Dashboard-IGPS/components/CustomSelect';
+export default function StepBasicDetails({
+    type,
+    data,
+    countries,
+    states,
+    loadingStates,
+    onChange,
+    onNext,
+    onBack }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -207,7 +215,25 @@ export default function StepBasicDetails({ type, data, onChange, onNext, onBack 
                 <div className="sm:col-span-6 pt-4">
                     <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider">Address</h4>
                 </div>
-
+                <div className="sm:col-span-6">
+                    <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
+                    <div className="mt-1">
+                        <CustomSelect
+                            options={countries}
+                            value={data.address.country}
+                            onChange={(val) =>
+                                onChange({
+                                    address: {
+                                        ...data.address,
+                                        country: val,
+                                        state: "" // reset state when country changes
+                                    }
+                                })
+                            }
+                            placeholder="Select Country"
+                        />
+                    </div>
+                </div>
                 <div className="sm:col-span-6">
                     <label htmlFor="street" className="block text-sm font-medium text-gray-700">Street Address</label>
                     <div className="mt-1">
@@ -241,15 +267,36 @@ export default function StepBasicDetails({ type, data, onChange, onNext, onBack 
                 <div className="sm:col-span-2">
                     <label htmlFor="state" className="block text-sm font-medium text-gray-700">State / Province</label>
                     <div className="mt-1">
-                        <input
-                            type="text"
-                            name="address.state"
-                            id="state"
-                            required
-                            value={data.address.state}
-                            onChange={handleChange}
-                            className="shadow-sm focus:ring-black focus:border-black block w-full sm:text-sm border-gray-300 rounded-md p-2 border"
-                        />
+                        {states.length > 0 ? (
+                            <CustomSelect
+                                options={states}
+                                value={data.address.state}
+                                onChange={(val) =>
+                                    onChange({
+                                        address: {
+                                            ...data.address,
+                                            state: val
+                                        }
+                                    })
+                                }
+                                placeholder={loadingStates ? "Loading..." : "Select State"}
+                            />
+                        ) : (
+                            <input
+                                type="text"
+                                value={data.address.state}
+                                onChange={(e) =>
+                                    onChange({
+                                        address: {
+                                            ...data.address,
+                                            state: e.target.value
+                                        }
+                                    })
+                                }
+                                className="..."
+                                placeholder="Enter State"
+                            />
+                        )}
                     </div>
                 </div>
 
@@ -268,27 +315,7 @@ export default function StepBasicDetails({ type, data, onChange, onNext, onBack 
                     </div>
                 </div>
 
-                <div className="sm:col-span-6">
-                    <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
-                    <div className="mt-1">
-                        <select
-                            id="country"
-                            name="address.country"
-                            autoComplete="country-name"
-                            required
-                            value={data.address.country}
-                            onChange={handleChange}
-                            className="shadow-sm focus:ring-black focus:border-black block w-full sm:text-sm border-gray-300 rounded-md p-2 border"
-                        >
-                            <option value="">Select Country</option>
-                            <option value="US">United States</option>
-                            <option value="CA">Canada</option>
-                            <option value="GB">United Kingdom</option>
-                            <option value="IN">India</option>
-                            {/* Add more countries as needed */}
-                        </select>
-                    </div>
-                </div>
+
 
             </div>
 

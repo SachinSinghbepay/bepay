@@ -13,7 +13,7 @@ export default function ModalRoot({ children, onClose }) {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center">
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center px-4">
       {/* overlay */}
       <div
         className="absolute inset-0 bg-black/40"

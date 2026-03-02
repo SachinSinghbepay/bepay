@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { FiChevronLeft } from "react-icons/fi";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 export default function StepPersonalDetails({ data, setData, onNext, onBack }) {
     const [agree, setAgree] = useState(false);
 
     const password = data.password || "";
-
+    const [showPassword, setShowPassword] = useState(false);
     // 🔐 Password rule checks
     const hasMinLength = password.length >= 8;
     const hasNumber = /[0-9]/.test(password);
@@ -48,9 +49,8 @@ export default function StepPersonalDetails({ data, setData, onNext, onBack }) {
     );
 
     return (
-        <div className="flex flex-col h-[630px] p-10 pr-0">
-
-            <div className="flex-1 overflow-y-auto pr-2">
+        <div className="w-full max-w-xl flex flex-col justify-between p-10">
+            <div className="flex-1 overflow-y-auto pr-2  ">
 
                 <h2 className="text-2xl font-semibold mb-2">
                     Create your account
@@ -103,18 +103,31 @@ export default function StepPersonalDetails({ data, setData, onNext, onBack }) {
                         <label className="block text-sm mb-2">
                             Create a password
                         </label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) =>
-                                setData((prev) => ({
-                                    ...prev,
-                                    password: e.target.value
-                                }))
-                            }
-                            placeholder="Enter a new password"
-                            className="w-full h-14 rounded-2xl border px-4 outline-none focus:border-black transition"
-                        />
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                value={password}
+                                onChange={(e) =>
+                                    setData((prev) => ({
+                                        ...prev,
+                                        password: e.target.value
+                                    }))
+                                }
+                                placeholder="Enter a new password"
+                                className="w-full h-14 rounded-2xl border px-4 outline-none focus:border-black transition"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-4 text-gray-400"
+                            >
+                                {showPassword ? (
+                                    <AiOutlineEyeInvisible size={20} />
+                                ) : (
+                                    <AiOutlineEye size={20} />
+                                )}
+                            </button>
+                        </div>
                     </div>
 
                     {/* Password Rules */}
@@ -131,8 +144,9 @@ export default function StepPersonalDetails({ data, setData, onNext, onBack }) {
                         <label className="block text-sm mb-2">
                             Confirm new password
                         </label>
+                          <div className="relative">
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             value={data.confirmPassword || ""}
                             onChange={(e) =>
                                 setData((prev) => ({
@@ -145,6 +159,18 @@ export default function StepPersonalDetails({ data, setData, onNext, onBack }) {
                                 ${passwordsMatch ? "focus:border-black" : "border-red-300 focus:border-red-400"}
                             `}
                         />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-4 top-4 text-gray-400"
+                        >
+                            {showPassword ? (
+                                <AiOutlineEyeInvisible size={20} />
+                            ) : (
+                                <AiOutlineEye size={20} />
+                            )}
+                        </button>
+                        </div>
                     </div>
 
                     {/* Checkbox */}
@@ -174,7 +200,7 @@ export default function StepPersonalDetails({ data, setData, onNext, onBack }) {
                     <button
                         onClick={handleSubmit}
                         disabled={!isValid}
-                        className={`w-full h-14 rounded-full text-white font-medium transition
+                        className={`mt-6 w-full h-10 md:h-16 rounded-xl text-white font-medium transition
                             ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-300 cursor-not-allowed"}
                         `}
                     >

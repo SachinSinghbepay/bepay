@@ -1,7 +1,29 @@
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
-
+import { useRef, useEffect } from "react";
 export default function BalanceDropdown({ wallets = [], onClose }) {
+
+    const scrollRef = useRef(null);
+
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+
+        const onWheel = (e) => {
+            const { scrollTop, scrollHeight, clientHeight } = el;
+            const atTop = scrollTop === 0;
+            const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+            if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+                e.preventDefault();
+            } else {
+                e.stopPropagation();
+            }
+        };
+
+        el.addEventListener("wheel", onWheel, { passive: false });
+        return () => el.removeEventListener("wheel", onWheel);
+    }, []);
 
     // Helper to get icons
     const getTokenIcon = (currency) => {
@@ -39,7 +61,12 @@ export default function BalanceDropdown({ wallets = [], onClose }) {
                     </div>
 
                     {/* CRYPTO COLUMN */}
-                    <div className="space-y-8 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+
+                    <div
+                        ref={scrollRef}
+                        className="h-[30vh] flex-1 overflow-y-auto px-10 py-8 space-y-8 max-h-[400px]  pr-2"
+                    >
+
                         {wallets.length === 0 ? (
                             <p className="text-sm text-gray-400">No wallets found</p>
                         ) : (

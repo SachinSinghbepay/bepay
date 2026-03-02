@@ -1,8 +1,17 @@
 
 import React, { useState } from 'react';
 import { Plus, Trash2, Check } from 'lucide-react';
+import { useEffect } from 'react';
+import { IgpsService } from '@/services/igpsService';
+import CustomSelect from '@/components/Dashboard-IGPS/components/CustomSelect';
+
+const igpsService = new IgpsService();
 
 export default function StepUBO({ ubos, onChange, onSubmit, onBack, isSubmitting }) {
+    const [countries, setCountries] = useState([]);
+    const [states, setStates] = useState([]);
+    const [loadingStates, setLoadingStates] = useState(false);
+
     const [showForm, setShowForm] = useState(false);
     const [newUbo, setNewUbo] = useState({
         firstName: '',
@@ -28,6 +37,56 @@ export default function StepUBO({ ubos, onChange, onSubmit, onBack, isSubmitting
         }
     };
 
+    useEffect(() => {
+        const loadCountries = async () => {
+            try {
+                const res = await igpsService.getCountries();
+                if (res.success && Array.isArray(res.data)) {
+                    const formatted = res.data.map(c => ({
+                        label: c.name,
+                        value: c.code
+                    }));
+                    setCountries(formatted);
+                }
+            } catch (err) {
+                console.error("Failed to load countries", err);
+            }
+        };
+
+        loadCountries();
+    }, []);
+
+    useEffect(() => {
+        if (!newUbo.address.country) {
+            setStates([]);
+            return;
+        }
+
+        const loadStates = async () => {
+            setLoadingStates(true);
+
+            try {
+                const res = await igpsService.getStates(newUbo.address.country);
+
+                if (res.success && Array.isArray(res.data)) {
+                    const formatted = res.data.map(s => ({
+                        label: s.name,
+                        value: s.code
+                    }));
+                    setStates(formatted);
+                } else {
+                    setStates([]);
+                }
+            } catch (err) {
+                console.error("Failed to load states", err);
+                setStates([]);
+            }
+
+            setLoadingStates(false);
+        };
+
+        loadStates();
+    }, [newUbo.address.country]);
     const handleFileChange = async (e, field) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -115,20 +174,81 @@ export default function StepUBO({ ubos, onChange, onSubmit, onBack, isSubmitting
                         <input type="text" name="phone" placeholder="Phone" required value={newUbo.phone} onChange={handleInputChange} className="p-2 border rounded" />
                         <input type="date" name="birthDate" required value={newUbo.birthDate} onChange={handleInputChange} className="p-2 border rounded" />
                         <input type="number" name="ownershipPercent" placeholder="Ownership %" required value={newUbo.ownershipPercent} onChange={handleInputChange} className="p-2 border rounded" />
-
+                        <div className="sm:col-span-2">
+                            <CustomSelect
+                                options={countries}
+                                value={newUbo.address.country}
+                                onChange={(val) =>
+                                    setNewUbo(prev => ({
+                                        ...prev,
+                                        address: {
+                                            ...prev.address,
+                                            country: val,
+                                            state: "" // reset state
+                                        }
+                                    }))
+                                }
+                                placeholder="Select Country"
+                            />
+                        </div>
                         {/* Address */}
                         <input type="text" name="address.street" placeholder="Street" required value={newUbo.address.street} onChange={handleInputChange} className="p-2 border rounded sm:col-span-2" />
                         <input type="text" name="address.city" placeholder="City" required value={newUbo.address.city} onChange={handleInputChange} className="p-2 border rounded" />
-                        <input type="text" name="address.state" placeholder="State/Province" required value={newUbo.address.state} onChange={handleInputChange} className="p-2 border rounded" />
+
+                        <div className="">
+                            {states.length > 0 ? (
+                                <CustomSelect
+                                    options={states}
+                                    value={newUbo.address.state}
+                                    onChange={(val) =>
+                                        setNewUbo(prev => ({
+                                            ...prev,
+                                            address: {
+                                                ...prev.address,
+                                                state: val
+                                            }
+                                        }))
+                                    }
+                                    placeholder={loadingStates ? "Loading..." : "Select State"}
+                                />
+                            ) : (
+                                <input
+                                    type="text"
+                                    value={newUbo.address.state}
+                                    onChange={(e) =>
+                                        setNewUbo(prev => ({
+                                            ...prev,
+                                            address: {
+                                                ...prev.address,
+                                                state: e.target.value
+                                            }
+                                        }))
+                                    }
+                                    className="p-2 border rounded"
+                                    placeholder="Enter State"
+                                />
+                            )}
+                        </div>
                         <input type="text" name="address.postalCode" placeholder="Postal Code" required value={newUbo.address.postalCode} onChange={handleInputChange} className="p-2 border rounded" />
-                        <input type="text" name="address.country" placeholder="Country Code (e.g. US)" required value={newUbo.address.country} onChange={handleInputChange} className="p-2 border rounded" />
 
                         {/* Identity */}
                         <div className="sm:col-span-2 pt-2 border-t mt-2">
                             <p className="text-xs font-medium text-gray-500 mb-2">Identification</p>
                             <div className="grid grid-cols-3 gap-2">
-                                <input type="text" name="identity.countryCode" placeholder="Issue Country" required value={newUbo.identity.countryCode} onChange={handleInputChange} className="p-2 border rounded" />
-                                <select name="identity.documentType" value={newUbo.identity.documentType} onChange={handleInputChange} className="p-2 border rounded">
+                                <CustomSelect
+                                    options={countries}
+                                    value={newUbo.identity.countryCode}
+                                    onChange={(val) =>
+                                        setNewUbo(prev => ({
+                                            ...prev,
+                                            identity: {
+                                                ...prev.identity,
+                                                countryCode: val
+                                            }
+                                        }))
+                                    }
+                                    placeholder="Select Issue Country"
+                                />                                <select name="identity.documentType" value={newUbo.identity.documentType} onChange={handleInputChange} className="p-2 border rounded">
                                     <option value="NATIONAL_ID">National ID</option>
                                     <option value="PASSPORT">Passport</option>
                                 </select>

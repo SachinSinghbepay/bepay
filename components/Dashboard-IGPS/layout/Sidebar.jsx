@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   Landmark,
   Users,
+  Wallet ,
   UserPlus,
   UserCog
 } from "lucide-react";
@@ -14,6 +15,7 @@ const menuItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "banking", label: "Banking", icon: Landmark },
   { id: "beneficiary", label: "Beneficiary", icon: Users },
+  { id: "payment", label: "Payment", icon: Wallet  },
   { id: "team", label: "Team", icon: UserCog },
   { id: "invite", label: "Invite", icon: UserPlus },
 ];

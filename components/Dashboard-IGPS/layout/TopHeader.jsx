@@ -7,6 +7,7 @@ export default function TopHeader({ title, onProfileClick, onMenuClick }) {
         dashboard: "Overview",
         banking: "Virtual Account",
         beneficiary: "Beneficiaries",
+        payment: "Payment requests",
         team: "Team",
         invite: "Invite",
         profile: "Profile",
@@ -22,7 +23,7 @@ export default function TopHeader({ title, onProfileClick, onMenuClick }) {
                     ☰
                 </button>
 
-                <h2 className="text-lg font-semibold text-[#6A6A6A]">
+                <h2 className="text-md sm:text-lg font-semibold text-[#6A6A6A]">
                     {titleMap[title] || "Overview"}
                 </h2>
             </div>

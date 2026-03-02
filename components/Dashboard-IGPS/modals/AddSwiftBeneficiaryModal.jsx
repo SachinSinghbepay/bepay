@@ -22,9 +22,10 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
     const [addressLine1, setAddressLine1] = useState("");
     const [addressLine2, setAddressLine2] = useState("");
     const [city, setCity] = useState("");
-    const [state, setState] = useState("");
+    const [states, setStates] = useState([]);
+    const [selectedState, setSelectedState] = useState("");
     const [zip, setZip] = useState("");
-
+  const [loadingStates, setLoadingStates] = useState(false);
     // Bank Details
     const [accountNumber, setAccountNumber] = useState("");
     const [swiftCode, setSwiftCode] = useState("");
@@ -35,6 +36,7 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
     const [bankId, setBankId] = useState("");
     const [routingNumber, setRoutingNumber] = useState(""); // For US
     const [sortCode, setSortCode] = useState(""); // For UK
+    const [countries, setCountries] = useState([]);
 
     const [category, setCategory] = useState("");
     const [purpose, setPurpose] = useState("");
@@ -59,12 +61,54 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
         return () => el.removeEventListener("wheel", onWheel);
     }, []);
 
-    const countryOptions = [
-        "United States",
-        "United Kingdom",
-        "Germany",
-        "India"
-    ];
+    useEffect(() => {
+        const loadCountries = async () => {
+            try {
+                const res = await igpsService.getCountries();
+                if (res.success && Array.isArray(res.data)) {
+
+                    const formatted = res.data.map(c => ({
+                        label: c.name,
+                        value: c.code
+                    }));
+
+                    setCountries(formatted);
+                }
+            } catch (err) {
+                console.error("Failed to load countries", err);
+            }
+        };
+
+        loadCountries();
+    }, []);
+
+    useEffect(() => {
+        if (!country) {
+            setStates([]);
+            return;
+        }
+
+        const loadStates = async () => {
+            setLoadingStates(true);
+
+            const res = await igpsService.getStates(country);
+
+            if (res.success && Array.isArray(res.data)) {
+                const formatted = res.data.map((s) => ({
+                    label: s.name,
+                    value: s.code,
+                }));
+
+                setStates(formatted);
+            } else {
+                setStates([]);
+            }
+
+            setLoadingStates(false);
+        };
+
+        loadStates();
+    }, [country]);
 
     const INDIAN_STATES = [
         { label: "Andhra Pradesh", value: "AP" },
@@ -274,13 +318,10 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                             Business country
                         </label>
                         <CustomSelect
-                            options={countryOptions}
-                            placeholder="Select country"
+                            options={countries}
                             value={country}
-                            onChange={(val) => {
-                                setCountry(val);
-                                setState(""); // Reset state when country changes
-                            }}
+                            onChange={setCountry}
+                            placeholder="Select Country"
                         />
                     </div>
 
@@ -296,21 +337,20 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                                 <Input placeholder="City" value={city} onChange={setCity} />
 
                                 {/* Conditional State Input */}
-                                {country === "India" ? (
-                                    <div>
-                                        <select
-                                            value={state}
-                                            onChange={(e) => setState(e.target.value)}
-                                            className="w-full h-14 rounded-xl border px-4 text-sm outline-none focus:ring-2 focus:ring-black/10 bg-white"
-                                        >
-                                            <option value="" disabled>Select State</option>
-                                            {INDIAN_STATES.map(s => (
-                                                <option key={s.value} value={s.value}>{s.label}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                {states.length > 0 ? (
+                                    <CustomSelect
+                                        options={states}
+                                        value={selectedState}
+                                        onChange={setSelectedState}
+                                        placeholder={loadingStates ? "Loading..." : "Select state"}
+                                    />
                                 ) : (
-                                    <Input placeholder="State" value={state} onChange={setState} />
+                                    <input
+                                        value={selectedState}
+                                        onChange={(e) => setSelectedState(e.target.value)}
+                                        placeholder="Enter state"
+                                        className="w-full mt-2 h-12 rounded-xl border px-4 outline-none focus:border-black"
+                                    />
                                 )}
 
                                 <Input placeholder="Zip / Pin code" value={zip} onChange={setZip} />

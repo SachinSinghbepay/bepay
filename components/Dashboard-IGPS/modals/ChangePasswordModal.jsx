@@ -1,15 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import ModalFrame from "./ModalFrame";
 import { FiX } from "react-icons/fi";
 import { FiCheck } from "react-icons/fi";
-
+import { useAuth } from "../context/AuthContext";
 export default function ChangePasswordModal({ onClose, onSubmit }) {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [mode, setMode] = useState("form");
+    const { igpsService } = useAuth();
+    const scrollRef = useRef(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+
+        const onWheel = (e) => {
+            const { scrollTop, scrollHeight, clientHeight } = el;
+            const atTop = scrollTop === 0;
+            const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+            if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+                e.preventDefault();
+            } else {
+                e.stopPropagation();
+            }
+        };
+        el.addEventListener("wheel", onWheel, { passive: false });
+        return () => el.removeEventListener("wheel", onWheel);
+    }, []);
 
     // 🔐 Password rules
     const rules = {
@@ -32,31 +54,38 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
 
 
     const handleSubmit = async () => {
-        if (!isValid) return;
+        if (!isValid || loading) return;
+
+        setLoading(true);
+        setError("");
 
         try {
-            // await updatePasswordAPI()
-            if (!isValid) return;
-
-            onSubmit?.({
+            const res = await igpsService.changePassword({
                 currentPassword,
                 newPassword,
             });
-            setMode("success");
 
+            if (res.success) {
+                setMode("success");
 
-            // optional auto close after 2 seconds
-            // setTimeout(() => onClose(), 2000);
+                // Optional auto close
+                setTimeout(() => {
+                    onClose();
+                }, 1500);
+            } else {
+                setError(res.error || "Failed to update password");
+            }
 
         } catch (err) {
-            console.error(err);
+            setError("Something went wrong");
         }
+
+        setLoading(false);
     };
+
     return (
         <ModalFrame size="sm">
-            <div className="flex flex-col bg-white rounded-3xl p-8">
-
-
+            <div className="flex flex-col bg-white rounded-3xl p-8 max-h-[90vh] overflow-hidden">
 
                 {mode === "form" ? (
                     <>
@@ -76,7 +105,9 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
                             </button>
                         </div>
                         {/* BODY */}
-                        <div className="space-y-6">
+                        <div
+                            ref={scrollRef}
+                            className="space-y-6  overflow-y-auto">
 
                             <input
                                 type="password"
@@ -121,27 +152,35 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
                                     </p>
                                 )}
                             </div>
+                            {error && (
+                                <p className="text-sm text-red-500 mt-2">
+                                    {error}
+                                </p>
+                            )}
+                            {/* FOOTER */}
+                            <div className="flex gap-4 mt-10">
+                                <button
+                                    onClick={onClose}
+                                    className="flex-1 h-14 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 transition"
+                                >
+                                    Cancel
+                                </button>
+
+                                <button
+                                    onClick={handleSubmit}
+                                    disabled={!isValid || loading}
+                                    className={`flex-1 h-14 rounded-full text-white font-medium transition
+                                    ${isValid && !loading
+                                            ? "bg-black hover:bg-gray-800"
+                                            : "bg-gray-300 cursor-not-allowed"}
+                                    `}
+                                >
+                                    {loading ? "Updating..." : "Update password"}
+                                </button>
+                            </div>
                         </div>
 
-                        {/* FOOTER */}
-                        <div className="flex gap-4 mt-10">
-                            <button
-                                onClick={onClose}
-                                className="flex-1 h-14 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 transition"
-                            >
-                                Cancel
-                            </button>
 
-                            <button
-                                onClick={handleSubmit}
-                                disabled={!isValid}
-                                className={`flex-1 h-14 rounded-full text-white font-medium transition
-                    ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-300 cursor-not-allowed"}
-                `}
-                            >
-                                Update password
-                            </button>
-                        </div>
                     </>
                 ) : (
                     /* ================= SUCCESS SCREEN ================= */
@@ -170,6 +209,7 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
 
 
             </div>
+
         </ModalFrame>
     );
 }

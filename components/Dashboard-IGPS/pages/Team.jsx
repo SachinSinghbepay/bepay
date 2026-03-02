@@ -3,7 +3,7 @@
 import { Trash2, Mail, Landmark, Wallet } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { IgpsService } from "../../../services/igpsService";
-
+import { createPortal } from "react-dom";
 const igpsService = new IgpsService();
 
 
@@ -111,14 +111,14 @@ export default function Team({ onOpenModal }) {
     }
 
     return (
-        <div className="flex-1 px-8 py-8 pb-22">
+        <div className="flex-1 px-2 sm:px-8 py-8 pb-22">
 
             <div className=" mx-auto space-y-8">
 
                 {/* Header */}
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <h1 className="text-2xl font-semibold">Manage Teams</h1>
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-col sm:flex-row  items-center gap-4">
                         <button
                             className="flex items-center gap-2 text-[#080808] px-6 py-3 rounded-full text-sm"
                             onClick={() => onOpenModal("learn-about-roles")}
@@ -154,72 +154,79 @@ export default function Team({ onOpenModal }) {
                         </div>
 
                         {/* ROWS */}
-                        {members.map((member) => (
-                            <div
-                                key={member.id}
-                                className="grid grid-cols-[2.5fr_1fr_1fr_0.5fr] items-center px-6 py-5 border-b hover:bg-gray-50 transition"
-                            >
-                                {/* MEMBER */}
-                                <div className="flex items-center gap-4">
-                                    <Avatar name={member.name} />
-                                    <div>
-                                        <p className="font-medium">{member.name}</p>
-                                        <p className="text-sm text-gray-500">{member.email}</p>
+                        <div
+                            className="overflow-x-auto">
+                            {members.map((member) => (
+
+                                <div key={member.id} className="min-w-[600px]">
+                                    <div
+
+                                        className="grid grid-cols-[2.5fr_1fr_1fr_0.5fr] items-center px-6 py-5 border-b hover:bg-gray-50 transition"
+                                    >
+                                        {/* MEMBER */}
+                                        <div className="flex items-center gap-4">
+                                            <Avatar name={member.name} />
+                                            <div>
+                                                <p className="font-medium">{member.name}</p>
+                                                <p className="text-sm text-gray-500">{member.email}</p>
+                                            </div>
+                                        </div>
+
+                                        {/* ROLE */}
+                                        <RolePill role={member.role} />
+
+                                        {/* STATUS */}
+                                        <StatusPill status={member.status} />
+
+                                        {/* ACTION */}
+                                        <div className="flex justify-end">
+                                            <ActionMenu
+                                                onResend={async () => {
+                                                    try {
+                                                        const res = await igpsService.inviteMember({
+                                                            email: member.email,
+                                                            role: member.role,
+                                                        });
+
+                                                        if (res.success) {
+                                                            onOpenModal("invite-success", {
+                                                                type: "success",
+                                                                name: member.name,
+                                                                email: member.email,
+                                                                role: member.role,
+                                                            });
+                                                        } else {
+                                                            onOpenModal("invite-success", {
+                                                                type: "error",
+                                                                message: res.error || "Failed to resend invite",
+                                                            });
+                                                        }
+                                                    } catch (err) {
+                                                        onOpenModal("invite-success", {
+                                                            type: "error",
+                                                            message: "Something went wrong",
+                                                        });
+                                                    }
+                                                }}
+                                                onEdit={() =>
+                                                    onOpenModal("edit-member", {
+                                                        member,
+                                                        refresh: fetchMembers,
+                                                    })
+                                                }
+                                                onRemove={() =>
+                                                    onOpenModal("remove-member", {
+                                                        member,
+                                                        refresh: fetchMembers,
+                                                    })
+                                                }
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* ROLE */}
-                                <RolePill role={member.role} />
-
-                                {/* STATUS */}
-                                <StatusPill status={member.status} />
-
-                                {/* ACTION */}
-                                <div className="flex justify-end">
-                                    <ActionMenu
-                                        onResend={async () => {
-                                            try {
-                                                const res = await igpsService.inviteMember({
-                                                    email: member.email,
-                                                    role: member.role,
-                                                });
-
-                                                if (res.success) {
-                                                    onOpenModal("invite-success", {
-                                                        type: "success",
-                                                        name: member.name,
-                                                        email: member.email,
-                                                        role: member.role,
-                                                    });
-                                                } else {
-                                                    onOpenModal("invite-success", {
-                                                        type: "error",
-                                                        message: res.error || "Failed to resend invite",
-                                                    });
-                                                }
-                                            } catch (err) {
-                                                onOpenModal("invite-success", {
-                                                    type: "error",
-                                                    message: "Something went wrong",
-                                                });
-                                            }
-                                        }}
-                                        onEdit={() =>
-                                            onOpenModal("edit-member", {
-                                                member,
-                                                refresh: fetchMembers,
-                                            })
-                                        }
-                                        onRemove={() =>
-                                            onOpenModal("remove-member", {
-                                                member,
-                                                refresh: fetchMembers,
-                                            })
-                                        }
-                                    />
-                                </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 )}
             </div>
@@ -283,60 +290,109 @@ function StatusPill({ status }) {
 function ActionMenu({ onResend, onEdit, onRemove }) {
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
+    const triggerRef = useRef(null);
+    const menuRef = useRef(null);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
-            if (ref.current && !ref.current.contains(e.target)) {
+            if (!open) return;
+
+            if (
+                triggerRef.current &&
+                !triggerRef.current.contains(e.target) &&
+                menuRef.current &&
+                !menuRef.current.contains(e.target)
+            ) {
                 setOpen(false);
             }
         };
 
         document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+
+        return () =>
+            document.removeEventListener("mousedown", handleClickOutside);
+    }, [open]);
+
+    useEffect(() => {
+        if (!open || !ref.current) return;
+
+        const updatePosition = () => {
+            const rect = ref.current.getBoundingClientRect();
+
+            setPosition({
+                top: rect.bottom + window.scrollY,
+                left: rect.right - 224 + window.scrollX, // 224 = w-56
+            });
+        };
+
+        // run immediately
+        updatePosition();
+
+        // update on scroll & resize
+        window.addEventListener("scroll", updatePosition);
+        window.addEventListener("resize", updatePosition);
+
+        return () => {
+            window.removeEventListener("scroll", updatePosition);
+            window.removeEventListener("resize", updatePosition);
+        };
+    }, [open]);
+
+    const [position, setPosition] = useState({ top: 0, left: 0 });
 
     return (
-        <div ref={ref} className="relative">
+        <div ref={ref} className="relative z-50">
 
             {/* 3 DOT BUTTON */}
-            <button
-                onClick={() => setOpen(v => !v)}
-                className="h-10 w-10 rounded-2xl bg-[#F3F3F3] flex items-center justify-center hover:bg-gray-200 transition"
-            >
-                <span className="text-lg tracking-widest">•••</span>
-            </button>
+            <div ref={triggerRef} className="relative">
+                <button
+                    onClick={() => setOpen(v => !v)}
+                    className="h-10 w-10 rounded-2xl bg-[#F3F3F3] flex items-center justify-center hover:bg-gray-200 transition"
+                >
+                    <span className="text-lg tracking-widest">•••</span>
+                </button>
+            </div>
 
             {/* DROPDOWN */}
-            {open && (
-                <div className="absolute right-0 mt-3 w-56 bg-white rounded-3xl shadow-xl p-3 z-50">
-
-                    <MenuItem
-                        label="Resend invite"
-                        highlighted
-                        onClick={() => {
-                            onResend?.();
-                            setOpen(false);
+            {open &&
+                createPortal(
+                    <div
+                        ref={menuRef}
+                        style={{
+                            position: "absolute",
+                            top: position.top,
+                            left: position.left,
                         }}
-                    />
+                        className="w-56 bg-white rounded-3xl shadow-xl p-3 z-[9999]"
+                    >
+                        <MenuItem
+                            label="Resend invite"
+                            highlighted
+                            onClick={() => {
+                                onResend?.();
+                                setOpen(false);
+                            }}
+                        />
 
-                    <MenuItem
-                        label="Edit"
-                        onClick={() => {
-                            onEdit?.();
-                            setOpen(false);
-                        }}
-                    />
+                        <MenuItem
+                            label="Edit"
+                            onClick={() => {
+                                onEdit?.();
+                                setOpen(false);
+                            }}
+                        />
 
-                    <MenuItem
-                        label="Remove member"
-                        danger
-                        onClick={() => {
-                            onRemove?.();
-                            setOpen(false);
-                        }}
-                    />
-                </div>
-            )}
+                        <MenuItem
+                            label="Remove member"
+                            danger
+                            onClick={() => {
+                                onRemove?.();
+                                setOpen(false);
+                            }}
+                        />
+                    </div>,
+                    document.body
+                )}
         </div>
     );
 }
