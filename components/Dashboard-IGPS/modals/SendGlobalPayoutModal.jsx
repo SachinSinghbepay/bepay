@@ -2,8 +2,8 @@ import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
 
-const igpsService = new IgpsService();
 
 export default function SendGlobalPayoutModal({
     onClose,
@@ -11,7 +11,7 @@ export default function SendGlobalPayoutModal({
     onOpenModal,
     beneficiary, // Pre-selected beneficiary if any
 }) {
-
+    const { igpsService } = useAuth();
     const scrollRef = useRef(null);
     // same scroll lock pattern
     useEffect(() => {
@@ -676,7 +676,7 @@ function AmountBox({
                                         sourceCurrencies.find(c => c.fullCurrency === currency)?.currency
                                     }
                                     {" "}
-                                    
+
                                 </span>
 
                                 {/* Arrow */}

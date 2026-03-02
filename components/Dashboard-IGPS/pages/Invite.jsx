@@ -2,7 +2,7 @@
 
 import { Copy } from "lucide-react";
 
-export default function Invite() {
+export default function Invite({ onOpenModal }) {
   const referralLink = "https://bepay.igps/referrals/4F8CG7";
 
   const handleCopy = async () => {
@@ -15,11 +15,11 @@ export default function Invite() {
 
         {/* Top Card Image + Logo */}
         <div className="w-[420px] h-[220px] bg-white rounded-3xl overflow-hidden shadow-sm flex">
-          
+
           {/* Image Left */}
           <div className="w-[65%]">
             <img
-              src="/icons/invite.png" 
+              src="/icons/invite.png"
               alt="Invite"
               className="w-full h-full object-cover"
             />
@@ -68,13 +68,15 @@ export default function Invite() {
               onClick={handleCopy}
               className="absolute right-1 top-1/2 -translate-y-1/2 p-2 rounded-lg hover:bg-gray-100"
             >
-             <img src="/icons/copy.svg" alt="" />
+              <img src="/icons/copy.svg" alt="" />
             </button>
           </div>
         </div>
 
         {/* Invite Button */}
-        <button className="w-full h-14 rounded-2xl bg-black text-white text-base font-medium hover:opacity-90 transition">
+        <button
+       onClick={() => onOpenModal("invite-friends")}
+          className="w-full h-14 rounded-2xl bg-black text-white text-base font-medium hover:opacity-90 transition">
           Invite friends
         </button>
 

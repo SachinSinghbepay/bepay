@@ -1,10 +1,32 @@
 import ModalFrame from "./ModalFrame";
-
+import { useState, useEffect, useRef } from "react";
 export default function NewTransferModal({ onClose, onGlobalPayout, onPayToEmail, onPayToWallet, onPayToSwift }) {
+    const scrollRef = useRef(null);
+  
+    useEffect(() => {
+      const el = scrollRef.current;
+      if (!el) return;
+  
+      const onWheel = (e) => {
+        const { scrollTop, scrollHeight, clientHeight } = el;
+        const atTop = scrollTop === 0;
+        const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+  
+        if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+          e.preventDefault();
+        } else {
+          e.stopPropagation();
+        }
+      };
+      el.addEventListener("wheel", onWheel, { passive: false });
+      return () => el.removeEventListener("wheel", onWheel);
+    }, []);
+  
+
   return (
     <ModalFrame size="lg">
       {/* HEADER */}
-      <div className="relative flex items-center justify-center px-8 pt-8 mb-4">
+      <div className="relative flex items-center justify-center px-2 sm:px-8 pt-8 mb-4">
         <h2 className="text-lg font-semibold text-gray-900">
           New transfer
         </h2>
@@ -18,8 +40,10 @@ export default function NewTransferModal({ onClose, onGlobalPayout, onPayToEmail
       </div>
 
       {/* CONTENT */}
-      <div className="px-8 py-10">
-        <div className="grid grid-cols-2 gap-6">
+      <div className="px-2 sm:px-8 py-10">
+        <div
+          ref={scrollRef}
+          className="grid sm:grid-cols-2 gap-6 max-h-[60vh] overflow-y-auto">
           <TransferCard
             title="Global payouts"
             desc="Pay anyone globally via local payment rails"

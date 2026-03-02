@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import ModalFrame from "./ModalFrame";
 import { FiX, FiCopy, FiDownload, FiPrinter } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
