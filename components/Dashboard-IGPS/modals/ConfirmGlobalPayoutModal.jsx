@@ -1,6 +1,7 @@
 import ModalFrame from "./ModalFrame";
 import { useState, useEffect } from "react";
 import { IgpsService } from "../../../services/igpsService";
+import Image from "next/image";
 
 const igpsService = new IgpsService();
 
@@ -74,7 +75,12 @@ export default function ConfirmGlobalPayoutModal({
                 {/* HEADER */}
                 <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
                     <button onClick={onBack} className="absolute left-8 text-xl text-gray-500">
-                        <img src="/icons/back.svg" alt="Back" />
+                        <Image
+                            src="/icons/back.svg"
+                            alt=""
+                            width={24}
+                            height={24}
+                        />
                     </button>
                     <h2 className="text-lg font-medium">Review & Confirm</h2>
                     <button onClick={onClose} className="absolute right-8 text-xl text-gray-500">✕</button>

@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { IgpsService } from "../../../services/igpsService";
 import { createPortal } from "react-dom";
 const igpsService = new IgpsService();
-
+import Image from "next/image";
 
 export default function Team({ onOpenModal }) {
     // 🔥 Toggle this to test empty vs populated
@@ -124,9 +124,11 @@ export default function Team({ onOpenModal }) {
                             onClick={() => onOpenModal("learn-about-roles")}
                         >
                             <span>Learn more about roles</span>
-                            <img
+                            <Image
                                 src="/icons/back.svg"
                                 alt=""
+                                width={24}
+                                height={24}
                                 className="rotate-180 w-4 h-4"
                             />
                         </button>

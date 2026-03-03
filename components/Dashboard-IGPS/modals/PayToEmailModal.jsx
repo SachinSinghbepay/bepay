@@ -2,6 +2,8 @@ import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useState, useEffect, useRef } from "react";
 import MultiSelect from "../components/MultiSelect";
+import Image from "next/image";
+
 export default function PayToEmailModal({ onClose, onBack, beneficiary,
     onOpenModal }) {
     const scrollRef = useRef(null);
@@ -48,7 +50,12 @@ export default function PayToEmailModal({ onClose, onBack, beneficiary,
                         className="absolute left-8 text-xl text-gray-500"
                         onClick={onBack}
                     >
-                        <img src="/icons/back.svg" alt="" />
+                        <Image
+                            src="/icons/back.svg"
+                            alt=""
+                            width={24}
+                            height={24}
+                        />
                     </button>
 
                     <h2 className="text-lg font-semibold text-gray-900">

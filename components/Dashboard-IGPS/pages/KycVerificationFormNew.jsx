@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { IgpsService } from "@/services/igpsService";
 import { getCountries, getCountryCallingCode } from "libphonenumber-js";
 import { Loader2 } from "lucide-react";
+import CustomSelect from "../components/CustomSelect";
 
 export default function KycVerificationForm() {
   const router = useRouter();
@@ -15,6 +16,8 @@ export default function KycVerificationForm() {
   const [senderId, setSenderId] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [uboEmailError, setUboEmailError] = useState("");
 
   // ✅ Initialize service instance when component mounts (AFTER cookies are available)
   useEffect(() => {
@@ -26,14 +29,14 @@ export default function KycVerificationForm() {
   const showKYCCompletedMessage = () => {
     try {
       console.log("✅ KYC submission completed!");
-      
+
       setSuccess("Your KYC is completed and under review!");
-      
+
       // Clear progress and redirect
       if (typeof window !== "undefined") {
         localStorage.removeItem("kyc_verification_progress");
       }
-      
+
       setTimeout(() => {
         router.push("/igps/dashboard");
       }, 2000);
@@ -761,7 +764,12 @@ export default function KycVerificationForm() {
                   type="text"
                   name="fullName"
                   value={formData.fullName}
-                  onChange={handleInputChange}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+                    handleInputChange({
+                      target: { name: "fullName", value }
+                    });
+                  }}
                   placeholder="Enter your full name or company name"
                   className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                 />
@@ -774,10 +782,24 @@ export default function KycVerificationForm() {
                   type="email"
                   name="email"
                   value={formData.email}
-                  onChange={handleInputChange}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    handleInputChange(e);
+
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                    if (value && !emailRegex.test(value)) {
+                      setEmailError("Invalid email format");
+                    } else {
+                      setEmailError("");
+                    }
+                  }}
                   placeholder="Enter your email"
                   className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                 />
+                {emailError && (
+                  <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                )}
               </div>
 
               {/* Phone with Code */}
@@ -793,10 +815,10 @@ export default function KycVerificationForm() {
                       }}
                       className="h-12 px-3 rounded-xl border border-gray-200 flex items-center gap-1.5 text-sm whitespace-nowrap bg-white hover:bg-gray-50 min-w-[90px]"
                     >
-                      <span className="text-base leading-none">
-                        {selectedPhoneOption?.flag}
+                      <span className="text-sm leading-none">
+                        {selectedPhoneOption?.country}
                       </span>
-                      <span className="font-medium">
+                      <span className="text-sm text-gray-500">
                         {selectedPhoneOption?.dialCode}
                       </span>
                       <svg
@@ -835,12 +857,12 @@ export default function KycVerificationForm() {
                                   setPhoneCodeSearch("");
                                 }}
                                 className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-gray-50 text-sm ${phoneCode === opt.value
-                                    ? "bg-gray-50 font-medium"
-                                    : ""
+                                  ? "bg-gray-50 font-medium"
+                                  : ""
                                   }`}
                               >
                                 <span className="text-base w-6 text-center leading-none">
-                                  {opt.flag}
+                                  {opt.country}
                                 </span>
                                 <span className="text-gray-500 w-12 shrink-0">
                                   {opt.dialCode}
@@ -863,7 +885,11 @@ export default function KycVerificationForm() {
                   <input
                     type="tel"
                     value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, "");
+                      setPhoneNumber(value);
+                    }}
+                    maxLength={15}
                     placeholder="Enter phone number"
                     className="flex-1 h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition text-sm"
                   />
@@ -897,21 +923,21 @@ export default function KycVerificationForm() {
                 />
               </div>
 
+
               {/* Business Type */}
               <div>
                 <label className="block text-sm mb-2">Business Type*</label>
-                <select
-                  name="businessType"
+                <CustomSelect
+                  options={businessTypeOptions}
                   value={formData.businessType}
-                  onChange={handleInputChange}
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                >
-                  {businessTypeOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(value) =>
+                    setFormData(prev => ({
+                      ...prev,
+                      businessType: value
+                    }))
+                  }
+                  placeholder="Select business type"
+                />
               </div>
 
               {/* Address */}
@@ -944,24 +970,45 @@ export default function KycVerificationForm() {
                   </div>
 
                   <div>
+                    <label className="block text-sm mb-2">Country*</label>
+                    <CustomSelect
+                      options={countries}
+                      value={formData.address.country}
+                      onChange={(value) =>
+                        setFormData(prev => ({
+                          ...prev,
+                          address: {
+                            ...prev.address,
+                            country: value,
+                            state: ""
+                          }
+                        }))
+                      }
+                      placeholder="Select country"
+                    />
+                  </div>
+
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                  <div>
                     <label className="block text-sm mb-2">State/Province*</label>
                     {states.length > 0 ? (
-                      <select
-                        name="state"
+                      <CustomSelect
+                        options={states}
                         value={formData.address.state}
-                        onChange={handleAddressChange}
-                        disabled={loadingStates}
-                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                      >
-                        <option value="">
-                          {loadingStates ? "Loading..." : "Select state"}
-                        </option>
-                        {states.map((s) => (
-                          <option key={s.value} value={s.value}>
-                            {s.label}
-                          </option>
-                        ))}
-                      </select>
+                        onChange={(value) =>
+                          setFormData(prev => ({
+                            ...prev,
+                            address: {
+                              ...prev.address,
+                              state: value
+                            }
+                          }))
+                        }
+                        placeholder={loadingStates ? "Loading..." : "Select state"}
+                      />
                     ) : (
                       <input
                         type="text"
@@ -972,25 +1019,6 @@ export default function KycVerificationForm() {
                         className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                       />
                     )}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm mb-2">Country*</label>
-                    <select
-                      name="country"
-                      value={formData.address.country}
-                      onChange={handleAddressChange}
-                      className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                    >
-                      <option value="">Select country</option>
-                      {countries.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
                   </div>
 
                   <div>
@@ -1084,7 +1112,12 @@ export default function KycVerificationForm() {
                   type="text"
                   name="firstName"
                   value={formData.ubo.firstName}
-                  onChange={handleUboInputChange}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+                    handleUboInputChange({
+                      target: { name: "firstName", value }
+                    });
+                  }}
                   placeholder="Enter first name"
                   className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                 />
@@ -1097,7 +1130,12 @@ export default function KycVerificationForm() {
                   type="text"
                   name="lastName"
                   value={formData.ubo.lastName}
-                  onChange={handleUboInputChange}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+                    handleUboInputChange({
+                      target: { name: "lastName", value }
+                    });
+                  }}
                   placeholder="Enter last name"
                   className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                 />
@@ -1110,10 +1148,23 @@ export default function KycVerificationForm() {
                   type="email"
                   name="email"
                   value={formData.ubo.email}
-                  onChange={handleUboInputChange}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    handleUboInputChange(e);
+
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (value && !emailRegex.test(value)) {
+                      setUboEmailError("Invalid email format");
+                    } else {
+                      setUboEmailError("");
+                    }
+                  }}
                   placeholder="Enter email"
                   className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                 />
+                {uboEmailError && (
+                  <p className="text-red-500 text-sm mt-1">{uboEmailError}</p>
+                )}
               </div>
 
               {/* Phone with Code */}
@@ -1129,10 +1180,10 @@ export default function KycVerificationForm() {
                       }}
                       className="h-12 px-3 rounded-xl border border-gray-200 flex items-center gap-1.5 text-sm whitespace-nowrap bg-white hover:bg-gray-50 min-w-[90px]"
                     >
-                      <span className="text-base leading-none">
-                        {selectedUboPhoneOption?.flag}
+                      <span className="text-sm leading-none">
+                        {selectedUboPhoneOption?.country}
                       </span>
-                      <span className="font-medium">
+                      <span className="text-sm text-gray-500">
                         {selectedUboPhoneOption?.dialCode}
                       </span>
                       <svg
@@ -1171,12 +1222,12 @@ export default function KycVerificationForm() {
                                   setUboPhoneCodeSearch("");
                                 }}
                                 className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-gray-50 text-sm ${uboPhoneCode === opt.value
-                                    ? "bg-gray-50 font-medium"
-                                    : ""
+                                  ? "bg-gray-50 font-medium"
+                                  : ""
                                   }`}
                               >
                                 <span className="text-base w-6 text-center leading-none">
-                                  {opt.flag}
+                                  {opt.country}
                                 </span>
                                 <span className="text-gray-500 w-12 shrink-0">
                                   {opt.dialCode}
@@ -1199,7 +1250,11 @@ export default function KycVerificationForm() {
                   <input
                     type="tel"
                     value={uboPhoneNumber}
-                    onChange={(e) => setUboPhoneNumber(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, "");
+                      setUboPhoneNumber(value);
+                    }}
+                    maxLength={15}
                     placeholder="Enter phone number"
                     className="flex-1 h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition text-sm"
                   />
@@ -1262,25 +1317,62 @@ export default function KycVerificationForm() {
                     />
                   </div>
 
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm mb-2">Country*</label>
+                      <CustomSelect
+                        options={countries}
+                        value={formData.ubo.address.country}
+                        onChange={(value) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            ubo: {
+                              ...prev.ubo,
+                              address: {
+                                ...prev.ubo.address,
+                                country: value,
+                                state: ""
+                              }
+                            }
+                          }))
+                        }
+                        placeholder="Select country"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm mb-2">Postal Code*</label>
+                      <input
+                        type="text"
+                        name="postalCode"
+                        value={formData.ubo.address.postalCode}
+                        onChange={handleUboAddressChange}
+                        placeholder="Enter postal code"
+                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                      />
+                    </div>
+                  </div>
+
                   <div>
                     <label className="block text-sm mb-2">State/Province*</label>
                     {uboStates.length > 0 ? (
-                      <select
-                        name="state"
+                      <CustomSelect
+                        options={uboStates}
                         value={formData.ubo.address.state}
-                        onChange={handleUboAddressChange}
-                        disabled={loadingUboStates}
-                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                      >
-                        <option value="">
-                          {loadingUboStates ? "Loading..." : "Select state"}
-                        </option>
-                        {uboStates.map((s) => (
-                          <option key={s.value} value={s.value}>
-                            {s.label}
-                          </option>
-                        ))}
-                      </select>
+                        onChange={(value) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            ubo: {
+                              ...prev.ubo,
+                              address: {
+                                ...prev.ubo.address,
+                                state: value,
+                              },
+                            },
+                          }))
+                        }
+                        placeholder={loadingUboStates ? "Loading..." : "Select state"}
+                      />
                     ) : (
                       <input
                         type="text"
@@ -1294,36 +1386,7 @@ export default function KycVerificationForm() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm mb-2">Country*</label>
-                    <select
-                      name="country"
-                      value={formData.ubo.address.country}
-                      onChange={handleUboAddressChange}
-                      className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                    >
-                      <option value="">Select country</option>
-                      {countries.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
 
-                  <div>
-                    <label className="block text-sm mb-2">Postal Code*</label>
-                    <input
-                      type="text"
-                      name="postalCode"
-                      value={formData.ubo.address.postalCode}
-                      onChange={handleUboAddressChange}
-                      placeholder="Enter postal code"
-                      className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                    />
-                  </div>
-                </div>
               </div>
 
               {/* Identity Information */}
@@ -1335,34 +1398,44 @@ export default function KycVerificationForm() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm mb-2">Country Code*</label>
-                    <select
-                      name="countryCode"
+                    <CustomSelect
+                      options={countries}
                       value={formData.ubo.identity.countryCode}
-                      onChange={handleUboIdentityChange}
-                      className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                    >
-                      {countries.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(value) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          ubo: {
+                            ...prev.ubo,
+                            identity: {
+                              ...prev.ubo.identity,
+                              countryCode: value,
+                            },
+                          },
+                        }))
+                      }
+                      placeholder="Select country"
+                    />
                   </div>
 
                   <div>
                     <label className="block text-sm mb-2">Document Type*</label>
-                    <select
-                      name="documentType"
+                    <CustomSelect
+                      options={identityDocumentTypes}
                       value={formData.ubo.identity.documentType}
-                      onChange={handleUboIdentityChange}
-                      className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                    >
-                      {identityDocumentTypes.map((opt) => (
-                        <option key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
+                      onChange={(value) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          ubo: {
+                            ...prev.ubo,
+                            identity: {
+                              ...prev.ubo.identity,
+                              documentType: value,
+                            },
+                          },
+                        }))
+                      }
+                      placeholder="Select document type"
+                    />
                   </div>
                 </div>
 
@@ -1388,8 +1461,8 @@ export default function KycVerificationForm() {
               onClick={handlePrev}
               disabled={currentStep === 1 || loading}
               className={`px-6 h-12 rounded-full border text-sm font-medium transition ${currentStep === 1 || loading
-                  ? "opacity-50 cursor-not-allowed"
-                  : "border-gray-300 hover:bg-gray-50"
+                ? "opacity-50 cursor-not-allowed"
+                : "border-gray-300 hover:bg-gray-50"
                 }`}
             >
               Back
@@ -1400,8 +1473,8 @@ export default function KycVerificationForm() {
               onClick={handleNext}
               disabled={loading}
               className={`px-8 h-12 rounded-full text-white text-sm font-medium transition flex items-center gap-2 ${loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-black hover:bg-gray-800"
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-black hover:bg-gray-800"
                 }`}
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}

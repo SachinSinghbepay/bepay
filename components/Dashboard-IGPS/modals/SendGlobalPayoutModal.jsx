@@ -3,6 +3,7 @@ import CustomSelect from "../components/CustomSelect";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { IgpsService } from "../../../services/igpsService";
 import { useAuth } from "../context/AuthContext";
+import Image from "next/image";
 
 
 export default function SendGlobalPayoutModal({
@@ -288,7 +289,12 @@ export default function SendGlobalPayoutModal({
                 {/* HEADER */}
                 <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
                     <button onClick={onBack} className="absolute left-8 text-xl text-gray-500">
-                        <img src="/icons/back.svg" alt="" />
+                        <Image
+                            src="/icons/back.svg"
+                            alt=""
+                            width={24}
+                            height={24}
+                        />
                     </button>
                     <h2 className="text-lg font-medium">Send Global Payout</h2>
                     <button onClick={onClose} className="absolute right-8 text-xl text-gray-500">✕</button>
@@ -315,13 +321,12 @@ export default function SendGlobalPayoutModal({
                             <div className="flex items-center gap-4 bg-[#F7F7F7] rounded-2xl p-4">
                                 <div className="p-[1.5px] rounded-xl bg-[#CECECE]">
                                     <div className="bg-[#F5F5F5] rounded-xl p-2">
-                                        <img
-                                            src={
-                                                selectedBeneficiary.countryIcon ||
-                                                "/icons/usa.svg"
-                                            }
-                                            className="h-7 w-7 rounded-full"
+                                        <Image
+                                            src={selectedBeneficiary.countryIcon || "/icons/usa.svg"}
                                             alt=""
+                                            width={28}
+                                            height={28}
+                                            className="rounded-full"
                                         />
                                     </div>
                                 </div>
@@ -447,7 +452,8 @@ export default function SendGlobalPayoutModal({
                         {!invoice ? (
                             /* ===== Upload Box ===== */
                             <label className="w-full h-14 rounded-2xl bg-[#F7F7F7] flex items-center justify-center gap-3 cursor-pointer border">
-                                <img src="/icons/upload.svg" className="h-5 w-5" alt="" />
+                                <Image src="/icons/upload.svg" alt="" width={20} height={20} />
+
                                 <span className="text-sm font-medium">
                                     Upload invoice or proof of funds
                                 </span>
@@ -463,7 +469,7 @@ export default function SendGlobalPayoutModal({
                             /* ===== Uploaded File Row ===== */
                             <div className="rounded-2xl bg-[#F7F7F7] p-4 flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                    <img src="/icons/file.svg" className="h-5 w-5" alt="" />
+                                    <Image src="/icons/file.svg" alt="" width={20} height={20} />
                                     <span className="text-sm font-medium">
                                         {invoice.fileName}
                                     </span>
@@ -642,23 +648,29 @@ function AmountBox({
                                     key={w.fullCurrency}
                                     className="relative h-10 w-10 pl-2"
                                 >
-                                    {/* BIG TOKEN ICON */}
                                     {w.tokenUrl && (
-                                        <img
+                                        <Image
                                             src={w.tokenUrl}
-                                            onError={(e) => (e.target.style.display = "none")}
-                                            className="h-8 w-8 rounded-full mt-1"
                                             alt="token"
+                                            width={32}
+                                            height={32}
+                                            className="rounded-full mt-1"
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = "none";
+                                            }}
                                         />
                                     )}
 
-                                    {/* SMALL NETWORK ICON (OVERLAP) */}
                                     {w.networkUrl && (
-                                        <img
+                                        <Image
                                             src={w.networkUrl}
-                                            onError={(e) => (e.target.style.display = "none")}
-                                            className="absolute -bottom-1 -right-2 h-4 w-4 rounded-full border-2 border-white "
                                             alt="network"
+                                            width={16}
+                                            height={16}
+                                            className="absolute -bottom-1 -right-2 rounded-full border-2 border-white"
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = "none";
+                                            }}
                                         />
                                     )}
                                 </div>
@@ -723,7 +735,13 @@ function AmountBox({
             {/* CENTER ARROW */}
             <div className="flex justify-center">
                 <div className="h-14 w-14 -mt-12 rounded-full bg-white shadow-md flex items-center justify-center text-lg">
-                    <img src="/icons/back.svg" alt="" className="rotate-270" />
+                    <Image
+                        src="/icons/back.svg"
+                        alt=""
+                        width={24}
+                        height={24}
+                        className="rotate-270"
+                    />
                 </div>
             </div>
 
@@ -774,7 +792,19 @@ function CurrencyDropdown({ label, icon }) {
                 border shadow-sm w-[160px]
                 "
             >
-                <img src={icon} alt="" className="h-8 w-8 flex justify-center items-center pt-1" />
+                <Image
+                    src={icon}
+                    alt=""
+                    width={32}
+                    height={32}
+                    className="h-8 w-8 flex justify-center items-center pt-1"
+                />
+                <Image
+                    src={icon}
+                    alt=""
+                    width={32}
+                    height={32}
+                />
                 <span className="text-[20px] font-bold ">{label}</span>
                 <span className="text-gray-400 ">
                     <svg
@@ -814,7 +844,13 @@ function CurrencyDropdown({ label, icon }) {
 function CurrencyPill({ label, icon }) {
     return (
         <div className="flex justify-center items-center gap-2 bg-[#EBEBEB] border rounded-xl px-3 py-4 w-fit lg:w-50">
-            <img src={icon} className="h-6 w-6 rounded-full" alt="" />
+            <Image
+                src={icon}
+                alt=""
+                width={24}
+                height={24}
+                className="rounded-full"
+            />
             <span className="text-[20px] font-semibold">{label}</span>
         </div>
     );
@@ -823,33 +859,18 @@ function CurrencyPill({ label, icon }) {
 function DropdownItem({ label, icon }) {
     return (
         <button
-            className="
-        w-full flex items-center gap-2
-        px-4 py-2 text-sm
-        hover:bg-gray-100
-      "
+            className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100"
         >
-            <img src={icon} alt="" className="h-4 w-4" />
+            <Image
+                src={icon}
+                alt=""
+                width={16}
+                height={16}
+            />
             {label}
         </button>
     );
 }
-
-const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-        const base64Data = reader.result.split(',')[1];
-        setInvoice({
-            fileName: file.name,
-            blob: base64Data,
-            type: "invoice"
-        });
-    };
-    reader.readAsDataURL(file);
-};
 
 
 function SummaryRow({ label, value, bold, info }) {
@@ -884,7 +905,13 @@ function FeeInfo() {
         <div ref={ref} className="relative inline-block ">
             {/* i BUTTON */}
             <button onClick={() => setOpen(v => !v)}>
-                <img src="/icons/i.svg" alt="info" />
+                <Image
+                    src="/icons/i.svg"
+                    alt="info"
+                    width={16}
+                    height={16}
+                    className="w-4"
+                />
             </button>
 
             {/* POPUP */}

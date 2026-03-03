@@ -1,6 +1,7 @@
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
     const scrollRef = useRef(null);
@@ -46,7 +47,12 @@ export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
                         className="absolute left-8 text-xl text-gray-500"
                         onClick={onBack}
                     >
-                        <img src="/icons/back.svg" alt="" />
+                        <Image
+                            src="/icons/back.svg"
+                            alt=""
+                            width={24}
+                            height={24}
+                        />
                     </button>
 
                     <h2 className="text-lg font-semibold text-gray-900">
@@ -97,7 +103,13 @@ export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
 
 
                         <div className="flex gap-1 justify-start items-start p-0 text-[#C07417]">
-                            <img src="/icons/i.svg" alt="" className="w-4 h-4 mt-2" />
+                            <Image
+                                src="/icons/i.svg"
+                                alt=""
+                                width={16}
+                                height={16}
+                                className="w-4 h-4 mt-2"
+                            />
                             <p className="text-xs  mt-2">
                                 Please verify the wallet address and network carefully before sending funds to ensure a successful transfer. bepay IGPS will not be responsible for any errors or loss of funds.
                             </p>

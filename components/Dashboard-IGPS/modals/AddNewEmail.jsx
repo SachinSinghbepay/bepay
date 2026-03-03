@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import ModalFrame from "./ModalFrame";
+import Image from "next/image";
+
 
 export default function AddNewEmail({ onClose, onBack }) {
 
     const [email, setEmail] = useState("");
     const [nickname, setNickname] = useState("");
 
-const isFormValid =
-    email.trim() && nickname.trim();
+    const isFormValid =
+        email.trim() && nickname.trim();
 
     return (
         <ModalFrame size="lg">
@@ -20,7 +22,12 @@ const isFormValid =
                         className="absolute left-8 text-xl text-gray-500"
                         onClick={onBack}
                     >
-                        <img src="/icons/back.svg" alt="" />
+                        <Image
+                            src="/icons/back.svg"
+                            alt=""
+                            width={24}
+                            height={24}
+                        />
                     </button>
 
                     <h2 className="text-lg font-semibold text-gray-900">
@@ -49,7 +56,13 @@ const isFormValid =
                                 className="w-full rounded-xl border px-4 py-3 pr-28 mt-2 text-[#C0C0C0]"
                             />
                             <div className='mt-1 flex gap-1 justify-items-start items-center'>
-                                <img src="/icons/i.svg" alt="" sizes="" srcset="" />
+                                <Image
+                                    src="/icons/i.svg"
+                                    alt=""
+                                    width={16}
+                                    height={16}
+                                    className="w-4"
+                                />
                                 <p className='text-sm text-[#6A6A6A]'>Funds will be sent to this email address.</p>
                             </div>
                         </div>

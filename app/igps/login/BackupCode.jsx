@@ -13,7 +13,7 @@ export default function BackupCode({
         <div className="w-full max-w-xl flex flex-col justify-between">
 
             {/* Back button */}
-           <div className="text-start px-10 py-4 mt-6">
+           <div className="text-start px-10 py-4 mt-2">
         <button
           onClick={onBack}
           className="text-sm text-gray-500 flex "
@@ -31,9 +31,9 @@ export default function BackupCode({
       </div>
 
             {/* Main content */}
-            <div className="rounded-3xl p-10">
+            <div className="rounded-3xl px-10 py-4">
 
-                <h2 className="text-start text-xl font-medium mb-6">
+                <h2 className="text-start text-xl font-medium mb-4">
                     Enter backup code
                 </h2>
 
@@ -41,7 +41,7 @@ export default function BackupCode({
                     Enter one of your backup codes to continue
                 </p>
 
-                <p className="text-sm mt-12 mb-4">Backup code</p>
+                <p className="text-sm mt-6 mb-4">Backup code</p>
 
                 <input
                     type="text"

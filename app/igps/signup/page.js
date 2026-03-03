@@ -1,13 +1,12 @@
+"use client";
 
-'use client';
-
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { IgpsService } from '@/services/igpsService';
-import CreateAccountLayout from '../onboarding/Layout';
-import StepEmail from '../onboarding/StepEmail';
-import StepVerifyCode from '../onboarding/StepVerifyCode';
-import StepPersonalDetails from '../onboarding/StepPersonalDetails';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { IgpsService } from "@/services/igpsService";
+import CreateAccountLayout from "../onboarding/Layout";
+import StepEmail from "../onboarding/StepEmail";
+import StepVerifyCode from "../onboarding/StepVerifyCode";
+import StepPersonalDetails from "../onboarding/StepPersonalDetails";
 
 const igpsService = new IgpsService();
 
@@ -15,35 +14,35 @@ export default function IgpsSignupPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
-    email: '',
-    verificationCode: '',
-    signupToken: '', // Token from OTP verification
-    firstName: '',
-    lastName: '',
-    organizationName: '', // New field
-    password: '',
-    confirmPassword: '',
+    email: "",
+    verificationCode: "",
+    signupToken: "", // Token from OTP verification
+    firstName: "",
+    lastName: "",
+    organizationName: "", // New field
+    password: "",
+    confirmPassword: "",
   });
 
   // 📧 Step 1: Send verification code to email
   const handleEmailNext = async () => {
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       const response = await igpsService.signupInitiate(formData.email);
-      
+
       if (response.success) {
         // Move to verify code step
         setStep(2);
       } else {
-        setError(response.error || 'Failed to send verification code.');
+        setError(response.error || "Failed to send verification code.");
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      setError("An error occurred. Please try again.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -53,31 +52,31 @@ export default function IgpsSignupPage() {
   // ✅ Step 2: Verify the code
   const handleCodeNext = async (otp) => {
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       // Use the OTP passed directly from the component
       const verificationCode = otp || formData.verificationCode;
-      
+
       const response = await igpsService.verifySignupCode(
         formData.email,
-        verificationCode
+        verificationCode,
       );
-      
+
       if (response.success) {
         // 🔑 Store the signupToken from response
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
-          signupToken: response.data.signupToken || '',
-          verificationCode: verificationCode
+          signupToken: response.data.signupToken || "",
+          verificationCode: verificationCode,
         }));
         // Move to personal details step
         setStep(3);
       } else {
-        setError(response.error || 'Invalid verification code.');
+        setError(response.error || "Invalid verification code.");
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      setError("An error occurred. Please try again.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -87,7 +86,7 @@ export default function IgpsSignupPage() {
   // 🎉 Step 3: Complete signup
   const handleFinalSubmit = async () => {
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       const response = await igpsService.completeSignup({
@@ -107,13 +106,29 @@ export default function IgpsSignupPage() {
         igpsService.setTokens(accessToken, refreshToken);
 
         // Redirect to dashboard
-        router.push('/igps/dashboard');
+        router.push("/igps/dashboard");
       } else {
-        setError(response.error || 'Signup failed. Please try again.');
+        setError(response.error || "Signup failed. Please try again.");
       }
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
+      setError("An unexpected error occurred. Please try again.");
       console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await igpsService.signupInitiate(formData.email);
+      if (!response.success) {
+        setError(response.error || "Failed to resend code.");
+      }
+    } catch (err) {
+      setError("Resend failed.");
     } finally {
       setLoading(false);
     }
@@ -136,6 +151,7 @@ export default function IgpsSignupPage() {
             setData={setFormData}
             onNext={handleCodeNext}
             onBack={() => setStep(1)}
+              onResend={handleResend}
           />
         );
       case 3:

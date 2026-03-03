@@ -2,6 +2,7 @@ import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useRef, useEffect, useState } from "react";
 import { IgpsService } from "../../../services/igpsService";
+import Image from "next/image";
 
 const igpsService = new IgpsService();
 
@@ -25,7 +26,7 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
     const [states, setStates] = useState([]);
     const [selectedState, setSelectedState] = useState("");
     const [zip, setZip] = useState("");
-  const [loadingStates, setLoadingStates] = useState(false);
+    const [loadingStates, setLoadingStates] = useState(false);
     // Bank Details
     const [accountNumber, setAccountNumber] = useState("");
     const [swiftCode, setSwiftCode] = useState("");
@@ -255,7 +256,12 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                         onClick={onBack}
                         className="absolute left-8 text-xl text-gray-500"
                     >
-                        <img src="/icons/back.svg" alt="" />
+                        <Image
+                            src="/icons/back.svg"
+                            alt=""
+                            width={24}
+                            height={24}
+                        />
                     </button>
 
                     <h2 className="text-lg font-medium">Add a new SWIFT beneficiary</h2>

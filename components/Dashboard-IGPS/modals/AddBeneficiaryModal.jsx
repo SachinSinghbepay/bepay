@@ -3,6 +3,7 @@ import CustomSelect from "../components/CustomSelect";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { IgpsService } from "../../../services/igpsService";
 import { getCountries, getCountryCallingCode } from "libphonenumber-js";
+import Image from "next/image";
 
 
 const igpsService = new IgpsService();
@@ -358,7 +359,12 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                 {/* HEADER */}
                 <div className="relative flex items-center justify-center md:px-8 pt-6 mb-8">
                     <button onClick={onBack} className="absolute left-8 text-xl text-gray-500">
-                        <img src="/icons/back.svg" alt="" />
+                        <Image
+                            src="/icons/back.svg"
+                            alt=""
+                            width={24}
+                            height={24}
+                        />
                     </button>
                     <h2 className="text-lg font-medium">Add beneficiary</h2>
                     <button onClick={onClose} className="absolute right-8 text-xl text-gray-500">
@@ -736,7 +742,13 @@ function WalletAddressBlock({ index, data, networkOptions, canRemove, onRemove, 
                 />
             </div>
             <div className="text-[12px] text-orange-600 flex items-start gap-1">
-                <img src="/icons/i.svg" alt="" className="w-4" />
+                <Image
+                    src="/icons/i.svg"
+                    alt=""
+                    width={16}
+                    height={16}
+                    className="w-4"
+                />
                 Please verify the wallet address and network carefully.
             </div>
         </div>

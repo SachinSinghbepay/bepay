@@ -35,8 +35,8 @@ export default function ScrollableCard({ children }) {
     <div
       ref={scrollRef}
       className="bg-white rounded-3xl shadow-sm w-full
-                 md:min-h-[72vh]
-                 max-h-[72vh]
+                 md:min-h-[52vh]
+                 max-h-[75vh]
                  overflow-y-auto
                  flex flex-col p-4"
     >
