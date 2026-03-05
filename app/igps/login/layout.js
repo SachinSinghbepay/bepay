@@ -48,9 +48,9 @@ export default async function LoginLayout({ children }) {
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="w-full lg:w-1/2 flex flex-col items-center px-6 py-12">
+      <div className="w-full lg:w-1/2 flex flex-col justify-between items-center px-6 py-4">
         {/* Logo */}
-        <div className="mb-12">
+        <div className="mb-8">
           <div className="flex items-center justify-center">
             <img src="/bepayicon.png" alt="Logo" className="w-10 h-10 mr-2" />
             <div className="font-bold text-xl tracking-tight">
@@ -65,7 +65,7 @@ export default async function LoginLayout({ children }) {
         </div>
 
         {/* Bottom Link */}
-        <div className="mt-10 text-sm text-center">
+        <div className="mt-6 text-sm text-center">
           New to bepay IGPS?{" "}
           <Link href="/igps/signup">
             <span className="font-semibold text-black cursor-pointer">

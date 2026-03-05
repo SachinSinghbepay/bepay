@@ -289,6 +289,22 @@ export class IgpsService {
     return this.request<any>("POST", "/auth/logout-all");
   }
 
+  async forgotPassword(data: { email: string }): Promise<ApiResponse<any>> {
+    return this.request<any>("POST", "/auth/forgot-password", data, true);
+  }
+
+  async resetPassword(data: {
+    token: string;
+    newPassword: string;
+  }): Promise<ApiResponse<any>> {
+    return this.request<any>(
+      "POST",
+      "/auth/reset-password",
+      data,
+      true, // public endpoint
+    );
+  }
+
   async setupTwoFactor(): Promise<
     ApiResponse<{ secret: string; backupCodes: string[] }>
   > {

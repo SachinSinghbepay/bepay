@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import ModalFrame from "./ModalFrame";
 import { FiX, FiCopy } from "react-icons/fi";
 import { IgpsService } from "../../../services/igpsService";
+import Image from "next/image";
 
 const igpsService = new IgpsService();
 
@@ -111,11 +112,13 @@ export default function EnableTwoFactorModal({
                         <div className="flex gap-6">
 
                             {/* QR PLACEHOLDER */}
-                            <div className="w-54 h-54 rounded-2xl bg-gray-100 shadow-sm" >
-                                <img
+                            <div className="w-54 h-54 rounded-2xl bg-gray-100 shadow-sm relative">
+                                <Image
                                     src={qrCode}
                                     alt="QR Code"
-                                    className="w-54 h-54 rounded-2xl shadow-sm"
+                                    width={216}
+                                    height={216}
+                                    className="rounded-2xl shadow-sm"
                                 />
                             </div>
 
@@ -131,8 +134,14 @@ export default function EnableTwoFactorModal({
 
                                 <button
                                     onClick={handleCopy}
-                                    className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
-                                    <img src="/icons/copy.svg" alt="" />
+                                    className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center"
+                                >
+                                    <Image
+                                        src="/icons/copy.svg"
+                                        alt=""
+                                        width={24}
+                                        height={24}
+                                    />
                                 </button>
                                 {copied && (
                                     <p className="text-sm text-green-600 mt-3">

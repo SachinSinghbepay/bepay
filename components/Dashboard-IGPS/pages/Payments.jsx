@@ -1,33 +1,22 @@
 "use client";
+
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IgpsService } from "@/services/igpsService";
+
+
 const igpsService = new IgpsService();
 
 export default function Payments({ onOpenModal }) {
-  const payments = [
-    {
-      id: 1,
-      payer: "Chahat pvt ltd",
-      amount: "USD 1000",
-      status: "Requested",
-      date: "Jan 31, 2026, 09:35 PM",
-    },
-    {
-      id: 2,
-      payer: "Chahat pvt ltd",
-      amount: "USD 1000",
-      status: "Awaiting",
-      date: "Jan 31, 2026, 09:35 PM",
-    },
-    {
-      id: 3,
-      payer: "Chahat pvt ltd",
-      amount: "USD 1000",
-      status: "Received",
-      date: "Jan 31, 2026, 09:35 PM",
-    },
-  ];
+
+  const [activeFilter, setActiveFilter] = useState("All");
+
+  const [orders, setOrders] = useState([]);
+  const [pagination, setPagination] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
 
   const filters = [
     "All",
@@ -39,35 +28,11 @@ export default function Payments({ onOpenModal }) {
     "Rejected",
   ];
 
-  const totalItems = 195;
+  /* =========================
+     FETCH ORDERS
+  ========================== */
 
-  const allPayments = Array.from({ length: totalItems }, (_, i) => ({
-    id: i + 1,
-    payer: `Chahat pvt ltd ${i + 1}`,
-    amount: "USD 1000",
-    status:
-      i % 3 === 0
-        ? "Requested"
-        : i % 3 === 1
-          ? "Awaiting"
-          : "Received",
-    date: "Jan 31, 2026, 09:35 PM",
-  }));
-
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [rowsPerPage, setRowsPerPage] = React.useState(20);
-  const totalPages = Math.ceil(allPayments.length / rowsPerPage);
-
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const endIndex = startIndex + rowsPerPage;
-
-  const currentPayments = allPayments.slice(startIndex, endIndex);
-
-  const [orders, setOrders] = React.useState([]);
-  const [pagination, setPagination] = React.useState(null);
-  const [loading, setLoading] = React.useState(false);
-
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchOrders = async () => {
       setLoading(true);
       try {
@@ -75,9 +40,13 @@ export default function Payments({ onOpenModal }) {
           page: currentPage,
           limit: rowsPerPage,
         });
-        if (res.success && res.data) {
-          setOrders(res.data.orders ?? []);
-          setPagination(res.data.pagination ?? null);
+
+        if (res.success) {
+          if (res.success && res.data) {
+            setOrders(res.data.orders || []);
+            setPagination(res.data.pagination || null);
+          }
+          console.log("API RESPONSE:", res);
         }
       } catch (err) {
         console.error("Failed to fetch orders", err);
@@ -89,76 +58,155 @@ export default function Payments({ onOpenModal }) {
     fetchOrders();
   }, [currentPage, rowsPerPage]);
 
+  /* =========================
+     PAGINATION VALUES
+  ========================== */
+
+  const totalItems = pagination?.total || 0;
+  const totalPages = pagination?.totalPages || 1;
+
+  const startItem =
+    totalItems === 0 ? 0 : (currentPage - 1) * rowsPerPage + 1;
+
+  const endItem = Math.min(currentPage * rowsPerPage, totalItems);
+
+  /* =========================
+     HELPERS
+  ========================== */
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "-";
+
+    const d = new Date(dateStr);
+
+    return d.toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const getPayerName = (order) => {
+    const b = order.beneficiary;
+    if (!b) return "-";
+
+    if (b.firstName && b.lastName) {
+      return `${b.firstName} ${b.lastName}`;
+    }
+
+    return b.fullName || "-";
+  };
+
+  const renderConversion = (order) => {
+    const sourceAmount = Number(order.sourceAmount || 0).toLocaleString();
+    const targetAmount = Number(order.targetAmount || 0).toLocaleString();
+
+    return (
+      <div className="flex items-center gap-8">
+
+        <div className="flex items-center gap-3">
+          <Image
+            src="/icons/usdc.svg"
+            alt="USDC"
+            width={28}
+            height={28}
+          />
+          <div>
+            <div className="font-semibold text-gray-900 leading-tight">
+              {sourceAmount}
+            </div>
+            <div className="text-xs text-gray-500">
+              {order.sourceCurrency}
+            </div>
+          </div>
+        </div>
+
+        <div className="text-gray-400 text-lg">
+          →
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Image
+            src="/icons/india.svg"
+            alt="India"
+            width={28}
+            height={28}
+          />
+          <div>
+            <div className="font-semibold text-gray-900 leading-tight">
+              {targetAmount}
+            </div>
+            <div className="text-xs text-gray-500">
+              {order.targetCurrency}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    );
+  };
 
   const renderStatus = (status) => {
-    if (status === "Requested") {
-      return (
-        <div className="flex items-center gap-2 font-semibold text-gray-600">
-          Requested
-          <div className="bg-gray-200 py-2 px-2 rounded-lg">
-            <Image
-              width={5}
-              height={5}
-              src='/icons/pending.svg'
-              alt='status'
-              className="w-4 h-4"
-            />
-          </div>
-        </div>
-      );
+    const s = status?.toLowerCase();
+
+    const base =
+      "inline-flex items-center justify-center rounded-full text-xs font-medium px-3 py-1";
+
+    if (s === "failed") {
+      return <span className={`${base} bg-red-100 text-red-600`}>Failed</span>;
     }
 
-    if (status === "Awaiting") {
-      return (
-        <div className="flex items-center gap-2 font-semibold text-gray-600">
-          Awaiting
-          <div className="bg-gray-200 py-2 px-2 rounded-lg">
-            <Image
-              width={5}
-              height={5}
-              src='/icons/pending.svg'
-              alt='status'
-              className="w-4 h-4"
-            />
-          </div>
-        </div>
-      );
+    if (s === "completed" || s === "received") {
+      return <span className={`${base} bg-green-100 text-green-600`}>Received</span>;
     }
 
-    if (status === "Received") {
-      return (
-        <div className="flex items-center gap-2 font-semibold text-gray-600">
-          Received
-          <div className="bg-gray-200 py-2 px-2 rounded-lg">
-            <Image
-              width={5}
-              height={5}
-              src='/icons/check.svg'
-              alt='status'
-              className="w-4 h-4"
-            />
-          </div>
-        </div>
-      );
+    if (s === "cancelled") {
+      return <span className={`${base} bg-gray-200 text-gray-600`}>Cancelled</span>;
     }
 
-    return null;
+    return (
+      <span className={`${base} bg-gray-200 text-gray-600`}>
+        {status}
+      </span>
+    );
   };
+  /* =========================
+     UI
+  ========================== */
+  const filteredOrders =
+    activeFilter === "All"
+      ? orders
+      : orders.filter((order) => {
+        const s = order.status?.toLowerCase();
+
+        if (activeFilter === "Received") {
+          return s === "completed" || s === "received";
+        }
+
+        return s === activeFilter.toLowerCase();
+      });
 
   return (
     <div className="w-full p-8">
-      {/* Top Section: Filters + Button */}
+
+      {/* Filters + Button */}
       <div className="flex items-center justify-between gap-6 mb-8">
 
-        {/* Filters (scrollable only this area) */}
         <div className="flex-1 overflow-x-auto">
           <div className="flex gap-3 min-w-max">
             {filters.map((filter, i) => (
               <button
                 key={i}
-                className={`px-5 h-10 rounded-full text-sm whitespace-nowrap ${filter === "All"
-                  ? "bg-black text-white"
-                  : "bg-gray-100 text-gray-700"
+                onClick={() => {
+                  setActiveFilter(filter);
+                  setCurrentPage(1); // reset pagination
+                }}
+                className={`px-5 h-10 rounded-full text-sm whitespace-nowrap transition-colors
+      ${activeFilter === filter
+                    ? "bg-black text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
               >
                 {filter}
@@ -167,69 +215,77 @@ export default function Payments({ onOpenModal }) {
           </div>
         </div>
 
-        {/* Request Button (fixed, not scrollable) */}
         <button className="shrink-0 bg-black text-white h-12 px-7 rounded-full text-sm font-medium">
           Request payment
         </button>
       </div>
 
-      {/* Horizontal Scroll for Table on small screens */}
+      {/* Table */}
       <div className="overflow-x-auto mt-4">
         <div className="min-w-[900px]">
 
-          {/* Table Header */}
-          <div className="grid grid-cols-[minmax(220px,2fr)_minmax(120px,1fr)_minmax(150px,1.2fr)_minmax(220px,2fr)_minmax(120px,1fr)] text-sm text-gray-500 px-6 pb-4 border-b">
+          {/* Header */}
+          <div className="grid grid-cols-[1.2fr_2.8fr_0.8fr_1.4fr_0.8fr] text-sm text-gray-500 px-6 pb-4 border-b">
             <div>Payer</div>
-            <div>Amount</div>
+            <div>Conversion</div>
             <div>Status</div>
             <div>Requested on (Date)</div>
             <div>Details</div>
           </div>
 
           {/* Rows */}
-          <div className="space-y-4 mt-6 b">
-            {currentPayments.map((item) => (
-              <div
-                key={item.id}
-                className="grid grid-cols-[minmax(220px,2fr)_minmax(120px,1fr)_minmax(150px,1.2fr)_minmax(220px,2fr)_minmax(120px,1fr)] items-center bg-gray-100 rounded-2xl px-6 py-6 text-[16px]"
-              >
-                <div className="font-semibold text-gray-900">
-                  {item.payer}
-                </div>
-
-                <div className="font-semibold text-gray-900">
-                  {item.amount}
-                </div>
-
-                {renderStatus(item.status)}
-
-                <div className=" text-gray-600 font-medium ">
-                  {item.date}
-                </div>
-
-                <div>
-                  <button className="underline font-semibold text-gray-800">
-                    View details
-                  </button>
-                </div>
+          <div className="space-y-4 mt-6">
+            {loading ? (
+              <div className="text-center py-10 text-gray-500">
+                Loading...
               </div>
-            ))}
+            ) : filteredOrders.length === 0 ? (
+              <div className="text-center py-10 text-gray-500">
+                No payments found.
+              </div>
+            ) : (
+              filteredOrders.map((order) => (
+                <div
+                  key={order.id}
+                  className="grid grid-cols-[1.2fr_2.8fr_0.8fr_1.4fr_0.8fr] items-center bg-gray-100 rounded-2xl px-6 py-6 text-[16px]" >
+                  <div className="font-semibold text-gray-900">
+                    {getPayerName(order)}
+                  </div>
+
+                  <div className="flex items-center">
+                    {renderConversion(order)}
+                  </div>
+
+                  <div className="pr-6">
+                    {renderStatus(order.status)}
+                  </div>
+
+                  <div className="text-gray-600 font-medium">
+                    {formatDate(order.quote?.createdAt)}
+                  </div>
+
+                  <div>
+                    <button className="underline font-semibold text-gray-800">
+                      View details
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
         </div>
       </div>
+
+      {/* Pagination */}
       <div className="flex items-center justify-between mt-8 text-sm text-gray-600">
 
-        {/* Left: Showing text */}
         <div>
-          Showing {startIndex + 1}–
-          {Math.min(endIndex, totalItems)} of {totalItems}
+          Showing {startItem}–{endItem} of {totalItems}
         </div>
 
-        {/* Right controls */}
         <div className="flex items-center gap-4">
 
-          {/* Rows per page */}
           <select
             value={rowsPerPage}
             onChange={(e) => {
@@ -243,31 +299,22 @@ export default function Payments({ onOpenModal }) {
             <option value={50}>50 rows per page</option>
           </select>
 
-          {/* Range display */}
           <div className="border rounded-full px-4 py-2 bg-white">
-            {startIndex + 1}–
-            {Math.min(endIndex, totalItems)} of {totalItems}
+            {startItem}–{endItem} of {totalItems}
           </div>
 
-          {/* Prev / Next buttons */}
           <div className="flex border rounded-full overflow-hidden bg-white">
             <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.max(prev - 1, 1))
-              }
-              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((prev) => prev - 1)}
+              disabled={currentPage <= 1 || loading}
               className="px-4 py-2 disabled:opacity-40"
             >
               ‹
             </button>
 
             <button
-              onClick={() =>
-                setCurrentPage((prev) =>
-                  Math.min(prev + 1, totalPages)
-                )
-              }
-              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+              disabled={currentPage >= totalPages || loading}
               className="px-4 py-2 disabled:opacity-40"
             >
               ›
@@ -276,6 +323,7 @@ export default function Payments({ onOpenModal }) {
 
         </div>
       </div>
+
     </div>
   );
 }

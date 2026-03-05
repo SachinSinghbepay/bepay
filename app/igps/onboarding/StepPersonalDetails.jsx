@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FiChevronLeft } from "react-icons/fi";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
-export default function StepPersonalDetails({ data, setData, onNext, onBack }) {
+export default function StepPersonalDetails({ data, setData, onNext, onBack, loading }) {
     const [agree, setAgree] = useState(false);
 
     const password = data.password || "";
@@ -49,7 +49,7 @@ export default function StepPersonalDetails({ data, setData, onNext, onBack }) {
     );
 
     return (
-        <div className="w-full max-w-xl flex flex-col justify-between p-10">
+        <div className="w-full max-w-xl flex flex-col justify-between px-10 py-4">
             <div className="flex-1 overflow-y-auto pr-2  ">
 
                 <h2 className="text-2xl font-semibold mb-2">
@@ -162,37 +162,37 @@ export default function StepPersonalDetails({ data, setData, onNext, onBack }) {
                         <label className="block text-sm mb-2">
                             Confirm new password
                         </label>
-                          <div className="relative">
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            value={data.confirmPassword || ""}
-                            onChange={(e) =>
-                                setData((prev) => ({
-                                    ...prev,
-                                    confirmPassword: e.target.value
-                                }))
-                            }
-                            placeholder="Confirm new password"
-                            className={`w-full h-14 rounded-2xl border px-4 outline-none transition
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                value={data.confirmPassword || ""}
+                                onChange={(e) =>
+                                    setData((prev) => ({
+                                        ...prev,
+                                        confirmPassword: e.target.value
+                                    }))
+                                }
+                                placeholder="Confirm new password"
+                                className={`w-full h-14 rounded-2xl border px-4 outline-none transition
                                 ${passwordsMatch ? "focus:border-black" : "border-red-300 focus:border-red-400"}
                             `}
-                        />
-                        <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-4 top-4 text-gray-400"
-                        >
-                            {showPassword ? (
-                                <AiOutlineEyeInvisible size={20} />
-                            ) : (
-                                <AiOutlineEye size={20} />
-                            )}
-                        </button>
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-4 text-gray-400"
+                            >
+                                {showPassword ? (
+                                    <AiOutlineEyeInvisible size={20} />
+                                ) : (
+                                    <AiOutlineEye size={20} />
+                                )}
+                            </button>
                         </div>
                     </div>
 
                     {/* Checkbox */}
-                    <div className="flex items-start gap-3 pt-2">
+                    <div className="flex justify-center items-center gap-3 pt-2">
                         <input
                             type="checkbox"
                             checked={agree}
@@ -217,21 +217,23 @@ export default function StepPersonalDetails({ data, setData, onNext, onBack }) {
 
                     <button
                         onClick={handleSubmit}
-                        disabled={!isValid}
+                        disabled={!isValid || loading}
                         className={`mt-6 w-full h-10 md:h-16 rounded-xl text-white font-medium transition
-                            ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-300 cursor-not-allowed"}
-                        `}
+    ${isValid && !loading
+                                ? "bg-black hover:bg-gray-800"
+                                : "bg-gray-300 cursor-not-allowed"}
+  `}
                     >
-                        Create account
+                        {loading ? "Creating account..." : "Create account"}
                     </button>
 
-                    <div
+                    {/* <div
                         onClick={onBack}
                         className="flex items-center justify-center gap-1 text-sm text-gray-500 hover:text-black transition mt-6 cursor-pointer"
                     >
                         <FiChevronLeft size={16} />
                         Change email
-                    </div>
+                    </div> */}
 
                 </div>
             </div>

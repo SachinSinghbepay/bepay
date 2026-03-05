@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import QRCodeStyling from "qr-code-styling";
 import ModalFrame from "./ModalFrame";
+import Image from "next/image";
+
 
 export default function DepositAddressModal({
   onClose,
@@ -13,13 +15,13 @@ export default function DepositAddressModal({
   networkLogo,
 }) {
 
-// the props should be passed when opening the modal, for example:
-// openModal("deposit-address", {
-//   network: "Polygon",
-//   address: "0x12345abcde...",
-//   currencyLogo: "/icons/usdc.svg",
-//   networkLogo: "/icons/polygon.png"
-// });
+  // the props should be passed when opening the modal, for example:
+  // openModal("deposit-address", {
+  //   network: "Polygon",
+  //   address: "0x12345abcde...",
+  //   currencyLogo: "/icons/usdc.svg",
+  //   networkLogo: "/icons/polygon.png"
+  // });
 
   const address =
     propAddress ||
@@ -68,7 +70,12 @@ export default function DepositAddressModal({
           className="absolute left-8 text-xl text-gray-500"
           onClick={onBack}
         >
-          <img src="/icons/back.svg" alt="" />
+          <Image
+            src="/icons/back.svg"
+            alt=""
+            width={24}
+            height={24}
+          />
         </button>
 
         <h2 className="text-lg font-semibold text-gray-900">
@@ -87,7 +94,14 @@ export default function DepositAddressModal({
       <div className="flex flex-col items-center px-8 py-8 space-y-6">
         {/* NETWORK PILL */}
         <div className="flex items-center gap-2 bg-gray-100 rounded-full px-4 py-2 text-[16px] font-medium">
-          <img src={chainLogo} className="h-10 w-10" alt="" />
+          <Image
+            src={chainLogo}
+            alt=""
+            width={40}
+            height={40}
+            className="h-10 w-10"
+          />
+
           {network} network
         </div>
 
@@ -99,7 +113,7 @@ export default function DepositAddressModal({
 
         {/* QR CARD */}
         <div className="w-full max-w-[388px] h-[388px] bg-white rounded-2xl border p-6 flex flex-col items-center gap-4">
-          
+
           {/* QR CONTAINER */}
           <div className="relative">
             <div ref={qrRef} />
@@ -107,16 +121,22 @@ export default function DepositAddressModal({
             {/* CENTER LOGO OVERLAY */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="relative h-18 w-18">
-                <img
+                <Image
                   src={mainLogo}
-                  className="h-18 w-18 rounded-full"
                   alt=""
+                  width={72}
+                  height={72}
+                  className="rounded-full"
                 />
-                <img
-                  src={chainLogo}
-                  className="h-8 w-8 rounded-full absolute bottom-1 right-2 "
-                  alt=""
-                />
+                <div className="rounded-full absolute bottom-1 right-2 bg-white border border-gray-300">
+                  <Image
+                    src={chainLogo}
+                    alt=""
+                    width={32}
+                    height={32}
+                    className=""
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -132,9 +152,11 @@ export default function DepositAddressModal({
               className="h-12 w-12 flex items-center justify-center rounded-lg hover:bg-gray-50"
               title="Copy address"
             >
-              <img
+              <Image
                 src="/icons/copy.svg"
                 alt="Copy"
+                width={36}
+                height={36}
                 className="h-9 w-9"
               />
             </button>

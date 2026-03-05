@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState, useRef, useEffect } from "react";
 import BalanceDropdown from "./BalanceDropdown";
+import Image from "next/image";
 
 export default function BalanceBreakdown({ wallets = [] }) {
     const [open, setOpen] = useState(false);
@@ -116,7 +117,13 @@ function FiatRow({ img, label, value }) {
     return (
         <div className="flex items-center justify-between min-w-0">
             <div className="flex items-center gap-3">
-                <img src={img} alt={label} className="h-6 w-6 rounded-full" />
+                <Image
+                    src={img}
+                    alt={label}
+                    width={24}
+                    height={24}
+                    className="h-6 w-6 rounded-full"
+                />
                 <span className="text-sm text-gray-700">{label}</span>
             </div>
             <span className="font-medium text-gray-900">{value}</span>
@@ -130,15 +137,20 @@ function CryptoRow({ main, chain, label, value }) {
         <div className="flex items-center justify-between min-w-0">
             <div className="flex items-center gap-3">
                 <div className="relative h-6 w-6">
-                    <img
+                    <Image
                         src={main}
+                        alt=""
+                        width={24}
+                        height={24}
                         className="h-6 w-6 rounded-full"
-                        alt=""
                     />
-                    <img
+
+                    <Image
                         src={chain}
-                        className="h-3 w-3 rounded-full absolute -bottom-0 -right-0 border border-white"
                         alt=""
+                        width={12}
+                        height={12}
+                        className="h-3 w-3 rounded-full absolute -bottom-0 -right-0 border border-white"
                     />
                 </div>
                 <span className="text-sm text-gray-700">{label}</span>

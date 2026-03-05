@@ -5,6 +5,7 @@ import { SlidersHorizontal } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
 import jsPDF from "jspdf";
+import Image from 'next/image';
 
 export default function Banking() {
   const [tab, setTab] = useState(null);
@@ -188,7 +189,12 @@ export default function Banking() {
                     onClick={() => handleCopy(item.value)}
                     className="bg-white p-4 rounded-xl hover:bg-gray-100 transition"
                   >
-                    <img src="/icons/copy.svg" alt="Copy" className="h-10 w-10" />
+                    <Image
+                      src="/icons/copy.svg"
+                      alt="Copy"
+                      width={40}
+                      height={40}
+                    />
                   </button>
                 </div>
               ))

@@ -1,12 +1,16 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { FiChevronLeft } from "react-icons/fi";
 
-export default function StepVerifyCode({ data, setData, onNext, onBack }) {
+export default function StepVerifyCode({ data, setData, onNext, onBack, onResend }) {
     const [code, setCode] = useState(["", "", "", "", "", ""]);
     const inputsRef = useRef([]);
+    const RESEND_SECONDS = 60;
 
+    const [secondsLeft, setSecondsLeft] = useState(RESEND_SECONDS);
+    const [showResentMessage, setShowResentMessage] = useState(false);
+    const [resending, setResending] = useState(false);
     const isValid = code.every((digit) => digit !== "");
 
     const handleChange = (value, index) => {
@@ -21,6 +25,40 @@ export default function StepVerifyCode({ data, setData, onNext, onBack }) {
         }
     };
 
+    useEffect(() => {
+        if (secondsLeft === 0) return;
+
+        const timer = setTimeout(() => {
+            setSecondsLeft(prev => prev - 1);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [secondsLeft]);
+
+
+    const handleResendClick = async () => {
+        if (secondsLeft > 0) return;
+
+        try {
+            setResending(true);
+            await onResend();
+
+            setSecondsLeft(RESEND_SECONDS);
+            setShowResentMessage(true);
+
+            // Hide message after 3 seconds
+            setTimeout(() => {
+                setShowResentMessage(false);
+            }, 3000);
+
+        } catch (err) {
+            console.error("Resend failed:", err);
+        } finally {
+            setResending(false);
+        }
+    };
+
+
     const handleKeyDown = (e, index) => {
         if (e.key === "Backspace" && !code[index] && index > 0) {
             inputsRef.current[index - 1]?.focus();
@@ -33,7 +71,7 @@ export default function StepVerifyCode({ data, setData, onNext, onBack }) {
 
         // Pass code directly instead of relying on state sync
         const fullCode = code.join("");
-        
+
         // Update parent state first
         setData((prev) => ({
             ...prev,
@@ -45,7 +83,7 @@ export default function StepVerifyCode({ data, setData, onNext, onBack }) {
     };
 
     return (
-        <div className="flex flex-col h-[500px] p-10">
+        <div className="flex flex-col h-[500px] px-10 py-4">
 
             <div className="flex-1">
 
@@ -96,10 +134,24 @@ export default function StepVerifyCode({ data, setData, onNext, onBack }) {
 
                     <p className="text-sm text-gray-500">
                         Didn&apos;t receive the code?{" "}
-                        <span className="text-black font-medium cursor-pointer">
-                            Resend in 59 s
+                        <span
+                            onClick={handleResendClick}
+                            className={`font-medium transition ${secondsLeft === 0
+                                ? "text-black cursor-pointer"
+                                : "text-gray-400 cursor-not-allowed"
+                                }`}
+                        >
+                            {secondsLeft > 0
+                                ? `Resend in ${secondsLeft}s`
+                                : "Resend code"}
                         </span>
                     </p>
+
+                    {showResentMessage && (
+                        <p className="text-sm text-green-600 mt-2">
+                            Code resent successfully.
+                        </p>
+                    )}
 
                 </form>
 
@@ -111,7 +163,7 @@ export default function StepVerifyCode({ data, setData, onNext, onBack }) {
                 <button
                     onClick={handleSubmit}
                     disabled={!isValid}
-                    className={` w-full h-10 md:h-16 rounded-xl text-white font-medium transition mt-20 md:mt-30
+                    className={` w-full h-10 md:h-16 rounded-xl text-white font-medium transition mt-6 md:mt-12
                         ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-300 cursor-not-allowed"}
                     `}
                 >

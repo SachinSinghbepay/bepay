@@ -17,7 +17,7 @@ export default function StepEmail({ data, setData, onNext }) {
         <>
             <div className="w-full max-w-xl   flex flex-col justify-between">
 
-                <div className="rounded-3xl  p-10">
+                <div className="rounded-3xl  px-10 py-4">
 
 
                     <h2 className="text-center text-xl font-medium mb-6">
@@ -65,7 +65,7 @@ export default function StepEmail({ data, setData, onNext }) {
                         <button
                             type="submit"
                             disabled={!isValid}
-                            className={` w-full h-10 md:h-16 rounded-xl text-white font-medium transition  mt-20 md:mt-30
+                            className={` w-full h-10 md:h-16 rounded-xl text-white font-medium transition  mt-12 md:mt-22
                 ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-300 cursor-not-allowed"}
               `}
                         >

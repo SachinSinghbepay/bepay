@@ -11,7 +11,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
   const [loading, setLoading] = useState(true);
   const [totalBalance, setTotalBalance] = useState(0);
   const [activeFilter, setActiveFilter] = useState("All");
-const [kycDone, setKycDone] = useState(null);
+  const [kycDone, setKycDone] = useState(null);
 
   // Function to check KYC completion status
   const checkKYCCompletion = (remainingSteps) => {
@@ -124,7 +124,7 @@ const [kycDone, setKycDone] = useState(null);
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-4 space-y-6 lg:space-y-8 overflow-x-hidden">
-    {kycDone === false && (
+      {kycDone === false && (
         <div className="w-full bg-[#E7DED1] rounded-[40px] px-6 py-8 flex flex-col  items-start justify-between gap-3">
 
           {/* LEFT SIDE */}
@@ -308,21 +308,19 @@ const [kycDone, setKycDone] = useState(null);
 
                   <div
                     className={`h-7 w-7 flex items-center justify-center
-      ${tx.type === "sent"
-                        ? "bg-red-100"
-                        : "bg-green-100"
-                      }
-      rounded-lg
-    `}
+    ${tx.type === "sent" ? "bg-red-100" : "bg-green-100"}
+    rounded-lg
+  `}
                   >
-                    <img
+                    <Image
                       src={
                         tx.type === "sent"
                           ? "/icons/redaero.svg"
                           : "/icons/greenaero.svg"
                       }
                       alt=""
-                      className="h-4 w-4"
+                      width={16}
+                      height={16}
                     />
                   </div>
                 </span>
