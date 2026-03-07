@@ -1,3 +1,6 @@
+"use client"; // ← top of file
+import { useEffect } from "react";
+
 import ScrollTextAnimation from "@/components/crypto/scroll-text-animation";
 import CryptoHeroSection from "@/components/crypto/CryptoHero";
 import CryptoWalletSection from "@/components/crypto/crypto-wallet-section";
@@ -13,13 +16,17 @@ import WaitlistPopup from "@/components/waitlist-popup";
 import ScrollTextMobile from "@/components/crypto/ScrollTextMobile";
 
 const page = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []); // ← add this
+
   return (
     <>
       <main>
         <WaitlistPopup />
         <CryptoHeroSection />
         <CryptoWalletSection />
-        <OneWallet /> 
+        <OneWallet />
         {/* <ScrollTextAnimation /> */}
         <ScrollTextMobile />
         <DefiYieldSection />

@@ -262,6 +262,7 @@ export default function LoginPage() {
           data={forgotData}
           setData={setForgotData}
           onNext={handleForgotPassword}
+          onBackToLogin={() => setStep(1)}
         />
       )}
 

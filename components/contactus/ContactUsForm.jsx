@@ -100,32 +100,21 @@ export default function ContactForm() {
   }, [])
 
   // Check if email already exists
-  const checkEmailExists = async (email) => {
-    try {
-      const q = query(collection(db, "contact-submissions"), where("email", "==", email))
-      const querySnapshot = await getDocs(q)
-      return !querySnapshot.empty
-    } catch (error) {
-      console.error("Error checking email:", error)
-      return false
-    }
-  }
+  // const checkEmailExists = async (email) => {
+  //   try {
+  //     const q = query(collection(db, "contact-submissions"), where("email", "==", email))
+  //     const querySnapshot = await getDocs(q)
+  //     return !querySnapshot.empty
+  //   } catch (error) {
+  //     console.error("Error checking email:", error)
+  //     return false
+  //   }
+  // }
 
   const onSubmit = async (data) => {
     setIsSubmitting(true)
+
     try {
-      // Check if email already exists
-      const emailExists = await checkEmailExists(data.email)
-
-      if (emailExists) {
-        setPopupType("error")
-        setPopupMessage("This email address has already been used. Please use a different email address.")
-        setShowPopup(true)
-        setIsSubmitting(false)
-        return
-      }
-
-      // Save to Firebase with timestamp
       await addDoc(collection(db, "contact-submissions"), {
         ...data,
         timestamp: new Date(),
@@ -140,6 +129,7 @@ export default function ContactForm() {
       reset()
     } catch (error) {
       console.error("Error submitting form:", error)
+
       setPopupType("error")
       setPopupMessage("There was an error submitting your message. Please try again.")
       setShowPopup(true)
@@ -423,11 +413,10 @@ export default function ContactForm() {
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
                   <Button
                     onClick={closePopup}
-                    className={`px-8 py-3 rounded-full font-medium transition-all duration-200 ${
-                      popupType === "success"
+                    className={`px-8 py-3 rounded-full font-medium transition-all duration-200 ${popupType === "success"
                         ? "bg-green-600 hover:bg-green-700 text-white"
                         : "bg-red-600 hover:bg-red-700 text-white"
-                    }`}
+                      }`}
                   >
                     {popupType === "success" ? "Great!" : "Try Again"}
                   </Button>
