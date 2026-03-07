@@ -26,6 +26,7 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
+
 export const metadata = {
   metadataBase: new URL("https://www.bepay.money"),
   title: "bepay - Stablecoin Payment, Wallet, Merchant Payment",

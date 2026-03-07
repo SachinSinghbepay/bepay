@@ -1,8 +1,7 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
-// import { getAllBlogs } from "@/lib/blogs"
-// import { getCategories } from "@/lib/categories"
+import { useState, useEffect, useRef, useCallback, useMemo } from "react"
+
 import BlogCard from "@/components/BlogCard"
 import BlogCardSkeleton from "@/components/BlogCardSkeleton"
 import { ChevronRight } from "lucide-react"
@@ -13,9 +12,7 @@ export default function BlogsPage() {
   const [blogs, setBlogs] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // const [categories, setCategories] = useState([])
-  // const [selectedFilter, setSelectedFilter] = useState("All")
- const [selectedFilter, setSelectedFilter] = useState("Latest")
+  const [selectedFilter, setSelectedFilter] = useState("Latest")
 
   // Infinite Scroll State
   const [displayedBlogs, setDisplayedBlogs] = useState([])
@@ -25,118 +22,6 @@ export default function BlogsPage() {
   const BLOGS_PER_PAGE = 9
   const isAllView = selectedFilter === "All"
 
-  const BLOGS_DATA = [
-    {
-      id: "1",
-      title: "How to Receive International Payments in India: A 2025 Guide for Freelancers & Businesses",
-      slug: "receive-international-payments-india-2025",
-      featuredImage: "/blog1.png",
-      category: "Latest",
-      tags: ["Payments"],
-      isFeatured: false,
-      createdAt: "2025-11-01",
-      content: "Dummy content for reading time calculation.",
-    },
-    {
-      id: "2",
-      title: "Cross-Border Payments for Marketplaces: Challenges and Solutions",
-      slug: "cross-border-payments-marketplaces",
-      featuredImage: "/blog1.png",
-      category: "Payments",
-      tags: ["Payments"],
-      isFeatured: false,
-      createdAt: "2025-11-01",
-      content: "Dummy content for reading time calculation.",
-    },
-    {
-      id: "3",
-      title: "How Long Do International Money Transfers Take?",
-      slug: "international-money-transfers-time",
-      featuredImage: "/blog1.png",
-      category: "Payments",
-      tags: ["Payments"],
-      isFeatured: true,
-      createdAt: "2025-11-01",
-      content: "Dummy content for reading time calculation.",
-    },
-    {
-      id: "4",
-      title: "Stablecoin vs Traditional FX for Cross-Border Payments",
-      slug: "stablecoin-vs-traditional-fx",
-      featuredImage: "/blog1.png",
-      category: "Crypto & Stablecoins",
-      tags: ["Crypto"],
-      isFeatured: false,
-      createdAt: "2025-11-01",
-      content: "Dummy content for reading time calculation.",
-    },
-    {
-      id: "5",
-      title: "Best Payment Methods for Global Freelancers in 2025",
-      slug: "best-payment-methods-freelancers-2025",
-      featuredImage: "/blog1.png",
-      category: "Payments",
-      tags: ["Payments"],
-      isFeatured: false,
-      createdAt: "2025-11-01",
-      content: "Dummy content for reading time calculation.",
-    },
-    {
-      id: "6",
-      title: "How Startups Can Accept International Payments Easily",
-      slug: "startups-accept-international-payments",
-      featuredImage: "/blog1.png",
-      category: "Payments",
-      tags: ["Payments"],
-      isFeatured: false,
-      createdAt: "2025-11-01",
-      content: "Dummy content for reading time calculation.",
-    },
-    {
-      id: "7",
-      title: "Multi-Currency Accounts: What They Are and Why You Need One",
-      slug: "multi-currency-accounts-explained",
-      featuredImage: "/blog1.png",
-      category: "Multi-currency accounts",
-      tags: ["Accounts"],
-      isFeatured: false,
-      createdAt: "2025-11-01",
-      content: "Dummy content for reading time calculation.",
-    },
-    {
-      id: "8",
-      title: "Reducing FX Fees in International Transfers",
-      slug: "reducing-fx-fees-international-transfers",
-      featuredImage: "/blog1.png",
-      category: "Payments",
-      tags: ["FX"],
-      isFeatured: false,
-      createdAt: "2025-11-01",
-      content: "Dummy content for reading time calculation.",
-    },
-    {
-      id: "9",
-      title: "International Payments Compliance: What Businesses Must Know",
-      slug: "international-payments-compliance-guide",
-      featuredImage: "/blog1.png",
-      category: "Compliance",
-      tags: ["Compliance"],
-      isFeatured: false,
-      createdAt: "2025-11-01",
-      content: "Dummy content for reading time calculation.",
-    },
-    {
-      id: "10",
-      title: "Future of Cross-Border Payments in Asia",
-      slug: "future-cross-border-payments-asia",
-      featuredImage: "/blog1.png",
-      category: "Payments",
-      tags: ["Payments"],
-      isFeatured: false,
-      createdAt: "2025-11-01",
-      content: "Dummy content for reading time calculation.",
-    },
-  ];
 
 
   useEffect(() => {
@@ -157,48 +42,23 @@ export default function BlogsPage() {
 
   const blogsSource = blogs
 
-const normalizedBlogs = blogsSource.map(blog => {
-  const slug = blog.slug || blog.link?.split("/").pop()
-  return {
-    id: blog.id,
-    title: blog.title,
-    slug,
-    featuredImage: blog.thumbnail,
-    category: "Latest",
-    isFeatured: false,
-    createdAt: blog.publishedAt,
-    content: blog.content || "",
-  }
-})
+  const normalizedBlogs = useMemo(() => {
+    return blogsSource.map(blog => {
+      const slug = blog.slug || blog.link?.split("/").pop()
+      return {
+        id: blog.id,
+        title: blog.title,
+        slug,
+        featuredImage: blog.thumbnail,
+        category: "Latest",
+        isFeatured: false,
+        createdAt: blog.publishedAt,
+        content: blog.content || "",
+      }
+    })
+  }, [blogsSource])
 
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setLoading(true)
-  //     const [blogsData, categoriesData] = await Promise.all([
-  //       getAllBlogs(),
-  //       getCategories()
-  //     ])
-  //     setBlogs(blogsData)
-  //     setCategories(categoriesData)
-  //     setLoading(false)
-  //   }
-  //   fetchData()
-  // }, [])
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setLoading(true)
-
-  //     const blogsData = await getAllBlogs()
-  //     console.log("BLOGS FROM DB:", blogsData)
-
-  //     setBlogs(blogsData)
-  //     setLoading(false)
-  //   }
-
-  //   fetchData()
-  // }, [])
 
   useEffect(() => {
     if (selectedFilter === "All") return
@@ -218,26 +78,7 @@ const normalizedBlogs = blogsSource.map(blog => {
     setDisplayedBlogs(filtered.slice(0, BLOGS_PER_PAGE))
   }, [selectedFilter, normalizedBlogs])
 
-  // Reset infinite scroll when filter changes
-  // useEffect(() => {
-  //   if (selectedFilter !== "All") {
-  //     setPage(1)
-  //     setHasMore(true)
-  //     const filtered = blogs.filter(blog =>
-  //       selectedFilter === "Latest" ? true :
-  //         selectedFilter === "Featured" ? blog.isFeatured :
-  //           selectedFilter === "Crypto & stablecoins" ? blog.category === "Crypto & stablecoins" :
-  //             selectedFilter === "Payments" ? blog.category === "Payments" :
-  //               selectedFilter === "Multi-currency accounts" ? blog.category === "Multi-currency accounts" :
-  //                 selectedFilter === "Discussion" ? blog.category === "Discussion" :
-  //                   selectedFilter === "Tech" ? blog.category === "Tech" :
-  //                     selectedFilter === "Product updates" ? blog.category === "Product updates" :
-  //                       selectedFilter === "Compliance/tax" ? blog.category === "Compliance/tax" :
-  //                         blog.category === selectedFilter
-  //     )
-  //     setDisplayedBlogs(filtered.slice(0, BLOGS_PER_PAGE))
-  //   }
-  // }, [selectedFilter, blogs])
+ 
 
   // Load more blogs for infinite scroll
   const loadMoreBlogs = useCallback(() => {
@@ -259,7 +100,7 @@ const normalizedBlogs = blogsSource.map(blog => {
     if (next.length >= filtered.length) {
       setHasMore(false)
     }
-  }, [page, selectedFilter])
+  }, [page, selectedFilter, normalizedBlogs])
 
   // Intersection Observer for Infinite Scroll
   const lastBlogElementRef = useCallback(node => {
@@ -275,19 +116,6 @@ const normalizedBlogs = blogsSource.map(blog => {
     if (node) observer.current.observe(node)
   }, [loading, hasMore, selectedFilter, loadMoreBlogs])
 
-  // Helper to get blogs by category for "All" view
-  // const getBlogsByCategory = (categoryName) => {
-  //   if (categoryName === "Latest") return blogs.slice(0, 10)
-  //   if (categoryName === "Featured") return blogs.filter(b => b.isFeatured).slice(0, 10)
-  //   if (categoryName === "Crypto & stablecoins") return blogs.filter(b => b.category === "Crypto & stablecoins").slice(0, 10)
-  //   if (categoryName === "Payments") return blogs.filter(b => b.category === "Payments").slice(0, 10)
-  //   if (categoryName === "Multi-currency accounts") return blogs.filter(b => b.category === "Multi-currency accounts").slice(0, 10)
-  //   if (categoryName === "Discussion") return blogs.filter(b => b.category === "Discussion").slice(0, 10)
-  //   if (categoryName === "Tech") return blogs.filter(b => b.category === "Tech").slice(0, 10)
-  //   if (categoryName === "Product updates") return blogs.filter(b => b.category === "Product updates").slice(0, 10)
-  //   if (categoryName === "Compliance/tax") return blogs.filter(b => b.category === "Compliance/tax").slice(0, 10)
-  //   return blogs.filter(b => b.category === categoryName).slice(0, 10)
-  // }
 
   const sections = [
     { name: "Latest", title: "Latest" },
@@ -349,34 +177,34 @@ const normalizedBlogs = blogsSource.map(blog => {
 
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-  {displayedBlogs.map((blog, index) => {
-    const card = (
-      <Link href={`/blogs/${blog.slug}`} className="w-full flex justify-center cursor-pointer">
-        <BlogCard blog={blog} />
-      </Link>
-    )
+        {displayedBlogs.map((blog, index) => {
+          const card = (
+            <Link href={`/blogs/${blog.slug}`} className="w-full flex justify-center cursor-pointer">
+              <BlogCard blog={blog} />
+            </Link>
+          )
 
-    if (displayedBlogs.length === index + 1) {
-      return (
-        <div ref={lastBlogElementRef} key={blog.id} className="w-full flex justify-center">
-          {card}
-        </div>
-      )
-    } else {
-      return (
-        <div key={blog.id} className="w-full flex justify-center">
-          {card}
-        </div>
-      )
-    }
-  })}
+          if (displayedBlogs.length === index + 1) {
+            return (
+              <div ref={lastBlogElementRef} key={blog.id} className="w-full flex justify-center">
+                {card}
+              </div>
+            )
+          } else {
+            return (
+              <div key={blog.id} className="w-full flex justify-center">
+                {card}
+              </div>
+            )
+          }
+        })}
 
-  {loading && Array(3).fill(0).map((_, i) => (
-    <div key={i} className="w-full flex justify-center">
-      <BlogCardSkeleton />
-    </div>
-  ))}
-</div>
+        {loading && Array(3).fill(0).map((_, i) => (
+          <div key={i} className="w-full flex justify-center">
+            <BlogCardSkeleton />
+          </div>
+        ))}
+      </div>
     )
   }
 

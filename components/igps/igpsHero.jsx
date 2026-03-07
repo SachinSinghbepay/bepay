@@ -196,7 +196,7 @@ const IgpsHero = () => {
               </div>
 
               {/* Overlapping Bottom Image */}
-              <div className="absolute -bottom-1 lg:-bottom-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[85%] lg:w-[105%] z-10">
+              {/* <div className="absolute -bottom-1 lg:-bottom-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[85%] lg:w-[105%] z-10">
                 <div className="relative shadow-[0_20px_50px_rgba(0,0,0,0.12)] rounded-t-2xl md:rounded-t-none rounded-b-[32px] md:rounded-[52px] overflow-hidden">
                   <Image
                     src="/landingimg.png"
@@ -206,7 +206,7 @@ const IgpsHero = () => {
                     className="w-full h-auto"
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 

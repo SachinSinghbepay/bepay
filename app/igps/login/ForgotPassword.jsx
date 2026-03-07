@@ -6,18 +6,18 @@ import Link from "next/link";
 import { FiChevronLeft } from "react-icons/fi";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
-export default function ForgotPassword({ data, setData, onNext }) {
+export default function ForgotPassword({ data, setData, onNext, onBackToLogin }) {
 
   const email = data.email || "";
 
 
   const isValid =
-    email.trim().length > 3 ;
+    email.trim().length > 3;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isValid) return;
-    onNext(); 
+    onNext();
   };
 
   return (
@@ -51,7 +51,7 @@ export default function ForgotPassword({ data, setData, onNext }) {
             />
           </div>
 
-  
+
           <button
             type="submit"
             disabled={!isValid}
@@ -65,13 +65,14 @@ export default function ForgotPassword({ data, setData, onNext }) {
 
         {/* Back */}
         <div className="text-center mt-6">
-          <Link
-            href="/igps/login"
+          <button
+            type="button"
+            onClick={onBackToLogin}
             className="flex items-center justify-center gap-1 text-sm text-gray-500 hover:text-black transition"
           >
             <FiChevronLeft size={16} />
             Back to login
-          </Link>
+          </button>
         </div>
       </div>
     </div>

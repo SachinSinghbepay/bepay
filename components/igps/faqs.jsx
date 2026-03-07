@@ -9,13 +9,13 @@ import { AnalyticsService } from "@/services/analyticsService";
 const faqData = [
   {
     id: 1,
-    question: "What currencies does bepay support?",
+    question: "What currencies does bepay IGPS support?",
     answer:
-      "We support over 30 major global currencies — including USD, EUR, GBP, AED, CNY and INR — plus major stablecoins for instant settlement where permitted.",
+      "We support over 30 major global currencies, including USD, EUR, GBP, AED, CNY and INR, plus major stablecoins for instant settlement where permitted.",
   },
   {
     id: 2,
-    question: "How do I get started with bepay?",
+    question: "How do I get started with bepay IGPS?",
     answer:
       "Sign up, complete a quick KYB, add your business details, and activate your preferred corridors. The process typically takes under 5 minutes for standard accounts.",
   },
@@ -29,18 +29,18 @@ const faqData = [
     id: 4,
     question: "Can I withdraw funds to my local bank account?",
     answer:
-      "Yes — you can withdraw to your domestic bank account in your local currency anytime.",
+      "Yes, you can withdraw to your domestic bank account in your local currency anytime.",
   },
   {
     id: 5,
-    question: "Is bepay safe & regulated ?",
+    question: "Is bepay IGPS safe & regulated ?",
     answer:
       "Yes, licensed as  RBI’s PA-CB(Payment Aggregator Cross Border), FEMA,  MSB (USA), VASP (EU), and compliant with DORA, MiCA, DPDP & CFT.",
   },
   {
     id: 6,
     question: "Are there any account maintenance or setup fees?",
-    answer: "No — creating and maintaining your bepay global account is free.",
+    answer: "No, creating and maintaining your bepay global account is free.",
   },
   {
     id: 7,
@@ -52,13 +52,13 @@ const faqData = [
     id: 8,
     question: "How do I get my e-FIRA / FIRC documents?",
     answer:
-      "We automate this completely — as soon as an inward remittance is settled into your account, a digital FIRA/FIRC is generated instantly and available to download from your dashboard.",
+      "We automate this completely, as soon as an inward remittance is settled into your account, a digital FIRA/FIRC is generated instantly and available to download from your dashboard.",
   },
   {
     id: 9,
     question: "Are there any limits on transaction volume?",
     answer:
-      "bepay is built for B2B trade and supports high-value transactions for exporters, importers, and large enterprises. Specific limits/tiering depend on KYB and corridor rules — contact support for custom volume needs.",
+      "bepay IGPS is built for B2B trade and supports high-value transactions for exporters, importers, and large enterprises. Specific limits/tiering depend on KYB and corridor rules, contact support for custom volume needs.",
   },
   {
     id: 10,
@@ -68,34 +68,27 @@ const faqData = [
   },
   {
     id: 11,
-    question: "Does bepay support stablecoin-based rails?",
+    question: "Does bepay IGPS support stablecoin-based rails?",
     answer:
-      "Yes — wherever permitted by regulation, stablecoin rails can be used for faster settlement and lower fees, paired with full compliance controls.",
+      "Yes, wherever permitted by regulation, stablecoin rails can be used for faster settlement and lower fees, paired with full compliance controls.",
   },
   {
     id: 12,
     question: "Which stablecoins are supported?",
     answer:
-      "bepay supports major stablecoins such as USDC and USDT where corridors and regulation allow — exact availability depends on region and corridor.",
+      "bepay IGPS supports major stablecoins such as USDC, USDT and USDG where corridors and regulation allow, exact availability depends on region and corridor.",
   },
   {
     id: 13,
     question: "Do you support receiving payments from Amazon?",
     answer:
-      "Yes — you can receive your Amazon marketplace payouts directly into your bepay multi-currency virtual accounts.",
+      "Yes, you can receive your Amazon marketplace payouts directly into your bepay multi-currency virtual accounts.",
   },
   {
     id: 14,
     question: "Do you provide customer support?",
-    answer: "Yes — 24/7 support with priority handling for global merchants.",
+    answer: "Yes, 24/7 support with priority handling for global merchants.",
   },
-  {
-    id: 15,
-    question: "How secure is bepay?",
-    answer:
-      "bepay uses banking-grade security and compliance controls (encryption, KYC/AML, monitoring, and regulatory oversight) to protect funds and data.",
-  },
-
 ];
 
 const titleVariants = {

@@ -93,7 +93,7 @@ export default function PartnershipSection() {
               <div className="col-span-1 flex justify-center">
                 <div
                   className="  text-[450px] bg-gradient-to-t from-[#EDEDED] to-[#EDEDED1A] bg-clip-text text-transparent font-bold "
-                 
+
                 >
                   1
                 </div>
@@ -128,14 +128,16 @@ export default function PartnershipSection() {
                   For press inquiries, interviews, and media resources
                 </p>
 
-                <motion.button
-                  className="inline-flex items-center gap-3 bg-black text-white px-6 py-3 rounded-full font-medium text-sm hover:bg-gray-800 transition-colors duration-300"
+                <motion.a
+                  href="/bepay-money-media-kit.zip"
+                  download
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  className="inline-flex items-center gap-3 bg-black text-white px-6 py-3 rounded-full font-medium text-sm hover:bg-gray-800 transition-colors duration-300"
                 >
                   <Download size={20} />
                   Download media kit
-                </motion.button>
+                </motion.a>
               </div>
             </div>
 
@@ -145,7 +147,7 @@ export default function PartnershipSection() {
               <div className="col-span-1 flex justify-center">
                 <div
                   className="text-[450px] bg-gradient-to-b from-[#EDEDED] to-[#EDEDED1A] bg-clip-text text-transparent font-bold"
-                  
+
                 >
                   2
                 </div>
@@ -166,14 +168,16 @@ export default function PartnershipSection() {
                     For press inquiries, interviews, and media resources
                   </p>
 
-                  <motion.button
-                    className="inline-flex items-center gap-3 bg-black text-white px-8 py-4 rounded-full font-medium text-base hover:bg-gray-800 transition-colors duration-300"
+                  <motion.a
+                    href="/bepay-money-media-kit.zip"
+                    download
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    className="inline-flex items-center gap-3 bg-black text-white px-8 py-4 rounded-full font-medium text-base hover:bg-gray-800 transition-colors duration-300"
                   >
                     <Download size={20} />
                     Download media kit
-                  </motion.button>
+                  </motion.a>
                 </div>
               </div>
             </div>
