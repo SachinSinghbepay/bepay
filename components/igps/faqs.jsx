@@ -40,7 +40,7 @@ const faqData = [
   {
     id: 6,
     question: "Are there any account maintenance or setup fees?",
-    answer: "No, creating and maintaining your bepay global account is free.",
+    answer: "No, creating and maintaining your bepay IGPS global account is free.",
   },
   {
     id: 7,

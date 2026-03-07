@@ -5,7 +5,7 @@ import TableOfContents from "@/components/TableOfContents"
 /* ---------------- FETCH BLOG ---------------- */
 async function getBlog(slug) {
   try {
-    const res = await fetch('http://localhost:3000/api/blogs', { cache: "no-store" })
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/blogs`, { cache: "no-store" })
     if (!res.ok) return null
 
     const data = await res.json()

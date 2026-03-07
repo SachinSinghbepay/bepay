@@ -11,10 +11,10 @@ const complianceData = [
     title: "Certified",
     badges: [
       { name: "ISO 27001", logo: "/icons/ISO-27001.svg" },
-      { name: "ISO 9001", logo: "/icons/ISO-9001.svg" },
-      { name: "ISO 20022", logo: "/icons/ISO-20022.svg" },
       { name: "SOC 2", logo: "/icons/SOC-2.svg" },
       { name: "PCI DSS", logo: "/icons/PCI-DSS.svg" },
+      { name: "ISO 20022", logo: "/icons/ISO-20022.svg" },
+      { name: "ISO 9001", logo: "/icons/ISO-9001.svg" },
     ],
   },
   {
@@ -22,29 +22,32 @@ const complianceData = [
     title: "Licensed",
     badges: [
       { name: "MSB (USA)", logo: "/icons/MSB-(USA).svg" },
+      { name: "MSB (Canada)", },
+      { name: "PSP (Canada)" },
       { name: "VASP (EU)", logo: "/icons/VASP-(EU).svg" },
-      { name: "MSME (India)", logo: "/icons/MSME-(India).svg" },
-      { name: "MiCA (EU)", logo: "/icons/MICA-(EU).svg" },
     ],
   },
   {
     icon: "/images/business/compliant.svg",
     title: "Compliant",
     badges: [
-      { name: "GDPR", logo: "/icons/GDPR.svg" },
+      { name: "RBI's PA-CB*" },
+      { name: "FEMA" },
+      { name: "DORA" },
+      { name: "DPDP" },
       { name: "MiCA-ready", logo: "/icons/MICA-ready.svg" },
-      { name: "DORA", logo: "/icons/DORA.svg" },
-      { name: "CFT", logo: "/icons/CFT.svg" },
-      { name: "DPDP", logo: "/icons/DPDP.svg" },
-      { name: "AML/KYC automation", logo: "/icons/AML.svg" },
+      { name: "CFT" },
     ],
   },
   {
     icon: "/images/business/protected.svg",
     title: "Protected",
     badges: [
-      { name: "Multi-sig wallets", logo: "/icons/security-icon.svg" },
-      { name: "Fraud detection", logo: "/icons/fraud.svg" },
+      { name: "GDPR", logo: "/icons/GDPR.svg" },
+      { name: "Multi-Factor Authentication" , logo: "/icons/security-icon.svg" },
+      { name: "24/7 Monitoring" },
+      { name: "End-to-End Encryption" },
+      { name: "Real-time Fraud Detection", logo: "/icons/fraud.svg" },
     ],
   },
 ];
@@ -173,14 +176,15 @@ export default function ComplianceSection() {
                       key={badgeIndex}
                       className="flex items-center gap-3 px-5 py-3 border rounded-[18px] bg-white"
                     >
-                      <Image
-                        src={badge.logo}
-                        alt={badge.name}
-                        width={38}
-                        height={38}
-                        className="object-contain"
-                        loading="lazy"
-                      />
+                      {badge.logo && (
+                        <Image
+                          src={badge.logo}
+                          alt={badge.name}
+                          width={38}
+                          height={38}
+                          className="object-contain"
+                        />
+                      )}
 
                       <span className="text-[#080808] text-sm lg:text-[16px] font-medium whitespace-nowrap">
                         {badge.name}

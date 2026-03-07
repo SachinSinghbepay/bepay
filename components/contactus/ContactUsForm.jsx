@@ -126,7 +126,14 @@ export default function ContactForm() {
       setPopupType("success")
       setPopupMessage("Thank you! Your message has been sent successfully. We'll get back to you soon.")
       setShowPopup(true)
-      reset()
+      reset({
+        subject: "",
+        name: "",
+        email: "",
+        countryCode: "",
+        phoneNumber: "",
+        message: "",
+      })
     } catch (error) {
       console.error("Error submitting form:", error)
 
@@ -172,7 +179,10 @@ export default function ContactForm() {
           {/* Subject */}
           <div className="space-y-3">
             <label className="text-sm font-medium text-[#080808]">Subject</label>
-            <Select onValueChange={(value) => setValue("subject", value)}>
+            <Select
+              value={watch("subject")}
+              onValueChange={(value) => setValue("subject", value)}
+            >
               <SelectTrigger
                 className="w-full bg-white/50 h-[60px] border border-gray-200 rounded-lg flex items-center justify-between px-3"
                 style={{ minHeight: "60px" }}
@@ -203,6 +213,10 @@ export default function ContactForm() {
             <Input
               {...register("name")}
               placeholder="Enter your name"
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^a-zA-Z\s]/g, "")
+                setValue("name", value)
+              }}
               className="w-full h-[60px] bg-white/50 border border-gray-200 rounded-lg px-3 text-base"
             />
             {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
@@ -279,10 +293,14 @@ export default function ContactForm() {
                   </Command>
                 </PopoverContent>
               </Popover>
-
               <Input
                 {...register("phoneNumber")}
                 placeholder="Enter phone number"
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, "")
+                  setValue("phoneNumber", value)
+                }}
+                inputMode="numeric"
                 className="flex-1 h-[60px] bg-white/50 border border-gray-200 rounded-lg px-3 text-base"
               />
             </div>
@@ -414,8 +432,8 @@ export default function ContactForm() {
                   <Button
                     onClick={closePopup}
                     className={`px-8 py-3 rounded-full font-medium transition-all duration-200 ${popupType === "success"
-                        ? "bg-green-600 hover:bg-green-700 text-white"
-                        : "bg-red-600 hover:bg-red-700 text-white"
+                      ? "bg-green-600 hover:bg-green-700 text-white"
+                      : "bg-red-600 hover:bg-red-700 text-white"
                       }`}
                   >
                     {popupType === "success" ? "Great!" : "Try Again"}

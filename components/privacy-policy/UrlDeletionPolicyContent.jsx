@@ -10,11 +10,11 @@ export default function UrlDeletionPolicyContent() {
         </h2>
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
-            <span className="font-semibold">bepay</span> is committed to
+            <span className="font-semibold">bepay money</span> is committed to
             protecting user privacy and ensuring compliance with data protection
             laws when handling user-generated content, including URLs submitted
             through our platform. This policy outlines how users can request the
-            deletion of URLs submitted through bepay&apos;s platform and what happens
+            deletion of URLs submitted through bepay money&apos;s platform and what happens
             to associated data when an account or URL content is removed.
           </p>
         </div>
@@ -30,14 +30,14 @@ export default function UrlDeletionPolicyContent() {
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>
               Users who have submitted URLs, links, or associated metadata via
-              bepay&apos;s platform.
+              bepay money&apos;s platform.
             </li>
             <li>
               Requests related to removing, anonymizing, or erasing such content
-              from bepay&apos;s systems.
+              from bepay money&apos;s systems.
             </li>
             <li>
-              The process bepay follows when verifying, processing, and
+              The process bepay money follows when verifying, processing, and
               executing deletion requests.
             </li>
             <li>
@@ -54,7 +54,7 @@ export default function UrlDeletionPolicyContent() {
         </h2>
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
-            When users submit URLs through bepay&apos;s platform, the following
+            When users submit URLs through bepay money&apos;s platform, the following
             information may be collected and processed:
           </p>
           <ul className="list-disc list-inside space-y-2 ml-4">
@@ -96,7 +96,7 @@ export default function UrlDeletionPolicyContent() {
               </li>
               <li>
                 The URL is linked to outdated, expired, or non-functional
-                content that is no longer relevant to bepay&apos;s services.
+                content that is no longer relevant to bepay money&apos;s services.
               </li>
               <li>
                 The URL was submitted erroneously or without proper
@@ -115,12 +115,12 @@ export default function UrlDeletionPolicyContent() {
               4.2. How to Submit a Deletion Request
             </h3>
             <p>
-              To request the deletion of a URL submitted to bepay&apos;s platform,
+              To request the deletion of a URL submitted to bepay money&apos;s platform,
               users must:
             </p>
             <ol className="list-decimal list-inside space-y-2 ml-4">
               <li>
-                Submit a written request via bepay&apos;s privacy support portal or
+                Submit a written request via bepay money&apos;s privacy support portal or
                 designated email address.
               </li>
               <li>
@@ -148,9 +148,9 @@ export default function UrlDeletionPolicyContent() {
             </h3>
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
-                If a user deletes their bepay account, all associated URLs,
+                If a user deletes their bepay money account, all associated URLs,
                 search history, and stored data will be automatically erased
-                from bepay&apos;s systems.
+                from bepay money&apos;s systems.
               </li>
               <li>
                 Users will receive a confirmation message stating that all
@@ -159,7 +159,7 @@ export default function UrlDeletionPolicyContent() {
               </li>
               <li>
                 Once the account is deleted, this action cannot be undone, and
-                bepay will not be able to recover the removed data.
+                bepay money will not be able to recover the removed data.
               </li>
             </ul>
           </div>
@@ -171,7 +171,7 @@ export default function UrlDeletionPolicyContent() {
             </h3>
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
-                bepay will review deletion requests within 10 business days from
+                bepay money will review deletion requests within 10 business days from
                 the date of submission.
               </li>
               <li>
@@ -179,7 +179,7 @@ export default function UrlDeletionPolicyContent() {
                 will be notified of the expected processing timeframe.
               </li>
               <li>
-                Upon approval, bepay will permanently delete the specified URL
+                Upon approval, bepay money will permanently delete the specified URL
                 content from its systems and confirm the completion of the
                 request.
               </li>
@@ -195,24 +195,24 @@ export default function UrlDeletionPolicyContent() {
         </h2>
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
-            While bepay aims to fulfill valid deletion requests, certain
+            While bepay money aims to fulfill valid deletion requests, certain
             circumstances may require us to retain URL data for a defined
             period:
           </p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>
               If the URL is associated with ongoing transactions, disputes, or
-              regulatory investigations, bepay may temporarily retain the
+              regulatory investigations, bepay money may temporarily retain the
               content until such matters are resolved.
             </li>
             <li>
-              bepay may retain anonymized metadata for statistical analysis,
+              bepay money may retain anonymized metadata for statistical analysis,
               fraud detection, and compliance audits, ensuring that no
               personally identifiable information remains accessible.
             </li>
             <li>
               In cases where deletion conflicts with regulatory or financial
-              obligations, bepay may decline the request and provide an
+              obligations, bepay money may decline the request and provide an
               explanation to the user.
             </li>
           </ul>
@@ -225,7 +225,7 @@ export default function UrlDeletionPolicyContent() {
           6. User Rights & Legal Compliance:
         </h2>
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>bepay users have the right to:</p>
+          <p>bepay money users have the right to:</p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>
               Request the deletion, correction, or restriction of their
@@ -236,7 +236,7 @@ export default function UrlDeletionPolicyContent() {
               processed.
             </li>
             <li>
-              Appeal a denied request, if applicable, through bepay&apos;s privacy
+              Appeal a denied request, if applicable, through bepay money&apos;s privacy
               dispute resolution mechanism.
             </li>
             <li>
@@ -255,7 +255,7 @@ export default function UrlDeletionPolicyContent() {
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>
-              bepay reserves the right to update this URL deletion policy to
+              bepay money reserves the right to update this URL deletion policy to
               align with evolving data protection laws and platform security
               measures.
             </li>
@@ -264,7 +264,7 @@ export default function UrlDeletionPolicyContent() {
               notifications, or our official website.
             </li>
             <li>
-              Continued use of bepay&apos;s services following a policy update
+              Continued use of bepay money&apos;s services following a policy update
               constitutes acceptance of the revised terms.
             </li>
           </ul>
@@ -279,7 +279,7 @@ export default function UrlDeletionPolicyContent() {
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>
-              bepay&apos;s services are not intended for individuals under the age of
+              bepay money&apos;s services are not intended for individuals under the age of
               13.
             </li>
             <li>
