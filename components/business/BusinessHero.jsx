@@ -373,11 +373,11 @@ const BusinessHero = () => {
                         <CheckCircle className="w-8 h-8 text-green-600" />
 
                         <p className="text-black font-semibold text-lg">
-                          Yay! You're on the waitlist.
+                          Yay! You&apos;re on the waitlist.
                         </p>
 
                         <p className="text-gray-500 text-sm leading-relaxed">
-                          We'll email you as soon as we launch.
+                          We&apos;ll email you as soon as we launch.
                         </p>
                       </motion.div>
                     )}
@@ -607,11 +607,11 @@ const BusinessHero = () => {
                                   <CheckCircle className="w-8 h-8 text-green-600" />
 
                                   <p className="text-black font-semibold text-lg">
-                                    Yay! You're on the waitlist.
+                                    Yay! You&apos;re on the waitlist.
                                   </p>
 
                                   <p className="text-gray-500 text-sm leading-relaxed">
-                                    We'll email you as soon as we launch.
+                                    We&apos;ll email you as soon as we launch.
                                   </p>
                                 </motion.div>
                               )}

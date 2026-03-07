@@ -15,7 +15,7 @@ import DefiYieldSection from "@/components/crypto/DefiYieldSection ";
 import WaitlistPopup from "@/components/waitlist-popup";
 import ScrollTextMobile from "@/components/crypto/ScrollTextMobile";
 
-const page = () => {
+const Page = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []); // ← add this
@@ -41,4 +41,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

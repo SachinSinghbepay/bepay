@@ -8,7 +8,7 @@ import JoinImpactSection from "@/components/foundation/join-impact-section"
 import MissionSection from "@/components/foundation/mission-section"
 import GetStartedPopup from "@/components/popups/getStartedPopup"
 
-const page = () => {
+const Page = () => {
   const [openPopup, setOpenPopup] = useState(false)
 
   return (
@@ -31,4 +31,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
