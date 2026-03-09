@@ -4,8 +4,9 @@ import { AppDownloadPopupWrapper } from "./app-download-popup-wrapper"
 import { CountryPhoneInput } from "@/components/ui/country-phone-input"
 import StyledQRCode from "./StyledQRCode"
 
-const androidLink = process.env.NEXT_PUBLIC_ANDROID_APP_URL
-const iosLink = process.env.NEXT_PUBLIC_IOS_APP_URL
+const androidLink = "https://play.google.com/store/apps/details?id=com.bepay.user"
+const iosLink = "https://testflight.apple.com/join/51JVNh5g"
+
 
 export function QRCodePopup({ isVisible, onClose, selectedOS }) {
   const handleSendSms = (countryCode, phoneNumber) => {
