@@ -21,7 +21,7 @@ export function OSSelectionPopup({ isVisible, onClose, onOSSelected }) {
       {/* Animate from bottom */}
       <div className="text-center space-y-6">
         <h2 className="text-2xl lg:text-[60px] font-bold text-[#333333]">
-          Get the bepay app 
+          Get the bepay money app 
         </h2>
         <p className="text-gray-900">Choose your device OS</p>
         <div className="flex flex-col max-w-[300px] mx-auto gap-3">

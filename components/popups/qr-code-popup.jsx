@@ -20,7 +20,7 @@ export function QRCodePopup({ isVisible, onClose, selectedOS }) {
     <AppDownloadPopupWrapper isVisible={isVisible} onClose={onClose} direction="right">
       <div className="text-center space-y-6">
         <h2 className="text-2xl lg:text-[60px] font-bold text-[#333333]">
-          Get the bepay app
+          Get the bepay money app
         </h2>
         <p className="text-gray-900">Scan the QR code to download the app</p>
 
