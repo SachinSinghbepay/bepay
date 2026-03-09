@@ -181,7 +181,7 @@ const Footer = ({
     setIsOSPopupOpen(false)
     setIsQRPopupOpen(true)
   }
- 
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 767);
     checkMobile();
@@ -820,6 +820,13 @@ const Footer = ({
                 {/* UPI Page - Column 1 */}
                 <div className="space-y-4 flex flex-col">
                   <Link
+                    href="/"
+                    onClick={() => handleLinkClick("BEPAY IGPS")}
+                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                  >
+                    BEPAY IGPS
+                  </Link>
+                  <Link
                     href="/about-us"
                     onClick={() => handleLinkClick("About Us")}
                     className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
@@ -832,13 +839,6 @@ const Footer = ({
                     className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
                   >
                     BEPAY FOUNDATION
-                  </Link>
-                  <Link
-                    href="/"
-                    onClick={() => handleLinkClick("BEPAY IGPS")}
-                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-                  >
-                    BEPAY IGPS
                   </Link>
                 </div>
 
@@ -965,6 +965,13 @@ const Footer = ({
               <>
                 <div className="space-y-4">
                   <div className="space-y-4 lg:space-y-6">
+                      <Link
+                      href="/"
+                      onClick={() => handleLinkClick("BEPAY IGPS")}
+                      className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                    >
+                      BEPAY IGPS
+                    </Link>
                     <Link
                       href="/personal"
                       onClick={() => handleLinkClick("Personal")}
@@ -985,13 +992,6 @@ const Footer = ({
                       className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
                     >
                       BEPAY FOUNDATIONS
-                    </Link>
-                    <Link
-                      href="/"
-                      onClick={() => handleLinkClick("BEPAY IGPS")}
-                      className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
-                    >
-                      BEPAY IGPS
                     </Link>
                   </div>
                 </div>
