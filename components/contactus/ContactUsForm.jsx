@@ -317,12 +317,12 @@ export default function ContactForm() {
                 placeholder="Write your message here..."
                 className="w-full min-h-[120px] bg-white/50 border border-gray-200 rounded-lg resize-none pr-12 px-3 py-3 text-base"
               />
-              <button
+              {/* <button
                 type="button"
                 className="absolute bottom-3 right-3 p-2 text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <Paperclip className="w-4 h-4" />
-              </button>
+              </button> */}
             </div>
             {errors.message && <p className="text-sm text-red-600">{errors.message.message}</p>}
           </div>

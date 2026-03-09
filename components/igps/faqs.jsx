@@ -82,7 +82,7 @@ const faqData = [
     id: 13,
     question: "Do you support receiving payments from Amazon?",
     answer:
-      "Yes, you can receive your Amazon marketplace payouts directly into your bepay multi-currency virtual accounts.",
+      "Yes, you can receive your Amazon marketplace payouts directly into your bepay IGPS multi-currency virtual accounts.",
   },
   {
     id: 14,

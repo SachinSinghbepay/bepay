@@ -69,20 +69,27 @@ const FoundationFooter = () => {
                 >
                   CONTACT US
                 </Link>
-              </div>
-              <div className="flex flex-col gap-4">
-                <Link
-                  href="/"
-                  className="block text-[#6A6A6A] hover:text-gray-400 transition-colors text-sm font-medium"
-                >
-                  PERSONAL
-                </Link>
-                <Link
+                   <Link
                   href="/business"
                   className="block text-[#6A6A6A] hover:text-gray-400 transition-colors text-sm font-medium"
                 >
                   BUSINESS
                 </Link>
+              </div>
+              <div className="flex flex-col gap-4">
+                <Link
+                  href="/personal"
+                  className="block text-[#6A6A6A] hover:text-gray-400 transition-colors text-sm font-medium"
+                >
+                  PERSONAL
+                </Link>
+                  <Link
+                  href="/"
+                  className="block text-[#6A6A6A] hover:text-gray-400 transition-colors text-sm font-medium"
+                >
+                  BEPAY IGPS
+                </Link>
+             
               </div>
             </div>
             <div className="flex gap-3 justify-start">
