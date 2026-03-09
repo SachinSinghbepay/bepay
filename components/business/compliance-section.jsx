@@ -54,7 +54,7 @@ const complianceData = [
     title: "Compliant",
     badges: [
       { name: "DORA" },
-      { name: "DPDP" },
+      { name: "DPDP", logo: "/icons/dpdp.svg" },
       { name: "MiCA (EU)" },
       { name: "CFT" },
     ],

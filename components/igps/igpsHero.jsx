@@ -173,7 +173,7 @@ const IgpsHero = () => {
               textTransform: "uppercase",
             }}
           >
-            ACCEPT INTERNATIONAL PAYMENTS WITH ZERO FEES
+            ACCEPT INTERNATIONAL PAYMENTS WITH EASE
           </p>
         </div>
 
@@ -214,12 +214,12 @@ const IgpsHero = () => {
             className={`flex-1 w-full max-w-[32rem] lg:max-w-[35rem] lg:pl-0 flex flex-col justify-between transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
               }`}
           >
-            <div className="flex flex-col h-full justify-between py-2">
+            <div className="flex flex-col h-full justify-between py-3">
               <div className="w-full">
-                <p className="igps-intro text-left mb-4">
+                {/* <p className="igps-intro text-left mb-4">
                   Global first platform offering free <br className="hidden lg:block" />
                   international settlements for businesses
-                </p>
+                </p> */}
 
                 <div className="space-y-4 lg:space-y-0 lg:block lg:divide-y lg:divide-gray-200">
                   {checklistItems.map((item, idx) => (
@@ -256,7 +256,7 @@ const IgpsHero = () => {
                 </div>
               </div>
 
-              <div className="mt-4">
+              <div className="mt-0">
                 <div
                   className={`pl-3 border-l-2 border-gray-400 transition-all duration-700 delay-500 ${isVisible ? "opacity-100" : "opacity-0"
                     }`}
