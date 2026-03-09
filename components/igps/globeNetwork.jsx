@@ -236,7 +236,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
               height: 'auto',
               display: 'block',
               margin: isMobile ? '0 auto' : undefined,
-              cursor: 'pointer'
+          
             }}
           />
 
@@ -330,7 +330,7 @@ const GlobalNetworkCoverage = ({ globeImagePath }) => {
                   height: '30px',
                   objectFit: 'contain',
                   display: 'block',
-                  cursor: 'pointer'
+           
                 }}
               />
             </div>

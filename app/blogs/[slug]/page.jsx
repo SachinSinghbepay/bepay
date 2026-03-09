@@ -4,8 +4,9 @@ import TableOfContents from "@/components/TableOfContents"
 
 /* ---------------- FETCH BLOG ---------------- */
 async function getBlog(slug) {
+  const URL = 'https://bepay.money';
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/blogs`, { cache: "no-store" })
+    const res = await fetch(`${URL}/api/blogs`, { cache: "no-store" })
     if (!res.ok) return null
 
     const data = await res.json()

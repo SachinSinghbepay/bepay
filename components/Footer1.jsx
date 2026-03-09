@@ -181,12 +181,7 @@ const Footer = ({
     setIsOSPopupOpen(false)
     setIsQRPopupOpen(true)
   }
-
-  const openQR = (os) => {
-    setSelectedOS(os)      // "ios" | "android" | "gallery"
-    setIsOSPopupOpen(false) // ensure OS selector never shows
-    setIsQRPopupOpen(true)  // open QR popup directly
-  }
+ 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 767);
     checkMobile();
@@ -838,6 +833,13 @@ const Footer = ({
                   >
                     BEPAY FOUNDATION
                   </Link>
+                  <Link
+                    href="/"
+                    onClick={() => handleLinkClick("BEPAY IGPS")}
+                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                  >
+                    BEPAY IGPS
+                  </Link>
                 </div>
 
                 {/* UPI Page - Column 2 */}
@@ -983,6 +985,13 @@ const Footer = ({
                       className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
                     >
                       BEPAY FOUNDATIONS
+                    </Link>
+                    <Link
+                      href="/"
+                      onClick={() => handleLinkClick("BEPAY IGPS")}
+                      className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                    >
+                      BEPAY IGPS
                     </Link>
                   </div>
                 </div>

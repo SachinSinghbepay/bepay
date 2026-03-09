@@ -252,7 +252,7 @@ export default function BepayLanding() {
                 AnalyticsService.sendEvent("BepayLanding Get Started Clicked");
               } catch (e) { }
             }}
-            className="flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto"
+            className="cursor-pointer flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto"
           >
             <span>Get Started</span>
             {/* Keeping ArrowUpRight icon as inline SVG for simplicity */}

@@ -6,6 +6,8 @@ import { gsap } from "gsap";
 import { motion, useTransform, useScroll } from "framer-motion";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AnalyticsService } from "@/services/analyticsService";
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 // --- Font Optimization: The BEST way to improve LCP for text elements ---
 import { Montserrat, Open_Sans } from "next/font/google";
@@ -29,7 +31,7 @@ const openSans = Open_Sans({
 gsap.registerPlugin(ScrollTrigger);
 
 // --- 1. Mobile Hero Component (Optimized) ---
-const MobileHero = ({ containerRef, frameRef }) => {
+const MobileHero = ({ containerRef, frameRef, openSmartDownload  }) => {
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
@@ -255,6 +257,7 @@ const MobileHero = ({ containerRef, frameRef }) => {
 
               {/* Buttons (Using optimized Open Sans) */}
               <button
+                onClick={() => openSmartDownload("ios")}
                 className={`bg-black text-white rounded-full flex items-center justify-center mt-2 ${openSans.className}`}
                 style={{
                   width: '260px',
@@ -281,6 +284,7 @@ const MobileHero = ({ containerRef, frameRef }) => {
               </button>
 
               <button
+                onClick={() => openSmartDownload("android")}
                 className={`bg-black text-white rounded-full flex items-center justify-center ${openSans.className}`}
                 style={{
                   width: '260px',
@@ -314,7 +318,7 @@ const MobileHero = ({ containerRef, frameRef }) => {
 };
 
 // --- 2. Desktop Hero Component (Optimized) ---
-const DesktopHero = ({ containerRef, logoRef, frameRef, cardSectionRef }) => {
+const DesktopHero = ({ containerRef, logoRef, frameRef, cardSectionRef,   openSmartDownload, }) => {
   // --- GSAP Animation Logic for Desktop/Tablet Only ---
   useEffect(() => {
     const container = containerRef.current;
@@ -452,7 +456,9 @@ const DesktopHero = ({ containerRef, logoRef, frameRef, cardSectionRef }) => {
 
               {/* Download Buttons: Applied optimized Open Sans font class */}
               <div className={`download absolute top-[38vh] left-[36vw] scale-[0.8] sm:scale-[1] transform -translate-x-1/2 z-2 flex flex-col sm:flex-row gap-3 text-left text-[0.4rem] sm:text-[0.6rem] items-center ${openSans.className}`}>
-                <button className="bg-black w-[42vw] sm:w-[40vw] md:w-[40vw] lg:w-[13vw] text-white px-5 py-4 sm:px-7 sm:py-5 rounded-full flex items-center gap-2 justify-center">
+                <button
+                  onClick={() => openSmartDownload("ios")}
+                  className="bg-black w-[42vw] sm:w-[40vw] md:w-[40vw] lg:w-[13vw] text-white px-5 py-4 sm:px-7 sm:py-5 rounded-full flex items-center gap-2 justify-center">
                   <Image
                     src="/apple.png"
                     alt="Apple App Store"
@@ -466,7 +472,9 @@ const DesktopHero = ({ containerRef, logoRef, frameRef, cardSectionRef }) => {
                     <div>App Store</div>
                   </div>
                 </button>
-                <button className="bg-black w-[42vw] sm:w-[40vw] md:w-[40vw] lg:w-[13vw] text-white px-5 py-4 sm:px-7 sm:py-5 rounded-full flex items-center gap-2 justify-center">
+                <button
+                  onClick={() => openSmartDownload("android")}
+                  className="bg-black w-[42vw] sm:w-[40vw] md:w-[40vw] lg:w-[13vw] text-white px-5 py-4 sm:px-7 sm:py-5 rounded-full flex items-center gap-2 justify-center">
                   <Image
                     src="/playstore.png"
                     alt="Google Play Store"
@@ -502,10 +510,46 @@ const DesktopHero = ({ containerRef, logoRef, frameRef, cardSectionRef }) => {
 
 // --- 3. Main Hero Component (FIXED) ---
 export default function Hero() {
+
+  const {
+    setIsQRPopupOpen,
+    setSelectedOS,
+    isQRPopupOpen,
+    setIsOSPopupOpen,
+    isOSPopupOpen,
+    selectedOS,
+  } = useAppDownload()
+
+  const openSmartDownload = (targetOS) => {
+    const ua = navigator.userAgent || navigator.vendor || window.opera
+
+    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream
+    const isAndroid = /android/i.test(ua)
+    const isMobile = isIOS || isAndroid
+
+    const links = {
+      ios: process.env.NEXT_PUBLIC_IOS_APP_URL,
+      android: process.env.NEXT_PUBLIC_ANDROID_APP_URL,
+    }
+
+    // If mobile & OS matches → redirect
+    if (isMobile) {
+      if ((isIOS && targetOS === "ios") || (isAndroid && targetOS === "android")) {
+        window.location.href = links[targetOS]
+        return
+      }
+    }
+
+    // Otherwise show QR
+    setSelectedOS(targetOS)
+    setIsOSPopupOpen(false)
+    setIsQRPopupOpen(true)
+  }
+
   // ** FIX **: Add hasMounted state to prevent hydration mismatch
   const [hasMounted, setHasMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  
+
   const containerRef = useRef(null);
   const [hasTrackedView, setHasTrackedView] = useState(false);
   const logoRef = useRef(null);
@@ -515,7 +559,7 @@ export default function Hero() {
   useEffect(() => {
     // 1. Mark as mounted (client-side execution started)
     setHasMounted(true);
-    
+
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -547,28 +591,45 @@ export default function Hero() {
 
     return () => observer.disconnect();
   }, [hasTrackedView]);
-  
+
   // ** FIX **: Render a placeholder until the client environment is known
   if (!hasMounted) {
     return (
       // Render a simple div that takes up the expected space to avoid layout shift
-      <div className="h-[120vh] md:h-[180vh] w-full bg-[#F9F9F9]" /> 
+      <div className="h-[120vh] md:h-[180vh] w-full bg-[#F9F9F9]" />
     );
   }
 
   // Once mounted, render the correct component based on isMobile
   return (
-    <div className={`${montserrat.variable} ${openSans.variable}`}> {/* Apply font variables to the root */}
-      {isMobile ? (
-        <MobileHero containerRef={containerRef} frameRef={frameRef} />
-      ) : (
-        <DesktopHero
-          containerRef={containerRef}
-          logoRef={logoRef}
-          frameRef={frameRef}
-          cardSectionRef={cardSectionRef}
-        />
-      )}
-    </div>
+    <>
+      <div className={`${montserrat.variable} ${openSans.variable}`}> {/* Apply font variables to the root */}
+        {isMobile ? (
+          <MobileHero
+            containerRef={containerRef}
+            frameRef={frameRef}
+            openSmartDownload={openSmartDownload}
+          />
+        ) : (
+          <DesktopHero
+            containerRef={containerRef}
+            logoRef={logoRef}
+            frameRef={frameRef}
+            cardSectionRef={cardSectionRef}
+            openSmartDownload={openSmartDownload}
+          />
+        )}
+
+
+      </div>
+      <AppDownloadPopups
+        isOSPopupOpen={false}
+        setIsOSPopupOpen={() => { }}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
+        selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
+      />
+    </>
   );
 }
