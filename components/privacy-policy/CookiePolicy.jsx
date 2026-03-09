@@ -6,7 +6,7 @@ export default function CookiesPolicyContent() {
       {/* Header */}
       <section className="space-y-6">
         <div className="text-sm lg:text-lg text-gray-600 mb-4">
-          Last Updated: <span className="text-black font-semibold">07/08/2025</span>
+          Last Updated: <span className="text-black font-semibold">01/03/2026</span>
         </div>
         <p className="text-base md:text-lg leading-relaxed text-[#080808]">
           <span className="font-semibold">BEPAY MONEY</span> makes use of cookies and
@@ -169,85 +169,6 @@ export default function CookiesPolicyContent() {
             with cookie banners (a pop-up that appears when a visitor comes to a website),
             which improves your browsing experience.
           </p>
-        </div>
-      </section>
-
-      {/* Section 8: Data Safety */}
-      <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          8. What you can do to help us keep your data safe
-        </h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>
-            Unfortunately, the transmission of information via the internet in general is not
-            always completely secure. Although we will do our best to protect your personal
-            information, we cannot guarantee the security of your information transmitted to
-            our site; any transmission is at your own risk. Once we have received your
-            information, we will use strict procedures and security features to try to prevent
-            unauthorized access. We do our utmost to protect your data, but there are certain
-            things you can do too:
-          </p>
-          <ul className="list-disc list-inside space-y-2 ml-4">
-            <li>
-              Install anti-virus software, anti-spyware software and a firewall on your
-              computer and keep them updated.
-            </li>
-            <li>
-              Do not leave verification tokens or your credit card unattended.
-            </li>
-            <li>
-              Keep your passwords strictly confidential and use strong passwords, i.e. avoid
-              obvious combinations of letters and figures.
-            </li>
-            <li>
-              Be alert online and learn how to spot unusual activity, such as a new website
-              address or phishing emails requesting personal information.
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      {/* Section 9: Data Retention */}
-      <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          9. How long we keep your personal data
-        </h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>
-            As per the GDPR, BEPAY MONEY will store and process your personal data only as
-            long as it is necessary to perform our obligations under the agreement with you or
-            as long as the law requires to store it. Therefore, we keep your personal data as
-            long as you are using our Services and for{" "}
-            <span className="font-semibold">five (5) years</span> after termination of the
-            agreement to comply with the law. There may be circumstances (e.g. fraud or
-            anti-money laundering) whereby we are obliged to store your personal data even
-            longer.
-          </p>
-        </div>
-      </section>
-
-      {/* Section 10: Contact */}
-      <section className="space-y-6  ">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          10. Contact us
-        </h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>
-            If you want to know more about BEPAY MONEY its data policies and how we use your
-            personal data, you can send us an e-mail at the following dedicated email address:
-          </p>
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <p className="font-semibold">BEPAY MONEY</p>
-            <p>
-              Email:{" "}
-              <a
-                href="mailto:compliance@bepay.money"
-                className="text-blue-500 font-bold"
-              >
-                compliance@bepay.money
-              </a>
-            </p>
-          </div>
         </div>
       </section>
     </div>
