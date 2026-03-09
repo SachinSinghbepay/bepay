@@ -18,6 +18,8 @@ export default function KycVerificationForm() {
   const [success, setSuccess] = useState("");
   const [emailError, setEmailError] = useState("");
   const [uboEmailError, setUboEmailError] = useState("");
+  const [senderProfile, setSenderProfile] = useState(null);
+  const [senderCompleted, setSenderCompleted] = useState(false);
 
   // ✅ Initialize service instance when component mounts (AFTER cookies are available)
   useEffect(() => {
@@ -51,59 +53,69 @@ export default function KycVerificationForm() {
 
     const loadKYCProgress = async () => {
       try {
-        const response = await igpsService.getKYCStatus();
 
-        if (response.success && response.data) {
-          const { senderId, remainingSteps, completedSteps } = response.data;
+        const [kycRes, senderRes] = await Promise.all([
+          igpsService.getKYCStatus(),
+          igpsService.getSenderProfile()
+        ]);
 
-          // Set senderId if available
+        if (kycRes.success && kycRes.data) {
+
+          const { senderId, remainingSteps, completedSteps } = kycRes.data;
+
           if (senderId) {
             setSenderId(senderId);
           }
 
-          // Determine which step to show based on remainingSteps
           let nextStep = 1;
+
           if (remainingSteps.includes("sender_details_submitted")) {
             nextStep = 1;
-          } else if (remainingSteps.includes("documents_uploaded")) {
+          }
+          else if (remainingSteps.includes("documents_uploaded")) {
             nextStep = 2;
-          } else if (remainingSteps.includes("ubo_submitted")) {
+          }
+          else if (remainingSteps.includes("ubo_submitted")) {
             nextStep = 3;
-          } else if (remainingSteps.length === 1 && remainingSteps.includes("verification_submitted")) {
-            // All KYC steps complete, only verification remains
-            console.log("✅ All KYC steps completed! KYC submission done.");
-            // Show KYC completion message and redirect
+          }
+          else if (
+            remainingSteps.length === 1 &&
+            remainingSteps.includes("verification_submitted")
+          ) {
             showKYCCompletedMessage();
             return;
           }
 
-          setCurrentStep(nextStep);
-
-          // Try to restore form data from localStorage if available
-          if (typeof window !== "undefined") {
-            const saved = localStorage.getItem("kyc_verification_progress");
-            if (saved) {
-              try {
-                const parsedData = JSON.parse(saved);
-                if (parsedData.formData) {
-                  setFormData(parsedData.formData);
-                }
-              } catch (err) {
-                console.error("Failed to restore form data", err);
-              }
-            }
+          if (!remainingSteps.includes("documents_uploaded")) {
+            setDocumentsCompleted(true);
           }
 
-          console.log("KYC Status Loaded:", {
-            senderId,
-            nextStep,
-            remainingSteps,
-            completedSteps,
-          });
+          setCurrentStep(nextStep);
         }
+
+        // sender profile
+        if (senderRes.success && senderRes.data) {
+          setSenderProfile(senderRes.data);
+          setSenderCompleted(true);
+        }
+
+        // restore local storage
+        if (typeof window !== "undefined") {
+          const saved = localStorage.getItem("kyc_verification_progress");
+          if (saved) {
+            try {
+              const parsedData = JSON.parse(saved);
+              if (parsedData.formData) {
+                setFormData(parsedData.formData);
+              }
+            } catch (err) {
+              console.error("Failed to restore form data", err);
+            }
+          }
+        }
+
       } catch (err) {
         console.error("Failed to load KYC status:", err);
-        // Continue with default step 1 if API fails
       }
     };
 
@@ -175,6 +187,7 @@ export default function KycVerificationForm() {
   const uboPhoneCodeScrollRef = useRef(null);
 
   // Step 2: File Upload States
+  const [documentsCompleted, setDocumentsCompleted] = useState(false);
   const [proofOfIdentityFile, setProofOfIdentityFile] = useState(null);
   const [proofOfAddressFile, setProofOfAddressFile] = useState(null);
   const [proofOfIdentityBase64, setProofOfIdentityBase64] = useState(null);
@@ -547,6 +560,19 @@ export default function KycVerificationForm() {
         const newSenderId = response.data.id;
         setSenderId(newSenderId);
         setSuccess("Sender details submitted successfully!");
+        // ✅ mark step1 completed immediately
+        setSenderCompleted(true);
+
+        // ✅ store data so UI can show summary
+        setSenderProfile({
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: fullPhone,
+          addressStreet: formData.address.street,
+          addressCity: formData.address.city,
+          addressCountry: formData.address.country,
+          registrationNumber: formData.identificationNumber
+        });
         saveProgress(2, formData, newSenderId);
         setCurrentStep(2);
         setError("");
@@ -686,13 +712,27 @@ export default function KycVerificationForm() {
   };
 
   const handleNext = () => {
+
     if (currentStep === 1) {
+      if (senderCompleted) {
+        setCurrentStep(2);
+        return;
+      }
       submitStep1();
-    } else if (currentStep === 2) {
+    }
+
+    else if (currentStep === 2) {
+      if (documentsCompleted) {
+        setCurrentStep(3);
+        return;
+      }
       submitStep2();
-    } else if (currentStep === 3) {
+    }
+
+    else if (currentStep === 3) {
       submitStep3();
     }
+
   };
 
   const handlePrev = () => {
@@ -752,350 +792,408 @@ export default function KycVerificationForm() {
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 space-y-6">
           {/* ===== STEP 1: SENDER DETAILS ===== */}
           {currentStep === 1 && (
-            <>
-              <h3 className="text-lg font-semibold text-gray-900">
-                Business Information
-              </h3>
 
-              {/* Full Name */}
-              <div>
-                <label className="block text-sm mb-2">Full Name / Company Name*</label>
-                <input
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
-                    handleInputChange({
-                      target: { name: "fullName", value }
-                    });
-                  }}
-                  placeholder="Enter your full name or company name"
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                />
-              </div>
+            senderCompleted ? (
 
-              {/* Email */}
-              <div>
-                <label className="block text-sm mb-2">Email Address*</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    handleInputChange(e);
+              <div className="space-y-4">
 
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-                    if (value && !emailRegex.test(value)) {
-                      setEmailError("Invalid email format");
-                    } else {
-                      setEmailError("");
-                    }
-                  }}
-                  placeholder="Enter your email"
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                />
-                {emailError && (
-                  <p className="text-red-500 text-sm mt-1">{emailError}</p>
-                )}
-              </div>
-
-              {/* Phone with Code */}
-              <div>
-                <label className="block text-sm mb-2">Phone Number*</label>
-                <div className="flex gap-2">
-                  <div className="relative" ref={phoneCodeRef}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setPhoneCodeOpen((v) => !v);
-                        setPhoneCodeSearch("");
-                      }}
-                      className="h-12 px-3 rounded-xl border border-gray-200 flex items-center gap-1.5 text-sm whitespace-nowrap bg-white hover:bg-gray-50 min-w-[90px]"
-                    >
-                      <span className="text-sm leading-none">
-                        {selectedPhoneOption?.country}
-                      </span>
-                      <span className="text-sm text-gray-500">
-                        {selectedPhoneOption?.dialCode}
-                      </span>
-                      <svg
-                        className="w-3 h-3 text-gray-400 ml-0.5"
-                        viewBox="0 0 10 6"
-                        fill="none"
-                      >
-                        <path
-                          d="M1 1l4 4 4-4"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </button>
-
-                    {phoneCodeOpen && (
-                      <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-xl z-50 flex flex-col">
-                        <div className="p-2 border-b">
-                          <input
-                            autoFocus
-                            value={phoneCodeSearch}
-                            onChange={(e) => setPhoneCodeSearch(e.target.value)}
-                            placeholder="Search country or code..."
-                            className="w-full h-9 rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-black"
-                          />
-                        </div>
-                        <div className="overflow-y-auto max-h-52" ref={phoneCodeScrollRef}>
-                          {filteredPhoneCodes.length > 0 ? (
-                            filteredPhoneCodes.map((opt) => (
-                              <div
-                                key={opt.value}
-                                onClick={() => {
-                                  setPhoneCode(opt.value);
-                                  setPhoneCodeOpen(false);
-                                  setPhoneCodeSearch("");
-                                }}
-                                className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-gray-50 text-sm ${phoneCode === opt.value
-                                  ? "bg-gray-50 font-medium"
-                                  : ""
-                                  }`}
-                              >
-                                <span className="text-base w-6 text-center leading-none">
-                                  {opt.country}
-                                </span>
-                                <span className="text-gray-500 w-12 shrink-0">
-                                  {opt.dialCode}
-                                </span>
-                                <span className="truncate text-gray-700">
-                                  {opt.name}
-                                </span>
-                              </div>
-                            ))
-                          ) : (
-                            <div className="p-3 text-sm text-gray-400 text-center">
-                              No results
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <input
-                    type="tel"
-                    value={phoneNumber}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, "");
-                      setPhoneNumber(value);
-                    }}
-                    maxLength={15}
-                    placeholder="Enter phone number"
-                    className="flex-1 h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition text-sm"
-                  />
+                <div className="border border-green-200 bg-green-50 rounded-xl p-4">
+                  <p className="text-green-700 font-medium">
+                    ✅ Business Information Submitted
+                  </p>
                 </div>
+
+                <div className="space-y-2 text-sm">
+
+                  <p><b>Business Name:</b> {senderProfile?.fullName}</p>
+                  <p><b>Email:</b> {senderProfile?.email}</p>
+                  <p><b>Phone:</b> {senderProfile?.phone}</p>
+
+                  <p>
+                    <b>Address:</b> {senderProfile?.addressStreet}{" "}
+                    {senderProfile?.addressCity}
+                  </p>
+
+                  <p>
+                    <b>Country:</b> {senderProfile?.addressCountry}
+                  </p>
+
+                  <p>
+                    <b>Registration Number:</b> {senderProfile?.registrationNumber}
+                  </p>
+
+                </div>
+
               </div>
 
-              {/* Identification Number */}
-              <div>
-                <label className="block text-sm mb-2">
-                  Business Registration / Identification Number*
-                </label>
-                <input
-                  type="text"
-                  name="identificationNumber"
-                  value={formData.identificationNumber}
-                  onChange={handleInputChange}
-                  placeholder="Enter registration number or tax ID"
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                />
-              </div>
+            ) : (
+              <>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Business Information
+                </h3>
 
-              {/* Registration Date */}
-              <div>
-                <label className="block text-sm mb-2">Registration Date*</label>
-                <input
-                  type="date"
-                  name="registrationDate"
-                  value={formData.registrationDate}
-                  onChange={handleInputChange}
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                />
-              </div>
-
-
-              {/* Business Type */}
-              <div>
-                <label className="block text-sm mb-2">Business Type*</label>
-                <CustomSelect
-                  options={businessTypeOptions}
-                  value={formData.businessType}
-                  onChange={(value) =>
-                    setFormData(prev => ({
-                      ...prev,
-                      businessType: value
-                    }))
-                  }
-                  placeholder="Select business type"
-                />
-              </div>
-
-              {/* Address */}
-              <div className="space-y-4 pt-2">
-                <h4 className="text-sm font-medium text-gray-900">Address</h4>
-
+                {/* Full Name */}
                 <div>
-                  <label className="block text-sm mb-2">Street Address*</label>
+                  <label className="block text-sm mb-2">Full Name / Company Name*</label>
                   <input
                     type="text"
-                    name="street"
-                    value={formData.address.street}
-                    onChange={handleAddressChange}
-                    placeholder="Enter street address"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+                      handleInputChange({
+                        target: { name: "fullName", value }
+                      });
+                    }}
+                    placeholder="Enter your full name or company name"
                     className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Email */}
+                <div>
+                  <label className="block text-sm mb-2">Email Address*</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      handleInputChange(e);
+
+                      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                      if (value && !emailRegex.test(value)) {
+                        setEmailError("Invalid email format");
+                      } else {
+                        setEmailError("");
+                      }
+                    }}
+                    placeholder="Enter your email"
+                    className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                  />
+                  {emailError && (
+                    <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                  )}
+                </div>
+
+                {/* Phone with Code */}
+                <div>
+                  <label className="block text-sm mb-2">Phone Number*</label>
+                  <div className="flex gap-2">
+                    <div className="relative" ref={phoneCodeRef}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPhoneCodeOpen((v) => !v);
+                          setPhoneCodeSearch("");
+                        }}
+                        className="h-12 px-3 rounded-xl border border-gray-200 flex items-center gap-1.5 text-sm whitespace-nowrap bg-white hover:bg-gray-50 min-w-[90px]"
+                      >
+                        <span className="text-sm leading-none">
+                          {selectedPhoneOption?.country}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          {selectedPhoneOption?.dialCode}
+                        </span>
+                        <svg
+                          className="w-3 h-3 text-gray-400 ml-0.5"
+                          viewBox="0 0 10 6"
+                          fill="none"
+                        >
+                          <path
+                            d="M1 1l4 4 4-4"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </button>
+
+                      {phoneCodeOpen && (
+                        <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-xl z-50 flex flex-col">
+                          <div className="p-2 border-b">
+                            <input
+                              autoFocus
+                              value={phoneCodeSearch}
+                              onChange={(e) => setPhoneCodeSearch(e.target.value)}
+                              placeholder="Search country or code..."
+                              className="w-full h-9 rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="overflow-y-auto max-h-52" ref={phoneCodeScrollRef}>
+                            {filteredPhoneCodes.length > 0 ? (
+                              filteredPhoneCodes.map((opt) => (
+                                <div
+                                  key={opt.value}
+                                  onClick={() => {
+                                    setPhoneCode(opt.value);
+                                    setPhoneCodeOpen(false);
+                                    setPhoneCodeSearch("");
+                                  }}
+                                  className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-gray-50 text-sm ${phoneCode === opt.value
+                                    ? "bg-gray-50 font-medium"
+                                    : ""
+                                    }`}
+                                >
+                                  <span className="text-base w-6 text-center leading-none">
+                                    {opt.country}
+                                  </span>
+                                  <span className="text-gray-500 w-12 shrink-0">
+                                    {opt.dialCode}
+                                  </span>
+                                  <span className="truncate text-gray-700">
+                                    {opt.name}
+                                  </span>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="p-3 text-sm text-gray-400 text-center">
+                                No results
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <input
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        setPhoneNumber(value);
+                      }}
+                      maxLength={15}
+                      placeholder="Enter phone number"
+                      className="flex-1 h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition text-sm"
+                    />
+                  </div>
+                </div>
+
+                {/* Identification Number */}
+                <div>
+                  <label className="block text-sm mb-2">
+                    Business Registration / Identification Number*
+                  </label>
+                  <input
+                    type="text"
+                    name="identificationNumber"
+                    value={formData.identificationNumber}
+                    onChange={handleInputChange}
+                    placeholder="Enter registration number or tax ID"
+                    className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                  />
+                </div>
+
+                {/* Registration Date */}
+                <div>
+                  <label className="block text-sm mb-2">Registration Date*</label>
+                  <input
+                    type="date"
+                    name="registrationDate"
+                    value={formData.registrationDate}
+                    onChange={handleInputChange}
+                    className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                  />
+                </div>
+
+
+                {/* Business Type */}
+                <div>
+                  <label className="block text-sm mb-2">Business Type*</label>
+                  <CustomSelect
+                    options={businessTypeOptions}
+                    value={formData.businessType}
+                    onChange={(value) =>
+                      setFormData(prev => ({
+                        ...prev,
+                        businessType: value
+                      }))
+                    }
+                    placeholder="Select business type"
+                  />
+                </div>
+
+                {/* Address */}
+                <div className="space-y-4 pt-2">
+                  <h4 className="text-sm font-medium text-gray-900">Address</h4>
+
                   <div>
-                    <label className="block text-sm mb-2">City*</label>
+                    <label className="block text-sm mb-2">Street Address*</label>
                     <input
                       type="text"
-                      name="city"
-                      value={formData.address.city}
+                      name="street"
+                      value={formData.address.street}
                       onChange={handleAddressChange}
-                      placeholder="Enter city"
+                      placeholder="Enter street address"
                       className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm mb-2">Country*</label>
-                    <CustomSelect
-                      options={countries}
-                      value={formData.address.country}
-                      onChange={(value) =>
-                        setFormData(prev => ({
-                          ...prev,
-                          address: {
-                            ...prev.address,
-                            country: value,
-                            state: ""
-                          }
-                        }))
-                      }
-                      placeholder="Select country"
-                    />
-                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm mb-2">City*</label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.address.city}
+                        onChange={handleAddressChange}
+                        placeholder="Enter city"
+                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                      />
+                    </div>
 
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-                  <div>
-                    <label className="block text-sm mb-2">State/Province*</label>
-                    {states.length > 0 ? (
+                    <div>
+                      <label className="block text-sm mb-2">Country*</label>
                       <CustomSelect
-                        options={states}
-                        value={formData.address.state}
+                        options={countries}
+                        value={formData.address.country}
                         onChange={(value) =>
                           setFormData(prev => ({
                             ...prev,
                             address: {
                               ...prev.address,
-                              state: value
+                              country: value,
+                              state: ""
                             }
                           }))
                         }
-                        placeholder={loadingStates ? "Loading..." : "Select state"}
+                        placeholder="Select country"
                       />
-                    ) : (
-                      <input
-                        type="text"
-                        name="state"
-                        value={formData.address.state}
-                        onChange={handleAddressChange}
-                        placeholder="Enter state or province"
-                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                      />
-                    )}
+                    </div>
+
                   </div>
 
-                  <div>
-                    <label className="block text-sm mb-2">Postal Code*</label>
-                    <input
-                      type="text"
-                      name="postalCode"
-                      value={formData.address.postalCode}
-                      onChange={handleAddressChange}
-                      placeholder="Enter postal code"
-                      className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    <div>
+                      <label className="block text-sm mb-2">State/Province*</label>
+                      {states.length > 0 ? (
+                        <CustomSelect
+                          options={states}
+                          value={formData.address.state}
+                          onChange={(value) =>
+                            setFormData(prev => ({
+                              ...prev,
+                              address: {
+                                ...prev.address,
+                                state: value
+                              }
+                            }))
+                          }
+                          placeholder={loadingStates ? "Loading..." : "Select state"}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          name="state"
+                          value={formData.address.state}
+                          onChange={handleAddressChange}
+                          placeholder="Enter state or province"
+                          className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                        />
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm mb-2">Postal Code*</label>
+                      <input
+                        type="text"
+                        name="postalCode"
+                        value={formData.address.postalCode}
+                        onChange={handleAddressChange}
+                        placeholder="Enter postal code"
+                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </>
+              </>
+            )
           )}
 
           {/* ===== STEP 2: DOCUMENT UPLOAD ===== */}
           {currentStep === 2 && (
-            <>
-              <h3 className="text-lg font-semibold text-gray-900">
-                Document Upload
-              </h3>
+            documentsCompleted ? (
 
-              <div>
-                <label className="block text-sm mb-2">
-                  Business Registration Document*
-                </label>
-                <label className="border border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-black transition cursor-pointer">
-                  <div className="flex flex-col">
-                    <span className="text-sm text-gray-500">
-                      {proofOfIdentityFile ? "Selected file" : "Upload business registration certificate or incorporation documents"}
-                    </span>
-                    {proofOfIdentityFile && (
-                      <span className="text-sm font-medium text-gray-900 mt-1 truncate max-w-[250px]">
-                        {proofOfIdentityFile.name}
-                      </span>
-                    )}
-                  </div>
-                  <span className="px-4 py-2 rounded-full bg-black text-white text-sm hover:bg-gray-800 transition">
-                    {proofOfIdentityFile ? "Replace" : "Upload"}
-                  </span>
-                  <input
-                    type="file"
-                    onChange={(e) => handleFileChange(e, "identity")}
-                    className="hidden"
-                  />
-                </label>
-              </div>
+              <div className="space-y-4" >
+                <div className="border border-green-200 bg-green-50 rounded-xl p-4">
+                  <p className="text-green-700 font-medium">
+                    ✅ Business Registration Document Submitted
+                  </p>
+                </div>
 
-              <div>
-                <label className="block text-sm mb-2">
-                  Proof of Address*
-                </label>
-                <label className="border border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-black transition cursor-pointer">
-                  <div className="flex flex-col">
-                    <span className="text-sm text-gray-500">
-                      {proofOfAddressFile ? "Selected file" : "Upload utility bill or bank statement (last 3 months)"}
-                    </span>
-                    {proofOfAddressFile && (
-                      <span className="text-sm font-medium text-gray-900 mt-1 truncate max-w-[250px]">
-                        {proofOfAddressFile.name}
-                      </span>
-                    )}
-                  </div>
-                  <span className="px-4 py-2 rounded-full bg-black text-white text-sm hover:bg-gray-800 transition">
-                    {proofOfAddressFile ? "Replace" : "Upload"}
-                  </span>
-                  <input
-                    type="file"
-                    onChange={(e) => handleFileChange(e, "address")}
-                    className="hidden"
-                  />
-                </label>
+                <div className="border border-green-200 bg-green-50 rounded-xl p-4">
+                  <p className="text-green-700 font-medium">
+                    ✅ Proof of Address Submitted
+                  </p>
+                </div>
+
+                <p className="text-sm text-gray-500">
+                  Your documents have been successfully uploaded.
+                </p>
+
               </div>
-            </>
+            ) : (
+              <>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Document Upload
+                </h3>
+
+                <div>
+                  <label className="block text-sm mb-2">
+                    Business Registration Document*
+                  </label>
+                  <label className="border border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-black transition cursor-pointer">
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-500">
+                        {proofOfIdentityFile ? "Selected file" : "Upload business registration certificate or incorporation documents"}
+                      </span>
+                      {proofOfIdentityFile && (
+                        <span className="text-sm font-medium text-gray-900 mt-1 truncate max-w-[250px]">
+                          {proofOfIdentityFile.name}
+                        </span>
+                      )}
+                    </div>
+                    <span className="px-4 py-2 rounded-full bg-black text-white text-sm hover:bg-gray-800 transition">
+                      {proofOfIdentityFile ? "Replace" : "Upload"}
+                    </span>
+                    <input
+                      type="file"
+                      onChange={(e) => handleFileChange(e, "identity")}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+
+                <div>
+                  <label className="block text-sm mb-2">
+                    Proof of Address*
+                  </label>
+                  <label className="border border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-black transition cursor-pointer">
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-500">
+                        {proofOfAddressFile ? "Selected file" : "Upload utility bill or bank statement (last 3 months)"}
+                      </span>
+                      {proofOfAddressFile && (
+                        <span className="text-sm font-medium text-gray-900 mt-1 truncate max-w-[250px]">
+                          {proofOfAddressFile.name}
+                        </span>
+                      )}
+                    </div>
+                    <span className="px-4 py-2 rounded-full bg-black text-white text-sm hover:bg-gray-800 transition">
+                      {proofOfAddressFile ? "Replace" : "Upload"}
+                    </span>
+                    <input
+                      type="file"
+                      onChange={(e) => handleFileChange(e, "address")}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              </>
+            )
           )}
 
           {/* ===== STEP 3: UBO INFORMATION ===== */}
@@ -1489,6 +1587,6 @@ export default function KycVerificationForm() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
