@@ -34,7 +34,7 @@ const complianceData = [
       { name: "RBI's PA-CB*" },
       { name: "FEMA" },
       { name: "DORA" },
-      { name: "DPDP", logo: "/icons/dpdp.svg" },
+      { name: "DPDP", logo: "/icons/DPDP.svg" },
       { name: "MiCA-ready", logo: "/icons/MiCA-ready.svg" },
       { name: "CFT" },
     ],
