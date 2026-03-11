@@ -35,7 +35,7 @@ const complianceData = [
       { name: "FEMA" },
       { name: "DORA" },
       { name: "DPDP", logo: "/icons/DPDP.svg" },
-      { name: "MiCA-ready", logo: "/icons/MiCA-ready.svg" },
+      { name: "MiCA-ready*", logo: "/icons/MiCA-ready.svg" },
       { name: "CFT" },
     ],
   },
