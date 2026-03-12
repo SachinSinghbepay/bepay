@@ -256,7 +256,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
 
             const res = await igpsService.getBanks(country);
 
-            if (res.success && Array.isArray(res.data)) {
+            if (res.success && Array.isArray(res.data) && res.data.length > 0) {
                 const formatted = res.data.map(b => ({
                     label: b.name,
                     value: b.id
@@ -264,6 +264,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                 setBanks(formatted);
             } else {
                 setBanks([]);
+                setBankDropdownOpen(false); 
             }
 
             setLoadingBanks(false);
@@ -487,41 +488,52 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                                 <div className="space-y-2 relative">
                                     <label className="text-sm text-[#6A6A6A]">Bank</label>
 
-                                    <input
-                                        value={bankSearch}
-                                        onChange={(e) => {
-                                            setBankSearch(e.target.value);
-                                            setBankDropdownOpen(true);
-                                        }}
-                                        onFocus={() => setBankDropdownOpen(true)}
-                                        placeholder="Search bank"
-                                        className="w-full mt-2 h-12 rounded-xl border px-4 outline-none focus:border-black"
-                                    />
+                                    {banks.length > 0 ? (
+                                        <>
+                                            <input
+                                                value={bankSearch}
+                                                onChange={(e) => {
+                                                    setBankSearch(e.target.value);
+                                                    setBankDropdownOpen(true);
+                                                }}
+                                                onFocus={() => setBankDropdownOpen(true)}
+                                                placeholder="Search bank"
+                                                className="w-full mt-2 h-12 rounded-xl border px-4 outline-none focus:border-black"
+                                            />
 
-                                    {bankDropdownOpen && (
-                                        <div className="absolute top-full left-0 w-full bg-white border rounded-xl shadow-lg max-h-[250px] overflow-y-auto z-50 mt-2">
-                                            {loadingBanks ? (
-                                                <div className="p-3 text-sm text-gray-500">Loading banks...</div>
-                                            ) : filteredBanks.length > 0 ? (
-                                                filteredBanks.map((bank) => (
-                                                    <div
-                                                        key={bank.value}
-                                                        className="px-4 py-3 hover:bg-gray-100 cursor-pointer text-sm"
-                                                        onClick={() => {
-                                                            setBankId(bank.value);
-                                                            setBankSearch(bank.label);
-                                                            setBankDropdownOpen(false);
-                                                        }}
-                                                    >
-                                                        {bank.label}
-                                                    </div>
-                                                ))
-                                            ) : (
-                                                <div className="p-3 text-sm text-gray-500">
-                                                    No banks found
+                                            {bankDropdownOpen && (
+                                                <div className="absolute top-full left-0 w-full bg-white border rounded-xl shadow-lg max-h-[250px] overflow-y-auto z-50 mt-2">
+                                                    {loadingBanks ? (
+                                                        <div className="p-3 text-sm text-gray-500">Loading banks...</div>
+                                                    ) : filteredBanks.length > 0 ? (
+                                                        filteredBanks.map((bank) => (
+                                                            <div
+                                                                key={bank.value}
+                                                                className="px-4 py-3 hover:bg-gray-100 cursor-pointer text-sm"
+                                                                onClick={() => {
+                                                                    setBankId(bank.value);
+                                                                    setBankSearch(bank.label);
+                                                                    setBankDropdownOpen(false);
+                                                                }}
+                                                            >
+                                                                {bank.label}
+                                                            </div>
+                                                        ))
+                                                    ) : (
+                                                        <div className="p-3 text-sm text-gray-500">
+                                                            No banks found
+                                                        </div>
+                                                    )}
                                                 </div>
                                             )}
-                                        </div>
+                                        </>
+                                    ) : (
+                                        <input
+                                            placeholder="Enter bank name"
+                                            value={bankSearch}
+                                            onChange={(e) => setBankSearch(e.target.value)}
+                                            className="w-full mt-2 h-12 rounded-xl border px-4 outline-none focus:border-black"
+                                        />
                                     )}
                                 </div>
 

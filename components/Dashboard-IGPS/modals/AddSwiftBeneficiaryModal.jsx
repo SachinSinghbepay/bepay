@@ -171,7 +171,7 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
             country &&
             addressLine1 &&
             city &&
-            state &&
+            selectedState &&
             zip &&
             accountNumber;
 

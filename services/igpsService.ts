@@ -57,27 +57,25 @@ export class IgpsService {
   setTokens(accessToken: string, refreshToken: string) {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
+
+    // Persist copies for localStorage fallback used by AuthContext
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(IgpsService.ACCESS_TOKEN_KEY, accessToken);
+        localStorage.setItem(IgpsService.REFRESH_TOKEN_KEY, refreshToken);
+      } catch (e) {
+        console.warn("Failed to persist tokens to localStorage", e);
+      }
+    }
   }
 
   getTokens() {
     return { accessToken: this.accessToken, refreshToken: this.refreshToken };
   }
 
-  private isRefreshing = false;
-  private refreshSubscribers: ((token: string) => void)[] = [];
-
   // Token storage keys for localStorage fallback
   private static ACCESS_TOKEN_KEY = "igps_access_token";
   private static REFRESH_TOKEN_KEY = "igps_refresh_token";
-
-  private onRefreshed(token: string) {
-    this.refreshSubscribers.forEach((cb) => cb(token));
-    this.refreshSubscribers = [];
-  }
-
-  private addRefreshSubscriber(cb: (token: string) => void) {
-    this.refreshSubscribers.push(cb);
-  }
 
   private async request<T>(
     method: string,
@@ -104,72 +102,6 @@ export class IgpsService {
 
     try {
       let response = await fetch(url, options);
-
-      // Handle 401 Unauthorized (Token Expiry)
-      if (response.status === 401 && !isPublic && this.refreshToken) {
-        if (this.isRefreshing) {
-          // If already refreshing, wait for it to finish
-          return new Promise((resolve) => {
-            this.addRefreshSubscriber(async (token) => {
-              // Retry original request with new token
-              options.headers = {
-                ...options.headers,
-                Authorization: `Bearer ${token}`,
-              };
-              const retryResponse = await fetch(url, options);
-              const retryData = await retryResponse.json();
-              resolve({
-                success: true, // Assuming retry succeeds or we handle it standard way
-                data: retryData.data || retryData,
-                message: retryData.message,
-              });
-            });
-          });
-        }
-
-        this.isRefreshing = true;
-
-        try {
-          const refreshRes = await this.refreshTokenCall({
-            refreshToken: this.refreshToken,
-          });
-
-          if (refreshRes.success && refreshRes.data?.tokens?.accessToken) {
-            const newAccessToken = refreshRes.data.tokens.accessToken;
-            const newRefreshToken = refreshRes.data.tokens.refreshToken;
-
-            this.setTokens(newAccessToken, newRefreshToken);
-
-            // Update cookies if client-side
-            if (typeof window !== "undefined") {
-              document.cookie = `igps_token=${newAccessToken}; path=/; max-age=86400`; // 1 day
-              document.cookie = `igps_refresh=${newRefreshToken}; path=/; max-age=604800`; // 7 days
-            }
-
-            this.isRefreshing = false;
-            this.onRefreshed(newAccessToken);
-
-            // Retry original request
-            options.headers = {
-              ...options.headers,
-              Authorization: `Bearer ${newAccessToken}`,
-            };
-            response = await fetch(url, options);
-          } else {
-            throw new Error("Refresh failed");
-          }
-        } catch (refreshErr) {
-          this.isRefreshing = false;
-          // Clear session
-          this.setTokens("", "");
-          IgpsService.clearAllCaches();
-
-          if (typeof window !== "undefined") {
-            window.location.href = "/igps/login";
-          }
-          throw new Error("Session expired. Please login again.");
-        }
-      }
 
       const data = await response.json();
 
@@ -279,10 +211,16 @@ export class IgpsService {
     }
   }
 
-  async logout(refreshToken: string): Promise<ApiResponse<any>> {
+  async logout(refreshToken?: string): Promise<ApiResponse<any>> {
+    const token = refreshToken || this.refreshToken || "";
     IgpsService.clearAllCaches();
     this.setTokens("", "");
-    return this.request<any>("POST", "/auth/logout", { refreshToken }, true);
+    return this.request<any>(
+      "POST",
+      "/auth/logout",
+      { refreshToken: token },
+      true,
+    );
   }
 
   async logoutAll(): Promise<ApiResponse<any>> {

@@ -25,7 +25,7 @@ export default function ProfileMenu({ onProfile }) {
         <div className="relative" ref={ref}>
 
             {/* TRIGGER WRAPPER (NOT CLICKABLE) */}
-            <div className="flex justify-around items-center bg-[#EBEBEB]  py-2 rounded-2xl shadow-sm w-[170px] md:w-[342px]">
+            <div className="flex justify-around items-center bg-[#EBEBEB] px-2  py-2 rounded-2xl shadow-sm">
 
                 {/* LEFT GROUP */}
                 <div className="flex items-center gap-3">
@@ -49,7 +49,7 @@ export default function ProfileMenu({ onProfile }) {
                 {/* DROPDOWN BUTTON (ONLY THIS OPENS MENU) */}
                 <button
                     onClick={() => setOpen((v) => !v)}
-                    className="ml-3 flex h-8 w-8 items-center justify-center rounded-lg cursor-pointer hover:bg-gray-200 transition"
+                    className="ml-3 mr-2 flex h-8 w-8 items-center justify-center rounded-lg cursor-pointer hover:bg-gray-200 transition"
                     aria-label="Open profile menu"
                 >
                     <svg
