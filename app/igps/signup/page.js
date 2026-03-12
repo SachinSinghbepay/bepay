@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { IgpsService } from "@/services/igpsService";
 import CreateAccountLayout from "../onboarding/Layout";
@@ -14,6 +14,14 @@ import { jwtDecode } from "jwt-decode";
 const igpsService = new IgpsService();
 
 export default function IgpsSignupPage() {
+  return (
+    <Suspense fallback={<div></div>}>
+      <IgpsSignupPageContent />
+    </Suspense>
+  );
+}
+
+function IgpsSignupPageContent() {
   const router = useRouter();
   const params = useSearchParams();
   const token = params.get("token");
