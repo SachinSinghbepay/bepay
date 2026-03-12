@@ -23,6 +23,29 @@ export default function DepositAddressModal({
   //   networkLogo: "/icons/polygon.png"
   // });
 
+
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const onWheel = (e) => {
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      const atTop = scrollTop === 0;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+        e.preventDefault();
+      } else {
+        e.stopPropagation();
+      }
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
+
+
   const address =
     propAddress ||
     "0xde2b741dujf4839hf4394f48735tyw98dnvcrveb75c3ee52493";
@@ -91,7 +114,9 @@ export default function DepositAddressModal({
       </div>
 
       {/* CONTENT */}
-      <div className="flex flex-col items-center px-8 py-8 space-y-6">
+      <div
+        ref={scrollRef}
+        className="flex flex-col items-center px-8 py-8 space-y-6  max-h-[70vh] overflow-y-auto">
         {/* NETWORK PILL */}
         <div className="flex items-center gap-2 bg-gray-100 rounded-full px-4 py-2 text-[16px] font-medium">
           <Image

@@ -54,7 +54,7 @@ export default function DepositSelectModal({
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
 
-
+ 
   return (
     <ModalFrame size="md">
       {/* HEADER */}
@@ -184,9 +184,9 @@ function OtherTokensRow() {
 
         <div className="relative h-10 w-10">
           <Image src="/icons/eth.svg" alt="" width={24} height={24} className="h-6 w-6 rounded-full absolute top-0 left-0" />
-          <Image src="/icons/solana.svg" alt="" width={24} height={24} className="h-6 w-6 rounded-full absolute top-0 right-0" />
-          <Image src="/icons/usdt.svg" alt="" width={24} height={24} className="h-6 w-6 rounded-full absolute bottom-0 left-0" />
-          <Image src="/icons/polygon.png" alt="" width={24} height={24} className="h-6 w-6 rounded-full absolute bottom-0 right-0" />
+          <Image src="/icons/Solana.svg" alt="" width={24} height={24} className="h-6 w-6 rounded-full absolute top-0 right-0" />
+          <Image src="/icons/USDT.svg" alt="" width={24} height={24} className="h-6 w-6 rounded-full absolute bottom-0 left-0" />
+          <Image src="/icons/Polygon.png" alt="" width={24} height={24} className="h-6 w-6 rounded-full absolute bottom-0 right-0" />
         </div>
         <div>
           <p className="font-medium text-gray-800">

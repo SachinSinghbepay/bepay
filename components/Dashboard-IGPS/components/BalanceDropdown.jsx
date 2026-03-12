@@ -28,18 +28,18 @@ export default function BalanceDropdown({ wallets = [], onClose }) {
     // Helper to get icons
     const getTokenIcon = (currency) => {
         const c = currency?.toLowerCase();
-        if (c === 'usdc') return "/icons/usdc.svg";
-        if (c === 'usdt') return "/icons/usdt.svg";
-        return "/icons/usdc.svg"; // default
+        if (c === 'usdc') return "/icons/USDC.svg";
+        if (c === 'usdt') return "/icons/USDT.svg";
+        return "/icons/USDC.svg"; // default
     }
 
     const getChainIcon = (chain) => {
         const c = chain?.toLowerCase();
-        if (c === 'polygon') return "/icons/polygon.png";
-        if (c === 'solana') return "/icons/solana.svg";
-        if (c === 'tron') return "/icons/tron.svg";
-        if (c === 'ethereum') return "/icons/ethereum.png";
-        return "/icons/polygon.png";
+        if (c === 'polygon') return "/icons/Polygon.png";
+        if (c === 'solana') return "/icons/Solana.svg";
+        if (c === 'tron') return "/icons/TRON.svg";
+        if (c === 'ethereum') return "/icons/eth.SVg";
+        return "/icons/Polygon.png";
     }
 
     return (

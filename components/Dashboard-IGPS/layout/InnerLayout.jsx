@@ -462,6 +462,7 @@ export default function InnerLayout() {
           {modal === "add-new-member" && (
             <AddTeamMemberModal
               onClose={closeModal}
+              refresh={modalProps?.refresh}
               onSubmit={(data) =>
                 openModal("invite-success", {
                   type: "success",
