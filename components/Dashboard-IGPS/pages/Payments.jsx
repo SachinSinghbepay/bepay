@@ -265,7 +265,14 @@ export default function Payments({ onOpenModal }) {
                   </div>
 
                   <div>
-                    <button className="underline font-semibold text-gray-800">
+                    <button
+                      onClick={() =>
+                        onOpenModal("payment-details", {
+                          order
+                        })
+                      }
+                      className="underline font-semibold text-gray-800"
+                    >
                       View details
                     </button>
                   </div>

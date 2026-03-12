@@ -2,12 +2,13 @@
 
 import { Copy } from "lucide-react";
 import Image from "next/image";
-
+import { useState } from "react";
 export default function Invite({ onOpenModal }) {
   const referralLink = "https://bepay.igps/referrals/4F8CG7";
-
+  const [copied, setCopied] = useState(false);
   const handleCopy = async () => {
     await navigator.clipboard.writeText(referralLink);
+
   };
 
   return (
@@ -68,19 +69,30 @@ export default function Invite({ onOpenModal }) {
             />
 
             <button
-              onClick={handleCopy}
+              onClick={() => {
+                handleCopy();
+                setCopied(true);
+
+                setTimeout(() => {
+                  setCopied(false);
+                }, 3000);
+              }}
               className="absolute right-1 top-1/2 -translate-y-1/2 p-2 rounded-lg hover:bg-gray-100"
             >
               <Image
                 src="/icons/copy.svg"
                 alt=""
-                width={20}
-                height={20}
+                width={26}
+                height={26}
               />
             </button>
           </div>
         </div>
-
+        {copied && (
+          <p className="text-green-600 text-sm mt-1 font-medium">
+            ✔ Invite link copied
+          </p>
+        )}
         {/* Invite Button */}
         <button
           onClick={() => onOpenModal("invite-friends")}
@@ -89,6 +101,6 @@ export default function Invite({ onOpenModal }) {
         </button>
 
       </div>
-    </div>
+    </div >
   );
 }

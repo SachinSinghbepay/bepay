@@ -12,7 +12,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
   const [totalBalance, setTotalBalance] = useState(0);
   const [activeFilter, setActiveFilter] = useState("All");
   const [kycDone, setKycDone] = useState(null);
-
+  const { kycStatus } = useAuth();
   // Function to check KYC completion status
   const checkKYCCompletion = (remainingSteps) => {
     const kycRequiredSteps = ["sender_details_submitted", "documents_uploaded", "ubo_submitted"];
@@ -124,7 +124,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-4 space-y-6 lg:space-y-8 overflow-x-hidden">
-      {kycDone === false && (
+  {kycStatus === "incomplete" && (
         <div className="w-full bg-[#E7DED1] rounded-[40px] px-6 py-8 flex flex-col  items-start justify-between gap-3">
 
           {/* LEFT SIDE */}

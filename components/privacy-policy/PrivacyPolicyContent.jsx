@@ -20,7 +20,7 @@ export default function PrivacyPolicyContent() {
             This Privacy Policy explains how we collect, store, use, and protect
             user data while ensuring compliance with global data protection
             regulations, including various act.
-          </p>
+          </p> 
           <p>
             We value user trust and are dedicated to safeguarding your personal
             data against unauthorized access, misuse, or disclosure. Our
