@@ -509,26 +509,63 @@ export function AuthProvider({ children }) {
     // ─── Checking the KYC Status  ──────────────────────────
 
     useEffect(() => {
+
+        if (!user) return;
+
         const fetchKYC = async () => {
-            if (!user) return;
+
+            // 1️⃣ Load cached value first (instant UI)
+            const cached = localStorage.getItem("kyc_status");
+
+            if (cached) {
+                try {
+                    const parsed = JSON.parse(cached);
+                    setKycStatus(parsed.value);
+                } catch { }
+            }
 
             try {
-                const res = await igpsService.getKYCStatus();
-                if (res.success) {
-                    const remaining = res.data.remainingSteps || [];
-                    const required = ["sender_details_submitted", "documents_uploaded", "ubo_submitted"];
-                    const needsKyc = required.some(step => remaining.includes(step));
 
-                    setKycStatus(needsKyc ? "incomplete" : "complete");
+                const res = await igpsService.getKYCStatus();
+
+                if (res.success) {
+
+                    const remaining = res.data.remainingSteps || [];
+                    const required = [
+                        "sender_details_submitted",
+                        "documents_uploaded",
+                        "ubo_submitted"
+                    ];
+
+                    const needsKyc = required.some(step =>
+                        remaining.includes(step)
+                    );
+
+                    const newStatus = needsKyc ? "incomplete" : "complete";
+
+                    setKycStatus(newStatus);
+
+                    // 2️⃣ Update cache
+                    localStorage.setItem(
+                        "kyc_status",
+                        JSON.stringify({
+                            value: newStatus,
+                            ts: Date.now()
+                        })
+                    );
+
                 } else {
                     setKycStatus("incomplete");
                 }
+
             } catch {
                 setKycStatus("incomplete");
             }
+
         };
 
         fetchKYC();
+
     }, [user]);
 
     return (

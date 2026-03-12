@@ -1,20 +1,49 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { IgpsService } from "@/services/igpsService";
 import CreateAccountLayout from "../onboarding/Layout";
 import StepEmail from "../onboarding/StepEmail";
 import StepVerifyCode from "../onboarding/StepVerifyCode";
 import StepPersonalDetails from "../onboarding/StepPersonalDetails";
+import { useSearchParams } from "next/navigation";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const igpsService = new IgpsService();
 
 export default function IgpsSignupPage() {
   const router = useRouter();
-  const [step, setStep] = useState(1);
+  const params = useSearchParams();
+  const token = params.get("token");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const email = params.get("email");
+  const name = params.get("name");
+
+  const isGoogleSignup = params.get("google") === "1";
+  const [step, setStep] = useState(1);
+
+  useEffect(() => {
+    if (isGoogleSignup) {
+      setStep(3);
+    }
+  }, [isGoogleSignup]);
+  useEffect(() => {
+    if (!isGoogleSignup) return;
+
+    const fullName = name || "";
+    const parts = fullName.split(" ");
+
+    setFormData((prev) => ({
+      ...prev,
+      email: email || "",
+      firstName: parts[0] || "",
+      lastName: parts.slice(1).join(" ") || "",
+      signupToken: token || "", // IMPORTANT
+    }));
+  }, [email, name, token, isGoogleSignup]);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -134,6 +163,78 @@ export default function IgpsSignupPage() {
     }
   };
 
+  // ================= Google Auth =================
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const { credential: idToken } = credentialResponse;
+      const decoded = jwtDecode(idToken);
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/igps/auth/google`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idToken: idToken,
+            email: decoded.email,
+            googleId: decoded.sub,
+            name: decoded.name || null,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Authentication failed");
+      }
+
+      console.log("Google signup response:", data);
+
+      /*
+      Possible responses:
+      1️⃣ requiresTwoFactor
+      2️⃣ existing user
+      3️⃣ new user (signupToken)
+    */
+
+      if (data.data.requiresTwoFactor) {
+        const { userId, email, twoFactorToken } = data.data;
+        router.push(
+          `/igps/login?twofactor=1&userId=${encodeURIComponent(userId)}&email=${encodeURIComponent(email)}&token=${encodeURIComponent(twoFactorToken)}`,
+        );
+        return;
+      }
+
+      if (data.data.signupToken) {
+        // NEW GOOGLE USER
+        const { signupToken } = data.data;
+        router.push(
+          `/igps/signup?google=1&email=${encodeURIComponent(decoded.email)}&name=${encodeURIComponent(decoded.name)}&token=${encodeURIComponent(signupToken)}`,
+        );
+        return;
+      }
+
+      if (data.data.tokens) {
+        // EXISTING USER
+        const { accessToken, refreshToken } = data.data.tokens;
+
+        document.cookie = `igps_token=${accessToken}; path=/; max-age=86400; SameSite=Strict`;
+        document.cookie = `igps_refresh=${refreshToken}; path=/; max-age=86400; SameSite=Strict`;
+
+        igpsService.setTokens(accessToken, refreshToken);
+
+        router.push("/igps/dashboard");
+      }
+    } catch (err) {
+      console.error("Google signup error:", err);
+      setError(err.message);
+    }
+  };
+
   const renderStep = () => {
     switch (step) {
       case 1:
@@ -142,6 +243,7 @@ export default function IgpsSignupPage() {
             data={formData}
             setData={setFormData}
             onNext={handleEmailNext}
+            onGoogleSuccess={handleGoogleSuccess}
           />
         );
       case 2:
@@ -151,7 +253,7 @@ export default function IgpsSignupPage() {
             setData={setFormData}
             onNext={handleCodeNext}
             onBack={() => setStep(1)}
-              onResend={handleResend}
+            onResend={handleResend}
           />
         );
       case 3:

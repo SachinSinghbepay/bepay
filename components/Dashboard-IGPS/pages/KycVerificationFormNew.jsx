@@ -18,6 +18,10 @@ export default function KycVerificationForm() {
   const [success, setSuccess] = useState("");
   const [emailError, setEmailError] = useState("");
   const [uboEmailError, setUboEmailError] = useState("");
+  const [senderProfile, setSenderProfile] = useState(null);
+  const [senderCompleted, setSenderCompleted] = useState(false);
+  const [uboCompleted, setUboCompleted] = useState(false);
+  const [uboProfile, setUboProfile] = useState(null);
 
   // ✅ Initialize service instance when component mounts (AFTER cookies are available)
   useEffect(() => {
@@ -51,59 +55,73 @@ export default function KycVerificationForm() {
 
     const loadKYCProgress = async () => {
       try {
-        const response = await igpsService.getKYCStatus();
 
-        if (response.success && response.data) {
-          const { senderId, remainingSteps, completedSteps } = response.data;
+        const [kycRes, senderRes] = await Promise.all([
+          igpsService.getKYCStatus(),
+          igpsService.getSenderProfile()
+        ]);
 
-          // Set senderId if available
+        if (kycRes.success && kycRes.data) {
+
+          const { senderId, remainingSteps, completedSteps } = kycRes.data;
+
           if (senderId) {
             setSenderId(senderId);
           }
 
-          // Determine which step to show based on remainingSteps
+          setUboCompleted(completedSteps?.includes("ubo_submitted"));
+
+
           let nextStep = 1;
+
           if (remainingSteps.includes("sender_details_submitted")) {
             nextStep = 1;
-          } else if (remainingSteps.includes("documents_uploaded")) {
+          }
+          else if (remainingSteps.includes("documents_uploaded")) {
             nextStep = 2;
-          } else if (remainingSteps.includes("ubo_submitted")) {
+          }
+          else if (remainingSteps.includes("ubo_submitted")) {
             nextStep = 3;
-          } else if (remainingSteps.length === 1 && remainingSteps.includes("verification_submitted")) {
-            // All KYC steps complete, only verification remains
-            console.log("✅ All KYC steps completed! KYC submission done.");
-            // Show KYC completion message and redirect
+          }
+          else if (
+            remainingSteps.length === 1 &&
+            remainingSteps.includes("verification_submitted")
+          ) {
             showKYCCompletedMessage();
             return;
           }
 
-          setCurrentStep(nextStep);
-
-          // Try to restore form data from localStorage if available
-          if (typeof window !== "undefined") {
-            const saved = localStorage.getItem("kyc_verification_progress");
-            if (saved) {
-              try {
-                const parsedData = JSON.parse(saved);
-                if (parsedData.formData) {
-                  setFormData(parsedData.formData);
-                }
-              } catch (err) {
-                console.error("Failed to restore form data", err);
-              }
-            }
+          if (!remainingSteps.includes("documents_uploaded")) {
+            setDocumentsCompleted(true);
           }
 
-          console.log("KYC Status Loaded:", {
-            senderId,
-            nextStep,
-            remainingSteps,
-            completedSteps,
-          });
+          setCurrentStep(nextStep);
         }
+
+        // sender profile
+        if (senderRes.success && senderRes.data) {
+          setSenderProfile(senderRes.data);
+          setSenderCompleted(true);
+
+        }
+
+        // restore local storage
+        if (typeof window !== "undefined") {
+          const saved = localStorage.getItem("kyc_verification_progress");
+          if (saved) {
+            try {
+              const parsedData = JSON.parse(saved);
+              if (parsedData.formData) {
+                setFormData(parsedData.formData);
+              }
+            } catch (err) {
+              console.error("Failed to restore form data", err);
+            }
+          }
+        }
+
       } catch (err) {
         console.error("Failed to load KYC status:", err);
-        // Continue with default step 1 if API fails
       }
     };
 
@@ -174,7 +192,9 @@ export default function KycVerificationForm() {
   const uboPhoneCodeRef = useRef(null);
   const uboPhoneCodeScrollRef = useRef(null);
 
+
   // Step 2: File Upload States
+  const [documentsCompleted, setDocumentsCompleted] = useState(false);
   const [proofOfIdentityFile, setProofOfIdentityFile] = useState(null);
   const [proofOfAddressFile, setProofOfAddressFile] = useState(null);
   const [proofOfIdentityBase64, setProofOfIdentityBase64] = useState(null);
@@ -547,6 +567,19 @@ export default function KycVerificationForm() {
         const newSenderId = response.data.id;
         setSenderId(newSenderId);
         setSuccess("Sender details submitted successfully!");
+        // ✅ mark step1 completed immediately
+        setSenderCompleted(true);
+
+        // ✅ store data so UI can show summary
+        setSenderProfile({
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: fullPhone,
+          addressStreet: formData.address.street,
+          addressCity: formData.address.city,
+          addressCountry: formData.address.country,
+          registrationNumber: formData.identificationNumber
+        });
         saveProgress(2, formData, newSenderId);
         setCurrentStep(2);
         setError("");
@@ -665,6 +698,22 @@ export default function KycVerificationForm() {
       const response = await igpsService.createUBO(senderId, uboPayload);
 
       if (response.success) {
+        setUboCompleted(true);
+
+        setUboProfile({
+          firstName: formData.ubo.firstName,
+          lastName: formData.ubo.lastName,
+          email: formData.ubo.email,
+          phone: fullUboPhone,
+          ownershipPercent: formData.ubo.ownershipPercent,
+          birthDate: formData.ubo.birthDate,
+          addressStreet: formData.ubo.address.street,
+          addressCity: formData.ubo.address.city,
+          addressCountry: formData.ubo.address.country,
+          documentType: formData.ubo.identity.documentType,
+          documentNumber: formData.ubo.identity.documentNumber
+        });
+
         setSuccess("Your KYC is completed and under review!");
 
         // Clear progress and redirect
@@ -686,13 +735,32 @@ export default function KycVerificationForm() {
   };
 
   const handleNext = () => {
+
     if (currentStep === 1) {
+      if (senderCompleted) {
+        setCurrentStep(2);
+        return;
+      }
       submitStep1();
-    } else if (currentStep === 2) {
+    }
+
+    else if (currentStep === 2) {
+      if (documentsCompleted) {
+        setCurrentStep(3);
+        return;
+      }
       submitStep2();
-    } else if (currentStep === 3) {
+    }
+
+    else if (currentStep === 3) {
+      if (uboCompleted) {
+        console.log("Step3 clicked", { uboCompleted });
+        router.push("/igps/dashboard");
+        return;
+      }
       submitStep3();
     }
+
   };
 
   const handlePrev = () => {
@@ -752,572 +820,684 @@ export default function KycVerificationForm() {
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 space-y-6">
           {/* ===== STEP 1: SENDER DETAILS ===== */}
           {currentStep === 1 && (
-            <>
-              <h3 className="text-lg font-semibold text-gray-900">
-                Business Information
-              </h3>
 
-              {/* Full Name */}
-              <div>
-                <label className="block text-sm mb-2">Full Name / Company Name*</label>
-                <input
-                  type="text"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
-                    handleInputChange({
-                      target: { name: "fullName", value }
-                    });
-                  }}
-                  placeholder="Enter your full name or company name"
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                />
-              </div>
+            senderCompleted ? (
 
-              {/* Email */}
-              <div>
-                <label className="block text-sm mb-2">Email Address*</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    handleInputChange(e);
+              <div className="space-y-4">
 
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-                    if (value && !emailRegex.test(value)) {
-                      setEmailError("Invalid email format");
-                    } else {
-                      setEmailError("");
-                    }
-                  }}
-                  placeholder="Enter your email"
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                />
-                {emailError && (
-                  <p className="text-red-500 text-sm mt-1">{emailError}</p>
-                )}
-              </div>
-
-              {/* Phone with Code */}
-              <div>
-                <label className="block text-sm mb-2">Phone Number*</label>
-                <div className="flex gap-2">
-                  <div className="relative" ref={phoneCodeRef}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setPhoneCodeOpen((v) => !v);
-                        setPhoneCodeSearch("");
-                      }}
-                      className="h-12 px-3 rounded-xl border border-gray-200 flex items-center gap-1.5 text-sm whitespace-nowrap bg-white hover:bg-gray-50 min-w-[90px]"
-                    >
-                      <span className="text-sm leading-none">
-                        {selectedPhoneOption?.country}
-                      </span>
-                      <span className="text-sm text-gray-500">
-                        {selectedPhoneOption?.dialCode}
-                      </span>
-                      <svg
-                        className="w-3 h-3 text-gray-400 ml-0.5"
-                        viewBox="0 0 10 6"
-                        fill="none"
-                      >
-                        <path
-                          d="M1 1l4 4 4-4"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </button>
-
-                    {phoneCodeOpen && (
-                      <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-xl z-50 flex flex-col">
-                        <div className="p-2 border-b">
-                          <input
-                            autoFocus
-                            value={phoneCodeSearch}
-                            onChange={(e) => setPhoneCodeSearch(e.target.value)}
-                            placeholder="Search country or code..."
-                            className="w-full h-9 rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-black"
-                          />
-                        </div>
-                        <div className="overflow-y-auto max-h-52" ref={phoneCodeScrollRef}>
-                          {filteredPhoneCodes.length > 0 ? (
-                            filteredPhoneCodes.map((opt) => (
-                              <div
-                                key={opt.value}
-                                onClick={() => {
-                                  setPhoneCode(opt.value);
-                                  setPhoneCodeOpen(false);
-                                  setPhoneCodeSearch("");
-                                }}
-                                className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-gray-50 text-sm ${phoneCode === opt.value
-                                  ? "bg-gray-50 font-medium"
-                                  : ""
-                                  }`}
-                              >
-                                <span className="text-base w-6 text-center leading-none">
-                                  {opt.country}
-                                </span>
-                                <span className="text-gray-500 w-12 shrink-0">
-                                  {opt.dialCode}
-                                </span>
-                                <span className="truncate text-gray-700">
-                                  {opt.name}
-                                </span>
-                              </div>
-                            ))
-                          ) : (
-                            <div className="p-3 text-sm text-gray-400 text-center">
-                              No results
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <input
-                    type="tel"
-                    value={phoneNumber}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, "");
-                      setPhoneNumber(value);
-                    }}
-                    maxLength={15}
-                    placeholder="Enter phone number"
-                    className="flex-1 h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition text-sm"
-                  />
+                <div className="border border-green-200 bg-green-50 rounded-xl p-4">
+                  <p className="text-green-700 font-medium">
+                    ✅ Business Information Submitted
+                  </p>
                 </div>
+
+                <div className="space-y-2 text-sm">
+
+                  <p><b>Business Name:</b> {senderProfile?.fullName}</p>
+                  <p><b>Email:</b> {senderProfile?.email}</p>
+                  <p><b>Phone:</b> {senderProfile?.phone}</p>
+
+                  <p>
+                    <b>Address:</b> {senderProfile?.addressStreet}{" "}
+                    {senderProfile?.addressCity}
+                  </p>
+
+                  <p>
+                    <b>Country:</b> {senderProfile?.addressCountry}
+                  </p>
+
+                  <p>
+                    <b>Registration Number:</b> {senderProfile?.registrationNumber}
+                  </p>
+
+                </div>
+
               </div>
 
-              {/* Identification Number */}
-              <div>
-                <label className="block text-sm mb-2">
-                  Business Registration / Identification Number*
-                </label>
-                <input
-                  type="text"
-                  name="identificationNumber"
-                  value={formData.identificationNumber}
-                  onChange={handleInputChange}
-                  placeholder="Enter registration number or tax ID"
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                />
-              </div>
+            ) : (
+              <>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Business Information
+                </h3>
 
-              {/* Registration Date */}
-              <div>
-                <label className="block text-sm mb-2">Registration Date*</label>
-                <input
-                  type="date"
-                  name="registrationDate"
-                  value={formData.registrationDate}
-                  onChange={handleInputChange}
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                />
-              </div>
-
-
-              {/* Business Type */}
-              <div>
-                <label className="block text-sm mb-2">Business Type*</label>
-                <CustomSelect
-                  options={businessTypeOptions}
-                  value={formData.businessType}
-                  onChange={(value) =>
-                    setFormData(prev => ({
-                      ...prev,
-                      businessType: value
-                    }))
-                  }
-                  placeholder="Select business type"
-                />
-              </div>
-
-              {/* Address */}
-              <div className="space-y-4 pt-2">
-                <h4 className="text-sm font-medium text-gray-900">Address</h4>
-
+                {/* Full Name */}
                 <div>
-                  <label className="block text-sm mb-2">Street Address*</label>
+                  <label className="block text-sm mb-2">Full Name / Company Name*</label>
                   <input
                     type="text"
-                    name="street"
-                    value={formData.address.street}
-                    onChange={handleAddressChange}
-                    placeholder="Enter street address"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+                      handleInputChange({
+                        target: { name: "fullName", value }
+                      });
+                    }}
+                    placeholder="Enter your full name or company name"
                     className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm mb-2">City*</label>
-                    <input
-                      type="text"
-                      name="city"
-                      value={formData.address.city}
-                      onChange={handleAddressChange}
-                      placeholder="Enter city"
-                      className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                    />
-                  </div>
+                {/* Email */}
+                <div>
+                  <label className="block text-sm mb-2">Email Address*</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      handleInputChange(e);
 
-                  <div>
-                    <label className="block text-sm mb-2">Country*</label>
-                    <CustomSelect
-                      options={countries}
-                      value={formData.address.country}
-                      onChange={(value) =>
-                        setFormData(prev => ({
-                          ...prev,
-                          address: {
-                            ...prev.address,
-                            country: value,
-                            state: ""
-                          }
-                        }))
+                      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                      if (value && !emailRegex.test(value)) {
+                        setEmailError("Invalid email format");
+                      } else {
+                        setEmailError("");
                       }
-                      placeholder="Select country"
-                    />
-                  </div>
-
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-                  <div>
-                    <label className="block text-sm mb-2">State/Province*</label>
-                    {states.length > 0 ? (
-                      <CustomSelect
-                        options={states}
-                        value={formData.address.state}
-                        onChange={(value) =>
-                          setFormData(prev => ({
-                            ...prev,
-                            address: {
-                              ...prev.address,
-                              state: value
-                            }
-                          }))
-                        }
-                        placeholder={loadingStates ? "Loading..." : "Select state"}
-                      />
-                    ) : (
-                      <input
-                        type="text"
-                        name="state"
-                        value={formData.address.state}
-                        onChange={handleAddressChange}
-                        placeholder="Enter state or province"
-                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                      />
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm mb-2">Postal Code*</label>
-                    <input
-                      type="text"
-                      name="postalCode"
-                      value={formData.address.postalCode}
-                      onChange={handleAddressChange}
-                      placeholder="Enter postal code"
-                      className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                    />
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-
-          {/* ===== STEP 2: DOCUMENT UPLOAD ===== */}
-          {currentStep === 2 && (
-            <>
-              <h3 className="text-lg font-semibold text-gray-900">
-                Document Upload
-              </h3>
-
-              <div>
-                <label className="block text-sm mb-2">
-                  Business Registration Document*
-                </label>
-                <label className="border border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-black transition cursor-pointer">
-                  <div className="flex flex-col">
-                    <span className="text-sm text-gray-500">
-                      {proofOfIdentityFile ? "Selected file" : "Upload business registration certificate or incorporation documents"}
-                    </span>
-                    {proofOfIdentityFile && (
-                      <span className="text-sm font-medium text-gray-900 mt-1 truncate max-w-[250px]">
-                        {proofOfIdentityFile.name}
-                      </span>
-                    )}
-                  </div>
-                  <span className="px-4 py-2 rounded-full bg-black text-white text-sm hover:bg-gray-800 transition">
-                    {proofOfIdentityFile ? "Replace" : "Upload"}
-                  </span>
-                  <input
-                    type="file"
-                    onChange={(e) => handleFileChange(e, "identity")}
-                    className="hidden"
-                  />
-                </label>
-              </div>
-
-              <div>
-                <label className="block text-sm mb-2">
-                  Proof of Address*
-                </label>
-                <label className="border border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-black transition cursor-pointer">
-                  <div className="flex flex-col">
-                    <span className="text-sm text-gray-500">
-                      {proofOfAddressFile ? "Selected file" : "Upload utility bill or bank statement (last 3 months)"}
-                    </span>
-                    {proofOfAddressFile && (
-                      <span className="text-sm font-medium text-gray-900 mt-1 truncate max-w-[250px]">
-                        {proofOfAddressFile.name}
-                      </span>
-                    )}
-                  </div>
-                  <span className="px-4 py-2 rounded-full bg-black text-white text-sm hover:bg-gray-800 transition">
-                    {proofOfAddressFile ? "Replace" : "Upload"}
-                  </span>
-                  <input
-                    type="file"
-                    onChange={(e) => handleFileChange(e, "address")}
-                    className="hidden"
-                  />
-                </label>
-              </div>
-            </>
-          )}
-
-          {/* ===== STEP 3: UBO INFORMATION ===== */}
-          {currentStep === 3 && (
-            <>
-              <h3 className="text-lg font-semibold text-gray-900">
-                Ultimate Beneficial Owner (UBO) Information
-              </h3>
-
-              {/* First Name */}
-              <div>
-                <label className="block text-sm mb-2">First Name*</label>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={formData.ubo.firstName}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
-                    handleUboInputChange({
-                      target: { name: "firstName", value }
-                    });
-                  }}
-                  placeholder="Enter first name"
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                />
-              </div>
-
-              {/* Last Name */}
-              <div>
-                <label className="block text-sm mb-2">Last Name*</label>
-                <input
-                  type="text"
-                  name="lastName"
-                  value={formData.ubo.lastName}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
-                    handleUboInputChange({
-                      target: { name: "lastName", value }
-                    });
-                  }}
-                  placeholder="Enter last name"
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-sm mb-2">Email*</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.ubo.email}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    handleUboInputChange(e);
-
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (value && !emailRegex.test(value)) {
-                      setUboEmailError("Invalid email format");
-                    } else {
-                      setUboEmailError("");
-                    }
-                  }}
-                  placeholder="Enter email"
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                />
-                {uboEmailError && (
-                  <p className="text-red-500 text-sm mt-1">{uboEmailError}</p>
-                )}
-              </div>
-
-              {/* Phone with Code */}
-              <div>
-                <label className="block text-sm mb-2">Phone Number*</label>
-                <div className="flex gap-2">
-                  <div className="relative" ref={uboPhoneCodeRef}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setUboPhoneCodeOpen((v) => !v);
-                        setUboPhoneCodeSearch("");
-                      }}
-                      className="h-12 px-3 rounded-xl border border-gray-200 flex items-center gap-1.5 text-sm whitespace-nowrap bg-white hover:bg-gray-50 min-w-[90px]"
-                    >
-                      <span className="text-sm leading-none">
-                        {selectedUboPhoneOption?.country}
-                      </span>
-                      <span className="text-sm text-gray-500">
-                        {selectedUboPhoneOption?.dialCode}
-                      </span>
-                      <svg
-                        className="w-3 h-3 text-gray-400 ml-0.5"
-                        viewBox="0 0 10 6"
-                        fill="none"
-                      >
-                        <path
-                          d="M1 1l4 4 4-4"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </button>
-
-                    {uboPhoneCodeOpen && (
-                      <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-xl z-50 flex flex-col">
-                        <div className="p-2 border-b">
-                          <input
-                            autoFocus
-                            value={uboPhoneCodeSearch}
-                            onChange={(e) => setUboPhoneCodeSearch(e.target.value)}
-                            placeholder="Search country or code..."
-                            className="w-full h-9 rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-black"
-                          />
-                        </div>
-                        <div className="overflow-y-auto max-h-52" ref={uboPhoneCodeScrollRef}>
-                          {filteredUboPhoneCodes.length > 0 ? (
-                            filteredUboPhoneCodes.map((opt) => (
-                              <div
-                                key={opt.value}
-                                onClick={() => {
-                                  setUboPhoneCode(opt.value);
-                                  setUboPhoneCodeOpen(false);
-                                  setUboPhoneCodeSearch("");
-                                }}
-                                className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-gray-50 text-sm ${uboPhoneCode === opt.value
-                                  ? "bg-gray-50 font-medium"
-                                  : ""
-                                  }`}
-                              >
-                                <span className="text-base w-6 text-center leading-none">
-                                  {opt.country}
-                                </span>
-                                <span className="text-gray-500 w-12 shrink-0">
-                                  {opt.dialCode}
-                                </span>
-                                <span className="truncate text-gray-700">
-                                  {opt.name}
-                                </span>
-                              </div>
-                            ))
-                          ) : (
-                            <div className="p-3 text-sm text-gray-400 text-center">
-                              No results
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <input
-                    type="tel"
-                    value={uboPhoneNumber}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, "");
-                      setUboPhoneNumber(value);
                     }}
-                    maxLength={15}
-                    placeholder="Enter phone number"
-                    className="flex-1 h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition text-sm"
+                    placeholder="Enter your email"
+                    className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                   />
+                  {emailError && (
+                    <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                  )}
                 </div>
-              </div>
 
-              {/* Ownership Percent */}
-              <div>
-                <label className="block text-sm mb-2">Ownership Percent*</label>
-                <input
-                  type="number"
-                  name="ownershipPercent"
-                  value={formData.ubo.ownershipPercent}
-                  onChange={handleUboInputChange}
-                  placeholder="Enter ownership percentage"
-                  min="0"
-                  max="100"
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                />
-              </div>
-
-              {/* Birth Date */}
-              <div>
-                <label className="block text-sm mb-2">Birth Date*</label>
-                <input
-                  type="date"
-                  name="birthDate"
-                  value={formData.ubo.birthDate}
-                  onChange={handleUboInputChange}
-                  className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                />
-              </div>
-
-              {/* Address */}
-              <div className="space-y-4 pt-2">
-                <h4 className="text-sm font-medium text-gray-900">Address</h4>
-
+                {/* Phone with Code */}
                 <div>
-                  <label className="block text-sm mb-2">Street Address*</label>
+                  <label className="block text-sm mb-2">Phone Number*</label>
+                  <div className="flex gap-2">
+                    <div className="relative" ref={phoneCodeRef}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPhoneCodeOpen((v) => !v);
+                          setPhoneCodeSearch("");
+                        }}
+                        className="h-12 px-3 rounded-xl border border-gray-200 flex items-center gap-1.5 text-sm whitespace-nowrap bg-white hover:bg-gray-50 min-w-[90px]"
+                      >
+                        <span className="text-sm leading-none">
+                          {selectedPhoneOption?.country}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          {selectedPhoneOption?.dialCode}
+                        </span>
+                        <svg
+                          className="w-3 h-3 text-gray-400 ml-0.5"
+                          viewBox="0 0 10 6"
+                          fill="none"
+                        >
+                          <path
+                            d="M1 1l4 4 4-4"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </button>
+
+                      {phoneCodeOpen && (
+                        <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-xl z-50 flex flex-col">
+                          <div className="p-2 border-b">
+                            <input
+                              autoFocus
+                              value={phoneCodeSearch}
+                              onChange={(e) => setPhoneCodeSearch(e.target.value)}
+                              placeholder="Search country or code..."
+                              className="w-full h-9 rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="overflow-y-auto max-h-52" ref={phoneCodeScrollRef}>
+                            {filteredPhoneCodes.length > 0 ? (
+                              filteredPhoneCodes.map((opt) => (
+                                <div
+                                  key={opt.value}
+                                  onClick={() => {
+                                    setPhoneCode(opt.value);
+                                    setPhoneCodeOpen(false);
+                                    setPhoneCodeSearch("");
+                                  }}
+                                  className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-gray-50 text-sm ${phoneCode === opt.value
+                                    ? "bg-gray-50 font-medium"
+                                    : ""
+                                    }`}
+                                >
+                                  <span className="text-base w-6 text-center leading-none">
+                                    {opt.country}
+                                  </span>
+                                  <span className="text-gray-500 w-12 shrink-0">
+                                    {opt.dialCode}
+                                  </span>
+                                  <span className="truncate text-gray-700">
+                                    {opt.name}
+                                  </span>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="p-3 text-sm text-gray-400 text-center">
+                                No results
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <input
+                      type="tel"
+                      value={phoneNumber}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        setPhoneNumber(value);
+                      }}
+                      maxLength={15}
+                      placeholder="Enter phone number"
+                      className="flex-1 h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition text-sm"
+                    />
+                  </div>
+                </div>
+
+                {/* Identification Number */}
+                <div>
+                  <label className="block text-sm mb-2">
+                    Business Registration / Identification Number*
+                  </label>
                   <input
                     type="text"
-                    name="street"
-                    value={formData.ubo.address.street}
-                    onChange={handleUboAddressChange}
-                    placeholder="Enter street address"
+                    name="identificationNumber"
+                    value={formData.identificationNumber}
+                    onChange={handleInputChange}
+                    placeholder="Enter registration number or tax ID"
                     className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Registration Date */}
+                <div>
+                  <label className="block text-sm mb-2">Registration Date*</label>
+                  <input
+                    type="date"
+                    name="registrationDate"
+                    value={formData.registrationDate}
+                    onChange={handleInputChange}
+                    className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                  />
+                </div>
+
+
+                {/* Business Type */}
+                <div>
+                  <label className="block text-sm mb-2">Business Type*</label>
+                  <CustomSelect
+                    options={businessTypeOptions}
+                    value={formData.businessType}
+                    onChange={(value) =>
+                      setFormData(prev => ({
+                        ...prev,
+                        businessType: value
+                      }))
+                    }
+                    placeholder="Select business type"
+                  />
+                </div>
+
+                {/* Address */}
+                <div className="space-y-4 pt-2">
+                  <h4 className="text-sm font-medium text-gray-900">Address</h4>
+
                   <div>
-                    <label className="block text-sm mb-2">City*</label>
+                    <label className="block text-sm mb-2">Street Address*</label>
                     <input
                       type="text"
-                      name="city"
-                      value={formData.ubo.address.city}
-                      onChange={handleUboAddressChange}
-                      placeholder="Enter city"
+                      name="street"
+                      value={formData.address.street}
+                      onChange={handleAddressChange}
+                      placeholder="Enter street address"
                       className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm mb-2">City*</label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.address.city}
+                        onChange={handleAddressChange}
+                        placeholder="Enter city"
+                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm mb-2">Country*</label>
+                      <CustomSelect
+                        options={countries}
+                        value={formData.address.country}
+                        onChange={(value) =>
+                          setFormData(prev => ({
+                            ...prev,
+                            address: {
+                              ...prev.address,
+                              country: value,
+                              state: ""
+                            }
+                          }))
+                        }
+                        placeholder="Select country"
+                      />
+                    </div>
+
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    <div>
+                      <label className="block text-sm mb-2">State/Province*</label>
+                      {states.length > 0 ? (
+                        <CustomSelect
+                          options={states}
+                          value={formData.address.state}
+                          onChange={(value) =>
+                            setFormData(prev => ({
+                              ...prev,
+                              address: {
+                                ...prev.address,
+                                state: value
+                              }
+                            }))
+                          }
+                          placeholder={loadingStates ? "Loading..." : "Select state"}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          name="state"
+                          value={formData.address.state}
+                          onChange={handleAddressChange}
+                          placeholder="Enter state or province"
+                          className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                        />
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm mb-2">Postal Code*</label>
+                      <input
+                        type="text"
+                        name="postalCode"
+                        value={formData.address.postalCode}
+                        onChange={handleAddressChange}
+                        placeholder="Enter postal code"
+                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </>
+            )
+          )}
+
+          {/* ===== STEP 2: DOCUMENT UPLOAD ===== */}
+          {currentStep === 2 && (
+            documentsCompleted ? (
+
+              <div className="space-y-4" >
+                <div className="border border-green-200 bg-green-50 rounded-xl p-4">
+                  <p className="text-green-700 font-medium">
+                    ✅ Business Registration Document Submitted
+                  </p>
+                </div>
+
+                <div className="border border-green-200 bg-green-50 rounded-xl p-4">
+                  <p className="text-green-700 font-medium">
+                    ✅ Proof of Address Submitted
+                  </p>
+                </div>
+
+                <p className="text-sm text-gray-500">
+                  Your documents have been successfully uploaded.
+                </p>
+
+              </div>
+            ) : (
+              <>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Document Upload
+                </h3>
+
+                <div>
+                  <label className="block text-sm mb-2">
+                    Business Registration Document*
+                  </label>
+                  <label className="border border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-black transition cursor-pointer">
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-500">
+                        {proofOfIdentityFile ? "Selected file" : "Upload business registration certificate or incorporation documents"}
+                      </span>
+                      {proofOfIdentityFile && (
+                        <span className="text-sm font-medium text-gray-900 mt-1 truncate max-w-[250px]">
+                          {proofOfIdentityFile.name}
+                        </span>
+                      )}
+                    </div>
+                    <span className="px-4 py-2 rounded-full bg-black text-white text-sm hover:bg-gray-800 transition">
+                      {proofOfIdentityFile ? "Replace" : "Upload"}
+                    </span>
+                    <input
+                      type="file"
+                      onChange={(e) => handleFileChange(e, "identity")}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+
+                <div>
+                  <label className="block text-sm mb-2">
+                    Proof of Address*
+                  </label>
+                  <label className="border border-gray-200 rounded-xl p-4 flex items-center justify-between hover:border-black transition cursor-pointer">
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-500">
+                        {proofOfAddressFile ? "Selected file" : "Upload utility bill or bank statement (last 3 months)"}
+                      </span>
+                      {proofOfAddressFile && (
+                        <span className="text-sm font-medium text-gray-900 mt-1 truncate max-w-[250px]">
+                          {proofOfAddressFile.name}
+                        </span>
+                      )}
+                    </div>
+                    <span className="px-4 py-2 rounded-full bg-black text-white text-sm hover:bg-gray-800 transition">
+                      {proofOfAddressFile ? "Replace" : "Upload"}
+                    </span>
+                    <input
+                      type="file"
+                      onChange={(e) => handleFileChange(e, "address")}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              </>
+            )
+          )}
+
+          {/* ===== STEP 3: UBO INFORMATION ===== */}
+          {currentStep === 3 && (
+
+            uboCompleted ? (
+              <div className="space-y-4">
+
+                <div className="border border-green-200 bg-green-50 rounded-xl p-4">
+                  <p className="text-green-700 font-medium">
+                    ✅ UBO Information Submitted
+                  </p>
+                </div>
+
+                <div className="space-y-2 text-sm">
+
+                  <p>
+                    <b>Name:</b> {uboProfile?.firstName} {uboProfile?.lastName}
+                  </p>
+
+                  <p>
+                    <b>Email:</b> {uboProfile?.email}
+                  </p>
+
+                  <p>
+                    <b>Phone:</b> {uboProfile?.phone}
+                  </p>
+
+                  <p>
+                    <b>Ownership:</b> {uboProfile?.ownershipPercent}%
+                  </p>
+
+                  <p>
+                    <b>Birth Date:</b> {uboProfile?.birthDate}
+                  </p>
+
+                  <p>
+                    <b>Address:</b> {uboProfile?.addressStreet} {uboProfile?.addressCity}
+                  </p>
+
+                  <p>
+                    <b>Country:</b> {uboProfile?.addressCountry}
+                  </p>
+
+                  <p>
+                    <b>ID Type:</b> {uboProfile?.documentType}
+                  </p>
+
+                  <p>
+                    <b>Document:</b> {uboProfile?.documentNumber}
+                  </p>
+
+                </div>
+
+              </div>
+            ) : (
+              <>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Ultimate Beneficial Owner (UBO) Information
+                </h3>
+
+                {/* First Name */}
+                <div>
+                  <label className="block text-sm mb-2">First Name*</label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.ubo.firstName}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+                      handleUboInputChange({
+                        target: { name: "firstName", value }
+                      });
+                    }}
+                    placeholder="Enter first name"
+                    className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                  />
+                </div>
+
+                {/* Last Name */}
+                <div>
+                  <label className="block text-sm mb-2">Last Name*</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.ubo.lastName}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+                      handleUboInputChange({
+                        target: { name: "lastName", value }
+                      });
+                    }}
+                    placeholder="Enter last name"
+                    className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label className="block text-sm mb-2">Email*</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.ubo.email}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      handleUboInputChange(e);
+
+                      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                      if (value && !emailRegex.test(value)) {
+                        setUboEmailError("Invalid email format");
+                      } else {
+                        setUboEmailError("");
+                      }
+                    }}
+                    placeholder="Enter email"
+                    className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                  />
+                  {uboEmailError && (
+                    <p className="text-red-500 text-sm mt-1">{uboEmailError}</p>
+                  )}
+                </div>
+
+                {/* Phone with Code */}
+                <div>
+                  <label className="block text-sm mb-2">Phone Number*</label>
+                  <div className="flex gap-2">
+                    <div className="relative" ref={uboPhoneCodeRef}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setUboPhoneCodeOpen((v) => !v);
+                          setUboPhoneCodeSearch("");
+                        }}
+                        className="h-12 px-3 rounded-xl border border-gray-200 flex items-center gap-1.5 text-sm whitespace-nowrap bg-white hover:bg-gray-50 min-w-[90px]"
+                      >
+                        <span className="text-sm leading-none">
+                          {selectedUboPhoneOption?.country}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          {selectedUboPhoneOption?.dialCode}
+                        </span>
+                        <svg
+                          className="w-3 h-3 text-gray-400 ml-0.5"
+                          viewBox="0 0 10 6"
+                          fill="none"
+                        >
+                          <path
+                            d="M1 1l4 4 4-4"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </button>
+
+                      {uboPhoneCodeOpen && (
+                        <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-xl z-50 flex flex-col">
+                          <div className="p-2 border-b">
+                            <input
+                              autoFocus
+                              value={uboPhoneCodeSearch}
+                              onChange={(e) => setUboPhoneCodeSearch(e.target.value)}
+                              placeholder="Search country or code..."
+                              className="w-full h-9 rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-black"
+                            />
+                          </div>
+                          <div className="overflow-y-auto max-h-52" ref={uboPhoneCodeScrollRef}>
+                            {filteredUboPhoneCodes.length > 0 ? (
+                              filteredUboPhoneCodes.map((opt) => (
+                                <div
+                                  key={opt.value}
+                                  onClick={() => {
+                                    setUboPhoneCode(opt.value);
+                                    setUboPhoneCodeOpen(false);
+                                    setUboPhoneCodeSearch("");
+                                  }}
+                                  className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-gray-50 text-sm ${uboPhoneCode === opt.value
+                                    ? "bg-gray-50 font-medium"
+                                    : ""
+                                    }`}
+                                >
+                                  <span className="text-base w-6 text-center leading-none">
+                                    {opt.country}
+                                  </span>
+                                  <span className="text-gray-500 w-12 shrink-0">
+                                    {opt.dialCode}
+                                  </span>
+                                  <span className="truncate text-gray-700">
+                                    {opt.name}
+                                  </span>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="p-3 text-sm text-gray-400 text-center">
+                                No results
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <input
+                      type="tel"
+                      value={uboPhoneNumber}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        setUboPhoneNumber(value);
+                      }}
+                      maxLength={15}
+                      placeholder="Enter phone number"
+                      className="flex-1 h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition text-sm"
+                    />
+                  </div>
+                </div>
+
+                {/* Ownership Percent */}
+                <div>
+                  <label className="block text-sm mb-2">Ownership Percent*</label>
+                  <input
+                    type="number"
+                    name="ownershipPercent"
+                    value={formData.ubo.ownershipPercent}
+                    onChange={handleUboInputChange}
+                    placeholder="Enter ownership percentage"
+                    min="0"
+                    max="100"
+                    className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                  />
+                </div>
+
+                {/* Birth Date */}
+                <div>
+                  <label className="block text-sm mb-2">Birth Date*</label>
+                  <input
+                    type="date"
+                    name="birthDate"
+                    value={formData.ubo.birthDate}
+                    onChange={handleUboInputChange}
+                    className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                  />
+                </div>
+
+                {/* Address */}
+                <div className="space-y-4 pt-2">
+                  <h4 className="text-sm font-medium text-gray-900">Address</h4>
+
+                  <div>
+                    <label className="block text-sm mb-2">Street Address*</label>
+                    <input
+                      type="text"
+                      name="street"
+                      value={formData.ubo.address.street}
+                      onChange={handleUboAddressChange}
+                      placeholder="Enter street address"
+                      className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    {/* City */}
+                    <div>
+                      <label className="block text-sm mb-2">City*</label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.ubo.address.city}
+                        onChange={handleUboAddressChange}
+                        placeholder="Enter city"
+                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                      />
+                    </div>
+
+                    {/* Country */}
                     <div>
                       <label className="block text-sm mb-2">Country*</label>
                       <CustomSelect
@@ -1340,6 +1520,40 @@ export default function KycVerificationForm() {
                       />
                     </div>
 
+                    {/* State */}
+                    <div>
+                      <label className="block text-sm mb-2">State/Province*</label>
+                      {uboStates.length > 0 ? (
+                        <CustomSelect
+                          options={uboStates}
+                          value={formData.ubo.address.state}
+                          onChange={(value) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              ubo: {
+                                ...prev.ubo,
+                                address: {
+                                  ...prev.ubo.address,
+                                  state: value,
+                                },
+                              },
+                            }))
+                          }
+                          placeholder={loadingUboStates ? "Loading..." : "Select state"}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          name="state"
+                          value={formData.ubo.address.state}
+                          onChange={handleUboAddressChange}
+                          placeholder="Enter state or province"
+                          className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                        />
+                      )}
+                    </div>
+
+                    {/* Postal Code */}
                     <div>
                       <label className="block text-sm mb-2">Postal Code*</label>
                       <input
@@ -1351,108 +1565,78 @@ export default function KycVerificationForm() {
                         className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                       />
                     </div>
+
                   </div>
 
-                  <div>
-                    <label className="block text-sm mb-2">State/Province*</label>
-                    {uboStates.length > 0 ? (
+
+                </div>
+
+                {/* Identity Information */}
+                <div className="space-y-4 pt-2">
+                  <h4 className="text-sm font-medium text-gray-900">
+                    Identity Information
+                  </h4>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm mb-2">Country Code*</label>
                       <CustomSelect
-                        options={uboStates}
-                        value={formData.ubo.address.state}
+                        options={countries}
+                        value={formData.ubo.identity.countryCode}
                         onChange={(value) =>
                           setFormData((prev) => ({
                             ...prev,
                             ubo: {
                               ...prev.ubo,
-                              address: {
-                                ...prev.ubo.address,
-                                state: value,
+                              identity: {
+                                ...prev.ubo.identity,
+                                countryCode: value,
                               },
                             },
                           }))
                         }
-                        placeholder={loadingUboStates ? "Loading..." : "Select state"}
+                        placeholder="Select country"
                       />
-                    ) : (
-                      <input
-                        type="text"
-                        name="state"
-                        value={formData.ubo.address.state}
-                        onChange={handleUboAddressChange}
-                        placeholder="Enter state or province"
-                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                      />
-                    )}
-                  </div>
-                </div>
+                    </div>
 
-
-              </div>
-
-              {/* Identity Information */}
-              <div className="space-y-4 pt-2">
-                <h4 className="text-sm font-medium text-gray-900">
-                  Identity Information
-                </h4>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm mb-2">Country Code*</label>
-                    <CustomSelect
-                      options={countries}
-                      value={formData.ubo.identity.countryCode}
-                      onChange={(value) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          ubo: {
-                            ...prev.ubo,
-                            identity: {
-                              ...prev.ubo.identity,
-                              countryCode: value,
+                    <div>
+                      <label className="block text-sm mb-2">Document Type*</label>
+                      <CustomSelect
+                        options={identityDocumentTypes}
+                        value={formData.ubo.identity.documentType}
+                        onChange={(value) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            ubo: {
+                              ...prev.ubo,
+                              identity: {
+                                ...prev.ubo.identity,
+                                documentType: value,
+                              },
                             },
-                          },
-                        }))
-                      }
-                      placeholder="Select country"
-                    />
+                          }))
+                        }
+                        placeholder="Select document type"
+                      />
+                    </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm mb-2">Document Type*</label>
-                    <CustomSelect
-                      options={identityDocumentTypes}
-                      value={formData.ubo.identity.documentType}
-                      onChange={(value) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          ubo: {
-                            ...prev.ubo,
-                            identity: {
-                              ...prev.ubo.identity,
-                              documentType: value,
-                            },
-                          },
-                        }))
-                      }
-                      placeholder="Select document type"
+                    <label className="block text-sm mb-2">Document Number*</label>
+                    <input
+                      type="text"
+                      name="documentNumber"
+                      value={formData.ubo.identity.documentNumber}
+                      onChange={handleUboIdentityChange}
+                      placeholder="Enter document number"
+                      className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                     />
                   </div>
                 </div>
-
-                <div>
-                  <label className="block text-sm mb-2">Document Number*</label>
-                  <input
-                    type="text"
-                    name="documentNumber"
-                    value={formData.ubo.identity.documentNumber}
-                    onChange={handleUboIdentityChange}
-                    placeholder="Enter document number"
-                    className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                  />
-                </div>
-              </div>
-            </>
+              </>
+            )
           )}
+
 
           {/* Buttons */}
           <div className="flex gap-4 pt-6">
@@ -1460,7 +1644,7 @@ export default function KycVerificationForm() {
               type="button"
               onClick={handlePrev}
               disabled={currentStep === 1 || loading}
-              className={`px-6 h-12 rounded-full border text-sm font-medium transition ${currentStep === 1 || loading
+              className={`px-6 h-12 rounded-full border text-sm font-medium transition  cursor-pointer  ${currentStep === 1 || loading
                 ? "opacity-50 cursor-not-allowed"
                 : "border-gray-300 hover:bg-gray-50"
                 }`}
@@ -1471,8 +1655,8 @@ export default function KycVerificationForm() {
             <button
               type="button"
               onClick={handleNext}
-              disabled={loading}
-              className={`px-8 h-12 rounded-full text-white text-sm font-medium transition flex items-center gap-2 ${loading
+             disabled={loading || (currentStep === 3 && uboCompleted)}
+              className={`px-8 h-12 rounded-full text-white text-sm font-medium transition flex items-center gap-2 cursor-pointer ${loading
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-black hover:bg-gray-800"
                 }`}
@@ -1483,12 +1667,12 @@ export default function KycVerificationForm() {
                   ? "Submitting..."
                   : "Complete KYC"
                 : loading
-                  ? "Loading..."
+                  ? "Loading..."  
                   : "Next"}
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

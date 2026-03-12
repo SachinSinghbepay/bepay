@@ -2,6 +2,7 @@
 
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useState } from "react";
+import { GoogleLogin } from "@react-oauth/google";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { FiChevronLeft } from "react-icons/fi";
@@ -15,7 +16,8 @@ export default function StepCredentials({
   error,
   success,
   onSubmit,
-  onForgot
+  onForgot,
+onGoogleSuccess
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -32,13 +34,13 @@ export default function StepCredentials({
         )}
 
         {/* Google Button */}
-        <button
-          type="button"
-          className="mt-1 w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-xl text-gray-700 font-medium hover:bg-gray-50 transition"
-        >
-          <FcGoogle className="text-xl" />
-          Continue with Google
-        </button>
+        <GoogleLogin
+          onSuccess={onGoogleSuccess}
+          onError={() => console.log("Google login failed")}
+          theme="outline"
+          size="large"
+          text="continue_with"
+        />
 
         {/* Divider */}
         <div className="relative flex py-4 items-center mt-0">

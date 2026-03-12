@@ -12,6 +12,9 @@ import Team from "../pages/Team";
 import Invite from "../pages/Invite";
 import Profile from "../pages/Profile";
 import LegalPolicy from "../pages/Legal";
+import Terms from "../pages/Terms";
+import Payments from "../pages/Payments";
+import KycBanner from "../components/KycBanner"
 
 
 
@@ -47,7 +50,8 @@ import EnableTwoFactorModal from "../modals/EnableTwoFactorModal";
 import BackupCodesModal from "../modals/BackupCodesModal";
 import DisableTwoFactorModal from "../modals/DisableTwoFactorModal";
 import ShareInviteModal from "../modals/ShareInviteModal";
-import Payments from "../pages/Payments";
+import PaymentDetailsModal from "../modals/PaymentDetailsModal";
+
 
 
 
@@ -108,19 +112,40 @@ export default function InnerLayout() {
   };
 
   const renderPage = () => {
+
+    const KYC_REQUIRED_PAGES = ["banking", "beneficiary", "payment", "profile"];
+
+    // If page requires KYC and it's incomplete
+    if (KYC_REQUIRED_PAGES.includes(activePage) && kycStatus === "incomplete") {
+      return (
+        <KycBanner
+          setActivePage={setActivePage}
+        />
+      );
+    }
+
     switch (activePage) {
+
       case "banking":
         return <Banking onOpenModal={openModal} />;
+
       case "beneficiary":
         return <Beneficiary onOpenModal={openModal} />;
+
       case "team":
         return <Team onOpenModal={openModal} />;
+
       case "invite":
         return <Invite onOpenModal={openModal} />;
+
       case "kyc":
-        return <KycVerificationForm onOpenModal={openModal}
-          setActivePage={setActivePage}
-        />;
+        return (
+          <KycVerificationForm
+            onOpenModal={openModal}
+            setActivePage={setActivePage}
+          />
+        );
+
       case "profile":
         return (
           <Profile
@@ -128,16 +153,23 @@ export default function InnerLayout() {
             setActivePage={setActivePage}
           />
         );
-      case "privacy-policies":
-        return <LegalPolicy onOpenModal={openModal} />;
+
       case "payment":
         return <Payments onOpenModal={openModal} />;
+
+      case "privacy-policies":
+        return <LegalPolicy />;
+
+      case "terms":
+        return <Terms />;
+
       default:
-        return (<Dashboard
-          onOpenModal={openModal}
-          setActivePage={setActivePage}
-        />
-        )
+        return (
+          <Dashboard
+            onOpenModal={openModal}
+            setActivePage={setActivePage}
+          />
+        );
     }
   };
 
@@ -497,6 +529,12 @@ export default function InnerLayout() {
             <ShareInviteModal onClose={closeModal} />
           )}
 
+          {modal === "payment-details" && (
+            <PaymentDetailsModal
+              order={modalProps?.order}
+              onClose={closeModal}
+            />
+          )}
 
 
 

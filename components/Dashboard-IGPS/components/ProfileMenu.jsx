@@ -29,7 +29,7 @@ export default function ProfileMenu({ onProfile }) {
 
                 {/* LEFT GROUP */}
                 <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-xl bg-[#D1D1D1] p-[2px]">
+                    <div className="h-10 w-10 rounded-xl bg-[#D1D1D1] p-[2px] flex-shrink-0">
                         <div className="h-full w-full rounded-lg overflow-hidden bg-[#B6B6B6]">
                             <Image
                                 src="/profile.png"
@@ -41,7 +41,7 @@ export default function ProfileMenu({ onProfile }) {
                         </div>
                     </div>
 
-                    <span className="text-sm font-semibold text-[#414141] truncate max-w-[140px] sm:max-w-[200px]">
+                    <span className="text-sm font-semibold text-[#414141] whitespace-nowrap">
                         {displayName}
                     </span>
                 </div>

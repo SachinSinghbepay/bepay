@@ -3,8 +3,8 @@
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { FiChevronLeft } from "react-icons/fi";
-
-export default function StepEmail({ data, setData, onNext }) {
+import { GoogleLogin } from "@react-oauth/google";
+export default function StepEmail({ data, setData, onNext, onGoogleSuccess }) {
     const isValid = data.email?.trim().length > 3;
 
     const handleSubmit = (e) => {
@@ -25,13 +25,13 @@ export default function StepEmail({ data, setData, onNext }) {
                     </h2>
 
                     {/* Google Button */}
-                    <button
-                        type="button"
-                        className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-300 rounded-xl text-gray-700 font-medium hover:bg-gray-50 transition"
-                    >
-                        <FcGoogle className="text-xl" />
-                        Continue with Google
-                    </button>
+                    <GoogleLogin
+                        onSuccess={onGoogleSuccess}
+                        onError={() => console.log("Google signup failed")}
+                        theme="outline"
+                        size="large"
+                        text="continue_with"
+                    />
 
                     {/* Divider */}
                     <div className="relative flex py-6 items-center">
