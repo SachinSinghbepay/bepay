@@ -231,7 +231,7 @@ const ImageComparisonTable = () => {
 
         {/* --- Image Table Replacement --- */}
         <div ref={sectionRef} className="flex justify-center w-full">
-          <div className="image-scroll w-full" onClick={() => { try { AnalyticsService.sendEvent('Comparison Table Clicked'); } catch (e) {} }} style={{ cursor: 'pointer' }}>
+          <div className="image-scroll w-full" onClick={() => { try { AnalyticsService.sendEvent('Comparison Table Clicked'); } catch (e) {} }} style={{ }}>
             {/* Wrap Image in an explicit container and use `fill` so the container controls size */}
             <div className="image-inner">
               <Image

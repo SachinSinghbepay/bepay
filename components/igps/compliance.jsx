@@ -9,31 +9,48 @@ const complianceData = [
   {
     icon: "/images/business/certified.svg",
     title: "Certified",
-    badges: ["ISO 27001", "SOC 2", "PCI DSS", "ISO 20022", "ISO 9001"],
+    badges: [
+      { name: "ISO 27001", logo: "/icons/ISO-27001.svg" },
+      { name: "SOC 2", logo: "/icons/SOC-2.svg" },
+      { name: "PCI DSS", logo: "/icons/PCI-DSS.svg" },
+      { name: "ISO 20022", logo: "/icons/ISO-20022.svg" },
+      { name: "ISO 9001", logo: "/icons/ISO-9001.svg" },
+    ],
   },
   {
     icon: "/images/business/licensed.svg",
     title: "Licensed",
-    badges: ["MSB (USA)", "MSB (Canada)", "PSP (Canada)", "VASP (EU)", ""],
+    badges: [
+      { name: "MSB (USA)", logo: "/icons/MSB-(USA).svg" },
+      { name: "MSB (Canada)", },
+      { name: "PSP (Canada)" },
+      { name: "VASP (EU)", logo: "/icons/VASP-(EU).svg" },
+    ],
   },
   {
     icon: "/images/business/compliant.svg",
     title: "Compliant",
-    badges: ["RBI’s PA-CB*", "FEMA", "DORA", "DPDP", "MiCA-ready", "CFT"],
+    badges: [
+      { name: "RBI's PA-CB*" },
+      { name: "FEMA" },
+      { name: "DORA" },
+      { name: "DPDP", logo: "/icons/DPDP.svg" },
+      { name: "MiCA-ready*", logo: "/icons/MiCA-ready.svg" },
+      { name: "CFT" },
+    ],
   },
   {
     icon: "/images/business/protected.svg",
     title: "Protected",
     badges: [
-      "GDPR",
-      "Multi-Factor Authentication",
-      "24/7 Monitoring",
-      "End-to-End Encryption",
-      "Real-time Fraud Detection",
+      { name: "GDPR", logo: "/icons/GDPR.svg" },
+      { name: "Multi-Factor Authentication" , logo: "/icons/security-icon.svg" },
+      { name: "24/7 Monitoring" },
+      { name: "End-to-End Encryption" },
+      { name: "Real-time Fraud Detection", logo: "/icons/fraud.svg" },
     ],
   },
 ];
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -155,13 +172,24 @@ export default function ComplianceSection() {
               >
                 <div className="flex flex-wrap gap-3">
                   {item.badges.map((badge, badgeIndex) => (
-                    <span
+                    <div
                       key={badgeIndex}
-                      className={`px-6 py-3 border text-[#080808] text-sm lg:text-[16px] 3xl:text-[20px] rounded-[24px] font-medium ${badge === "" ? "invisible" : ""
-                        }`}
+                      className="flex items-center gap-3 px-5 py-3 border rounded-[18px] bg-white"
                     >
-                      {badge || "placeholder"}
-                    </span>
+                      {badge.logo && (
+                        <Image
+                          src={badge.logo}
+                          alt={badge.name}
+                          width={38}
+                          height={38}
+                          className="object-contain"
+                        />
+                      )}
+
+                      <span className="text-[#080808] text-sm lg:text-[16px] font-medium whitespace-nowrap">
+                        {badge.name}
+                      </span>
+                    </div>
                   ))}
                 </div>
               </div>

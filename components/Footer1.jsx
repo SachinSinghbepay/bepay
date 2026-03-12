@@ -182,11 +182,6 @@ const Footer = ({
     setIsQRPopupOpen(true)
   }
 
-  const openQR = (os) => {
-    setSelectedOS(os)      // "ios" | "android" | "gallery"
-    setIsOSPopupOpen(false) // ensure OS selector never shows
-    setIsQRPopupOpen(true)  // open QR popup directly
-  }
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 767);
     checkMobile();
@@ -825,6 +820,13 @@ const Footer = ({
                 {/* UPI Page - Column 1 */}
                 <div className="space-y-4 flex flex-col">
                   <Link
+                    href="/"
+                    onClick={() => handleLinkClick("BEPAY IGPS")}
+                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                  >
+                    BEPAY IGPS
+                  </Link>
+                  <Link
                     href="/about-us"
                     onClick={() => handleLinkClick("About Us")}
                     className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
@@ -963,6 +965,13 @@ const Footer = ({
               <>
                 <div className="space-y-4">
                   <div className="space-y-4 lg:space-y-6">
+                      <Link
+                      href="/"
+                      onClick={() => handleLinkClick("BEPAY IGPS")}
+                      className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                    >
+                      BEPAY IGPS
+                    </Link>
                     <Link
                       href="/personal"
                       onClick={() => handleLinkClick("Personal")}

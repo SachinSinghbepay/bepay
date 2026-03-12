@@ -8,23 +8,27 @@ export default function DisclaimerContent() {
         <h2 className="text-xl font-bold text-[#080808] mb-6">Disclaimer:</h2>
         <div className="text-base leading-relaxed text-[#080808]">
           <p>
-            bepay is a non-custodial Web3 wallet created, developed, and
-            maintained by the bepay group. We are not a credit institution,
-            investment firm, CASP (MiCA), or payment (initiating) service
-            provider, and do not hold user funds at any point in time.
-            Registered VASP in Lithuania (Reg. No.{" "}
-            <span className="font-semibold">57-3505237-1383318</span>) and with
-            FINCEN USA (Reg. No.{" "}
-            <span className="font-semibold">31000294520372</span>). Additional
-            registrations/exemptions are in progress with FIU India and all EU
-            regulators. Interactions occur via open APIs with third-party
-            platforms. Custody and fiat services are provided by regulated
-            partners by a voluntary decision of bepay (Group) (where
-            applicable). Users remain solely responsible for compliance with any
-            local laws, restrictions, and tax laws. Fiat deposits may be insured
-            by licensed partner institutions where applicable. Use of bepay
-            implies acceptance of the terms, conditions, ethical standards,
-            applicable laws, and associated risks.
+            bepay money functions as a next-generation payment infrastructure
+            designed to support seamless value transfer across countries,
+            currencies, and financial systems. bepay money does not function as
+            a credit institution, payment (initiation) institution, money
+            transmitter business, cryptoasset service provider, or financial
+            service provider, and does not possess user funds or private keys.
+            The bepay money group operates through several entities globally,
+            including registrations in Romania (CUI:{" "}
+            <span className="font-semibold">52474864</span>), India, Dubai
+            (DLT-related license), the United States (MSB with FinCEN), Canada
+            (MSB and PSP), and the British Virgin Islands. Interactions occur
+            via open-source public APIs with decentralised ledger technologies
+            and third-party platforms. Custody, settlement, and fiat services
+            are provided by regulated third-party partners where applicable.
+            ISO certifications (ISO 9001, ISO 20022, ISO 27001) reflect
+            internal best practices but do not imply financial regulatory
+            authorization. Users, merchants, and partners remain solely
+            responsible for compliance with local laws, restrictions, and tax
+            laws. Fiat deposits may be insured by licensed partner institutions
+            where applicable. Use of bepay money implies acceptance of the
+            terms, conditions, and associated risks.
           </p>
         </div>
       </section>
@@ -34,68 +38,87 @@ export default function DisclaimerContent() {
         <h2 className="text-xl font-bold text-[#080808] mb-6">Disclaimer:</h2>
         <div className="space-y-6 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
-            bepay functions as a non-custodial Web3 wallet, created by the bepay
-            group of companies, which operates across various jurisdictions.
-            bepay does not function as a credit institution, payment
-            (initiation) institution, money transmitter business, cryptoasset
-            service provider, or financial service provider, and does not
-            possess user funds or private keys.
+            bepay money functions as a next-generation payment infrastructure
+            designed to support seamless value transfer across countries,
+            currencies, and financial systems. The bepay ecosystem includes
+            digital products and technological solutions such as the bepay user
+            application, the bepay merchant application, and the IGPS
+            cross-border payment infrastructure. bepay money does not function
+            as a credit institution, payment (initiation) institution, money
+            transmitter business, cryptoasset service provider, or financial
+            service provider, and does not possess user funds or private keys.
           </p>
           <p>
-            The bepay interface facilitates user interaction with decentralised
-            ledger technologies (DLTs) and third-party platforms through the
-            utilisation of open-source public APIs. The bepay group of companies
-            currently holds a Virtual Asset Service Provider (VASP) registration
-            in Lithuania, identified by Registration Number{" "}
-            <span className="font-semibold">57-3505237-1383318</span>, which
-            serves as the main entity for the EEA market. bepay is also
-            registered with FINCEN in the United States under Registration
-            Number <span className="font-semibold">31000294520372</span>.
-            Furthermore, the group is actively seeking additional registrations
-            and/or regulatory exemptions in India with the FIU.
+            The bepay money interface facilitates user interaction with
+            decentralised ledger technologies (DLTs) and third-party platforms
+            through the utilisation of open-source public APIs. The bepay user
+            application enables individuals to interact with digital assets and
+            payment functionalities through a non-custodial wallet environment
+            where users retain full control over their private keys and digital
+            assets. The bepay merchant application provides technological tools
+            that enable merchants to accept and manage digital asset payments
+            and related transaction data within their business environments. The
+            IGPS cross-border infrastructure facilitates technological
+            connectivity that supports cross-border transaction messaging,
+            settlement coordination, and multi-currency payment interactions
+            through integrated financial networks and supported partners.
           </p>
           <p>
-            In the European Union, bepay ensured voluntary compliance with DORA
-            and also applied for MiCA regulatory exemptions in each Member
-            State. The legal opinion secured by bepay (Group) highlights and
-            clearly establishes the exempted status of this decentralized
-            application and the principles to be respected in order to benefit
-            out of such exemptions under MiCA.
+            The bepay money group operates through several entities globally,
+            including Bepay Money Europe S.R.L registered in Romania with
+            Unique Registration Code (CUI):{" "}
+            <span className="font-semibold">52474864</span>, Bepay Technologies
+            Private Limited in India, IGPS Technology LLC SCO in Dubai holding
+            a DLT-related license, Bepay Fintech INC in the United States
+            registered as a Money Services Business (MSB) with FinCEN,
+            Directpay Fintech LTD in Canada holding MSB and Payment Service
+            Provider (PSP) registrations, and Bepay Fintech Products Holding
+            LTD in the British Virgin Islands. These entities support various
+            operational, technological, regulatory, and partnership functions of
+            the bepay ecosystem across different jurisdictions.
           </p>
           <p>
-            The bepay group has obtained and maintains relevant ISO
+            The bepay platform may interact with licensed financial
+            institutions, payment processors, custodians, and regulated service
+            providers for certain payment processing, settlement, liquidity
+            management, or fiat-related services associated with the bepay
+            merchant application or the IGPS cross-border infrastructure. Such
+            services, where applicable, are provided by regulated third-party
+            partners and not directly by bepay money.
+          </p>
+          <p>
+            The bepay money group has obtained and maintains relevant ISO
             (International Organization for Standardization) certifications to
             ensure high standards of information security, data management, and
             operational resilience. These certifications, such as{" "}
-            <span className="font-semibold">ISO 9001, 20022, and 27001</span>{" "}
+            <span className="font-semibold">ISO 9001, ISO 20022, and ISO 27001</span>{" "}
             (latest versions), reflect internal best practices but do not imply
-            financial regulatory authorization or supervisory approval. Such ISO
-            certifications are complementary to DORA, but they do not replace
-            the need for compliance with the Regulation in the EU. Nonetheless,
-            bepay is currently exempted under DORA in line with our secured
-            legal opinion on the basis of Article 3 (60), (63), and (64) of the
-            Regulation.
+            financial regulatory authorization or supervisory approval.
           </p>
           <p>
-            All interactions conducted through bepay are subject to applicable
-            regulatory standards. It is the responsibility of users to ensure
-            adherence to the local laws that govern the use of digital assets,
+            All interactions conducted through the bepay ecosystem are subject
+            to applicable regulatory standards. It is the responsibility of
+            users, merchants, and partners to ensure adherence to the local
+            laws that govern the use of digital assets, payment technologies,
             local restrictions (if any), and domestic tax laws. The control of
-            digital assets is retained by the user, and such assets are neither
-            held nor accessed by bepay. Custody and fiat services are
-            voluntarily decided upon by bepay (Group) and rendered by licensed
-            third-party partners (where applicable).
+            digital assets within the non-custodial wallet environment is
+            retained by the user, and such assets are neither held nor accessed
+            by bepay money. Custody, settlement, and fiat services, where
+            applicable, are rendered by licensed third-party partners.
           </p>
           <p>
-            Deposits in fiat currency may be subject to insurance coverage up to
-            the legally established limits provided by the relevant financial
+            Deposits in fiat currency may be subject to insurance coverage up
+            to the legally established limits provided by the relevant financial
             institutions and according to international, European, national, or
             state law (where applicable).
           </p>
           <p>
-            The use of the bepay wallet constitutes an explicit acceptance of
-            the terms herein and a recognition of all inherent risks associated
-            with the use of digital assets and decentralised systems.
+            The use of the bepay money wallet, merchant platform, IGPS
+            infrastructure, or any related application or service within the
+            bepay ecosystem constitutes an explicit acceptance of the terms
+            herein and a recognition of all inherent risks associated with the
+            use of digital assets, decentralised systems, and cross-border
+            payment technologies.
           </p>
         </div>
       </section>

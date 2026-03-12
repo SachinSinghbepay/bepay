@@ -1,1043 +1,717 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 export default function PrivacyPolicyContent() {
-  // Animation variants for content
-
   return (
     <div className="max-w-[979px] py-8 space-y-12">
-      {/* Section 1: Introduction */}
+
+      {/* Section 1: About this Privacy Policy */}
       <section className="space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          1. Introduction:
+          1. About this Privacy Policy
         </h2>
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
-            <span className="font-semibold">bepay</span> is committed to
-            ensuring the highest level of data security, privacy, and
-            transparency in handling users&apos; personal and financial information.
-            This Privacy Policy explains how we collect, store, use, and protect
-            user data while ensuring compliance with global data protection
-            regulations, including various act.
-          </p> 
-          <p>
-            We value user trust and are dedicated to safeguarding your personal
-            data against unauthorized access, misuse, or disclosure. Our
-            platform follows strict security measures, including encryption,
-            two-factor authentication (2FA), and real-time fraud monitoring to
-            ensure the protection of sensitive information.
-          </p>
-          <div>
-            <p className="mb-2">This Privacy Policy applies to:</p>
-            <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>Individuals who register an account on bepay.</li>
-              <li>Businesses and merchants using bepay&apos;s services.</li>
-              <li>Website visitors who engage with our platform.</li>
-            </ul>
-          </div>
-          <p>
-            By using <span className="font-semibold">bepay</span>, you consent
-            to the collection, processing, and sharing of your personal data as
-            described in this Privacy Policy. If you disagree with any terms,
-            you should discontinue using our services.
-          </p>
-        </div>
-      </section>
-
-      {/* Section 1.1: Purpose of Privacy Policy */}
-      <section className="space-y-6">
-        <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
-          1.1 For the purpose of privacy policy:
-        </h3>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>
-            Reference in this policy to &apos;you&apos; or &apos;your&apos; is reference to user(s)
-          </p>
-          <p>Reference to &apos;we&apos;, &apos;us&apos; or &apos;our&apos; is reference to bepay.</p>
-          <p>
-            Reference to website (&quot;bepay&quot;) means a reference to website(s),
-            mobile site(s) and mobile app(s).
+            This is the Privacy Policy of{" "}
+            <span className="font-semibold">BEPAY MONEY EUROPE SRL</span>, a
+            company incorporated under the laws of Romania, whose registered
+            number is 52474864, with a registered office located at Street
+            Alexandru Donici, nr. 19, Ground Floor, Ap. 4, office no. 2, Sector
+            2, Bucharest, Romania (hereinafter referred to BEPAY MONEY.io as
+            &quot;BEPAY MONEY&quot;). This privacy policy also applies to all subsidiaries
+            and branches of BEPAY MONEY to the extent that they process personal
+            data, including Bepay Fintech Inc (USA Registered MSB Entity),
+            Directpay Fintech LTD (Canada Registered MSB Entity) and Bepay
+            Technologies Private Limited (India). Hereinafter, all companies are
+            to be collectively referred to as &quot;BEPAY MONEY&quot;. They are all
+            compliant with the GDPR standards and other privacy laws in each
+            jurisdiction.
           </p>
           <p>
-            First, we need to define, and it is important for you to understand,
-            the expression: &quot;Personal Data&quot; (PD). It generically represents any
-            kind of information about a physical person, whose particularities
-            can lead, directly or indirectly, to its identification. Here you
-            have, by way of example, but not limited to: name and surname,
-            geographical address, any identification number, political
-            orientation, sexual orientation, email address, any location
-            information and any other online identifier such as the device used
-            to access the Internet, IP address, or cookie information.
+            BEPAY MONEY treats personal data which it receives through its
+            websites, portals and any other means with due care and is dedicated
+            to safeguarding any personal data it receives. BEPAY MONEY is bound
+            by the General Data Protection Regulation (Regulation (EU)
+            2016/679). This Privacy Policy is designed to inform you about the
+            type of information that BEPAY MONEY collects when using our website
+            and our application and the purposes for which this information is
+            being processed, used, maintained, and disclosed (together the
+            &quot;Services&quot;).
           </p>
           <p>
-            With regards of your agreement on collection and use of personal
-            data, we have taken all the necessary technical measures to provide
-            you with this detailed agreement, so you can have a crisp clear
-            experience, from the first to the last interaction with our website
-            or our services.
+            This Privacy Policy aims to explain in a simple and transparent way
+            what personal data we gather about you and how we process it. It
+            applies to the following persons:
           </p>
-          <p>
-            Visitors and Users agree and accept that the use of our website is
-            not possible without any indication of personal data.
-          </p>
-          <p>
-            In your relationship with us through the website, controller, for
-            the purposes of the General Data Protection Regulation (GDPR), other
-            data protection laws applicable in member states of the European
-            Union and other provisions related to data protection, is{" "}
-            <span className="font-semibold">bepay</span>.
-          </p>
-          <p>
-            This Policy does not apply to other companies&apos; or Companys&apos; websites
-            to which we may link to or may link to us. You should carefully
-            review the privacy policies of those websites in order to determine
-            how they treat your personal information.
-          </p>
-          <p>
-            If you do not agree to this Privacy Policy, please exit, and do not
-            access or use our website.
-          </p>
-        </div>
-      </section>
-
-      {/* Section 2: Definitions */}
-      <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          2. Definitions:
-        </h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>
-            Our data protection policy should be legible and understandable for
-            the general public, as well as for our Users and business partners.
-            To ensure this, we would like to first explain the terminology used.
-            In this data protection declaration, we use, inter alia, the
-            following terms:
-          </p>
-          <ul className="space-y-3 list-disc list-inside ml-4">
+          <ul className="list-disc list-inside space-y-2 ml-4">
             <li>
-              <strong>Data Subject or Data Principal</strong> - is any
-              identified or identifiable natural person, whose personal data is
-              collected and processed by us.
+              The legal representatives and ultimate beneficial owners of all
+              past, present, and prospective commercial contracting parties. We
+              are legally obliged to retain personal data of these persons, also
+              for a certain period after the relationship has ended, in
+              compliance with &apos;know your customer&apos; (&quot;KYC&quot;) regulations.
             </li>
             <li>
-              <strong>Processing</strong> - is any operation which is performed
-              on personal data, such as collection, recording, Company,
-              structuring, storage, etc.
-            </li>
-            <li>
-              <strong>Restriction of processing</strong> - is the marking of
-              stored personal data with the aim of limiting their processing in
-              the future.
-            </li>
-            <li>
-              <strong>Profiling</strong> - means any form of automated
-              processing of personal data consisting of the use of personal data
-              to evaluate certain personal aspects relating to a natural person.
-            </li>
-            <li>
-              <strong>Data Controller or Data Fiduciary</strong> - is the
-              natural or legal person, public authority, agency or other body,
-              which determines the purposes and means of the processing of
-              personal data;
-            </li>
-            <li>
-              <strong>Processor</strong> - is a natural or legal person, public
-              authority, agency or other body which processes personal data on
-              behalf of the controller.
-            </li>
-            <li>
-              <strong>Recipient</strong> - is a natural or legal person, public
-              authority, agency or another body, to which the personal data are
-              disclosed.
-            </li>
-            <li>
-              <strong>Third-party</strong> - is a natural or legal person,
-              public authority, agency or body other than the ones above, who,
-              under the direct authority of the controller or processor, are
-              authorized to process personal data.
-            </li>
-            <li>
-              <strong>Consent</strong> - is any freely given, specific, informed
-              and unambiguous indication of data subject&apos;s acceptance to the
-              processing of their personal data.
+              Anyone visiting the BEPAY MONEY website. We may amend this Privacy
+              Policy to remain compliant with any changes in law and/or to
+              reflect how our business processes personal data.
             </li>
           </ul>
         </div>
       </section>
 
-      {/* Section 2.1: Compliance */}
+      {/* Section 2: Personal Data */}
       <section className="space-y-6">
-        <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
-          2.1 Compliance:
-        </h3>
+        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
+          2. Personal Data
+        </h2>
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
-            The processing of personal data will be in line with these main
-            international legislations:
+            Personal data refers to any information that tells us something
+            about you or that we can link to you. BEPAY MONEY processes any
+            information we receive from you, including personal and financial
+            information you provide to us including when you or your business:
+            enquire or make an application for BEPAY MONEY its services,
+            register to use and/or use any of our services and when you
+            communicate with us through email, SMS, WhatsApp, a website or
+            portal, telephone, or any other electronic means. Such information
+            may include your: name including first name and family name,
+            nationality, place of birth, date of birth, street name, street
+            number, street number suffix, postal code, city, country of
+            residence, phone number and email address.
           </p>
-          <ul className="list-disc list-inside space-y-1 ml-4">
+          <p>
+            BEPAY MONEY collects and processes your personal data in accordance
+            with the EU&apos;s General Data Protection Regulation (hereinafter:
+            &quot;GDPR&quot;) in the event at least one of the following applies:
+          </p>
+          <ul className="list-disc list-inside space-y-3 ml-4">
             <li>
-              General Data Protection Regulation (GDPR), applicable in Europe;
+              The data subject has given consent to the processing of his or her
+              personal data for one or more specific purposes (refer to Article
+              6.1(a) GDPR). In the event you give your consent to the processing
+              of your personal data for specific purposes, the processing is
+              permitted on the legal basis of your consent, which consent is
+              revocable at any time.
             </li>
             <li>
-              California Consumer Privacy Act (2018) and Privacy Act U.S.C. 552a
-              (Privacy Act of USA);
+              Processing is necessary for the performance of a contract to which
+              the data subject is party or in order to take steps at the request
+              of the data subject prior to entering into a contract (refer to
+              Article 6.1(b) GDPR). Personal data is processed to conduct
+              financial services in order to fulfill our contractual and
+              pre-contractual obligations. These actions are only taken when
+              requested by you.
             </li>
             <li>
-              Federal Decree-Law No. 45 of 2021 on the Protection of Personal
-              Data Protection (&quot;PDPL&quot;) of Dubai
+              Processing is necessary for compliance with a legal obligation to
+              which the controller is subject (refer to Article 6.1(c) GDPR)
+              and processing is necessary for the performance of a task carried
+              out in the public interest or in the exercise of official authority
+              vested in the controller (refer to Article 6.1(e) GDPR). BEPAY
+              MONEY is subject to several legal obligations as well as regulatory
+              requirements. Please refer to Section 5.
             </li>
             <li>
-              Any other applicable law, as the case may be, at any given time.
+              Processing is necessary for the purposes of the legitimate
+              interests pursued by the controller or by a third party, except
+              where such interests are overridden by the interests or fundamental
+              rights and freedoms of the data subject which require protection of
+              personal data, in particular where the data subject is a child
+              (refer to Article 6.1(f) GDPR). If we deem it is necessary, we
+              will process your personal data beyond our contractual obligations
+              in order to protect our legitimate interests or the legitimate
+              interests of a third party. By processing we mean everything we
+              can do with this data such as collecting, recording, storing,
+              adjusting, organizing, using, disclosing, transferring, or
+              deleting. For more information about the way we use your personal
+              data, please refer to Section 4 (What we do with your personal
+              data). You share personal information with us, for example when
+              you: visit our website, complete a(n) (online) (application) form,
+              sign a contract or contact us through one of our channels. We also
+              use data that is legally available from public sources such as
+              commercial registers, the media, or data that is legitimately
+              provided by other companies within the SafeNed Group or by third
+              parties.
+            </li>
+            <li>
+              Nonetheless, all rights under the GDPR and other Privacy Laws are
+              applicable and respected by BEPAY MONEY.
             </li>
           </ul>
+        </div>
+      </section>
+
+      {/* Section 3: Sensitive Data */}
+      <section className="space-y-6">
+        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
+          3. Sensitive Data
+        </h2>
+        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
-            We are able to provide our services worldwide. For the purpose of
-            avoiding any compliance conflict with any terminology used by any
-            particular legislation, in this document: &quot;Users&quot; are the &quot;data
-            subjects&quot; or the &quot;data principals&quot; and{" "}
-            <span className="font-semibold">bepay</span> is the &quot;data
-            controller&quot; or &quot;data fiduciary.&quot;
+            We do not record sensitive data relating to your health, ethnicity,
+            religious or political beliefs unless it is strictly necessary. When
+            we do it is limited to specific circumstances.
           </p>
         </div>
       </section>
 
-      {/* Section 3: Information We Collect */}
+      {/* Section 4: What we do with your personal data */}
       <section className="space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          3. Information We Collect:
+          4. What we do with your personal data
         </h2>
         <div className="space-y-6 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>
-            <span className="font-semibold">bepay</span> collects and processes
-            various categories of personal and transactional data to ensure the
-            secure and efficient operation of its services. The types of data
-            collected may vary depending on user activity, regulatory
-            requirements, and service usage patterns.
-          </p>
+          <p>We only use your personal data for legitimate business reasons. This includes:</p>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              3.1. Categories of Data Collected
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Administration
             </h3>
-
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold">
-                3.1.1. Personal Identification & Account Data
-              </h4>
-              <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>
-                  <strong>
-                    Full Name, Date of Birth, and Contact Information
-                  </strong>{" "}
-                  – Including email address, phone number, and residential
-                  address, used for account verification and customer support.
-                </li>
-                <li>
-                  <strong>Government-Issued Identification</strong> – Such as
-                  passports, national ID cards, or driver&apos;s licenses, required
-                  for Know Your Customer (KYC) compliance and fraud prevention.
-                </li>
-                <li>
-                  <strong>Selfie or Biometric Verification Data</strong> – In
-                  certain cases, users may be asked to provide facial
-                  recognition or biometric data for enhanced identity
-                  verification and security authentication.
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold">
-                3.1.2. Financial & Transactional Data
-              </h4>
-              <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>
-                  <strong>Payment and Wallet Information</strong> – Including
-                  linked bank accounts, cryptocurrency wallet addresses,
-                  transaction histories, and payment preferences.
-                </li>
-                <li>
-                  <strong>Transaction Records</strong> – Details of deposits,
-                  withdrawals, purchases, and peer-to-peer transfers conducted
-                  through bepay, used for compliance, auditing, and fraud
-                  detection.
-                </li>
-                <li>
-                  <strong>Billing & Subscription Data</strong> – Information
-                  related to recurring payments, invoices, and merchant
-                  subscriptions, if applicable.
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold">
-                3.1.3. Technical & Device Data
-              </h4>
-              <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>
-                  <strong>IP Address & Geolocation Data</strong> – Collected to
-                  monitor for suspicious activities, prevent unauthorized
-                  access, and comply with location-based regulatory
-                  restrictions.
-                </li>
-                <li>
-                  <strong>Device Identifiers & Browser Information</strong> –
-                  Including operating system details, browser type, and session
-                  activity, used for fraud prevention and security monitoring.
-                </li>
-                <li>
-                  <strong>Cookies & Tracking Technologies</strong> – Utilized to
-                  enhance user experience, analyze platform performance, and
-                  offer personalized features.
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold">
-                3.1.4. Communication & Support Data
-              </h4>
-              <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>
-                  <strong>Customer Support Interactions</strong> – Records of
-                  inquiries, complaints, and chat conversations with bepay&apos;s
-                  support team, maintained for quality assurance and dispute
-                  resolution.
-                </li>
-                <li>
-                  <strong>Marketing Preferences</strong> – User choices
-                  regarding promotional communications, newsletters, and
-                  engagement with bepay&apos;s marketing campaigns.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">3.2. How We Collect User Data</h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                <strong>Directly from Users</strong> – Information is provided
-                when creating an account, completing verification, making
-                transactions, or contacting customer support.
-              </li>
-              <li>
-                <strong>Automatically Through Platform Use</strong> – bepay
-                collects system logs, cookies, and metadata whenever users
-                engage with its services.
-              </li>
-              <li>
-                <strong>From Third-Party Sources</strong> – bepay may obtain
-                additional data from financial institutions, regulatory
-                agencies, or compliance service providers to validate identity,
-                prevent fraud, and ensure platform security.
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 4: How We Use Your Data */}
-      <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          4. How We Use Your Data:
-        </h2>
-        <div className="space-y-6 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>
-            <span className="font-semibold">bepay</span> collects, processes,
-            and protects user data to ensure a secure and compliant payment
-            experience.
-          </p>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">4.1. Personal Data Collection</h3>
-            <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>
-                <strong>User Information:</strong> Name, email, phone number,
-                nationality, and government-issued ID (for KYC).
-              </li>
-              <li>
-                <strong>Transaction Data:</strong> Payment history, wallet
-                balances, withdrawal and deposit records.
-              </li>
-              <li>
-                <strong>Technical Data:</strong> Device type, IP address,
-                geolocation data, and browser information for fraud prevention.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">4.2. Data Usage & Processing</h3>
             <p>
-              <span className="font-semibold">bepay</span> uses collected data
-              for:
+              When you provide us with information by filling in a form on our
+              website or through the application, we are legally obliged to
+              collect personal data that verifies your identity (such as a copy
+              of your ID card or passport) and to assess whether we can accept
+              you or your company as a customer. We also need to know your
+              address or phone number to contact you.
             </p>
-            <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>User verification (KYC/AML compliance).</li>
-              <li>Transaction security and fraud prevention.</li>
-              <li>
-                Providing a seamless payment experience across fiat and crypto
-                assets.
-              </li>
-              <li>
-                Compliance with financial regulations and tax reporting
-                obligations.
-              </li>
-            </ul>
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-bold">4.3. Third-Party Data Sharing</h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                <span className="font-semibold">
-                  bepay does not sell user data.
-                </span>
-              </li>
-              <li>
-                Data may be shared with:
-                <ul className="list-disc list-inside space-y-1 ml-6 mt-2">
-                  <li>Regulatory authorities for legal compliance.</li>
-                  <li>Financial institutions for transaction processing.</li>
-                  <li>
-                    Fraud detection agencies to prevent illicit activities.
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">4.4. Data Retention Policy</h3>
-            <ul className="list-disc list-inside space-y-1 ml-4">
-              <li>
-                Personal data is retained for as long as legally required under
-                applicable KYC/AML laws.
-              </li>
-              <li>
-                Users can request data deletion (subject to legal compliance).
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 5: Data Sharing */}
-      <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          5. Data Sharing:
-        </h2>
-        <div className="space-y-6 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>
-            <span className="font-semibold">bepay</span> is committed to
-            protecting user data and does not sell personal information to third
-            parties. However, bepay may share or disclose certain data under
-            specific conditions, as outlined below.
-          </p>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              5.1. Data Sharing for Service Provisioning
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Managing customer relationships
             </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                <strong>Payment Processors & Banking Partners</strong> – bepay
-                collaborates with banks, card networks, and blockchain
-                infrastructure providers to facilitate transactions, fiat-to
-                crypto conversions, and fund settlements.
-              </li>
-              <li>
-                <strong>Identity Verification & Compliance Partners</strong> –
-                bepay works with KYC/AML service providers to ensure that users
-                meet regulatory requirements before accessing financial
-                services.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              5.2. Legal & Regulatory Disclosures
-            </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                <strong>Compliance with Legal Obligations</strong> – bepay may
-                disclose personal information in response to court orders,
-                regulatory requests, or subpoenas issued by law enforcement
-                agencies.
-              </li>
-              <li>
-                <strong>Fraud Prevention & Risk Mitigation</strong> –
-                Information may be shared with government authorities or
-                industry partners to prevent financial crime, cyber fraud, and
-                unauthorized account activity.
-              </li>
-              <li>
-                <strong>Jurisdiction-Specific Reporting</strong> – In certain
-                regions, bepay may be required to provide user transaction
-                records to tax authorities or financial regulators for legal
-                compliance.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              5.3. Data Transfers to Third-Party Service Providers
-            </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                bepay engages cloud hosting services, cybersecurity firms, and
-                analytics providers to ensure the reliability and security of
-                its platform.
-              </li>
-              <li>
-                Third-party service providers are contractually obligated to
-                protect user data, maintain confidentiality, and comply with
-                global data protection laws.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              5.4. Business Transfers & Mergers
-            </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                In the event of a merger, acquisition, or sale of bepay&apos;s
-                assets, user data may be transferred to the acquiring entity,
-                subject to applicable data protection regulations.
-              </li>
-              <li>
-                Users will be notified in advance if their personal data is
-                subject to ownership changes.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              5.5. User-Controlled Data Sharing
-            </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                Users may authorize third-party integrations, such as linking
-                bepay to financial apps, blockchain wallets, or tax reporting
-                services.
-              </li>
-              <li>
-                Any data shared through user-authorized connections remains
-                under the user&apos;s control and is governed by the third party&apos;.s
-                privacy policies.
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 6: Compliance & Security Measures */}
-      <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          6. Compliance & Security Measures:
-        </h2>
-        <div className="space-y-6 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>
-            <span className="font-semibold">bepay</span> is committed to
-            protecting user data and does not sell personal information to third
-            parties. However, bepay may share or disclose certain data under
-            specific conditions, as outlined below.
-          </p>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">6.1. Regulatory Framework</h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                bepay complies with General Data Protection Regulation (GDPR),
-                California Consumer Privacy Act (CCPA), and other international
-                privacy laws.
-              </li>
-              <li>
-                Data processing follows strict AML/CTF protocols to prevent
-                financial crimes.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              6.2. Encryption & Secure Storage
-            </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>bepay uses 256-bit encryption for sensitive data storage.</li>
-              <li>
-                All financial transactions are secured through blockchain-based
-                authentication mechanisms.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">6.3. Account Security</h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                Users must enable two-factor authentication (2FA) for added
-                protection.
-              </li>
-              <li>
-                bepay uses biometric authentication (where applicable) for
-                secure login.
-              </li>
-              <li>
-                Suspicious login attempts trigger automated security alerts.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              6.4. Data Breach & Incident Response
-            </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                bepay has a dedicated cybersecurity team monitoring threats.
-              </li>
-              <li>
-                In case of a data breach, users will be notified immediately,
-                and security patches will be deployed.
-              </li>
-              <li>
-                bepay cooperates with cybercrime authorities for risk
-                mitigation.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">6.5. User Privacy Rights</h3>
             <p>
-              bepay would like to make sure you are fully aware of all of your
-              data protection rights. Every user is entitled to the following:
+              We may ask you for feedback about our products and services and
+              share this with certain members of our staff to improve our
+              offering. We might also use notes from conversations we have with
+              you online, by telephone or in person to customize products and
+              services for you.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Providing you with the best-suited products and services
+            </h3>
+            <p>
+              When you visit our website(s), call our customer service center or
+              visit a branch we gather information about you. We analyze this
+              information to identify your potential needs and assess the
+              suitability of products or services. We assess your needs in
+              relation to key moments when a specific financial product or
+              service may be relevant for you. We assess your interests based on
+              simulations you participate in on our website.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Improving and developing products and services
+            </h3>
+            <p>
+              Analyzing how you use our products and services helps us
+              understand more about you and shows us where we can improve. For
+              instance, we analyze the results of our marketing activities to
+              measure their effectiveness and the relevance of our campaigns.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Preventing and detecting fraud and data security
+            </h3>
+            <p>
+              We have a duty to protect your personal data and to prevent,
+              detect and contain data breaches. This includes information we are
+              obliged to collect about you, for example to comply with
+              regulations against money laundering, terrorism financing and tax
+              fraud.
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
-                <strong>The right to be informed</strong> – You have the right
-                to be informed about the personal data we collect from you, and
-                how we process it.
+                We may process your personal information to protect you and your
+                assets from fraudulent activities, for example if you are the
+                victim of identity theft, if your personal data was disclosed or
+                if you have been hacked.
               </li>
               <li>
-                <strong>The right to access</strong> – You have the right to
-                request bepay for copies of your personal data. We may charge
-                you a small fee for this service.
-              </li>
-              <li>
-                <strong>The right to rectification</strong> – You have the right
-                to request that bepay correct any information you believe is
-                inaccurate. You also have the right to request bepay to complete
-                the information you believe is incomplete.
-              </li>
-              <li>
-                <strong>The right to erasure</strong> – You have the right to
-                request that bepay erase your personal data, under certain
-                conditions.
-              </li>
-              <li>
-                <strong>The right to restrict processing</strong> – You have the
-                right to request that bepay restrict the processing of your
-                personal data, under certain conditions.
-              </li>
-              <li>
-                <strong>The right to object to processing</strong> – You have
-                the right to object to bepay&apos;s processing of your personal data,
-                under certain conditions.
-              </li>
-              <li>
-                <strong>The right to data portability</strong> – You have the
-                right to request that bepay transfer the data that we have
-                collected to another organization, or directly to you, under
-                certain conditions.
+                We may use certain information about you for profiling (e.g.
+                name, account number, age, nationality, IP address, etc.) to
+                quickly and efficiently detect a particular crime and the person
+                behind it.
               </li>
             </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Internal and external reporting
+            </h3>
             <p>
-              If you make a request, we have one month to respond to you. If you
-              would like to exercise any of these rights, please contact us.
+              We process your data for our operations and to help our management
+              make better decisions about our operations and services. To comply
+              with a range of legal obligations and statutory requirements
+              (anti-money laundering legislation and tax legislation, for
+              example). The personal information we have collected from you will
+              be shared with fraud prevention agencies who will use it to
+              prevent fraud and money-laundering and to verify your identity. If
+              fraud is detected, you could be refused certain services, finance,
+              or employment. Data that we process for any other reason is
+              anonymized or we remove as much of the personal information as
+              possible.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Section 7: Cookies & Tracking Technologies */}
+      {/* Section 5: Who we share your data with and why */}
       <section className="space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          7. Cookies & Tracking Technologies:
+          5. Who we share your data with and why
         </h2>
         <div className="space-y-6 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
-            bepay employs cookies, tracking technologies, and analytical tools
-            to enhance user experience, improve service functionality, and
-            ensure platform security. These technologies collect non-personally
-            identifiable information related to user activity, device
-            interactions, and browsing behavior.
+            Whenever we share personal data internally or with third parties in
+            other countries, we ensure the necessary safeguards are in place to
+            protect it. For this, BEPAY MONEY relies on EU Model clauses, which
+            are standardized contractual clauses used in agreements with service
+            providers to ensure personal data transferred outside of the
+            European Economic Area complies with EU data protection law.
           </p>
+          <p>
+            To be able to offer you the best possible services and remain
+            competitive in our business, we share certain data both internally
+            as well as outside of BEPAY MONEY and the entities in the Group.
+          </p>
+          <p>This includes:</p>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-bold">7.1. Types of Cookies Used</h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                <strong>Essential Cookies</strong> – Required for core
-                functionalities such as user authentication, security
-                verification, and transaction processing. Disabling these may
-                affect platform accessibility.
-              </li>
-              <li>
-                <strong>Performance & Analytics Cookies</strong> – Collect
-                anonymized data on website traffic, session duration, and user
-                engagement to improve platform efficiency.
-              </li>
-              <li>
-                <strong>Functional Cookies</strong> – Store user preferences,
-                language settings, and personalized dashboard configurations for
-                a seamless experience.
-              </li>
-              <li>
-                <strong>Marketing & Advertising Cookies</strong> – Used to
-                deliver targeted advertisements, promotions, and personalized
-                recommendations based on browsing behavior.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              7.2. User Control & Cookie Management
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              BEPAY MONEY entities
             </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                Users may accept, reject, or customize cookie preferences
-                through browser settings or bepay&apos;s cookie management tool.
-              </li>
-              <li>
-                Disabling certain cookies may limit access to specific features,
-                potentially affecting transaction speed, personalized content,
-                or account-related functionalities.
-              </li>
-              <li>
-                bepay does not track users beyond its platform and does not
-                engage in cross-site tracking unless explicitly stated.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              7.3. Third-Party Tracking & Analytics
-            </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                bepay may integrate with third-party analytics services (e.g.,
-                Google Analytics, blockchain monitoring tools) to assess
-                platform performance and identify fraudulent activities.
-              </li>
-              <li>
-                These services operate under their own privacy policies, and
-                users are encouraged to review their respective data collection
-                practices.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">7.4. Links</h3>
             <p>
-              For your convenience, bepay provides links to other sites. When
-              you click on one of their links, you are leaving bepay and
-              entering another site. We are not responsible for such third-party
-              sites. You should carefully review the privacy statements of any
-              other sites you visit because those privacy statements will apply
-              to your visit to such other sites.
+              We transfer data across BEPAY MONEY businesses and branches for
+              operational, regulatory, or reporting purposes, for example to
+              comply with certain laws, secure IT systems or provide certain
+              services (see section 4 (What we do with your personal data). We
+              may also transfer data to centralized storage systems or to
+              process it globally for more efficiency.
             </p>
           </div>
-        </div>
-      </section>
-
-      {/* Section 8: Data Retention Policy */}
-      <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          8. Data Retention Policy:
-        </h2>
-        <div className="space-y-6 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>
-            bepay retains user data, transaction records, and compliance-related
-            information for the duration necessary to fulfill regulatory, legal,
-            and operational requirements.
-          </p>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-bold">8.1. Retention Periods</h3>
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Government authorities
+            </h3>
+            <p>
+              To comply with our regulatory obligations, we may disclose data to
+              the relevant authorities, for example to counter terrorism and
+              prevent money laundering. In some cases, we are obliged by law to
+              share your data with external parties, including:
+            </p>
             <ul className="list-disc list-inside space-y-2 ml-4">
               <li>
-                <strong>Personal Identification & KYC Data</strong> – Stored for
-                a minimum of five (5) years post account closure, in line with
-                AML and financial compliance laws.
+                Public authorities, regulators, and supervisory bodies such as
+                fraud protection agencies and the central banks of the countries
+                where we operate.
               </li>
               <li>
-                <strong>Transaction History & Payment Records</strong> –
-                Retained for audit, taxation, and dispute resolution purposes,
-                typically between 5 to 7 years, or as required by applicable
-                jurisdictions.
+                Judicial/investigative authorities such as the police, public
+                prosecutors, courts, and arbitration/mediation bodies on their
+                express and legal request.
               </li>
               <li>
-                <strong>Technical & Usage Data</strong> – Log files, security
-                logs, and device metadata are stored for up to 2 years unless
-                extended for fraud investigations.
+                Lawyers, for example, in case of a claim or bankruptcy, trustees
+                who take care of other parties&apos; interests and company auditors.
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Third party service providers
+            </h3>
+            <p>
+              When we use other service providers, we only share personal data
+              that is required for the particular task we involve the service
+              provider for. Service providers support us with activities like:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4">
+              <li>Performing certain services and operations.</li>
+              <li>
+                Designing and maintenance of internet-based tools and
+                applications.
               </li>
               <li>
-                <strong>Marketing & Communication Data</strong> – Retained until
-                the user withdraws consent or unsubscribes from promotional
+                Marketing activities or events and managing customer
                 communications.
               </li>
+              <li>
+                Preparing reports and statistics, printing materials, and
+                designing products.
+              </li>
+              <li>
+                Placing advertisements on apps, websites, and social media.
+              </li>
             </ul>
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              8.2. Data Deletion & Anonymization
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Business transfers
             </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                Upon account termination, certain data may be anonymized,
-                ensuring it can no longer be linked to the individual but is
-                retained for statistical and research purposes.
-              </li>
-              <li>
-                Users may request deletion of personal data; however, bepay
-                reserves the right to deny such requests if retention is legally
-                mandated for compliance, dispute resolution, or anti-fraud
-                purposes.
-              </li>
-            </ul>
+            <p>
+              BEPAY MONEY or any of its entities in the Group may buy or sell
+              business units or affiliates. In such circumstances, we may
+              transfer customer information as a business asset. Without
+              limiting the foregoing, if our business enters into a joint
+              venture with or is sold to or merged with another business entity,
+              your information may be disclosed to our new business partners or
+              owners.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              With your permission
+            </h3>
+            <p>
+              Your information may also be used for other purposes for which you
+              give your specific and explicit permission in a freely, voluntarily
+              and unequivocal manner as available in a given moment (e.g., box
+              ticking, button click signing, orally, in writing), or when
+              required by law or were permitted under the terms of the laws of
+              the relevant jurisdiction.
+            </p>
+            <p>
+              The fundamental principle of the GDPR is data minimization, which
+              is at the core of any activity of BEPAY MONEY. We use your data
+              only if needed or required as described above. Your privacy is of
+              utmost importance to BEPAY MONEY.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Section 9: Policy Updates & Amendments */}
+      {/* Section 6: Cookies */}
       <section className="space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          9. Policy Updates & Amendments:
+          6. Cookies
         </h2>
         <div className="space-y-6 text-base md:text-lg leading-relaxed text-[#080808]">
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              9.1. Modification of Privacy Policy
-            </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                bepay reserves the right to update, amend, or modify this
-                Privacy Policy in response to changes in regulatory
-                requirements, technological advancements, or service
-                enhancements.
-              </li>
-              <li>
-                Any material changes affecting user rights, data processing
-                practices, or security measures will be communicated via email,
-                in-app notifications, or website announcements.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              9.2. User Acknowledgment & Continued Use
-            </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                Users are advised to review the Privacy Policy periodically to
-                stay informed about their rights and bepay&apos;s data protection
-                measures.
-              </li>
-              <li>
-                Continued use of bepay&apos;s services following a policy update
-                constitutes acceptance of the revised terms.
-              </li>
-              <li>
-                If a user disagrees with any changes, they must discontinue use
-                of bepay&apos;s platform and request account closure.
-              </li>
-            </ul>
-          </div>
+          <p>
+            BEPAY MONEY makes use of cookies and similar technologies throughout
+            our websites to ensure your visit to our website goes smoothly. Our
+            websites (and some emails) use &quot;cookies&quot; and other technologies,
+            which store small amounts of information on your computer or device,
+            to allow certain information from your web browser to be collected.
+            Cookies (and similar technologies) are widely used on the internet
+            and allow a website/portal to recognize a user&apos;s device, without
+            uniquely identifying the individual person using the computer. These
+            technologies help to make it easier for you to log on and use our
+            websites and provide information to us, for example which parts of
+            the website you visit.
+          </p>
+          <p>
+            BEPAY MONEY uses functional, analytical, and marketing cookies.
+            Functional and analytical cookies are used to ensure your visit to
+            our websites goes smoothly. By contrast marketing cookies are not
+            necessary for the proper functioning of our websites but are used
+            for promotional purposes. For more information about the specific
+            cookies read the subsection in our Cookie Policy about what types of
+            cookies we use.
+          </p>
+          <p>
+            But first, some background information. Cookies (and similar
+            technologies) are widely used nowadays. Also, fintech businesses
+            that provide their services to consumers online are subject to the
+            EU Directive on Privacy and Electronic Communications (2002/58/EC).
+            requires businesses to notify consumers and obtain their consent for
+            the use of cookies (opt-in). Opt-in means that before placing a
+            cookie, the visitor would have to give permission.
+          </p>
         </div>
       </section>
 
-      {/* Section 10: Governing Law & Dispute Resolution */}
+      {/* Section 7: Your rights and how we respect them */}
       <section className="space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          10. Governing Law & Dispute Resolution:
+          7. Your rights and how we respect them
         </h2>
         <div className="space-y-6 text-base md:text-lg leading-relaxed text-[#080808]">
+          <p>
+            We respect your rights as a customer to determine how your personal
+            information is used. These rights include:
+          </p>
+
           <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              10.1. Jurisdiction & Legal Compliance
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Right to access information
             </h3>
+            <p>
+              You have the right to ask us for an overview of your personal data
+              that we process.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Right to rectification
+            </h3>
+            <p>
+              If your personal data is incorrect, you have the right to ask us
+              to rectify it. If we share data about you with a third party that
+              is later corrected, we will also notify that party.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Right to object to processing
+            </h3>
+            <p>
+              You can object to BEPAY MONEY using your personal data for its own
+              legitimate interests. There is a list of contact details at the
+              end of this Privacy Policy. We will consider your objection and
+              whether processing your information has any undue impact on you
+              that requires us to stop doing so.
+            </p>
+            <p>
+              You can also object to receiving personalized commercial messages
+              from us. You cannot object to us processing your personal data if
+              we are legally required to do so, even if you have opted out of
+              receiving personalized commercial messages.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Right to object to automated decisions
+            </h3>
+            <p>
+              We sometimes use systems to make automated decisions based on your
+              personal information if this is necessary to fulfill a contract
+              with you, or if you gave us consent to do so. You have the right
+              to object to such automated decisions (for example requiring a new
+              passport copy if the one we have on file for you as representative
+              of your company is no longer valid) and ask for an actual person
+              to make the decision instead.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Right to restrict processing
+            </h3>
+            <p>
+              You have the right to ask us to restrict using your personal data
+              if:
+            </p>
             <ul className="list-disc list-inside space-y-2 ml-4">
+              <li>You believe the information is inaccurate.</li>
+              <li>We are processing the data unlawfully.</li>
               <li>
-                This Privacy Policy shall be governed by and construed in
-                accordance with the laws of the European Union, USA and GCC
-                area, without regard to conflict of law principles.
+                BEPAY MONEY no longer needs the data, but you want us to keep it
+                for use in a legal claim.
               </li>
               <li>
-                Users are responsible for ensuring their use of bepay complies
-                with local, national, and international financial regulations
-                applicable in their jurisdiction.
+                You have objected to us processing your data for our own
+                legitimate interests.
               </li>
             </ul>
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              10.2. Dispute Resolution Mechanism
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Right to data portability
             </h3>
+            <p>
+              You have the right to ask us to transfer your personal data
+              directly to you or to another company. This applies to personal
+              data we process by automated means and with your consent or on the
+              basis of a contract with you. Where technically feasible, we will
+              transfer your personal data.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Right to erasure
+            </h3>
+            <p>You may ask us to erase your personal data if:</p>
             <ul className="list-disc list-inside space-y-2 ml-4">
+              <li>We no longer need it for its original purpose.</li>
+              <li>You withdraw your consent for processing it.</li>
               <li>
-                Users agree to resolve disputes through good faith negotiations
-                before seeking legal action.
+                You object to us processing your data for our own legitimate
+                interests or for personalized commercial messages.
               </li>
+              <li>BEPAY MONEY unlawfully processes your personal data.</li>
               <li>
-                If disputes remain unresolved, they shall be subject to binding
-                arbitration in Dubai, in accordance with the applicable rules.
-              </li>
-              <li>
-                Arbitration proceedings will be conducted in English, unless
-                otherwise agreed upon.
+                A law of the European Union or a member state of the European
+                Union requires BEPAY MONEY to erase your personal data.
               </li>
             </ul>
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              10.3. Compliance with International Laws
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Right to complain
             </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                bepay operates under global data protection laws, including
-                GDPR, CCPA, IT Act and AML regulations.
-              </li>
-              <li>
-                Users must acknowledge that cryptocurrency regulations vary by
-                jurisdiction and are responsible for compliance with applicable
-                financial and tax laws.
-              </li>
-            </ul>
+            <p>
+              Should you for any reason be unhappy with the way BEPAY MONEY
+              treats your personal data, you can file a complaint with BEPAY
+              MONEY its compliance department via{" "}
+              <a
+                href="mailto:compliance@bepay.money"
+                className="text-blue-500 font-bold"
+              >
+                compliance@bepay.money
+              </a>
+            </p>
+            <p>
+              You can also contact the data protection authority in your
+              country.
+            </p>
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xl font-bold">
-              10.4. Cooperation with Regulatory Authorities
+            <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
+              Exercising your rights
             </h3>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                bepay may cooperate with government agencies, tax authorities,
-                and financial regulators as required by law.
-              </li>
-              <li>
-                Users may be required to provide additional documentation for
-                compliance purposes.
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-6 mt-8">
-            <h3 className="text-xl font-bold">California Privacy Rights</h3>
             <p>
-              In addition to the rights provided for above, if you are a
-              California or US resident, you have the right to request
-              information from us regarding whether we share certain categories
-              of your personal information with third parties for the third
-              parties&apos; direct marketing purposes. To the extent we share your
-              personal information in this way, you may receive the following
-              information:
-            </p>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>
-                the categories of information we disclosed to third parties for
-                the third parties&apos; direct marketing purposes during the
-                preceding calendar year; and
-              </li>
-              <li>
-                the names and addresses of third parties that received such
-                information, or if the nature of their business cannot be
-                determined from the name, then examples of the products or
-                services marketed.
-              </li>
-            </ul>
-            <p>
-              Effective January 1, 2020, pursuant to the California Consumer
-              Privacy Act of 2018 (&quot;CCPA&quot;), California residents have certain
-              rights in relation to their personal information, subject to
-              limited exceptions. Any terms defined in the CCPA have the same
-              meaning when used in this California Privacy Rights section.
-            </p>
-            <p>
-              bepay does not sell your personal information in its ordinary
-              course of business and will never sell your personal information
-              to third parties without your explicit consent.
-            </p>
-
-            <h4 className="text-lg font-semibold mt-6">
-              Transferring PD From the European Economic Area
-            </h4>
-            <p>
-              PD that we collect from you may be stored, processed, and
-              transferred between any of the countries in which we operate. The
-              European Union and the UK has not found the United States and some
-              other countries to have an adequate level of protection of PD
-              under Article 45 of the GDPR. Our company relies on derogations
-              for specific situations as defined in Article 49 of the GDPR.
-            </p>
-
-            <h4 className="text-lg font-semibold mt-6">
-              Changes to Our Privacy Policy
-            </h4>
-            <p>
-              We reserve the right to change this privacy notice at any time. If
-              our company decides to change this privacy notice, we will post
-              those changes on our website so that our users and customers are
-              always aware of what information we collect, use, and disclose.
+              How you can exercise your rights depends on the type of personal
+              data BEPAY MONEY processes. It could be through our website, by
+              fulfilling our KYC obligations or by processing a transaction. We
+              aim to respond to your request as quickly as possible. In certain
+              cases, we may deny your request. If it&apos;s legally permitted, we
+              will let you know within a reasonable timeframe why we denied it.
+              If you want to exercise your rights or submit a complaint, please
+              contact us via the email address provided below.
             </p>
           </div>
         </div>
       </section>
-      {/* Contact Information */}
-      <section className="space-y-6 border-t pt-8">
+
+      {/* Section 8: Your duty to provide data */}
+      <section className="space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          11. Contact Information:
+          8. Your duty to provide data
         </h2>
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
-            If you want to exercise any of the rights described above or are
-            dissatisfied with the way we have used your information, you should
-            contact our Data Protection officer
+            There is certain information that we must know about you so that we
+            can commence and execute our duties as a payment institution and
+            fulfil our associated obligations. There is also information that we
+            are legally obliged to collect. Without this data we may for example
+            not be able to enter into an agreement with you.
           </p>
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <p className="font-semibold">Mr. Sadri Sali LL.M., CCAS</p>
-            <p>
-              Email:{" "}
-              <a
-                href="mailto:info@bepay.money"
-                className="text-blue-500 font-bold"
-              >
-                info@bepay.money
-              </a>
-            </p>
-          </div>
+        </div>
+      </section>
+
+      {/* Section 9: How we protect your personal data */}
+      <section className="space-y-6">
+        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
+          9. How we protect your personal data
+        </h2>
+        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
-            We will seek to deal with your request without undue delay, and in
-            all events in accordance with the requirements of the applicable
-            law.
+            We apply an internal framework of policies and minimum standards to
+            keep your data safe. These policies and standards are periodically
+            updated to keep them up to date with regulations and market
+            developments. More specifically and in accordance with the law, we
+            take appropriate technical and organizational measures (policies and
+            procedures, IT security etc.) to ensure the confidentiality and
+            integrity of your personal data and the way it&apos;s processed.
           </p>
+          <p>
+            In addition, BEPAY MONEY employees are subject to confidentiality
+            and may not disclose your personal data unlawfully or unnecessarily.
+          </p>
+        </div>
+      </section>
+
+      {/* Section 10: What you can do to help us keep your data safe */}
+      <section className="space-y-6">
+        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
+          10. What you can do to help us keep your data safe
+        </h2>
+        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+          <p>
+            Unfortunately, the transmission of information via the internet in
+            general is not always completely secure. Although we will do our
+            best to protect your personal information, we cannot guarantee the
+            security of your information transmitted to our site; any
+            transmission is at your own risk. Once we have received your
+            information, we will use strict procedures and security features to
+            try to prevent unauthorized access. We do our utmost to protect your
+            data, but there are certain things you can do too:
+          </p>
+          <ul className="list-disc list-inside space-y-2 ml-4">
+            <li>
+              Install anti-virus software, anti-spyware software and a firewall
+              on your computer and keep them updated.
+            </li>
+            <li>
+              Do not leave verification tokens or your credit card unattended.
+            </li>
+            <li>
+              Keep your passwords strictly confidential and use strong
+              passwords, i.e. avoid obvious combinations of letters and figures.
+            </li>
+            <li>
+              Be alert online and learn how to spot unusual activity, such as a
+              new website address or phishing emails requesting personal
+              information.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* Section 11: How long we keep your personal data */}
+      <section className="space-y-6">
+        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
+          11. How long we keep your personal data
+        </h2>
+        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+          <p>
+            As per the GDPR, BEPAY MONEY will store and process your personal
+            data only as long as it is necessary to perform our obligations
+            under the agreement with you or as long as the law requires to store
+            it. Therefore, we keep your personal data as long as you are using
+            our Services and for five (5) years after termination of the
+            agreement to comply with the law. There may be circumstances (e.g.
+            fraud or anti-money laundering) whereby we are obliged to store your
+            personal data even longer.
+          </p>
+        </div>
+      </section>
+
+      {/* Section 12: Cookies Policy */}
+      <section className="space-y-6">
+        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
+          12. Cookies Policy
+        </h2>
+        <div className="space-y-6 text-base md:text-lg leading-relaxed text-[#080808]">
+          <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+            <p>
+              If you want to know more about BEPAY MONEY its data policies and
+              how we use your personal data, you can send us an e-mail at the
+              following dedicated email address:
+            </p>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <p>
+                Email:{" "}
+                <a
+                  href="mailto:compliance@bepay.money"
+                  className="text-blue-500 font-bold"
+                >
+                  compliance@bepay.money
+                </a>
+              </p>
+            </div>
+          </div>
         </div>
       </section>
     </div>

@@ -64,7 +64,7 @@ export const BusinessSection = () => {
         >
           <button className="flex items-center justify-center gap-2 bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 transition-colors">
             <Smartphone size={18} />
-            <span className="text-sm font-medium">Download bepay app</span>
+            <span className="text-sm font-medium">Download bepay money app</span>
           </button>
           <button className="flex items-center justify-center gap-2 bg-white text-black px-6 py-3 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors">
             <span className="text-sm font-medium">Checkout all services</span>

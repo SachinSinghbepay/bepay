@@ -340,6 +340,7 @@ console.log(idToken)
           data={forgotData}
           setData={setForgotData}
           onNext={handleForgotPassword}
+          onBackToLogin={() => setStep(1)}
         />
       )}
 

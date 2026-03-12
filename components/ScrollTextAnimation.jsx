@@ -5,11 +5,71 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { AnalyticsService } from "@/services/analyticsService";
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
+  // Helper component for the download buttons
+  const DownloadButtons = ({ buttonRef, id, src, alt, text,  onClick, isMobile  }) => {
+    return (
+      <button
+        ref={buttonRef}
+        onClick={onClick} 
+        className={`rounded-[61px] bg-[#080808] text-white flex items-center gap-[10px] ${isMobile ? "opacity-100 justify-center" : "justify-start"}`}
+        style={{
+          borderRadius: '61px',
+          width: isMobile ? '265px' : '260px',
+          height: isMobile ? '83px' : '90px',
+          paddingTop: isMobile ? '20px' : '30px',
+          paddingRight: isMobile ? '55px' : '50px',
+          paddingBottom: isMobile ? '20px' : '30px',
+          paddingLeft: isMobile ? '55px' : '40px',
+        }}
+      >
+        <span>
+          <Image
+            src={src}
+            width={22}
+            height={22}
+            className="h-6 w-7"
+            alt={alt}
+          />
+        </span>
+        <span
+          className="font-semibold text-sm leading-5 tracking-[0.02em] text-left"
+          style={{ fontFamily: "'Open Sans', sans-serif" }}
+        >
+          {text}
+        </span>
+      </button>
+    );
+  };
+
 const ScrollTextAnimation = () => {
+  const [isQRPopupOpen, setIsQRPopupOpen] = useState(false);
+const [selectedOS, setSelectedOS] = useState(null);
+
+const openSmartDownload = (targetOS) => {
+  const ua = navigator.userAgent || navigator.vendor || window.opera
+  const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream
+  const isAndroid = /android/i.test(ua)
+
+  const links = {
+    ios: process.env.NEXT_PUBLIC_IOS_APP_URL,
+    android: process.env.NEXT_PUBLIC_ANDROID_APP_URL,
+    gallery: process.env.NEXT_PUBLIC_GALLERY_APP_URL,
+  }
+
+  if ((isIOS && targetOS === "ios") || (isAndroid && targetOS === "android")) {
+    window.location.href = links[targetOS]
+    return
+  }
+
+  setSelectedOS(targetOS)
+  setIsQRPopupOpen(true)
+}
+
   const containerRef = useRef(null);
   const [hasTrackedView, setHasTrackedView] = useState(false);
   const firstLineRef = useRef(null);
@@ -33,7 +93,8 @@ const ScrollTextAnimation = () => {
   const downloadButton2Ref = useRef(null);
   const downloadButton3Ref = useRef(null);
 
-  const [windowWidth, setWindowWidth] = useState(0);
+const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1280);
+
   const [isReady, setIsReady] = useState(false);
   const isMobile = windowWidth < 1024;
 
@@ -376,40 +437,7 @@ const ScrollTextAnimation = () => {
     return () => ctx.revert();
   }, [windowWidth, finalCardSets.length, isMobile, isReady]);
 
-  // Helper component for the download buttons
-  const DownloadButtons = ({ buttonRef, id, src, alt, text }) => {
-    return (
-      <button
-        ref={buttonRef}
-        className={`rounded-[61px] bg-[#080808] text-white flex items-center gap-[10px] ${isMobile ? "opacity-100 justify-center" : "justify-start"}`}
-        style={{
-          borderRadius: '61px',
-          width: isMobile ? '265px' : '260px',
-          height: isMobile ? '83px' : '90px',
-          paddingTop: isMobile ? '20px' : '30px',
-          paddingRight: isMobile ? '55px' : '50px',
-          paddingBottom: isMobile ? '20px' : '30px',
-          paddingLeft: isMobile ? '55px' : '40px',
-        }}
-      >
-        <span>
-          <Image
-            src={src}
-            width={22}
-            height={22}
-            className="h-6 w-7"
-            alt={alt}
-          />
-        </span>
-        <span
-          className="font-semibold text-sm leading-5 tracking-[0.02em] text-left"
-          style={{ fontFamily: "'Open Sans', sans-serif" }}
-        >
-          {text}
-        </span>
-      </button>
-    );
-  };
+
 
   return (
     <>
@@ -677,20 +705,25 @@ const ScrollTextAnimation = () => {
             >
                 <DownloadButtons
                     buttonRef={downloadButton1Ref}
+                    isMobile={isMobile}
                     id="downloadButton1"
                     src="/apple.png"
                     alt="apple logo"
                     text="Download on the App Store"
+                    onClick={() => openSmartDownload("ios")} 
                 />
                 <DownloadButtons
                     buttonRef={downloadButton2Ref}
+                    isMobile={isMobile}
                     id="downloadButton2"
                     src="/playstore.png"
                     alt="playstore logo"
                     text="Get the App on Google Play!"
+                    onClick={() => openSmartDownload("android")} 
                 />
                 <DownloadButtons
                     buttonRef={downloadButton3Ref}
+                    isMobile={isMobile}
                     id="downloadButton3"
                     src="/gal.png"
                     alt="gallery logo"
@@ -705,20 +738,25 @@ const ScrollTextAnimation = () => {
         <div className="bg-[#F6F6F6] flex flex-col items-center space-y-3 px-4 w-full mt-0 pb-12">
           <DownloadButtons
             buttonRef={downloadButton1Ref}
+            isMobile={isMobile}
             id="downloadButton1-mobile"
             src="/apple.png"
             alt="apple logo"
             text="Download on the App Store"
+            onClick={() => openSmartDownload("ios")} 
           />
           <DownloadButtons
             buttonRef={downloadButton2Ref}
+            isMobile={isMobile}
             id="downloadButton2-mobile"
             src="/playstore.png"
             alt="playstore logo"
             text="Get the App on Google Play!"
+            onClick={() => openSmartDownload("android")} 
           />
           <DownloadButtons
             buttonRef={downloadButton3Ref}
+            isMobile={isMobile}
             id="downloadButton3-mobile"
             src="/gal.png"
             alt="gallery logo"
@@ -726,6 +764,15 @@ const ScrollTextAnimation = () => {
           />
         </div>
       )}
+
+      <AppDownloadPopups
+  isOSPopupOpen={false}
+  setIsOSPopupOpen={() => {}}
+  isQRPopupOpen={isQRPopupOpen}
+  setIsQRPopupOpen={setIsQRPopupOpen}
+  selectedOS={selectedOS}
+  setSelectedOS={setSelectedOS}
+/>
     </>
   );
 };

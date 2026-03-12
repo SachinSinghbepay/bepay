@@ -219,12 +219,12 @@ export default function Header() {
 
                   handleDownloadClick()
                 }} variant="outline"
-                className="hidden lg:flex cursor-pointer lg:w-[199px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
+                className="hidden lg:flex cursor-pointer lg:w-[225px] lg:h-[56px] items-center border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 hover:scale-105"
               >
                 <div className="flex gap-2">
                   <Smartphone className="w-4 h-4 lg:w-5 lg:h-9" />
                   <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">
-                    Download bepay app
+                    Download bepay money app
                   </span>
                 </div>
               </Button>
@@ -370,7 +370,7 @@ export default function Header() {
                   className="flex px-[24px] py-[16px] w-full items-center text-[12px] justify-center space-x-2 border border-[#C0C0C0] text-black hover:bg-gray-50 bg-transparent rounded-full transition-all duration-200 mt-4"
                 >
                   <Smartphone className="w-4 h-4" />
-                  <span className="font-semibold text-xs">Download bepay app</span>
+                  <span className="font-semibold text-xs">Download bepay money app</span>
                 </Button>
 
               </>

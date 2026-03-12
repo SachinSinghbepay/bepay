@@ -287,17 +287,17 @@ const DesktopCreditCardView = ({ scrollYProgress, handleStartClick }) => {
             </motion.p>
             <motion.p style={{ x: line2X, opacity: line2Opacity }}>
               <span className="font-semibold text-[#333333]">
-                Card — designed for rewards,
+                Card, designed for rewards,
               </span>
             </motion.p>
             <motion.p style={{ x: line3X, opacity: line3Opacity }}>
               <span className="font-semibold text-[#333333]">
-                lifestyle, zero
+                lifestyle,
               </span>{" "}
               and
             </motion.p>
             <motion.p style={{ x: line4X, opacity: line4Opacity }}>
-              <span className="font-semibold text-[#333333]">compromise.</span>
+              <span className="font-semibold text-[#333333]">     zero compromise.</span>
             </motion.p>
           </div>
 
@@ -572,14 +572,13 @@ export default function CreditCardSection() {
       <section
         ref={sectionRef}
         // Mobile view no longer needs the huge scroll height, only desktop does.
-        className={`relative max-w-[1500px] mx-auto ${
-          isMobile ? "min-h-0" : "md:min-h-[800vh]"
-        }`}
+        className={`relative max-w-[1500px] mx-auto ${isMobile ? "min-h-0" : "md:min-h-[800vh]"
+          }`}
       >
         {isMobile ? (
           <MobileCreditCardView
             handleStartClick={handleStartClick}
-            // Removed scrollYProgress and containerRef for static mobile view
+          // Removed scrollYProgress and containerRef for static mobile view
           />
         ) : (
           <DesktopCreditCardView
