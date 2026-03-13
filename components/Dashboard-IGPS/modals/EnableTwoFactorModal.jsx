@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import ModalFrame from "./ModalFrame";
 import { FiX, FiCopy } from "react-icons/fi";
-import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
+
 import Image from "next/image";
 
 

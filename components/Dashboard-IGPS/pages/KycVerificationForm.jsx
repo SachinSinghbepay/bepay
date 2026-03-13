@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { IgpsService } from "@/services/igpsService";
 import { getCountries, getCountryCallingCode } from "libphonenumber-js";
-
+import { useAuth } from "../context/AuthContext";
 
 
 export default function KycVerificationForm() {

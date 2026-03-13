@@ -2,9 +2,9 @@
 
 import { Trash2, Mail, Landmark, Wallet } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { IgpsService } from "../../../services/igpsService";
-import { createPortal } from "react-dom";
 
+import { createPortal } from "react-dom";
+import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
 
 export default function Team({ onOpenModal }) {

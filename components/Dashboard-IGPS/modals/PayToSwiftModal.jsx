@@ -1,6 +1,6 @@
 import ModalFrame from "./ModalFrame";
 import { useState, useEffect, useRef } from "react";
-import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
 
 

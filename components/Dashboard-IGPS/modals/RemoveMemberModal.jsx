@@ -1,6 +1,6 @@
 "use client";
 import ModalFrame from "./ModalFrame";
-import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 
 

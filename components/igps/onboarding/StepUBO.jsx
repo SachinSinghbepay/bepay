@@ -2,9 +2,8 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, Check } from 'lucide-react';
 import { useEffect } from 'react';
-import { IgpsService } from '@/services/igpsService';
 import CustomSelect from '@/components/Dashboard-IGPS/components/CustomSelect';
-
+import { useAuth } from "../context/AuthContext";
 
 
 export default function StepUBO({ ubos, onChange, onSubmit, onBack, isSubmitting }) {

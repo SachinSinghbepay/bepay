@@ -38,7 +38,7 @@ const { igpsService } = useAuth();
                     alt=""
                     width={24}
                     height={24}
-                />
+                /> 
             </button>
             {/* USER CARD */}
             <div className="bg-white rounded-3xl p-6 flex items-center justify-between shadow-sm">

@@ -25,13 +25,23 @@ export default function StepEmail({ data, setData, onNext, onGoogleSuccess }) {
                     </h2>
 
                     {/* Google Button */}
-                    <GoogleLogin
-                        onSuccess={onGoogleSuccess}
-                        onError={() => console.log("Google signup failed")}
-                        theme="outline"
-                        size="large"
-                        text="continue_with"
-                    />
+                    <div className="relative w-full h-14">
+                        {/* Your styled fake button underneath */}
+                        <div className="absolute inset-0 w-full flex items-center justify-center gap-3 h-14 rounded-2xl border border-gray-300 hover:bg-gray-50 transition font-medium text-gray-700 text-sm cursor-pointer">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5 h-5" />
+                            Continue with Google
+                        </div>
+
+                        {/* Real Google button on top - invisible but clickable */}
+                        <div className="absolute inset-0 z-10 overflow-hidden rounded-2xl opacity-[0.01]">
+                            <GoogleLogin
+                                onSuccess={onGoogleSuccess}
+                                onError={() => console.log("Google login failed")}
+                                width="500"
+                                size="large"
+                            />
+                        </div>
+                    </div>
 
                     {/* Divider */}
                     <div className="relative flex py-6 items-center">

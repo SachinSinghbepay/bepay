@@ -3,7 +3,7 @@
 import { Trash2, Mail, Landmark, Wallet, Plus, RefreshCw } from "lucide-react";
 import { useState, useEffect } from "react";
 import { IgpsService } from "../../../services/igpsService";
-
+import { useAuth } from "../context/AuthContext";
 
 
 export default function Beneficiary({ onOpenModal }) {

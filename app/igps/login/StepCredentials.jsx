@@ -6,6 +6,9 @@ import { GoogleLogin } from "@react-oauth/google";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import { FiChevronLeft } from "react-icons/fi";
+import { useGoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+
 
 export default function StepCredentials({
   email,
@@ -17,9 +20,10 @@ export default function StepCredentials({
   success,
   onSubmit,
   onForgot,
-onGoogleSuccess
+  onGoogleSuccess
 }) {
   const [showPassword, setShowPassword] = useState(false);
+
 
   return (
     <div className="w-full max-w-xl   flex flex-col justify-between">
@@ -34,14 +38,23 @@ onGoogleSuccess
         )}
 
         {/* Google Button */}
-        <GoogleLogin
-          onSuccess={onGoogleSuccess}
-          onError={() => console.log("Google login failed")}
-          theme="outline"
-          size="large"
-          text="continue_with"
-        />
+            <div className="relative w-full h-14">
+    {/* Your styled fake button underneath */}
+    <div className="absolute inset-0 w-full flex items-center justify-center gap-3 h-14 rounded-2xl border border-gray-300 hover:bg-gray-50 transition font-medium text-gray-700 text-sm cursor-pointer">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5 h-5" />
+        Continue with Google
+    </div>
 
+    {/* Real Google button on top - invisible but clickable */}
+    <div className="absolute inset-0 z-10 overflow-hidden rounded-2xl opacity-[0.01]">
+        <GoogleLogin
+            onSuccess={onGoogleSuccess}
+            onError={() => console.log("Google login failed")}
+            width="500"
+            size="large"
+        />
+    </div>
+</div>
         {/* Divider */}
         <div className="relative flex py-4 items-center mt-0">
           <div className="flex-grow border-t border-gray-200"></div>

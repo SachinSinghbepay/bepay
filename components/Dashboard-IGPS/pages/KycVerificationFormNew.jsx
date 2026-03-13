@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { IgpsService } from "@/services/igpsService";
 import { getCountries, getCountryCallingCode } from "libphonenumber-js";
 import { Loader2 } from "lucide-react";
 import CustomSelect from "../components/CustomSelect";
@@ -26,7 +25,7 @@ export default function KycVerificationForm() {
 
 
   // ✅ Initialize service instance when component mounts (AFTER cookies are available)
-  const { igpsService } = useAuth();
+  const { igpsService, user, organization, refreshKycStatus } = useAuth();
 
   // ✅ Show KYC completion message and redirect
   const showKYCCompletedMessage = () => {
@@ -40,7 +39,8 @@ export default function KycVerificationForm() {
         localStorage.removeItem("kyc_verification_progress");
       }
 
-      setTimeout(() => {
+      setTimeout(async () => {
+        await refreshKycStatus();
         router.push("/igps/dashboard");
       }, 2000);
     } catch (err) {
@@ -168,6 +168,15 @@ export default function KycVerificationForm() {
     },
   });
 
+  useEffect(() => {
+    if (!user) return;
+    setFormData(prev => ({
+      ...prev,
+      fullName: prev.fullName || organization?.name || user?.organizationName || (user?.firstName ? `${user.firstName} ${user.lastName}` : ""),
+      email: prev.email || user?.email || "",
+    }));
+  }, [user, organization]);
+
   // Countries & States
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
@@ -212,7 +221,7 @@ export default function KycVerificationForm() {
     { label: "SSN (9 digits)", value: "SSN9" },
     { label: "Passport", value: "PASSPORT" },
     { label: "Driver's License", value: "DRIVER_LICENSE" },
-    { label: "Tax ID (EIN)", value: "TAX_ID" }, 
+    { label: "Tax ID (EIN)", value: "TAX_ID" },
   ];
 
   // Phone Code Options with Flags
@@ -568,7 +577,7 @@ export default function KycVerificationForm() {
         setSuccess("Sender details submitted successfully!");
         // ✅ mark step1 completed immediately
         setSenderCompleted(true);
-
+        await refreshKycStatus()
         // ✅ store data so UI can show summary
         setSenderProfile({
           fullName: formData.fullName,
@@ -644,6 +653,7 @@ export default function KycVerificationForm() {
       setSuccess("Documents uploaded successfully!");
       saveProgress(3, formData, senderId);
       setCurrentStep(3);
+      await refreshKycStatus();
       setError("");
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
@@ -720,7 +730,8 @@ export default function KycVerificationForm() {
           localStorage.removeItem("kyc_verification_progress");
         }
 
-        setTimeout(() => {
+        setTimeout(async () => {
+          await refreshKycStatus();
           router.push("/igps/dashboard");
         }, 2000);
       } else {

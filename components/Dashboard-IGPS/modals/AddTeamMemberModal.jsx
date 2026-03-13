@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
-import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
 
 
