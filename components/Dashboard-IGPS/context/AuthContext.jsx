@@ -572,6 +572,26 @@ export function AuthProvider({ children }) {
 
     }, [user]);
 
+    // Add this function inside AuthProvider:
+const refreshKycStatus = useCallback(async () => {
+    if (!user) return;
+    
+    try {
+        const res = await igpsService.getKYCStatus();
+        if (res.success) {
+            const remaining = res.data.remainingSteps || [];
+            const required = ["sender_details_submitted", "documents_uploaded", "ubo_submitted"];
+            const needsKyc = required.some(step => remaining.includes(step));
+            const newStatus = needsKyc ? "incomplete" : "complete";
+            
+            setKycStatus(newStatus);
+            localStorage.setItem("kyc_status", JSON.stringify({ value: newStatus, ts: Date.now() }));
+        }
+    } catch {
+        setKycStatus("incomplete");
+    }
+}, [user]);
+
     return (
         <AuthContext.Provider value={{
             user,
@@ -583,7 +603,8 @@ export function AuthProvider({ children }) {
             refreshUser,
             completeLogin,
             refreshToken,
-            kycStatus
+            kycStatus,
+            refreshKycStatus 
         }}>
             {children}
         </AuthContext.Provider>

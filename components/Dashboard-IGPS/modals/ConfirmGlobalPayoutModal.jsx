@@ -1,9 +1,9 @@
 import ModalFrame from "./ModalFrame";
 import { useState, useEffect } from "react";
-import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
 
-const igpsService = new IgpsService();
+
 
 export default function ConfirmGlobalPayoutModal({
     onClose,
@@ -13,6 +13,7 @@ export default function ConfirmGlobalPayoutModal({
     beneficiary,
     paymentDetails
 }) {
+    const { igpsService } = useAuth();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 

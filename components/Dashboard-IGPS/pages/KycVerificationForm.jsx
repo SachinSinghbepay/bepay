@@ -3,10 +3,11 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { IgpsService } from "@/services/igpsService";
 import { getCountries, getCountryCallingCode } from "libphonenumber-js";
+import { useAuth } from "../context/AuthContext";
 
-const igpsService = new IgpsService();
 
 export default function KycVerificationForm() {
+    const { igpsService } = useAuth();
     const [accountType, setAccountType] = useState("business");
     const [volume, setVolume] = useState("under_10k");
     const [loading, setLoading] = useState(false);

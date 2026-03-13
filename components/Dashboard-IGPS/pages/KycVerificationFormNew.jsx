@@ -2,15 +2,15 @@
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { IgpsService } from "@/services/igpsService";
 import { getCountries, getCountryCallingCode } from "libphonenumber-js";
 import { Loader2 } from "lucide-react";
 import CustomSelect from "../components/CustomSelect";
+import { useAuth } from "../context/AuthContext";
 
 export default function KycVerificationForm() {
   const router = useRouter();
   // ✅ Initialize service as null - will be set in useEffect after mount
-  const [igpsService, setIgpsService] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [senderId, setSenderId] = useState(null);
@@ -23,11 +23,9 @@ export default function KycVerificationForm() {
   const [uboCompleted, setUboCompleted] = useState(false);
   const [uboProfile, setUboProfile] = useState(null);
 
+
   // ✅ Initialize service instance when component mounts (AFTER cookies are available)
-  useEffect(() => {
-    const service = new IgpsService();
-    setIgpsService(service);
-  }, []);
+  const { igpsService, user, organization, refreshKycStatus } = useAuth();
 
   // ✅ Show KYC completion message and redirect
   const showKYCCompletedMessage = () => {
@@ -41,7 +39,8 @@ export default function KycVerificationForm() {
         localStorage.removeItem("kyc_verification_progress");
       }
 
-      setTimeout(() => {
+      setTimeout(async () => {
+        await refreshKycStatus();
         router.push("/igps/dashboard");
       }, 2000);
     } catch (err) {
@@ -169,6 +168,15 @@ export default function KycVerificationForm() {
     },
   });
 
+  useEffect(() => {
+    if (!user) return;
+    setFormData(prev => ({
+      ...prev,
+      fullName: prev.fullName || organization?.name || user?.organizationName || (user?.firstName ? `${user.firstName} ${user.lastName}` : ""),
+      email: prev.email || user?.email || "",
+    }));
+  }, [user, organization]);
+
   // Countries & States
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
@@ -213,7 +221,7 @@ export default function KycVerificationForm() {
     { label: "SSN (9 digits)", value: "SSN9" },
     { label: "Passport", value: "PASSPORT" },
     { label: "Driver's License", value: "DRIVER_LICENSE" },
-    { label: "Tax ID (EIN)", value: "EIN" },
+    { label: "Tax ID (EIN)", value: "TAX_ID" },
   ];
 
   // Phone Code Options with Flags
@@ -569,7 +577,7 @@ export default function KycVerificationForm() {
         setSuccess("Sender details submitted successfully!");
         // ✅ mark step1 completed immediately
         setSenderCompleted(true);
-
+        await refreshKycStatus()
         // ✅ store data so UI can show summary
         setSenderProfile({
           fullName: formData.fullName,
@@ -645,6 +653,7 @@ export default function KycVerificationForm() {
       setSuccess("Documents uploaded successfully!");
       saveProgress(3, formData, senderId);
       setCurrentStep(3);
+      await refreshKycStatus();
       setError("");
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
@@ -721,7 +730,8 @@ export default function KycVerificationForm() {
           localStorage.removeItem("kyc_verification_progress");
         }
 
-        setTimeout(() => {
+        setTimeout(async () => {
+          await refreshKycStatus();
           router.push("/igps/dashboard");
         }, 2000);
       } else {
@@ -773,16 +783,16 @@ export default function KycVerificationForm() {
   const progress = (currentStep / 3) * 100;
 
   // ✅ Guard: Don't render until igpsService is initialized
-  if (!igpsService) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-12 px-4">
-        <div className="flex items-center gap-3">
-          <Loader2 className="w-6 h-6 animate-spin text-black" />
-          <p className="text-gray-600">Initializing form...</p>
-        </div>
-      </div>
-    );
-  }
+  // if (!igpsService) {
+  //   return (
+  //     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-12 px-4">
+  //       <div className="flex items-center gap-3">
+  //         <Loader2 className="w-6 h-6 animate-spin text-black" />
+  //         <p className="text-gray-600">Initializing form...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 font-sans">
@@ -1579,7 +1589,7 @@ export default function KycVerificationForm() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm mb-2">Country Code*</label>
+                      <label className="block text-sm mb-2">Country*</label>
                       <CustomSelect
                         options={countries}
                         value={formData.ubo.identity.countryCode}
@@ -1655,7 +1665,7 @@ export default function KycVerificationForm() {
             <button
               type="button"
               onClick={handleNext}
-             disabled={loading || (currentStep === 3 && uboCompleted)}
+              disabled={loading || (currentStep === 3 && uboCompleted)}
               className={`px-8 h-12 rounded-full text-white text-sm font-medium transition flex items-center gap-2 cursor-pointer ${loading
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-black hover:bg-gray-800"
@@ -1667,7 +1677,7 @@ export default function KycVerificationForm() {
                   ? "Submitting..."
                   : "Complete KYC"
                 : loading
-                  ? "Loading..."  
+                  ? "Loading..."
                   : "Next"}
             </button>
           </div>

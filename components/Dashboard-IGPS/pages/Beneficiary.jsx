@@ -3,10 +3,11 @@
 import { Trash2, Mail, Landmark, Wallet, Plus, RefreshCw } from "lucide-react";
 import { useState, useEffect } from "react";
 import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
 
-const igpsService = new IgpsService();
 
 export default function Beneficiary({ onOpenModal }) {
+    const { igpsService } = useAuth();
     const [beneficiaries, setBeneficiaries] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState("All");

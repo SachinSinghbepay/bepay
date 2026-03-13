@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
-import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
 
 
-const igpsService = new IgpsService();
+
 
 export default function AddNewWalletBeneficiary({ onClose, onBack }) {
+  const { igpsService } = useAuth();
   const scrollRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

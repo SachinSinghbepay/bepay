@@ -1,9 +1,9 @@
 import ModalFrame from "./ModalFrame";
 import { useState, useEffect, useRef } from "react";
-import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
 
-const igpsService = new IgpsService();
+
 
 export default function DepositSelectModal({
   onClose,
@@ -13,6 +13,7 @@ export default function DepositSelectModal({
   onBack,
   heading = "Deposit"
 }) {
+  const { igpsService } = useAuth();
   const [wallets, setWallets] = useState([]);
   const [loading, setLoading] = useState(true);
 

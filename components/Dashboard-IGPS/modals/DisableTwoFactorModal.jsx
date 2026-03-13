@@ -6,11 +6,12 @@ import { FiX } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 import { IgpsService } from "../../../services/igpsService";
 
-const igpsService = new IgpsService();
+
 
 export default function DisableTwoFactorModal({ onClose }) {
+  const { igpsService } = useAuth();
   const { refreshUser } = useAuth();
-  const [password, setPassword] = useState(""); 
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [mode, setMode] = useState("form");

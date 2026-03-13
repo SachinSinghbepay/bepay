@@ -4,9 +4,9 @@ import React from "react";
 import { useState } from "react";
 import { IgpsService } from "../../../services/igpsService";
 
-const igpsService = new IgpsService();
-export default function Profile({ onOpenModal, setActivePage }) {
 
+export default function Profile({ onOpenModal, setActivePage }) {
+const { igpsService } = useAuth();
     const { user, organization, loading } = useAuth();
     if (loading) return <div>Loading...</div>;
 
@@ -38,7 +38,7 @@ export default function Profile({ onOpenModal, setActivePage }) {
                     alt=""
                     width={24}
                     height={24}
-                />
+                /> 
             </button>
             {/* USER CARD */}
             <div className="bg-white rounded-3xl p-6 flex items-center justify-between shadow-sm">
