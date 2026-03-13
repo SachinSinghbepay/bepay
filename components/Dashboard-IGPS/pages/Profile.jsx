@@ -4,9 +4,9 @@ import React from "react";
 import { useState } from "react";
 import { IgpsService } from "../../../services/igpsService";
 
-const igpsService = new IgpsService();
-export default function Profile({ onOpenModal, setActivePage }) {
 
+export default function Profile({ onOpenModal, setActivePage }) {
+const { igpsService } = useAuth();
     const { user, organization, loading } = useAuth();
     if (loading) return <div>Loading...</div>;
 

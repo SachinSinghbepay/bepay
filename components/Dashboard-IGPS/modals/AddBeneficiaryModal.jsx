@@ -6,9 +6,10 @@ import { getCountries, getCountryCallingCode } from "libphonenumber-js";
 import Image from "next/image";
 
 
-const igpsService = new IgpsService();
+
 
 export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
+    const { igpsService } = useAuth();
     const scrollRef = useRef(null);
 
     useEffect(() => {
@@ -264,7 +265,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                 setBanks(formatted);
             } else {
                 setBanks([]);
-                setBankDropdownOpen(false); 
+                setBankDropdownOpen(false);
             }
 
             setLoadingBanks(false);

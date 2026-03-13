@@ -5,9 +5,10 @@ import { IgpsService } from "../../../services/igpsService";
 import Image from "next/image";
 
 
-const igpsService = new IgpsService();
+
 
 export default function AddNewWalletBeneficiary({ onClose, onBack }) {
+  const { igpsService } = useAuth();
   const scrollRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

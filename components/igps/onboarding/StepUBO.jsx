@@ -5,9 +5,10 @@ import { useEffect } from 'react';
 import { IgpsService } from '@/services/igpsService';
 import CustomSelect from '@/components/Dashboard-IGPS/components/CustomSelect';
 
-const igpsService = new IgpsService();
+
 
 export default function StepUBO({ ubos, onChange, onSubmit, onBack, isSubmitting }) {
+    const { igpsService } = useAuth();
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const [loadingStates, setLoadingStates] = useState(false);

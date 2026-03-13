@@ -4,7 +4,7 @@ import { Trash2, Mail, Landmark, Wallet } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { IgpsService } from "../../../services/igpsService";
 import { createPortal } from "react-dom";
-const igpsService = new IgpsService();
+
 import Image from "next/image";
 
 export default function Team({ onOpenModal }) {
@@ -47,6 +47,7 @@ export default function Team({ onOpenModal }) {
     //     },
 
     // ];
+    const { igpsService } = useAuth();
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(true);
 

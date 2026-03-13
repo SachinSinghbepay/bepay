@@ -6,7 +6,6 @@ import { FiX, FiCopy } from "react-icons/fi";
 import { IgpsService } from "../../../services/igpsService";
 import Image from "next/image";
 
-const igpsService = new IgpsService();
 
 export default function EnableTwoFactorModal({
     onClose,
@@ -15,7 +14,7 @@ export default function EnableTwoFactorModal({
     backupCodes,
     onConfirm
 }) {
-
+    const { igpsService } = useAuth();
     const scrollRef = useRef(null);
 
     useEffect(() => {

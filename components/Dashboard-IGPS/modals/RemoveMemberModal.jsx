@@ -3,11 +3,11 @@ import ModalFrame from "./ModalFrame";
 import { IgpsService } from "../../../services/igpsService";
 import { useState } from "react";
 
-const igpsService = new IgpsService();
-
-
 
 export default function RemoveMemberModal({ onClose, member, refresh }) {
+
+    const { igpsService } = useAuth();
+
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const initial = member?.name?.charAt(0).toUpperCase();

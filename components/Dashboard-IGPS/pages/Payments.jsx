@@ -5,10 +5,10 @@ import React, { useEffect, useState } from "react";
 import { IgpsService } from "@/services/igpsService";
 
 
-const igpsService = new IgpsService();
+
 
 export default function Payments({ onOpenModal }) {
-
+const { igpsService } = useAuth();
   const [activeFilter, setActiveFilter] = useState("All");
 
   const [orders, setOrders] = useState([]);

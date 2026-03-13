@@ -5,7 +5,7 @@ import CustomSelect from "../components/CustomSelect";
 import { IgpsService } from "../../../services/igpsService";
 import Image from "next/image";
 
-const igpsService = new IgpsService();
+
 const roleOptions = [
     { label: "Owner", value: "owner" },
     { label: "Admin", value: "admin" },
@@ -18,6 +18,7 @@ export default function AddTeamMemberModal({
     onSubmit,
     refresh
 }) {
+    const { igpsService } = useAuth();
     const scrollRef = useRef(null);
 
     useEffect(() => {
