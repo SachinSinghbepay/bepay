@@ -271,6 +271,7 @@ function IgpsSignupPageContent() {
             setData={setFormData}
             onNext={handleFinalSubmit}
             onBack={() => setStep(2)}
+            loading={loading}
           />
         );
       default:

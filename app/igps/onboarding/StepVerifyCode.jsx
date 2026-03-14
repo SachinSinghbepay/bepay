@@ -82,6 +82,26 @@ export default function StepVerifyCode({ data, setData, onNext, onBack, onResend
         onNext(fullCode);
     };
 
+    const handlePaste = (e) => {
+        const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+
+        if (!pasted) return;
+
+        const newCode = [...code];
+
+        pasted.split("").forEach((char, i) => {
+            newCode[i] = char;
+        });
+
+        setCode(newCode);
+
+        // Move focus to last filled box
+        const nextIndex = Math.min(pasted.length, 5);
+        inputsRef.current[nextIndex]?.focus();
+
+        e.preventDefault();
+    };
+
     return (
         <div className="flex flex-col h-[500px] px-10 py-4">
 
@@ -116,12 +136,9 @@ export default function StepVerifyCode({ data, setData, onNext, onBack, onResend
                                     inputMode="numeric"
                                     maxLength={1}
                                     value={digit}
-                                    onChange={(e) =>
-                                        handleChange(e.target.value, index)
-                                    }
-                                    onKeyDown={(e) =>
-                                        handleKeyDown(e, index)
-                                    }
+                                    onChange={(e) => handleChange(e.target.value, index)}
+                                    onKeyDown={(e) => handleKeyDown(e, index)}
+                                    onPaste={handlePaste}
                                     className="w-14 h-14 rounded-xl border text-center text-lg font-medium focus:border-black outline-none transition"
                                 />
                             ))}
