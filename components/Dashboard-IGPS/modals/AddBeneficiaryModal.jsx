@@ -35,6 +35,24 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
+    // payment config for each countries    
+    const PAYMENT_CONFIG = {
+        IN: {
+            paymentType: "bank_account",
+            fields: ["accountNumber", "accountType", "bankId", "ifscCode"]
+        },
+
+        US: {
+            paymentType: "bank_account",
+            fields: ["accountNumber", "routingNumber", "transferType"]
+        },
+
+        BR: {
+            paymentType: "pix",
+            fields: ["pixKeyId", "taxId"]
+        }
+    };
+
     // Selection State
     const [addBank, setAddBank] = useState(false);
     const [addWallet, setAddWallet] = useState(false);
@@ -44,6 +62,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [businessName, setBusinessName] = useState("");
+    const [businessRegistrationNumber, setbusinessRegistrationNumber] = useState("");
     const [email, setEmail] = useState("");
 
     // Address State
@@ -64,6 +83,13 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
         { label: "Ethereum", value: "ethereum", icon: "/icons/eth.svg" }
     ];
 
+    const transferTypeOptions = [
+        { label: "ACH (Standard Bank Transfer)", value: "ach" },
+        { label: "RTP (Real Time Payment)", value: "rtp" },
+        { label: "Wire Transfer", value: "wire" },
+        { label: "SWIFT (International Wire)", value: "swift" }
+    ];
+
     // --- BANK STATE (Simplified/Ported) ---
     // If Bank selected, we might want Business Name? 
     // For now, let's stick to the requested change which focused on Crypto beneficiary payload.
@@ -73,10 +99,18 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
     const [accountNumber, setAccountNumber] = useState("");
 
     const [routingNumber, setRoutingNumber] = useState(""); // US
+    const [transferType, setTransferType] = useState("");
     const [sortCode, setSortCode] = useState(""); // UK
     const [ifscCode, setIfscCode] = useState(""); // IN
     const [bankId, setBankId] = useState(""); // IN
     const [accountType, setAccountType] = useState("");
+    const [pixKeyId, setPixKeyId] = useState(""); //BR
+    const [taxId, setTaxId] = useState(""); //BR
+
+
+
+    const fields = PAYMENT_CONFIG[country]?.fields || [];
+
 
     const [phoneNumber, setPhoneNumber] = useState("");
     const [search, setSearch] = useState("");
@@ -127,6 +161,18 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
         });
     }, []);
 
+    useEffect(() => {
+        setAccountNumber("");
+        setRoutingNumber("");
+        setSortCode("");
+        setIfscCode("");
+        setBankId("");
+        setAccountType("");
+        setPixKeyId("");
+        setTaxId("");
+        setBankSearch("");
+    }, [country]);
+
     const [phoneCode, setPhoneCode] = useState(phoneCodeOptions.find(o => o.country === "US")?.value ?? phoneCodeOptions[0]?.value);
     const [phoneCodeOpen, setPhoneCodeOpen] = useState(false);
     const [phoneCodeSearch, setPhoneCodeSearch] = useState("");
@@ -173,7 +219,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
         if (beneficiaryType === "individual") {
             if (!firstName.trim() || !lastName.trim()) return false;
         } else if (beneficiaryType === "business") {
-            if (!businessName.trim()) return false;
+            if (!businessName.trim() || !businessRegistrationNumber.trim()) return false;
         }
         if (!email.trim()) return false;
         if (!country || !addressLine1.trim() || !city.trim() || !selectedState.trim() || !zip.trim()) return false;
@@ -186,15 +232,30 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
         if (beneficiaryType === "individual") {
             if (!firstName.trim() || !lastName.trim()) return false;
         } else if (beneficiaryType === "business") {
-            if (!businessName.trim()) return false;
+            if (!businessName.trim() || !businessRegistrationNumber.trim()) return false;
         }
 
         if (!email.trim()) return false;
         if (!country) return false;
-        if (!accountNumber.trim()) return false;
-        if (!accountType) return false;
-        if (!bankId.trim()) return false;
-        if (!ifscCode.trim()) return false;
+
+        const fieldValues = {
+            accountNumber,
+            accountType,
+            bankId,
+            ifscCode,
+            routingNumber,
+            sortCode,
+            pixKeyId,
+            taxId,
+            transferType
+        };
+
+        for (const field of fields) {
+            const value = fieldValues[field];
+            if (!value || !value.toString().trim()) {
+                return false;
+            }
+        }
 
         return true;
     };
@@ -284,6 +345,30 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
             phoneNumber.trim() ? `${selectedPhoneOption?.dialCode}${phoneNumber}`
                 : undefined;
 
+
+        const config = PAYMENT_CONFIG[country] || PAYMENT_CONFIG["IN"];
+        const paymentInfo = {
+            paymentType: config.paymentType
+        };
+
+        config.fields.forEach(field => {
+            const value = {
+                accountNumber,
+                accountType,
+                bankId,
+                ifscCode,
+                routingNumber,
+                sortCode,
+                pixKeyId,
+                taxId,
+                transferType
+            }[field];
+
+            if (value) {
+                paymentInfo[field] = value;
+            }
+        });
+
         try {
             let payload = {};
 
@@ -306,7 +391,8 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                         lastName: lastName
                     }),
                     ...(beneficiaryType === "business" && {
-                        fullName: businessName
+                        fullName: businessName,
+                        businessRegistrationNumber
                     }),
                     email: email,
                     address: commonAddress,
@@ -326,18 +412,13 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                         lastName
                     }),
                     ...(beneficiaryType === "business" && {
-                        fullName: businessName
+                        fullName: businessName,
+                        businessRegistrationNumber
                     }),
                     email,
                     ...(fullPhone && { phone: fullPhone }),
                     address: commonAddress,
-                    paymentInfo: {
-                        paymentType: "bank_account",
-                        accountNumber,
-                        accountType,
-                        bankId,
-                        ifscCode
-                    }
+                    paymentInfo
                 };
             }
             console.log("PAYLOAD:", payload);
@@ -413,16 +494,28 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                             </div>
                         </div>
                     ) : (
-                        <div className="space-y-2">
-                            <label className="text-sm text-[#6A6A6A]">Business Name</label>
-                            <input
-                                value={businessName}
-                                onChange={(e) => setBusinessName(e.target.value)}
-                                placeholder="Your Business Name"
-                                className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
-                            />
-                        </div>
+                        <>
+                            <div className="space-y-2">
+                                <label className="text-sm text-[#6A6A6A]">Business Name</label>
+                                <input
+                                    value={businessName}
+                                    onChange={(e) => setBusinessName(e.target.value)}
+                                    placeholder="Your Business Name"
+                                    className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm text-[#6A6A6A]">Business Registration Number</label>
+                                <input
+                                    value={businessRegistrationNumber}
+                                    onChange={(e) => setbusinessRegistrationNumber(e.target.value)}
+                                    placeholder="Your Business Registration Number"
+                                    className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                />
+                            </div>
+                        </>
                     )}
+
 
                     <div className="space-y-2">
                         <label className="text-sm text-[#6A6A6A]">Email</label>
@@ -455,38 +548,17 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                     {/* --- BANK FORM --- */}
                     {addBank && (
                         <div className="pt-8 space-y-6">
-                            <div className="space-y-4">
+                            <div className="space-y-2">
+                                <label className="text-sm text-[#6A6A6A]">Country</label>
 
-                                {/* Account Number */}
-                                <input
-                                    placeholder="Account Number"
-                                    value={accountNumber}
-                                    onChange={(e) => setAccountNumber(e.target.value)}
-                                    className="w-full h-12 border rounded-xl px-4"
+                                <CustomSelect
+                                    options={countries}
+                                    value={country}
+                                    onChange={setCountry}
+                                    placeholder="Select Country"
                                 />
-
-                                {/* Account Type */}
-                                <div className="space-y-2">
-                                    <label className="text-sm text-gray-500">Account type</label>
-                                    <CustomSelect
-                                        options={accountTypeOptions}
-                                        value={accountType}
-                                        onChange={setAccountType}
-                                        placeholder="Select account type"
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-sm text-[#6A6A6A]">Country</label>
-
-                                    <CustomSelect
-                                        options={countries}
-                                        value={country}
-                                        onChange={setCountry}
-                                        placeholder="Select Country"
-                                    />
-                                </div>
-
+                            </div>
+                            {fields.includes("bankId") && (
                                 <div className="space-y-2 relative">
                                     <label className="text-sm text-[#6A6A6A]">Bank</label>
 
@@ -538,20 +610,108 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                                         />
                                     )}
                                 </div>
+                            )}
+                            <div className="space-y-4">
+
+
+                                {/* Account Type */}
+                                {fields.includes("accountType") && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-gray-500">Account type</label>
+                                        <CustomSelect
+                                            options={accountTypeOptions}
+                                            value={accountType}
+                                            onChange={setAccountType}
+                                            placeholder="Select account type"
+                                        />
+                                    </div>
+                                )}
+                                {/* Account Number */}
+                                {fields.includes("accountNumber") && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-gray-500">Account Number</label>
+                                        <input
+                                            placeholder="Account Number"
+                                            value={accountNumber}
+                                            onChange={(e) => setAccountNumber(e.target.value)}
+                                            className="w-full h-12 border rounded-xl px-4"
+                                        />
+                                    </div>
+                                )}
+
+                                {fields.includes("transferType") && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-gray-500">Transfer type</label>
+                                        <CustomSelect
+                                            options={transferTypeOptions}
+                                            value={transferType}
+                                            onChange={setTransferType}
+                                            placeholder="Select transfer type"
+                                        />
+                                    </div>
+                                )}
+
+                                {fields.includes("routingNumber") && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-gray-500">Routing Number</label>
+                                        <input
+                                            placeholder="Routing Number"
+                                            value={routingNumber}
+                                            onChange={(e) => setRoutingNumber(e.target.value)}
+                                            className="w-full h-12 border rounded-xl px-4"
+                                        />
+                                    </div>
+                                )}
+
+                                {fields.includes("ifscCode") && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-gray-500">IFSC Code</label>
+                                        <input
+                                            placeholder="IFSC Code"
+                                            value={ifscCode}
+                                            onChange={(e) => setIfscCode(e.target.value)}
+                                            className="w-full h-12 border rounded-xl px-4"
+                                        />
+                                    </div>
+                                )}
+
+                                {fields.includes("pixKeyId") && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-gray-500">PIX Key</label>
+                                        <input
+                                            placeholder="PIX Key"
+                                            value={pixKeyId}
+                                            onChange={(e) => setPixKeyId(e.target.value)}
+                                            className="w-full h-12 border rounded-xl px-4"
+                                        />
+                                    </div>
+                                )}
+
+                                {fields.includes("taxId") && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-gray-500">Tax ID</label>
+                                        <input
+                                            placeholder="Tax ID"
+                                            value={taxId}
+                                            onChange={(e) => setTaxId(e.target.value)}
+                                            className="w-full h-12 border rounded-xl px-4"
+                                        />
+                                    </div>
+                                )}
+
 
                                 {/* IFSC Code (India example) */}
-                                <input
+                                {/* <input
                                     placeholder="IFSC Code"
                                     value={ifscCode}
                                     onChange={(e) => setIfscCode(e.target.value)}
                                     className="w-full h-12 border rounded-xl px-4"
-                                />
+                                /> */}
 
                                 <div className="space-y-2">
                                     <label className="text-sm text-[#6A6A6A]">
                                         Phone number (optional)
                                     </label>
-
                                     <div className="flex gap-2">
                                         {/* Custom Phone Code Picker */}
                                         <div className="relative" ref={phoneCodeRef}>
