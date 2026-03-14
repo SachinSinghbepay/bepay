@@ -184,6 +184,8 @@ export default function KycVerificationForm() {
   const [uboStates, setUboStates] = useState([]);
   const [loadingUboStates, setLoadingUboStates] = useState(false);
 
+  
+
   // Step 1: Phone Code
   const [phoneCode, setPhoneCode] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -217,13 +219,21 @@ export default function KycVerificationForm() {
     { label: "Other", value: "other" },
   ];
 
-  const identityDocumentTypes = [
-    { label: "SSN (9 digits)", value: "SSN9" },
-    { label: "Passport", value: "PASSPORT" },
-    { label: "Driver's License", value: "DRIVER_LICENSE" },
-    { label: "Tax ID (EIN)", value: "TAX_ID" },
-  ];
-
+const identityDocumentTypes = [
+  { label: "SSN (9 digits)", value: "SSN9" },
+  { label: "Passport", value: "PASSPORT" },
+  { label: "Driver's License", value: "DRIVER_LICENSE" },
+  { label: "Tax ID (EIN)", value: "TAX_ID" },
+  { label: "National ID", value: "NATIONAL_ID" },
+  { label: "Voter ID", value: "VOTER_ID" },
+  { label: "Voter ID Card", value: "VOTER_ID_CARD" },
+  { label: "ID Card", value: "ID_CARD" },
+  { label: "Alien Card", value: "ALIEN_CARD" },
+  { label: "SSNIT", value: "SSNIT" },
+  { label: "Kenya KRA PIN", value: "KENYA_KRA_PIN" },
+  { label: "Bank Verification Number (BVN)", value: "BVN" },
+  { label: "National Identification Number (NIN)", value: "NIN" },
+];
   // Phone Code Options with Flags
   const phoneCodeOptions = useMemo(() => {
     const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
@@ -250,6 +260,7 @@ export default function KycVerificationForm() {
       };
     });
   }, []);
+
 
   const selectedPhoneOption = phoneCodeOptions.find(
     (o) => o.value === phoneCode
@@ -794,6 +805,36 @@ export default function KycVerificationForm() {
   //   );
   // }
 
+  const handleAddAnotherUbo = () => {
+    setUboCompleted(false);
+
+    setFormData(prev => ({
+      ...prev,
+      ubo: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        ownershipPercent: 100,
+        birthDate: "",
+        address: {
+          street: "",
+          city: "",
+          state: "",
+          country: "",
+          postalCode: "",
+        },
+        identity: {
+          countryCode: "US",
+          documentType: "SSN9",
+          documentNumber: "",
+        },
+      }
+    }));
+
+    setUboPhoneNumber("");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 font-sans">
       <div className="w-full max-w-3xl space-y-8">
@@ -1070,17 +1111,7 @@ export default function KycVerificationForm() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm mb-2">City*</label>
-                      <input
-                        type="text"
-                        name="city"
-                        value={formData.address.city}
-                        onChange={handleAddressChange}
-                        placeholder="Enter city"
-                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                      />
-                    </div>
+
 
                     <div>
                       <label className="block text-sm mb-2">Country*</label>
@@ -1100,11 +1131,6 @@ export default function KycVerificationForm() {
                         placeholder="Select country"
                       />
                     </div>
-
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
                     <div>
                       <label className="block text-sm mb-2">State/Province*</label>
                       {states.length > 0 ? (
@@ -1133,7 +1159,22 @@ export default function KycVerificationForm() {
                         />
                       )}
                     </div>
+                  </div>
 
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+
+                    <div>
+                      <label className="block text-sm mb-2">City*</label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.address.city}
+                        onChange={handleAddressChange}
+                        placeholder="Enter city"
+                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                      />
+                    </div>
                     <div>
                       <label className="block text-sm mb-2">Postal Code*</label>
                       <input
@@ -1157,6 +1198,7 @@ export default function KycVerificationForm() {
 
               <div className="space-y-4" >
                 <div className="border border-green-200 bg-green-50 rounded-xl p-4">
+                  
                   <p className="text-green-700 font-medium">
                     ✅ Business Registration Document Submitted
                   </p>
@@ -1178,7 +1220,7 @@ export default function KycVerificationForm() {
                 <h3 className="text-lg font-semibold text-gray-900">
                   Document Upload
                 </h3>
-
+ <p className="text-sm text-green-400">***  Only PDF files are supported   ***</p>
                 <div>
                   <label className="block text-sm mb-2">
                     Business Registration Document*
@@ -1493,20 +1535,6 @@ export default function KycVerificationForm() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-                    {/* City */}
-                    <div>
-                      <label className="block text-sm mb-2">City*</label>
-                      <input
-                        type="text"
-                        name="city"
-                        value={formData.ubo.address.city}
-                        onChange={handleUboAddressChange}
-                        placeholder="Enter city"
-                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
-                      />
-                    </div>
-
                     {/* Country */}
                     <div>
                       <label className="block text-sm mb-2">Country*</label>
@@ -1561,6 +1589,19 @@ export default function KycVerificationForm() {
                           className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
                         />
                       )}
+                    </div>
+
+                    {/* City */}
+                    <div>
+                      <label className="block text-sm mb-2">City*</label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.ubo.address.city}
+                        onChange={handleUboAddressChange}
+                        placeholder="Enter city"
+                        className="w-full h-12 rounded-xl border border-gray-200 px-4 outline-none focus:border-black transition"
+                      />
                     </div>
 
                     {/* Postal Code */}
@@ -1662,24 +1703,39 @@ export default function KycVerificationForm() {
               Back
             </button>
 
-            <button
-              type="button"
-              onClick={handleNext}
-              disabled={loading || (currentStep === 3 && uboCompleted)}
-              className={`px-8 h-12 rounded-full text-white text-sm font-medium transition flex items-center gap-2 cursor-pointer ${loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-black hover:bg-gray-800"
-                }`}
-            >
-              {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-              {currentStep === 3
-                ? loading
-                  ? "Submitting..."
-                  : "Complete KYC"
-                : loading
-                  ? "Loading..."
-                  : "Next"}
-            </button>
+            {currentStep === 3 && uboCompleted ? (
+
+              <button
+                type="button"
+                onClick={handleAddAnotherUbo}
+                className="px-8 h-12 rounded-full text-white text-sm font-medium bg-black hover:bg-gray-800 transition"
+              >
+                + Add another UBO
+              </button>
+
+            ) : (
+
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={loading}
+                className={`px-8 h-12 rounded-full text-white text-sm font-medium transition flex items-center gap-2 cursor-pointer
+        ${loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-black hover:bg-gray-800"
+                  }`}
+              >
+                {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+                {currentStep === 3
+                  ? loading
+                    ? "Submitting..."
+                    : "Complete KYC"
+                  : loading
+                    ? "Loading..."
+                    : "Next"}
+              </button>
+
+            )}
           </div>
         </div>
       </div>

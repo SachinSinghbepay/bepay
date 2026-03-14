@@ -167,76 +167,80 @@ export default function Banking() {
               </div>
 
             ) : (
-              /* ACCOUNT DETAILS */
-              [
-                { label: "Beneficiary name", value: selectedAccount?.name || "-" },
-                { label: "Account number", value: selectedAccount?.accountNumber || "-" },
-                { label: "BIC", value: selectedAccount?.bic || "-" },
-                { label: "Bank name", value: selectedAccount?.bankDetails?.name || "-" },
-                { label: "Bank address", value: selectedAccount?.bankDetails?.address || "-" },
-              ].map((item, i) => (
-                <div key={i} className="flex justify-between items-center border-b pb-4 px-2">
-                  <div>
-                    <p className="font-medium text-[14px] text-gray-500">
-                      {item.label}
-                    </p>
-                    <p className="font-semibold text-[#6A6A6A] text-[20px]">
-                      {item.value}
-                    </p>
+              <>
+                {/* ACCOUNT DETAILS */}
+                {[
+                  { label: "Beneficiary name", value: selectedAccount?.name || "-" },
+                  { label: "Account number", value: selectedAccount?.accountNumber || "-" },
+                  { label: "BIC", value: selectedAccount?.bic || "-" },
+                  { label: "Bank name", value: selectedAccount?.bankDetails?.name || "-" },
+                  { label: "Bank address", value: selectedAccount?.bankDetails?.address || "-" },
+                ].map((item, i) => (
+                  <div key={i} className="flex justify-between items-center border-b pb-4 px-2">
+                    <div>
+                      <p className="font-medium text-[14px] text-gray-500">
+                        {item.label}
+                      </p>
+                      <p className="font-semibold text-[#6A6A6A] text-[20px]">
+                        {item.value}
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() => handleCopy(item.value)}
+                      className="bg-white p-4 rounded-xl hover:bg-gray-100 transition"
+                    >
+                      <Image
+                        src="/icons/copy.svg"
+                        alt="Copy"
+                        width={40}
+                        height={40}
+                      />
+                    </button>
                   </div>
+                ))}
+
+                {/* Buttons */}
+                <div className="flex gap-4 mt-8">
+                  <button
+                    onClick={handleDownloadPDF}
+                    className="flex-1 h-14 rounded-2xl border border-[#C0C0C0] text-sm font-medium hover:bg-gray-100 transition"
+                  >
+                    Download PDF
+                  </button>
 
                   <button
-                    onClick={() => handleCopy(item.value)}
-                    className="bg-white p-4 rounded-xl hover:bg-gray-100 transition"
+                    onClick={async () => {
+                      if (!selectedAccount) return;
+
+                      const text = [
+                        `Beneficiary name: ${selectedAccount?.name || ""}`,
+                        `Account number: ${selectedAccount?.accountNumber || ""}`,
+                        `BIC: ${selectedAccount?.bic || ""}`,
+                        `Bank name: ${selectedAccount?.bankDetails?.name || ""}`,
+                        `Bank address: ${selectedAccount?.bankDetails?.address || ""}`
+                      ].join("\n");
+
+                      try {
+                        await navigator.clipboard.writeText(text);
+                        setCopiedAll(true);
+                        setTimeout(() => setCopiedAll(false), 2000);
+                      } catch (err) {
+                        console.error("Copy failed", err);
+                      }
+                    }}
+                    className="flex-1 h-14 rounded-2xl border border-[#C0C0C0] text-sm font-medium hover:bg-gray-100 transition"
                   >
-                    <Image
-                      src="/icons/copy.svg"
-                      alt="Copy"
-                      width={40}
-                      height={40}
-                    />
+                    {copiedAll ? "Copied ✓" : "Copy all details"}
                   </button>
+
                 </div>
-              ))
+              </>
             )}
           </div>
 
 
-          {/* Buttons */}
-          <div className="flex gap-4 mt-8">
-            <button
-              onClick={handleDownloadPDF}
-              className="flex-1 h-14 rounded-2xl border border-[#C0C0C0] text-sm font-medium hover:bg-gray-100 transition"
-            >
-              Download PDF
-            </button>
 
-            <button
-              onClick={async () => {
-                if (!selectedAccount) return;
-
-                const text = [
-                  `Beneficiary name: ${selectedAccount?.name || ""}`,
-                  `Account number: ${selectedAccount?.accountNumber || ""}`,
-                  `BIC: ${selectedAccount?.bic || ""}`,
-                  `Bank name: ${selectedAccount?.bankDetails?.name || ""}`,
-                  `Bank address: ${selectedAccount?.bankDetails?.address || ""}`
-                ].join("\n");
-
-                try {
-                  await navigator.clipboard.writeText(text);
-                  setCopiedAll(true);
-                  setTimeout(() => setCopiedAll(false), 2000);
-                } catch (err) {
-                  console.error("Copy failed", err);
-                }
-              }}
-              className="flex-1 h-14 rounded-2xl border border-[#C0C0C0] text-sm font-medium hover:bg-gray-100 transition"
-            >
-              {copiedAll ? "Copied ✓" : "Copy all details"}
-            </button>
-
-          </div>
 
         </div>
 

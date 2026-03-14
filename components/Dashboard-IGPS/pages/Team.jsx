@@ -344,7 +344,7 @@ function ActionMenu({ onResend, onEdit, onRemove }) {
     const [position, setPosition] = useState({ top: 0, left: 0 });
 
     return (
-        <div ref={ref} className="relative z-50">
+        <div ref={ref} className="relative z-20">
 
             {/* 3 DOT BUTTON */}
             <div ref={triggerRef} className="relative">
