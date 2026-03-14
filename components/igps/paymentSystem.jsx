@@ -112,18 +112,6 @@ const PaymentSystemUI = () => {
     {
       title: (
         <>
-          Free
-          <br />
-          settlement
-        </>
-      ),
-      description:
-        "Send and receive money worldwide without paying any settlement fees.",
-      visual: <Image src="/p2.png" alt="FX Rate visual" {...imageProps} />,
-    },
-    {
-      title: (
-        <>
           Near Real-time
           <br />
           Settlement

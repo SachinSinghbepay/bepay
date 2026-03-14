@@ -110,11 +110,7 @@ const IgpsHero = () => {
   }, [popup])
 
   const checklistItems = [
-    {
-      icon: "/icons/h1.png",
-      text: "Free International Settlement",
-    },
-    {
+       {
       icon: "/icons/h2.png",
       text: "Accept payments in USD, EUR, GBP, CNY, ZAR, MAD  & 40+ Major Currencies",
     },
@@ -221,7 +217,7 @@ const IgpsHero = () => {
                   international settlements for businesses
                 </p> */}
 
-                <div className="space-y-4 lg:space-y-0 lg:block lg:divide-y lg:divide-gray-200">
+                <div className="space-y-4 lg:space-y-0 lg:block lg:divide-y lg:divide-gray-200 sm:py-6">
                   {checklistItems.map((item, idx) => (
                     <div
                       key={idx}
