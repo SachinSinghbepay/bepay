@@ -153,12 +153,12 @@ export default function DepositAddressModal({
                   height={72}
                   className="rounded-full"
                 />
-                <div className="rounded-full absolute bottom-1 right-2 bg-white border border-gray-300">
+                <div className="rounded-full absolute -bottom-1 right-1 bg-white border border-gray-300">
                   <Image
                     src={chainLogo}
                     alt=""
-                    width={32}
-                    height={32}
+                    width={26}
+                    height={26}
                     className=""
                   />
                 </div>
