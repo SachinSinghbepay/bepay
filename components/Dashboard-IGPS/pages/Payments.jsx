@@ -8,7 +8,7 @@ import { useAuth } from "../context/AuthContext";
 
 
 export default function Payments({ onOpenModal }) {
-const { igpsService } = useAuth();
+  const { igpsService } = useAuth();
   const [activeFilter, setActiveFilter] = useState("All");
 
   const [orders, setOrders] = useState([]);
@@ -27,6 +27,33 @@ const { igpsService } = useAuth();
     "Cancelled",
     "Rejected",
   ];
+
+
+  const tokenIcons = {
+    USDC: "/icons/usdc.svg",
+    USDT: "/icons/usdt.svg",
+    DAI: "/icons/dai.svg",
+    BTC: "/icons/btc.svg",
+    ETH: "/icons/eth.svg"
+  };
+
+  const fiatIcons = {
+    USD: "/icons/usa.svg",
+    INR: "/icons/india.svg",
+    EUR: "/icons/eu.svg",
+    GBP: "/icons/uk.svg"
+  };
+  const getTokenIcon = (sourceCurrency) => {
+    if (!sourceCurrency) return "/icons/default-token.svg";
+
+    const token = sourceCurrency.split("_")[0]; // USDC_POL -> USDC
+
+    return tokenIcons[token] || "/icons/default-token.svg";
+  };
+
+  const getFiatIcon = (currency) => {
+    return fiatIcons[currency] || "/icons/default-flag.svg";
+  };
 
   /* =========================
      FETCH ORDERS
@@ -108,10 +135,10 @@ const { igpsService } = useAuth();
 
         <div className="flex items-center gap-3">
           <Image
-            src="/icons/usdc.svg"
-            alt="USDC"
+            src={getTokenIcon(order.sourceCurrency)}
             width={28}
             height={28}
+            alt={order.sourceCurrency}
           />
           <div>
             <div className="font-semibold text-gray-900 leading-tight">
@@ -129,10 +156,10 @@ const { igpsService } = useAuth();
 
         <div className="flex items-center gap-3">
           <Image
-            src="/icons/india.svg"
-            alt="India"
+            src={getFiatIcon(order.targetCurrency)}
             width={28}
             height={28}
+            alt={order.targetCurrency}
           />
           <div>
             <div className="font-semibold text-gray-900 leading-tight">

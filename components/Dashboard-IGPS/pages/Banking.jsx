@@ -39,6 +39,7 @@ export default function Banking() {
     navigator.clipboard.writeText(text);
   };
 
+  
   const handleDownloadPDF = () => {
     if (!selectedAccount) return;
 
@@ -79,7 +80,7 @@ export default function Banking() {
         }
 
         const depositAccounts = depositRes.data || [];
-
+        console.log(depositAccounts)
         setAccounts(depositAccounts);
 
         if (depositAccounts.length > 0) {
@@ -97,6 +98,17 @@ export default function Banking() {
   }, [igpsService]);
 
   const selectedAccount = accounts.find(acc => acc.currency === tab);
+
+const accountDetails = selectedAccount
+  ? [
+      { label: "Beneficiary name", value: selectedAccount?.name },
+      { label: "Account number", value: selectedAccount?.accountNumber },
+      { label: "BIC", value: selectedAccount?.bic },
+      { label: "Routing number", value: selectedAccount?.routingDetails?.[0]?.routingNumber },
+      { label: "Bank name", value: selectedAccount?.bankDetails?.name },
+      { label: "Bank address", value: selectedAccount?.bankDetails?.address }
+    ].filter(item => item.value) // remove empty values
+  : [];
 
 
   return (
@@ -169,13 +181,7 @@ export default function Banking() {
             ) : (
               <>
                 {/* ACCOUNT DETAILS */}
-                {[
-                  { label: "Beneficiary name", value: selectedAccount?.name || "-" },
-                  { label: "Account number", value: selectedAccount?.accountNumber || "-" },
-                  { label: "BIC", value: selectedAccount?.bic || "-" },
-                  { label: "Bank name", value: selectedAccount?.bankDetails?.name || "-" },
-                  { label: "Bank address", value: selectedAccount?.bankDetails?.address || "-" },
-                ].map((item, i) => (
+                {accountDetails.map((item, i) => (
                   <div key={i} className="flex justify-between items-center border-b pb-4 px-2">
                     <div>
                       <p className="font-medium text-[14px] text-gray-500">

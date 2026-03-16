@@ -2,154 +2,61 @@ import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useRef, useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { PAYMENT_CONFIG } from "../utils/paymentConfig";
 import Image from "next/image";
-
-
 
 export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
     const { igpsService } = useAuth();
     const scrollRef = useRef(null);
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    // Form State
+    // Business Info
     const [nickname, setNickname] = useState("");
     const [businessName, setBusinessName] = useState("");
-    const [email, setEmail] = useState("");
-
     const [registrationNumber, setRegistrationNumber] = useState("");
+    const [email, setEmail] = useState("");
 
     // Address
     const [country, setCountry] = useState("");
     const [addressLine1, setAddressLine1] = useState("");
     const [addressLine2, setAddressLine2] = useState("");
     const [city, setCity] = useState("");
-    const [states, setStates] = useState([]);
     const [selectedState, setSelectedState] = useState("");
     const [zip, setZip] = useState("");
-    const [loadingStates, setLoadingStates] = useState(false);
-    // Bank Details
-    const [accountNumber, setAccountNumber] = useState("");
-    const [swiftCode, setSwiftCode] = useState("");
-    const [bankName, setBankName] = useState("");
 
-    // Country specific
-    const [ifscCode, setIfscCode] = useState("");
-    const [bankId, setBankId] = useState("");
-    const [routingNumber, setRoutingNumber] = useState(""); // For US
-    const [sortCode, setSortCode] = useState(""); // For UK
+    const [states, setStates] = useState([]);
     const [countries, setCountries] = useState([]);
+    const [loadingStates, setLoadingStates] = useState(false);
 
+    // Bank fields
+    const [accountNumber, setAccountNumber] = useState("");
+    const [accountType, setAccountType] = useState("");
+    const [bankId, setBankId] = useState("");
+    const [routingNumber, setRoutingNumber] = useState("");
+    const [ifscCode, setIfscCode] = useState("");
+    const [transferType, setTransferType] = useState("");
+    const [swiftCode, setSwiftCode] = useState("");
+    const [pixKeyId, setPixKeyId] = useState("");
+    const [taxId, setTaxId] = useState("");
+
+    // Banks
+    const [banks, setBanks] = useState([]);
+    const [bankSearch, setBankSearch] = useState("");
+    const [bankDropdownOpen, setBankDropdownOpen] = useState(false);
+    const [loadingBanks, setLoadingBanks] = useState(false);
+
+    // Transfer metadata
     const [category, setCategory] = useState("");
     const [purpose, setPurpose] = useState("");
+    const [description, setDescription] = useState("");
 
-    useEffect(() => {
-        const el = scrollRef.current;
-        if (!el) return;
-
-        const onWheel = (e) => {
-            const { scrollTop, scrollHeight, clientHeight } = el;
-            const atTop = scrollTop === 0;
-            const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
-
-            if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
-                e.preventDefault();
-            } else {
-                e.stopPropagation();
-            }
-        };
-
-        el.addEventListener("wheel", onWheel, { passive: false });
-        return () => el.removeEventListener("wheel", onWheel);
-    }, []);
-
-    useEffect(() => {
-        const loadCountries = async () => {
-            try {
-                const res = await igpsService.getCountries();
-                if (res.success && Array.isArray(res.data)) {
-
-                    const formatted = res.data.map(c => ({
-                        label: c.name,
-                        value: c.code
-                    }));
-
-                    setCountries(formatted);
-                }
-            } catch (err) {
-                console.error("Failed to load countries", err);
-            }
-        };
-
-        loadCountries();
-    }, []);
-
-    useEffect(() => {
-        if (!country) {
-            setStates([]);
-            return;
-        }
-
-        const loadStates = async () => {
-            setLoadingStates(true);
-
-            const res = await igpsService.getStates(country);
-
-            if (res.success && Array.isArray(res.data)) {
-                const formatted = res.data.map((s) => ({
-                    label: s.name,
-                    value: s.code,
-                }));
-
-                setStates(formatted);
-            } else {
-                setStates([]);
-            }
-
-            setLoadingStates(false);
-        };
-
-        loadStates();
-    }, [country]);
-
-    const INDIAN_STATES = [
-        { label: "Andhra Pradesh", value: "AP" },
-        { label: "Arunachal Pradesh", value: "AR" },
-        { label: "Assam", value: "AS" },
-        { label: "Bihar", value: "BR" },
-        { label: "Chhattisgarh", value: "CG" },
-        { label: "Goa", value: "GA" },
-        { label: "Gujarat", value: "GJ" },
-        { label: "Haryana", value: "HR" },
-        { label: "Himachal Pradesh", value: "HP" },
-        { label: "Jharkhand", value: "JH" },
-        { label: "Karnataka", value: "KA" },
-        { label: "Kerala", value: "KL" },
-        { label: "Madhya Pradesh", value: "MP" },
-        { label: "Maharashtra", value: "MH" },
-        { label: "Manipur", value: "MN" },
-        { label: "Meghalaya", value: "ML" },
-        { label: "Mizoram", value: "MZ" },
-        { label: "Nagaland", value: "NL" },
-        { label: "Odisha", value: "OR" },
-        { label: "Punjab", value: "PB" },
-        { label: "Rajasthan", value: "RJ" },
-        { label: "Sikkim", value: "SK" },
-        { label: "Tamil Nadu", value: "TN" },
-        { label: "Telangana", value: "TG" },
-        { label: "Tripura", value: "TR" },
-        { label: "Uttar Pradesh", value: "UP" },
-        { label: "Uttarakhand", value: "UT" },
-        { label: "West Bengal", value: "WB" },
-        { label: "Andaman and Nicobar Islands", value: "AN" },
-        { label: "Chandigarh", value: "CH" },
-        { label: "Dadra and Nagar Haveli", value: "DN" },
-        { label: "Daman and Diu", value: "DD" },
-        { label: "Delhi", value: "DL" },
-        { label: "Jammu and Kashmir", value: "JK" },
-        { label: "Ladakh", value: "LA" },
-        { label: "Lakshadweep", value: "LD" },
-        { label: "Puducherry", value: "PY" }
+    const transferTypeOptions = [
+        { label: "ACH (Standard Bank Transfer)", value: "ach" },
+        { label: "RTP (Real Time Payment)", value: "rtp" },
+        { label: "Wire Transfer", value: "wire" },
+        { label: "SWIFT (International Wire)", value: "swift" }
     ];
 
     const categoryOptions = [
@@ -164,318 +71,418 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
         "Intra group transfer"
     ];
 
-    const isFormValid = (() => {
-        const basic = nickname.trim() &&
-            businessName.trim() &&
-            registrationNumber.trim() &&
-            email.trim() &&
-            country &&
-            addressLine1 &&
-            city &&
-            selectedState &&
-            zip &&
-            accountNumber;
+    const fields = PAYMENT_CONFIG[country]?.fields || [];
 
-        if (!basic) return false;
+    const fieldValues = {
+        accountNumber,
+        accountType,
+        bankId,
+        routingNumber,
+        ifscCode,
+        transferType,
+        swiftCode,
+        pixKeyId,
+        taxId
+    };
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el) return;
 
-        // Country specific validation
-        if (country === "India") {
-            return basic && ifscCode.trim() && bankId.trim();
-        } else if (country === "United States") {
-            return basic && routingNumber.trim();
-        } else if (country === "United Kingdom") {
-            return basic && sortCode.trim();
+        const onWheel = (e) => {
+            const { scrollTop, scrollHeight, clientHeight } = el;
+
+            const atTop = scrollTop === 0;
+            const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+            if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+                e.preventDefault();
+            } else {
+                e.stopPropagation();
+            }
+        };
+
+        el.addEventListener("wheel", onWheel, { passive: false });
+
+        return () => {
+            el.removeEventListener("wheel", onWheel);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!country) return;
+
+        const loadBanks = async () => {
+            setLoadingBanks(true);
+
+            const res = await igpsService.getBanks(country);
+
+            if (res.success && Array.isArray(res.data)) {
+                setBanks(
+                    res.data.map(b => ({
+                        label: b.name,
+                        value: b.id
+                    }))
+                );
+            } else {
+                setBanks([]);
+            }
+
+            setLoadingBanks(false);
+        };
+
+        loadBanks();
+    }, [country]);
+
+
+    const filteredBanks = banks.filter(b =>
+        b.label.toLowerCase().includes(bankSearch.toLowerCase())
+    );
+
+    const isFormValid = () => {
+        if (
+            !nickname.trim() ||
+            !businessName.trim() ||
+            !registrationNumber.trim() ||
+            !email.trim() ||
+            !country ||
+            !addressLine1 ||
+            !city ||
+            !selectedState ||
+            !zip
+        ) return false;
+
+        for (const field of fields) {
+            const value = fieldValues[field];
+            if (!value || !value.toString().trim()) return false;
         }
 
-        // Default to requiring SWIFT for others or as fallback
-        return basic && swiftCode.trim();
-    })();
+        return true;
+    };
+
+    /* ---------------- API LOADERS ---------------- */
+
+    useEffect(() => {
+        const loadCountries = async () => {
+            const res = await igpsService.getCountries();
+            if (res.success) {
+                setCountries(res.data.map(c => ({
+                    label: c.name,
+                    value: c.code
+                })));
+            }
+        };
+        loadCountries();
+    }, []);
+
+    useEffect(() => {
+        if (!country) return;
+
+        const loadStates = async () => {
+            setLoadingStates(true);
+
+            const res = await igpsService.getStates(country);
+
+            if (res.success) {
+                setStates(res.data.map(s => ({
+                    label: s.name,
+                    value: s.code
+                })));
+            }
+
+            setLoadingStates(false);
+        };
+
+        loadStates();
+    }, [country]);
+
+    useEffect(() => {
+        if (!country) return;
+
+        const loadBanks = async () => {
+            const res = await igpsService.getBanks(country);
+
+            if (res.success && res.data?.length) {
+                setBanks(res.data.map(b => ({
+                    label: b.name,
+                    value: b.id
+                })));
+            } else {
+                setBanks([]);
+            }
+        };
+
+        loadBanks();
+    }, [country]);
+
+    /* ---------------- PAYLOAD ---------------- */
 
     const handleSubmit = async () => {
-        if (!isFormValid) return;
+        if (!isFormValid()) return;
+
         setLoading(true);
         setError("");
 
         try {
-            // Sanitize street address: STRICTLY alphanumeric and spaces only to avoid "special characters" error.
-            // Replace any non-alphanumeric char with a space, then collapse multiple spaces.
-            const cleanAddress = (addr) => addr.replace(/[^a-zA-Z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
-            const fullStreet = cleanAddress(addressLine1 + " " + (addressLine2 || ""));
+
+            const config = PAYMENT_CONFIG[country];
+
+            const paymentInfo = {
+                paymentType: config.paymentType
+            };
+
+            config.fields.forEach(field => {
+                const value = fieldValues[field];
+                if (value) paymentInfo[field] = value;
+            });
 
             const payload = {
-                type: 'business',
+                type: "business",
+                referenceName: nickname,
                 fullName: businessName,
-                email: email,
-                businessRegistrationNumber: registrationNumber, // Added field
+                businessRegistrationNumber: registrationNumber,
+                email,
+
                 address: {
-                    street: fullStreet,
-                    city: cleanAddress(city), // Apply to city too just in case
-                    state: state, // Already set to code if India via dropdown logic
-                    postalCode: zip.replace(/[^a-zA-Z0-9]/g, ''), // strict verify alphanumeric for zip too
-                    country: country
+                    street: `${addressLine1} ${addressLine2}`.trim(),
+                    city,
+                    state: selectedState,
+                    postalCode: zip,
+                    country
                 },
-                paymentInfo: {
-                    paymentType: 'bank_account',
-                    accountNumber: accountNumber,
-                    // Conditional fields based on country
-                    ...(country === "India" && { ifscCode: ifscCode, bankId: bankId }),
-                    ...(country === "United States" && { routingNumber: routingNumber }),
-                    ...(country === "United Kingdom" && { sortCode: sortCode }),
-                    swiftCode: swiftCode // Always send if populated, or maybe only if needed?
+
+                paymentInfo,
+
+                metadata: {
+                    category,
+                    purpose,
+                    description
                 }
             };
 
-            // If India, we might NOT need swiftCode if we have IFSC/BankID, but keeping it if user entered it is safer unless it conflicts.
-            // The user example had NO swiftCode.
-            if (country === "India" && !swiftCode) delete payload.paymentInfo.swiftCode;
+            const res = await igpsService.createBeneficiary(payload);
 
-
-            const countryMap = { "United States": "US", "United Kingdom": "GB", "Germany": "DE", "India": "IN" };
-            if (countryMap[country]) payload.address.country = countryMap[country];
-
-            const response = await igpsService.createBeneficiary(payload);
-
-            if (response.success) {
+            if (res.success) {
                 onBack();
             } else {
-                setError(response.error || "Failed to create beneficiary");
+                setError(res.error || "Failed to create beneficiary");
             }
+
         } catch (err) {
-            setError(err.message || "An error occurred");
+            setError(err.message);
         } finally {
             setLoading(false);
         }
     };
 
+    /* ---------------- UI ---------------- */
+
     return (
         <ModalFrame size="lg">
             <div className="flex flex-col h-[85vh] bg-white rounded-3xl">
 
-                {/* HEADER */}
-                <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
-                    <button
-                        onClick={onBack}
-                        className="absolute left-8 text-xl text-gray-500"
-                    >
-                        <Image
-                            src="/icons/back.svg"
-                            alt=""
-                            width={24}
-                            height={24}
-                        />
-                    </button>
+                <Header onClose={onClose} onBack={onBack} />
 
-                    <h2 className="text-lg font-medium">Add a new SWIFT beneficiary</h2>
-
-                    <button
-                        onClick={onClose}
-                        className="absolute right-8 text-xl text-gray-500"
-                    >
-                        ✕
-                    </button>
-                </div>
-
-                {/* SCROLL BODY */}
                 <div
                     ref={scrollRef}
                     className="flex-1 overflow-y-auto px-8 pb-8 space-y-8"
                 >
+
                     {error && (
                         <div className="p-4 bg-red-50 text-red-600 rounded-xl text-sm">
                             {error}
                         </div>
                     )}
 
-                    {/* BUSINESS INFO */}
                     <SectionTitle title="Business information" />
 
-                    <Input
-                        label="Nickname"
-                        placeholder="Enter a unique beneficiary nickname for your reference"
-                        value={nickname}
-                        onChange={setNickname}
-                    />
+                    <Input label="Nickname" value={nickname} onChange={setNickname} />
 
-                    <Input
-                        label="Business name"
-                        placeholder="e.g. Airus corporation Ltd."
-                        value={businessName}
-                        onChange={setBusinessName}
-                    />
+                    <Input label="Business name" value={businessName} onChange={setBusinessName} />
 
-                    <Input
-                        label="Registration Number"
-                        placeholder="e.g. U12345MH2024PTC123456"
-                        value={registrationNumber}
-                        onChange={setRegistrationNumber}
-                    />
+                    <Input label="Registration number" value={registrationNumber} onChange={setRegistrationNumber} />
 
-                    <Input
-                        label="Email"
-                        placeholder="e.g. contact@airus.com"
-                        value={email}
-                        onChange={setEmail}
-                    />
+                    <Input label="Email" value={email} onChange={setEmail} />
 
-                    {/* BUSINESS ADDRESS */}
                     <SectionTitle title="Business address" />
 
-                    <div>
-                        <label className="text-sm text-gray-600 mb-2 block">
-                            Business country
-                        </label>
-                        <CustomSelect
-                            options={countries}
-                            value={country}
-                            onChange={setCountry}
-                            placeholder="Select Country"
-                        />
-                    </div>
+                    <CustomSelect
+                        options={countries}
+                        value={country}
+                        onChange={setCountry}
+                        placeholder="Select country"
+                    />
 
-                    <div>
-                        <label className="text-sm text-gray-600 mb-2 block">
-                            Business address
-                        </label>
+                    <Input placeholder="Address line 1" value={addressLine1} onChange={setAddressLine1} />
+                    <Input placeholder="Address line 2" value={addressLine2} onChange={setAddressLine2} />
 
-                        <div className="space-y-4">
-                            <Input placeholder="Address line 1" value={addressLine1} onChange={setAddressLine1} />
-                            <Input placeholder="Address line 2" value={addressLine2} onChange={setAddressLine2} />
-                            <Grid3>
-                                <Input placeholder="City" value={city} onChange={setCity} />
+                    <Grid3>
+                        <Input placeholder="City" value={city} onChange={setCity} />
 
-                                {/* Conditional State Input */}
-                                {states.length > 0 ? (
-                                    <CustomSelect
-                                        options={states}
-                                        value={selectedState}
-                                        onChange={setSelectedState}
-                                        placeholder={loadingStates ? "Loading..." : "Select state"}
-                                    />
-                                ) : (
-                                    <input
-                                        value={selectedState}
-                                        onChange={(e) => setSelectedState(e.target.value)}
-                                        placeholder="Enter state"
-                                        className="w-full mt-2 h-12 rounded-xl border px-4 outline-none focus:border-black"
-                                    />
-                                )}
+                        {states.length > 0 ? (
+                            <CustomSelect
+                                options={states}
+                                value={selectedState}
+                                onChange={setSelectedState}
+                                placeholder="Select state"
+                            />
+                        ) : (
+                            <Input placeholder="State" value={selectedState} onChange={setSelectedState} />
+                        )}
 
-                                <Input placeholder="Zip / Pin code" value={zip} onChange={setZip} />
-                            </Grid3>
-                        </div>
-                    </div>
+                        <Input placeholder="Postal code" value={zip} onChange={setZip} />
+                    </Grid3>
 
-                    {/* BANK DETAILS */}
                     <SectionTitle title="Bank details" />
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <Input
-                            label="Account Number / IBAN"
-                            placeholder="Account number or IBAN"
-                            value={accountNumber}
-                            onChange={setAccountNumber}
-                        />
+                    {fields.includes("bankId") && (
+                        <div className="space-y-2 relative">
+                            <label className="text-sm text-[#6A6A6A]">Bank</label>
 
-                        {country === "India" && (
-                            <>
-                                <Input
-                                    label="IFSC Code"
-                                    placeholder="e.g. SBIN0001234"
-                                    value={ifscCode}
-                                    onChange={setIfscCode}
-                                />
-                                <Input
-                                    label="Bank ID"
-                                    placeholder="e.g. 1300"
-                                    value={bankId}
-                                    onChange={setBankId}
-                                />
-                            </>
-                        )}
-
-                        {country === "United States" && (
-                            <Input
-                                label="ACH Routing Number"
-                                placeholder="9 digits"
-                                value={routingNumber}
-                                onChange={setRoutingNumber}
+                            <input
+                                value={bankSearch}
+                                onChange={(e) => {
+                                    setBankSearch(e.target.value);
+                                    setBankDropdownOpen(true);
+                                }}
+                                onFocus={() => setBankDropdownOpen(true)}
+                                placeholder="Search bank"
+                                className="w-full h-12 rounded-xl border px-4 outline-none focus:border-black"
                             />
-                        )}
 
-                        {country === "United Kingdom" && (
-                            <Input
-                                label="Sort Code"
-                                placeholder="6 digits"
-                                value={sortCode}
-                                onChange={setSortCode}
-                            />
-                        )}
+                            {bankDropdownOpen && (
+                                <div className="absolute top-full left-0 w-full bg-white border rounded-xl shadow-lg max-h-[250px] overflow-y-auto z-50 mt-2">
 
-                        {/* Always show SWIFT unless we want to hide it for India strictly? Let's show it as optional for India if we want, or side by side. */}
-                        {/* If not specific country specialized flow, or if user wants to provide SWIFT as well */}
-                        <Input
-                            label="BIC / SWIFT Code"
-                            placeholder="e.g. DEUTGB2LXXX"
-                            value={swiftCode}
-                            onChange={setSwiftCode}
+                                    {loadingBanks ? (
+                                        <div className="p-3 text-sm text-gray-500">
+                                            Loading banks...
+                                        </div>
+                                    ) : filteredBanks.length > 0 ? (
+                                        filteredBanks.map(bank => (
+                                            <div
+                                                key={bank.value}
+                                                className="px-4 py-3 hover:bg-gray-100 cursor-pointer text-sm"
+                                                onClick={() => {
+                                                    setBankId(bank.value);
+                                                    setBankSearch(bank.label);
+                                                    setBankDropdownOpen(false);
+                                                }}
+                                            >
+                                                {bank.label}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="p-3 text-sm text-gray-500">
+                                            No banks found
+                                        </div>
+                                    )}
+
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {fields.includes("accountType") && (
+                        <Input label="Account type" value={accountType} onChange={setAccountType} />
+                    )}
+
+                    {fields.includes("accountNumber") && (
+                        <Input label="Account number" value={accountNumber} onChange={setAccountNumber} />
+                    )}
+
+                    {fields.includes("routingNumber") && (
+                        <Input label="Routing number" value={routingNumber} onChange={setRoutingNumber} />
+                    )}
+
+                    {fields.includes("ifscCode") && (
+                        <Input label="IFSC code" value={ifscCode} onChange={setIfscCode} />
+                    )}
+
+                    {fields.includes("transferType") && (
+                        <CustomSelect
+                            options={transferTypeOptions}
+                            value={transferType}
+                            onChange={setTransferType}
+                            placeholder="Transfer type"
                         />
-                    </div>
+                    )}
 
-                    {/* TRANSFER DETAILS */}
+                    {fields.includes("swiftCode") && (
+                        <Input label="SWIFT / BIC code" value={swiftCode} onChange={setSwiftCode} />
+                    )}
+
+                    {fields.includes("pixKeyId") && (
+                        <Input label="PIX Key" value={pixKeyId} onChange={setPixKeyId} />
+                    )}
+
+                    {fields.includes("taxId") && (
+                        <Input label="Tax ID" value={taxId} onChange={setTaxId} />
+                    )}
+
                     <SectionTitle title="Transfer details" />
 
-                    <div>
-                        <label className="text-sm text-gray-600 mb-2 block">
-                            Category
-                        </label>
-                        <CustomSelect
-                            options={categoryOptions}
-                            placeholder="Select category"
-                            value={category}
-                            onChange={setCategory}
-                        />
-                    </div>
+                    <CustomSelect
+                        options={categoryOptions}
+                        value={category}
+                        onChange={setCategory}
+                        placeholder="Category"
+                    />
 
-                    <div>
-                        <label className="text-sm text-gray-600 mb-2 block">
-                            Purpose of funds
-                        </label>
-                        <CustomSelect
-                            options={purposeOptions}
-                            placeholder="Select purpose"
-                            value={purpose}
-                            onChange={setPurpose}
-                        />
-                    </div>
+                    <CustomSelect
+                        options={purposeOptions}
+                        value={purpose}
+                        onChange={setPurpose}
+                        placeholder="Purpose of funds"
+                    />
 
                     <Input
                         label="Short business description"
-                        placeholder="e.g. software development services"
+                        value={description}
+                        onChange={setDescription}
                     />
 
-                    <p className="text-xs text-gray-500 -mt-3">
-                        Brief description of the business relationship (max 200 characters)
-                    </p>
-
                 </div>
 
-                {/* FOOTER */}
-                <div className="px-8 py-6 border-t bg-white">
-                    <button
-                        disabled={!isFormValid || loading}
-                        onClick={handleSubmit}
-                        className={`w-full h-14 rounded-2xl transition-all
-              ${isFormValid && !loading
-                                ? "bg-black text-white hover:bg-gray-800"
-                                : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                            }`}
-                    >
-                        {loading ? "Adding..." : "Add swift account"}
-                    </button>
-                </div>
+                <Footer
+                    loading={loading}
+                    disabled={!isFormValid()}
+                    onSubmit={handleSubmit}
+                />
 
             </div>
         </ModalFrame>
+    );
+}
+
+/* ---------------- UI COMPONENTS ---------------- */
+
+function Header({ onBack, onClose }) {
+    return (
+        <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
+            <button onClick={onBack} className="absolute left-8">
+                <Image src="/icons/back.svg" alt="" width={24} height={24} />
+            </button>
+
+            <h2 className="text-lg font-medium">Add SWIFT beneficiary</h2>
+
+            <button onClick={onClose} className="absolute right-8">
+                ✕
+            </button>
+        </div>
+    );
+}
+
+function Footer({ loading, disabled, onSubmit }) {
+    return (
+        <div className="px-8 py-6 border-t bg-white">
+            <button
+                disabled={disabled || loading}
+                onClick={onSubmit}
+                className={`w-full h-14 rounded-2xl ${disabled ? "bg-gray-300 text-gray-500" : "bg-black text-white"
+                    }`}
+            >
+                {loading ? "Adding..." : "Add SWIFT account"}
+            </button>
+        </div>
     );
 }
 
@@ -490,16 +497,12 @@ function SectionTitle({ title }) {
 function Input({ label, placeholder, value, onChange }) {
     return (
         <div className="space-y-1">
-            {label && (
-                <label className="text-sm text-gray-600">
-                    {label}
-                </label>
-            )}
+            {label && <label className="text-sm text-gray-600">{label}</label>}
             <input
                 value={value}
-                onChange={(e) => onChange?.(e.target.value)}
+                onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="w-full h-14 rounded-xl border px-4 text-sm outline-none focus:ring-2 focus:ring-black/10"
+                className="w-full h-12 rounded-xl border px-4 text-sm outline-none focus:ring-2 focus:ring-black/10"
             />
         </div>
     );
@@ -508,14 +511,6 @@ function Input({ label, placeholder, value, onChange }) {
 function Grid3({ children }) {
     return (
         <div className="grid grid-cols-3 gap-4">
-            {children}
-        </div>
-    );
-}
-
-function Grid2({ children }) {
-    return (
-        <div className="grid grid-cols-2 gap-4">
             {children}
         </div>
     );

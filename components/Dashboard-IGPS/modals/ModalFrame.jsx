@@ -1,7 +1,7 @@
 export default function ModalFrame({ size = "lg", children, height }) {
   const sizes = {
-    lg: "w-full w-[95%]  md:w-[842px] ",
-    md: "w-full w-[95%]  md:w-[650px] ",
+    lg: "w-[95vw] max-w-[842px]",
+    md: "w-[95vw] max-w-[650px]"
   };
 
   const heightClass = height ? height : "h-[90vh]";
@@ -16,7 +16,7 @@ export default function ModalFrame({ size = "lg", children, height }) {
         flex
         flex-col
         overflow-hidden
-        p-4
+        sm:p-4
       `}
     >
       {children}
