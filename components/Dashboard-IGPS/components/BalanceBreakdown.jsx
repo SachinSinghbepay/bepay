@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import BalanceDropdown from "./BalanceDropdown";
 import Image from "next/image";
 
-export default function BalanceBreakdown({ wallets = [] }) {
+export default function BalanceBreakdown({ wallets = [], loading }) {
     const [open, setOpen] = useState(false);
     const wrapperRef = useRef(null);
 
@@ -84,7 +84,13 @@ export default function BalanceBreakdown({ wallets = [] }) {
                     <div className="px-4 sm:px-6 py-4 sm:py-5">
                         <p className="text-sm text-gray-500 mb-5">Cryptocurrencies</p>
                         <div className="space-y-5 max-h-64 overflow-y-auto pr-2">
-                            {wallets.length === 0 ? (
+                            {loading && wallets.length === 0 ? (
+                                <div className="space-y-4">
+                                    <WalletShimmer />
+                                    <WalletShimmer />
+                                    <WalletShimmer />
+                                </div>
+                            ) : wallets.length === 0 ? (
                                 <p className="text-sm text-gray-400">No wallets found</p>
                             ) : (
                                 visibleWallets.map((w, i) => (
@@ -156,6 +162,18 @@ function CryptoRow({ main, chain, label, value }) {
                 <span className="text-sm text-gray-700">{label}</span>
             </div>
             <span className="font-medium text-gray-900">{value}</span>
+        </div>
+    );
+}
+
+function WalletShimmer() {
+    return (
+        <div className="flex items-center justify-between animate-pulse">
+            <div className="flex items-center gap-3">
+                <div className="h-6 w-6 rounded-full bg-gray-300"></div>
+                <div className="h-4 w-20 bg-gray-300 rounded"></div>
+            </div>
+            <div className="h-4 w-14 bg-gray-300 rounded"></div>
         </div>
     );
 }

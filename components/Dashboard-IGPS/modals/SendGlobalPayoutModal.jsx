@@ -174,8 +174,19 @@ export default function SendGlobalPayoutModal({
     // Get Quote Debounced
     useEffect(() => {
         const fetchQuote = async () => {
-            if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+            const amt = parseFloat(amount);
+
+            // basic validation
+            if (!amount || isNaN(amt) || amt <= 0) {
                 setQuote(null);
+                setQuoteError("");
+                return;
+            }
+
+            // minimum amount validation
+            if (amt < 50) {
+                setQuote(null);
+                setQuoteError("Minimum amount should be $50");
                 return;
             }
 
@@ -294,7 +305,7 @@ export default function SendGlobalPayoutModal({
         <ModalFrame size="lg">
             <div className="flex flex-col h-[85vh] bg-white rounded-3xl">
                 {/* HEADER */}
-                <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
+                <div className="relative flex items-center justify-center px-2 sm:px-8 pt-6 mb-8">
                     <button onClick={onBack} className="absolute left-8 text-xl text-gray-500">
                         <Image
                             src="/icons/back.svg"
@@ -422,7 +433,7 @@ export default function SendGlobalPayoutModal({
 
                     {/* PURPOSE */}
                     <div className="space-y-2">
-                        <label className="text-sm text-gray-500">Purpose code</label>
+                        <label className="text-sm text-gray-500">Purpose</label>
                         <CustomSelect
                             options={purposeOptions}
                             value={purposeCode}
@@ -602,14 +613,115 @@ function AmountBox({
         <div className="rounded-2xl space-y-6">
 
             {/* TOP: Amount */}
-            <div className="flex justify-between items-start bg-[#F7F7F7] p-5 rounded-xl pl-6">
-                <div className="flex-1">
-                    <div className="flex justify-start gap-8 items-center">
+            <div className="flex flex-col sm:flex-row justify-between items-start bg-[#F7F7F7] p-5 rounded-xl pl-6">
+                {/* dropdown for mobile */}
+                 <div className=" mb-2 relative">
+                    <div className="flex sm:hidden items-center gap-3 bg-[#EBEBEB] py-2 px-2 rounded-xl w-full lg:w-50">
+
+                        {/* TOKEN + NETWORK ICONS */}
+                        {sourceCurrencies
+                            .filter(w => w.fullCurrency === currency)
+                            .map(w => (
+                                <div
+                                    key={w.fullCurrency}
+                                    className="relative h-10 w-10 pl-2"
+                                >
+                                    {w.tokenUrl && (
+                                        <Image
+                                            src={w.tokenUrl}
+                                            alt="token"
+                                            width={32}
+                                            height={32}
+                                            className="rounded-full mt-1"
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = "none";
+                                            }}
+                                        />
+                                    )}
+
+                                    {w.networkUrl && (
+                                        <Image
+                                            src={w.networkUrl}
+                                            alt="network"
+                                            width={16}
+                                            height={16}
+                                            className="absolute -bottom-1 -right-2 rounded-full border-2 border-white"
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = "none";
+                                            }}
+                                        />
+                                    )}
+                                </div>
+                            ))}
+                        {/* SELECT DROPDOWN */}
+                        <div ref={dropdownRef} className="relative">
+
+                            {/* BUTTON */}
+                            <button
+                                onClick={() => {
+                                    if (sourceCurrencies.length > 0) {
+                                        setOpen(v => !v);
+                                    }
+                                }}
+                                className="flex items-center gap-3 bg-[#EBEBEB] px-4 py-3 rounded-xl border text-[18px] font-semibold min-w-[120px]"
+                            >
+                                {sourceCurrencies.length === 0 ? (
+                                    <span className="text-gray-400 text-sm">Loading...</span>
+                                ) : (
+                                    <>
+                                        <span>
+                                            {
+                                                sourceCurrencies.find(c => c.fullCurrency === currency)?.currency
+                                            }
+                                        </span>
+
+                                        <svg
+                                            className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path d="M6 9l6 6 6-6" />
+                                        </svg>
+                                    </>
+                                )}
+                            </button>
+
+                            {/* DROPDOWN */}
+                            {open && sourceCurrencies.length > 0 && (
+                                <div className="absolute mt-2 -right-2 bg-white border rounded-xl shadow-lg z-50 w-45">
+                                    {sourceCurrencies.map((c) => (
+                                        <button
+                                            key={c.fullCurrency}
+                                            onClick={() => {
+                                                setCurrency(c.fullCurrency);
+                                                setOpen(false);
+                                            }}
+                                            className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm"
+                                        >
+                                            {c.currency}{" "}
+                                            <span className="font-light">
+                                                ({c.chain})
+                                            </span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div className="flex-1 ">
+                    <div className="flex  justify-start gap-8 items-center">
                         <p className="text-sm text-gray-500 mb-2 font-medium">
                             Amount you want to send
                         </p>
 
-                        <div className="flex gap-4 text-sm text-gray-400 pb-1 font-medium">
+                        <div className="gap-4 text-sm text-gray-400 pb-1 font-medium hidden md:flex">
                             <button onClick={() => setAmount((amount * 0.1).toFixed(2))}>
                                 10%
                             </button>
@@ -632,20 +744,25 @@ function AmountBox({
                         <input
                             type="number"
                             value={amount}
+                            placeholder="Add Amount"
                             onChange={(e) => setAmount(e.target.value)}
                             className="
-                                w-[140px]
+                               w-full 
                                 bg-transparent
                                 text-[32px]
                                 font-semibold
                                 outline-none
+                                border-b-1
+                                mb-2 sm:mb-0
                             "
                         />
                     </div>
                 </div>
 
+                {/* dropdown for Desktop */}
+
                 <div className="relative">
-                    <div className="flex items-center gap-3 bg-[#EBEBEB] py-2 px-2 rounded-xl w-fit lg:w-50">
+                    <div className="hidden sm:flex items-center gap-3 bg-[#EBEBEB] py-2 px-2 rounded-xl  md:w-50">
 
                         {/* TOKEN + NETWORK ICONS */}
                         {sourceCurrencies
@@ -857,7 +974,7 @@ function CurrencyDropdown({ label, icon }) {
 
 function CurrencyPill({ label, icon }) {
     return (
-        <div className="flex justify-center items-center gap-2 bg-[#EBEBEB] border rounded-xl px-3 py-4 w-fit lg:w-50">
+        <div className="flex justify-center items-center gap-2 bg-[#EBEBEB] border rounded-xl px-3 py-4 w-30 sm:w-50">
             <Image
                 src={icon}
                 alt=""
