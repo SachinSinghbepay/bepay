@@ -209,12 +209,19 @@ export default function SendGlobalPayoutModal({
             });
             console.log("SELECTED WALLET:", selectedWallet);
             try {
-                const res = await igpsService.createQuote({
+                const quotePayload = {
                     sourceCurrency: reqSourceCurrency,
                     targetCurrency: targetCurrency,
                     sourceAmount: parseFloat(amount),
-                    network: reqNetwork
-                });
+                    network: reqNetwork,
+                };
+
+                // add transferType ONLY if it exists
+                if (selectedBeneficiary?.paymentInfo?.transferType) {
+                    quotePayload.transferType = selectedBeneficiary.paymentInfo.transferType;
+                }
+                console.log("QUOTE PAYLOAD:", quotePayload);
+                const res = await igpsService.createQuote(quotePayload);
 
                 if (res.success) {
                     setQuote(res.data);
@@ -680,31 +687,38 @@ function AmountBox({
 
                             {/* BUTTON */}
                             <button
-                                onClick={() => setOpen(v => !v)}
-                                className="flex items-center gap-3 bg-[#EBEBEB] px-4 py-3 rounded-xl border text-[18px] font-semibold"
-                            >
-                                <span>
-                                    {
-                                        sourceCurrencies.find(c => c.fullCurrency === currency)?.currency
+                                onClick={() => {
+                                    if (sourceCurrencies.length > 0) {
+                                        setOpen(v => !v);
                                     }
-                                    {" "}
+                                }}
+                                className="flex items-center gap-3 bg-[#EBEBEB] px-4 py-3 rounded-xl border text-[18px] font-semibold min-w-[120px]"
+                            >
+                                {sourceCurrencies.length === 0 ? (
+                                    <span className="text-gray-400 text-sm">Loading...</span>
+                                ) : (
+                                    <>
+                                        <span>
+                                            {
+                                                sourceCurrencies.find(c => c.fullCurrency === currency)?.currency
+                                            }
+                                        </span>
 
-                                </span>
-
-                                {/* Arrow */}
-                                <svg
-                                    className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M6 9l6 6 6-6" />
-                                </svg>
+                                        <svg
+                                            className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path d="M6 9l6 6 6-6" />
+                                        </svg>
+                                    </>
+                                )}
                             </button>
 
                             {/* DROPDOWN */}
-                            {open && (
+                            {open && sourceCurrencies.length > 0 && (
                                 <div className="absolute mt-2 -right-2 bg-white border rounded-xl shadow-lg z-50 w-45">
                                     {sourceCurrencies.map((c) => (
                                         <button
@@ -759,7 +773,7 @@ function AmountBox({
 
                 <CurrencyPill
                     label={targetCurrency || "USD"}
-                    icon="/icons/india.svg"
+                    icon={targetCurrency === "INR" ? "/icons/india.svg" : "/icons/usa.svg"}
                 />
             </div>
         </div>
