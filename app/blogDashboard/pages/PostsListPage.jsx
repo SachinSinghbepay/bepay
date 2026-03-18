@@ -20,7 +20,7 @@ export default function PostsListPage({ onNewPost }) {
       setLoading(true);
       try {
         const query = filter !== "all" ? `?status=${filter}` : "";
-        const res = await fetch(`/api/posts${query}`);
+        const res = await fetch(`/api/blogPosts${query}`);
         const data = await res.json();
         if (data.success) setPosts(data.data);
       } catch (err) {
