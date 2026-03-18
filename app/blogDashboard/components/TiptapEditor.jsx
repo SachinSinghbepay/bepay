@@ -1,87 +1,166 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, ReactNodeViewRenderer, NodeViewWrapper } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import Image from "@tiptap/extension-image";
-import Youtube from "@tiptap/extension-youtube";
-import Placeholder from "@tiptap/extension-placeholder";
-import CharacterCount from "@tiptap/extension-character-count";
-
+import { Node, mergeAttributes, Extension } from "@tiptap/core";
+import Suggestion from "@tiptap/suggestion";
+import { useRef, useState, forwardRef, useEffect, useImperativeHandle } from "react";
 import FloatingToolbar from "./FloatingToolbar";
-import SlashMenu from "./SlashMenu";
-
 import "./Editor.css";
 
-const AUTOSAVE_KEY = "blog_cms_draft";
-const AUTOSAVE_INTERVAL = 30000; // 30s
+// ─── ImageWithAlt node ───────────────────────────────────────────────────────
 
-export default function TiptapEditor({ postId, onChange }) {
-  const autosaveTimer = useRef(null);
+function ImageNodeView({ node, updateAttributes, selected }) {
+  const [editingAlt, setEditingAlt] = useState(false);
+  const inputRef = useRef(null);
+  const alt = node.attrs.alt || "";
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        heading: { levels: [1, 2, 3, 4] },
-        blockquote: {},
-        bulletList: {},
-        orderedList: {},
-        code: {},
-        codeBlock: false,
-      }),
-      Underline,
-      Image.configure({
-        inline: false,
-        allowBase64: true,
-        HTMLAttributes: { class: "editor-image" },
-      }),
-      Youtube.configure({
-        controls: true,
-        nocookie: true,
-        HTMLAttributes: { class: "editor-youtube" },
-      }),
-      Placeholder.configure({
-        placeholder: ({ node }) => {
-          if (node.type.name === "heading") return "Heading...";
-          return "Write something, or type  /  for blocks...";
-        },
-      }),
-      CharacterCount,
-      SlashMenu,
-    ],
-    immediatelyRender: false,
-    content: loadDraft(postId),
-    editorProps: {
-      attributes: {
-        class: "tiptap-editor-content",
-        spellcheck: "true",
-      },
-    },
-    onUpdate({ editor }) {
-      const json = editor.getJSON();
-      onChange?.(json);
-      schedulAutosave(json, postId);
-    },
-  });
+  const handleAltClick = () => {
+    setEditingAlt(true);
+    setTimeout(() => inputRef.current?.focus(), 0);
+  };
 
-  const schedulAutosave = useCallback((json, id) => {
-    clearTimeout(autosaveTimer.current);
-    autosaveTimer.current = setTimeout(() => {
-      try {
-        localStorage.setItem(`${AUTOSAVE_KEY}_${id || "new"}`, JSON.stringify({
-          content: json,
-          savedAt: new Date().toISOString(),
-        }));
-      } catch {}
-    }, AUTOSAVE_INTERVAL);
-  }, []);
+  const handleAltBlur = (e) => { updateAttributes({ alt: e.target.value }); setEditingAlt(false); };
+  const handleAltKey = (e) => {
+    if (e.key === "Enter" || e.key === "Escape") { updateAttributes({ alt: e.target.value }); setEditingAlt(false); }
+  };
+
+  return (
+    <NodeViewWrapper className="image-block" contentEditable={false}>
+      <img src={node.attrs.src} alt={alt} className={`editor-image ${selected ? "editor-image--selected" : ""}`} />
+      <div className="image-alt-row">
+        {editingAlt ? (
+          <input ref={inputRef} defaultValue={alt} onBlur={handleAltBlur} onKeyDown={handleAltKey}
+            placeholder="Describe this image..." className="image-alt-input" />
+        ) : (
+          <button onClick={handleAltClick} className="image-alt-btn">
+            {alt ? <><span className="image-alt-label">Alt:</span><span className="image-alt-value">{alt}</span></> :
+              <span className="image-alt-missing">⚠ Add alt text</span>}
+          </button>
+        )}
+      </div>
+    </NodeViewWrapper>
+  );
+}
+
+const ImageWithAlt = Node.create({
+  name: "imageWithAlt", group: "block", atom: true, draggable: true,
+  addAttributes() { return { src: { default: null }, alt: { default: "" }, title: { default: null } }; },
+  parseHTML() { return [{ tag: "img[src]" }]; },
+  renderHTML({ HTMLAttributes }) { return ["img", mergeAttributes(HTMLAttributes)]; },
+  addNodeView() { return ReactNodeViewRenderer(ImageNodeView); },
+});
+
+// ─── SlashMenu ────────────────────────────────────────────────────────────────
+
+import {
+  Heading1, Heading2, Heading3, Heading4,
+  List, ListOrdered, Quote, Image as ImageIcon, Youtube, Minus, Type,
+} from "lucide-react";
+
+const COMMANDS = [
+  { title: "Paragraph", description: "Plain text", icon: Type, command: ({ editor, range }) => editor.chain().focus().deleteRange(range).setParagraph().run() },
+  { title: "Heading 1", description: "Big title", icon: Heading1, command: ({ editor, range }) => editor.chain().focus().deleteRange(range).setHeading({ level: 1 }).run() },
+  { title: "Heading 2", description: "Sub-section", icon: Heading2, command: ({ editor, range }) => editor.chain().focus().deleteRange(range).setHeading({ level: 2 }).run() },
+  { title: "Heading 3", description: "Smaller heading", icon: Heading3, command: ({ editor, range }) => editor.chain().focus().deleteRange(range).setHeading({ level: 3 }).run() },
+  { title: "Heading 4", description: "Small heading", icon: Heading4, command: ({ editor, range }) => editor.chain().focus().deleteRange(range).setHeading({ level: 4 }).run() },
+  { title: "Bullet List", description: "Unordered list", icon: List, command: ({ editor, range }) => editor.chain().focus().deleteRange(range).toggleBulletList().run() },
+  { title: "Numbered List", description: "Ordered list", icon: ListOrdered, command: ({ editor, range }) => editor.chain().focus().deleteRange(range).toggleOrderedList().run() },
+  { title: "Blockquote", description: "Indented quote", icon: Quote, command: ({ editor, range }) => editor.chain().focus().deleteRange(range).toggleBlockquote().run() },
+  { title: "Divider", description: "Horizontal rule", icon: Minus, command: ({ editor, range }) => editor.chain().focus().deleteRange(range).setHorizontalRule().run() },
+  { title: "Image", description: "Upload from device", icon: ImageIcon, command: ({ editor, range }) => {
+    editor.chain().focus().deleteRange(range).run();
+    const input = document.createElement("input"); input.type = "file"; input.accept = "image/*";
+    input.onchange = (e) => {
+      const file = e.target.files?.[0]; if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (re) => editor.chain().focus().insertContent({ type: "imageWithAlt", attrs: { src: re.target.result, alt: "" } }).run();
+      reader.readAsDataURL(file);
+    }; input.click();
+  }},
+];
+
+const SlashMenuList = forwardRef(({ items, command, clientRect }, ref) => {
+  const [selected, setSelected] = useState(0);
+  const menuRef = useRef(null);
 
   useEffect(() => {
-    return () => clearTimeout(autosaveTimer.current);
-  }, []);
+    const menu = menuRef.current; if (!menu || !clientRect) return;
+    const rect = clientRect(); if (!rect) return;
+    let top = rect.bottom + 4;
+    if (top + 320 > window.innerHeight) top = rect.top - 320 - 4;
+    let left = Math.max(8, Math.min(rect.left, window.innerWidth - 240 - 8));
+    menu.style.top = `${top}px`; menu.style.left = `${left}px`;
+  }, [clientRect, items]);
 
-  const wordCount = editor?.storage.characterCount.words() ?? 0;
+  useEffect(() => setSelected(0), [items]);
+
+  const selectItem = (i) => { const item = items[i]; if (item) command(item); };
+
+  useImperativeHandle(ref, () => ({
+    onKeyDown({ event }) {
+      if (event.key === "ArrowUp") { setSelected(i => (i + items.length - 1) % items.length); return true; }
+      if (event.key === "ArrowDown") { setSelected(i => (i + 1) % items.length); return true; }
+      if (event.key === "Enter") { selectItem(selected); return true; }
+      return false;
+    },
+  }));
+
+  if (!items.length) return null;
+  return (
+    <div ref={menuRef} className="slash-menu" style={{ position: "fixed", zIndex: 9999 }}>
+      <p className="slash-menu__label">Blocks</p>
+      {items.map((item, i) => {
+        const Icon = item.icon;
+        return (
+          <button key={item.title} onClick={() => selectItem(i)} className={`slash-menu__item ${i === selected ? "slash-menu__item--active" : ""}`}>
+            <div className="slash-menu__icon"><Icon className="w-3.5 h-3.5" /></div>
+            <div className="slash-menu__text">
+              <span className="slash-menu__title">{item.title}</span>
+              <span className="slash-menu__desc">{item.description}</span>
+            </div>
+          </button>
+        );
+      })}
+    </div>
+  );
+});
+SlashMenuList.displayName = "SlashMenuList";
+
+// ─── TiptapEditor ─────────────────────────────────────────────────────────────
+
+export default function TiptapEditor({ onChange, autoSaveStatus }) {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [
+      StarterKit.configure({ heading: { levels: [1, 2, 3, 4] }, image: false }),
+      ImageWithAlt,
+      Extension.create({
+        name: "slashMenu",
+        addOptions() { return { suggestion: { char: "/", command: ({ editor, range, props }) => props.command({ editor, range }) } }; },
+        addProseMirrorPlugins() {
+          return [Suggestion({
+            editor: this.editor, ...this.options.suggestion,
+            items: ({ query }) => COMMANDS.filter(i => i.title.toLowerCase().includes(query.toLowerCase())),
+            render: () => {
+              let component, container;
+              const { ReactRenderer } = require("@tiptap/react");
+              return {
+                onStart(props) { container = document.createElement("div"); document.body.appendChild(container); component = new ReactRenderer(SlashMenuList, { props, editor: props.editor }); container.appendChild(component.element); },
+                onUpdate(props) { component.updateProps(props); },
+                onKeyDown(props) { if (props.event.key === "Escape") { container?.remove(); return true; } return component.ref?.onKeyDown(props) ?? false; },
+                onExit() { container?.remove(); component?.destroy(); },
+              };
+            },
+          })];
+        },
+      }),
+    ],
+    editorProps: { attributes: { class: "tiptap-editor-content", spellcheck: "true" } },
+    onUpdate({ editor }) { onChange?.(editor.getJSON()); },
+  });
+
+  const wordCount = editor?.storage?.characterCount?.words() ?? 0;
   const readTime = Math.max(1, Math.ceil(wordCount / 200));
 
   return (
@@ -93,33 +172,15 @@ export default function TiptapEditor({ postId, onChange }) {
         <span>·</span>
         <span>~{readTime} min read</span>
         <span>·</span>
-        <AutosaveIndicator postId={postId} />
+        <AutoSaveLabel status={autoSaveStatus} />
       </div>
     </div>
   );
 }
 
-function AutosaveIndicator({ postId }) {
-  const key = `${AUTOSAVE_KEY}_${postId || "new"}`;
-  let savedAt = null;
-  try {
-    const raw = localStorage.getItem(key);
-    if (raw) savedAt = JSON.parse(raw).savedAt;
-  } catch {}
-
-  if (!savedAt) return <span className="text-[#CCCCBC]">Not saved yet</span>;
-
-  const time = new Date(savedAt).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  return <span className="text-[#AAAA9A]">Draft saved at {time}</span>;
-}
-
-function loadDraft(postId) {
-  try {
-    const raw = localStorage.getItem(`${AUTOSAVE_KEY}_${postId || "new"}`);
-    if (raw) return JSON.parse(raw).content;
-  } catch {}
-  return "";
+function AutoSaveLabel({ status }) {
+  if (!status) return <span className="text-[#CCCCBC]">Not saved yet</span>;
+  if (status === "saving") return <span className="text-[#AAAA9A] animate-pulse">Saving...</span>;
+  if (status === "error") return <span className="text-red-400">Autosave failed</span>;
+  return <span className="text-[#AAAA9A]">{status}</span>;
 }

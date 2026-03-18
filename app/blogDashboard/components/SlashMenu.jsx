@@ -39,7 +39,7 @@ const COMMANDS = [
       input.onchange = (e) => {
         const file = e.target.files?.[0]; if (!file) return;
         const reader = new FileReader();
-        reader.onload = (re) => editor.chain().focus().setImage({ src: re.target.result, alt: file.name }).run();
+        reader.onload = (re) => editor.chain().focus().insertContent({ type: 'imageWithAlt', attrs: { src: re.target.result, alt: '' } }).run();
         reader.readAsDataURL(file);
       };
       input.click();

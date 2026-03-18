@@ -301,3 +301,94 @@
 .drag-handle:hover {
   opacity: 1;
 }
+
+/* ─── Image with Alt ─────────────────────────────────────────────────────── */
+
+.image-block {
+  margin: 1.25rem 0;
+}
+
+.editor-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+}
+
+.editor-image--selected {
+  outline: 2px solid #1A1A1A;
+  outline-offset: 2px;
+}
+
+.image-alt-row {
+  margin-top: 6px;
+}
+
+.image-alt-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.image-alt-label {
+  font-weight: 600;
+  color: #9A9A8A;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.image-alt-value {
+  color: #5A5A4A;
+  font-size: 12px;
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-alt-missing {
+  color: #E07B39;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.image-alt-edit {
+  color: #AAAA9A;
+  font-size: 11px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.image-alt-btn:hover .image-alt-edit {
+  opacity: 1;
+}
+
+.image-alt-input {
+  width: 100%;
+  font-size: 12px;
+  color: #3A3A2A;
+  background: #F4F3EF;
+  border: 1px solid #DDDBD5;
+  border-radius: 7px;
+  padding: 6px 10px;
+  outline: none;
+  transition: border 0.15s;
+}
+
+.image-alt-input:focus {
+  border-color: #1A1A1A;
+  background: #fff;
+}
+
+.image-alt-input::placeholder {
+  color: #CCCCBC;
+}

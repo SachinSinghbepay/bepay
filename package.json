@@ -3,7 +3,7 @@
   "version": "0.2.7",
   "private": true,
   "scripts": {
-    "dev": "next dev  --turbopack ",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -19,12 +19,16 @@
     "@react-oauth/google": "^0.13.4",
     "@studio-freight/lenis": "^1.0.42",
     "@tabler/icons-react": "^3.34.0",
-    "@tiptap/extension-image": "^3.0.9",
-    "@tiptap/extension-link": "^3.0.9",
-    "@tiptap/extension-placeholder": "^3.0.9",
-    "@tiptap/extension-text-align": "^3.0.9",
-    "@tiptap/react": "^3.0.9",
-    "@tiptap/starter-kit": "^3.0.9",
+    "@tiptap/core": "^2.27.2",
+    "@tiptap/extension-image": "^2.27.2",
+    "@tiptap/extension-link": "^2.27.2",
+    "@tiptap/extension-placeholder": "^2.27.2",
+    "@tiptap/extension-text-align": "^2.27.2",
+    "@tiptap/extension-underline": "^2.27.2",
+    "@tiptap/pm": "^2.27.2",
+    "@tiptap/react": "^2.27.2",
+    "@tiptap/starter-kit": "^2.27.2",
+    "@tiptap/suggestion": "^2.27.2",
     "@vercel/speed-insights": "^1.3.1",
     "cheerio": "^1.2.0",
     "class-variance-authority": "^0.7.1",
@@ -45,6 +49,7 @@
     "locomotive-scroll": "^5.0.0-beta.21",
     "lucide-react": "^0.525.0",
     "mixpanel-browser": "^2.70.0",
+    "mongoose": "^9.3.0",
     "motion": "^12.23.9",
     "next": "15.3.8",
     "path": "^0.12.7",
@@ -55,6 +60,7 @@
     "react-hook-form": "^7.62.0",
     "react-icons": "^5.5.0",
     "rss-parser": "^3.13.0",
+    "slugify": "^1.6.8",
     "tailwind-merge": "^3.3.1",
     "uuid": "^11.1.0",
     "zod": "^4.0.14"
@@ -67,6 +73,7 @@
     "eslint-config-next": "15.5.2",
     "eslint-plugin-react-hooks": "^7.0.1",
     "tailwindcss": "^4",
-    "tw-animate-css": "^1.3.4"
+    "tw-animate-css": "^1.3.4",
+    "typescript": "5.9.3"
   }
 }
