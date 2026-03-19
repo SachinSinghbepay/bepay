@@ -252,7 +252,7 @@ const IgpsHero = () => {
                 </div>
               </div>
 
-              <div className="mt-0">
+              <div className="mt-4 sm: mt-0">
                 <div
                   className={`pl-3 border-l-2 border-gray-400 transition-all duration-700 delay-500 ${isVisible ? "opacity-100" : "opacity-0"
                     }`}
