@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { connectDB } from "@/lib/mongodb";
-import Post from "@/models/Post";
+
+const CMS = process.env.CMS_API_URL;
 
 export const metadata = {
   title: "Blog | BePay",
@@ -8,12 +8,9 @@ export const metadata = {
 };
 
 async function getPosts() {
-  await connectDB();
-  const posts = await Post.find({ status: "published" })
-    .sort({ publishedAt: -1 })
-    .select("title slug excerpt coverImage tags categories publishedAt")
-    .lean();
-  return posts;
+  const res = await fetch(`${CMS}/api/blogPosts?status=published`, { cache: "no-store" });
+  const data = await res.json();
+  return data.success ? data.data : [];
 }
 
 export default async function BlogListPage() {

@@ -1,14 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { tiptapToHtml } from "@/lib/tiptapToHtml";
-import { connectDB } from "@/lib/mongodb";
-import Post from "@/models/Post";
+
+const CMS = process.env.CMS_API_URL;
 
 async function getPost(slug) {
-  await connectDB();
-  // Allow any status — drafts are viewable as previews
-  const post = await Post.findOne({ slug }).lean();
-  return post;
+  const res  = await fetch(`${CMS}/api/blogPosts?slug=${slug}`, { cache: "no-store" });
+  const data = await res.json();
+  return data.success ? data.data : null;
 }
 
 export async function generateMetadata({ params }) {
