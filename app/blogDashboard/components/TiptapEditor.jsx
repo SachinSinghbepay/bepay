@@ -71,11 +71,30 @@ const COMMANDS = [
   { title: "Image", description: "Upload from device", icon: ImageIcon, command: ({ editor, range }) => {
     editor.chain().focus().deleteRange(range).run();
     const input = document.createElement("input"); input.type = "file"; input.accept = "image/*";
-    input.onchange = (e) => {
+    input.onchange = async (e) => {
       const file = e.target.files?.[0]; if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (re) => editor.chain().focus().insertContent({ type: "imageWithAlt", attrs: { src: re.target.result, alt: "" } }).run();
-      reader.readAsDataURL(file);
+      // Optimistic local preview
+      const localUrl = URL.createObjectURL(file);
+      editor.chain().focus().insertContent({ type: "imageWithAlt", attrs: { src: localUrl, alt: "" } }).run();
+      // Upload to S3
+      try {
+        const form = new FormData();
+        form.append("file", file);
+        form.append("type", "inline");
+        const res  = await fetch("/api/upload", { method: "POST", body: form });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error);
+        // Swap local blob URL with permanent S3/CDN URL in the editor
+        const { state, dispatch } = editor.view;
+        state.doc.descendants((node, pos) => {
+          if (node.type.name === "imageWithAlt" && node.attrs.src === localUrl) {
+            const tr = state.tr.setNodeMarkup(pos, null, { ...node.attrs, src: data.url });
+            dispatch(tr);
+          }
+        });
+      } catch (err) {
+        console.error("Inline image upload failed:", err);
+      }
     }; input.click();
   }},
 ];
@@ -129,9 +148,10 @@ SlashMenuList.displayName = "SlashMenuList";
 
 // ─── TiptapEditor ─────────────────────────────────────────────────────────────
 
-export default function TiptapEditor({ onChange, autoSaveStatus }) {
+export default function TiptapEditor({ onChange, autoSaveStatus, initialContent }) {
   const editor = useEditor({
     immediatelyRender: false,
+    content: initialContent ?? undefined,
     extensions: [
       StarterKit.configure({ heading: { levels: [1, 2, 3, 4] }, image: false }),
       ImageWithAlt,

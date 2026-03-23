@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PenSquare, Eye, Clock, Loader2 } from "lucide-react";
+import { PenSquare, Eye, Trash2, Loader2 } from "lucide-react";
 
 const STATUS_STYLES = {
   published: "bg-[#D1F5E0] text-[#1A6B3A]",
@@ -9,11 +9,13 @@ const STATUS_STYLES = {
   scheduled: "bg-[#FFF3D6] text-[#8A6000]",
 };
 
-export default function PostsListPage({ onNewPost }) {
-  const [posts, setPosts]       = useState([]);
-  const [loading, setLoading]   = useState(true);
-  const [filter, setFilter]     = useState("all");
-  const [search, setSearch]     = useState("");
+export default function PostsListPage({ onNewPost, onEditPost }) {
+  const [posts, setPosts]           = useState([]);
+  const [loading, setLoading]       = useState(true);
+  const [filter, setFilter]         = useState("all");
+  const [search, setSearch]         = useState("");
+  const [confirmDelete, setConfirmDelete] = useState(null); // post object | null
+  const [deleting, setDeleting]     = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -40,8 +42,56 @@ export default function PostsListPage({ onNewPost }) {
   const formatDate = (iso) =>
     iso ? new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "—";
 
+  const handleDelete = async () => {
+    if (!confirmDelete) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/blogPosts/${confirmDelete._id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.success) {
+        setPosts((prev) => prev.filter((p) => p._id !== confirmDelete._id));
+      }
+    } catch (err) {
+      console.error("Failed to delete post", err);
+    } finally {
+      setDeleting(false);
+      setConfirmDelete(null);
+    }
+  };
+
   return (
     <div className="p-4 lg:p-8 max-w-5xl mx-auto">
+
+      {/* Delete confirmation modal */}
+      {confirmDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm mx-4">
+            <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center mb-4">
+              <Trash2 className="w-5 h-5 text-red-500" />
+            </div>
+            <h3 className="text-base font-semibold text-[#1A1A1A] mb-1">Delete post?</h3>
+            <p className="text-sm text-[#6A6A5A] mb-5">
+              <span className="font-medium text-[#1A1A1A]">"{confirmDelete.title}"</span> will be permanently deleted. This cannot be undone.
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setConfirmDelete(null)}
+                className="flex-1 px-4 py-2 rounded-xl border border-[#E4E2DC] text-sm font-medium text-[#5A5A4A] hover:bg-[#F4F3EF] transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={deleting}
+                className="flex-1 px-4 py-2 rounded-xl bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition disabled:opacity-50 flex items-center justify-center gap-1.5"
+              >
+                {deleting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Filter bar */}
       <div className="flex items-center gap-2 mb-6 flex-wrap">
@@ -131,12 +181,29 @@ export default function PostsListPage({ onNewPost }) {
                     <span className="text-[#5A5A4A] text-xs">{formatDate(post.createdAt)}</span>
                   </td>
                   <td className="px-4 py-4">
-                    <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition">
-                      <button className="p-1.5 rounded-lg hover:bg-[#EFEDE8] text-[#5A5A4A] transition">
+                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+                      <button
+                        onClick={() => onEditPost(post)}
+                        className="p-1.5 rounded-lg hover:bg-[#EFEDE8] text-[#5A5A4A] transition"
+                        title="Edit post"
+                      >
                         <PenSquare className="w-3.5 h-3.5" />
                       </button>
-                      <button className="p-1.5 rounded-lg hover:bg-[#EFEDE8] text-[#5A5A4A] transition">
+                      <a
+                        href={`/blog/${post.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1.5 rounded-lg hover:bg-[#EFEDE8] text-[#5A5A4A] transition"
+                        title={post.status === "published" ? "View live post" : "Preview draft"}
+                      >
                         <Eye className="w-3.5 h-3.5" />
+                      </a>
+                      <button
+                        onClick={() => setConfirmDelete(post)}
+                        className="p-1.5 rounded-lg hover:bg-red-50 text-[#AAAA9A] hover:text-red-500 transition"
+                        title="Delete post"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </td>

@@ -11,9 +11,18 @@ const PostSchema = new Schema(
     categories: { type: [String], default: [] },
     status: { type: String, enum: ["draft", "published"], default: "draft" },
     publishedAt: { type: Date },
+    metaTitle: { type: String, default: "" },
+    metaDesc:  { type: String, default: "" },
   },
-  { timestamps: true }, // auto adds createdAt & updatedAt
+  { timestamps: true }
 );
+
+// ── Indexes ───────────────────────────────────────────────────────────────────
+PostSchema.index({ status: 1, createdAt: -1 });
+PostSchema.index({ categories: 1 });
+PostSchema.index({ tags: 1 });
+PostSchema.index({ publishedAt: -1 });
+// ─────────────────────────────────────────────────────────────────────────────
 
 // Auto-generate slug from title if not provided
 PostSchema.pre("validate", function () {

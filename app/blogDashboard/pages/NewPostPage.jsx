@@ -13,60 +13,56 @@ const TiptapEditor = dynamic(() => import("../components/TiptapEditor"), {
 
 const AUTOSAVE_DELAY = 2500;
 
-export default function NewPostPage({ onBack }) {
+export default function NewPostPage({ onBack, initialPost = null }) {
+  const ip = initialPost; // shorthand
+
   // Content
-  const [title, setTitle]       = useState("");
-  const [excerpt, setExcerpt]   = useState("");
-  const [body, setBody]         = useState(null);
+  const [title, setTitle]       = useState(ip?.title    ?? "");
+  const [excerpt, setExcerpt]   = useState(ip?.excerpt  ?? "");
+  const [body, setBody]         = useState(ip?.content  ?? null);
 
   // Sidebar
-  const [slug, setSlug]         = useState("");
-  const [tags, setTags]         = useState([]);
+  const [slug, setSlug]         = useState(ip?.slug              ?? "");
+  const [tags, setTags]         = useState(ip?.tags              ?? []);
   const [tagInput, setTagInput] = useState("");
-  const [category, setCategory] = useState("");
-  const [metaTitle, setMetaTitle] = useState("");
-  const [metaDesc, setMetaDesc]   = useState("");
-  const [coverImage, setCoverImage] = useState("");
+  const [category, setCategory] = useState(ip?.categories?.[0]  ?? "");
+  const [metaTitle, setMetaTitle] = useState(ip?.metaTitle ?? "");
+  const [metaDesc, setMetaDesc]   = useState(ip?.metaDesc  ?? "");
+  const [coverImage, setCoverImage] = useState(ip?.coverImage ?? "");
 
   // Save state
-  const [savedId, setSavedId]       = useState(null);
+  const [savedId, setSavedId]       = useState(ip?._id ?? null);
   const [saving, setSaving]         = useState(false);
   const [publishing, setPublishing] = useState(false);
-  const [autoSaveStatus, setAutoSaveStatus] = useState(null); // null | "saving" | "saved at HH:MM" | "error"
+  const [autoSaveStatus, setAutoSaveStatus] = useState(null);
   const [toast, setToast]           = useState(null);
 
-  const autosaveTimer = useRef(null);
-  const savedIdRef    = useRef(null); // mirror of savedId for use inside callbacks
-  const bodyRef       = useRef(null);
-  const titleRef      = useRef("");
-  const excerptRef    = useRef("");
-  const slugRef       = useRef("");
-  const tagsRef       = useRef([]);
-  const categoryRef   = useRef("");
-  const fileInputRef  = useRef(null);
+  const autosaveTimer  = useRef(null);
+  const isPublishedRef = useRef(ip?.status === "published");
+  const savedIdRef     = useRef(ip?._id ?? null);
+  const bodyRef        = useRef(ip?.content ?? null);
+  const titleRef       = useRef(ip?.title   ?? "");
+  const excerptRef     = useRef(ip?.excerpt ?? "");
+  const slugRef        = useRef(ip?.slug       ?? "");
+  const tagsRef        = useRef(ip?.tags       ?? []);
+  const categoryRef    = useRef(ip?.categories?.[0] ?? "");
+  const metaTitleRef   = useRef(ip?.metaTitle  ?? "");
+  const metaDescRef    = useRef(ip?.metaDesc   ?? "");
+  const coverImageRef  = useRef(ip?.coverImage ?? "");
+  const fileInputRef   = useRef(null);
 
   // Keep refs in sync so autosave always has latest values
   const syncRefs = (patch) => {
     if (patch.title     !== undefined) titleRef.current    = patch.title;
     if (patch.excerpt   !== undefined) excerptRef.current  = patch.excerpt;
     if (patch.slug      !== undefined) slugRef.current     = patch.slug;
-    if (patch.tags      !== undefined) tagsRef.current     = patch.tags;
-    if (patch.category  !== undefined) categoryRef.current = patch.category;
-    if (patch.body      !== undefined) bodyRef.current     = patch.body;
+    if (patch.tags       !== undefined) tagsRef.current      = patch.tags;
+    if (patch.category   !== undefined) categoryRef.current  = patch.category;
+    if (patch.body       !== undefined) bodyRef.current      = patch.body;
+    if (patch.metaTitle  !== undefined) metaTitleRef.current = patch.metaTitle;
+    if (patch.metaDesc   !== undefined) metaDescRef.current  = patch.metaDesc;
+    if (patch.coverImage !== undefined) coverImageRef.current = patch.coverImage;
   };
-
-  const buildPayload = (status) => ({
-    title:      titleRef.current,
-    slug:       slugRef.current,
-    content:    bodyRef.current ?? { type: "doc", content: [] },
-    excerpt:    excerptRef.current,
-    coverImage,
-    tags:       tagsRef.current,
-    categories: categoryRef.current ? [categoryRef.current] : [],
-    status,
-    metaTitle:  metaTitle || titleRef.current,
-    metaDesc:   metaDesc  || excerptRef.current,
-  });
 
   const persist = useCallback(async (status = "draft") => {
     if (!titleRef.current.trim()) return null;
@@ -76,24 +72,36 @@ export default function NewPostPage({ onBack }) {
       {
         method: isUpdate ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(buildPayload(status)),
+        body: JSON.stringify({
+          title:      titleRef.current,
+          slug:       slugRef.current,
+          content:    bodyRef.current ?? { type: "doc", content: [] },
+          excerpt:    excerptRef.current,
+          coverImage: coverImageRef.current,
+          tags:       tagsRef.current,
+          categories: categoryRef.current ? [categoryRef.current] : [],
+          status,
+          metaTitle:  metaTitleRef.current || titleRef.current,
+          metaDesc:   metaDescRef.current  || excerptRef.current,
+        }),
       }
     );
     const data = await res.json();
     if (!data.success) throw new Error(data.error);
-    // Store returned _id for future PATCH calls
     if (!savedIdRef.current) {
       savedIdRef.current = data.data._id;
       setSavedId(data.data._id);
     }
     return data.data;
-  }, [metaTitle, metaDesc, coverImage]);
+  }, []);
 
   // ── Autosave (debounced) ──────────────────────────────────────────────────
   const scheduleAutosave = useCallback(() => {
     clearTimeout(autosaveTimer.current);
     autosaveTimer.current = setTimeout(async () => {
       if (!titleRef.current.trim()) return;
+      // Never downgrade a published post back to draft
+      if (isPublishedRef.current) return;
       setAutoSaveStatus("saving");
       try {
         await persist("draft");
@@ -150,12 +158,25 @@ export default function NewPostPage({ onBack }) {
     scheduleAutosave();
   };
 
-  const handleCoverImage = (e) => {
+  const handleCoverImage = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (re) => setCoverImage(re.target.result);
-    reader.readAsDataURL(file);
+    // Optimistic local preview
+    const localUrl = URL.createObjectURL(file);
+    setCoverImage(localUrl);
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: form });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error);
+      // Replace preview with the permanent S3 URL
+      setCoverImage(data.url);
+      syncRefs({ coverImage: data.url });
+    } catch (err) {
+      showToast("error", "Cover image upload failed: " + err.message);
+      setCoverImage("");
+    }
   };
 
   const showToast = (type, msg) => {
@@ -181,9 +202,12 @@ export default function NewPostPage({ onBack }) {
   const handlePublish = async () => {
     if (!title.trim()) return showToast("error", "Title is required");
     if (!body) return showToast("error", "Write some content first");
+    // Cancel any pending autosave before publishing
+    clearTimeout(autosaveTimer.current);
     setPublishing(true);
     try {
       await persist("published");
+      isPublishedRef.current = true;
       showToast("success", "Post published! 🎉");
     } catch (err) {
       showToast("error", err.message || "Failed to publish");
@@ -270,6 +294,7 @@ export default function NewPostPage({ onBack }) {
             postId={savedId}
             onChange={handleBodyChange}
             autoSaveStatus={autoSaveStatus}
+            initialContent={ip?.content ?? undefined}
           />
         </div>
 
@@ -327,14 +352,14 @@ export default function NewPostPage({ onBack }) {
                 <input
                   type="text"
                   value={metaTitle}
-                  onChange={(e) => setMetaTitle(e.target.value)}
+                  onChange={(e) => { setMetaTitle(e.target.value); syncRefs({ metaTitle: e.target.value }); }}
                   placeholder="Meta title (defaults to post title)"
                   className="w-full px-3 py-2 rounded-lg border border-[#E4E2DC] bg-white text-sm placeholder:text-[#AAAA9A] outline-none focus:border-[#1A1A1A] transition"
                 />
                 <textarea
                   rows={3}
                   value={metaDesc}
-                  onChange={(e) => setMetaDesc(e.target.value)}
+                  onChange={(e) => { setMetaDesc(e.target.value); syncRefs({ metaDesc: e.target.value }); }}
                   placeholder="Meta description (defaults to excerpt)"
                   className="w-full px-3 py-2 rounded-lg border border-[#E4E2DC] bg-white text-sm placeholder:text-[#AAAA9A] outline-none focus:border-[#1A1A1A] transition resize-none"
                 />

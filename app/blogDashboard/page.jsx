@@ -11,21 +11,38 @@ import TopicsPage from "./pages/TopicsPage";
 import MediaPage from "./pages/MediaPage";
 
 export default function BlogDashboardPage() {
-  const [activePage, setActivePage] = useState("posts");
+  const [activePage, setActivePage]   = useState("posts");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [editingPost, setEditingPost] = useState(null);
+
+  const goToEditor = (post = null) => {
+    setEditingPost(post);
+    setActivePage("new-post");
+  };
 
   const renderPage = () => {
     switch (activePage) {
       case "posts":
-        return <PostsListPage onNewPost={() => setActivePage("new-post")} />;
+        return (
+          <PostsListPage
+            onNewPost={() => goToEditor(null)}
+            onEditPost={(post) => goToEditor(post)}
+          />
+        );
       case "new-post":
-        return <NewPostPage onBack={() => setActivePage("posts")} />;
+        return (
+          <NewPostPage
+            key={editingPost?._id ?? "new"}
+            initialPost={editingPost}
+            onBack={() => { setEditingPost(null); setActivePage("posts"); }}
+          />
+        );
       case "topics":
         return <TopicsPage />;
       case "media":
         return <MediaPage />;
       default:
-        return <PostsListPage onNewPost={() => setActivePage("new-post")} />;
+        return <PostsListPage onNewPost={() => goToEditor(null)} onEditPost={(post) => goToEditor(post)} />;
     }
   };
 
@@ -46,7 +63,11 @@ export default function BlogDashboardPage() {
         <BlogSidebar
           active={activePage}
           onChange={(page) => {
-            setActivePage(page);
+            if (page === "new-post") {
+              goToEditor(null);
+            } else {
+              setActivePage(page);
+            }
             setSidebarOpen(false);
           }}
           isOpen={sidebarOpen}
