@@ -9,6 +9,7 @@ export default function StepPersonalDetails({ data, setData, onNext, onBack, loa
 
     const password = data.password || "";
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     // 🔐 Password rule checks
     const hasMinLength = password.length >= 8;
     const hasNumber = /[0-9]/.test(password);
@@ -164,7 +165,7 @@ export default function StepPersonalDetails({ data, setData, onNext, onBack, loa
                         </label>
                         <div className="relative">
                             <input
-                                type={showPassword ? "text" : "password"}
+                                type={showConfirmPassword ? "text" : "password"}
                                 value={data.confirmPassword || ""}
                                 onChange={(e) =>
                                     setData((prev) => ({
@@ -179,10 +180,10 @@ export default function StepPersonalDetails({ data, setData, onNext, onBack, loa
                             />
                             <button
                                 type="button"
-                                onClick={() => setShowPassword(!showPassword)}
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                 className="absolute right-4 top-4 text-gray-400"
                             >
-                                {showPassword ? (
+                                {showConfirmPassword ? (
                                     <AiOutlineEyeInvisible size={20} />
                                 ) : (
                                     <AiOutlineEye size={20} />

@@ -135,8 +135,8 @@ export default function InnerLayout() {
       case "team":
         return <Team onOpenModal={openModal} />;
 
-      case "invite":
-        return <Invite onOpenModal={openModal} />;
+      // case "invite":
+      //   return <Invite onOpenModal={openModal} />;
 
       case "kyc":
         return (

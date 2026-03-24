@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { AnalyticsService } from "@/services/analyticsService";
 import { useRef, useState, useEffect } from "react";
+import { ShieldCheck } from "lucide-react";
 
 const complianceData = [
   {
@@ -22,8 +23,8 @@ const complianceData = [
     title: "Licensed",
     badges: [
       { name: "MSB (USA)", logo: "/icons/MSB-(USA).svg" },
-      { name: "MSB (Canada)", },
-      { name: "PSP (Canada)" },
+      { name: "MSB (Canada)", logo:"/canada.png"},
+      { name: "PSP (Canada)", logo:"/canada.png" },
       { name: "VASP (EU)", logo: "/icons/VASP-(EU).svg" },
     ],
   },
@@ -31,12 +32,12 @@ const complianceData = [
     icon: "/images/business/compliant.svg",
     title: "Compliant",
     badges: [
-      { name: "RBI's PA-CB*" },
-      { name: "FEMA" },
-      { name: "DORA" },
+      { name: "RBI's PA-CB*", logo: '/rbi.png'},
+      { name: "FEMA", logo: '/rbi.png' },
+      { name: "DORA", logo:"/dora.png" },
       { name: "DPDP", logo: "/icons/DPDP.svg" },
       { name: "MiCA-ready*", logo: "/icons/MiCA-ready.svg" },
-      { name: "CFT" },
+      { name: "AML/CFT", logo: '/finger.png'},
     ],
   },
   {
@@ -45,8 +46,8 @@ const complianceData = [
     badges: [
       { name: "GDPR", logo: "/icons/GDPR.svg" },
       { name: "Multi-Factor Authentication" , logo: "/icons/security-icon.svg" },
-      { name: "24/7 Monitoring" },
-      { name: "End-to-End Encryption" },
+      { name: "24/7 Monitoring", logo: '/monitor.png'},
+      { name: "End-to-End Encryption", logo: '/Encryption.png' },
       { name: "Real-time Fraud Detection", logo: "/icons/fraud.svg" },
     ],
   },
@@ -154,17 +155,6 @@ export default function ComplianceSection() {
                 <h3 className="text-3xl lg:text-[60px] 3xl:text-[80px] font-[500] text-[#6A6A6A] leading-tight">
                   {item.title}
                 </h3>
-                {/* Mobile-only flag image */}
-                {item.title === "Licensed" && (
-                  <Image
-                    src="/igps_flag.png"
-                    alt="Flag"
-                    width={45}
-                    height={40}
-                    className="absolute top-[29%] right-[5%] pointer-events-none lg:hidden"
-                    loading="lazy" // <-- ADDED
-                  />
-                )}
               </div>
               <div
                 className={`${index === complianceData.length - 1 ? "md:-mt-8" : ""
@@ -192,19 +182,7 @@ export default function ComplianceSection() {
                     </div>
                   ))}
                 </div>
-              </div>
-
-              {/* Desktop-only flag image */}
-              {item.title === "Licensed" && (
-                <Image
-                  src="/igps_flag.png"
-                  alt="Flag"
-                  width={70}
-                  height={63}
-                  className="absolute bottom-8 right-12 lg:bottom-12 lg:right-12 pointer-events-none hidden lg:block"
-                  loading="lazy"
-                />
-              )}
+              </div>            
             </motion.div>
           ))}
         </motion.div>

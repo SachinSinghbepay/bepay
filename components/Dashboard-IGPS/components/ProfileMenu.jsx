@@ -8,9 +8,6 @@ export default function ProfileMenu({ onProfile }) {
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
 
-    // Display Name Logic: Organization Name or First Last Name
-    const displayName = organization?.name || user?.organizationName || (user?.firstName ? `${user.firstName} ${user.lastName}` : "User");
-
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (ref.current && !ref.current.contains(e.target)) {
@@ -20,6 +17,21 @@ export default function ProfileMenu({ onProfile }) {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    const [cachedName, setCachedName] = useState("");
+
+    useEffect(() => {
+        if (user) {
+            const name =
+                organization?.name ||
+                user?.organizationName ||
+                `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim();
+
+            setCachedName(name);
+        }
+    }, [user, organization]);
+
+    const displayName = cachedName;
 
     return (
         <div className="relative" ref={ref}>
