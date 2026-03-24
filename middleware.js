@@ -18,6 +18,17 @@ export async function middleware(request) {
   const { pathname, search } = request.nextUrl;
   const userAgent = request.headers.get("user-agent") || "";
 
+  // ─────────────────────────────────────────────
+  // 🔐 BLOG CMS AUTH GUARD
+  // ─────────────────────────────────────────────
+  if (pathname.startsWith("/blogDashboard") && !pathname.startsWith("/blogDashboard/login")) {
+    const token = request.cookies.get("blog_cms_token");
+    if (!token?.value) {
+      const loginUrl = new URL("/blogDashboard/login", request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
 
 
   // ─────────────────────────────────────────────
@@ -30,7 +41,6 @@ export async function middleware(request) {
   if (isAppRoute) {
     const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
     const isAndroid = /android/i.test(userAgent);
-    const isIOS = /iphone|ipad|ipod/i.test(userAgent);
 
     if (isMobile) {
       const deepLinkUrl = `bepay://${pathname}${search}`;
@@ -118,9 +128,10 @@ export async function middleware(request) {
 // Configure which routes the middleware applies to
 export const config = {
   matcher: [
-
     "/transactions-screen/:path*",
     "/explore-screen/:path*",
     "/app/:path*",
+    "/blogDashboard/:path*",
+    "/blogDashboard",
   ],
 };

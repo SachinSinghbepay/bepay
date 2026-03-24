@@ -1,6 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  transpilePackages: [
+    "@tiptap/core",
+    "@tiptap/react",
+    "@tiptap/pm",
+    "@tiptap/starter-kit",
+    "@tiptap/extensions",
+    "@tiptap/extension-underline",
+    "@tiptap/extension-placeholder",
+    "@tiptap/extension-image",
+    "@tiptap/extension-link",
+    "@tiptap/extension-text-align",
+    "@tiptap/suggestion",
+  ],
   images: {
     dangerouslyAllowSVG: true,
     contentDispositionType: "attachment",
@@ -18,7 +31,6 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
-      // Add this new object to the array
       {
         protocol: "https",
         hostname: "assets.bepay.money",
@@ -28,7 +40,6 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "ui-avatars.com",
-
         port: "",
         pathname: "/**",
       },
@@ -54,6 +65,13 @@ const nextConfig = {
   },
   experimental: {
     scrollRestoration: false,
+  },
+  webpack: (config) => {
+    config.resolve.extensionAlias = {
+      ".js": [".js", ".ts", ".tsx"],
+    };
+    config.resolve.conditionNames = ["import", "module", "require", "default"];
+    return config;
   },
   async headers() {
     return [
@@ -85,7 +103,6 @@ const nextConfig = {
       },
     ];
   },
-
 };
 
 export default nextConfig;
