@@ -5,17 +5,17 @@ import { PenSquare, Eye, Trash2, Loader2 } from "lucide-react";
 
 const STATUS_STYLES = {
   published: "bg-[#D1F5E0] text-[#1A6B3A]",
-  draft:     "bg-[#F0EFEA] text-[#6A6A5A]",
+  draft: "bg-[#F0EFEA] text-[#6A6A5A]",
   scheduled: "bg-[#FFF3D6] text-[#8A6000]",
 };
 
 export default function PostsListPage({ onNewPost, onEditPost }) {
-  const [posts, setPosts]           = useState([]);
-  const [loading, setLoading]       = useState(true);
-  const [filter, setFilter]         = useState("all");
-  const [search, setSearch]         = useState("");
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("all");
+  const [search, setSearch] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(null); // post object | null
-  const [deleting, setDeleting]     = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -71,7 +71,9 @@ export default function PostsListPage({ onNewPost, onEditPost }) {
             </div>
             <h3 className="text-base font-semibold text-[#1A1A1A] mb-1">Delete post?</h3>
             <p className="text-sm text-[#6A6A5A] mb-5">
-              <span className="font-medium text-[#1A1A1A]">"{confirmDelete.title}"</span> will be permanently deleted. This cannot be undone.
+              <span className="font-medium text-[#1A1A1A]">
+                &quot;{confirmDelete.title}&quot;
+              </span> will be permanently deleted. This cannot be undone.
             </p>
             <div className="flex gap-2">
               <button
@@ -99,11 +101,10 @@ export default function PostsListPage({ onNewPost, onEditPost }) {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-3.5 py-1.5 rounded-lg text-sm font-medium capitalize transition ${
-              filter === f
+            className={`px-3.5 py-1.5 rounded-lg text-sm font-medium capitalize transition ${filter === f
                 ? "bg-[#1A1A1A] text-white"
                 : "bg-[#EFEDE8] text-[#5A5A4A] hover:bg-[#E4E2DC]"
-            }`}
+              }`}
           >
             {f === "all" ? "All" : f.charAt(0).toUpperCase() + f.slice(1)}
           </button>
@@ -154,9 +155,8 @@ export default function PostsListPage({ onNewPost, onEditPost }) {
               {filtered.map((post, i) => (
                 <tr
                   key={post._id}
-                  className={`border-b border-[#ECEAE4] hover:bg-[#F9F8F5] transition group ${
-                    i === filtered.length - 1 ? "border-0" : ""
-                  }`}
+                  className={`border-b border-[#ECEAE4] hover:bg-[#F9F8F5] transition group ${i === filtered.length - 1 ? "border-0" : ""
+                    }`}
                 >
                   <td className="px-5 py-4">
                     <p className="font-medium text-[#1A1A1A] leading-snug">{post.title}</p>
