@@ -226,7 +226,7 @@ const ImageComparisonTable = () => {
           max-w-3xl 
           mx-auto
         ">
-          Businesses lose time and money to complex cross-border processes. bepay IGPS simplifies it, offering <span className="text-[#080808]">free international settlements, faster transfers, and a reliable experience built for modern trade.</span>
+          Businesses lose time and money to complex cross-border processes. bepay IGPS simplifies it, offering <span className="text-[#080808]"> low cost international settlements, faster transfers, and a reliable experience built for modern trade.</span>
         </p>
 
         {/* --- Image Table Replacement --- */}

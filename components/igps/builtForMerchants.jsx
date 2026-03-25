@@ -55,7 +55,8 @@ const cards = [
   },
 ];
 
-const infiniteCards = [...cards, ...cards];
+const COPIES = 20;
+const infiniteCards = Array.from({ length: COPIES }, () => cards).flat();
 
 export default function BuiltForMerchants() {
   const scrollRef = useRef(null);
@@ -63,17 +64,24 @@ export default function BuiltForMerchants() {
   const isPaused = useRef(false);
   const intervalRef = useRef(null);
 
+  // Start at midpoint so both left and right work
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollLeft = el.scrollWidth / 2;
+  }, []);
+
   const scrollByOneCard = (dir) => {
     const el = scrollRef.current;
     if (!el) return;
     const cardWidth = el.querySelector('[data-card]')?.offsetWidth ?? 420;
     el.scrollBy({ left: dir === 'left' ? -(cardWidth + 20) : cardWidth + 20, behavior: 'smooth' });
-    // Seamless loop reset after smooth scroll settles
+    // Reset to midpoint only when approaching the edges (25% or 75%)
     setTimeout(() => {
       if (!el) return;
-      if (el.scrollLeft >= el.scrollWidth / 2) el.scrollLeft -= el.scrollWidth / 2;
-      else if (el.scrollLeft <= 0) el.scrollLeft += el.scrollWidth / 2;
-    }, 500);
+      if (el.scrollLeft >= el.scrollWidth * 0.75) el.scrollLeft -= el.scrollWidth / 2;
+      else if (el.scrollLeft <= el.scrollWidth * 0.25) el.scrollLeft += el.scrollWidth / 2;
+    }, 600);
   };
 
   // Auto-advance one card every 3s
