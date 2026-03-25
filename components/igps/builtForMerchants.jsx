@@ -55,13 +55,35 @@ const cards = [
   },
 ];
 
-const infiniteCards = [...cards, ...cards];
+const COPIES = 10;
+const infiniteCards = Array.from({ length: COPIES }, () => cards).flat();
+const SEGMENT = cards.length; // 6 cards per copy
 
 export default function BuiltForMerchants() {
   const scrollRef = useRef(null);
   const [showPopup, setShowPopup] = useState(false);
   const isPaused = useRef(false);
   const intervalRef = useRef(null);
+
+  // Initialize scroll position to the middle copy so we have room in both directions
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    // Wait for layout
+    requestAnimationFrame(() => {
+      const cardWidth = el.querySelector('[data-card]')?.offsetWidth ?? 420;
+      const gap = 20;
+      // Start at copy index 5 (middle of 10 copies)
+      el.scrollLeft = SEGMENT * 5 * (cardWidth + gap);
+    });
+  }, []);
+
+  const startInterval = () => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      if (!isPaused.current) scrollByOneCard('right');
+    }, 3000);
+  };
 
   const scrollByOneCard = (dir) => {
     const el = scrollRef.current;
@@ -71,16 +93,20 @@ export default function BuiltForMerchants() {
     // Seamless loop reset after smooth scroll settles
     setTimeout(() => {
       if (!el) return;
-      if (el.scrollLeft >= el.scrollWidth / 2) el.scrollLeft -= el.scrollWidth / 2;
-      else if (el.scrollLeft <= 0) el.scrollLeft += el.scrollWidth / 2;
-    }, 500);
+      const mid = el.scrollWidth / 2;
+      if (el.scrollLeft >= el.scrollWidth * 0.8) el.scrollLeft -= mid;
+      else if (el.scrollLeft <= el.scrollWidth * 0.2) el.scrollLeft += mid;
+    }, 600);
+  };
+
+  const handleManualScroll = (dir) => {
+    scrollByOneCard(dir);
+    startInterval(); // reset timer so autoplay doesn't fire immediately after
   };
 
   // Auto-advance one card every 3s
   useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      if (!isPaused.current) scrollByOneCard('right');
-    }, 3000);
+    startInterval();
     return () => clearInterval(intervalRef.current);
   }, []);
 
@@ -106,14 +132,14 @@ export default function BuiltForMerchants() {
         {/* Navigation arrows */}
         <div className="hidden md:flex items-center gap-3 flex-shrink-0 ml-6">
           <button
-            onClick={() => scrollByOneCard('left')}
+            onClick={() => handleManualScroll('left')}
             aria-label="Scroll left"
             className="w-12 h-12 rounded-xl border border-[#D0D0D0] bg-white flex items-center justify-center transition-all hover:bg-[#F0F0F0]"
           >
             <ChevronLeft size={20} color="#333" strokeWidth={1.8} />
           </button>
           <button
-            onClick={() => scrollByOneCard('right')}
+            onClick={() => handleManualScroll('right')}
             aria-label="Scroll right"
             className="w-12 h-12 rounded-xl border border-[#D0D0D0] bg-white flex items-center justify-center transition-all hover:bg-[#F0F0F0]"
           >
@@ -186,14 +212,14 @@ export default function BuiltForMerchants() {
       {/* Mobile arrows */}
       <div className="flex md:hidden items-center justify-center gap-4 mt-6">
         <button
-          onClick={() => scrollByOneCard('left')}
+          onClick={() => handleManualScroll('left')}
           aria-label="Scroll left"
           className="w-11 h-11 rounded-full border border-[#D0D0D0] bg-white flex items-center justify-center"
         >
           <ChevronLeft size={18} color="#333" strokeWidth={1.8} />
         </button>
         <button
-          onClick={() => scrollByOneCard('right')}
+          onClick={() => handleManualScroll('right')}
           aria-label="Scroll right"
           className="w-11 h-11 rounded-full border border-[#D0D0D0] bg-white flex items-center justify-center"
         >
