@@ -324,6 +324,7 @@ export default function InnerLayout() {
               onClose={closeModal}
               onBack={() => openModal("global-payout")}
               onOpenModal={openModal}
+              onSuccess={modalProps?.onSuccess}
             />
           )}
 
