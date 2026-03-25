@@ -144,7 +144,7 @@ const MobileCreditCardView = ({ handleStartClick }) => {
               height={18}
               className="opacity-70"
             />
-            Get your bepay card now
+            Get your bepay money card now
           </Button>
         </WaitlistTriggerButton>
       </div>
@@ -428,7 +428,7 @@ const DesktopCreditCardView = ({ scrollYProgress, handleStartClick }) => {
                     height={24}
                     className="w-6 h-6"
                   />
-                  Get your BePay card now
+                  Get your bepay money card now
                 </Button>
               </WaitlistTriggerButton>
             </motion.div>

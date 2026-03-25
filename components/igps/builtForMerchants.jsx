@@ -34,7 +34,7 @@ const cards = [
     title: 'Marketplace Sellers',
     description:
       'Collect payouts from platforms like Amazon or Shopify directly into your account. Withdraw anytime with full visibility.',
-    image: '/businessnew/marketplace.jpg',
+    image: '/scrollPage/sp4.webp',
     fallbackBg: 'linear-gradient(135deg, #2a1a1a 0%, #4a2a2a 100%)',
   },
   {

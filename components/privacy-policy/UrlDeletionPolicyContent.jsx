@@ -2,7 +2,7 @@
 
 export default function UrlDeletionPolicyContent() {
   return (
-    <div className="max-w-[979px] py-8 space-y-12">
+    <div className="w-full py-8 space-y-12">
       {/* Section 1: Introduction */}
       <section className="space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">

@@ -57,7 +57,7 @@ export default function CTASection() {
             </p>
 
             {/* Telegram Button */}
-            <Link href={"https://t.me/officialbepaymoney"}>
+            <Link href={"https://t.me/officialbepay"}>
               <motion.button
                 className="inline-flex items-center gap-3 bg-black text-white px-6 py-3 lg:px-8 lg:py-4 rounded-full font-medium text-sm lg:text-base hover:bg-black/90 cursor-pointer transition-colors duration-300"
                 whileHover={{ scale: 1.05 }}

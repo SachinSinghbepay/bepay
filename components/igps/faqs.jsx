@@ -35,7 +35,7 @@ const faqData = [
     id: 5,
     question: "Is bepay IGPS safe & regulated ?",
     answer:
-      "Yes, licensed as  RBI’s PA-CB(Payment Aggregator Cross Border), FEMA,  MSB (USA), VASP (EU), and compliant with DORA, MiCA, DPDP & CFT.",
+      "Yes, licensed as  RBI’s PA-CB(Payment Aggregator Cross Border), FEMA,  MSB (USA), MSB (Canada), VASP (EU), and compliant with DORA, MiCA, DPDP & CFT.",
   },
   {
     id: 6,
