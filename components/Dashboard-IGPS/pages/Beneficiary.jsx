@@ -10,10 +10,12 @@ export default function Beneficiary({ onOpenModal }) {
     const { igpsService } = useAuth();
     const [beneficiaries, setBeneficiaries] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     const [filter, setFilter] = useState("All");
 
     const fetchBeneficiaries = async (force = false) => {
-        setLoading(true);
+        if (force) setRefreshing(true);
+        else setLoading(true);
         try {
             const res = await igpsService.listBeneficiaries(force);
             if (res.success) {
@@ -23,6 +25,7 @@ export default function Beneficiary({ onOpenModal }) {
             console.error("Failed to fetch beneficiaries", error);
         } finally {
             setLoading(false);
+            setRefreshing(false);
         }
     };
 
@@ -70,10 +73,10 @@ export default function Beneficiary({ onOpenModal }) {
                             className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition"
                             title="Refresh list"
                         >
-                            <RefreshCw size={18} />
+                            <RefreshCw size={18} className={refreshing ? "animate-spin" : ""} />
                         </button>
                         <button
-                            onClick={() => onOpenModal("add-beneficiary")}
+                            onClick={() => onOpenModal("add-beneficiary", { onSuccess: () => fetchBeneficiaries(true) })}
                             className="bg-black text-white px-6 py-3 rounded-full text-sm flex items-center gap-2 hover:bg-gray-800 transition"
                         >
                             <Plus size={16} />
@@ -99,7 +102,7 @@ export default function Beneficiary({ onOpenModal }) {
                 {loading ? (
                     <div className="py-20 text-center text-gray-400">Loading beneficiaries...</div>
                 ) : filtered.length === 0 ? (
-                    <EmptyState onAdd={() => onOpenModal('add-beneficiary')} filter={filter} />
+                    <EmptyState onAdd={() => onOpenModal('add-beneficiary', { onSuccess: () => fetchBeneficiaries(true) })} filter={filter} />
                 ) : (
                     <div className="space-y-4">
                         {/* Table Header */}

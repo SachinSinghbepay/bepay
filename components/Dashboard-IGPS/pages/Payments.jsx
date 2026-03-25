@@ -30,8 +30,8 @@ export default function Payments({ onOpenModal }) {
 
 
   const tokenIcons = {
-    USDC: "/icons/usdc.svg",
-    USDT: "/icons/usdt.svg",
+    USDC: "/icons/USDC.svg",
+    USDT: "/icons/USDT.svg",
     DAI: "/icons/dai.svg",
     BTC: "/icons/btc.svg",
     ETH: "/icons/eth.svg"
@@ -40,7 +40,7 @@ export default function Payments({ onOpenModal }) {
   const fiatIcons = {
     USD: "/icons/usa.svg",
     INR: "/icons/india.svg",
-    EUR: "/icons/eu.svg",
+    EUR: "/icons/europe.png",
     GBP: "/icons/uk.svg"
   };
   const getTokenIcon = (sourceCurrency) => {
