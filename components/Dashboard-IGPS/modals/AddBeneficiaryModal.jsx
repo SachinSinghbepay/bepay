@@ -9,7 +9,7 @@ import { useAuth } from "../context/AuthContext";
 
 
 
-export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
+export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSuccess }) {
     const { igpsService } = useAuth();
     const scrollRef = useRef(null);
 
@@ -425,6 +425,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
             const res = await igpsService.createBeneficiary(payload);
             if (res.success) {
                 onClose();
+                onSuccess?.();
             } else {
                 setError(res.error || res.message || "Failed to create beneficiary");
             }
@@ -783,6 +784,11 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal }) {
                                         placeholder="123 Main St"
                                         className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
                                     />
+                                    {/[^a-zA-Z0-9\s]/.test(addressLine1) && (
+                                        <p className="text-xs text-amber-600">
+                                            Special characters like {[...new Set(addressLine1.match(/[^a-zA-Z0-9\s]/g))].map(c => `"${c}"`).join(", ")} are not allowed. Use only letters, numbers, and spaces.
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

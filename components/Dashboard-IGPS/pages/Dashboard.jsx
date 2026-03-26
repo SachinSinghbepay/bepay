@@ -12,6 +12,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
   const [totalBalance, setTotalBalance] = useState(0);
   const [activeFilter, setActiveFilter] = useState("All");
   const [kycDone, setKycDone] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
   const { kycStatus } = useAuth();
   // Function to check KYC completion status
   const checkKYCCompletion = (remainingSteps) => {
@@ -141,7 +142,9 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
   }, [user, igpsService, activeFilter]);
 
   const handleRefresh = async () => {
+    setRefreshing(true);
     await fetchData(true);
+    setRefreshing(false);
   };
 
   return (
@@ -203,7 +206,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
                 className="h-8 w-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition"
               >
                 <svg
-                  className={`h-4 w-4 text-gray-600 ${loading ? "animate-spin" : ""}`}
+                  className={`h-4 w-4 text-gray-600 ${refreshing ? "animate-spin" : ""}`}
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
