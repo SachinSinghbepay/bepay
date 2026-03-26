@@ -2,7 +2,7 @@
 
 export default function CookiesPolicyContent() {
   return (
-    <div className="max-w-[979px] py-8 space-y-12">
+    <div className="w-full py-8 space-y-12">
       {/* Header */}
       <section className="space-y-6">
         <div className="text-sm lg:text-lg text-gray-600 mb-4">

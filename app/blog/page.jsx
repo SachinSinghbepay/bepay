@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const CMS = process.env.CMS_API_URL;
+const BASE = process.env.SITE_URL || "http://localhost:3000";
 
 export const metadata = {
   title: "Blog | BePay",
@@ -8,7 +8,7 @@ export const metadata = {
 };
 
 async function getPosts() {
-  const res = await fetch(`${CMS}/api/blogPosts?status=published`, { cache: "no-store" });
+  const res = await fetch(`${BASE}/api/blogPosts?status=published`, { cache: "no-store" });
   const data = await res.json();
   return data.success ? data.data : [];
 }

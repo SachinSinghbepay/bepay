@@ -2,7 +2,7 @@
 
 export default function PrivacyPolicyContent() {
   return (
-    <div className="max-w-[979px] py-8 space-y-12">
+    <div className="w-full py-8 space-y-12">
 
       {/* Section 1: About this Privacy Policy */}
       <section className="space-y-6">

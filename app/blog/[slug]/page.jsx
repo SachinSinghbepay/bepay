@@ -2,10 +2,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { tiptapToHtml } from "@/lib/tiptapToHtml";
 
-const CMS = process.env.CMS_API_URL;
+const BASE = process.env.SITE_URL || "http://localhost:3000";
 
 async function getPost(slug) {
-  const res  = await fetch(`${CMS}/api/blogPosts?slug=${slug}`, { cache: "no-store" });
+  const res = await fetch(`${BASE}/api/blogPosts?slug=${slug}`, { cache: "no-store" });
   const data = await res.json();
   return data.success ? data.data : null;
 }
