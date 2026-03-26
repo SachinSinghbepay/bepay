@@ -2,7 +2,7 @@
 
 export default function TermsAndConditionsContent() {
   return (
-    <div className="w-full py-8 space-y-12">
+    <div className="w-full py-8 space-y-12 text-justify">
 
             {/* Preamble */}
       <section className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">

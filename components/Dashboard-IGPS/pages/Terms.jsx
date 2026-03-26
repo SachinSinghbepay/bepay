@@ -2,7 +2,7 @@
 
 export default function Terms() {
   return (
-    <div className="max-w-[979px] py-8 space-y-12">
+    <div className="max-w-[979px] py-8 space-y-12 text-justify">
 
       {/* Preamble */}
       <section className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
