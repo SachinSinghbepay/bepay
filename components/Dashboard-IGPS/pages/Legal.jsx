@@ -2,7 +2,7 @@ import React from "react";
 
 export default function LegalPolicy() {
     return (
-        <div className="min-h-screen bg-white px-8 py-12">
+        <div className="min-h-screen bg-white px-8 py-12 text-justify">
             <div className="max-w-5xl mx-auto text-[#6A6A6A] leading-relaxed space-y-10">
 
                 <h1 className="text-3xl font-semibold text-black">

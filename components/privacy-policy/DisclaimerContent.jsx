@@ -2,7 +2,7 @@
 
 export default function DisclaimerContent() {
   return (
-    <div className="w-full py-8 space-y-12">
+    <div className="w-full py-8 space-y-12 text-justify">
       {/* Mobile/Tablet Version (up to lg) */}
       <section className="block lg:hidden space-y-6">
         <h2 className="text-xl font-bold text-[#080808] mb-6">Disclaimer:</h2>
