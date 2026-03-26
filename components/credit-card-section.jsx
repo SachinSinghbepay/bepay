@@ -417,7 +417,7 @@ const DesktopCreditCardView = ({ scrollYProgress, handleStartClick }) => {
                 <Button
                   onClick={handleStartClick}
                   className="relative z-20 bg-black cursor-pointer whitespace-nowrap text-white 
-                w-[258px] h-[56px] rounded-full flex items-center justify-center gap-2 
+                w-[288px] h-[56px] rounded-full flex items-center justify-center gap-2 
                 text-[14px] font-medium px-6 py-4 -mt-12
                 hover:bg-gray-800 transition-colors"
                 >
