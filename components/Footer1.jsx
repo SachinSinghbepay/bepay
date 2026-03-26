@@ -9,6 +9,8 @@ import { db } from "@/lib/firebase";
 import Link from "next/link";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 import GetStartedPopup from "@/components/popups/getStartedPopup";
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 const AppStoreButton = (
   { iconSrc, iconAlt, line1, line2, onClick } // ANALYTICS: Added onClick prop
@@ -142,6 +144,43 @@ const Footer = ({
   const [isMobile, setIsMobile] = useState(false);
   const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
   const footerRef = useRef(null); // For intersection observer
+
+
+  const {
+    setIsQRPopupOpen,
+    setSelectedOS,
+    isQRPopupOpen,
+    setIsOSPopupOpen,
+    isOSPopupOpen,
+    selectedOS,
+  } = useAppDownload()
+
+  const openSmartDownload = (targetOS) => {
+    const ua = navigator.userAgent || navigator.vendor || window.opera
+
+    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream
+    const isAndroid = /android/i.test(ua)
+    const isMobile = isIOS || isAndroid
+
+    const links = {
+      ios: process.env.NEXT_PUBLIC_IOS_APP_URL,
+      android: process.env.NEXT_PUBLIC_ANDROID_APP_URL,
+      gallery: process.env.NEXT_PUBLIC_GALLERY_APP_URL,
+    }
+
+    //If mobile AND OS matches → redirect to store
+    if (isMobile) {
+      if ((isIOS && targetOS === "ios") || (isAndroid && targetOS === "android")) {
+        window.location.href = links[targetOS]
+        return
+      }
+    }
+
+    //Otherwise show QR
+    setSelectedOS(targetOS)
+    setIsOSPopupOpen(false)
+    setIsQRPopupOpen(true)
+  }
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 767);
@@ -545,26 +584,29 @@ const Footer = ({
               variants={containerVariants}
             >
               <AppStoreButton
-                onClick={handleAppStoreClick}
+                onClick={() => openSmartDownload("ios")}
                 iconSrc="/apple.png"
                 iconAlt="Apple Store"
                 line1="Download on the "
                 line2=" App Store!"
               />
+
               <AppStoreButton
-                onClick={handleGooglePlayClick}
+                onClick={() => openSmartDownload("android")}
                 iconSrc="/playstore.png"
                 iconAlt="Google Play"
                 line1="Get the App on "
                 line2="Google Play!"
               />
+
+
               <AppStoreButton
-                onClick={handleAppGalleryClick}
                 iconSrc="/huawei.png"
                 iconAlt="Huawei App Gallery"
                 line1="Get it on the App "
                 line2=" Gallery!"
               />
+
             </motion.div>
           )}
 
@@ -766,10 +808,10 @@ const Footer = ({
           <motion.div
             // Default to flex-col (vertical list) on mobile. Use md:flex (row) on desktop.
             className={`w-full mt-8 text-[14px] ${isUpiPage
-                ? "grid grid-cols-2 gap-8 md:grid-cols-4"
-                : isIGPSPage && !isLandingPage
-                  ? "flex flex-col items-center"
-                  : "grid grid-cols-2 gap-8 md:flex md:justify-between"
+              ? "grid grid-cols-2 gap-8 md:grid-cols-4"
+              : isIGPSPage && !isLandingPage
+                ? "flex flex-col items-center"
+                : "grid grid-cols-2 gap-8 md:flex md:justify-between"
               }`}
             variants={itemVariants}
           >
@@ -777,6 +819,13 @@ const Footer = ({
               <>
                 {/* UPI Page - Column 1 */}
                 <div className="space-y-4 flex flex-col">
+                  <Link
+                    href="/"
+                    onClick={() => handleLinkClick("BEPAY IGPS")}
+                    className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                  >
+                    BEPAY IGPS
+                  </Link>
                   <Link
                     href="/about-us"
                     onClick={() => handleLinkClick("About Us")}
@@ -917,6 +966,13 @@ const Footer = ({
                 <div className="space-y-4">
                   <div className="space-y-4 lg:space-y-6">
                     <Link
+                      href="/"
+                      onClick={() => handleLinkClick("BEPAY IGPS")}
+                      className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                    >
+                      BEPAY IGPS
+                    </Link>
+                    <Link
                       href="/personal"
                       onClick={() => handleLinkClick("Personal")}
                       className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
@@ -954,6 +1010,13 @@ const Footer = ({
                       className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
                     >
                       CONTACT US
+                    </Link>
+                    <Link
+                      href="/blogs"
+                      onClick={() => handleLinkClick("Contact Us")}
+                      className="block text-[#7A7A7A] hover:text-gray-400 transition-colors"
+                    >
+                      BLOGS
                     </Link>
                     <Link
                       href="/privacy-policy"
@@ -1046,7 +1109,7 @@ const Footer = ({
         </motion.div>
 
         <p className="text-[8px] font-[400] lg:tracking-[2%] lg:leading-[20px] max-w-[1359px] mx-auto lg:text-[10px] text-[#6A6A6A]">
-          {isUpiPage || isLandingPage ? (
+          {isUpiPage ? (
             <>
               bepay operates under the brand name “bepay money”, with its
               registered legal entity Bepay Technologies Private Limited.
@@ -1061,43 +1124,13 @@ const Footer = ({
               Availability of services is subject to regulatory approvals and
               partner bank policies.
             </>
-          ) : isIGPSPage ? (
+          ) : isLandingPage ? (
             <>
-              bepay operates under the brand name “bepay money”, with its
-              registered legal entity Bepay Technologies Private Limited.
-              Payment services on this platform are provided in partnership with
-              authorized banking and payment partners, in compliance with
-              guidelines issued by the Reserve Bank of India (RBI) and the
-              National Payments Corporation of India (NPCI). The information and
-              services presented on this website are intended for general
-              informational purposes only and do not constitute financial,
-              investment, or legal advice. bepay money does not operate as a
-              bank, financial institution, or digital asset exchange.
-              Availability of services is subject to regulatory approvals and
-              partner bank policies.
+              bepay money operates through its legal entities registered across multiple jurisdictions worldwide The cross-border payment services available through the bepay platform are facilitated in partnership with an RBI-authorized Payment Aggregator – Cross Border (PA-CB) licensed partner, along with authorized banking and payment network partners, and are provided in compliance with applicable guidelines issued by the Reserve Bank of India (RBI) and relevant payment network regulations. The information and services presented on this website are intended for general informational purposes only and do not constitute financial, investment, legal, or tax advice. bepay money does not operate as a bank, financial institution, or digital asset exchange, and does not independently hold or process customer funds outside of its regulated partner infrastructure. All services are subject to regulatory requirements, partner bank policies, and applicable compliance checks, including but not limited to KYC, AML, and transaction monitoring obligations.
             </>
           ) : (
             <>
-              bepay operates under the brand name bepay through its legal
-              entities registered across multiple jurisdictions worldwide: Bepay
-              Fintech Products Holding LTD, British Virgin Islands (Registration
-              No: 2185015); Bepay Money Europe S.R.L, Romania (Registration No:
-              52474864); Bepay Money Fintech UAB, Lithuania, European Union
-              (Registration No: 306999867); and Bepay Fintech Inc, United States
-              (Registration No: 31000294520372). The information and services
-              presented on this website are provided for informational purposes
-              only and do not constitute financial, investment, or legal advice.
-              bepay does not operate as a bank, financial institution, or
-              digital asset exchange. All wallet and payment-related services
-              are provided in a non-custodial capacity, leveraging public
-              distributed ledger technologies and open-source data from
-              integrated platforms and partners. Cryptocurrency trading is
-              highly volatile, and users may lose their entire investment; all
-              activities are undertaken at your own risk. bepay holds ISO 9001,
-              ISO 20022, and ISO 27001 certifications, and is
-              licensed/registered under applicable frameworks including MSB,
-              DORA, MiCA, VASP, and DPDP.
-            </>
+              bepay money operates through its legal entities registered across multiple jurisdictions worldwide: Bepay Fintech Products Holding LTD, British Virgin Islands (Registration No: 2185015); Bepay Money Europe S.R.L, Romania (Registration No: 52474864); IGPS technology LLC SCO, Dubai; Bepay Fintech Inc, United States (Registration No: 31000294520372) and Directpay Fintech LTD, Canada (Registration No: 1001340184). The information and services presented on this website are provided for informational purposes only and do not constitute financial, investment, or legal advice. bepay does not operate as a bank, financial institution, or digital asset exchange. All wallet and payment-related services are provided in a non-custodial capacity, leveraging public distributed ledger technologies and open-source data from integrated platforms and partners. Cryptocurrency trading is highly volatile, and users may lose their entire investment; all activities are undertaken at your own risk. bepay money holds ISO 9001, ISO 20022, and ISO 27001 certifications, and is licensed/registered under applicable frameworks including MSB, DORA, MiCA, VASP, and DPDP.            </>
           )}
         </p>
       </footer>
@@ -1111,6 +1144,14 @@ const Footer = ({
       )}
 
       <NewsletterModal isOpen={showModal} onClose={() => setShowModal(false)} />
+      <AppDownloadPopups
+        isOSPopupOpen={false}
+        setIsOSPopupOpen={() => { }}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
+        selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
+      />
     </>
   );
 };

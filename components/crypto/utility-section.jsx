@@ -3,6 +3,8 @@ import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 const utilityData = [
   {
@@ -78,7 +80,7 @@ const AnimatedText = () => {
 const DesktopCardComponent = ({ cardData }) => {
   return (
     <div className="w-[300px] h-[400px] lg:w-[380px] lg:h-[500px] drop-shadow-2xl bg-white shadow-utility-card rounded-[40px] p-8 flex flex-col justify-between items-start flex-shrink-0 border-0">
-      
+
       {/* Icon - Now always on the left, positioned by flexbox */}
       <Image
         src={cardData.icon || "/placeholder.svg"}
@@ -124,7 +126,7 @@ const DesktopCard = ({ cardData, index, progress, totalCards }) => {
   return (
     <motion.div style={{ y, opacity }} transition={{ ease: "easeInOut", duration: 0.6 }} className="absolute inset-0 flex items-center justify-center">
       <div className="relative w-full md:w-[800px] h-full md:h-[648px] flex flex-col md:flex-row items-center justify-center gap-3 md:gap-0 px-4 md:px-0">
-        <div className={`${ isEven ? "md:absolute md:top-0 md:left-0" : "md:absolute md:bottom-0 md:right-0" } relative`} >
+        <div className={`${isEven ? "md:absolute md:top-0 md:left-0" : "md:absolute md:bottom-0 md:right-0"} relative`} >
           <DesktopCardComponent cardData={cardData} />
         </div>
       </div>
@@ -157,7 +159,7 @@ const MobileView = () => {
     });
     return () => unsubscribe();
   }, [scrollYProgress, x]);
-  
+
   // ANALYTICS: Handler for the mobile button click
   const handleStartPayingClick = () => {
     AnalyticsService.sendEvent("'Start paying with crypto' button clicked");
@@ -184,7 +186,7 @@ const MobileView = () => {
             </motion.div>
           </div>
           <div className="flex items-center justify-center mt-6">
-            <button 
+            <button
               onClick={handleStartPayingClick} // ANALYTICS: Added onClick handler
               className="bg-black cursor-pointer whitespace-nowrap text-white px-6 h-[56px] rounded-full flex items-center justify-center gap-2 text-xs font-medium hover:bg-gray-800 transition-colors"
             >
@@ -202,7 +204,7 @@ export const UtilitySection = () => {
   const containerRef = useRef(null);
   const sectionRef = useRef(null); // For intersection observer
   const [hasTrackedView, setHasTrackedView] = useState(false); // Track if we've already sent the view event
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
@@ -237,6 +239,18 @@ export const UtilitySection = () => {
     AnalyticsService.sendEvent("'Start paying with crypto' button clicked");
   };
 
+    const {
+      handleDownloadClick,
+      isOSPopupOpen,
+      setIsOSPopupOpen,
+      isQRPopupOpen,
+      setIsQRPopupOpen,
+      selectedOS,
+      setSelectedOS,
+    } = useAppDownload()
+  
+  
+
   return (
     <section ref={sectionRef}>
       {/* Desktop View */}
@@ -257,28 +271,31 @@ export const UtilitySection = () => {
             ))}
           </div>
           <motion.button
-          onClick={handleStartPayingClick} // ANALYTICS: Added onClick handler
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          style={{
-            opacity: buttonOpacity,
-            y: buttonY,
-          }}
-          transition={{ ease: "easeOut", duration: 0.6 }}
-          className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 
+            onClick={() => {
+              handleStartPayingClick()
+              handleDownloadClick()
+            }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            style={{
+              opacity: buttonOpacity,
+              y: buttonY,
+            }}
+            transition={{ ease: "easeOut", duration: 0.6 }}
+            className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 
                        bg-black cursor-pointer whitespace-nowrap text-white 
                        w-[250px] h-[56px] rounded-full flex items-center justify-center gap-2 
                        text-[14px] font-medium px-6 py-4
                        hover:bg-gray-800 transition-colors"
-        >
-          <Image
-            src="/utility.svg"
-            alt="Utility Icon"
-            width={24}
-            height={24}
-            className="w-6 h-6"
-          />
-          Start paying with crypto
+          >
+            <Image
+              src="/utility.svg"
+              alt="Utility Icon"
+              width={24}
+              height={24}
+              className="w-6 h-6"
+            />
+            Start paying with crypto
           </motion.button>
 
         </div>
@@ -286,6 +303,14 @@ export const UtilitySection = () => {
 
       {/* Mobile View */}
       <MobileView />
+         <AppDownloadPopups
+              isOSPopupOpen={isOSPopupOpen}
+              setIsOSPopupOpen={setIsOSPopupOpen}
+              isQRPopupOpen={isQRPopupOpen}
+              setIsQRPopupOpen={setIsQRPopupOpen}
+              selectedOS={selectedOS}
+              setSelectedOS={setSelectedOS}
+            />
     </section>
   );
 };

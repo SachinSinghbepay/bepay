@@ -1,40 +1,75 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 export default function CookiesPolicyContent() {
   return (
-    <div className="max-w-[979px] py-8 space-y-12">
+    <div className="w-full py-8 space-y-12 text-justify">
       {/* Header */}
       <section className="space-y-6">
         <div className="text-sm lg:text-lg text-gray-600 mb-4">
-          Last Updated: <span className="text-black font-semibold">07/08/2025</span> 
+          Last Updated: <span className="text-black font-semibold">01/03/2026</span>
         </div>
         <p className="text-base md:text-lg leading-relaxed text-[#080808]">
-          This Cookies Policy explains how{" "}
-          <span className="font-semibold">Bepay money fintech UAB</span>{" "}
-          (&quot;bepay&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) uses cookies and similar technologies
-          when you visit our website{" "}
-          <a href="https://bepay.money" className="text-blue-500 font-semibold">
-            https://bepay.money
-          </a>{" "}
-          (&quot;Website&quot;). This policy is compliant with the EU General Data
-          Protection Regulation (GDPR) and other applicable data protection
-          laws.
+          <span className="font-semibold">BEPAY MONEY</span> makes use of cookies and
+          similar technologies throughout our websites to ensure your visit to our website
+          goes smoothly. Our websites (and some emails) use &quot;cookies&quot; and other
+          technologies, which store small amounts of information on your computer or device,
+          to allow certain information from your web browser to be collected. Cookies (and
+          similar technologies) are widely used on the internet and allow a website/portal
+          to recognize a user&apos;s device, without uniquely identifying the individual
+          person using the computer. These technologies help to make it easier for you to
+          log on and use our websites and provide information to us, for example which parts
+          of the website you visit.
+        </p>
+        <p className="text-base md:text-lg leading-relaxed text-[#080808]">
+          BEPAY MONEY uses functional, analytical, and marketing cookies. Functional and
+          analytical cookies are used to ensure your visit to our websites goes smoothly.
+          By contrast marketing cookies are not necessary for the proper functioning of our
+          websites but are used for promotional purposes. For more information about the
+          specific cookies read the subsection in our Cookie Policy about what types of
+          cookies we use.
+        </p>
+        <p className="text-base md:text-lg leading-relaxed text-[#080808]">
+          But first, some background information. Cookies (and similar technologies) are
+          widely used nowadays. Also, fintech businesses that provide their services to
+          consumers online are subject to the EU Directive on Privacy and Electronic
+          Communications (2002/58/EC), which requires businesses to notify consumers and
+          obtain their consent for the use of cookies (opt-in). Opt-in means that before
+          placing a cookie, the visitor would have to give permission.
         </p>
       </section>
 
       {/* Section 1: What are Cookies */}
       <section className="space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          1. What are Cookies?
+          What are Cookies?
         </h2>
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
-            Cookies are small text files that are stored on your device
-            (computer, smartphone, or tablet) when you visit a website. They
-            help us remember your preferences, understand how you use our
-            website, and improve your user experience.
+            Many of the websites you visit place small, encrypted text files on your device
+            (smartphone, computer, or tablet). We call these text files cookies. BEPAY MONEY
+            uses cookies or similar techniques whenever you interact with our website. A
+            cookie is sent by a web server to a web browser that enables the server to
+            collect information back from the browser creating connectivity between a company
+            and the customer. In other words, the cookies on the websites (and some e-mails)
+            store small amounts of information on your device to allow browser information
+            from your web browser to be collected. This information could be used to make it
+            easier for you to use the website or for marketing purposes. Cookies generally
+            process your IP-address, but they do not save your personal information such as
+            your e-mail address or phone number (only if you give us permission to act in
+            this manner). Above all, cookies allow websites to monitor website visitor&apos;s
+            behavior.
+          </p>
+          <p>
+            You can find more information on the website{" "}
+            <a
+              href="https://allaboutcookies.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 font-semibold"
+            >
+              All about cookies
+            </a>
+            .
           </p>
         </div>
       </section>
@@ -42,160 +77,100 @@ export default function CookiesPolicyContent() {
       {/* Section 2: Types of Cookies */}
       <section className="space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          2. Types of Cookies We Use
+          What types of cookies do we use?
         </h2>
         <div className="space-y-6 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>We use the following categories of cookies:</p>
+          <p>
+            The way responsible and ethical web developers deal with privacy issues caused
+            by cookie tracking is by including clear descriptions of how cookies are deployed
+            on their site (informed consent). The cookies our website uses falls into the
+            following three categories:
+          </p>
 
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="space-y-4">
               <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
-                a. Necessary Cookies
+                1. Functional cookies
               </h3>
               <p>
-                These cookies are essential for the functioning of the Website
-                and cannot be switched off in our systems. They are usually set
-                in response to actions made by you, such as logging in, filling
-                out forms, or setting preferences.
+                These cookies may store your browser name, the type of computer and technical
+                information about your means of connection to our website, such as the
+                operating system and the Internet Service Providers utilized and other similar
+                information. BEPAY MONEY uses this information to technically facilitate the
+                visitors of this website. In addition, functional cookies may be used to store
+                personal settings, such as language or to log your information for next visits
+                to save you the trouble of having to change these every time you enter our
+                website. To conclude, our website could not work properly without these cookies.
               </p>
             </div>
 
             <div className="space-y-4">
               <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
-                b. Analytics and Performance Cookies
+                2. Analytical cookies
               </h3>
               <p>
-                These cookies help us understand how visitors interact with our
-                Website by collecting and reporting information anonymously
-                (e.g., via Google Analytics). This helps us improve content and
-                performance.
+                BEPAY MONEY uses cookies to help us understand and improve the customer
+                experience on our website. We use Google Analytics, a web analysis service,
+                to generate statistical and other analytical information to learn about visitor
+                preferences and provide them with the right information more quickly. The goal
+                is to provide much greater functionality to visitors. Therefore, we also examine
+                whether visitors experience any forms of errors or inaccuracies on the website.
+                We use the analytical cookies also to test different designs and features for
+                our sites. All information is collected in a pseudonymized or anonymized form.
               </p>
             </div>
 
             <div className="space-y-4">
               <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
-                c. Functionality Cookies
+                3. Marketing cookies
               </h3>
               <p>
-                These cookies allow the Website to remember choices you make
-                (such as language preferences) to provide enhanced and more
-                personalized features.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <h3 className="text-xl md:text-2xl font-bold text-[#080808]">
-                d. Third-Party Cookies
-              </h3>
-              <p>
-                We may allow third-party services (e.g., payment providers,
-                analytics tools, partners) to place cookies to enable their
-                features or gather usage statistics. These cookies are subject
-                to the respective third parties&apos; privacy policies.
+                This website contains cookies from third-party websites, mainly social media
+                cookies. When placed on your computer, they automatically activate handy extras,
+                for example, to share information on LinkedIn or HubSpot. These cookies inform
+                our website whether you are logged into such social media and they also make it
+                easy for you to share pages on social media or to display social content about a
+                topic (content timeline LinkedIn, for instance). If you would like to know more
+                about how these social media platforms use data, please refer to the privacy
+                notices of these platforms. When visiting this website, BEPAY MONEY will ask for
+                your consent to use these cookies. In other words, we only place advertising,
+                marketing and social media cookies if you give us your permission to do this.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Section 3: Legal Basis */}
+      {/* Section 3: Manage Cookies */}
       <section className="space-y-6">
         <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          3. Legal Basis for Using Cookies
+          Manage cookies
         </h2>
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>We use cookies:</p>
+          <p>
+            To see what cookies have been set and how to manage, block and/or delete them,
+            please read this subsection on how you object to cookies. If you do not want to
+            have cookies stored on your computer or want to remove cookies that have already
+            been stored, you can change settings, at any time on this website by clicking the
+            change cookie settings on the cookie button on the homepage. Another option is to
+            arrange the settings (privacy &amp; security) in your web browser. This so-called
+            &quot;Do Not Track&quot; is a function that allows visitors not to be tracked by websites.
+          </p>
+          <p>Do Not Track options are available in several browsers including:</p>
           <ul className="list-disc list-inside space-y-2 ml-4">
-            <li>
-              Based on your consent (as per Art. 6(1)(a) GDPR) for non-essential
-              cookies.
-            </li>
-            <li>
-              Based on our legitimate interests (Art. 6(1)(f) GDPR), for
-              essential cookies needed to operate the website securely and
-              efficiently.
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      {/* Section 4: Cookie Control */}
-      <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          4. How to Control or Delete Cookies
-        </h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>You can manage your cookie preferences at any time through:</p>
-          <ul className="list-disc list-inside space-y-2 ml-4">
-            <li>The cookie consent banner is shown on your first visit.</li>
-            <li>
-              Your browser settings (e.g., Chrome, Firefox, Safari). You can
-              delete stored cookies and prevent new ones from being set.
-            </li>
+            <li>Chrome</li>
+            <li>Firefox</li>
+            <li>Internet Explorer</li>
+            <li>Safari</li>
+            <li>Opera</li>
           </ul>
           <p>
-            Please note that disabling certain cookies may affect your
-            experience on our Website.
+            The advantage of this method is that consumers are less likely to be confronted
+            with cookie banners (a pop-up that appears when a visitor comes to a website),
+            which improves your browsing experience.
           </p>
-        </div>
-      </section>
-
-      {/* Section 5: Retention Period */}
-      <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          5. Retention Period
-        </h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>
-            Cookies may remain on your device for varying periods depending on
-            their type. Session cookies expire when you close your browser,
-            while persistent cookies remain until they are manually deleted or
-            expire automatically.
-          </p>
-        </div>
-      </section>
-
-      {/* Section 6: Policy Changes */}
-      <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          6. Changes to This Policy
-        </h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>
-            We may update this Cookies Policy from time to time to reflect
-            changes in our practices or legal requirements. The updated version
-            will be posted on this page with a revised &quot;Last Updated&quot; date.
-          </p>
-        </div>
-      </section>
-
-      {/* Contact Information */}
-      <section className="space-y-6 border-t pt-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">
-          7. Contact Us
-        </h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
-          <p>
-            If you have any questions or concerns about our use of cookies,
-            please contact us:
-          </p>
-
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <p className="font-semibold">Bepay money fintech UAB</p>
-            <p>
-              Email:{" "}
-              <a
-                href="mailto:info@bepay.money"
-                className="text-blue-500 font-bold"
-              >
-                info@bepay.money
-              </a>
-            </p>
-            <p>Company Reg. No.: 306999867</p>
-            <p>Registered in the European Union</p>
-          </div>
         </div>
       </section>
     </div>
   );
-}
+} 

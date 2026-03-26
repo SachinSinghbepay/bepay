@@ -269,10 +269,10 @@ const CreditCardSection = () => {
 
           
         </div>
-        <button ref={buttonRef} className="absolute cardbutton top-[89vh] sm:left-57 left-18 bg-black sm:w-[13vw] w-[50vw] text-white px-7 py-5 rounded-full flex items-center gap-2">
+        <button ref={buttonRef} className="absolute cardbutton top-[89vh] sm:left-57 left-18 bg-black sm:w-[18vw] w-[50vw] text-white px-7 py-5 rounded-full flex items-center gap-2">
             <Image src="/cardbutton.png" alt="" className="h-3" />
             <div className="text-left sm:text-[0.6rem] text-[0.5rem]"> 
-              <div>Get your bepay card now</div>
+              <div>Get your bepay money card now</div>
             </div>
           </button>
       </div>

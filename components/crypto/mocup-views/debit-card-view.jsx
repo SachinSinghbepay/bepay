@@ -14,6 +14,8 @@ import Image from "next/image";
 import WaitlistTriggerButton from "@/components/waitlist-trigger-button";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 import { IconClockHour12 } from "@tabler/icons-react";
+import { useAppDownload } from "@/hooks/useAppDownload"
+import { AppDownloadPopups } from "@/components/AppDownloadPopups"
 
 export function DebitCardView({ setActiveView, scrollYProgress }) {
   const innerCardScale = useTransform(
@@ -23,8 +25,19 @@ export function DebitCardView({ setActiveView, scrollYProgress }) {
   );
   const innerCardOpacity = useTransform(scrollYProgress, [0.38, 0.42], [0, 1]);
   const handleButtonClick = () => {
-        AnalyticsService.sendEvent("Get your virtual crypto debit card button Clicked");
-      }
+    AnalyticsService.sendEvent("Get your virtual crypto debit card button Clicked");
+  }
+
+  const {
+    handleDownloadClick,
+    isOSPopupOpen,
+    setIsOSPopupOpen,
+    isQRPopupOpen,
+    setIsQRPopupOpen,
+    selectedOS,
+    setSelectedOS,
+  } = useAppDownload()
+
 
   return (
     <div className="flex h-full flex-col bg-white p-4">
@@ -89,11 +102,23 @@ export function DebitCardView({ setActiveView, scrollYProgress }) {
         <p className="mt-2 text-[10px] text-gray-400">No transactions to see</p>
       </div>
 
-      <WaitlistTriggerButton triggerSource="'Get your virtual crypto debit card' button clicked" buttonLocation="Crypto Debit Card View">
-        <button onClick={handleButtonClick} className="mt-auto mx-auto items-center flex justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white">
-          Get your virtual crypto debit card
-        </button>
-      </WaitlistTriggerButton>
+      <motion.button
+        onClick={() => {
+          handleButtonClick()
+          handleDownloadClick()
+        }}
+        className="mt-auto mx-auto items-center flex justify-center whitespace-nowrap rounded-full bg-black px-6 py-3 text-[8px] md:text-[12px] font-medium text-white">
+        Get your virtual crypto debit card
+      </motion.button>
+
+      <AppDownloadPopups
+        isOSPopupOpen={isOSPopupOpen}
+        setIsOSPopupOpen={setIsOSPopupOpen}
+        isQRPopupOpen={isQRPopupOpen}
+        setIsQRPopupOpen={setIsQRPopupOpen}
+        selectedOS={selectedOS}
+        setSelectedOS={setSelectedOS}
+      />
     </div>
   );
 }

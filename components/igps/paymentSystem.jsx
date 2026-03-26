@@ -12,43 +12,43 @@ const Card = ({ title, description, visual, index, isActive }) => {
 
   const titleStyle = isMobile
     ? {
-        fontFamily: "Montserrat, sans-serif",
-        fontWeight: 600,
-        fontSize: "28.25px",
-        lineHeight: "26.83px",
-        letterSpacing: "-0.04em",
-        color: "#333333",
-        textAlign: "left",
-      }
+      fontFamily: "Montserrat, sans-serif",
+      fontWeight: 600,
+      fontSize: "28.25px",
+      lineHeight: "26.83px",
+      letterSpacing: "-0.04em",
+      color: "#333333",
+      textAlign: "left",
+    }
     : {
-        fontFamily: "Montserrat, sans-serif",
-        fontWeight: 600,
-        fontSize: "30px",
-        lineHeight: "32px",
-        letterSpacing: "-0.04em",
-        color: "#333333",
-        textAlign: "left",
-      };
+      fontFamily: "Montserrat, sans-serif",
+      fontWeight: 600,
+      fontSize: "30px",
+      lineHeight: "32px",
+      letterSpacing: "-0.04em",
+      color: "#333333",
+      textAlign: "left",
+    };
 
   const descriptionStyle = isMobile
     ? {
-        fontFamily: "Montserrat, sans-serif",
-        fontWeight: 500,
-        fontSize: "14.12px",
-        lineHeight: "16.95px",
-        letterSpacing: "-0.02em",
-        color: "#6A6A6A",
-        textAlign: "left",
-      }
+      fontFamily: "Montserrat, sans-serif",
+      fontWeight: 500,
+      fontSize: "14.12px",
+      lineHeight: "16.95px",
+      letterSpacing: "-0.02em",
+      color: "#6A6A6A",
+      textAlign: "left",
+    }
     : {
-        fontFamily: "Montserrat, sans-serif",
-        fontWeight: 500,
-        fontSize: "16px",
-        lineHeight: "20px",
-        letterSpacing: "-0.02em",
-        color: "#6A6A6A",
-        textAlign: "left",
-      };
+      fontFamily: "Montserrat, sans-serif",
+      fontWeight: 500,
+      fontSize: "16px",
+      lineHeight: "20px",
+      letterSpacing: "-0.02em",
+      color: "#6A6A6A",
+      textAlign: "left",
+    };
 
   return (
     <div
@@ -104,22 +104,10 @@ const PaymentSystemUI = () => {
         </>
       ),
       description:
-        "Look like a local business, anywhere across US, EU, UAE, CHINA, UK & more",
+        "Look like a local business, anywhere across US, EU, UAE, CHINA, UK, Africa & more",
       visual: (
         <Image src="/p1.png" alt="Multi-currency visual" {...imageProps} />
       ),
-    },
-    {
-      title: (
-        <>
-          Free
-          <br />
-          settlement
-        </>
-      ),
-      description:
-        "Send and receive money worldwide without paying any settlement fees.",
-      visual: <Image src="/p2.png" alt="FX Rate visual" {...imageProps} />,
     },
     {
       title: (
@@ -198,9 +186,9 @@ const PaymentSystemUI = () => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
       const eased = easeOutCubic(progress);
-      
+
       scrollerRef.current.scrollLeft = start + (scrollAmount * eased);
-      
+
       if (progress < 1) {
         requestAnimationFrame(animateScroll);
       }
@@ -238,12 +226,12 @@ const PaymentSystemUI = () => {
         const maxScroll =
           scrollerRef.current.scrollWidth - scrollerRef.current.clientWidth;
         const currentScroll = scrollerRef.current.scrollLeft;
-        
+
         let targetScroll;
         if (currentScroll >= maxScroll - 10) {
-            targetScroll = 0;
+          targetScroll = 0;
         } else {
-            targetScroll = currentScroll + scrollAmount;
+          targetScroll = currentScroll + scrollAmount;
         }
 
         // Custom smooth scroll
@@ -254,17 +242,17 @@ const PaymentSystemUI = () => {
         const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
         const animateScroll = (currentTime) => {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const eased = easeOutCubic(progress);
-            
-            if (scrollerRef.current) {
-                scrollerRef.current.scrollLeft = start + (change * eased);
-            }
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = easeOutCubic(progress);
 
-            if (progress < 1) {
-                requestAnimationFrame(animateScroll);
-            }
+          if (scrollerRef.current) {
+            scrollerRef.current.scrollLeft = start + (change * eased);
+          }
+
+          if (progress < 1) {
+            requestAnimationFrame(animateScroll);
+          }
         };
         requestAnimationFrame(animateScroll);
       }
@@ -463,7 +451,7 @@ const PaymentSystemUI = () => {
         if (entry.isIntersecting && !hasTrackedView) {
           try {
             AnalyticsService.sendEvent("Payment System IGPS viewed");
-          } catch (e) {}
+          } catch (e) { }
           setHasTrackedView(true);
           observer.unobserve(entry.target);
         }
@@ -533,11 +521,10 @@ const PaymentSystemUI = () => {
             <button
               onClick={() => handleScroll("left")}
               disabled={activeIndex === 0}
-              className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 ${
-                activeIndex === 0
+              className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 ${activeIndex === 0
                   ? "border-gray-200 bg-gray-50 cursor-not-allowed opacity-40"
                   : "border-gray-300 hover:bg-gray-100 active:bg-gray-200"
-              }`}
+                }`}
               aria-label="Previous slide"
             >
               <ChevronLeft className={`w-5 h-5 ${activeIndex === 0 ? "text-gray-400" : "text-gray-600"}`} />
@@ -545,11 +532,10 @@ const PaymentSystemUI = () => {
             <button
               onClick={() => handleScroll("right")}
               disabled={activeIndex === cardsData.length - 1}
-              className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 ${
-                activeIndex === cardsData.length - 1
+              className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 ${activeIndex === cardsData.length - 1
                   ? "border-gray-200 bg-gray-50 cursor-not-allowed opacity-40"
                   : "border-gray-300 hover:bg-gray-100 active:bg-gray-200"
-              }`}
+                }`}
               aria-label="Next slide"
             >
               <ChevronRight className={`w-5 h-5 ${activeIndex === cardsData.length - 1 ? "text-gray-400" : "text-gray-600"}`} />
@@ -577,8 +563,8 @@ const PaymentSystemUI = () => {
                 index === 0
                   ? "md:ml-11"
                   : index === cardsData.length - 1
-                  ? "md:mr-11"
-                  : ""
+                    ? "md:mr-11"
+                    : ""
               }
             >
               <Card
@@ -603,9 +589,9 @@ const PaymentSystemUI = () => {
           setIsPopupOpen(true);
           try {
             AnalyticsService.sendEvent("PaymentSystem Explore IGPS Clicked");
-          } catch (e) {}
+          } catch (e) { }
         }}
-        className="flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto transition-all duration-300 hover:scale-105 active:scale-95"
+        className="cursor-pointer flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto transition-all duration-300 hover:scale-105 active:scale-95"
       >
         <span>Explore IGPS</span>
         <svg

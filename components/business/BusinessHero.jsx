@@ -134,7 +134,7 @@ const BusinessHero = () => {
     const checkMobile = () => {
       const width = window.innerWidth;
       // Using 1024px (lg breakpoint) to separate mobile/desktop
-      setIsMobile(width < 1024); 
+      setIsMobile(width < 1024);
       setScreenWidth(width);
     };
     checkMobile();
@@ -368,11 +368,16 @@ const BusinessHero = () => {
                       <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="flex flex-col items-center gap-2 text-center"
+                        className="bg-bg-gray-100 rounded-3xl shadow-md px-8 py-6 text-center w-[320px] flex flex-col items-center gap-3"
                       >
                         <CheckCircle className="w-8 h-8 text-green-600" />
-                        <p className="text-green-600 text-sm leading-relaxed">
-                          {submitMessage}
+
+                        <p className="text-black font-semibold text-lg">
+                          Yay! You&apos;re on the waitlist.
+                        </p>
+
+                        <p className="text-gray-500 text-sm leading-relaxed">
+                          We&apos;ll email you as soon as we launch.
                         </p>
                       </motion.div>
                     )}
@@ -588,7 +593,7 @@ const BusinessHero = () => {
                                     )}
                                   </motion.button>
                                   {submitMessage && !isSuccess && (
-                                    <div className="text-red-500 text-xs text-center mt-1">
+                                    <div className="text-green-500 text-xs text-center mt-1">
                                       {submitMessage}
                                     </div>
                                   )}
@@ -597,11 +602,16 @@ const BusinessHero = () => {
                                 <motion.div
                                   initial={{ opacity: 0, scale: 0.95 }}
                                   animate={{ opacity: 1, scale: 1 }}
-                                  className="flex flex-col items-center gap-2 text-center"
+                                  className="bg-gray-100 rounded-3xl shadow-md px-8 py-6 text-center w-[320px] flex flex-col items-center gap-3"
                                 >
                                   <CheckCircle className="w-8 h-8 text-green-600" />
-                                  <p className="text-green-600 text-sm leading-relaxed px-4">
-                                    {submitMessage}
+
+                                  <p className="text-black font-semibold text-lg">
+                                    Yay! You&apos;re on the waitlist.
+                                  </p>
+
+                                  <p className="text-gray-500 text-sm leading-relaxed">
+                                    We&apos;ll email you as soon as we launch.
                                   </p>
                                 </motion.div>
                               )}

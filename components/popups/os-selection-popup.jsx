@@ -15,19 +15,19 @@ export function OSSelectionPopup({ isVisible, onClose, onOSSelected }) {
     <AppDownloadPopupWrapper
       isVisible={isVisible}
       onClose={onClose}
-      direction="bottom"
+      direction="bottom" 
     >
       {" "}
       {/* Animate from bottom */}
       <div className="text-center space-y-6">
         <h2 className="text-2xl lg:text-[60px] font-bold text-[#333333]">
-          Get the bepay app
+          Get the bepay money app 
         </h2>
         <p className="text-gray-900">Choose your device OS</p>
         <div className="flex flex-col max-w-[300px] mx-auto gap-3">
           <Button
             className="w-full py-8 px-5 cursor-pointer rounded-full text-sm font-semibold flex items-center justify-center gap-2 bg-black text-white hover:bg-black/80"
-            onClick={onOSSelected} // Trigger QR popup on click
+           onClick={() => onOSSelected("ios")}// Trigger QR popup on click
           >
             <div>
               <Image
@@ -42,7 +42,7 @@ export function OSSelectionPopup({ isVisible, onClose, onOSSelected }) {
           </Button>
           <Button
             className="w-full cursor-pointer py-8 px-5 text-sm rounded-full font-semibold flex items-center justify-center gap-2 bg-black text-white hover:bg-black/80"
-            onClick={onOSSelected} // Trigger QR popup on click
+           onClick={() => onOSSelected("android")}// Trigger QR popup on click
           >
             <Image
               src={"/playstore.png"}
@@ -53,9 +53,9 @@ export function OSSelectionPopup({ isVisible, onClose, onOSSelected }) {
             />{" "}
             Get the App on Google Play!
           </Button>
-          <Button
+          {/* <Button
             className="w-full py-8 px-5 cursor-pointer text-sm rounded-full font-semibold flex items-center justify-center gap-2 bg-black text-white hover:bg-black/80"
-            onClick={onOSSelected} // Trigger QR popup on click
+            onClick={() => onOSSelected("gallery")} // Trigger QR popup on click
           >
             <Image
               src={"/gal.png"}
@@ -65,10 +65,10 @@ export function OSSelectionPopup({ isVisible, onClose, onOSSelected }) {
               alt="App Gallery logo"
             />{" "}
             Get it on the App Gallery!
-          </Button>
+          </Button> */}
         </div>
-        <p className="text-gray-900">or get a download link via SMS</p>
-        <CountryPhoneInput onSendSms={handleSendSms} />
+        {/* <p className="text-gray-900">or get a download link via SMS</p>
+        <CountryPhoneInput onSendSms={handleSendSms} /> */}
       </div>
     </AppDownloadPopupWrapper>
   );

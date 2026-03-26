@@ -17,7 +17,7 @@ export default function BepayLanding() {
         if (entry.isIntersecting && !hasTrackedView) {
           try {
             AnalyticsService.sendEvent("BepayLanding IGPS viewed");
-          } catch (e) {}
+          } catch (e) { }
           setHasTrackedView(true);
           observer.unobserve(entry.target);
         }
@@ -95,7 +95,7 @@ export default function BepayLanding() {
             }}
           >
             A single platform that bridges traditional banking with intelligent
-            payment rails, delivering near real-time settlements, cost savings,
+            stablecoin rails, delivering near real-time settlements, cost savings,
             and easy compliance for global enterprises.
           </p>
         </div>
@@ -205,7 +205,7 @@ export default function BepayLanding() {
             style={{
               width: "100%",
               maxWidth: "480px",
-             height: "293px",
+              height: "293px",
               borderRadius: "54px",
             }}
             variants={{
@@ -250,9 +250,9 @@ export default function BepayLanding() {
               setIsPopupOpen(true);
               try {
                 AnalyticsService.sendEvent("BepayLanding Get Started Clicked");
-              } catch (e) {}
+              } catch (e) { }
             }}
-            className="flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto"
+            className="cursor-pointer flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto"
           >
             <span>Get Started</span>
             {/* Keeping ArrowUpRight icon as inline SVG for simplicity */}

@@ -26,15 +26,15 @@ export default function WaitlistPopup({
   const pathname = usePathname();
 
   // Delay popup open
-  useEffect(() => {
-    history.scrollRestoration = "manual";
-    if (externalIsOpen === undefined) {
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [externalIsOpen]);
+  // useEffect(() => {
+  //   history.scrollRestoration = "manual";
+  //   if (externalIsOpen === undefined) {
+  //     const timer = setTimeout(() => {
+  //       setIsOpen(true);
+  //     }, 2000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [externalIsOpen]);
 
   useEffect(() => {
     const submittedEmail = localStorage.getItem(
@@ -62,7 +62,7 @@ export default function WaitlistPopup({
         pathname,
       });
     }
-  }, [finalIsOpen, triggerSource, buttonLocation,pathname]);
+  }, [finalIsOpen, triggerSource, buttonLocation, pathname]);
 
   const handleOverlayClose = () => {
     AnalyticsService.sendEvent("user_clicked_on_screen_to_close_popup");
@@ -353,8 +353,8 @@ function PortalContent({
                     {pathname === "/business"
                       ? "Every business starts with a spark!"
                       : pathname === "/upi"
-                      ? "Be the first to experience smarter UPI payments." // Added text for UPI path
-                      : "Be the first to experience the future of payments."}
+                        ? "Be the first to experience smarter UPI payments." // Added text for UPI path
+                        : "Be the first to experience the future of payments."}
                     {/* --- MODIFICATION END --- */}
                   </h2>
                 </motion.div>
@@ -456,8 +456,8 @@ function PortalContent({
                       {pathname === "/business"
                         ? "We’re launching soon! Join the waitlist and stay ahead of others businesses!"
                         : pathname === "/upi"
-                        ? "Join the waitlist and get early access to our upcoming UPI app." // Added text for UPI path
-                        : "We’re launching soon! Join the waitlist and stay ahead of others!"}
+                          ? "Join the waitlist and get early access to our upcoming UPI app." // Added text for UPI path
+                          : "We’re launching soon! Join the waitlist and stay ahead of others!"}
                       {/* --- MODIFICATION END --- */}
                     </p>
                     {isMobile ? (

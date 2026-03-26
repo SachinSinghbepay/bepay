@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -522,4 +523,14 @@ body {
 .prose li {
   margin-top: 0.5em;
   margin-bottom: 0.5em;
+}
+
+
+#credential_picker_container {
+    width: 100% !important;
+}
+
+iframe[src*="accounts.google.com"] {
+    width: 100% !important;
+    border-radius: 16px !important;
 }
