@@ -4,9 +4,9 @@ import React from "react";
 import { useState } from "react";
 import { IgpsService } from "../../../services/igpsService";
 
-const igpsService = new IgpsService();
-export default function Profile({ onOpenModal, setActivePage }) {
 
+export default function Profile({ onOpenModal, setActivePage }) {
+const { igpsService } = useAuth();
     const { user, organization, loading } = useAuth();
     if (loading) return <div>Loading...</div>;
 
@@ -29,6 +29,17 @@ export default function Profile({ onOpenModal, setActivePage }) {
     return (
         <div className="px-8 space-y-8 max-w-full">
 
+            <button
+                className="  text-xl text-gray-500 cursor-pointer"
+                onClick={() => setActivePage("dashboard")}
+            >
+                <Image
+                    src="/icons/back.svg"
+                    alt=""
+                    width={24}
+                    height={24}
+                /> 
+            </button>
             {/* USER CARD */}
             <div className="bg-white rounded-3xl p-6 flex items-center justify-between shadow-sm">
                 <div className="flex items-center gap-4">
@@ -103,7 +114,7 @@ export default function Profile({ onOpenModal, setActivePage }) {
                     title="Privacy policy"
                     onClick={() => setActivePage("privacy-policies")}
                 />
-                <SimpleRow title="Terms of service" />
+                <SimpleRow title="Terms of service" onClick={() => setActivePage("terms")} />
             </Section>
 
         </div>
@@ -150,12 +161,20 @@ function SecurityCard({ title, desc, action, onClick }) {
 
 function ExportRow({ title, desc }) {
     return (
-        <div className="flex items-center justify-between bg-gray-50 rounded-2xl p-4">
+        <div className="flex items-center justify-between bg-gray-50 rounded-2xl px-4 py-6">
             <div>
                 <p className="font-medium text-gray-900">{title}</p>
                 <p className="text-sm text-gray-500">{desc}</p>
             </div>
-            <span className="text-sm text-gray-500">CSV</span>
+            <div className="text-sm text-gray-500 flex flex-col justify-center  items-center cursor-pointer">
+                <Image
+                    src="/icons/export.svg"
+                    width={25}
+                    height={25}
+                    alt="export"
+                />
+                <p>CSV</p>
+            </div>
         </div>
     );
 }
@@ -164,7 +183,7 @@ function SimpleRow({ title, onClick }) {
     return (
         <div
             onClick={onClick}
-            className="bg-gray-50 rounded-2xl p-4 font-medium text-gray-900">
+            className="bg-gray-50 rounded-2xl p-4 font-medium text-gray-900 cursor-pointer">
             {title}
         </div>
     );

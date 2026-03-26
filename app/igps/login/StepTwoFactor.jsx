@@ -14,7 +14,7 @@ export default function StepTwoFactor({
   return (
     <div className="w-full max-w-xl flex flex-col justify-between">
 
-      <div className="text-start px-10 py-4 mt-6">
+      <div className="text-start px-10 py-2 mt-2">
         <button
           onClick={onBack}
           className="text-sm text-gray-500 flex "
@@ -28,7 +28,7 @@ export default function StepTwoFactor({
               strokeLinejoin="round"
             />
           </svg> Back
-        </button> 
+        </button>
       </div>
       <div className="rounded-3xl p-10">
 
@@ -37,8 +37,8 @@ export default function StepTwoFactor({
         </h2>
 
         <p className="text-[#6A6A6A] text-sm">Enter 6-digit code from your authenticator app to continue</p>
-        <p className="text-sm mt-12 mb-4">Authentication code</p>
-        <div className="flex gap-3 justify-between mb-6">
+        <p className="text-sm mt-8 mb-4">Authentication code</p>
+        <div className="flex gap-3 justify-between mb-3">
           {otp.map((digit, index) => (
             <input
               key={index}
@@ -53,7 +53,7 @@ export default function StepTwoFactor({
           ))}
         </div>
         {error && (
-          <div className="p-3 bg-red-50 text-red-600 text-sm rounded-md border border-red-200 mb-4">
+          <div className="p-2 bg-red-50 text-red-600 text-sm rounded-md border border-red-200 mb-4">
             {error}
           </div>
         )}
@@ -61,7 +61,7 @@ export default function StepTwoFactor({
 
 
       </div>
-      <div className="rounded-3xl p-10 pb-6">
+      <div className="rounded-3xl px-10 pb-6">
         <button
           onClick={onSubmit}
           disabled={loading || otp.join("").length !== 6}

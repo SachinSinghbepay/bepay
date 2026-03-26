@@ -26,7 +26,7 @@ export default function GetPaidModal({
         <div className="relative rounded-3xl overflow-hidden bg-[#EEF3F8] h-32 flex items-center">
           {/* Your banner image */}
           <Image
-            src="/icons/bannergetpaid.svg" 
+            src="/icons/bannergetpaid.svg"
             alt="banner"
             fill
             className="object-contain opacity-80 pointer-events-none"
@@ -69,7 +69,12 @@ function OptionRow({ icon, title, desc, onClick }) {
       <div className=" flex items-center gap-4 text-left">
         {/* ICON */}
         <div className="h-16 w-16 rounded-2xl bg-white flex items-center justify-center shadow-sm">
-          <img src={icon} alt="" className="h-7 w-7" />
+          <Image
+            src={icon}
+            alt=""
+            width={28}
+            height={28}
+          />
         </div>
 
         {/* TEXT */}

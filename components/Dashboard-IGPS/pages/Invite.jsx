@@ -1,12 +1,14 @@
 "use client";
 
 import { Copy } from "lucide-react";
-
+import Image from "next/image";
+import { useState } from "react";
 export default function Invite({ onOpenModal }) {
   const referralLink = "https://bepay.igps/referrals/4F8CG7";
-
+  const [copied, setCopied] = useState(false);
   const handleCopy = async () => {
     await navigator.clipboard.writeText(referralLink);
+
   };
 
   return (
@@ -17,20 +19,22 @@ export default function Invite({ onOpenModal }) {
         <div className="w-[420px] h-[220px] bg-white rounded-3xl overflow-hidden shadow-sm flex">
 
           {/* Image Left */}
-          <div className="w-[65%]">
-            <img
+          <div className="w-[65%] relative aspect-[4/3]">
+            <Image
               src="/icons/invite.png"
               alt="Invite"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           </div>
 
           {/* Logo Right */}
           <div className="w-1/2 flex items-center justify-center bg-gray-50">
-            <img
+            <Image
               src="/bepayicon.png"
               alt="logo"
-              className="w-14 h-14"
+              width={56}
+              height={56}
             />
           </div>
         </div>
@@ -65,22 +69,38 @@ export default function Invite({ onOpenModal }) {
             />
 
             <button
-              onClick={handleCopy}
+              onClick={() => {
+                handleCopy();
+                setCopied(true);
+
+                setTimeout(() => {
+                  setCopied(false);
+                }, 3000);
+              }}
               className="absolute right-1 top-1/2 -translate-y-1/2 p-2 rounded-lg hover:bg-gray-100"
             >
-              <img src="/icons/copy.svg" alt="" />
+              <Image
+                src="/icons/copy.svg"
+                alt=""
+                width={26}
+                height={26}
+              />
             </button>
           </div>
         </div>
-
+        {copied && (
+          <p className="text-green-600 text-sm mt-1 font-medium">
+            ✔ Invite link copied
+          </p>
+        )}
         {/* Invite Button */}
         <button
-       onClick={() => onOpenModal("invite-friends")}
+          onClick={() => onOpenModal("invite-friends")}
           className="w-full h-14 rounded-2xl bg-black text-white text-base font-medium hover:opacity-90 transition">
           Invite friends
         </button>
 
       </div>
-    </div>
+    </div >
   );
 }

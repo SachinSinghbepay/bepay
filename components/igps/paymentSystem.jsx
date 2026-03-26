@@ -112,18 +112,6 @@ const PaymentSystemUI = () => {
     {
       title: (
         <>
-          Free
-          <br />
-          settlement
-        </>
-      ),
-      description:
-        "Send and receive money worldwide without paying any settlement fees.",
-      visual: <Image src="/p2.png" alt="FX Rate visual" {...imageProps} />,
-    },
-    {
-      title: (
-        <>
           Near Real-time
           <br />
           Settlement
@@ -603,7 +591,7 @@ const PaymentSystemUI = () => {
             AnalyticsService.sendEvent("PaymentSystem Explore IGPS Clicked");
           } catch (e) { }
         }}
-        className="flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto transition-all duration-300 hover:scale-105 active:scale-95"
+        className="cursor-pointer flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto transition-all duration-300 hover:scale-105 active:scale-95"
       >
         <span>Explore IGPS</span>
         <svg

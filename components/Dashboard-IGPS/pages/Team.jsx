@@ -2,10 +2,10 @@
 
 import { Trash2, Mail, Landmark, Wallet } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { IgpsService } from "../../../services/igpsService";
-import { createPortal } from "react-dom";
-const igpsService = new IgpsService();
 
+import { createPortal } from "react-dom";
+import { useAuth } from "../context/AuthContext";
+import Image from "next/image";
 
 export default function Team({ onOpenModal }) {
     // 🔥 Toggle this to test empty vs populated
@@ -47,6 +47,7 @@ export default function Team({ onOpenModal }) {
     //     },
 
     // ];
+    const { igpsService } = useAuth();
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -124,9 +125,11 @@ export default function Team({ onOpenModal }) {
                             onClick={() => onOpenModal("learn-about-roles")}
                         >
                             <span>Learn more about roles</span>
-                            <img
+                            <Image
                                 src="/icons/back.svg"
                                 alt=""
+                                width={24}
+                                height={24}
                                 className="rotate-180 w-4 h-4"
                             />
                         </button>
@@ -341,7 +344,7 @@ function ActionMenu({ onResend, onEdit, onRemove }) {
     const [position, setPosition] = useState({ top: 0, left: 0 });
 
     return (
-        <div ref={ref} className="relative z-50">
+        <div ref={ref} className="relative z-20">
 
             {/* 3 DOT BUTTON */}
             <div ref={triggerRef} className="relative">

@@ -83,7 +83,7 @@ export default function BepayStorySection() {
               textTransform: "uppercase",
             }}
           >
-            THE bepay STORY
+            THE bepay Money STORY
           </p>
           <h2 className="text-3xl lg:text-[60px] font-bold leading-tight">
             <span style={{ color: "#C0C0C0" }}>From </span>
@@ -187,7 +187,7 @@ export default function BepayStorySection() {
             <p className="text-base lg:text-[20px] leading-relaxed text-[#080808] font-medium">
               Started by blockchain pioneers who saw the gap between traditional
               banking and the crypto revolution,{" "}
-              <span className="font-semibold">bepay</span> was born from a
+              <span className="font-semibold">bepay money</span> was born from a
               simple question: &quot;Why should you have to choose between the
               convenience of traditional finance and the freedom of digital
               finance?&quot;

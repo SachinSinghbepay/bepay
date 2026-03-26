@@ -87,7 +87,7 @@ const PhotoCardItem = ({ imageSrc, altText, index, progress, totalImages, cardCo
                   } catch (e) { }
                   if (onOpenPopup) onOpenPopup()
                 }}
-                className="flex items-center justify-center whitespace-nowrap gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full text-xs font-medium md:w-[180px] md:text-[14px] "
+                className="cursor-pointer flex items-center justify-center whitespace-nowrap gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full text-xs font-medium md:w-[180px] md:text-[14px] "
               >
                 {cardContent.cta}
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-7 flex-shrink-0">
@@ -512,7 +512,7 @@ const VerticalScrollingSection = () => {
                 </button>
                 <button
                   onClick={handleNextSlide}
-                  className="flex items-center justify-center w-14 h-14 rounded-[14px] bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors shadow-md"
+                  className=" flex items-center justify-center w-14 h-14 rounded-[14px] bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors shadow-md"
                   aria-label="Next slide"
                 >
                   <ChevronRight className="w-5 h-5 text-gray-100" />

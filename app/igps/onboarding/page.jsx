@@ -29,8 +29,9 @@ export default function OnboardingPage() {
 
   const handleFinalSubmit = async () => {
     setLoading(true);
+    setError("");
+
     try {
-      // 🔐 API call to create account and handle auth/cookies
       const response = await fetch("/api/igps/create-account", {
         method: "POST",
         headers: {
@@ -45,25 +46,27 @@ export default function OnboardingPage() {
         }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      const data = await response.json();
 
-        // ✅ THIS IS THE MISSING PIECE
-        // completeLogin sets tokens in cookies + localStorage + igpsService
-        // AND fetches profile to populate AuthContext user state
-        const { accessToken, refreshToken } = data.tokens;
-        const ok = await completeLogin(accessToken, refreshToken);
-
-        if (ok) {
-          router.push("/igps/dashboard");
-        } else {
-          setError("Account created but login failed. Please login manually.");
-          router.push("/igps/login");
-        }
+      if (!response.ok) {
+        setError(data.message || "Failed to create account.");
+        return;
       }
-    }
-    catch (error) {
+
+      const { accessToken, refreshToken } = data.tokens;
+
+      const ok = await completeLogin(accessToken, refreshToken);
+
+      if (ok) {
+        router.push("/igps/dashboard");
+      } else {
+        setError("Account created but login failed. Please login manually.");
+        router.push("/igps/login");
+      }
+
+    } catch (error) {
       console.error("Error creating account:", error);
+      setError("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -82,6 +85,7 @@ export default function OnboardingPage() {
             setData={setFormData}
             onNext={handleFinalSubmit}
             onBack={back}
+            loading={loading}
           />
         );
       default:

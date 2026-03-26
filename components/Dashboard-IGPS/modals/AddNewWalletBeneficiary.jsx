@@ -1,11 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
-import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
+import Image from "next/image";
 
-const igpsService = new IgpsService();
+
+
 
 export default function AddNewWalletBeneficiary({ onClose, onBack }) {
+  const { igpsService } = useAuth();
   const scrollRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -94,7 +97,12 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
             className="absolute left-8 text-xl text-gray-500"
             onClick={onBack}
           >
-            <img src="/icons/back.svg" alt="" />
+            <Image
+              src="/icons/back.svg"
+              alt=""
+              width={24}
+              height={24}
+            />
           </button>
 
           <h2 className="text-lg font-semibold text-gray-900">
@@ -164,7 +172,14 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
               />
 
               <div className="mt-2 text-[12px] text-orange-600 flex items-start gap-1">
-                <img src="/icons/iorange.svg" alt="" className="w-4" />
+                <Image
+                  src="/icons/iorange.svg"
+                  alt=""
+                  width={16}
+                  height={16}
+                  className="w-4"
+                />
+
                 Please verify the wallet address and network carefully.
               </div>
             </div>

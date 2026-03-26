@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 
-export default function MissionSection() {
+export default function MissionSection({ onPartnerClick }) {
   return (
     <section className="w-full bg-[#f9f9f9] py-12 md:py-16 lg:py-20">
       <div className="container mx-auto px-4 md:px-6 max-w-7xl">
@@ -33,6 +33,7 @@ export default function MissionSection() {
           </Button>
           <Button
             variant="default"
+            onClick={onPartnerClick}
             className="rounded-full cursor-pointer bg-black px-8 py-6 text-[12px] font-medium text-white hover:bg-gray-800"
           >
             Partner with us

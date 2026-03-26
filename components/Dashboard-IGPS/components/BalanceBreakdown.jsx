@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState, useRef, useEffect } from "react";
 import BalanceDropdown from "./BalanceDropdown";
+import Image from "next/image";
 
-export default function BalanceBreakdown({ wallets = [] }) {
+export default function BalanceBreakdown({ wallets = [], loading }) {
     const [open, setOpen] = useState(false);
     const wrapperRef = useRef(null);
 
@@ -11,18 +12,18 @@ export default function BalanceBreakdown({ wallets = [] }) {
     // Helper to get icons
     const getTokenIcon = (currency) => {
         const c = currency?.toLowerCase();
-        if (c === 'usdc') return "/icons/usdc.svg";
-        if (c === 'usdt') return "/icons/usdt.svg";
-        return "/icons/usdc.svg"; // default
+        if (c === 'usdc') return "/icons/USDC.svg";
+        if (c === 'usdt') return "/icons/USDT.svg";
+        return "/icons/USDC.svg"; // default
     }
 
     const getChainIcon = (chain) => {
         const c = chain?.toLowerCase();
-        if (c === 'polygon') return "/icons/polygon.png";
-        if (c === 'solana') return "/icons/solana.svg";
-        if (c === 'tron') return "/icons/tron.svg";
-        if (c === 'ethereum') return "/icons/ethereum.png";
-        return "/icons/polygon.png";
+        if (c === 'polygon') return "/icons/Polygon.png";
+        if (c === 'solana') return "/icons/Solana.svg";
+        if (c === 'tron') return "/icons/TRON.svg";
+        if (c === 'ethereum') return "/icons/eth.svg";
+        return "/icons/Polygon.png";
     }
 
     useEffect(() => {
@@ -83,7 +84,13 @@ export default function BalanceBreakdown({ wallets = [] }) {
                     <div className="px-4 sm:px-6 py-4 sm:py-5">
                         <p className="text-sm text-gray-500 mb-5">Cryptocurrencies</p>
                         <div className="space-y-5 max-h-64 overflow-y-auto pr-2">
-                            {wallets.length === 0 ? (
+                            {loading && wallets.length === 0 ? (
+                                <div className="space-y-4">
+                                    <WalletShimmer />
+                                    <WalletShimmer />
+                                    <WalletShimmer />
+                                </div>
+                            ) : wallets.length === 0 ? (
                                 <p className="text-sm text-gray-400">No wallets found</p>
                             ) : (
                                 visibleWallets.map((w, i) => (
@@ -116,7 +123,13 @@ function FiatRow({ img, label, value }) {
     return (
         <div className="flex items-center justify-between min-w-0">
             <div className="flex items-center gap-3">
-                <img src={img} alt={label} className="h-6 w-6 rounded-full" />
+                <Image
+                    src={img}
+                    alt={label}
+                    width={24}
+                    height={24}
+                    className="h-6 w-6 rounded-full"
+                />
                 <span className="text-sm text-gray-700">{label}</span>
             </div>
             <span className="font-medium text-gray-900">{value}</span>
@@ -130,20 +143,37 @@ function CryptoRow({ main, chain, label, value }) {
         <div className="flex items-center justify-between min-w-0">
             <div className="flex items-center gap-3">
                 <div className="relative h-6 w-6">
-                    <img
+                    <Image
                         src={main}
+                        alt=""
+                        width={24}
+                        height={24}
                         className="h-6 w-6 rounded-full"
-                        alt=""
                     />
-                    <img
+
+                    <Image
                         src={chain}
-                        className="h-3 w-3 rounded-full absolute -bottom-0 -right-0 border border-white"
                         alt=""
+                        width={12}
+                        height={12}
+                        className="h-3 w-3 rounded-full absolute -bottom-0 -right-0 border border-white"
                     />
                 </div>
                 <span className="text-sm text-gray-700">{label}</span>
             </div>
             <span className="font-medium text-gray-900">{value}</span>
+        </div>
+    );
+}
+
+function WalletShimmer() {
+    return (
+        <div className="flex items-center justify-between animate-pulse">
+            <div className="flex items-center gap-3">
+                <div className="h-6 w-6 rounded-full bg-gray-300"></div>
+                <div className="h-4 w-20 bg-gray-300 rounded"></div>
+            </div>
+            <div className="h-4 w-14 bg-gray-300 rounded"></div>
         </div>
     );
 }

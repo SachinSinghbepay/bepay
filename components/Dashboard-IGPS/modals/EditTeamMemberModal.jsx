@@ -1,10 +1,9 @@
 "use client";
-import { useState, useEffect} from "react";
+import { useState, useEffect, useRef} from "react";
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
-import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
 
-const igpsService = new IgpsService();
 
 const roleOptions = [
   { label: "Owner", value: "owner" },
@@ -15,6 +14,28 @@ const roleOptions = [
 ];
 
 export default function EditTeamMemberModal({ onClose, member: data, refresh }) {
+      const scrollRef = useRef(null);
+  
+      useEffect(() => {
+          const el = scrollRef.current;
+          if (!el) return;
+  
+          const onWheel = (e) => {
+              const { scrollTop, scrollHeight, clientHeight } = el;
+              const atTop = scrollTop === 0;
+              const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+  
+              if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+                  e.preventDefault();
+              } else {
+                  e.stopPropagation();
+              }
+          };
+          el.addEventListener("wheel", onWheel, { passive: false });
+          return () => el.removeEventListener("wheel", onWheel);
+      }, []);
+
+  const { igpsService } = useAuth();
   const [firstName, setFirstName] = useState(data?.name?.split(" ")[0] || "");
   const [lastName, setLastName] = useState(data?.name?.split(" ")[1] || "");
   const [role, setRole] = useState("");
@@ -69,7 +90,7 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
           </button>
         </div>
 
-        <div className="px-8 py-8 space-y-8">
+         <div ref={scrollRef} className="max-h-[90vh] overflow-y-auto px-8 py-8 space-y-8 pb-20">
 
           {/* INFO CARD */}
           <div className="bg-[#F7F7F7] rounded-3xl p-6 space-y-3">

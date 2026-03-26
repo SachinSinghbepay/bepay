@@ -17,7 +17,7 @@ const menuItems = [
   { id: "beneficiary", label: "Beneficiary", icon: Users },
   { id: "payment", label: "Payment", icon: Wallet  },
   { id: "team", label: "Team", icon: UserCog },
-  { id: "invite", label: "Invite", icon: UserPlus },
+  // { id: "invite", label: "Invite", icon: UserPlus },
 ];
 
 export default function Sidebar({ active, onChange, isOpen }) {

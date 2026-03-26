@@ -100,32 +100,21 @@ export default function ContactForm() {
   }, [])
 
   // Check if email already exists
-  const checkEmailExists = async (email) => {
-    try {
-      const q = query(collection(db, "contact-submissions"), where("email", "==", email))
-      const querySnapshot = await getDocs(q)
-      return !querySnapshot.empty
-    } catch (error) {
-      console.error("Error checking email:", error)
-      return false
-    }
-  }
+  // const checkEmailExists = async (email) => {
+  //   try {
+  //     const q = query(collection(db, "contact-submissions"), where("email", "==", email))
+  //     const querySnapshot = await getDocs(q)
+  //     return !querySnapshot.empty
+  //   } catch (error) {
+  //     console.error("Error checking email:", error)
+  //     return false
+  //   }
+  // }
 
   const onSubmit = async (data) => {
     setIsSubmitting(true)
+
     try {
-      // Check if email already exists
-      const emailExists = await checkEmailExists(data.email)
-
-      if (emailExists) {
-        setPopupType("error")
-        setPopupMessage("This email address has already been used. Please use a different email address.")
-        setShowPopup(true)
-        setIsSubmitting(false)
-        return
-      }
-
-      // Save to Firebase with timestamp
       await addDoc(collection(db, "contact-submissions"), {
         ...data,
         timestamp: new Date(),
@@ -137,9 +126,17 @@ export default function ContactForm() {
       setPopupType("success")
       setPopupMessage("Thank you! Your message has been sent successfully. We'll get back to you soon.")
       setShowPopup(true)
-      reset()
+      reset({
+        subject: "",
+        name: "",
+        email: "",
+        countryCode: "",
+        phoneNumber: "",
+        message: "",
+      })
     } catch (error) {
       console.error("Error submitting form:", error)
+
       setPopupType("error")
       setPopupMessage("There was an error submitting your message. Please try again.")
       setShowPopup(true)
@@ -182,7 +179,10 @@ export default function ContactForm() {
           {/* Subject */}
           <div className="space-y-3">
             <label className="text-sm font-medium text-[#080808]">Subject</label>
-            <Select onValueChange={(value) => setValue("subject", value)}>
+            <Select
+              value={watch("subject")}
+              onValueChange={(value) => setValue("subject", value)}
+            >
               <SelectTrigger
                 className="w-full bg-white/50 h-[60px] border border-gray-200 rounded-lg flex items-center justify-between px-3"
                 style={{ minHeight: "60px" }}
@@ -213,6 +213,10 @@ export default function ContactForm() {
             <Input
               {...register("name")}
               placeholder="Enter your name"
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^a-zA-Z\s]/g, "")
+                setValue("name", value)
+              }}
               className="w-full h-[60px] bg-white/50 border border-gray-200 rounded-lg px-3 text-base"
             />
             {errors.name && <p className="text-sm text-red-600">{errors.name.message}</p>}
@@ -289,10 +293,14 @@ export default function ContactForm() {
                   </Command>
                 </PopoverContent>
               </Popover>
-
               <Input
                 {...register("phoneNumber")}
                 placeholder="Enter phone number"
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, "")
+                  setValue("phoneNumber", value)
+                }}
+                inputMode="numeric"
                 className="flex-1 h-[60px] bg-white/50 border border-gray-200 rounded-lg px-3 text-base"
               />
             </div>
@@ -309,12 +317,12 @@ export default function ContactForm() {
                 placeholder="Write your message here..."
                 className="w-full min-h-[120px] bg-white/50 border border-gray-200 rounded-lg resize-none pr-12 px-3 py-3 text-base"
               />
-              <button
+              {/* <button
                 type="button"
                 className="absolute bottom-3 right-3 p-2 text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <Paperclip className="w-4 h-4" />
-              </button>
+              </button> */}
             </div>
             {errors.message && <p className="text-sm text-red-600">{errors.message.message}</p>}
           </div>
@@ -423,11 +431,10 @@ export default function ContactForm() {
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
                   <Button
                     onClick={closePopup}
-                    className={`px-8 py-3 rounded-full font-medium transition-all duration-200 ${
-                      popupType === "success"
-                        ? "bg-green-600 hover:bg-green-700 text-white"
-                        : "bg-red-600 hover:bg-red-700 text-white"
-                    }`}
+                    className={`px-8 py-3 rounded-full font-medium transition-all duration-200 ${popupType === "success"
+                      ? "bg-green-600 hover:bg-green-700 text-white"
+                      : "bg-red-600 hover:bg-red-700 text-white"
+                      }`}
                   >
                     {popupType === "success" ? "Great!" : "Try Again"}
                   </Button>

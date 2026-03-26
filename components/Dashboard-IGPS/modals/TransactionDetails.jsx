@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import ModalFrame from "./ModalFrame";
+import Image from "next/image";
 
 export default function TransactionDetails({ transaction, onClose, onBack }) {
     const scrollRef = useRef(null);
@@ -224,10 +225,11 @@ function DetailRow({ label, value, copy, share }) {
                         className="text-gray-400 hover:text-gray-700"
                         title="Copy"
                     >
-                        <img
+                        <Image
                             src="/icons/copy.svg"
                             alt="Copy"
-                            className="h-9 w-9"
+                            width={36}
+                            height={36}
                         />
                     </button>
                 )}
@@ -238,10 +240,11 @@ function DetailRow({ label, value, copy, share }) {
                         className="text-gray-400 hover:text-gray-700"
                         title="Share"
                     >
-                        <img
+                        <Image
                             src="/icons/share.svg"
-                            alt="Copy"
-                            className="h-9 w-9"
+                            alt="Share"
+                            width={36}
+                            height={36}
                         />
                     </button>
                 )}

@@ -161,7 +161,7 @@ export function AuthProvider({ children }) {
 
         if (!refreshToken) {
             console.log("❌ No refresh token found");
-            handleSessionExpired();
+            handleSessionExpiredRef.current?.();
             return;
         }
 
@@ -179,11 +179,11 @@ export function AuthProvider({ children }) {
                 console.log("✅ Token refreshed successfully");
             } else {
                 console.log("❌ Token refresh failed:", response.message);
-                handleSessionExpired();
+                handleSessionExpiredRef.current?.();
             }
         } catch (error) {
             console.error("❌ Token refresh error:", error);
-            handleSessionExpired();
+            handleSessionExpiredRef.current?.();
         } finally {
             isRefreshingRef.current = false;
         }
@@ -214,6 +214,7 @@ export function AuthProvider({ children }) {
         }
     }, []);
 
+    const handleSessionExpiredRef = useRef(null);
     // ─── Handle Session Expired ─────────────────────────────────────────────────
     const handleSessionExpired = useCallback(() => {
         stopRefreshInterval();
@@ -245,7 +246,9 @@ export function AuthProvider({ children }) {
             router.push("/igps/login");
         }
     }, [stopRefreshInterval, pathname, router]);
-
+    useEffect(() => {
+        handleSessionExpiredRef.current = handleSessionExpired;
+    }, [handleSessionExpired]);
     // ─── Check Session on Mount (with retry logic) ─────────────────────────────
     useEffect(() => {
         const checkSession = async () => {
@@ -311,7 +314,7 @@ export function AuthProvider({ children }) {
                         console.log("❌ Profile fetch failed:", profileRes.message);
                         // Don't immediately logout - could be temporary
                         if (profileRes.message?.includes("expired") || profileRes.message?.includes("invalid")) {
-                            handleSessionExpired();
+                            handleSessionExpiredRef.current?.();
                         }
                     }
                 }
@@ -333,7 +336,7 @@ export function AuthProvider({ children }) {
 
         // Cleanup on unmount
         return () => stopRefreshInterval();
-    }, [getTokens, setTokens, startRefreshInterval, stopRefreshInterval, handleSessionExpired]);
+    }, []);
 
     // ─── Cross-Tab Event Listener ─────────────────────────────────────────────────
     useEffect(() => {
@@ -354,12 +357,12 @@ export function AuthProvider({ children }) {
 
                 case "SESSION_EXPIRED":
                     console.log("📡 Session expired in another tab");
-                    handleSessionExpired();
+                    handleSessionExpiredRef.current?.();
                     break;
 
                 case "LOGOUT":
                     console.log("📡 Logout triggered from another tab");
-                    handleSessionExpired();
+                    handleSessionExpiredRef.current?.();
                     break;
             }
         };
@@ -456,7 +459,8 @@ export function AuthProvider({ children }) {
         stopRefreshInterval();
 
         try {
-            await igpsService.logout();
+            const { refreshToken: currentRefreshToken } = getTokens();
+            await igpsService.logout(currentRefreshToken ?? undefined);
         } catch (error) {
             console.error("Logout API failed:", error);
         }
@@ -509,27 +513,84 @@ export function AuthProvider({ children }) {
     // ─── Checking the KYC Status  ──────────────────────────
 
     useEffect(() => {
+
+        if (!user) return;
+
         const fetchKYC = async () => {
-            if (!user) return;
+
+            // 1️⃣ Load cached value first (instant UI)
+            const cached = localStorage.getItem("kyc_status");
+
+            if (cached) {
+                try {
+                    const parsed = JSON.parse(cached);
+                    setKycStatus(parsed.value);
+                } catch { }
+            }
 
             try {
-                const res = await igpsService.getKYCStatus();
-                if (res.success) {
-                    const remaining = res.data.remainingSteps || [];
-                    const required = ["sender_details_submitted", "documents_uploaded", "ubo_submitted"];
-                    const needsKyc = required.some(step => remaining.includes(step));
 
-                    setKycStatus(needsKyc ? "incomplete" : "complete");
+                const res = await igpsService.getKYCStatus();
+
+                if (res.success) {
+
+                    const remaining = res.data.remainingSteps || [];
+                    const required = [
+                        "sender_details_submitted",
+                        "documents_uploaded",
+                        "ubo_submitted"
+                    ];
+
+                    const needsKyc = required.some(step =>
+                        remaining.includes(step)
+                    );
+
+                    const newStatus = needsKyc ? "incomplete" : "complete";
+
+                    setKycStatus(newStatus);
+
+                    // 2️⃣ Update cache
+                    localStorage.setItem(
+                        "kyc_status",
+                        JSON.stringify({
+                            value: newStatus,
+                            ts: Date.now()
+                        })
+                    );
+
                 } else {
                     setKycStatus("incomplete");
                 }
+
             } catch {
                 setKycStatus("incomplete");
             }
+
         };
 
         fetchKYC();
+
     }, [user]);
+
+    // Add this function inside AuthProvider:
+const refreshKycStatus = useCallback(async () => {
+    if (!user) return;
+    
+    try {
+        const res = await igpsService.getKYCStatus();
+        if (res.success) {
+            const remaining = res.data.remainingSteps || [];
+            const required = ["sender_details_submitted", "documents_uploaded", "ubo_submitted"];
+            const needsKyc = required.some(step => remaining.includes(step));
+            const newStatus = needsKyc ? "incomplete" : "complete";
+            
+            setKycStatus(newStatus);
+            localStorage.setItem("kyc_status", JSON.stringify({ value: newStatus, ts: Date.now() }));
+        }
+    } catch {
+        setKycStatus("incomplete");
+    }
+}, [user]);
 
     return (
         <AuthContext.Provider value={{
@@ -542,7 +603,8 @@ export function AuthProvider({ children }) {
             refreshUser,
             completeLogin,
             refreshToken,
-            kycStatus
+            kycStatus,
+            refreshKycStatus 
         }}>
             {children}
         </AuthContext.Provider>

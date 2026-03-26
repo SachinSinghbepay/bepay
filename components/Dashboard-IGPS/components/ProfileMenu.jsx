@@ -8,9 +8,6 @@ export default function ProfileMenu({ onProfile }) {
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
 
-    // Display Name Logic: Organization Name or First Last Name
-    const displayName = organization?.name || user?.organizationName || (user?.firstName ? `${user.firstName} ${user.lastName}` : "User");
-
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (ref.current && !ref.current.contains(e.target)) {
@@ -21,15 +18,30 @@ export default function ProfileMenu({ onProfile }) {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    const [cachedName, setCachedName] = useState("");
+
+    useEffect(() => {
+        if (user) {
+            const name =
+                organization?.name ||
+                user?.organizationName ||
+                `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim();
+
+            setCachedName(name);
+        }
+    }, [user, organization]);
+
+    const displayName = cachedName;
+
     return (
         <div className="relative" ref={ref}>
 
             {/* TRIGGER WRAPPER (NOT CLICKABLE) */}
-            <div className="flex justify-around items-center bg-[#EBEBEB]  py-2 rounded-2xl shadow-sm w-[170px] md:w-[342px]">
+            <div className="flex justify-around items-center bg-[#EBEBEB] px-2  py-2 rounded-2xl shadow-sm">
 
                 {/* LEFT GROUP */}
                 <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-xl bg-[#D1D1D1] p-[2px]">
+                    <div className="h-10 w-10 rounded-xl bg-[#D1D1D1] p-[2px] flex-shrink-0">
                         <div className="h-full w-full rounded-lg overflow-hidden bg-[#B6B6B6]">
                             <Image
                                 src="/profile.png"
@@ -41,7 +53,7 @@ export default function ProfileMenu({ onProfile }) {
                         </div>
                     </div>
 
-                    <span className="text-sm font-semibold text-[#414141] truncate max-w-[140px] sm:max-w-[200px]">
+                    <span className="text-sm font-semibold text-[#414141] whitespace-nowrap">
                         {displayName}
                     </span>
                 </div>
@@ -49,7 +61,7 @@ export default function ProfileMenu({ onProfile }) {
                 {/* DROPDOWN BUTTON (ONLY THIS OPENS MENU) */}
                 <button
                     onClick={() => setOpen((v) => !v)}
-                    className="ml-3 flex h-8 w-8 items-center justify-center rounded-lg cursor-pointer hover:bg-gray-200 transition"
+                    className="ml-3 mr-2 flex h-8 w-8 items-center justify-center rounded-lg cursor-pointer hover:bg-gray-200 transition"
                     aria-label="Open profile menu"
                 >
                     <svg

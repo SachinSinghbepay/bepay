@@ -1,0 +1,394 @@
+/* ─── Tiptap Editor Content ──────────────────────────────────────────────── */
+
+.tiptap-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.tiptap-editor-content {
+  outline: none;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #1A1A1A;
+  min-height: 320px;
+  caret-color: #1A1A1A;
+}
+
+/* Placeholder */
+.tiptap-editor-content p.is-editor-empty:first-child::before,
+.tiptap-editor-content .is-empty::before {
+  content: attr(data-placeholder);
+  color: #CCCCBC;
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+/* Headings */
+.tiptap-editor-content h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 1.5rem 0 0.5rem;
+  color: #0F0F0F;
+  letter-spacing: -0.02em;
+}
+.tiptap-editor-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 1.25rem 0 0.4rem;
+  color: #1A1A1A;
+}
+.tiptap-editor-content h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 1rem 0 0.35rem;
+  color: #1A1A1A;
+}
+.tiptap-editor-content h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0.75rem 0 0.25rem;
+  color: #3A3A2A;
+}
+
+/* Paragraph */
+.tiptap-editor-content p {
+  margin: 0 0 0.75rem;
+  color: #2A2A1A;
+}
+
+/* Lists */
+.tiptap-editor-content ul,
+.tiptap-editor-content ol {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0 0.75rem;
+}
+.tiptap-editor-content li {
+  margin-bottom: 0.25rem;
+  color: #2A2A1A;
+}
+.tiptap-editor-content li p {
+  margin: 0;
+}
+
+/* Blockquote */
+.tiptap-editor-content blockquote {
+  border-left: 3px solid #1A1A1A;
+  padding: 0.5rem 0 0.5rem 1.25rem;
+  margin: 1rem 0;
+  color: #5A5A4A;
+  font-style: italic;
+}
+.tiptap-editor-content blockquote p {
+  margin: 0;
+  color: #5A5A4A;
+}
+
+/* Horizontal rule */
+.tiptap-editor-content hr {
+  border: none;
+  border-top: 1px solid #E4E2DC;
+  margin: 2rem 0;
+}
+
+/* Inline code */
+.tiptap-editor-content code {
+  background: #F0EFEA;
+  color: #C0392B;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.85em;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+/* Bold / Italic / Underline */
+.tiptap-editor-content strong { font-weight: 700; color: #0F0F0F; }
+.tiptap-editor-content em { font-style: italic; }
+.tiptap-editor-content u { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Images */
+.tiptap-editor-content .editor-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin: 1rem 0;
+  display: block;
+}
+
+.tiptap-editor-content img.ProseMirror-selectednode {
+  outline: 2px solid #1A1A1A;
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+/* YouTube embeds */
+.tiptap-editor-content .editor-youtube {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+.tiptap-editor-content iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border: none;
+  border-radius: 12px;
+  display: block;
+  margin: 1rem 0;
+}
+
+/* Selected node highlight */
+.tiptap-editor-content .ProseMirror-selectednode {
+  outline: 2px solid #1A1A1A;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Floating Toolbar ───────────────────────────────────────────────────── */
+
+.floating-toolbar {
+  display: flex;
+  align-items: center;
+  background: #1A1A1A;
+  border-radius: 10px;
+  padding: 4px 6px;
+  gap: 2px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  color: #D4D4C8;
+  transition: background 0.12s, color 0.12s;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.toolbar-btn:hover {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+}
+.toolbar-btn--active {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(255,255,255,0.15);
+  margin: 0 4px;
+}
+
+/* ─── Slash Command Menu ─────────────────────────────────────────────────── */
+
+.slash-menu {
+  background: #fff;
+  border: 1px solid #E4E2DC;
+  border-radius: 14px;
+  padding: 6px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  min-width: 220px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.slash-menu__label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #AAAA9A;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 10px 6px;
+}
+
+.slash-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+.slash-menu__item:hover,
+.slash-menu__item--active {
+  background: #F4F3EF;
+}
+
+.slash-menu__icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: #EFEDE8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #3A3A2A;
+}
+
+.slash-menu__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.slash-menu__title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1A1A1A;
+  line-height: 1;
+}
+
+.slash-menu__desc {
+  font-size: 11px;
+  color: #9A9A8A;
+  line-height: 1;
+}
+
+/* ─── Editor Footer ──────────────────────────────────────────────────────── */
+
+.editor-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #AAAA9A;
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ECEAE4;
+}
+
+/* ─── Drag handle ────────────────────────────────────────────────────────── */
+
+.drag-handle {
+  position: absolute;
+  left: -28px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s;
+  cursor: grab;
+  color: #CCCCBC;
+}
+.tiptap-editor-content > *:hover .drag-handle,
+.drag-handle:hover {
+  opacity: 1;
+}
+
+/* ─── Image with Alt ─────────────────────────────────────────────────────── */
+
+.image-block {
+  margin: 1.25rem 0;
+}
+
+.editor-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+}
+
+.editor-image--selected {
+  outline: 2px solid #1A1A1A;
+  outline-offset: 2px;
+}
+
+.image-alt-row {
+  margin-top: 6px;
+}
+
+.image-alt-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.image-alt-label {
+  font-weight: 600;
+  color: #9A9A8A;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.image-alt-value {
+  color: #5A5A4A;
+  font-size: 12px;
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-alt-missing {
+  color: #E07B39;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.image-alt-edit {
+  color: #AAAA9A;
+  font-size: 11px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.image-alt-btn:hover .image-alt-edit {
+  opacity: 1;
+}
+
+.image-alt-input {
+  width: 100%;
+  font-size: 12px;
+  color: #3A3A2A;
+  background: #F4F3EF;
+  border: 1px solid #DDDBD5;
+  border-radius: 7px;
+  padding: 6px 10px;
+  outline: none;
+  transition: border 0.15s;
+}
+
+.image-alt-input:focus {
+  border-color: #1A1A1A;
+  background: #fff;
+}
+
+.image-alt-input::placeholder {
+  color: #CCCCBC;
+}

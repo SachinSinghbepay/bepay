@@ -2,9 +2,10 @@
 import { useState, useRef, useEffect } from "react";
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
-import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
+import Image from "next/image";
 
-const igpsService = new IgpsService();
+
 const roleOptions = [
     { label: "Owner", value: "owner" },
     { label: "Admin", value: "admin" },
@@ -17,27 +18,28 @@ export default function AddTeamMemberModal({
     onSubmit,
     refresh
 }) {
-        const scrollRef = useRef(null);
-    
-        useEffect(() => {
-            const el = scrollRef.current;
-            if (!el) return;
-    
-            const onWheel = (e) => {
-                const { scrollTop, scrollHeight, clientHeight } = el;
-                const atTop = scrollTop === 0;
-                const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
-    
-                if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
-                    e.preventDefault();
-                } else {
-                    e.stopPropagation();
-                }
-            };
-    
-            el.addEventListener("wheel", onWheel, { passive: false });
-            return () => el.removeEventListener("wheel", onWheel);
-        }, []);
+    const { igpsService } = useAuth();
+    const scrollRef = useRef(null);
+
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (!el) return;
+
+        const onWheel = (e) => {
+            const { scrollTop, scrollHeight, clientHeight } = el;
+            const atTop = scrollTop === 0;
+            const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+            if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+                e.preventDefault();
+            } else {
+                e.stopPropagation();
+            }
+        };
+
+        el.addEventListener("wheel", onWheel, { passive: false });
+        return () => el.removeEventListener("wheel", onWheel);
+    }, []);
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -72,8 +74,8 @@ export default function AddTeamMemberModal({
             const res = await igpsService.inviteMember(payload);
 
             if (res.success) {
-                  refresh?.(); 
-                   onClose();   
+                refresh?.();
+                onClose();
                 onSubmit?.({
                     name: `${firstName} ${lastName}`,
                     email,
@@ -100,7 +102,12 @@ export default function AddTeamMemberModal({
                         className="absolute left-8 text-xl text-gray-500"
                         onClick={onBack}
                     >
-                        <img src="/icons/back.svg" alt="" />
+                        <Image
+                            src="/icons/back.svg"
+                            alt=""
+                            width={24}
+                            height={24}
+                        />
                     </button>
 
                     <h2 className="text-lg font-semibold text-gray-900">

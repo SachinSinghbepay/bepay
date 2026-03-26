@@ -11,8 +11,9 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
   const [loading, setLoading] = useState(true);
   const [totalBalance, setTotalBalance] = useState(0);
   const [activeFilter, setActiveFilter] = useState("All");
-const [kycDone, setKycDone] = useState(null);
-
+  const [kycDone, setKycDone] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const { kycStatus } = useAuth();
   // Function to check KYC completion status
   const checkKYCCompletion = (remainingSteps) => {
     const kycRequiredSteps = ["sender_details_submitted", "documents_uploaded", "ubo_submitted"];
@@ -20,111 +21,135 @@ const [kycDone, setKycDone] = useState(null);
     return !needsKYC;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        let currentWallets = [];
+  const fetchData = async () => {
+    try {
+      if (wallets.length === 0) setLoading(true);
+      let currentWallets = [];
 
-        // 1. Try Local Cache (SWR)
-        if (igpsService.getLocalBalances) {
-          const cached = igpsService.getLocalBalances();
-          if (cached && cached.success && Array.isArray(cached.data?.wallets)) {
-            const sorted = cached.data.wallets.sort((a, b) => (parseFloat(b.balance) || 0) - (parseFloat(a.balance) || 0));
-            currentWallets = sorted;
-            setWallets(sorted);
-            setTotalBalance(sorted.reduce((acc, w) => acc + (parseFloat(w.balance || 0)), 0));
-          }
+      // 1. Try Local Cache (SWR)
+      if (igpsService.getLocalBalances) {
+        const cached = igpsService.getLocalBalances();
+        if (cached && cached.success && Array.isArray(cached.data?.wallets)) {
+          const sorted = cached.data.wallets.sort((a, b) => (parseFloat(b.balance) || 0) - (parseFloat(a.balance) || 0));
+          currentWallets = sorted;
+          setWallets(sorted);
+          setTotalBalance(sorted.reduce((acc, w) => acc + (parseFloat(w.balance || 0)), 0));
         }
-
-        // 2. Fetch Fresh Balances
-        try {
-          const balRes = await igpsService.getWalletBalances();
-          if (balRes.success) {
-            console.log("Full Balance Response:", balRes.data);
-            const wData = balRes.data.wallets || [];
-
-            if (Array.isArray(wData)) {
-              currentWallets = wData.sort((a, b) => {
-                return (parseFloat(b.balance) || 0) - (parseFloat(a.balance) || 0);
-              });
-              setWallets(currentWallets);
-              setTotalBalance(currentWallets.reduce((acc, w) => acc + (parseFloat(w.balance || 0)), 0));
-            } else {
-              console.warn("Expected array in data.wallets", balRes.data);
-            }
-          }
-        } catch (e) {
-          console.error("Failed to fetch balances", e);
-        }
-
-        setWallets(currentWallets);
-
-        // 3. Fetch KYC Status
-        try {
-          const kycRes = await igpsService.getKYCStatus();
-          if (kycRes.success) {
-            const isKYCComplete = checkKYCCompletion(kycRes.data.remainingSteps);
-            setKycDone(isKYCComplete);
-          }
-        } catch (e) {
-          console.error("Failed to fetch KYC status", e);
-        }
-
-        // Fetch Transactions
-        let queryParams = { limit: 5 };
-        if (activeFilter !== "All") {
-          if (activeFilter !== "All") {
-            const f = activeFilter.toLowerCase();
-            if (f === 'onramp') queryParams.status = 'fiat_to_crypto';
-            else if (f === 'offramp') queryParams.status = 'crypto_to_fiat';
-            else queryParams.status = f;
-          }
-        }
-
-        const txnRes = await igpsService.getTransactions(queryParams);
-        if (txnRes.success) {
-          const txns = txnRes.data.transactions || [];
-          const mapped = txns.map(tx => {
-            const isSent = tx.from?.type === 'user';
-
-            let otherParty = isSent
-              ? (tx.to?.name || tx.to?.email || "Beneficiary")
-              : (tx.from?.name || "Sender");
-
-            return {
-              id: tx.id,
-              amount: tx.amount,
-              currency: tx.currency,
-              type: isSent ? "sent" : "received",
-              status: (tx.status || "Unknown").charAt(0).toUpperCase() + (tx.status || "").slice(1),
-              date: new Date(tx.createdAt).toLocaleString(),
-              email: otherParty,
-              raw: tx
-            };
-          });
-          setTransactions(mapped);
-        }
-
-        // Calculate Total Balance
-        const total = currentWallets.reduce((acc, w) => acc + (parseFloat(w.balance || 0)), 0);
-        setTotalBalance(total);
-
-      } catch (err) {
-        console.error("Dashboard fetch error", err);
-      } finally {
-        setLoading(false);
       }
-    };
+
+      // 2. Fetch Fresh Balances
+      try {
+        // Fetch fresh balances in background
+        const balRes = await igpsService.getWalletBalances();
+
+        if (balRes.success) {
+          console.log("Full Balance Response:", balRes.data);
+
+          const wData = balRes.data.wallets || [];
+
+          if (Array.isArray(wData)) {
+            const sorted = wData.sort(
+              (a, b) => (parseFloat(b.balance) || 0) - (parseFloat(a.balance) || 0)
+            );
+
+            const newTotal = sorted.reduce(
+              (acc, w) => acc + (parseFloat(w.balance || 0)),
+              0
+            );
+
+            // Only update state if balance actually changed
+            setWallets(prev => {
+              const prevTotal = prev.reduce((acc, w) => acc + parseFloat(w.balance || 0), 0);
+
+              if (prevTotal !== newTotal) {
+                setTotalBalance(newTotal);
+                return sorted;
+              }
+
+              return prev;
+            });
+          } else {
+            console.warn("Expected array in data.wallets", balRes.data);
+          }
+        }
+
+      } catch (e) {
+        console.error("Failed to fetch balances", e);
+      }
+
+      // 3. Fetch KYC Status
+      try {
+        const kycRes = await igpsService.getKYCStatus();
+        if (kycRes.success) {
+          const isKYCComplete = checkKYCCompletion(kycRes.data.remainingSteps);
+          setKycDone(isKYCComplete);
+        }
+      } catch (e) {
+        console.error("Failed to fetch KYC status", e);
+      }
+
+      // Fetch Transactions
+      let queryParams = { limit: 5 };
+      if (activeFilter !== "All") {
+        if (activeFilter !== "All") {
+          const f = activeFilter.toLowerCase();
+          if (f === 'onramp') queryParams.status = 'fiat_to_crypto';
+          else if (f === 'offramp') queryParams.status = 'crypto_to_fiat';
+          else queryParams.status = f;
+        }
+      }
+
+      const txnRes = await igpsService.getTransactions(queryParams);
+      if (txnRes.success) {
+        const txns = txnRes.data.transactions || [];
+        const mapped = txns.map(tx => {
+          const isSent = tx.from?.type === 'user';
+
+          let otherParty = isSent
+            ? (tx.to?.name || tx.to?.email || "Beneficiary")
+            : (tx.from?.name || "Sender");
+
+          return {
+            id: tx.id,
+            amount: tx.amount,
+            currency: tx.currency,
+            type: isSent ? "sent" : "received",
+            status: (tx.status || "Unknown").charAt(0).toUpperCase() + (tx.status || "").slice(1),
+            date: new Date(tx.createdAt).toLocaleString(),
+            email: otherParty,
+            raw: tx
+          };
+        });
+        setTransactions(mapped);
+      }
+
+      // Calculate Total Balance
+      const total = currentWallets.reduce((acc, w) => acc + (parseFloat(w.balance || 0)), 0);
+      setTotalBalance(total);
+
+    } catch (err) {
+      console.error("Dashboard fetch error", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
 
     if (user) {
       fetchData();
     }
   }, [user, igpsService, activeFilter]);
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchData(true);
+    setRefreshing(false);
+  };
+
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-4 space-y-6 lg:space-y-8 overflow-x-hidden">
-    {kycDone === false && (
+      {kycStatus === "incomplete" && (
         <div className="w-full bg-[#E7DED1] rounded-[40px] px-6 py-8 flex flex-col  items-start justify-between gap-3">
 
           {/* LEFT SIDE */}
@@ -172,20 +197,44 @@ const [kycDone, setKycDone] = useState(null);
 
           {/* LEFT */}
           <div className="p-4 lg:p-8 flex-1 min-w-0">
-            <p className="text-[16px] text-[#6A6A6A] font-medium">
-              Total available balance
-            </p>
+            <div className="flex justify-start items-center gap-2 ">
+              <p className="text-[16px] text-[#6A6A6A] font-medium">
+                Total available balance
+              </p>
+              <button
+                onClick={handleRefresh}
+                className="h-8 w-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition"
+              >
+                <svg
+                  className={`h-4 w-4 text-gray-600 ${refreshing ? "animate-spin" : ""}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M4 4v6h6" />
+                  <path d="M20 20v-6h-6" />
+                  <path d="M5 15a7 7 0 0011 2l4-4" />
+                  <path d="M19 9a7 7 0 00-11-2L4 11" />
+                </svg>
+              </button>
+            </div>
             <p className="text-[#6A6A6A] text-[12px]">
               (Fiat + stablecoins)
             </p>
-            <p className="text-3xl sm:text-4xl lg:text-[54px] font-bold text-gray-900 mt-2">
-              ${totalBalance.toFixed(2)}
-            </p>
+            {loading && wallets.length === 0 ? (
+              <div className="h-[54px] w-[220px] rounded-lg bg-gray-300 animate-pulse mt-2"></div>
+            ) : (
+              <p className="text-3xl sm:text-4xl lg:text-[54px] font-bold text-gray-900 mt-2">
+                ${totalBalance.toFixed(2)}
+              </p>
+            )}
+
           </div>
 
           {/* RIGHT */}
           <div className="rounded-[32px] bg-[#FAFAFA] p-4 shadow-sm w-full xl:max-w-[630px]">
-            <BalanceBreakdown wallets={wallets} />
+            <BalanceBreakdown wallets={wallets} loading={loading} />
           </div>
         </div>
       </div>
@@ -308,21 +357,19 @@ const [kycDone, setKycDone] = useState(null);
 
                   <div
                     className={`h-7 w-7 flex items-center justify-center
-      ${tx.type === "sent"
-                        ? "bg-red-100"
-                        : "bg-green-100"
-                      }
-      rounded-lg
-    `}
+    ${tx.type === "sent" ? "bg-red-100" : "bg-green-100"}
+    rounded-lg
+  `}
                   >
-                    <img
+                    <Image
                       src={
                         tx.type === "sent"
                           ? "/icons/redaero.svg"
                           : "/icons/greenaero.svg"
                       }
                       alt=""
-                      className="h-4 w-4"
+                      width={16}
+                      height={16}
                     />
                   </div>
                 </span>

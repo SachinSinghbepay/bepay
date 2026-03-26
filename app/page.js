@@ -9,17 +9,19 @@ import FAQSection from '@/components/igps/faqs';
 import PaymentSystemUI from '@/components/igps/paymentSystem';
 import SetupGlobalAccount from '@/components/igps/globalAccount';
 import VerticalScrollingSection from '@/components/igps/verticalScroll';
+import BuiltForMerchants from '@/components/igps/builtForMerchants';
 
 const IgpsPage = () => {
   return (
     <div>
       <IgpsHero />
+      <BuiltForMerchants/>
       <GlobalNetworkCoverage/>
       <ImageComparisonTable/>
-      <App/>
+      {/* <App/> */}
       <PaymentSystemUI/>
       <BepayLanding/>
-      <VerticalScrollingSection/>
+      {/* <VerticalScrollingSection/> */}
       <SetupGlobalAccount/>
       <ComplianceSection/>
       <FAQSection/>

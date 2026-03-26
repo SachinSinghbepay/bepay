@@ -1,8 +1,9 @@
 import ModalFrame from "./ModalFrame";
 import { useState, useEffect, useRef } from "react";
-import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
+import Image from "next/image";
 
-const igpsService = new IgpsService();
+
 
 export default function DepositSelectModal({
   onClose,
@@ -12,6 +13,7 @@ export default function DepositSelectModal({
   onBack,
   heading = "Deposit"
 }) {
+  const { igpsService } = useAuth();
   const [wallets, setWallets] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -53,7 +55,7 @@ export default function DepositSelectModal({
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
 
-
+ 
   return (
     <ModalFrame size="md">
       {/* HEADER */}
@@ -64,7 +66,12 @@ export default function DepositSelectModal({
               onClick={onBack}
               className="absolute left-6 text-xl text-gray-500"
             >
-              <img src="/icons/back.svg" alt="" />
+              <Image
+                src="/icons/back.svg"
+                alt=""
+                width={24}
+                height={24}
+              />
             </button>
           )}
 
@@ -140,13 +147,23 @@ function DepositRow({ main, network, label, sub, onSelect }) {
     >
       <div className="flex items-center gap-4">
         {/* ICON STACK */}
-        <div className="relative">
-          <img src={main} className="h-10 w-10 rounded-full" alt="" />
-          <img
-            src={network}
-            className="h-5 w-5 rounded-full absolute -bottom-0 -right-0"
+        <div className="relative h-10 w-10">
+          <Image
+            src={main}
             alt=""
+            width={40}
+            height={40}
+            className="rounded-full"
           />
+          <div className="absolute bottom-0 right-0 p-0 bg-gray-50 rounded-full border border-gray-300">
+            <Image
+              src={network}
+              alt=""
+              width={20}
+              height={20}
+              className="rounded-full "
+            />
+          </div>
         </div>
 
         <div className="text-gray-800">
@@ -165,13 +182,13 @@ function OtherTokensRow() {
     <div className="flex items-center justify-between bg-[#F7F7F7] rounded-2xl px-6 py-4 cursor-pointer hover:bg-gray-100">
       <div className="flex items-center gap-4">
         {/* 4 ICONS STACK */}
-        <div className="relative h-10 w-10">
-          <img src="/icons/eth.svg" className="h-6 w-6 rounded-full absolute top-0 left-0" />
-          <img src="/icons/solana.svg" className="h-6 w-6 rounded-full absolute top-0 right-0" />
-          <img src="/icons/usdt.svg" className="h-6 w-6 rounded-full absolute bottom-0 left-0" />
-          <img src="/icons/polygon.png" className="h-6 w-6 rounded-full absolute bottom-0 right-0" />
-        </div>
 
+        <div className="relative h-10 w-10">
+          <Image src="/icons/eth.svg" alt="" width={24} height={24} className="h-6 w-6 rounded-full absolute top-0 left-0" />
+          <Image src="/icons/Solana.svg" alt="" width={24} height={24} className="h-6 w-6 rounded-full absolute top-0 right-0" />
+          <Image src="/icons/USDT.svg" alt="" width={24} height={24} className="h-6 w-6 rounded-full absolute bottom-0 left-0" />
+          <Image src="/icons/Polygon.png" alt="" width={24} height={24} className="h-6 w-6 rounded-full absolute bottom-0 right-0" />
+        </div>
         <div>
           <p className="font-medium text-gray-800">
             Add funds using other tokens and networks

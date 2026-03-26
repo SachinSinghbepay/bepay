@@ -110,11 +110,7 @@ const IgpsHero = () => {
   }, [popup])
 
   const checklistItems = [
-    {
-      icon: "/icons/h1.png",
-      text: "Free International Settlement",
-    },
-    {
+       {
       icon: "/icons/h2.png",
       text: "Accept payments in USD, EUR, GBP, CNY, ZAR, MAD  & 40+ Major Currencies",
     },
@@ -173,7 +169,7 @@ const IgpsHero = () => {
               textTransform: "uppercase",
             }}
           >
-            ACCEPT INTERNATIONAL PAYMENTS WITH ZERO FEES
+            ACCEPT INTERNATIONAL PAYMENTS WITH EASE
           </p>
         </div>
 
@@ -196,7 +192,7 @@ const IgpsHero = () => {
               </div>
 
               {/* Overlapping Bottom Image */}
-              <div className="absolute -bottom-1 lg:-bottom-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[85%] lg:w-[105%] z-10">
+              {/* <div className="absolute -bottom-1 lg:-bottom-6 left-1/2 -translate-x-1/2 w-[95%] sm:w-[85%] lg:w-[105%] z-10">
                 <div className="relative shadow-[0_20px_50px_rgba(0,0,0,0.12)] rounded-t-2xl md:rounded-t-none rounded-b-[32px] md:rounded-[52px] overflow-hidden">
                   <Image
                     src="/landingimg.png"
@@ -206,7 +202,7 @@ const IgpsHero = () => {
                     className="w-full h-auto"
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -214,14 +210,14 @@ const IgpsHero = () => {
             className={`flex-1 w-full max-w-[32rem] lg:max-w-[35rem] lg:pl-0 flex flex-col justify-between transition-all duration-700 delay-200 ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
               }`}
           >
-            <div className="flex flex-col h-full justify-between py-2">
+            <div className="flex flex-col h-full justify-between py-3">
               <div className="w-full">
-                <p className="igps-intro text-left mb-4">
+                {/* <p className="igps-intro text-left mb-4">
                   Global first platform offering free <br className="hidden lg:block" />
                   international settlements for businesses
-                </p>
+                </p> */}
 
-                <div className="space-y-4 lg:space-y-0 lg:block lg:divide-y lg:divide-gray-200">
+                <div className="space-y-4 lg:space-y-0 lg:block lg:divide-y lg:divide-gray-200 sm:py-6">
                   {checklistItems.map((item, idx) => (
                     <div
                       key={idx}
@@ -256,7 +252,7 @@ const IgpsHero = () => {
                 </div>
               </div>
 
-              <div className="mt-4">
+              <div className="mt-4 sm: mt-0">
                 <div
                   className={`pl-3 border-l-2 border-gray-400 transition-all duration-700 delay-500 ${isVisible ? "opacity-100" : "opacity-0"
                     }`}

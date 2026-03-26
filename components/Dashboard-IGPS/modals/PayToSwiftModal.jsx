@@ -1,8 +1,9 @@
 import ModalFrame from "./ModalFrame";
 import { useState, useEffect, useRef } from "react";
-import { IgpsService } from "../../../services/igpsService";
+import { useAuth } from "../context/AuthContext";
+import Image from "next/image";
 
-const igpsService = new IgpsService();
+
 
 export default function PayToSwiftModal({
   onClose,
@@ -10,6 +11,7 @@ export default function PayToSwiftModal({
   onAddBeneficiary,
   onPay
 }) {
+  const { igpsService } = useAuth();
   const [beneficiaries, setBeneficiaries] = useState([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef(null);
@@ -73,7 +75,12 @@ export default function PayToSwiftModal({
         {/* HEADER */}
         <div className="flex items-center justify-between p-8 pb-4 shrink-0">
           <button onClick={onBack} className="text-gray-400 hover:text-gray-600">
-            <img src="/icons/back.svg" alt="Back" className="w-6 h-6" />
+            <Image
+              src="/icons/back.svg"
+              alt=""
+              width={24}
+              height={24}
+            />
           </button>
           <h2 className="text-xl font-medium">Pay USD via SWIFT</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">

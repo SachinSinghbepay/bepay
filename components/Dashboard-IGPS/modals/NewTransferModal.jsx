@@ -1,27 +1,29 @@
 import ModalFrame from "./ModalFrame";
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+
 export default function NewTransferModal({ onClose, onGlobalPayout, onPayToEmail, onPayToWallet, onPayToSwift }) {
-    const scrollRef = useRef(null);
-  
-    useEffect(() => {
-      const el = scrollRef.current;
-      if (!el) return;
-  
-      const onWheel = (e) => {
-        const { scrollTop, scrollHeight, clientHeight } = el;
-        const atTop = scrollTop === 0;
-        const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
-  
-        if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
-          e.preventDefault();
-        } else {
-          e.stopPropagation();
-        }
-      };
-      el.addEventListener("wheel", onWheel, { passive: false });
-      return () => el.removeEventListener("wheel", onWheel);
-    }, []);
-  
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const onWheel = (e) => {
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      const atTop = scrollTop === 0;
+      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
+
+      if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+        e.preventDefault();
+      } else {
+        e.stopPropagation();
+      }
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
+
 
   return (
     <ModalFrame size="lg">
@@ -101,13 +103,15 @@ function TransferCard({ title, desc, icon, flags, badge, onClick }) {
       {/* TOP */}
       <div className="flex items-center gap-3 mb-3">
         {flags && (
-          <div className="flex -space-x-2">
+          <div className="flex -space-x-2 items-center">
             {flags.map((src, i) => (
-              <img
+              <Image
                 key={i}
                 src={src}
-                className="h-8 w-8 rounded-full border border-white"
                 alt=""
+                width={32}
+                height={32}
+                className="rounded-full border border-white"
               />
             ))}
             <span className="text-sm text-gray-500 ml-2">+ more</span>
@@ -115,7 +119,12 @@ function TransferCard({ title, desc, icon, flags, badge, onClick }) {
         )}
 
         {icon && (
-          <img src={icon} className="h-8 w-8" alt="" />
+          <Image
+            src={icon}
+            alt=""
+            width={32}
+            height={32}
+          />
         )}
 
         {badge && (

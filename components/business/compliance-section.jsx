@@ -5,29 +5,72 @@ import Image from "next/image";
 import { AnalyticsService } from "@/services/analyticsService";
 import { useRef, useState, useEffect } from "react";
 
+// const complianceData = [
+//   {
+//     icon: "/images/business/certified.svg",
+//     title: "Certified",
+//     badges: ["ISO 27001", "SOC 2", "PCI DSS", "ISO 20022", "ISO 9001"],
+//   },
+//   {
+//     icon: "/images/business/licensed.svg",
+//     title: "Licensed",
+//     badges: ["MSB (USA)", "MSB (CANADA)", "PSP (CANADA)", "VASP (EU)", ""],
+//   },
+//   {
+//     icon: "/images/business/compliant.svg",
+//     title: "Compliant",
+//     badges: ["DORA", "DPDP", "CFT", "MiCA (EU)"],
+//   },
+//   {
+//     icon: "/images/business/protected.svg",
+//     title: "Protected",
+//     badges: ["GDPR", "Multi-Factor Authentication", "24/7 Monitoring", "End-to-End Encryption", "Real-time Fraud Detection"],
+//   },
+// ];
 const complianceData = [
   {
     icon: "/images/business/certified.svg",
     title: "Certified",
-    badges: ["ISO 27001", "SOC 2", "PCI DSS", "ISO 20022", "ISO 9001"],
+    badges: [
+      { name: "ISO 27001", logo: "/icons/ISO-27001.svg" },
+      { name: "SOC 2", logo: "/icons/SOC-2.svg" },
+      { name: "PCI DSS", logo: "/icons/PCI-DSS.svg" },
+      { name: "ISO 20022", logo: "/icons/ISO-20022.svg" },
+      { name: "ISO 9001", logo: "/icons/ISO-9001.svg" },
+    ],
   },
   {
     icon: "/images/business/licensed.svg",
     title: "Licensed",
-    badges: ["MSB (USA)", "MSB (CANADA)", "PSP (CANADA)", "VASP (EU)", ""],
+    badges: [
+      { name: "MSB (USA)", logo: "/icons/MSB-(USA).svg" },
+      { name: "MSB (Canada)", logo:"/canada.png"},
+      { name: "PSP (Canada)", logo:"/canada.png" },
+      { name: "VASP (EU)", logo: "/icons/VASP-(EU).svg" },
+    ],
   },
   {
     icon: "/images/business/compliant.svg",
     title: "Compliant",
-    badges: ["DORA", "DPDP", "CFT", "MiCA (EU)"],
+    badges: [
+      { name: "DORA", logo: '/dora.png' },
+      { name: "DPDP", logo: "/icons/DPDP.svg" },
+      { name: "MiCA (EU)" },
+      { name: "AML/CFT", logo: '/finger.png' },
+    ],
   },
   {
     icon: "/images/business/protected.svg",
     title: "Protected",
-    badges: ["GDPR", "Multi-Factor Authentication", "24/7 Monitoring", "End-to-End Encryption", "Real-time Fraud Detection"],
+     badges: [
+      { name: "GDPR", logo: "/icons/GDPR.svg" },
+      { name: "Multi-Factor Authentication" , logo: "/icons/security-icon.svg" },
+      { name: "24/7 Monitoring", logo: '/monitor.png'},
+      { name: "End-to-End Encryption", logo: '/Encryption.png' },
+      { name: "Real-time Fraud Detection", logo: "/icons/fraud.svg" },
+    ],
   },
 ];
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -87,7 +130,7 @@ export default function ComplianceSection() {
     <section ref={sectionRef} className="py-16 px-4 bg-gray-50">
       <div className="max-w-7xl mx-auto">
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-3"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -118,17 +161,8 @@ export default function ComplianceSection() {
                 <h3 className="text-3xl lg:text-[60px] 3xl:text-[80px] font-[500] text-[#6A6A6A] leading-tight">
                   {item.title}
                 </h3>
-                {/* Mobile-only flag image */}
-                {item.title === "Licensed" && (
-                  <Image
-                    src="/flags.png"
-                    alt="Flag"
-                    width={45}
-                    height={40}
-                    className="absolute top-[29%] right-[5%] pointer-events-none lg:hidden"
-                    loading="lazy" // <-- ADDED
-                  />
-                )}
+
+
               </div>
               <div
                 className={`${index === complianceData.length - 1 ? "md:-mt-8" : ""
@@ -136,28 +170,27 @@ export default function ComplianceSection() {
               >
                 <div className="flex flex-wrap gap-3">
                   {item.badges.map((badge, badgeIndex) => (
-                    <span
+                    <div
                       key={badgeIndex}
-                      className={`px-6 py-3 border text-[#080808] text-sm lg:text-[16px] 3xl:text-[20px] rounded-[24px] font-medium ${badge === "" ? "invisible" : ""
-                        }`}
+                      className="flex items-center gap-3 px-5 py-3 border rounded-[18px] bg-white"
                     >
-                      {badge || "placeholder"}
-                    </span>
+                      {badge.logo && (
+                        <Image
+                          src={badge.logo}
+                          alt={badge.name}
+                          width={38}
+                          height={38}
+                          className="object-contain"
+                        />
+                      )}
+
+                      <span className="text-[#080808] text-sm lg:text-[16px] font-medium whitespace-nowrap">
+                        {badge.name}
+                      </span>
+                    </div>
                   ))}
                 </div>
               </div>
-
-              {/* Desktop-only flag image */}
-              {item.title === "Licensed" && (
-                <Image
-                  src="/igps_flag.png"
-                  alt="Flag"
-                  width={70}
-                  height={63}
-                  className="absolute bottom-8 right-12 lg:bottom-12 lg:right-12 pointer-events-none hidden lg:block"
-                  loading="lazy"
-                />
-              )}
             </motion.div>
           ))}
         </motion.div>

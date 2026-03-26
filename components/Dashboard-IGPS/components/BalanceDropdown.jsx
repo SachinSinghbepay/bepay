@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { useRef, useEffect } from "react";
+import Image from "next/image";
 export default function BalanceDropdown({ wallets = [], onClose }) {
 
     const scrollRef = useRef(null);
@@ -28,18 +28,18 @@ export default function BalanceDropdown({ wallets = [], onClose }) {
     // Helper to get icons
     const getTokenIcon = (currency) => {
         const c = currency?.toLowerCase();
-        if (c === 'usdc') return "/icons/usdc.svg";
-        if (c === 'usdt') return "/icons/usdt.svg";
-        return "/icons/usdc.svg"; // default
+        if (c === 'usdc') return "/icons/USDC.svg";
+        if (c === 'usdt') return "/icons/USDT.svg";
+        return "/icons/USDC.svg"; // default
     }
 
     const getChainIcon = (chain) => {
         const c = chain?.toLowerCase();
-        if (c === 'polygon') return "/icons/polygon.png";
-        if (c === 'solana') return "/icons/solana.svg";
-        if (c === 'tron') return "/icons/tron.svg";
-        if (c === 'ethereum') return "/icons/ethereum.png";
-        return "/icons/polygon.png";
+        if (c === 'polygon') return "/icons/Polygon.png";
+        if (c === 'solana') return "/icons/Solana.svg";
+        if (c === 'tron') return "/icons/TRON.svg";
+        if (c === 'ethereum') return "/icons/eth.SVg";
+        return "/icons/Polygon.png";
     }
 
     return (
@@ -93,7 +93,14 @@ function FiatRow({ img, label, value }) {
         <div className="grid grid-cols-[1fr_auto] items-center">
             {/* LEFT */}
             <div className="flex items-center gap-2">
-                <img src={img} className="h-6 w-6 rounded-full" alt="" />
+                <Image
+                    src={img}
+                    alt={label}
+                    width={24}
+                    height={24}
+                    className="h-6 w-6 rounded-full"
+                />
+
                 <span className="text-[16px] text-[#6A6A6A] font-medium">
                     {label}
                 </span>
@@ -113,12 +120,21 @@ function CryptoRow({ main, chain, label, value, action, subLabel }) {
             {/* LEFT */}
             <div className="flex items-center gap-2">
                 <div className="relative">
-                    <img src={main} className="h-[28px] w-[28px] rounded-full" alt="" />
+                    <Image
+                        src={main}
+                        alt=""
+                        width={28}
+                        height={28}
+                        className="rounded-full"
+                    />
+
                     {chain && (
-                        <img
+                        <Image
                             src={chain}
-                            className="h-[16px] w-[16px] rounded-full absolute bottom-0 right-0 border border-white"
                             alt=""
+                            width={16}
+                            height={16}
+                            className="rounded-full absolute bottom-0 right-0 border border-white"
                         />
                     )}
                 </div>
