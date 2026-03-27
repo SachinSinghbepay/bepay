@@ -75,16 +75,16 @@ export default function ConfirmGlobalPayoutModal({
             <div className="bg-white rounded-3xl h-[85vh] flex flex-col">
                 {/* HEADER */}
                 <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
-                    <button onClick={onBack} className="absolute left-8 text-xl text-gray-500">
+                    <button onClick={onBack} className="absolute left-8 text-xl text-gray-500 cursor-pointer">
                         <Image
                             src="/icons/back.svg"
                             alt=""
-                            width={24}
-                            height={24}
+                            width={18}
+                            height={18}
                         />
                     </button>
                     <h2 className="text-lg font-medium">Review & Confirm</h2>
-                    <button onClick={onClose} className="absolute right-8 text-xl text-gray-500">✕</button>
+                    <button onClick={onClose} className="absolute right-8 text-xl text-gray-500 cursor-pointer"><Image src="/icons/close.png" alt="close" width={16} height={16} /></button>
                 </div>
 
                 {/* SCROLLABLE BODY */}

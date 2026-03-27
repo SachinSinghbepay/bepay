@@ -85,8 +85,8 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
             Edit {data?.email}
           </h2>
 
-          <button onClick={onClose} className="text-gray-500">
-            ✕
+          <button onClick={onClose} className="text-gray-500 cursor-pointer">
+            <Image src="/icons/close.png" alt="close" width={16} height={16} />
           </button>
         </div>
 
@@ -170,7 +170,7 @@ function Input({ label, value, onChange }) {
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full h-14 rounded-2xl border px-4 outline-none"
+        className="w-full py-4 px-4 text-sm rounded-2xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
       />
     </div>
   );

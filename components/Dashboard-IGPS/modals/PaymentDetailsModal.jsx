@@ -26,7 +26,7 @@ export default function PaymentDetailsModal({ order, onClose }) {
     const requestedAmount = `${order.sourceCurrency} ${order.sourceAmount}`;
 
     const destination = `bepay IGPS ${order.targetCurrency} account`;
-
+ 
     return (
         <ModalFrame size="md">
 

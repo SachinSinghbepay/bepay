@@ -2,22 +2,15 @@
 
 import React from "react";
 import Image from "next/image";
-import {
-  LayoutDashboard,
-  Landmark,
-  Users,
-  Wallet ,
-  UserPlus,
-  UserCog
-} from "lucide-react";
+import { Wallet } from "lucide-react";
 
 const menuItems = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "banking", label: "Banking", icon: Landmark },
-  { id: "beneficiary", label: "Beneficiary", icon: Users },
-  { id: "payment", label: "Payment", icon: Wallet  },
-  { id: "team", label: "Team", icon: UserCog },
-  // { id: "invite", label: "Invite", icon: UserPlus },
+  { id: "dashboard", label: "Dashboard", iconKey: "dashboard" },
+  { id: "banking", label: "Banking", iconKey: "bank" },
+  { id: "beneficiary", label: "Beneficiary", iconKey: "beneficiary" },
+  { id: "payment", label: "Payment", lucideIcon: Wallet },
+  { id: "team", label: "Team", iconKey: "team" },
+  // { id: "invite", label: "Invite", iconKey: "invite" },
 ];
 
 export default function Sidebar({ active, onChange, isOpen }) {
@@ -41,13 +34,13 @@ top-0 left-0 h-screen lg:h-auto
       {/* Logo */}
       <div className="flex justify-center items-center gap-4 my-6">
         <Image
-          src={"/bepayicon.png"}
-          height={40}
-          width={41}
+          src={"/bepay_business_logo.png"}
+          height={150}
+          width={150}
           alt="logo"
-          className="object-cover h-[40px] w-[42px]"
+          className=" "
         />
-        <h2 className="font-semibold">bepay IGPS</h2>
+        {/* <h2 className="font-semibold">bepay IGPS</h2> */}
       </div>
 
       {/* Menu */}
@@ -56,7 +49,8 @@ top-0 left-0 h-screen lg:h-auto
           <SidebarItem
             key={item.id}
             label={item.label}
-            Icon={item.icon}
+            iconKey={item.iconKey}
+            lucideIcon={item.lucideIcon}
             active={active === item.id}
             onClick={() => onChange(item.id)}
           />
@@ -69,7 +63,7 @@ top-0 left-0 h-screen lg:h-auto
 
 /* -------- Sidebar Item -------- */
 
-function SidebarItem({ label, Icon, active, onClick }) {
+function SidebarItem({ label, iconKey, lucideIcon: LucideIcon, active, onClick }) {
   return (
     <button
       onClick={onClick}
@@ -79,7 +73,26 @@ function SidebarItem({ label, Icon, active, onClick }) {
           : "text-gray-600 hover:bg-gray-200"
         }`}
     >
-      <Icon className="w-5 h-5" />
+      {LucideIcon ? (
+        <LucideIcon className="w-5 h-5" />
+      ) : (
+        <span className="relative w-5 h-5 shrink-0">
+          <Image
+            src={`/icons/${iconKey}-black.png`}
+            alt={label}
+            width={20}
+            height={20}
+            className={`absolute inset-0 transition-opacity duration-0 ${active ? "opacity-0" : "opacity-100"}`}
+          />
+          <Image
+            src={`/icons/${iconKey}-white.png`}
+            alt={label}
+            width={20}
+            height={20}
+            className={`absolute inset-0 transition-opacity duration-0 ${active ? "opacity-100" : "opacity-0"}`}
+          />
+        </span>
+      )}
       {label}
     </button>
   );

@@ -534,3 +534,34 @@ iframe[src*="accounts.google.com"] {
     width: 100% !important;
     border-radius: 16px !important;
 }
+
+/* ── Dashboard modal inputs: typed text color + no focus highlight ── */
+.dashboard-input {
+  color: #1a1a1a;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.dashboard-input:focus {
+  border-color: #e5e7eb !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ── Custom scrollbars (IGPS only) ── */
+.igps-layout *::-webkit-scrollbar {
+  width: 6px;
+}
+.igps-layout *::-webkit-scrollbar-track {
+  background: transparent;
+}
+.igps-layout *::-webkit-scrollbar-thumb {
+  background-color: #DFDFDF;
+  border-radius: 99px;
+}
+.igps-layout *::-webkit-scrollbar-thumb:hover {
+  background-color: #C8C8C8;
+}
+.igps-layout * {
+  scrollbar-width: thin;
+  scrollbar-color: #DFDFDF transparent;
+}
