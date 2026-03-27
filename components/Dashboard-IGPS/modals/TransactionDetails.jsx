@@ -2,10 +2,83 @@ import { useEffect, useRef } from "react";
 import ModalFrame from "./ModalFrame";
 import Image from "next/image";
 
+// Main coin icons
+const COIN_ICONS = {
+    USDC:    "/icons/USDC.png",
+    USDT:    "/icons/USDT.png",
+    ETH:     "/icons/Eth.png",
+    SOL:     "/icons/Sol.png",
+    TRX:     "/icons/TRON.png",
+    MATIC:   "/icons/Polygon.png",
+    POL:     "/icons/Polygon.png",
+};
+
+// Network/chain icons (small overlay)
+const NETWORK_ICONS = {
+    POL:     "/icons/Polygon.png",
+    POLYGON: "/icons/Polygon.png",
+    SOL:     "/icons/Sol.png",
+    SOLANA:  "/icons/Sol.png",
+    TRX:     "/icons/TRON.png",
+    TRON:    "/icons/TRON.png",
+    ETH:     "/icons/Eth.png",
+};
+
+// Supports "USDC_POL", "USDC (POL)", "USDC" + optional chain string like "polygon"
+function parseCurrencyIcons(currency, chain) {
+    if (!currency) return { coin: null, network: null };
+    const upper = currency.toUpperCase();
+
+    // Split on _ or space/paren to get [coinPart, networkPart]
+    // e.g. "USDC_POL" → ["USDC", "POL"], "USDC (POL)" → ["USDC", "POL"]
+    const parts = upper.replace(/[()]/g, "").split(/[_\s]+/);
+    const coinPart = parts[0];
+    const networkPart = parts[1] ?? chain?.toUpperCase() ?? null;
+
+    const coinKey = Object.keys(COIN_ICONS).find((k) => k === coinPart);
+    const coin = coinKey ? COIN_ICONS[coinKey] : null;
+
+    const networkKey = networkPart
+        ? Object.keys(NETWORK_ICONS).find((k) => networkPart.includes(k))
+        : null;
+    const network = networkKey ? NETWORK_ICONS[networkKey] : null;
+
+    return { coin, network };
+}
+
 export default function TransactionDetails({ transaction, onClose, onBack }) {
     const scrollRef = useRef(null);
 
     const status = transaction?.status?.toLowerCase() || "pending";
+    const { coin: coinIcon, network: networkIcon } = parseCurrencyIcons(
+        transaction?.sourceCurrency ?? transaction?.currency,
+        transaction?.depositChain
+    );
+
+    // "USDC_POL" → "USDC (POL)", "USDT_SOL" → "USDT (SOL)", "USDC" → "USDC"
+    const rawCurrency = transaction?.sourceCurrency ?? transaction?.currency ?? "";
+    const [coinLabel, networkLabel] = rawCurrency.split("_");
+    const currencyLabel = networkLabel ? `${coinLabel} (${networkLabel})` : coinLabel;
+
+    const amount = transaction?.sourceAmount ?? transaction?.amount ?? "";
+
+    const walletAddr = transaction?.depositWalletAddress;
+    const truncatedWallet = walletAddr
+        ? `${walletAddr.slice(0, 6)}...${walletAddr.slice(-4)}`
+        : null;
+    const destination =
+        transaction?.beneficiary?.fullName ||
+        transaction?.beneficiary?.email ||
+        transaction?.email ||
+        truncatedWallet ||
+        "—";
+
+    const dateStr = transaction?.createdAt
+        ? new Date(transaction.createdAt).toLocaleString("en-US", {
+              month: "short", day: "numeric", year: "numeric",
+              hour: "numeric", minute: "2-digit", hour12: true,
+          })
+        : null;
 
     // Dummy data if transaction prop is missing
     const dummyDetails = [
@@ -108,9 +181,9 @@ export default function TransactionDetails({ transaction, onClose, onBack }) {
 
                 <button
                     onClick={onClose}
-                    className="absolute right-10 top-8 text-gray-400 hover:text-gray-600 text-xl"
+                    className="absolute right-10 top-8 text-gray-400 hover:text-gray-600 text-xl cursor-pointer"
                 >
-                    ✕
+                    <Image src="/icons/close.png" alt="close" width={16} height={16} />
                 </button>
             </div>
 
@@ -125,20 +198,27 @@ export default function TransactionDetails({ transaction, onClose, onBack }) {
                 {/* FIXED ICON + SUMMARY */}
                 <div className=" mt-6">
                     <div className="flex justify-center mb-6">
-                        <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center">
-                            <div className="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center text-xl">
-                                $
-                            </div>
+                        <div className="relative h-16 w-16">
+                            {coinIcon ? (
+                                <Image src={coinIcon} alt={transaction?.currency ?? "coin"} width={64} height={64} className="h-16 w-16 object-contain" />
+                            ) : (
+                                <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <div className="h-10 w-10 rounded-full bg-blue-600 text-white flex items-center justify-center text-xl">$</div>
+                                </div>
+                            )}
+                            {networkIcon && (
+                                <Image src={networkIcon} alt="network" width={22} height={22} className="absolute bottom-0 right-0 h-5 w-5 object-contain rounded-full bg-white" />
+                            )}
                         </div>
                     </div>
 
                     <div className="text-center space-y-1 mb-6">
                         <p className="text-gray-700">
-                            You’ve sent <b>10 USDC (POL)</b> to <b>0xce40...j6gf270</b>
+                            You’ve sent <b>{amount} {currencyLabel}</b> to <b>{destination}</b>
                         </p>
-                        <p className="text-sm text-gray-500">
-                            Jan 31, 2026, 09:35 PM
-                        </p>
+                        {dateStr && (
+                            <p className="text-sm text-gray-500">{dateStr}</p>
+                        )}
                     </div>
                 </div>
 
@@ -147,11 +227,12 @@ export default function TransactionDetails({ transaction, onClose, onBack }) {
                         <div className="bg-gray-50 rounded-2xl px-6 py-4 flex justify-between ">
                             <span className="text-gray-500">Status</span>
                             <span
-                                className={`font-medium ${status === "successful"
-                                    ? "text-green-600"
-                                    : status === "pending"
-                                        ? "text-yellow-600"
-                                        : "text-red-600"
+                                className={`font-medium ${
+                                    status === "successful" || status === "completed"
+                                        ? "text-[#0E7630]"
+                                        : status === "pending" || status === "waiting"
+                                            ? "text-yellow-600"
+                                            : "text-red-600"
                                     }`}
                             >
                                 {status.charAt(0).toUpperCase() + status.slice(1)}

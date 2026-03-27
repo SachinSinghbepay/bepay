@@ -2,6 +2,7 @@
 import ModalFrame from "./ModalFrame";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
+import Image from "next/image";
 
 
 export default function RemoveMemberModal({ onClose, member, refresh }) {
@@ -53,9 +54,9 @@ export default function RemoveMemberModal({ onClose, member, refresh }) {
                 {/* Close X */}
                 <button
                     onClick={onClose}
-                    className="absolute right-6 top-6 text-gray-500"
+                    className="absolute right-6 top-6 text-gray-500 cursor-pointer"
                 >
-                    ✕
+                    <Image src="/icons/close.png" alt="close" width={16} height={16} />
                 </button>
 
                 {/* Avatar */}

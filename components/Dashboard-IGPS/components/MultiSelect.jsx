@@ -38,28 +38,33 @@ export default function MultiSelect({
       {/* SELECT BOX */}
       <div
         onClick={() => setOpen(!open)}
-        className="w-full rounded-xl border px-4 py-3 flex flex-wrap gap-2 cursor-pointer"
+        className="w-full rounded-xl border px-4 h-[54px] flex items-center gap-2 cursor-pointer overflow-hidden"
       >
         {value.length === 0 && (
-          <span className="text-gray-400">{placeholder}</span>
+          <span className="text-sm text-[#C0C0C0] flex-1">{placeholder}</span>
         )}
 
-        {value.map((item) => (
-          <div
-            key={item}
-            className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-sm"
-          >
-            {item}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                removeChip(item);
-              }}
-            >
-              ✕
-            </button>
+        {value.length > 0 && (
+          <div className="flex items-center gap-2 flex-1 overflow-hidden">
+            {value.map((item) => (
+              <div
+                key={item}
+                className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-full text-sm whitespace-nowrap shrink-0"
+              >
+                {item}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeChip(item);
+                  }}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
 
       {/* DROPDOWN */}

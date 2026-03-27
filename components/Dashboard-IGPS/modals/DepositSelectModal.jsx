@@ -1,9 +1,7 @@
 import ModalFrame from "./ModalFrame";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
-
-
 
 export default function DepositSelectModal({
   onClose,
@@ -23,6 +21,7 @@ export default function DepositSelectModal({
         const res = await igpsService.listWallets();
         if (res.success && res.data && Array.isArray(res.data.wallets)) {
           setWallets(res.data.wallets);
+          console.log(res.data.wallets)
         }
       } catch (error) {
         console.error("Failed to fetch wallets", error);
@@ -34,95 +33,64 @@ export default function DepositSelectModal({
   }, []);
 
 
-  const scrollRef = useRef(null);
 
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    const onWheel = (e) => {
-      const { scrollTop, scrollHeight, clientHeight } = el;
-      const atTop = scrollTop === 0;
-      const atBottom = scrollTop + clientHeight >= scrollHeight - 1;
-
-      if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
-        e.preventDefault();
-      } else {
-        e.stopPropagation();
-      }
-    };
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
-  }, []);
-
- 
   return (
     <ModalFrame size="md">
-      {/* HEADER */}
-      <div className="flex flex-col max-h-[80vh] h-full">
-        <div className="relative px-10 pt-8 pb-4 mb-4 text-center">
-          {showBackButton && (
-            <button
-              onClick={onBack}
-              className="absolute left-6 text-xl text-gray-500"
-            >
-              <Image
-                src="/icons/back.svg"
-                alt=""
-                width={24}
-                height={24}
+      {/* ModalFrame is already h-[90vh] flex flex-col overflow-hidden */}
+      {/* So we just need to fill it properly */}
+
+      {/* HEADER — fixed, never scrolls */}
+      <div className="relative flex items-center justify-center px-2 sm:px-8 pt-8 mb-4">
+        {showBackButton && (
+          <button onClick={onBack} className="absolute left-6 text-xl text-gray-500 cursor-pointer">
+            <Image src="/icons/back.svg" alt="" width={18} height={18} />
+          </button>
+        )}
+        <h2 className="text-lg font-semibold text-gray-900">
+          {heading}
+        </h2>
+
+        <button
+          onClick={onClose}
+          className="absolute right-8 text-xl text-gray-400 hover:text-gray-600 cursor-pointer"
+        >
+          <Image src="/icons/close.png" alt="close" width={16} height={16} />
+        </button>
+      </div>
+
+
+
+      {/* CONTENT — this is the only scrollable area */}
+      <div className="px-10 pb-10 space-y-8 overflow-y-auto flex-1 min-h-0 scroll-smooth">
+        <div className="space-y-4">
+          <p className="text-gray-500 text-sm">Select a stablecoin to deposit</p>
+
+          {loading ? (
+            <div className="text-center py-4 text-gray-500">Loading wallets...</div>
+          ) : (
+            wallets.map((wallet, index) => (
+              <DepositRow
+                key={index}
+                main={wallet.tokenUrl || "/icons/usdc.svg"}
+                network={wallet.networkUrl || "/icons/polygon.png"}
+                label={wallet.currency}
+                sub={`(${wallet.chain})`}
+                onSelect={() => onSelect({
+                  currency: wallet.currency,
+                  network: wallet.chain,
+                  currencyLogo: wallet.tokenUrl,
+                  networkLogo: wallet.networkUrl,
+                  address: wallet.address
+                })}
               />
-            </button>
+            ))
           )}
 
-          <h2 className="text-lg font-medium text-gray-900">{heading}</h2>
+          {!loading && wallets.length === 0 && (
+            <div className="text-center py-4 text-gray-400">No wallets found</div>
+          )}
 
-          <button
-            onClick={onClose}
-            className="absolute right-10 top-8 text-gray-400 hover:text-gray-600 text-xl"
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* CONTENT */}
-        <div
-          ref={scrollRef}
-          className="px-10 pb-10 space-y-8 max-h-[60vh] overflow-y-auto">
-          {/* SECTION */}
-          <div className="space-y-4">
-            <p className="text-gray-500 text-sm">
-              Select a stablecoin to deposit
-            </p>
-
-            {loading ? (
-              <div className="text-center py-4 text-gray-500">Loading wallets...</div>
-            ) : (
-              wallets.map((wallet, index) => (
-                <DepositRow
-                  key={index}
-                  main={wallet.tokenUrl || "/icons/usdc.svg"}
-                  network={wallet.networkUrl || "/icons/polygon.png"}
-                  label={wallet.currency}
-                  sub={`(${wallet.chain})`} // Format chain name if needed, e.g. title case
-                  onSelect={() => onSelect({
-                    currency: wallet.currency,
-                    network: wallet.chain, // pass chain name/slug
-                    currencyLogo: wallet.tokenUrl,
-                    networkLogo: wallet.networkUrl,
-                    address: wallet.address // Pass address!
-                  })}
-                />
-              ))
-            )}
-
-            {!loading && wallets.length === 0 && (
-              <div className="text-center py-4 text-gray-400">No wallets found</div>
-            )}
-          </div>
-
-          {/* SECOND SECTION */}
-          {showOtherTokens && (
+          {/* {showOtherTokens && (
             <div className="space-y-4">
               <p className="text-gray-500 text-sm">
                 Deposit using another token
@@ -130,14 +98,12 @@ export default function DepositSelectModal({
 
               <OtherTokensRow />
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </ModalFrame>
   );
 }
-
-/* ---------- ROWS ---------- */
 
 function DepositRow({ main, network, label, sub, onSelect }) {
   return (
@@ -146,34 +112,27 @@ function DepositRow({ main, network, label, sub, onSelect }) {
       className="flex items-center justify-between bg-gray-50 rounded-2xl px-6 py-4 cursor-pointer hover:bg-gray-100"
     >
       <div className="flex items-center gap-4">
-        {/* ICON STACK */}
         <div className="relative h-10 w-10">
-          <Image
-            src={main}
-            alt=""
-            width={40}
-            height={40}
-            className="rounded-full"
-          />
-          <div className="absolute bottom-0 right-0 p-0 bg-gray-50 rounded-full border border-gray-300">
-            <Image
-              src={network}
-              alt=""
-              width={20}
-              height={20}
-              className="rounded-full "
-            />
+          <Image src={main} alt="" width={40} height={40} className="rounded-full" />
+          <div className="absolute bottom-0 right-0 bg-gray-50 rounded-full border border-gray-300">
+            <Image src={network} alt="" width={20} height={20} className="rounded-full" />
           </div>
         </div>
-
         <div className="text-gray-800">
           <span className="font-medium">{label}</span>{" "}
           <span className="text-gray-500">{sub}</span>
         </div>
       </div>
-
       <Chevron />
     </div>
+  );
+}
+
+function Chevron() {
+  return (
+    <svg className="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M9 18l6-6-6-6" />
+    </svg>
   );
 }
 
@@ -199,19 +158,5 @@ function OtherTokensRow() {
 
       <Chevron />
     </div>
-  );
-}
-
-function Chevron() {
-  return (
-    <svg
-      className="h-5 w-5 text-gray-400"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <path d="M9 18l6-6-6-6" />
-    </svg>
   );
 }

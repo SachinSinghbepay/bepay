@@ -79,8 +79,8 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
     // --- WALLET STATE ---
     const [wallets, setWallets] = useState([{ id: 1, address: "", network: "" }]);
     const networkOptions = [
-        { label: "Polygon", value: "polygon", icon: "/icons/polygon.svg" },
-        { label: "Ethereum", value: "ethereum", icon: "/icons/eth.svg" }
+        { label: "Polygon", value: "polygon", icon: "/icons/Polygon.png" },
+        { label: "Ethereum", value: "ethereum", icon: "/icons/Eth.png" }
     ];
 
     const transferTypeOptions = [
@@ -236,7 +236,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
         }
 
         if (!email.trim()) return false;
-        if (!country) return false;
+        if (!country || !addressLine1.trim() || !city.trim() || !selectedState.trim() || !zip.trim()) return false;
 
         const fieldValues = {
             accountNumber,
@@ -339,7 +339,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
     const handleSubmit = async () => {
         if (loading) return;
         setLoading(true);
-        setError("");
+        setError(null);
 
         const fullPhone =
             phoneNumber.trim() ? `${selectedPhoneOption?.dialCode}${phoneNumber}`
@@ -427,15 +427,22 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                 onClose();
                 onSuccess?.();
             } else {
-                setError(res.error || res.message || "Failed to create beneficiary");
+                setError({
+                    message: res.error || res.message || "Failed to create beneficiary",
+                    details: Array.isArray(res.details) ? res.details : [],
+                });
             }
         } catch (err) {
-            setError(err.message);
+            setError({ message: err.message, details: [] });
         } finally {
             setLoading(false);
         }
     };
 
+
+    const isValid =
+        (addBank && isBankFormValid()) ||
+        (addWallet && isWalletFormValid());
 
     return (
         <ModalFrame size="lg">
@@ -443,23 +450,32 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
 
                 {/* HEADER */}
                 <div className="relative flex items-center justify-center md:px-8 pt-6 mb-8">
-                    <button onClick={onBack} className="absolute left-8 text-xl text-gray-500">
+                    <button onClick={onBack} className="absolute left-8 text-xl text-gray-500 cursor-pointer">
                         <Image
                             src="/icons/back.svg"
                             alt=""
-                            width={24}
-                            height={24}
+                            width={18}
+                            height={18}
                         />
                     </button>
                     <h2 className="text-lg font-medium">Add beneficiary</h2>
-                    <button onClick={onClose} className="absolute right-8 text-xl text-gray-500">
-                        ✕
+                    <button onClick={onClose} className="absolute right-8 text-xl text-gray-500 cursor-pointer">
+                        <Image src="/icons/close.png" alt="close" width={16} height={16} />
                     </button>
                 </div>
 
                 {/* BODY */}
                 <div ref={scrollRef} className="flex-1 overflow-y-auto md:px-8 py-6 space-y-6 pb-40">
-                    {error && <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">{error}</div>}
+                    {error && (
+                        <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm space-y-1">
+                            <p className="font-medium">{error.message}</p>
+                            {error.details?.length > 0 && (
+                                <ul className="list-disc list-inside space-y-0.5 text-xs">
+                                    {error.details.map((d, i) => <li key={i}>{d}</li>)}
+                                </ul>
+                            )}
+                        </div>
+                    )}
 
                     {/* Beneficiary Type Selector */}
                     <div className="space-y-2">
@@ -481,7 +497,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
                                     placeholder="John"
-                                    className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                    className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -490,7 +506,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
                                     placeholder="Doe"
-                                    className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                    className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
                                 />
                             </div>
                         </div>
@@ -502,7 +518,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                     value={businessName}
                                     onChange={(e) => setBusinessName(e.target.value)}
                                     placeholder="Your Business Name"
-                                    className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                    className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -511,7 +527,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                     value={businessRegistrationNumber}
                                     onChange={(e) => setbusinessRegistrationNumber(e.target.value)}
                                     placeholder="Your Business Registration Number"
-                                    className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                    className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
                                 />
                             </div>
                         </>
@@ -524,7 +540,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="john@example.com"
-                            className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                            className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
                         />
                     </div>
 
@@ -555,8 +571,9 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                 <CustomSelect
                                     options={countries}
                                     value={country}
-                                    onChange={setCountry}
+                                    onChange={(val) => { setCountry(val); setSelectedState(""); }}
                                     placeholder="Select Country"
+                                    searchable
                                 />
                             </div>
                             {fields.includes("bankId") && (
@@ -573,7 +590,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                                 }}
                                                 onFocus={() => setBankDropdownOpen(true)}
                                                 placeholder="Search bank"
-                                                className="w-full mt-2 h-12 rounded-xl border px-4 outline-none focus:border-black"
+                                                className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
                                             />
 
                                             {bankDropdownOpen && (
@@ -607,7 +624,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                             placeholder="Enter bank name"
                                             value={bankSearch}
                                             onChange={(e) => setBankSearch(e.target.value)}
-                                            className="w-full mt-2 h-12 rounded-xl border px-4 outline-none focus:border-black"
+                                            className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
                                         />
                                     )}
                                 </div>
@@ -635,7 +652,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                             placeholder="Account Number"
                                             value={accountNumber}
                                             onChange={(e) => setAccountNumber(e.target.value)}
-                                            className="w-full h-12 border rounded-xl px-4"
+                                            className="w-full py-4 px-4 text-sm border rounded-xl dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
                                         />
                                     </div>
                                 )}
@@ -659,7 +676,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                             placeholder="Routing Number"
                                             value={routingNumber}
                                             onChange={(e) => setRoutingNumber(e.target.value)}
-                                            className="w-full h-12 border rounded-xl px-4"
+                                            className="w-full py-4 px-4 text-sm border rounded-xl dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
                                         />
                                     </div>
                                 )}
@@ -671,7 +688,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                             placeholder="IFSC Code"
                                             value={ifscCode}
                                             onChange={(e) => setIfscCode(e.target.value)}
-                                            className="w-full h-12 border rounded-xl px-4"
+                                            className="w-full py-4 px-4 text-sm border rounded-xl dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
                                         />
                                     </div>
                                 )}
@@ -683,7 +700,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                             placeholder="PIX Key"
                                             value={pixKeyId}
                                             onChange={(e) => setPixKeyId(e.target.value)}
-                                            className="w-full h-12 border rounded-xl px-4"
+                                            className="w-full py-4 px-4 text-sm border rounded-xl dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
                                         />
                                     </div>
                                 )}
@@ -695,7 +712,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                             placeholder="Tax ID"
                                             value={taxId}
                                             onChange={(e) => setTaxId(e.target.value)}
-                                            className="w-full h-12 border rounded-xl px-4"
+                                            className="w-full py-4 px-4 text-sm border rounded-xl dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
                                         />
                                     </div>
                                 )}
@@ -706,7 +723,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                     placeholder="IFSC Code"
                                     value={ifscCode}
                                     onChange={(e) => setIfscCode(e.target.value)}
-                                    className="w-full h-12 border rounded-xl px-4"
+                                    className="w-full py-3 px-4 text-sm border rounded-xl"
                                 /> */}
 
                                 <div className="space-y-2">
@@ -767,7 +784,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                             value={phoneNumber}
                                             onChange={(e) => setPhoneNumber(e.target.value)}
                                             placeholder="Enter beneficiary phone number"
-                                            className="flex-1 h-12 rounded-xl border px-4 outline-none focus:border-black text-sm"
+                                            className="flex-1 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
                                         />
                                     </div>
                                 </div>
@@ -782,7 +799,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                         value={addressLine1}
                                         onChange={(e) => setAddressLine1(e.target.value)}
                                         placeholder="123 Main St"
-                                        className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                        className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
                                     />
                                     {/[^a-zA-Z0-9\s]/.test(addressLine1) && (
                                         <p className="text-xs text-amber-600">
@@ -798,7 +815,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                             value={city}
                                             onChange={(e) => setCity(e.target.value)}
                                             placeholder="New York"
-                                            className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                            className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -810,13 +827,14 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                                 value={selectedState}
                                                 onChange={setSelectedState}
                                                 placeholder={loadingStates ? "Loading..." : "Select state"}
+                                                searchable
                                             />
                                         ) : (
                                             <input
                                                 value={selectedState}
                                                 onChange={(e) => setSelectedState(e.target.value)}
                                                 placeholder="Enter state"
-                                                className="w-full mt-2 h-12 rounded-xl border px-4 outline-none focus:border-black"
+                                                className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
                                             />
                                         )}
                                     </div>
@@ -828,7 +846,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                         value={zip}
                                         onChange={(e) => setZip(e.target.value)}
                                         placeholder="10001"
-                                        className="w-full mt-2 h-12 rounded-xl border px-4 outline-none active:border-black focus:border-black"
+                                        className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
                                     />
                                 </div>
                             </div>
@@ -839,6 +857,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                     {/* --- WALLET FORM --- */}
                     {addWallet && (
                         <div className="pt-8 space-y-6">
+                            <h1 className="text-xl mb-3 font-medium">Wallet addresses</h1>
                             {wallets.map((w, i) => (
                                 <WalletAddressBlock
                                     key={w.id}
@@ -859,24 +878,23 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                             </button>
                         </div>
                     )}
+                    {/* FOOTER */}
+                    <div className="px-8 pb-8 pt-4 space-y-4 bg-white border-t">
+                        <button
+                            disabled={!isValid || loading}
+                            onClick={handleSubmit}
+                            className={`w-full h-14 rounded-xl text-white text-base transition-colors ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-400 cursor-not-allowed"}`}
+                        >
+                            {loading ? "Adding..." : "Add beneficiary"}
+                        </button>
 
+                        <button onClick={onClose} className="w-full text-center text-base hover:text-gray-700">
+                            Cancel
+                        </button>
+                    </div>
                 </div>
 
-                {/* FOOTER */}
-                <div className="px-8 pb-8 pt-4 space-y-4 bg-white border-t">
-                    <button
-                        disabled={(!addBank && !addWallet) || loading}
-                        onClick={handleSubmit}
-                        className={`w-full h-14 rounded-full text-white text-base transition-colors ${(addBank || addWallet) ? "bg-black hover:bg-gray-800" : "bg-gray-400 cursor-not-allowed"
-                            }`}
-                    >
-                        {loading ? "Adding..." : "Add beneficiary"}
-                    </button>
 
-                    <button onClick={onClose} className="w-full text-center text-base hover:text-gray-700">
-                        Cancel
-                    </button>
-                </div>
             </div>
         </ModalFrame>
     );
@@ -884,9 +902,15 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
 
 function OptionCard({ title, desc, checked, onChange }) {
     return (
-        <label className={`cursor-pointer rounded-2xl p-5 border transition ${checked ? "border-black bg-white" : "bg-[#FAFAFA]"}`}>
+        <label onClick={onChange} className={`cursor-pointer rounded-2xl p-5 border transition ${checked ? "border-black bg-white" : "bg-[#FAFAFA]"}`}>
             <div className="flex items-start gap-3">
-                <input type="checkbox" checked={checked} onChange={onChange} className="mt-1 h-4 w-4 accent-black" />
+                <div className={`mt-0.5 shrink-0 h-6 w-6 rounded-sm flex items-center justify-center transition-colors ${checked ? "bg-[#1C1C1C]" : "bg-gray-200"}`}>
+                    {checked && (
+                        <svg className="h-4.5 w-4.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                            <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    )}
+                </div>
                 <div>
                     <p className="font-medium">{title}</p>
                     <p className="text-sm text-gray-500">{desc}</p>
@@ -897,39 +921,60 @@ function OptionCard({ title, desc, checked, onChange }) {
 }
 
 function WalletAddressBlock({ index, data, networkOptions, canRemove, onRemove, onChange }) {
+    const handlePaste = async () => {
+        try {
+            const text = await navigator.clipboard.readText();
+            onChange("address", text);
+        } catch {
+            // clipboard access denied — do nothing
+        }
+    };
+
     return (
-        <div className="relative rounded-2xl bg-[#FAFAFA] px-4 py-7 space-y-4">
-            <div className="flex items-center justify-between">
-                <p className="font-medium">Wallet address {index}</p>
-                {canRemove && (
-                    <button onClick={onRemove} className="text-gray-400 hover:text-gray-700 text-lg">✕</button>
-                )}
-            </div>
+        <div>
+            <div className="relative rounded-2xl bg-[#F9F9F9] px-4 py-7 space-y-4">
 
-            <CustomSelect
-                options={networkOptions}
-                placeholder="Select network"
-                value={data.network}
-                onChange={(val) => onChange("network", val)}
-            />
-
-            <div className="relative">
-                <input
-                    value={data.address}
-                    onChange={(e) => onChange("address", e.target.value)}
-                    className="w-full rounded-xl border px-3 py-5 pr-16 text-sm outline-none focus:border-black"
-                    placeholder="Enter wallet address"
-                />
-            </div>
-            <div className="text-[12px] text-orange-600 flex items-start gap-1">
-                <Image
-                    src="/icons/i.svg"
-                    alt=""
-                    width={16}
-                    height={16}
-                    className="w-4"
-                />
-                Please verify the wallet address and network carefully.
+                <div className="flex items-center justify-between">
+                    <p className="font-bold text-md">Wallet address {index}</p>
+                    {canRemove && (
+                        <button onClick={onRemove} className="text-gray-400 hover:text-gray-700 text-lg"><Image src="/icons/close.png" alt="close" width={14} height={14} /></button>
+                    )}
+                </div>
+                <div className="space-y-3">
+                    <label className="text-sm text-[#6A6A6A]">Network</label>
+                    <CustomSelect
+                        options={networkOptions}
+                        placeholder="Select network"
+                        value={data.network}
+                        onChange={(val) => onChange("network", val)}
+                    />
+                </div>
+                <div className="relative ">
+                    <label className="text-sm text-[#6A6A6A]">Wallet address</label>
+                    <input
+                        value={data.address}
+                        onChange={(e) => onChange("address", e.target.value)}
+                        className="w-full rounded-xl border px-4 py-4 pr-16 text-sm dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+                        placeholder="Enter wallet address"
+                    />
+                    <button
+                        type="button"
+                        onClick={handlePaste}
+                        className="absolute right-4 top-12 -translate-y-1/2 text-sm font-medium text-[#6A6A6A] hover:opacity-70 transition-opacity"
+                    >
+                        Paste
+                    </button>
+                </div>
+                <div className="text-[12px] text-[#C07417] flex items-start gap-1">
+                    <Image
+                        src="/icons/iorange.svg"
+                        alt=""
+                        width={16}
+                        height={16}
+                        className="w-5 mt-0.5"
+                    />
+                    Please verify the wallet address and network carefully before sending funds to ensure a successful transfer. bepay IGPS will not be responsible for any errors or loss of funds.
+                </div>
             </div>
         </div>
     );

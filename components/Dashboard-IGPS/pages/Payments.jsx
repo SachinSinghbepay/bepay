@@ -20,12 +20,8 @@ export default function Payments({ onOpenModal }) {
 
   const filters = [
     "All",
-    "Requested",
-    "Awaiting",
-    "Received",
-    "Failed",
-    "Cancelled",
-    "Rejected",
+    ...Array.from(new Set(orders.map(o => o.status).filter(Boolean)))
+      .map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()),
   ];
 
 
@@ -34,7 +30,7 @@ export default function Payments({ onOpenModal }) {
     USDT: "/icons/USDT.svg",
     DAI: "/icons/dai.svg",
     BTC: "/icons/btc.svg",
-    ETH: "/icons/eth.svg"
+    ETH: "/icons/Eth.png"
   };
 
   const fiatIcons = {
@@ -136,8 +132,8 @@ export default function Payments({ onOpenModal }) {
         <div className="flex items-center gap-3">
           <Image
             src={getTokenIcon(order.sourceCurrency)}
-            width={28}
-            height={28}
+            width={32}
+            height={32}
             alt={order.sourceCurrency}
           />
           <div>
@@ -205,15 +201,9 @@ export default function Payments({ onOpenModal }) {
   const filteredOrders =
     activeFilter === "All"
       ? orders
-      : orders.filter((order) => {
-        const s = order.status?.toLowerCase();
-
-        if (activeFilter === "Received") {
-          return s === "completed" || s === "received";
-        }
-
-        return s === activeFilter.toLowerCase();
-      });
+      : orders.filter(order =>
+          order.status?.toLowerCase() === activeFilter.toLowerCase()
+        );
 
   return (
     <div className="w-full p-8">
@@ -242,9 +232,9 @@ export default function Payments({ onOpenModal }) {
           </div>
         </div>
 
-        <button className="shrink-0 bg-black text-white h-12 px-7 rounded-full text-sm font-medium">
+        {/* <button className="shrink-0 bg-black text-white h-12 px-7 rounded-full text-sm font-medium">
           Request payment
-        </button>
+        </button> */}
       </div>
 
       {/* Table */}

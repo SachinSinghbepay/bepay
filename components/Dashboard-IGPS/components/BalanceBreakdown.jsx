@@ -22,7 +22,7 @@ export default function BalanceBreakdown({ wallets = [], loading }) {
         if (c === 'polygon') return "/icons/Polygon.png";
         if (c === 'solana') return "/icons/Solana.svg";
         if (c === 'tron') return "/icons/TRON.svg";
-        if (c === 'ethereum') return "/icons/eth.svg";
+        if (c === 'ethereum') return "/icons/Eth.png";
         return "/icons/Polygon.png";
     }
 

@@ -44,14 +44,14 @@ export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
                 <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
                     {/* Back */}
                     <button
-                        className="absolute left-8 text-xl text-gray-500"
+                        className="absolute left-8 text-xl text-gray-500 cursor-pointer"
                         onClick={onBack}
                     >
                         <Image
                             src="/icons/back.svg"
                             alt=""
-                            width={24}
-                            height={24}
+                            width={18}
+                            height={18}
                         />
                     </button>
 
@@ -61,10 +61,10 @@ export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
 
                     {/* Close */}
                     <button
-                        className="absolute right-8 text-xl text-gray-400 hover:text-gray-600"
+                        className="absolute right-8 text-xl text-gray-400 hover:text-gray-600 cursor-pointer"
                         onClick={onClose}
                     >
-                        ✕
+                        <Image src="/icons/close.png" alt="close" width={16} height={16} />
                     </button>
                 </div>
 
@@ -104,11 +104,11 @@ export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
 
                         <div className="flex gap-1 justify-start items-start p-0 text-[#C07417]">
                             <Image
-                                src="/icons/i.svg"
+                                src="/icons/iorange.svg"
                                 alt=""
                                 width={16}
                                 height={16}
-                                className="w-4 h-4 mt-2"
+                                className="w-4 h-4 mt-2.5"
                             />
                             <p className="text-xs  mt-2">
                                 Please verify the wallet address and network carefully before sending funds to ensure a successful transfer. bepay IGPS will not be responsible for any errors or loss of funds.
@@ -152,22 +152,30 @@ export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
                             </span>
                         </div>
 
-                        <div className="relative">
-                            <input
-                                type="number"
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
-                                placeholder="Enter amount you want to send"
-                                className="w-full rounded-xl border px-4 py-3 pr-28 text-[#C0C0C0]"
-                            />
-
-                            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3 text-sm text-gray-500">
-                                <button type="button">10%</button>
-                                <button type="button">25%</button>
-                                <button type="button">50%</button>
-                                <button type="button">MAX</button>
-                            </div>
-                        </div>
+                        {(() => {
+                            const availableBalance = 100; // TODO: wire from API
+                            return (
+                                <div className="flex items-center rounded-xl border focus-within:border-gray-300 overflow-hidden">
+                                    <input
+                                        type="text"
+                                        inputMode="decimal"
+                                        value={amount}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            if (/^\d*\.?\d*$/.test(val)) setAmount(val);
+                                        }}
+                                        placeholder="Enter amount you want to send"
+                                        className="flex-1 px-4 py-4 text-sm dashboard-input placeholder:text-[#C0C0C0] text-gray-800 focus:outline-none focus:ring-0 bg-transparent"
+                                    />
+                                    <div className="flex items-center gap-3 px-4 border-l text-sm text-gray-400 shrink-0">
+                                        <button type="button" onClick={() => setAmount((availableBalance * 0.1).toFixed(2))}>10%</button>
+                                        <button type="button" onClick={() => setAmount((availableBalance * 0.25).toFixed(2))}>25%</button>
+                                        <button type="button" onClick={() => setAmount((availableBalance * 0.5).toFixed(2))}>50%</button>
+                                        <button type="button" onClick={() => setAmount(availableBalance.toFixed(2))}>MAX</button>
+                                    </div>
+                                </div>
+                            );
+                        })()}
                     </div>
 
                     {/* NOTE */}

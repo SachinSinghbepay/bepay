@@ -7,6 +7,7 @@ import { useAuth } from "../context/AuthContext";
 export default function Dashboard({ onOpenModal, setActivePage }) {
   const { user, igpsService } = useAuth();
   const [transactions, setTransactions] = useState([]);
+  const [allTransactions, setAllTransactions] = useState([]);
   const [wallets, setWallets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalBalance, setTotalBalance] = useState(0);
@@ -88,44 +89,53 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
         console.error("Failed to fetch KYC status", e);
       }
 
-      // Fetch Transactions
-      let queryParams = { limit: 5 };
-      if (activeFilter !== "All") {
-        if (activeFilter !== "All") {
-          const f = activeFilter.toLowerCase();
-          if (f === 'onramp') queryParams.status = 'fiat_to_crypto';
-          else if (f === 'offramp') queryParams.status = 'crypto_to_fiat';
-          else queryParams.status = f;
-        }
-      }
-
-      const txnRes = await igpsService.getTransactions(queryParams);
+      // Fetch Transactions — always fetch all, filter client-side
+      const txnRes = await igpsService.getTransactions({ limit: 20 });
       if (txnRes.success) {
+        
         const txns = txnRes.data.transactions || [];
+          console.log(txns)
+
         const mapped = txns.map(tx => {
           const isSent = tx.from?.type === 'user';
+          const txType = tx.transactionType || tx.subType || tx.type || "";
+          let kind;
+          if (txType === 'fiat_to_crypto') kind = 'onramp';
+          else if (txType === 'crypto_to_fiat') kind = 'offramp';
+          else if (txType === 'deposit') kind = 'deposit';  
+          else kind = isSent ? "sent" : "received";
 
-          let otherParty = isSent
-            ? (tx.to?.name || tx.to?.email || "Beneficiary")
-            : (tx.from?.name || "Sender");
+          const statusRaw = tx.status || "unknown";
+          const status = statusRaw.charAt(0).toUpperCase() + statusRaw.slice(1);
 
           return {
             id: tx.id,
             amount: tx.amount,
             currency: tx.currency,
             type: isSent ? "sent" : "received",
-            status: (tx.status || "Unknown").charAt(0).toUpperCase() + (tx.status || "").slice(1),
+            kind,
+            status,
+            statusRaw,
             date: new Date(tx.createdAt).toLocaleString(),
-            email: otherParty,
+            email: isSent ? (tx.to?.name || tx.to?.email || "Beneficiary") : (tx.from?.name || "Sender"),
             raw: tx
           };
         });
-        setTransactions(mapped);
+
+        setAllTransactions(mapped);
+
+        const filtered = activeFilter === "All" ? mapped : mapped.filter(tx =>
+          tx.statusRaw === activeFilter.toLowerCase()
+        );
+
+        setTransactions(filtered);
       }
 
-      // Calculate Total Balance
-      const total = currentWallets.reduce((acc, w) => acc + (parseFloat(w.balance || 0)), 0);
-      setTotalBalance(total);
+      // Only use currentWallets total if API fetch didn't already set it via fresh data
+      if (currentWallets.length > 0) {
+        const total = currentWallets.reduce((acc, w) => acc + (parseFloat(w.balance || 0)), 0);
+        setTotalBalance(total);
+      }
 
     } catch (err) {
       console.error("Dashboard fetch error", err);
@@ -148,7 +158,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
   };
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-4 space-y-6 lg:space-y-8 overflow-x-hidden">
+    <div className="px-4 sm:px-6 lg:px-8 py-4 space-y-2 lg:space-y-4 overflow-x-hidden">
       {kycStatus === "incomplete" && (
         <div className="w-full bg-[#E7DED1] rounded-[40px] px-6 py-8 flex flex-col  items-start justify-between gap-3">
 
@@ -191,7 +201,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
         </div>
       )}
       {/* BALANCE CARD */}
-      <div className="rounded-3xl bg-white p-6 shadow-sm">
+      <div className="rounded-4xl bg-white p-6 border border-gray-100">
         <div className="flex flex-col xl:flex-row gap-6 xl:gap-0 justify-between items-start mb-6">
 
 
@@ -233,7 +243,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
           </div>
 
           {/* RIGHT */}
-          <div className="rounded-[32px] bg-[#FAFAFA] p-4 shadow-sm w-full xl:max-w-[630px]">
+          <div className="rounded-[32px] bg-[#FAFAFA] p-4  w-full xl:max-w-[630px]">
             <BalanceBreakdown wallets={wallets} loading={loading} />
           </div>
         </div>
@@ -241,7 +251,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
 
 
       {/* ACTION CARDS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-3">
         <ActionCard
           title="Deposit"
           bg="bg-[#eaf4f8]"
@@ -253,33 +263,28 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
               previousModal: null
             })
           }
-          icon={
-            <PlusIcon className="h-14 w-14 sm:h-16 sm:w-16 lg:h-20 lg:w-20 text-[#B0CDD8] group-hover:text-[#5A8EA8] transition-colors" />
-          }
+          icon="/icons/plus.png"
+          iconClassName="h-12 w-12 sm:h-14 sm:w-14 lg:h-16 lg:w-16 mt-3"
         />
         <ActionCard
           title="Get paid"
           bg="bg-[#eef4e4]"
           onClick={() => onOpenModal("get-paid")}
-          icon={
-            <ArrowDownLeftIcon className="h-14 w-14 sm:h-16 sm:w-16 lg:h-20 lg:w-20 text-[#C8D7B5] group-hover:text-[#8FA66E]" />
-          }
+          icon="/icons/get.png"
         />
 
         <ActionCard
           title="Send"
           bg="bg-[#f5eee6]"
           onClick={() => onOpenModal("new-transfer")}
-          icon={
-            <ArrowUpRightIcon className="h-22 w-22 text-[#DBCAB6] group-hover:text-[#B79A72]" />
-          }
+          icon="/icons/send.png"
         />
 
       </div>
 
 
       {/* SECONDARY ACTIONS */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 auto-rows-fr w-full">
+      {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 auto-rows-fr w-full">
         <SecondaryCard
           icons="/icons/members.svg"
           title="Pay team members"
@@ -291,7 +296,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
           desc="Add employees, vendors, or freelancers"
           onClick={() => onOpenModal("add-beneficiary")}
         />
-      </div>
+      </div> */}
 
       {/* TRANSACTIONS */}
 
@@ -299,7 +304,8 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
 
         {/* FILTERS */}
         <div className="flex items-center gap-3 overflow-x-auto pb-2">
-          {["All", "Deposit", "Sent", "Received", "Onramp", "Offramp"].map(f => (
+          {["All", ...Array.from(new Set(allTransactions.map(tx => tx.status)))
+          ].map(f => (
             <Filter
               key={f}
               label={f}
@@ -456,7 +462,7 @@ function SecondaryCard({ title, desc, icons, onClick }) {
       flex items-center justify-between
       h-[110px] sm:h-[120px] lg:h-[140px] min-w-0
       ">
-      <div className="bg-[#EBEBEB] h-full w-[60px] sm:w-[70px] lg:w-[80px] rounded-2xl flex items-center justify-center">
+      <div className=" h-full w-[60px] sm:w-[70px] lg:w-[80px] rounded-2xl flex items-center justify-center">
         <Image
           src={icons}
           alt={title}
@@ -492,14 +498,14 @@ function Filter({ label, active, onClick }) {
 
 
 
-function ActionCard({ title, bg, icon, onClick }) {
+function ActionCard({ title, bg, icon, iconClassName, onClick }) {
   return (
     <div
       onClick={onClick}
       className={`
         ${bg}
         h-[180px] sm:h-[220px] lg:h-[270px]
-        rounded-[32px]
+        rounded-4xl
         p-4 sm:p-5 lg:p-6
         flex
         flex-col
@@ -509,7 +515,7 @@ function ActionCard({ title, bg, icon, onClick }) {
     >
       {/* ICON */}
       <div>
-        {icon}
+        <Image src={icon} alt="" width={80} height={80} className={iconClassName ?? "h-14 w-14 sm:h-18 sm:w-18 lg:h-22 lg:w-22 object-contain"} />
       </div>
 
       {/* TITLE */}
@@ -522,44 +528,3 @@ function ActionCard({ title, bg, icon, onClick }) {
 
 
 
-function PlusIcon({ className }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1"
-    >
-      <path d="M12 5v14M5 12h14" />
-    </svg>
-  );
-}
-
-function ArrowDownLeftIcon({ className }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1"
-    >
-      <path d="M17 7l-10 10M7 7v10h10" />
-    </svg>
-  );
-}
-
-function ArrowUpRightIcon({ className }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1"
-    >
-      <path d="M7 17L17 7M7 7h10v10" />
-    </svg>
-  );
-}

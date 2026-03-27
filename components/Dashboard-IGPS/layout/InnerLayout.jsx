@@ -177,7 +177,7 @@ export default function InnerLayout() {
     <>
       {/* ===== MAIN LAYOUT ===== */}
       <div className="min-h-screen bg-[#F9F9F9] p-2 sm:p-4 lg:p-6">
-        <div className="relative mx-auto max-w-full bg-[#fafafa] rounded-2xl lg:rounded-3xl flex overflow-hidden">
+        <div className="relative mx-auto max-w-full bg-[#F9F9F9] rounded-2xl lg:rounded-3xl flex overflow-hidden">
 
           {/* Mobile Overlay */}
           {sidebarOpen && (
@@ -203,7 +203,7 @@ export default function InnerLayout() {
               onMenuClick={() => setSidebarOpen(true)}
             />
 
-            <div className="flex-1 overflow-y-auto">
+            <div id="main-scroll-container" className="flex-1 overflow-y-auto">
               {renderPage()}
             </div>
           </div>
@@ -375,7 +375,7 @@ export default function InnerLayout() {
           )}
 
           {modal === "add-new-email" && (
-            <AddNewEmail onClose={closeModal} />
+            <AddNewEmail onClose={closeModal} onBack={() => openModal("pay-to-email")} />
           )}
 
           {modal === "payment-sent" && (
