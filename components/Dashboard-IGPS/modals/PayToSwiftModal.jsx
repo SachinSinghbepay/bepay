@@ -74,17 +74,17 @@ export default function PayToSwiftModal({
       <div className="flex flex-col max-h-[80vh] h-full">
         {/* HEADER */}
         <div className="flex items-center justify-between p-8 pb-4 shrink-0">
-          <button onClick={onBack} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onBack} className="text-gray-400 hover:text-gray-600 cursor-pointer">
             <Image
               src="/icons/back.svg"
               alt=""
-              width={24}
-              height={24}
+              width={18}
+              height={18}
             />
           </button>
           <h2 className="text-xl font-medium">Pay USD via SWIFT</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            ✕
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 cursor-pointer">
+            <Image src="/icons/close.png" alt="close" width={16} height={16} />
           </button>
         </div>
 

@@ -1,4 +1,5 @@
 import ModalFrame from "./ModalFrame";
+import Image from "next/image";
 
 
 export default function InviteSuccessModal({
@@ -17,9 +18,9 @@ export default function InviteSuccessModal({
 
                 <button
                     onClick={onClose}
-                    className="absolute right-6 top-6 text-gray-500 hover:text-gray-700"
+                    className="absolute right-6 top-6 text-gray-500 hover:text-gray-700 cursor-pointer"
                 >
-                    ✕
+                    <Image src="/icons/close.png" alt="close" width={16} height={16} />
                 </button>
 
                 {/* Icon */}

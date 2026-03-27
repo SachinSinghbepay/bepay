@@ -1,5 +1,6 @@
 import ModalFrame from "./ModalFrame";
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 
 export default function LearnAboutRolesModal({ onClose }) {
     const scrollRef = useRef(null);
@@ -35,9 +36,9 @@ export default function LearnAboutRolesModal({ onClose }) {
 
                     <button
                         onClick={onClose}
-                        className="absolute right-8 text-gray-500 hover:text-gray-700"
+                        className="absolute right-8 text-gray-500 hover:text-gray-700 cursor-pointer"
                     >
-                        ✕
+                        <Image src="/icons/close.png" alt="close" width={16} height={16} />
                     </button>
                 </div>
 

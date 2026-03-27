@@ -346,7 +346,7 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                                 }}
                                 onFocus={() => setBankDropdownOpen(true)}
                                 placeholder="Search bank"
-                                className="w-full h-12 rounded-xl border px-4 outline-none focus:border-black"
+                                className="w-full py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
                             />
 
                             {bankDropdownOpen && (
@@ -458,14 +458,14 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
 function Header({ onBack, onClose }) {
     return (
         <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
-            <button onClick={onBack} className="absolute left-8">
-                <Image src="/icons/back.svg" alt="" width={24} height={24} />
+            <button onClick={onBack} className="absolute left-8 cursor-pointer">
+                <Image src="/icons/back.svg" alt="" width={18} height={18} />
             </button>
 
             <h2 className="text-lg font-medium">Add SWIFT beneficiary</h2>
 
-            <button onClick={onClose} className="absolute right-8">
-                ✕
+            <button onClick={onClose} className="absolute right-8 cursor-pointer">
+                <Image src="/icons/close.png" alt="close" width={16} height={16} />
             </button>
         </div>
     );
@@ -502,7 +502,7 @@ function Input({ label, placeholder, value, onChange }) {
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="w-full h-12 rounded-xl border px-4 text-sm outline-none focus:ring-2 focus:ring-black/10"
+                className="w-full py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
             />
         </div>
     );

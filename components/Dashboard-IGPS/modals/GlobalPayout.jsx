@@ -74,17 +74,17 @@ export default function GlobalPayoutModal({
       <div className="flex flex-col max-h-[80vh] h-full lg:px-4">
         {/* HEADER */}
         <div className="flex items-center justify-between  p-8 pb-4 shrink-0">
-          <button onClick={onBack} className="text-gray-400 hover:text-gray-600">
+          <button onClick={onBack} className="text-gray-400 hover:text-gray-600 cursor-pointer">
             <Image
               src="/icons/back.svg"
               alt=""
-              width={24}
-              height={24}
+              width={18}
+              height={18}
             />
           </button>
           <h2 className="text-xl font-medium">Global Payout</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            ✕
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 cursor-pointer">
+            <Image src="/icons/close.png" alt="close" width={16} height={16} />
           </button>
         </div>
 
@@ -117,7 +117,7 @@ export default function GlobalPayoutModal({
 
           {/* LIST */}
           {!loading && beneficiaries.length > 0 && (
-            <div className="space-y-3">
+            <div className="space-y-3 mt-5 sm:mt-8">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-sm font-medium text-gray-500">Beneficiaries with bank details</h3>
                 <button
@@ -128,7 +128,7 @@ export default function GlobalPayoutModal({
                 </button>
               </div>
 
-              <div className="space-y-3 pr-2">
+              <div className="space-y-3 pr-2 mt-3">
                 {beneficiaries.map((b) => (
                   <BeneficiaryRow
                     key={b.id}
@@ -154,10 +154,13 @@ export default function GlobalPayoutModal({
 function BeneficiaryRow({ id, name, bank, country, status = "active", flag, onPay }) {
   return (
     <div className="flex items-center justify-between p-4 md:gap-30 lg:gap-60 bg-[#F9F9F9] rounded-2xl">
-      <div className="flex items-center gap-4">
-        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border shadow-sm overflow-hidden">
-          {/* Placeholder or Flag */}
-          <span className="text-xs font-bold">{country?.substring(0, 2).toUpperCase()}</span>
+      <div className="flex items-center gap-4 p-[1.5px] rounded-xl ">
+        <div className="w-10 h-10 bg-[#F5F5F5] rounded-xl p-2 flex items-center justify-center border shadow-sm overflow-hidden">
+          {flag ? (
+            <Image src={flag} alt={country ?? ""} width={28} height={28} className="w-full h-full object-cover rounded-full" />
+          ) : (
+            <span className="text-xs font-bold">{country?.substring(0, 2).toUpperCase()}</span>
+          )}
         </div>
         <div>
           <p className="font-medium">{name}</p>
@@ -183,9 +186,25 @@ function BeneficiaryRow({ id, name, bank, country, status = "active", flag, onPa
   );
 }
 
-function getCountryFlag(countryName) {
-  // Simple mock map or logic provided here
-  // In a real app, use a library or the existing icon system
-  return null;
+const COUNTRY_FLAGS = {
+  US: "/icons/usa.svg",
+  USA: "/icons/usa.svg",
+  IN: "/icons/india.svg",
+  IND: "/icons/india.svg",
+  // Europe / EUR countries
+  DE: "/icons/europe.png",
+  FR: "/icons/europe.png",
+  IT: "/icons/europe.png",
+  ES: "/icons/europe.png",
+  NL: "/icons/europe.png",
+  BE: "/icons/europe.png",
+  AT: "/icons/europe.png",
+  PT: "/icons/europe.png",
+  EU: "/icons/europe.png",
+};
+
+function getCountryFlag(countryCode) {
+  if (!countryCode) return null;
+  return COUNTRY_FLAGS[countryCode.toUpperCase()] ?? null;
 }
 

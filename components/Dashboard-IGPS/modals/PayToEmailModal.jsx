@@ -32,6 +32,7 @@ export default function PayToEmailModal({ onClose, onBack, beneficiary,
     const [currency, setCurrency] = useState("");
     const [purpose, setPurpose] = useState("");
     const [amount, setAmount] = useState("");
+    const availableBalance = 300.00;
 
     const isFormValid =
         emails.length > 0 &&
@@ -47,15 +48,16 @@ export default function PayToEmailModal({ onClose, onBack, beneficiary,
                 <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
                     {/* Back */}
                     <button
-                        className="absolute left-8 text-xl text-gray-500"
+                        className="absolute left-8 text-xl text-gray-500 cursor-pointer"
                         onClick={onBack}
                     >
                         <Image
                             src="/icons/back.svg"
                             alt=""
-                            width={24}
-                            height={24}
+                            width={18}
+                            height={18}
                         />
+
                     </button>
 
                     <h2 className="text-lg font-semibold text-gray-900">
@@ -64,10 +66,10 @@ export default function PayToEmailModal({ onClose, onBack, beneficiary,
 
                     {/* Close */}
                     <button
-                        className="absolute right-8 text-xl text-gray-400 hover:text-gray-600"
+                        className="absolute right-8 text-xl text-gray-400 hover:text-gray-600 cursor-pointer"
                         onClick={onClose}
                     >
-                        ✕
+                        <Image src="/icons/close.png" alt="close" width={16} height={16} />
                     </button>
                 </div>
 
@@ -81,7 +83,7 @@ export default function PayToEmailModal({ onClose, onBack, beneficiary,
                     <div>
                         <div className="flex justify-between mb-2">
                             <label className="text-sm font-medium text-[#6A6A6A]">Email</label>
-                            <button className="text-sm underline">
+                            <button className="text-sm underline cursor-pointer" onClick={() => onOpenModal("add-new-email")}>
                                 Add new email contact +
                             </button>
                         </div>
@@ -114,18 +116,13 @@ export default function PayToEmailModal({ onClose, onBack, beneficiary,
                                 {
                                     label: "USDC (POL)",
                                     value: "USDC",
-                                    icon: "/icons/usdc.svg"
+                                    icon: "/icons/USDC.png"
                                 },
                                 {
                                     label: "USDT (TRX)",
                                     value: "USDT",
-                                    icon: "/icons/usdt.svg"
+                                    icon: "/icons/USDT.png"
                                 },
-                                {
-                                    label: "BTC",
-                                    value: "BTC",
-                                    icon: "/icons/btc.svg"
-                                }
                             ]}
                             placeholder="Select payment currency"
                             value={currency}
@@ -138,28 +135,27 @@ export default function PayToEmailModal({ onClose, onBack, beneficiary,
                         <div className="flex justify-between mb-2">
                             <label className="text-sm font-medium text-[#6A6A6A]">Amount</label>
                             <span className="text-sm">
-                                Available balance: <strong>$100.00</strong>
+                                Available balance: <strong>${availableBalance.toFixed(2)}</strong>
                             </span>
                         </div>
 
-                        <div className="relative">
+                        <div className="flex items-center border rounded-xl overflow-hidden">
                             <input
                                 type="number"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
                                 placeholder="Enter amount you want to send"
-                                className="w-full rounded-xl border px-4 py-3 pr-28 text-[#C0C0C0]"
+                                className="flex-1 px-4 py-3 dashboard-input outline-none text-gray-800 placeholder:text-[#C0C0C0] focus:outline-none focus:ring-0 focus:border-gray-200"
                             />
-
-                            <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-3 text-sm text-gray-500">
-                                <button type="button">10%</button>
-                                <button type="button">25%</button>
-                                <button type="button">50%</button>
-                                <button type="button">MAX</button>
+                            <div className="flex items-center gap-3 px-4 border-l text-sm text-gray-500 shrink-0">
+                                <button type="button" className="hover:text-black transition cursor-pointer" onClick={() => setAmount((availableBalance * 0.10).toFixed(2))}>10%</button>
+                                <button type="button" className="hover:text-black transition cursor-pointer" onClick={() => setAmount((availableBalance * 0.25).toFixed(2))}>25%</button>
+                                <button type="button" className="hover:text-black transition cursor-pointer" onClick={() => setAmount((availableBalance * 0.50).toFixed(2))}>50%</button>
+                                <button type="button" className="hover:text-black transition cursor-pointer" onClick={() => setAmount(availableBalance.toFixed(2))}>MAX</button>
                             </div>
                         </div>
                     </div>
-
+ 
                     {/* PURPOSE */}
                     <div>
                         <label className="text-sm font-medium text-[#6A6A6A]">Purpose</label>
@@ -176,7 +172,7 @@ export default function PayToEmailModal({ onClose, onBack, beneficiary,
                         <label className="text-sm font-medium text-[#6A6A6A]">Note (Optional)</label>
                         <textarea
                             placeholder="Enter a note for this transaction"
-                            className="w-full mt-2 rounded-xl border px-4 py-3 text-gray-700 resize-none"
+                            className="w-full mt-2 rounded-xl border px-4 py-4 text-sm text-gray-800 placeholder:text-[#C0C0C0] resize-none focus:outline-none focus:ring-0 focus:border-gray-200 dashboard-input"
                             rows={1}
                         />
                     </div>

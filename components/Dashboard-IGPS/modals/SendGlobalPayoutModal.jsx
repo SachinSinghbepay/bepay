@@ -176,15 +176,8 @@ export default function SendGlobalPayoutModal({
         const fetchQuote = async () => {
             const amt = parseFloat(amount);
 
-            // basic validation
-            if (!amount || isNaN(amt) || amt <= 0) {
-                setQuote(null);
-                setQuoteError("");
-                return;
-            }
-
-            // minimum amount validation
-            if (amt < 50) {
+            // basic validation — always show minimum hint
+            if (!amount || isNaN(amt) || amt <= 0 || amt < 50) {
                 setQuote(null);
                 setQuoteError("Minimum amount should be $50");
                 return;
@@ -306,16 +299,16 @@ export default function SendGlobalPayoutModal({
             <div className="flex flex-col h-[85vh] bg-white rounded-3xl">
                 {/* HEADER */}
                 <div className="relative flex items-center justify-center px-2 sm:px-8 pt-6 mb-8">
-                    <button onClick={onBack} className="absolute left-8 text-xl text-gray-500">
+                    <button onClick={onBack} className="absolute left-8 text-xl text-gray-500 cursor-pointer">
                         <Image
                             src="/icons/back.svg"
                             alt=""
-                            width={24}
-                            height={24}
+                            width={18}
+                            height={18}
                         />
                     </button>
-                    <h2 className="text-lg font-medium">Send Global Payout</h2>
-                    <button onClick={onClose} className="absolute right-8 text-xl text-gray-500">✕</button>
+                    <h2 className="text-lg font-medium">Global Payout</h2>
+                    <button onClick={onClose} className="absolute right-8 text-xl text-gray-500 cursor-pointer"><Image src="/icons/close.png" alt="close" width={16} height={16} /></button>
                 </div>
 
                 {/* BODY */}
@@ -367,7 +360,7 @@ export default function SendGlobalPayoutModal({
                         ) : (
                             <div className="space-y-3">
                                 <select
-                                    className="w-full h-12 rounded-xl border px-4 outline-none"
+                                    className="w-full py-3 px-4 text-sm rounded-xl border outline-none"
                                     onChange={(e) => {
                                         const b = beneficiaries.find(
                                             (x) => x.id === e.target.value
@@ -422,14 +415,14 @@ export default function SendGlobalPayoutModal({
                             setCurrency={setCurrency}
                             targetCurrency={targetCurrency}
                             sourceCurrencies={sourceCurrencies}
+                            availableBalance={parseFloat(selectedWalletBalance?.balance || 0)}
                         />
                     </Section>
 
-
-
-                    {quoteError && (
-                        <p className="text-red-500 text-sm">{quoteError}</p>
+    {quoteError && (
+                        <p className="text-red-500 text-sm -mt-3">{quoteError}</p>
                     )}
+
 
                     {/* PURPOSE */}
                     <div className="space-y-2">
@@ -497,12 +490,12 @@ export default function SendGlobalPayoutModal({
                                     onClick={() => setInvoice(null)}
                                     className="text-xl text-gray-400 hover:text-gray-600"
                                 >
-                                    ✕
+                                    <Image src="/icons/close.png" alt="close" width={20} height={20} />
                                 </button>
                             </div>
                         )}
 
-                        {invoice && (
+                        {!invoice && (
                             <p className="text-xs text-[#BC4242] mt-2">
                                 Source of funds document is required for business-to-business transfers
                                 to comply with regulatory requirements.
@@ -548,10 +541,7 @@ export default function SendGlobalPayoutModal({
 
                         </div>
                     )}
-
-                </div>
-
-                {/* FOOTER */}
+                      {/* FOOTER */}
                 <div className="px-8 py-6 border-t bg-white">
                     <button
                         onClick={handleSend}
@@ -563,6 +553,10 @@ export default function SendGlobalPayoutModal({
                         Send payment
                     </button>
                 </div>
+
+                </div>
+
+              
             </div>
         </ModalFrame>
     );
@@ -588,7 +582,8 @@ function AmountBox({
     currency,
     setCurrency,
     targetCurrency,
-    sourceCurrencies
+    sourceCurrencies,
+    availableBalance = 0,
 }) {
 
     const [open, setOpen] = useState(false);
@@ -722,30 +717,23 @@ function AmountBox({
                         </p>
 
                         <div className="gap-4 text-sm text-gray-400 pb-1 font-medium hidden md:flex">
-                            <button onClick={() => setAmount((amount * 0.1).toFixed(2))}>
-                                10%
-                            </button>
-
-                            <button onClick={() => setAmount((amount * 0.25).toFixed(2))}>
-                                25%
-                            </button>
-
-                            <button onClick={() => setAmount((amount * 0.5).toFixed(2))}>
-                                50%
-                            </button>
-
-                            <button className="font-medium">
-                                MAX
-                            </button>
+                            <button onClick={() => setAmount((availableBalance * 0.1).toFixed(2))}>10%</button>
+                            <button onClick={() => setAmount((availableBalance * 0.25).toFixed(2))}>25%</button>
+                            <button onClick={() => setAmount((availableBalance * 0.5).toFixed(2))}>50%</button>
+                            <button onClick={() => setAmount(availableBalance.toFixed(2))}>MAX</button>
                         </div>
                     </div>
 
                     <div className="flex items-end gap-4">
                         <input
-                            type="number"
+                            type="text"
+                            inputMode="decimal"
                             value={amount}
-                            placeholder="Add Amount"
-                            onChange={(e) => setAmount(e.target.value)}
+                            placeholder="0"
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                if (/^\d*\.?\d*$/.test(val)) setAmount(val);
+                            }}
                             className="
                                w-full 
                                 bg-transparent
