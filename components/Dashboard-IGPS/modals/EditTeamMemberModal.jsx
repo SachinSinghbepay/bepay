@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef} from "react";
+import Image from "next/image";
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useAuth } from "../context/AuthContext";
