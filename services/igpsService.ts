@@ -36,7 +36,7 @@ export class IgpsService {
   private accessToken: string | null = null;
   private refreshToken: string | null = null;
 
-  constructor(baseUrl: string = "https://dev.bepay.money/api/igps") {
+  constructor(baseUrl: string = process.env.NEXT_PUBLIC_IGPS_BASE_URL) {
     this.baseUrl = baseUrl;
 
     // Auto-load tokens from cookies if in browser

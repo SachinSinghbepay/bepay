@@ -1,44 +1,33 @@
 "use client";
 
 import { Trash2, Mail, Landmark, Wallet, Plus, RefreshCw } from "lucide-react";
-import { useState, useEffect } from "react";
-import { IgpsService } from "../../../services/igpsService";
+import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import useSWR from 'swr';
 
 
 export default function Beneficiary({ onOpenModal }) {
     const { igpsService } = useAuth();
-    const [beneficiaries, setBeneficiaries] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [refreshing, setRefreshing] = useState(false);
     const [filter, setFilter] = useState("All");
 
-    const fetchBeneficiaries = async (force = false) => {
-        if (force) setRefreshing(true);
-        else setLoading(true);
-        try {
-            const res = await igpsService.listBeneficiaries(force);
-            if (res.success) {
-                setBeneficiaries(res.data);
-            }
-        } catch (error) {
-            console.error("Failed to fetch beneficiaries", error);
-        } finally {
-            setLoading(false);
-            setRefreshing(false);
+    const { data, isValidating, mutate } = useSWR(
+        'igps-beneficiaries',
+        async () => {
+            const res = await igpsService.listBeneficiaries();
+            return res.success ? res.data : [];
         }
-    };
+    );
 
-    useEffect(() => {
-        fetchBeneficiaries();
-    }, []);
+    const beneficiaries = data ?? [];
+    const loading = !data && isValidating;
+    const refreshing = !!data && isValidating;
 
     const handleDelete = async (id) => {
         if (!confirm("Are you sure you want to delete this beneficiary?")) return;
         try {
             const res = await igpsService.deleteBeneficiary(id);
             if (res.success) {
-                fetchBeneficiaries();
+                mutate();
             } else {
                 alert(res.message || "Failed to delete");
             }
@@ -52,10 +41,6 @@ export default function Beneficiary({ onOpenModal }) {
         const type = b.paymentInfo?.paymentType || "unknown";
         if (filter === "Bank" && type === "bank_account") return true;
         if (filter === "Wallet" && type === "crypto_wallet") return true;
-        // Email is not a distinct type in current API, usually it's part of contact info. 
-        // We can check if it has email? All have email. 
-        // Maybe 'Email' tab is not relevant or means 'Internal Transfer'? 
-        // For now, let's just filter by paymentType.
         return false;
     });
 
@@ -69,14 +54,14 @@ export default function Beneficiary({ onOpenModal }) {
 
                     <div className="flex gap-2">
                         <button
-                            onClick={() => fetchBeneficiaries(true)}
+                            onClick={() => mutate()}
                             className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition"
                             title="Refresh list"
                         >
                             <RefreshCw size={18} className={refreshing ? "animate-spin" : ""} />
                         </button>
                         <button
-                            onClick={() => onOpenModal("add-beneficiary", { onSuccess: () => fetchBeneficiaries(true) })}
+                            onClick={() => onOpenModal("add-beneficiary", { onSuccess: () => mutate() })}
                             className="bg-black text-white px-6 py-3 rounded-full text-sm flex items-center gap-2 hover:bg-gray-800 transition"
                         >
                             <Plus size={16} />
@@ -102,7 +87,7 @@ export default function Beneficiary({ onOpenModal }) {
                 {loading ? (
                     <div className="py-20 text-center text-gray-400">Loading beneficiaries...</div>
                 ) : filtered.length === 0 ? (
-                    <EmptyState onAdd={() => onOpenModal('add-beneficiary', { onSuccess: () => fetchBeneficiaries(true) })} filter={filter} />
+                    <EmptyState onAdd={() => onOpenModal('add-beneficiary', { onSuccess: () => mutate() })} filter={filter} />
                 ) : (
                     <div className="space-y-4">
                         {/* Table Header */}

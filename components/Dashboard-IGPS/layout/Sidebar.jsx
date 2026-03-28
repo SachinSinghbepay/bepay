@@ -67,7 +67,7 @@ function SidebarItem({ label, iconKey, lucideIcon: LucideIcon, active, onClick }
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-3 px-3 py-3 lg:px-4 lg:py-6 rounded-2xl text-sm font-medium transition
+      className={`flex items-center gap-3 px-3 py-3 lg:px-4 lg:py-6 rounded-2xl text-sm font-medium transition cursor-pointer
         ${active
           ? "bg-[#2b2b2b] text-white"
           : "text-gray-600 hover:bg-gray-200"

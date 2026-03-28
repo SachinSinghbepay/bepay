@@ -45,6 +45,7 @@ export default function GlobalPayoutModal({
       const response = await igpsService.listBeneficiaries();
       if (response.success) {
         setBeneficiaries(response.data);
+        console.log(response.data)
       } else {
         console.error("Failed to fetch beneficiaries:", response.error);
       }
