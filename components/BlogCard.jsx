@@ -16,12 +16,13 @@ export default function BlogCard({ blog }) {
       <div className="w-full h-[200px] relative">
           <div className="relative w-full h-full">
             <Image
-              src={blog.featuredImage || blog.thumbnail || "/placeholder.svg"}
+              src={blog.featuredImage || blog.thumbnail || "/blog-placeholder.svg"}
               alt={blog.title}
               fill
               unoptimized
               className="object-cover rounded-[24px] p-2"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              onError={(e) => { e.currentTarget.src = "/blog-placeholder.svg" }}
             />
           </div>
       </div>

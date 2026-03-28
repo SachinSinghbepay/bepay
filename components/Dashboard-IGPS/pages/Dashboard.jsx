@@ -455,6 +455,7 @@ function SecondaryCard({ title, desc, icons, onClick }) {
       onClick={onClick}
       className="
       w-full
+      cursor-pointer
       rounded-3xl bg-white
       p-3 sm:p-4 lg:p-6
       border border-[#D9D9D9]

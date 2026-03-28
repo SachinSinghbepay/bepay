@@ -37,9 +37,10 @@ export default function NewPostPage({ onBack, initialPost = null }) {
   const [autoSaveStatus, setAutoSaveStatus] = useState(null);
   const [toast, setToast]           = useState(null);
 
-  const autosaveTimer  = useRef(null);
-  const isPublishedRef = useRef(ip?.status === "published");
-  const savedIdRef     = useRef(ip?._id ?? null);
+  const autosaveTimer    = useRef(null);
+  const isPublishedRef   = useRef(ip?.status === "published");
+  const savedIdRef       = useRef(ip?._id ?? null);
+  const slugEditedByUser = useRef(!!ip?.slug); // true if slug already exists (editing post)
   const bodyRef        = useRef(ip?.content ?? null);
   const titleRef       = useRef(ip?.title   ?? "");
   const excerptRef     = useRef(ip?.excerpt ?? "");
@@ -118,7 +119,7 @@ export default function NewPostPage({ onBack, initialPost = null }) {
     const val = e.target.value;
     setTitle(val);
     syncRefs({ title: val });
-    if (!slugRef.current) {
+    if (!slugEditedByUser.current) {
       const auto = val.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
       setSlug(auto);
       syncRefs({ slug: auto });
@@ -236,9 +237,14 @@ export default function NewPostPage({ onBack, initialPost = null }) {
           <ArrowLeft className="w-4 h-4" /> All Posts
         </button>
         <div className="flex items-center gap-2">
-          <button className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-sm font-medium text-[#5A5A4A] hover:bg-[#EFEDE8] transition border border-[#E4E2DC]">
+          <a
+            href={slug ? `/blog/${slug}` : "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-sm font-medium text-[#5A5A4A] hover:bg-[#EFEDE8] transition border border-[#E4E2DC]"
+          >
             <Eye className="w-3.5 h-3.5" /> Preview
-          </button>
+          </a>
           <button onClick={handleSave} disabled={saving} className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-sm font-medium text-[#5A5A4A] hover:bg-[#EFEDE8] transition border border-[#E4E2DC] disabled:opacity-50">
             {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />} Save
           </button>
@@ -308,7 +314,7 @@ export default function NewPostPage({ onBack, initialPost = null }) {
                 <input
                   type="text"
                   value={slug}
-                  onChange={(e) => { setSlug(e.target.value); syncRefs({ slug: e.target.value }); scheduleAutosave(); }}
+                  onChange={(e) => { slugEditedByUser.current = true; setSlug(e.target.value); syncRefs({ slug: e.target.value }); scheduleAutosave(); }}
                   placeholder="post-slug"
                   className="flex-1 px-2.5 py-2 text-sm text-[#3A3A2A] bg-white outline-none"
                 />
