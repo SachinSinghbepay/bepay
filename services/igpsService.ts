@@ -31,13 +31,19 @@ import {
   PaginationParams,
 } from "./igpsTypes";
 
+const DEFAULT_IGPS_BASE_URL = "http://app.bepay.money/api/igps";
+
+const IGPS_BASE_URL =
+  process.env.NEXT_PUBLIC_IGPS_BASE_URL?.trim().replace(/\/+$/, "") ||
+  DEFAULT_IGPS_BASE_URL;
+
 export class IgpsService {
   private baseUrl: string;
   private accessToken: string | null = null;
   private refreshToken: string | null = null;
 
-  constructor(baseUrl: string = "http://localhost:5001/api/igps") {
-    this.baseUrl = baseUrl;
+  constructor(baseUrl: string = IGPS_BASE_URL) {
+    this.baseUrl = baseUrl.trim().replace(/\/+$/, "");
 
     // Auto-load tokens from cookies if in browser
     if (typeof window !== "undefined" && typeof document !== "undefined") {
