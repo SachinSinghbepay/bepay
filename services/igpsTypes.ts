@@ -312,6 +312,41 @@ export interface Order {
     subStatus?: string;
     amount: number;
     currency: string;
+    corridor?: 'STABLE_TO_FIAT' | 'FIAT_TO_STABLE' | 'FIAT_TO_FIAT';
+    transferType?: string;
+    depositBankAccount?: DepositBankAccount;
+    depositWalletAddress?: string;
+    depositChain?: string;
     createdAt: string;
     updatedAt: string;
 }
+
+// 8. Fiat Balance & Deposit Types
+export interface FiatBalance {
+    currency: string;
+    balance: string;
+    balanceUsd: string;
+    type: 'fiat';
+}
+
+export interface WalletBalancesResponse {
+    wallets: any[];
+    fiatBalances: FiatBalance[];
+}
+
+export interface DepositBankAccount {
+    name?: string;
+    accountNumber?: string;
+    currency?: string;
+    reference?: string;
+    bankDetails?: {
+        name?: string;
+        address?: string;
+    };
+    routingDetails?: Array<{
+        transferType: string;
+        routingNumber: string;
+    }>;
+}
+
+export type TransferType = 'ACH' | 'RTP' | 'WIRE' | 'SWIFT';

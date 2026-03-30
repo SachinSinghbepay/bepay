@@ -11,6 +11,8 @@ export default function ConfirmGlobalPayoutModal({
     onConfirm,
     quote,
     beneficiary,
+    sourceType = 'crypto',
+    transferType,
     paymentDetails
 }) {
     const { igpsService } = useAuth();
@@ -100,7 +102,12 @@ export default function ConfirmGlobalPayoutModal({
                         <div className="flex justify-between items-start">
                             <div>
                                 <p className="text-sm text-gray-500 mb-1">From</p>
-                                <p className="font-medium text-gray-900">My USDC Wallet</p>
+                                <p className="font-medium text-gray-900">
+                                    {sourceType === 'fiat' ? `My ${quote.sourceCurrency} Balance` : `My ${quote.sourceCurrency} Wallet`}
+                                </p>
+                                {sourceType === 'fiat' && transferType && (
+                                    <p className="text-xs text-gray-400 mt-0.5">via {transferType}</p>
+                                )}
                             </div>
                             <div className="text-right">
                                 <p className="text-gray-900 font-bold text-lg">{quote.sourceAmount} {quote.sourceCurrency}</p>
@@ -142,7 +149,7 @@ export default function ConfirmGlobalPayoutModal({
                     {/* CONFIRMATION TEXT */}
                     <div className="pt-4">
                         <p className="text-xs text-center text-gray-400">
-                            By clicking confirm, you authorize the transfer of {quote.sourceAmount} {quote.sourceCurrency} from your wallet.
+                            By clicking confirm, you authorize the transfer of {quote.sourceAmount} {quote.sourceCurrency} from your {sourceType === 'fiat' ? 'account' : 'wallet'}.
                         </p>
                     </div>
 

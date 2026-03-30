@@ -18,11 +18,13 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
       ]);
 
       let wallets = [];
+      let fiatBalances = [];
       let totalBalance = 0;
       if (balRes.success) {
         const wData = balRes.data.wallets || [];
         wallets = [...wData].sort((a, b) => (parseFloat(b.balance) || 0) - (parseFloat(a.balance) || 0));
-        totalBalance = wallets.reduce((acc, w) => acc + parseFloat(w.balance || 0), 0);
+        fiatBalances = balRes.data.fiatBalances || [];
+        totalBalance = balRes.data.totalBalance ?? wallets.reduce((acc, w) => acc + parseFloat(w.balance || 0), 0);
       }
 
       let allTransactions = [];
@@ -35,6 +37,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
           let kind;
           if (txType === 'fiat_to_crypto') kind = 'onramp';
           else if (txType === 'crypto_to_fiat') kind = 'offramp';
+          else if (txType === 'fiat_to_fiat') kind = 'transfer';
           else if (txType === 'deposit') kind = 'deposit';
           else kind = isSent ? "sent" : "received";
 
@@ -56,11 +59,12 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
         });
       }
 
-      return { wallets, totalBalance, allTransactions };
+      return { wallets, fiatBalances, totalBalance, allTransactions };
     }
   );
 
   const wallets = data?.wallets ?? [];
+  const fiatBalances = data?.fiatBalances ?? [];
   const totalBalance = data?.totalBalance ?? 0;
   const allTransactions = data?.allTransactions ?? [];
   const loading = !data && isValidating;
@@ -140,7 +144,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
 
           {/* RIGHT */}
           <div className="rounded-[32px] bg-[#FAFAFA] p-4 w-full xl:max-w-[630px]">
-            <BalanceBreakdown wallets={wallets} loading={loading} />
+            <BalanceBreakdown wallets={wallets} fiatBalances={fiatBalances} loading={loading} />
           </div>
         </div>
       </div>

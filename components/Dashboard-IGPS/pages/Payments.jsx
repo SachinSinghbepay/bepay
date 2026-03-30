@@ -39,7 +39,10 @@ export default function Payments({ onOpenModal }) {
     USDT: "/icons/USDT.svg",
     DAI: "/icons/dai.svg",
     BTC: "/icons/btc.svg",
-    ETH: "/icons/Eth.png"
+    ETH: "/icons/Eth.png",
+    USD: "/icons/usa.svg",
+    EUR: "/icons/europe.png",
+    GBP: "/icons/usa.svg",
   };
 
   const fiatIcons = {
