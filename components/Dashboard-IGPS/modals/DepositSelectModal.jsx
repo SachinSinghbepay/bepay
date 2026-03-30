@@ -52,7 +52,7 @@ export default function DepositSelectModal({
       {/* So we just need to fill it properly */}
 
       {/* HEADER — fixed, never scrolls */}
-      <div className="relative flex items-center justify-center px-2 sm:px-8 pt-8 mb-4">
+      <div className="relative flex items-center justify-center px-2 sm:px-8 pt-8 mb-5 sm:mb-8 ">
         {showBackButton && (
           <button onClick={onBack} className="absolute left-6 text-xl text-gray-500 cursor-pointer">
             <Image src="/icons/back.svg" alt="" width={18} height={18} />

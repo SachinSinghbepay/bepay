@@ -43,7 +43,7 @@ export default function NewTransferModal({ onClose, onGlobalPayout, onPayToEmail
       </div>
 
       {/* CONTENT */}
-      <div className="px-2 sm:px-8 py-10">
+      <div className="px-6 sm:px-8 py-10">
         <div
           ref={scrollRef}
           className="grid sm:grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto">

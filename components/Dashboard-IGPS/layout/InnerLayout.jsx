@@ -52,6 +52,7 @@ import BackupCodesModal from "../modals/BackupCodesModal";
 import DisableTwoFactorModal from "../modals/DisableTwoFactorModal";
 import ShareInviteModal from "../modals/ShareInviteModal";
 import PaymentDetailsModal from "../modals/PaymentDetailsModal";
+import DownloadStatementModal from "../modals/DownloadStatementModal";
 
 
 
@@ -535,6 +536,13 @@ export default function InnerLayout() {
           {modal === "payment-details" && (
             <PaymentDetailsModal
               order={modalProps?.order}
+              onClose={closeModal}
+            />
+          )}
+
+          {modal === "download-statement" && (
+            <DownloadStatementModal
+              transactions={modalProps?.transactions || []}
               onClose={closeModal}
             />
           )}

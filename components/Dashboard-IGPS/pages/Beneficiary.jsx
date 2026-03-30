@@ -1,6 +1,6 @@
 "use client";
 
-import { Trash2, Mail, Landmark, Wallet, Plus, RefreshCw } from "lucide-react";
+import { Trash2, Mail, Landmark, Wallet, Plus, RefreshCw, Search } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
@@ -12,6 +12,7 @@ export default function Beneficiary({ onOpenModal }) {
     const { igpsService } = useAuth();
     const { toast } = useToast();
     const [filter, setFilter] = useState("All");
+    const [search, setSearch] = useState("");
     const [confirmTarget, setConfirmTarget] = useState(null);
     const [deleting, setDeleting] = useState(false);
 
@@ -57,11 +58,14 @@ export default function Beneficiary({ onOpenModal }) {
     };
 
     const filtered = beneficiaries.filter(b => {
-        if (filter === "All") return true;
-        const type = b.paymentInfo?.paymentType || "unknown";
-        if (filter === "Bank" && type === "bank_account") return true;
-        if (filter === "Wallet" && type === "crypto_wallet") return true;
-        return false;
+        if (filter === "Bank" && (b.paymentInfo?.paymentType || "unknown") !== "bank_account") return false;
+        if (filter === "Wallet" && (b.paymentInfo?.paymentType || "unknown") !== "crypto_wallet") return false;
+        if (search.trim()) {
+            const q = search.toLowerCase();
+            const name = b.fullName || (b.firstName ? `${b.firstName} ${b.lastName}` : b.email) || "";
+            if (!name.toLowerCase().includes(q) && !(b.email || "").toLowerCase().includes(q)) return false;
+        }
+        return true;
     });
 
     return (
@@ -71,9 +75,19 @@ export default function Beneficiary({ onOpenModal }) {
 
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                        <h1 className="text-2xl font-semibold">Beneficiaries</h1>
-
-                        <div className="flex gap-2">
+                        {/* Tabs */}
+                        <div className="flex gap-8 text-[#6A6A6A] font-medium text-sm  pb-1">
+                            {["All", "Bank", "Email", "Wallet"].map((tab) => (
+                                <button
+                                    key={tab}
+                                    onClick={() => setFilter(tab)}
+                                    className={`pb-2 ${filter === tab ? "text-black border-b-2 border-black -mb-1.5" : "hover:text-gray-800"}`}
+                                >
+                                    {tab}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="flex items-center gap-2">
                             <button
                                 onClick={handleRefresh}
                                 className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition cursor-pointer"
@@ -81,28 +95,25 @@ export default function Beneficiary({ onOpenModal }) {
                             >
                                 <RefreshCw size={18} className={refreshing ? "animate-spin" : ""} />
                             </button>
+                            <div className="flex items-center gap-2 px-4 py-3 rounded-full border border-[#C0C0C099]/60 text-sm text-gray-500 w-80">
+                                <Image src='/icons/lens.png' width={20} height={20} />
+                                <input
+                                    value={search}
+                                    onChange={e => setSearch(e.target.value)}
+                                    placeholder="Search by name or email"
+                                    className="bg-transparent outline-none w-48 placeholder-gray-400 text-gray-800"
+                                />
+                            </div>
                             <button
                                 onClick={() => onOpenModal("add-beneficiary", { onSuccess: () => mutate() })}
                                 className="bg-black text-white px-6 py-3 rounded-full text-sm flex items-center gap-2 cursor-pointer hover:bg-gray-800 transition"
                             >
-                                <Plus size={16} />
                                 Add beneficiary
                             </button>
                         </div>
                     </div>
 
-                    {/* Tabs */}
-                    <div className="flex gap-8 text-gray-500 text-sm border-b pb-1">
-                        {["All", "Bank", "Wallet"].map((tab) => (
-                            <button
-                                key={tab}
-                                onClick={() => setFilter(tab)}
-                                className={`pb-2 ${filter === tab ? "text-black border-b-2 border-black -mb-1.5" : "hover:text-gray-800"}`}
-                            >
-                                {tab}
-                            </button>
-                        ))}
-                    </div>
+
 
                     {/* CONTENT */}
                     {loading ? (
@@ -242,7 +253,7 @@ function BeneficiaryRow({ item, index, onDelete }) {
                             className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-red-500 hover:bg-red-50 transition"
                             title="Delete beneficiary"
                         >
-                            <Trash2 size={18} />
+                            <Image src="/icons/delete.png" alt="Delete" width={20} height={20} />
                         </button>
                     </div>
                 </div>

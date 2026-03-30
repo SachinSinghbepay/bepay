@@ -89,7 +89,7 @@ export default function GlobalPayoutModal({
           </button>
         </div>
 
-        <div ref={scrollRef} className="flex-1 overflow-y-auto px-8 pb-8 min-h-0">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 sm:px-8 pb-8 min-h-0">
           {/* LOADING STATE */}
           {loading && (
             <div className="flex justify-center py-10">

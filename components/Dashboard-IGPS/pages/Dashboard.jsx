@@ -181,15 +181,25 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
       <div className="bg-white rounded-3xl p-6 shadow-sm space-y-6">
 
         {/* FILTERS */}
-        <div className="flex items-center gap-3 overflow-x-auto pb-2">
-          {filterOptions.map(f => (
-            <Filter
-              key={f}
-              label={f}
-              active={activeFilter === f}
-              onClick={() => setActiveFilter(f)}
-            />
-          ))}
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 flex-wrap">
+            <h2 className="text-base font-semibold text-[#333333] mr-2">Recent transactions</h2>
+            {filterOptions.map(f => (
+              <Filter
+                key={f}
+                label={f}
+                active={activeFilter === f}
+                onClick={() => setActiveFilter(f)}
+              />
+            ))}
+          </div>
+          <button
+            onClick={() => onOpenModal("download-statement", { transactions: allTransactions })}
+            className="p-2 rounded-lg bg-[#EBEBEB] transition shrink-0 cursor-pointer"
+            title="Download statement"
+          >
+            <Image src="/icons/filter.svg" alt="Filter" width={20} height={20} />
+          </button>
         </div>
 
         {loading ? (
@@ -203,7 +213,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
           <div className="space-y-4">
 
             {/* TABLE HEADER */}
-            <div className="hidden lg:grid lg:grid-cols-5 text-sm text-[#6A6A6A] border-b pb-3">
+            <div className="hidden lg:grid lg:grid-cols-5 text-sm text-[#6A6A6A] border-b pb-3 px-4">
               <span>Amount</span>
               <span>Date</span>
               <span>Status</span>
@@ -215,7 +225,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
             {transactions.map((tx) => (
               <div
                 key={tx.id}
-                className="hidden lg:grid lg:grid-cols-5 items-center py-3 border-b text-sm"
+                className="hidden lg:grid lg:grid-cols-5 items-center py-3 px-4 rounded-xl text-sm bg-[#EFEFEF]"
               >
                 <span className={`font-medium ${tx.type === 'sent' ? "text-red-500" : "text-green-500"}`}>
                   {tx.type === 'sent' ? "-" : "+"}{tx.amount} {tx.currency}
@@ -235,7 +245,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
                 <span className="text-[#6A6A6A] truncate">{tx.email}</span>
                 <button
                   onClick={() => onOpenModal("txn-details", { transaction: tx })}
-                  className="text-right underline text-[#6A6A6A] hover:text-black"
+                  className="text-right underline text-[#6A6A6A] hover:text-black font-medium cursor-pointer"
                 >
                   View txn. details
                 </button>
