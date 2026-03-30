@@ -1,6 +1,7 @@
 "use client";
 import ModalFrame from "./ModalFrame";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 import { useState } from "react";
 import Image from "next/image";
 
@@ -8,6 +9,7 @@ import Image from "next/image";
 export default function RemoveMemberModal({ onClose, member, refresh }) {
 
     const { igpsService } = useAuth();
+    const { toast } = useToast();
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -33,6 +35,7 @@ export default function RemoveMemberModal({ onClose, member, refresh }) {
             }
 
             if (res.success) {
+                toast.success(isInvite ? "Invite cancelled" : "Member removed");
                 refresh?.();
                 onClose();
             } else {

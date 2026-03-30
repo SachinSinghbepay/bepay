@@ -5,12 +5,14 @@ import { IgpsService } from "../../../services/igpsService";
 import { getCountries, getCountryCallingCode } from "libphonenumber-js";
 import Image from "next/image";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 
 
 
 
 export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSuccess }) {
     const { igpsService } = useAuth();
+    const { toast } = useToast();
     const scrollRef = useRef(null);
 
     useEffect(() => {
@@ -424,16 +426,20 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
             console.log("PAYLOAD:", payload);
             const res = await igpsService.createBeneficiary(payload);
             if (res.success) {
+                toast.success("Beneficiary added");
                 onClose();
                 onSuccess?.();
             } else {
+                const msg = res.error || res.message || "Failed to create beneficiary";
                 setError({
-                    message: res.error || res.message || "Failed to create beneficiary",
+                    message: msg,
                     details: Array.isArray(res.details) ? res.details : [],
                 });
+                toast.error(msg);
             }
         } catch (err) {
             setError({ message: err.message, details: [] });
+            toast.error(err.message);
         } finally {
             setLoading(false);
         }

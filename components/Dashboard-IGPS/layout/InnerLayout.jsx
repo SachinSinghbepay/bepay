@@ -19,6 +19,7 @@ import KycBanner from "../components/KycBanner"
 
 
 import ModalRoot from "../layout/ModalRoot";
+import { ToastProvider } from "../context/ToastContext";
 import ModalFrame from "../modals/ModalFrame";
 import KycRequiredModal from "../modals/KycRequiredModal";
 import KycVerificationForm from "../pages/KycVerificationFormNew";
@@ -174,7 +175,7 @@ export default function InnerLayout() {
   };
 
   return (
-    <>
+    <ToastProvider>
       {/* ===== MAIN LAYOUT ===== */}
       <div className="min-h-screen bg-[#F9F9F9] p-2 sm:p-4 lg:p-6">
         <div className="relative mx-auto max-w-full bg-[#F9F9F9] rounded-2xl lg:rounded-3xl flex overflow-hidden">
@@ -544,6 +545,6 @@ export default function InnerLayout() {
         </ModalRoot>
       )}
 
-    </>
+    </ToastProvider>
   );
 }

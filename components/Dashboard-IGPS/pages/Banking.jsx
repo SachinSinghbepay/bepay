@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { Copy } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 import jsPDF from "jspdf";
 import Image from 'next/image';
 import useSWR from 'swr';
@@ -9,6 +10,7 @@ import useSWR from 'swr';
 export default function Banking() {
   const [tab, setTab] = useState(null);
   const { igpsService } = useAuth();
+  const { toast } = useToast();
   const [copiedAll, setCopiedAll] = useState(false);
 
   const { data, isValidating } = useSWR(
@@ -47,6 +49,7 @@ export default function Banking() {
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
+    toast.info("Copied");
   };
 
   const handleDownloadPDF = () => {
@@ -149,6 +152,7 @@ export default function Banking() {
                         await navigator.clipboard.writeText(text);
                         setCopiedAll(true);
                         setTimeout(() => setCopiedAll(false), 2000);
+                        toast.info("All details copied");
                       } catch (err) {
                         console.error("Copy failed", err);
                       }

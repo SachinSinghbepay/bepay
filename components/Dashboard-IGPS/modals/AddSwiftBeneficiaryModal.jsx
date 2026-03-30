@@ -2,11 +2,13 @@ import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useRef, useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 import { PAYMENT_CONFIG } from "../utils/paymentConfig";
 import Image from "next/image";
 
 export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
     const { igpsService } = useAuth();
+    const { toast } = useToast();
     const scrollRef = useRef(null);
 
     const [loading, setLoading] = useState(false);
@@ -57,6 +59,11 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
         { label: "RTP (Real Time Payment)", value: "rtp" },
         { label: "Wire Transfer", value: "wire" },
         { label: "SWIFT (International Wire)", value: "swift" }
+    ];
+
+    const accountTypeOptions = [
+        { label: "Savings", value: "savings" },
+        { label: "Checking / Current account", value: "checking" }
     ];
 
     const categoryOptions = [
@@ -262,13 +269,17 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
             const res = await igpsService.createBeneficiary(payload);
 
             if (res.success) {
+                toast.success("Beneficiary added");
                 onBack();
             } else {
-                setError(res.error || "Failed to create beneficiary");
+                const msg = res.error || "Failed to create beneficiary";
+                setError(msg);
+                toast.error(msg);
             }
 
         } catch (err) {
             setError(err.message);
+            toast.error(err.message);
         } finally {
             setLoading(false);
         }
@@ -308,8 +319,9 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                     <CustomSelect
                         options={countries}
                         value={country}
-                        onChange={setCountry}
+                        onChange={(val) => { setCountry(val); setSelectedState(""); }}
                         placeholder="Select country"
+                        searchable
                     />
 
                     <Input placeholder="Address line 1" value={addressLine1} onChange={setAddressLine1} />
@@ -323,10 +335,11 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                                 options={states}
                                 value={selectedState}
                                 onChange={setSelectedState}
-                                placeholder="Select state"
+                                placeholder={loadingStates ? "Loading..." : "Select state"}
+                                searchable
                             />
                         ) : (
-                            <Input placeholder="State" value={selectedState} onChange={setSelectedState} />
+                            <Input placeholder={loadingStates ? "Loading..." : "State"} value={selectedState} onChange={setSelectedState} />
                         )}
 
                         <Input placeholder="Postal code" value={zip} onChange={setZip} />
@@ -382,7 +395,15 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                     )}
 
                     {fields.includes("accountType") && (
-                        <Input label="Account type" value={accountType} onChange={setAccountType} />
+                        <div className="space-y-2">
+                            <label className="text-sm text-gray-500">Account type</label>
+                            <CustomSelect
+                                options={accountTypeOptions}
+                                value={accountType}
+                                onChange={setAccountType}
+                                placeholder="Select account type"
+                            />
+                        </div>
                     )}
 
                     {fields.includes("accountNumber") && (

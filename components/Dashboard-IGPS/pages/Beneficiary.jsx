@@ -3,12 +3,17 @@
 import { Trash2, Mail, Landmark, Wallet, Plus, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import Image from "next/image";
 import useSWR from 'swr';
 
 
 export default function Beneficiary({ onOpenModal }) {
     const { igpsService } = useAuth();
+    const { toast } = useToast();
     const [filter, setFilter] = useState("All");
+    const [confirmTarget, setConfirmTarget] = useState(null);
+    const [deleting, setDeleting] = useState(false);
 
     const { data, isValidating, mutate } = useSWR(
         'igps-beneficiaries',
@@ -19,20 +24,35 @@ export default function Beneficiary({ onOpenModal }) {
     );
 
     const beneficiaries = data ?? [];
+    const [refreshing, setRefreshing] = useState(false);
     const loading = !data && isValidating;
-    const refreshing = !!data && isValidating;
 
-    const handleDelete = async (id) => {
-        if (!confirm("Are you sure you want to delete this beneficiary?")) return;
+    const handleRefresh = async () => {
+        setRefreshing(true);
+        await Promise.all([
+            mutate(),
+            new Promise(resolve => setTimeout(resolve, 600)),
+        ]);
+        setRefreshing(false);
+    };
+
+    const handleDelete = async () => {
+        if (!confirmTarget) return;
+        setDeleting(true);
         try {
-            const res = await igpsService.deleteBeneficiary(id);
+            const res = await igpsService.deleteBeneficiary(confirmTarget.id);
             if (res.success) {
                 mutate();
+                toast.success("Beneficiary deleted");
+                setConfirmTarget(null);
             } else {
-                alert(res.message || "Failed to delete");
+                toast.error(res.error || res.message || "Failed to delete");
             }
         } catch (error) {
             console.error("Delete failed", error);
+            toast.error("Failed to delete beneficiary");
+        } finally {
+            setDeleting(false);
         }
     };
 
@@ -45,69 +65,140 @@ export default function Beneficiary({ onOpenModal }) {
     });
 
     return (
-        <div className="flex-1 px-2 sm:px-10 py-8">
-            <div className="max-w-6xl mx-auto space-y-8">
+        <>
+            <div className="flex-1 px-2 sm:px-10 py-8">
+                <div className="max-w-6xl mx-auto space-y-8">
 
-                {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <h1 className="text-2xl font-semibold">Beneficiaries</h1>
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <h1 className="text-2xl font-semibold">Beneficiaries</h1>
 
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => mutate()}
-                            className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition"
-                            title="Refresh list"
-                        >
-                            <RefreshCw size={18} className={refreshing ? "animate-spin" : ""} />
-                        </button>
-                        <button
-                            onClick={() => onOpenModal("add-beneficiary", { onSuccess: () => mutate() })}
-                            className="bg-black text-white px-6 py-3 rounded-full text-sm flex items-center gap-2 hover:bg-gray-800 transition"
-                        >
-                            <Plus size={16} />
-                            Add beneficiary
-                        </button>
-                    </div>
-                </div>
-
-                {/* Tabs */}
-                <div className="flex gap-8 text-gray-500 text-sm border-b pb-1">
-                    {["All", "Bank", "Wallet"].map((tab) => (
-                        <button
-                            key={tab}
-                            onClick={() => setFilter(tab)}
-                            className={`pb-2 ${filter === tab ? "text-black border-b-2 border-black -mb-1.5" : "hover:text-gray-800"}`}
-                        >
-                            {tab}
-                        </button>
-                    ))}
-                </div>
-
-                {/* CONTENT */}
-                {loading ? (
-                    <div className="py-20 text-center text-gray-400">Loading beneficiaries...</div>
-                ) : filtered.length === 0 ? (
-                    <EmptyState onAdd={() => onOpenModal('add-beneficiary', { onSuccess: () => mutate() })} filter={filter} />
-                ) : (
-                    <div className="space-y-4">
-                        {/* Table Header */}
-                        <div className="grid grid-cols-3 text-sm text-gray-500 pb-3 border-b">
-                            <span>Name</span>
-                            <span>Pay via</span>
-                            <span className="text-right">Action</span>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={handleRefresh}
+                                className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition cursor-pointer"
+                                title="Refresh list"
+                            >
+                                <RefreshCw size={18} className={refreshing ? "animate-spin" : ""} />
+                            </button>
+                            <button
+                                onClick={() => onOpenModal("add-beneficiary", { onSuccess: () => mutate() })}
+                                className="bg-black text-white px-6 py-3 rounded-full text-sm flex items-center gap-2 cursor-pointer hover:bg-gray-800 transition"
+                            >
+                                <Plus size={16} />
+                                Add beneficiary
+                            </button>
                         </div>
+                    </div>
 
-                        {/* Rows */}
-                        {filtered.map((item, index) => (
-                            <BeneficiaryRow
-                                key={item.id}
-                                item={item}
-                                index={index}
-                                onDelete={() => handleDelete(item.id)}
-                            />
+                    {/* Tabs */}
+                    <div className="flex gap-8 text-gray-500 text-sm border-b pb-1">
+                        {["All", "Bank", "Wallet"].map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => setFilter(tab)}
+                                className={`pb-2 ${filter === tab ? "text-black border-b-2 border-black -mb-1.5" : "hover:text-gray-800"}`}
+                            >
+                                {tab}
+                            </button>
                         ))}
                     </div>
-                )}
+
+                    {/* CONTENT */}
+                    {loading ? (
+                        <div className="py-20 text-center text-gray-400">Loading beneficiaries...</div>
+                    ) : filtered.length === 0 ? (
+                        <EmptyState onAdd={() => onOpenModal('add-beneficiary', { onSuccess: () => mutate() })} filter={filter} />
+                    ) : (
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-3 text-sm text-gray-500 pb-3 border-b">
+                                <span>Name</span>
+                                <span>Pay via</span>
+                                <span className="text-right">Action</span>
+                            </div>
+
+                            {filtered.map((item, index) => (
+                                <BeneficiaryRow
+                                    key={item.id}
+                                    item={item}
+                                    index={index}
+                                    onDelete={() => setConfirmTarget(item)}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {confirmTarget && (
+                <DeleteConfirmModal
+                    item={confirmTarget}
+                    loading={deleting}
+                    onConfirm={handleDelete}
+                    onClose={() => setConfirmTarget(null)}
+                />
+            )}
+        </>
+    );
+}
+
+function DeleteConfirmModal({ item, loading, onConfirm, onClose }) {
+    const name = item.fullName || (item.firstName ? `${item.firstName} ${item.lastName}` : item.email);
+    const initial = name?.charAt(0).toUpperCase();
+
+    return (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+            <div className="relative bg-white rounded-3xl px-10 py-14 text-center w-full max-w-sm">
+
+                {/* Close */}
+                <button
+                    onClick={onClose}
+                    className="absolute right-6 top-6 text-gray-400 hover:text-gray-600 cursor-pointer transition"
+                >
+                    <Image src="/icons/close.png" alt="close" width={16} height={16} />
+                </button>
+
+                {/* Avatar */}
+                <div className="flex justify-center mb-6">
+                    <div className="h-16 w-16 rounded-2xl bg-[#E9E0D2] flex items-center justify-center text-xl font-medium text-gray-600">
+                        {initial}
+                    </div>
+                </div>
+
+                {/* Title */}
+                <h2 className="text-2xl font-semibold mb-4">
+                    Delete {name}?
+                </h2>
+
+                {/* Description */}
+                <p className="text-gray-600 text-base leading-relaxed mb-3">
+                    Are you sure you want to remove{" "}
+                    <span className="font-medium">{item.email}</span>{" "}
+                    from your beneficiaries?
+                </p>
+
+                <p className="text-red-600 text-sm mb-10">
+                    This action cannot be undone.
+                </p>
+
+                {/* Buttons */}
+                <div className="flex gap-4">
+                    <button
+                        onClick={onClose}
+                        disabled={loading}
+                        className="flex-1 h-14 rounded-2xl border text-gray-700 hover:bg-gray-50 transition disabled:opacity-50"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={onConfirm}
+                        disabled={loading}
+                        className="flex-1 h-14 rounded-2xl bg-black text-white hover:bg-gray-900 transition disabled:opacity-50"
+                    >
+                        {loading ? "Deleting..." : "Delete"}
+                    </button>
+                </div>
+
             </div>
         </div>
     );
@@ -128,9 +219,7 @@ function BeneficiaryRow({ item, index, onDelete }) {
 
                     {/* Name + Avatar */}
                     <div className="flex items-center gap-4">
-                        <div
-                            className={`w-12 h-12 rounded-xl flex items-center justify-center font-medium text-lg ${avatarColors[index % avatarColors.length]}`}
-                        >
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-medium text-lg ${avatarColors[index % avatarColors.length]}`}>
                             {name.charAt(0).toUpperCase()}
                         </div>
                         <div>
