@@ -1,7 +1,7 @@
 import React from "react";
 import { useRef, useEffect } from "react";
 import Image from "next/image";
-export default function BalanceDropdown({ wallets = [], onClose }) {
+export default function BalanceDropdown({ wallets = [], fiatBalances = [], onClose }) {
 
     const scrollRef = useRef(null);
 
@@ -42,6 +42,14 @@ export default function BalanceDropdown({ wallets = [], onClose }) {
         return "/icons/Polygon.png";
     }
 
+    const getFiatIcon = (currency) => {
+        const c = currency?.toUpperCase();
+        if (c === 'USD') return "/icons/usa.png";
+        if (c === 'EUR') return "/icons/europe.png";
+        if (c === 'GBP') return "/icons/usa.png";
+        return "/icons/usa.png";
+    }
+
     return (
         <div className="absolute right-0 top-[72px] z-50 w-full px-4 sm:px-0 sm:w-auto">
             <div className="w-full sm:w-[630px] max-w-full rounded-[28px] bg-white shadow-xl p-4 sm:p-6">
@@ -57,7 +65,18 @@ export default function BalanceDropdown({ wallets = [], onClose }) {
 
                     {/* FIAT COLUMN */}
                     <div className="space-y-8">
-                        <FiatRow img="/icons/usa.png" label="USD" value="0.00" />
+                        {fiatBalances.length === 0 ? (
+                            <FiatRow img="/icons/usa.png" label="USD" value="0.00" />
+                        ) : (
+                            fiatBalances.map((f, i) => (
+                                <FiatRow
+                                    key={i}
+                                    img={getFiatIcon(f.currency)}
+                                    label={f.currency}
+                                    value={parseFloat(f.balance || 0).toFixed(2)}
+                                />
+                            ))
+                        )}
                     </div>
 
                     {/* CRYPTO COLUMN */}
