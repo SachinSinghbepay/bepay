@@ -350,7 +350,7 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                             />
 
                             {bankDropdownOpen && (
-                                <div className="absolute top-full left-0 w-full bg-white border rounded-xl shadow-lg max-h-[250px] overflow-y-auto z-50 mt-2">
+                                <div className="absolute top-full left-0 w-full bg-white border rounded-xl shadow-lg max-h-62 overflow-y-auto z-50 mt-2">
 
                                     {loadingBanks ? (
                                         <div className="p-3 text-sm text-gray-500">

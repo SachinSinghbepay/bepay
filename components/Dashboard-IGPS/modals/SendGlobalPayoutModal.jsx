@@ -6,6 +6,17 @@ import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
 
 
+const COUNTRY_FLAGS = {
+    US: "/icons/usa.svg", USA: "/icons/usa.svg",
+    IN: "/icons/india.svg", IND: "/icons/india.svg",
+    DE: "/icons/europe.png", FR: "/icons/europe.png",
+    IT: "/icons/europe.png", ES: "/icons/europe.png",
+    NL: "/icons/europe.png", BE: "/icons/europe.png",
+    AT: "/icons/europe.png", PT: "/icons/europe.png",
+    EU: "/icons/europe.png",
+    GB: "/icons/usa.png",
+};
+
 export default function SendGlobalPayoutModal({
     onClose,
     onBack,
@@ -41,12 +52,15 @@ export default function SendGlobalPayoutModal({
     const [selectedBeneficiary, setSelectedBeneficiary] = useState(beneficiary || null);
     const [amount, setAmount] = useState("");
     const [currency, setCurrency] = useState("USDC"); // Source currency
+    const [sourceType, setSourceType] = useState("crypto"); // "crypto" | "fiat"
+    const [transferType, setTransferType] = useState("WIRE"); // ACH | RTP | WIRE | SWIFT
     const [purposeCode, setPurposeCode] = useState("");
     const [sourceOfFunds, setSourceOfFunds] = useState("");
     const [relationship, setRelationship] = useState("");
 
     const [targetCurrency, setTargetCurrency] = useState("USD");
     const [invoice, setInvoice] = useState(null);
+    const [fiatBalances, setFiatBalances] = useState([]);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -103,18 +117,21 @@ export default function SendGlobalPayoutModal({
 
 
     const selectedWalletBalance = useMemo(() => {
+        if (['USD', 'EUR', 'GBP'].includes(currency)) {
+            const fiat = fiatBalances.find(f => f.currency === currency);
+            return fiat ? { balance: fiat.balance, currency: fiat.currency } : null;
+        }
         const chainMap = {
             solana: "SOL",
             ethereum: "ETH",
             polygon: "POL",
             tron: "TRX"
         };
-
         return walletBalances.find(w => {
             const normalized = `${w.currency}_${chainMap[w.chain]}`;
             return normalized === currency;
         });
-    }, [walletBalances, currency]);
+    }, [walletBalances, fiatBalances, currency]);
 
 
     // Fetch beneficiaries & currencies
@@ -160,7 +177,11 @@ export default function SendGlobalPayoutModal({
                     setWalletBalances(balanceRes.data.wallets);
                 }
 
-                else {
+                if (balanceRes.success && Array.isArray(balanceRes.data?.fiatBalances)) {
+                    setFiatBalances(balanceRes.data.fiatBalances);
+                }
+
+                if (!walletRes.success) {
                     // Fallback defaults
                     setSourceCurrencies([]);
                 }
@@ -183,48 +204,53 @@ export default function SendGlobalPayoutModal({
                 return;
             }
 
-            // Find selected wallet to get correct currency code and network
-            const selectedWallet = sourceCurrencies.find(w => w.fullCurrency === currency);
-            // If strictly matching wallet not found (e.g. initial load or fallback), might default or return
-            // For now, if we have wallets, we expect a match. If no wallets (fallback), we might use raw string?
-            // Let's assume strict match if wallets exist.
+            // Check if source is fiat (USD, EUR, GBP) or crypto (USDC_POL, etc.)
+            const isFiatSource = ['USD', 'EUR', 'GBP'].includes(currency);
+
+            // Update sourceType state
+            setSourceType(isFiatSource ? 'fiat' : 'crypto');
 
             let reqSourceCurrency = currency;
             let reqNetwork = "ETH";
 
-            if (selectedWallet) {
-                reqSourceCurrency = selectedWallet.currency;
-                // Parse network from fullCurrency (USDT_TRX -> TRX) or map chain
-                const parts = selectedWallet.fullCurrency.split('_');
-                if (parts.length > 1) reqNetwork = parts[1];
-            } else if (currency === "USDC") {
-                // Fallback default
-                reqSourceCurrency = "USDC";
-                reqNetwork = "ETH";
+            if (isFiatSource) {
+                // Fiat source: no network needed
+                reqSourceCurrency = currency;
+                reqNetwork = null;
+            } else {
+                // Find selected wallet to get correct currency code and network
+                const selectedWallet = sourceCurrencies.find(w => w.fullCurrency === currency);
+                if (selectedWallet) {
+                    reqSourceCurrency = selectedWallet.currency;
+                    const parts = selectedWallet.fullCurrency.split('_');
+                    if (parts.length > 1) reqNetwork = parts[1];
+                } else if (currency === "USDC") {
+                    reqSourceCurrency = "USDC";
+                    reqNetwork = "ETH";
+                }
             }
 
             setLoadingQuote(true);
             setQuoteError("");
-            console.log("QUOTE REQUEST:", {
-                sourceCurrency: reqSourceCurrency,
-                targetCurrency,
-                sourceAmount: parseFloat(amount),
-                network: reqNetwork
-            });
-            console.log("SELECTED WALLET:", selectedWallet);
             try {
                 const quotePayload = {
                     sourceCurrency: reqSourceCurrency,
                     targetCurrency: targetCurrency,
                     sourceAmount: parseFloat(amount),
-                    network: reqNetwork,
                 };
 
-                // add transferType ONLY if it exists
-                if (selectedBeneficiary?.paymentInfo?.transferType) {
+                // Only add network for crypto sources
+                if (reqNetwork) {
+                    quotePayload.network = reqNetwork;
+                }
+
+                // Add transferType for fiat sources (required for FIAT_TO_FIAT)
+                if (isFiatSource) {
+                    quotePayload.transferType = transferType;
+                } else if (selectedBeneficiary?.paymentInfo?.transferType) {
                     quotePayload.transferType = selectedBeneficiary.paymentInfo.transferType;
                 }
-                console.log("QUOTE PAYLOAD:", quotePayload);
+
                 const res = await igpsService.createQuote(quotePayload);
 
                 if (res.success) {
@@ -242,7 +268,7 @@ export default function SendGlobalPayoutModal({
 
         const timer = setTimeout(fetchQuote, 500);
         return () => clearTimeout(timer);
-    }, [amount, currency, targetCurrency, sourceCurrencies]);
+    }, [amount, currency, targetCurrency, sourceCurrencies, transferType]);
 
     const handleSend = () => {
         if (!quote || !selectedBeneficiary) return;
@@ -250,13 +276,15 @@ export default function SendGlobalPayoutModal({
         onOpenModal("confirm-globalpayout", {
             quote: quote,
             beneficiary: selectedBeneficiary,
+            sourceType,
+            transferType: sourceType === 'fiat' ? transferType : undefined,
             paymentDetails: {
                 purpose: purposeCode,
                 sourceOfFunds: sourceOfFunds,
                 beneficiaryRelationship: relationship,
                 documents: invoice ? [invoice] : []
             },
-            onBack: () => onOpenModal("send-globalpayout"), // Return here
+            onBack: () => onOpenModal("send-globalpayout"),
             onConfirm: () => onOpenModal("transfer-request-submitted"),
         });
     };
@@ -333,7 +361,7 @@ export default function SendGlobalPayoutModal({
                                 <div className="p-[1.5px] rounded-xl bg-[#CECECE]">
                                     <div className="bg-[#F5F5F5] rounded-xl p-2">
                                         <Image
-                                            src={selectedBeneficiary.countryIcon || "/icons/usa.svg"}
+                                            src={COUNTRY_FLAGS[selectedBeneficiary.addressCountry || selectedBeneficiary.address?.country] || "/icons/usa.svg"}
                                             alt=""
                                             width={28}
                                             height={28}
@@ -415,14 +443,34 @@ export default function SendGlobalPayoutModal({
                             setCurrency={setCurrency}
                             targetCurrency={targetCurrency}
                             sourceCurrencies={sourceCurrencies}
+                            fiatBalances={fiatBalances}
+                            setSourceType={setSourceType}
                             availableBalance={parseFloat(selectedWalletBalance?.balance || 0)}
                         />
                     </Section>
 
-    {quoteError && (
+                    {quoteError && (
                         <p className="text-red-500 text-sm -mt-3">{quoteError}</p>
                     )}
 
+
+                    {/* TRANSFER TYPE — fiat only */}
+                    {sourceType === 'fiat' && (
+                        <div className="space-y-2">
+                            <label className="text-sm text-gray-500">Transfer Type</label>
+                            <CustomSelect
+                                options={[
+                                    { label: "WIRE", value: "WIRE" },
+                                    { label: "ACH", value: "ACH" },
+                                    { label: "SWIFT", value: "SWIFT" },
+                                    { label: "RTP", value: "RTP" },
+                                ]}
+                                value={transferType}
+                                onChange={setTransferType}
+                                placeholder="Select transfer type"
+                            />
+                        </div>
+                    )}
 
                     {/* PURPOSE */}
                     <div className="space-y-2">
@@ -504,59 +552,66 @@ export default function SendGlobalPayoutModal({
 
                     </Section>
 
+
                     {/* SUMMARY */}
 
                     {(loadingQuote || quote) && (
-                        <div className="grid grid-cols-2 gap-y-4 text-sm pt-4 p-20">
+                        <>
+                            <hr />
+                            <div className="grid grid-cols-2 gap-y-4 text-sm pt-4 p-20">
 
-                            {loadingQuote ? (
-                                <div className="col-span-2 text-center text-gray-500 py-4">
-                                    Fetching rate...
-                                </div>
-                            ) : quote ? (
-                                <>
-                                    <SummaryRow
-                                        label="Exchange rate"
-                                        value={`1 ${quote.sourceCurrency} ≈ ${quote.exchangeRate} ${quote.targetCurrency}`}
-                                    />
+                                {loadingQuote ? (
+                                    <div className="col-span-2 text-center text-gray-500 py-4">
+                                        Fetching rate...
+                                    </div>
+                                ) : quote ? (
+                                    <>
+                                        <SummaryRow
+                                            label="Exchange rate"
+                                            value={`1 ${quote.sourceCurrency} ≈ ${quote.exchangeRate} ${quote.targetCurrency}`}
+                                        />
 
-                                    <SummaryRow
-                                        label="Processing fee"
-                                        value={`${quote.fee} ${quote.sourceCurrency}`}
-                                        info={<FeeInfo />}
-                                    />
+                                        <SummaryRow
+                                            label="Processing fee"
+                                            value={`${quote.fee} ${quote.sourceCurrency}`}
+                                            info={<FeeInfo />}
+                                        />
 
-                                    <SummaryRow
-                                        label="Total receivable"
-                                        value={`≈ ${quote.targetAmount} ${quote.targetCurrency}`}
-                                        bold
-                                    />
+                                        <SummaryRow
+                                            label="Total receivable"
+                                            value={`≈ ${quote.targetAmount} ${quote.targetCurrency}`}
+                                            bold
+                                        />
 
-                                    <SummaryRow
-                                        label="Processing time"
-                                        value="1–3 business days"
-                                    />
-                                </>
-                            ) : null}
+                                        <SummaryRow
+                                            label="Processing time"
+                                            value="1–3 business days"
+                                        />
+                                    </>
+                                ) : null}
 
-                        </div>
+                            </div>
+                        </>
+
                     )}
-                      {/* FOOTER */}
-                <div className="px-8 py-6 border-t bg-white">
-                    <button
-                        onClick={handleSend}
-                        disabled={!quote || !selectedBeneficiary}
-                        className={`w-full h-14 rounded-2xl text-white text-base font-medium transition-all
+                    {/* FOOTER */}
+                    <div className=" py-6 border-t bg-white">
+                        <button
+                            onClick={handleSend}
+                            disabled={!quote || !selectedBeneficiary}
+                            className={`w-full h-14 rounded-2xl text-white text-base font-medium transition-all
                             ${(!quote || !selectedBeneficiary) ? "bg-gray-300 cursor-not-allowed" : "bg-black hover:bg-gray-800"}
                         `}
-                    >
-                        Send payment
-                    </button>
-                </div>
+                        >
+                            Send payment
+                        </button>
+
+                        <p className="text-[#6A6A6A] text-xs text-center mt-5">We’ll notify you via email once the payment is successful</p>
+                    </div>
 
                 </div>
 
-              
+
             </div>
         </ModalFrame>
     );
@@ -583,6 +638,8 @@ function AmountBox({
     setCurrency,
     targetCurrency,
     sourceCurrencies,
+    fiatBalances = [],
+    setSourceType,
     availableBalance = 0,
 }) {
 
@@ -610,66 +667,43 @@ function AmountBox({
             {/* TOP: Amount */}
             <div className="flex flex-col sm:flex-row justify-between items-start bg-[#F7F7F7] p-5 rounded-xl pl-6">
                 {/* dropdown for mobile */}
-                 <div className=" mb-2 relative">
+                <div className=" mb-2 relative">
                     <div className="flex sm:hidden items-center gap-3 bg-[#EBEBEB] py-2 px-2 rounded-xl w-full lg:w-50">
 
                         {/* TOKEN + NETWORK ICONS */}
-                        {sourceCurrencies
-                            .filter(w => w.fullCurrency === currency)
-                            .map(w => (
-                                <div
-                                    key={w.fullCurrency}
-                                    className="relative h-10 w-10 pl-2"
-                                >
-                                    {w.tokenUrl && (
-                                        <Image
-                                            src={w.tokenUrl}
-                                            alt="token"
-                                            width={32}
-                                            height={32}
-                                            className="rounded-full mt-1"
-                                            onError={(e) => {
-                                                e.currentTarget.style.display = "none";
-                                            }}
-                                        />
-                                    )}
-
-                                    {w.networkUrl && (
-                                        <Image
-                                            src={w.networkUrl}
-                                            alt="network"
-                                            width={16}
-                                            height={16}
-                                            className="absolute -bottom-1 -right-2 rounded-full border-2 border-white"
-                                            onError={(e) => {
-                                                e.currentTarget.style.display = "none";
-                                            }}
-                                        />
-                                    )}
-                                </div>
-                            ))}
+                        {fiatBalances.some(f => f.currency === currency) ? (
+                            <div className="relative h-10 w-10 pl-2">
+                                <Image src="/icons/usa.png" alt="USD" width={32} height={32} className="rounded-full mt-1" />
+                            </div>
+                        ) : sourceCurrencies.filter(w => w.fullCurrency === currency).map(w => (
+                            <div key={w.fullCurrency} className="relative h-10 w-10 pl-2">
+                                {w.tokenUrl && (
+                                    <Image src={w.tokenUrl} alt="token" width={32} height={32} className="rounded-full mt-1" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                                )}
+                                {w.networkUrl && (
+                                    <Image src={w.networkUrl} alt="network" width={16} height={16} className="absolute -bottom-1 -right-2 rounded-full border-2 border-white" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                                )}
+                            </div>
+                        ))}
                         {/* SELECT DROPDOWN */}
                         <div ref={dropdownRef} className="relative">
 
                             {/* BUTTON */}
                             <button
                                 onClick={() => {
-                                    if (sourceCurrencies.length > 0) {
+                                    if (sourceCurrencies.length > 0 || fiatBalances.length > 0) {
                                         setOpen(v => !v);
                                     }
                                 }}
                                 className="flex items-center gap-3 bg-[#EBEBEB] px-4 py-3 rounded-xl border text-[18px] font-semibold min-w-[120px]"
                             >
-                                {sourceCurrencies.length === 0 ? (
+                                {sourceCurrencies.length === 0 && fiatBalances.length === 0 ? (
                                     <span className="text-gray-400 text-sm">Loading...</span>
                                 ) : (
                                     <>
                                         <span>
-                                            {
-                                                sourceCurrencies.find(c => c.fullCurrency === currency)?.currency
-                                            }
+                                            {sourceCurrencies.find(c => c.fullCurrency === currency)?.currency || currency.split('_')[0]}
                                         </span>
-
                                         <svg
                                             className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
                                             fill="none"
@@ -684,23 +718,50 @@ function AmountBox({
                             </button>
 
                             {/* DROPDOWN */}
-                            {open && sourceCurrencies.length > 0 && (
-                                <div className="absolute mt-2 -right-2 bg-white border rounded-xl shadow-lg z-50 w-45">
-                                    {sourceCurrencies.map((c) => (
-                                        <button
-                                            key={c.fullCurrency}
-                                            onClick={() => {
-                                                setCurrency(c.fullCurrency);
-                                                setOpen(false);
-                                            }}
-                                            className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm"
-                                        >
-                                            {c.currency}{" "}
-                                            <span className="font-light">
-                                                ({c.chain})
-                                            </span>
-                                        </button>
-                                    ))}
+                            {open && (sourceCurrencies.length > 0 || fiatBalances.some(f => f.currency === 'USD')) && (
+                                <div className="absolute mt-2 -right-2 bg-white border rounded-xl shadow-lg z-50 w-45 max-h-64 overflow-y-auto">
+                                    {fiatBalances.some(f => f.currency === 'USD') && (
+                                        <>
+                                            <div className="px-4 py-1.5 text-xs text-gray-400 font-medium border-b">Fiat</div>
+                                            {fiatBalances.filter(f => f.currency === 'USD').map((f) => (
+                                                <button
+                                                    key={f.currency}
+                                                    onClick={() => {
+                                                        setCurrency(f.currency);
+                                                        setSourceType('fiat');
+                                                        setOpen(false);
+                                                    }}
+                                                    className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm"
+                                                >
+                                                    {f.currency}{" "}
+                                                    <span className="font-light">
+                                                        (${parseFloat(f.balance || 0).toFixed(2)})
+                                                    </span>
+                                                </button>
+                                            ))}
+                                        </>
+                                    )}
+                                    {sourceCurrencies.length > 0 && (
+                                        <>
+                                            <div className="px-4 py-1.5 text-xs text-gray-400 font-medium border-b">Crypto</div>
+                                            {sourceCurrencies.map((c) => (
+                                                <button
+                                                    key={c.fullCurrency}
+                                                    onClick={() => {
+                                                        setCurrency(c.fullCurrency);
+                                                        setSourceType('crypto');
+                                                        setOpen(false);
+                                                    }}
+                                                    className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm"
+                                                >
+                                                    {c.currency}{" "}
+                                                    <span className="font-light">
+                                                        ({c.chain})
+                                                    </span>
+                                                </button>
+                                            ))}
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -753,62 +814,39 @@ function AmountBox({
                     <div className="hidden sm:flex items-center gap-3 bg-[#EBEBEB] py-2 px-2 rounded-xl  md:w-50">
 
                         {/* TOKEN + NETWORK ICONS */}
-                        {sourceCurrencies
-                            .filter(w => w.fullCurrency === currency)
-                            .map(w => (
-                                <div
-                                    key={w.fullCurrency}
-                                    className="relative h-10 w-10 pl-2"
-                                >
-                                    {w.tokenUrl && (
-                                        <Image
-                                            src={w.tokenUrl}
-                                            alt="token"
-                                            width={32}
-                                            height={32}
-                                            className="rounded-full mt-1"
-                                            onError={(e) => {
-                                                e.currentTarget.style.display = "none";
-                                            }}
-                                        />
-                                    )}
-
-                                    {w.networkUrl && (
-                                        <Image
-                                            src={w.networkUrl}
-                                            alt="network"
-                                            width={16}
-                                            height={16}
-                                            className="absolute -bottom-1 -right-2 rounded-full border-2 border-white"
-                                            onError={(e) => {
-                                                e.currentTarget.style.display = "none";
-                                            }}
-                                        />
-                                    )}
-                                </div>
-                            ))}
+                        {fiatBalances.some(f => f.currency === currency) ? (
+                            <div className="relative h-10 w-10 pl-2">
+                                <Image src="/icons/usa.svg" alt="USD" width={32} height={32} className="rounded-full mt-1" />
+                            </div>
+                        ) : sourceCurrencies.filter(w => w.fullCurrency === currency).map(w => (
+                            <div key={w.fullCurrency} className="relative h-10 w-10 pl-2">
+                                {w.tokenUrl && (
+                                    <Image src={w.tokenUrl} alt="token" width={32} height={32} className="rounded-full mt-1" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                                )}
+                                {w.networkUrl && (
+                                    <Image src={w.networkUrl} alt="network" width={16} height={16} className="absolute -bottom-1 -right-2 rounded-full border-2 border-white" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                                )}
+                            </div>
+                        ))}
                         {/* SELECT DROPDOWN */}
                         <div ref={dropdownRef} className="relative">
 
                             {/* BUTTON */}
                             <button
                                 onClick={() => {
-                                    if (sourceCurrencies.length > 0) {
+                                    if (sourceCurrencies.length > 0 || fiatBalances.length > 0) {
                                         setOpen(v => !v);
                                     }
                                 }}
                                 className="flex items-center gap-3 bg-[#EBEBEB] px-4 py-3 rounded-xl border text-[18px] font-semibold min-w-[120px]"
                             >
-                                {sourceCurrencies.length === 0 ? (
+                                {sourceCurrencies.length === 0 && fiatBalances.length === 0 ? (
                                     <span className="text-gray-400 text-sm">Loading...</span>
                                 ) : (
                                     <>
                                         <span>
-                                            {
-                                                sourceCurrencies.find(c => c.fullCurrency === currency)?.currency
-                                            }
+                                            {sourceCurrencies.find(c => c.fullCurrency === currency)?.currency || currency.split('_')[0]}
                                         </span>
-
                                         <svg
                                             className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
                                             fill="none"
@@ -823,23 +861,50 @@ function AmountBox({
                             </button>
 
                             {/* DROPDOWN */}
-                            {open && sourceCurrencies.length > 0 && (
-                                <div className="absolute mt-2 -right-2 bg-white border rounded-xl shadow-lg z-50 w-45">
-                                    {sourceCurrencies.map((c) => (
-                                        <button
-                                            key={c.fullCurrency}
-                                            onClick={() => {
-                                                setCurrency(c.fullCurrency);
-                                                setOpen(false);
-                                            }}
-                                            className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm"
-                                        >
-                                            {c.currency}{" "}
-                                            <span className="font-light">
-                                                ({c.chain})
-                                            </span>
-                                        </button>
-                                    ))}
+                            {open && (sourceCurrencies.length > 0 || fiatBalances.some(f => f.currency === 'USD')) && (
+                                <div className="absolute mt-2 -right-2 bg-white border rounded-xl shadow-lg z-50 w-45 max-h-64 overflow-y-auto">
+                                    {fiatBalances.some(f => f.currency === 'USD') && (
+                                        <>
+                                            <div className="px-4 py-1.5 text-xs text-gray-400 font-medium border-b">Fiat</div>
+                                            {fiatBalances.filter(f => f.currency === 'USD').map((f) => (
+                                                <button
+                                                    key={f.currency}
+                                                    onClick={() => {
+                                                        setCurrency(f.currency);
+                                                        setSourceType('fiat');
+                                                        setOpen(false);
+                                                    }}
+                                                    className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm"
+                                                >
+                                                    {f.currency}{" "}
+                                                    <span className="font-light">
+                                                        (${parseFloat(f.balance || 0).toFixed(2)})
+                                                    </span>
+                                                </button>
+                                            ))}
+                                        </>
+                                    )}
+                                    {sourceCurrencies.length > 0 && (
+                                        <>
+                                            <div className="px-4 py-1.5 text-xs text-gray-400 font-medium border-b">Crypto</div>
+                                            {sourceCurrencies.map((c) => (
+                                                <button
+                                                    key={c.fullCurrency}
+                                                    onClick={() => {
+                                                        setCurrency(c.fullCurrency);
+                                                        setSourceType('crypto');
+                                                        setOpen(false);
+                                                    }}
+                                                    className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm"
+                                                >
+                                                    {c.currency}{" "}
+                                                    <span className="font-light">
+                                                        ({c.chain})
+                                                    </span>
+                                                </button>
+                                            ))}
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </div>

@@ -9,6 +9,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
   const [transactions, setTransactions] = useState([]);
   const [allTransactions, setAllTransactions] = useState([]);
   const [wallets, setWallets] = useState([]);
+  const [fiatBalances, setFiatBalances] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalBalance, setTotalBalance] = useState(0);
   const [activeFilter, setActiveFilter] = useState("All");
@@ -34,7 +35,8 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
           const sorted = cached.data.wallets.sort((a, b) => (parseFloat(b.balance) || 0) - (parseFloat(a.balance) || 0));
           currentWallets = sorted;
           setWallets(sorted);
-          setTotalBalance(sorted.reduce((acc, w) => acc + (parseFloat(w.balance || 0)), 0));
+          setFiatBalances(cached.data.fiatBalances || []);
+          setTotalBalance(cached.data.totalBalance ?? 0);
         }
       }
 
@@ -47,31 +49,15 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
           console.log("Full Balance Response:", balRes.data);
 
           const wData = balRes.data.wallets || [];
+          const fData = balRes.data.fiatBalances || [];
+          const sorted = Array.isArray(wData)
+            ? wData.sort((a, b) => (parseFloat(b.balance) || 0) - (parseFloat(a.balance) || 0))
+            : [];
 
-          if (Array.isArray(wData)) {
-            const sorted = wData.sort(
-              (a, b) => (parseFloat(b.balance) || 0) - (parseFloat(a.balance) || 0)
-            );
-
-            const newTotal = sorted.reduce(
-              (acc, w) => acc + (parseFloat(w.balance || 0)),
-              0
-            );
-
-            // Only update state if balance actually changed
-            setWallets(prev => {
-              const prevTotal = prev.reduce((acc, w) => acc + parseFloat(w.balance || 0), 0);
-
-              if (prevTotal !== newTotal) {
-                setTotalBalance(newTotal);
-                return sorted;
-              }
-
-              return prev;
-            });
-          } else {
-            console.warn("Expected array in data.wallets", balRes.data);
-          }
+          setWallets(sorted);
+          setFiatBalances(fData);
+          // Use backend-computed total (single source of truth)
+          setTotalBalance(balRes.data.totalBalance ?? 0);
         }
 
       } catch (e) {
@@ -102,7 +88,8 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
           let kind;
           if (txType === 'fiat_to_crypto') kind = 'onramp';
           else if (txType === 'crypto_to_fiat') kind = 'offramp';
-          else if (txType === 'deposit') kind = 'deposit';  
+          else if (txType === 'fiat_to_fiat') kind = 'transfer';
+          else if (txType === 'deposit') kind = 'deposit';
           else kind = isSent ? "sent" : "received";
 
           const statusRaw = tx.status || "unknown";
@@ -131,11 +118,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
         setTransactions(filtered);
       }
 
-      // Only use currentWallets total if API fetch didn't already set it via fresh data
-      if (currentWallets.length > 0) {
-        const total = currentWallets.reduce((acc, w) => acc + (parseFloat(w.balance || 0)), 0);
-        setTotalBalance(total);
-      }
+      // totalBalance is now set by the API response (includes crypto + fiat)
 
     } catch (err) {
       console.error("Dashboard fetch error", err);
@@ -244,7 +227,7 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
 
           {/* RIGHT */}
           <div className="rounded-[32px] bg-[#FAFAFA] p-4  w-full xl:max-w-[630px]">
-            <BalanceBreakdown wallets={wallets} loading={loading} />
+            <BalanceBreakdown wallets={wallets} fiatBalances={fiatBalances} loading={loading} />
           </div>
         </div>
       </div>

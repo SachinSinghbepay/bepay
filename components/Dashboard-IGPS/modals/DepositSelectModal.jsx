@@ -13,15 +13,27 @@ export default function DepositSelectModal({
 }) {
   const { igpsService } = useAuth();
   const [wallets, setWallets] = useState([]);
+  const [depositBankAccounts, setDepositBankAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchWallets = async () => {
       try {
-        const res = await igpsService.listWallets();
-        if (res.success && res.data && Array.isArray(res.data.wallets)) {
-          setWallets(res.data.wallets);
-          console.log(res.data.wallets)
+        const walletRes = await igpsService.listWallets();
+        if (walletRes.success && walletRes.data && Array.isArray(walletRes.data.wallets)) {
+          setWallets(walletRes.data.wallets);
+        }
+        // Fetch fiat deposit bank accounts from sender
+        try {
+          const senderRes = await igpsService.getSenderProfile();
+          if (senderRes.success && senderRes.data?.id) {
+            const acctRes = await igpsService.getDepositAccounts(senderRes.data.id);
+            if (acctRes.success && Array.isArray(acctRes.data)) {
+              setDepositBankAccounts(acctRes.data);
+            }
+          }
+        } catch (e) {
+          console.warn("Could not fetch fiat deposit accounts", e);
         }
       } catch (error) {
         console.error("Failed to fetch wallets", error);
@@ -90,6 +102,26 @@ export default function DepositSelectModal({
             <div className="text-center py-4 text-gray-400">No wallets found</div>
           )}
 
+          {/* Fiat Deposit Accounts */}
+          {depositBankAccounts.length > 0 && (
+            <div className="space-y-4 mt-6">
+              <p className="text-gray-500 text-sm">Deposit fiat via bank transfer</p>
+              {depositBankAccounts.map((acct, index) => (
+                <FiatDepositRow
+                  key={index}
+                  currency={acct.currency || 'USD'}
+                  bankName={acct.bankDetails?.name || acct.name || 'Bank Account'}
+                  reference={acct.reference}
+                  onSelect={() => onSelect({
+                    type: 'fiat',
+                    currency: acct.currency || 'USD',
+                    bankAccount: acct,
+                  })}
+                />
+              ))}
+            </div>
+          )}
+
           {/* {showOtherTokens && (
             <div className="space-y-4">
               <p className="text-gray-500 text-sm">
@@ -133,6 +165,32 @@ function Chevron() {
     <svg className="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M9 18l6-6-6-6" />
     </svg>
+  );
+}
+
+function FiatDepositRow({ currency, bankName, reference, onSelect }) {
+  const getFiatIcon = (c) => {
+    if (c === 'USD') return "/icons/usa.png";
+    if (c === 'EUR') return "/icons/europe.png";
+    return "/icons/usa.png";
+  };
+
+  return (
+    <div
+      onClick={onSelect}
+      className="flex items-center justify-between bg-gray-50 rounded-2xl px-6 py-4 cursor-pointer hover:bg-gray-100"
+    >
+      <div className="flex items-center gap-4">
+        <div className="relative h-10 w-10 flex items-center justify-center">
+          <Image src={getFiatIcon(currency)} alt="" width={40} height={40} className="rounded-full" />
+        </div>
+        <div>
+          <p className="text-gray-800 font-medium">{currency} <span className="text-gray-500 font-normal">({bankName})</span></p>
+          {reference && <p className="text-xs text-gray-400">Ref: {reference}</p>}
+        </div>
+      </div>
+      <Chevron />
+    </div>
   );
 }
 
