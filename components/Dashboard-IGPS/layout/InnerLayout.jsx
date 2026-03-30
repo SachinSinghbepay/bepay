@@ -19,6 +19,7 @@ import KycBanner from "../components/KycBanner"
 
 
 import ModalRoot from "../layout/ModalRoot";
+import { ToastProvider } from "../context/ToastContext";
 import ModalFrame from "../modals/ModalFrame";
 import KycRequiredModal from "../modals/KycRequiredModal";
 import KycVerificationForm from "../pages/KycVerificationFormNew";
@@ -51,6 +52,7 @@ import BackupCodesModal from "../modals/BackupCodesModal";
 import DisableTwoFactorModal from "../modals/DisableTwoFactorModal";
 import ShareInviteModal from "../modals/ShareInviteModal";
 import PaymentDetailsModal from "../modals/PaymentDetailsModal";
+import DownloadStatementModal from "../modals/DownloadStatementModal";
 
 
 
@@ -174,7 +176,7 @@ export default function InnerLayout() {
   };
 
   return (
-    <>
+    <ToastProvider>
       {/* ===== MAIN LAYOUT ===== */}
       <div className="min-h-screen bg-[#F9F9F9] p-2 sm:p-4 lg:p-6">
         <div className="relative mx-auto max-w-full bg-[#F9F9F9] rounded-2xl lg:rounded-3xl flex overflow-hidden">
@@ -538,12 +540,19 @@ export default function InnerLayout() {
             />
           )}
 
+          {modal === "download-statement" && (
+            <DownloadStatementModal
+              transactions={modalProps?.transactions || []}
+              onClose={closeModal}
+            />
+          )}
+
 
 
           {/* ends here */}
         </ModalRoot>
       )}
 
-    </>
+    </ToastProvider>
   );
 }

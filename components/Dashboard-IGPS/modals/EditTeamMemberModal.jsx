@@ -4,6 +4,7 @@ import Image from "next/image";
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 
 
 const roleOptions = [
@@ -37,6 +38,7 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
       }, []);
 
   const { igpsService } = useAuth();
+  const { toast } = useToast();
   const [firstName, setFirstName] = useState(data?.name?.split(" ")[0] || "");
   const [lastName, setLastName] = useState(data?.name?.split(" ")[1] || "");
   const [role, setRole] = useState("");
@@ -57,11 +59,15 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
       console.log("Update response:", res);
 
       if (res.success) {
+        toast.success("Member updated");
         refresh?.();
         onClose();
+      } else {
+        toast.error(res.error || "Failed to update member");
       }
     } catch (err) {
       console.error("Failed to update member", err);
+      toast.error("Failed to update member");
     } finally {
       setLoading(false);
     }

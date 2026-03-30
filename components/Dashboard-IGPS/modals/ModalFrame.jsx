@@ -4,7 +4,8 @@ export default function ModalFrame({ size = "lg", children, height }) {
 
   const sizes = {
     lg: "w-[95vw] max-w-[842px]",
-    md: "w-[95vw] max-w-[650px]"
+    md: "w-[95vw] max-w-[650px]",
+    sm: "w-[95vw] max-w-[480px]",
   };
 
   const heightClass = height ? height : "h-[90vh]";

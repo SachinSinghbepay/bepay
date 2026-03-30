@@ -45,6 +45,7 @@ export default function GlobalPayoutModal({
       const response = await igpsService.listBeneficiaries();
       if (response.success) {
         setBeneficiaries(response.data);
+        console.log(response.data)
       } else {
         console.error("Failed to fetch beneficiaries:", response.error);
       }
@@ -88,7 +89,7 @@ export default function GlobalPayoutModal({
           </button>
         </div>
 
-        <div ref={scrollRef} className="flex-1 overflow-y-auto px-8 pb-8 min-h-0">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 sm:px-8 pb-8 min-h-0">
           {/* LOADING STATE */}
           {loading && (
             <div className="flex justify-center py-10">
@@ -108,7 +109,7 @@ export default function GlobalPayoutModal({
               </p>
               <button
                 onClick={onAddBeneficiary}
-                className="mt-4 px-6 py-3 bg-black text-white rounded-xl font-medium"
+                className="mt-4 px-6 py-3 bg-black text-white rounded-xl font-medium cursor-pointer"
               >
                 Add new beneficiary +
               </button>
@@ -122,7 +123,7 @@ export default function GlobalPayoutModal({
                 <h3 className="text-sm font-medium text-gray-500">Beneficiaries with bank details</h3>
                 <button
                   onClick={onAddBeneficiary}
-                  className="text-sm font-medium underline"
+                  className="text-sm font-medium underline cursor-pointer"
                 >
                   Add new beneficiary +
                 </button>
@@ -174,7 +175,7 @@ function BeneficiaryRow({ id, name, bank, country, status = "active", flag, onPa
       <button
         onClick={onPay}
         disabled={status !== "verified" && status !== "active" && status !== "pending"} // Allow pending for now based on rules
-        className={`px-6 py-2 rounded-full text-sm font-medium transition-colors
+        className={`px-6 py-4 rounded-full text-sm font-medium transition-colors cursor-pointer
           ${status === "verification_in_progress"
             ? "bg-gray-200 text-gray-400 cursor-not-allowed"
             : "bg-black text-white hover:bg-gray-800"
