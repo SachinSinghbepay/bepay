@@ -6,6 +6,17 @@ import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
 
 
+const COUNTRY_FLAGS = {
+    US: "/icons/usa.svg", USA: "/icons/usa.svg",
+    IN: "/icons/india.svg", IND: "/icons/india.svg",
+    DE: "/icons/europe.png", FR: "/icons/europe.png",
+    IT: "/icons/europe.png", ES: "/icons/europe.png",
+    NL: "/icons/europe.png", BE: "/icons/europe.png",
+    AT: "/icons/europe.png", PT: "/icons/europe.png",
+    EU: "/icons/europe.png",
+    GB: "/icons/usa.png",
+};
+
 export default function SendGlobalPayoutModal({
     onClose,
     onBack,
@@ -106,18 +117,21 @@ export default function SendGlobalPayoutModal({
 
 
     const selectedWalletBalance = useMemo(() => {
+        if (['USD', 'EUR', 'GBP'].includes(currency)) {
+            const fiat = fiatBalances.find(f => f.currency === currency);
+            return fiat ? { balance: fiat.balance, currency: fiat.currency } : null;
+        }
         const chainMap = {
             solana: "SOL",
             ethereum: "ETH",
             polygon: "POL",
             tron: "TRX"
         };
-
         return walletBalances.find(w => {
             const normalized = `${w.currency}_${chainMap[w.chain]}`;
             return normalized === currency;
         });
-    }, [walletBalances, currency]);
+    }, [walletBalances, fiatBalances, currency]);
 
 
     // Fetch beneficiaries & currencies
@@ -347,7 +361,7 @@ export default function SendGlobalPayoutModal({
                                 <div className="p-[1.5px] rounded-xl bg-[#CECECE]">
                                     <div className="bg-[#F5F5F5] rounded-xl p-2">
                                         <Image
-                                            src={selectedBeneficiary.countryIcon || "/icons/usa.svg"}
+                                            src={COUNTRY_FLAGS[selectedBeneficiary.addressCountry || selectedBeneficiary.address?.country] || "/icons/usa.svg"}
                                             alt=""
                                             width={28}
                                             height={28}
@@ -430,18 +444,33 @@ export default function SendGlobalPayoutModal({
                             targetCurrency={targetCurrency}
                             sourceCurrencies={sourceCurrencies}
                             fiatBalances={fiatBalances}
-                            sourceType={sourceType}
                             setSourceType={setSourceType}
-                            transferType={transferType}
-                            setTransferType={setTransferType}
                             availableBalance={parseFloat(selectedWalletBalance?.balance || 0)}
                         />
                     </Section>
 
-    {quoteError && (
+                    {quoteError && (
                         <p className="text-red-500 text-sm -mt-3">{quoteError}</p>
                     )}
 
+
+                    {/* TRANSFER TYPE — fiat only */}
+                    {sourceType === 'fiat' && (
+                        <div className="space-y-2">
+                            <label className="text-sm text-gray-500">Transfer Type</label>
+                            <CustomSelect
+                                options={[
+                                    { label: "WIRE", value: "WIRE" },
+                                    { label: "ACH", value: "ACH" },
+                                    { label: "SWIFT", value: "SWIFT" },
+                                    { label: "RTP", value: "RTP" },
+                                ]}
+                                value={transferType}
+                                onChange={setTransferType}
+                                placeholder="Select transfer type"
+                            />
+                        </div>
+                    )}
 
                     {/* PURPOSE */}
                     <div className="space-y-2">
@@ -523,59 +552,66 @@ export default function SendGlobalPayoutModal({
 
                     </Section>
 
+
                     {/* SUMMARY */}
 
                     {(loadingQuote || quote) && (
-                        <div className="grid grid-cols-2 gap-y-4 text-sm pt-4 p-20">
+                        <>
+                            <hr />
+                            <div className="grid grid-cols-2 gap-y-4 text-sm pt-4 p-20">
 
-                            {loadingQuote ? (
-                                <div className="col-span-2 text-center text-gray-500 py-4">
-                                    Fetching rate...
-                                </div>
-                            ) : quote ? (
-                                <>
-                                    <SummaryRow
-                                        label="Exchange rate"
-                                        value={`1 ${quote.sourceCurrency} ≈ ${quote.exchangeRate} ${quote.targetCurrency}`}
-                                    />
+                                {loadingQuote ? (
+                                    <div className="col-span-2 text-center text-gray-500 py-4">
+                                        Fetching rate...
+                                    </div>
+                                ) : quote ? (
+                                    <>
+                                        <SummaryRow
+                                            label="Exchange rate"
+                                            value={`1 ${quote.sourceCurrency} ≈ ${quote.exchangeRate} ${quote.targetCurrency}`}
+                                        />
 
-                                    <SummaryRow
-                                        label="Processing fee"
-                                        value={`${quote.fee} ${quote.sourceCurrency}`}
-                                        info={<FeeInfo />}
-                                    />
+                                        <SummaryRow
+                                            label="Processing fee"
+                                            value={`${quote.fee} ${quote.sourceCurrency}`}
+                                            info={<FeeInfo />}
+                                        />
 
-                                    <SummaryRow
-                                        label="Total receivable"
-                                        value={`≈ ${quote.targetAmount} ${quote.targetCurrency}`}
-                                        bold
-                                    />
+                                        <SummaryRow
+                                            label="Total receivable"
+                                            value={`≈ ${quote.targetAmount} ${quote.targetCurrency}`}
+                                            bold
+                                        />
 
-                                    <SummaryRow
-                                        label="Processing time"
-                                        value="1–3 business days"
-                                    />
-                                </>
-                            ) : null}
+                                        <SummaryRow
+                                            label="Processing time"
+                                            value="1–3 business days"
+                                        />
+                                    </>
+                                ) : null}
 
-                        </div>
+                            </div>
+                        </>
+
                     )}
-                      {/* FOOTER */}
-                <div className="px-8 py-6 border-t bg-white">
-                    <button
-                        onClick={handleSend}
-                        disabled={!quote || !selectedBeneficiary}
-                        className={`w-full h-14 rounded-2xl text-white text-base font-medium transition-all
+                    {/* FOOTER */}
+                    <div className=" py-6 border-t bg-white">
+                        <button
+                            onClick={handleSend}
+                            disabled={!quote || !selectedBeneficiary}
+                            className={`w-full h-14 rounded-2xl text-white text-base font-medium transition-all
                             ${(!quote || !selectedBeneficiary) ? "bg-gray-300 cursor-not-allowed" : "bg-black hover:bg-gray-800"}
                         `}
-                    >
-                        Send payment
-                    </button>
-                </div>
+                        >
+                            Send payment
+                        </button>
+
+                        <p className="text-[#6A6A6A] text-xs text-center mt-5">We’ll notify you via email once the payment is successful</p>
+                    </div>
 
                 </div>
 
-              
+
             </div>
         </ModalFrame>
     );
@@ -603,10 +639,7 @@ function AmountBox({
     targetCurrency,
     sourceCurrencies,
     fiatBalances = [],
-    sourceType = 'crypto',
     setSourceType,
-    transferType = 'WIRE',
-    setTransferType,
     availableBalance = 0,
 }) {
 
@@ -634,66 +667,43 @@ function AmountBox({
             {/* TOP: Amount */}
             <div className="flex flex-col sm:flex-row justify-between items-start bg-[#F7F7F7] p-5 rounded-xl pl-6">
                 {/* dropdown for mobile */}
-                 <div className=" mb-2 relative">
+                <div className=" mb-2 relative">
                     <div className="flex sm:hidden items-center gap-3 bg-[#EBEBEB] py-2 px-2 rounded-xl w-full lg:w-50">
 
                         {/* TOKEN + NETWORK ICONS */}
-                        {sourceCurrencies
-                            .filter(w => w.fullCurrency === currency)
-                            .map(w => (
-                                <div
-                                    key={w.fullCurrency}
-                                    className="relative h-10 w-10 pl-2"
-                                >
-                                    {w.tokenUrl && (
-                                        <Image
-                                            src={w.tokenUrl}
-                                            alt="token"
-                                            width={32}
-                                            height={32}
-                                            className="rounded-full mt-1"
-                                            onError={(e) => {
-                                                e.currentTarget.style.display = "none";
-                                            }}
-                                        />
-                                    )}
-
-                                    {w.networkUrl && (
-                                        <Image
-                                            src={w.networkUrl}
-                                            alt="network"
-                                            width={16}
-                                            height={16}
-                                            className="absolute -bottom-1 -right-2 rounded-full border-2 border-white"
-                                            onError={(e) => {
-                                                e.currentTarget.style.display = "none";
-                                            }}
-                                        />
-                                    )}
-                                </div>
-                            ))}
+                        {fiatBalances.some(f => f.currency === currency) ? (
+                            <div className="relative h-10 w-10 pl-2">
+                                <Image src="/icons/usa.png" alt="USD" width={32} height={32} className="rounded-full mt-1" />
+                            </div>
+                        ) : sourceCurrencies.filter(w => w.fullCurrency === currency).map(w => (
+                            <div key={w.fullCurrency} className="relative h-10 w-10 pl-2">
+                                {w.tokenUrl && (
+                                    <Image src={w.tokenUrl} alt="token" width={32} height={32} className="rounded-full mt-1" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                                )}
+                                {w.networkUrl && (
+                                    <Image src={w.networkUrl} alt="network" width={16} height={16} className="absolute -bottom-1 -right-2 rounded-full border-2 border-white" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                                )}
+                            </div>
+                        ))}
                         {/* SELECT DROPDOWN */}
                         <div ref={dropdownRef} className="relative">
 
                             {/* BUTTON */}
                             <button
                                 onClick={() => {
-                                    if (sourceCurrencies.length > 0) {
+                                    if (sourceCurrencies.length > 0 || fiatBalances.length > 0) {
                                         setOpen(v => !v);
                                     }
                                 }}
                                 className="flex items-center gap-3 bg-[#EBEBEB] px-4 py-3 rounded-xl border text-[18px] font-semibold min-w-[120px]"
                             >
-                                {sourceCurrencies.length === 0 ? (
+                                {sourceCurrencies.length === 0 && fiatBalances.length === 0 ? (
                                     <span className="text-gray-400 text-sm">Loading...</span>
                                 ) : (
                                     <>
                                         <span>
-                                            {
-                                                sourceCurrencies.find(c => c.fullCurrency === currency)?.currency
-                                            }
+                                            {sourceCurrencies.find(c => c.fullCurrency === currency)?.currency || currency.split('_')[0]}
                                         </span>
-
                                         <svg
                                             className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
                                             fill="none"
@@ -708,12 +718,12 @@ function AmountBox({
                             </button>
 
                             {/* DROPDOWN */}
-                            {open && (sourceCurrencies.length > 0 || fiatBalances.length > 0) && (
+                            {open && (sourceCurrencies.length > 0 || fiatBalances.some(f => f.currency === 'USD')) && (
                                 <div className="absolute mt-2 -right-2 bg-white border rounded-xl shadow-lg z-50 w-45 max-h-64 overflow-y-auto">
-                                    {fiatBalances.length > 0 && (
+                                    {fiatBalances.some(f => f.currency === 'USD') && (
                                         <>
                                             <div className="px-4 py-1.5 text-xs text-gray-400 font-medium border-b">Fiat</div>
-                                            {fiatBalances.map((f) => (
+                                            {fiatBalances.filter(f => f.currency === 'USD').map((f) => (
                                                 <button
                                                     key={f.currency}
                                                     onClick={() => {
@@ -761,28 +771,6 @@ function AmountBox({
 
                 </div>
 
-                {/* Transfer Type selector — shown only for fiat sources */}
-                {sourceType === 'fiat' && (
-                    <div className="mb-4">
-                        <p className="text-sm text-gray-500 mb-2 font-medium">Transfer Type</p>
-                        <div className="flex gap-2">
-                            {['WIRE', 'ACH', 'SWIFT', 'RTP'].map((tt) => (
-                                <button
-                                    key={tt}
-                                    onClick={() => setTransferType(tt)}
-                                    className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
-                                        transferType === tt
-                                            ? 'bg-black text-white border-black'
-                                            : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
-                                    }`}
-                                >
-                                    {tt}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
                 <div className="flex-1 ">
                     <div className="flex  justify-start gap-8 items-center">
                         <p className="text-sm text-gray-500 mb-2 font-medium">
@@ -826,62 +814,39 @@ function AmountBox({
                     <div className="hidden sm:flex items-center gap-3 bg-[#EBEBEB] py-2 px-2 rounded-xl  md:w-50">
 
                         {/* TOKEN + NETWORK ICONS */}
-                        {sourceCurrencies
-                            .filter(w => w.fullCurrency === currency)
-                            .map(w => (
-                                <div
-                                    key={w.fullCurrency}
-                                    className="relative h-10 w-10 pl-2"
-                                >
-                                    {w.tokenUrl && (
-                                        <Image
-                                            src={w.tokenUrl}
-                                            alt="token"
-                                            width={32}
-                                            height={32}
-                                            className="rounded-full mt-1"
-                                            onError={(e) => {
-                                                e.currentTarget.style.display = "none";
-                                            }}
-                                        />
-                                    )}
-
-                                    {w.networkUrl && (
-                                        <Image
-                                            src={w.networkUrl}
-                                            alt="network"
-                                            width={16}
-                                            height={16}
-                                            className="absolute -bottom-1 -right-2 rounded-full border-2 border-white"
-                                            onError={(e) => {
-                                                e.currentTarget.style.display = "none";
-                                            }}
-                                        />
-                                    )}
-                                </div>
-                            ))}
+                        {fiatBalances.some(f => f.currency === currency) ? (
+                            <div className="relative h-10 w-10 pl-2">
+                                <Image src="/icons/usa.svg" alt="USD" width={32} height={32} className="rounded-full mt-1" />
+                            </div>
+                        ) : sourceCurrencies.filter(w => w.fullCurrency === currency).map(w => (
+                            <div key={w.fullCurrency} className="relative h-10 w-10 pl-2">
+                                {w.tokenUrl && (
+                                    <Image src={w.tokenUrl} alt="token" width={32} height={32} className="rounded-full mt-1" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                                )}
+                                {w.networkUrl && (
+                                    <Image src={w.networkUrl} alt="network" width={16} height={16} className="absolute -bottom-1 -right-2 rounded-full border-2 border-white" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                                )}
+                            </div>
+                        ))}
                         {/* SELECT DROPDOWN */}
                         <div ref={dropdownRef} className="relative">
 
                             {/* BUTTON */}
                             <button
                                 onClick={() => {
-                                    if (sourceCurrencies.length > 0) {
+                                    if (sourceCurrencies.length > 0 || fiatBalances.length > 0) {
                                         setOpen(v => !v);
                                     }
                                 }}
                                 className="flex items-center gap-3 bg-[#EBEBEB] px-4 py-3 rounded-xl border text-[18px] font-semibold min-w-[120px]"
                             >
-                                {sourceCurrencies.length === 0 ? (
+                                {sourceCurrencies.length === 0 && fiatBalances.length === 0 ? (
                                     <span className="text-gray-400 text-sm">Loading...</span>
                                 ) : (
                                     <>
                                         <span>
-                                            {
-                                                sourceCurrencies.find(c => c.fullCurrency === currency)?.currency
-                                            }
+                                            {sourceCurrencies.find(c => c.fullCurrency === currency)?.currency || currency.split('_')[0]}
                                         </span>
-
                                         <svg
                                             className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
                                             fill="none"
@@ -896,12 +861,12 @@ function AmountBox({
                             </button>
 
                             {/* DROPDOWN */}
-                            {open && (sourceCurrencies.length > 0 || fiatBalances.length > 0) && (
+                            {open && (sourceCurrencies.length > 0 || fiatBalances.some(f => f.currency === 'USD')) && (
                                 <div className="absolute mt-2 -right-2 bg-white border rounded-xl shadow-lg z-50 w-45 max-h-64 overflow-y-auto">
-                                    {fiatBalances.length > 0 && (
+                                    {fiatBalances.some(f => f.currency === 'USD') && (
                                         <>
                                             <div className="px-4 py-1.5 text-xs text-gray-400 font-medium border-b">Fiat</div>
-                                            {fiatBalances.map((f) => (
+                                            {fiatBalances.filter(f => f.currency === 'USD').map((f) => (
                                                 <button
                                                     key={f.currency}
                                                     onClick={() => {
