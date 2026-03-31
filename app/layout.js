@@ -41,7 +41,7 @@ export const metadata = {
         url: "/thumbnail.png",
         width: 1200,
         height: 630,
-        alt: "bepay Money",
+        alt: "bepay money",
       },
     ],
     locale: "en_US",

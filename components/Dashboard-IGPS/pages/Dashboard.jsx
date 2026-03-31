@@ -284,7 +284,7 @@ function Filter({ label, active, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-1.5 rounded-full text-sm ${active ? "bg-black text-white" : "border text-gray-600"}`}
+      className={`px-4 py-1.5 rounded-full  cursor-pointer text-sm ${active ? "bg-black text-white" : "border text-gray-600"}`}
     >
       {label}
     </button>

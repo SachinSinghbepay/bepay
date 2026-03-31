@@ -101,7 +101,7 @@ export default function NotFound() {
         <div className="mb-8">
           <Image
             src="/bepayicon.png"
-            alt="Bepay Logo"
+            alt="bepay Logo"
             width={150}
             height={40}
             className="mx-auto"

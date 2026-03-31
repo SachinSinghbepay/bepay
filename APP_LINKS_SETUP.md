@@ -11,7 +11,7 @@
 **Solution:** Created middleware that detects mobile devices and redirects to Play Store/App Store if the app doesn't open
 
 ### 3. **Path Format Issues**
-**Problem:** The `/*` wildcard in apple-app-site-association was incorrectly formatted  
+**Problem:** The `/*` wildcard in apple-Fapp-site-association was incorrectly formatted  
 **Solution:** Cleaned up and properly formatted the paths array
 
 ## Changes Made
