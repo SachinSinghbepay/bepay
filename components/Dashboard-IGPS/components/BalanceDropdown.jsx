@@ -28,9 +28,9 @@ export default function BalanceDropdown({ wallets = [], fiatBalances = [], onClo
     // Helper to get icons
     const getTokenIcon = (currency) => {
         const c = currency?.toLowerCase();
-        if (c === 'usdc') return "/icons/USDC.svg";
-        if (c === 'usdt') return "/icons/USDT.svg";
-        return "/icons/USDC.svg"; // default
+        if (c === 'usdc') return "/icons/USDC.png";
+        if (c === 'usdt') return "/icons/USDT.png";
+        return "/icons/USDC.png"; // default
     }
 
     const getChainIcon = (chain) => {
@@ -38,16 +38,16 @@ export default function BalanceDropdown({ wallets = [], fiatBalances = [], onClo
         if (c === 'polygon') return "/icons/Polygon.png";
         if (c === 'solana') return "/icons/Solana.svg";
         if (c === 'tron') return "/icons/TRON.svg";
-        if (c === 'ethereum') return "/icons/eth.SVg";
+        if (c === 'ethereum') return "/icons/eth.png";
         return "/icons/Polygon.png";
     }
 
     const getFiatIcon = (currency) => {
         const c = currency?.toUpperCase();
-        if (c === 'USD') return "/icons/usa.png";
+        if (c === 'USD') return "/icons/usa.svg";
         if (c === 'EUR') return "/icons/europe.png";
-        if (c === 'GBP') return "/icons/usa.png";
-        return "/icons/usa.png";
+        if (c === 'GBP') return "/icons/usa.svg";
+        return "/icons/usa.svg";
     }
 
     return (
@@ -61,12 +61,12 @@ export default function BalanceDropdown({ wallets = [], fiatBalances = [], onClo
                 </div>
 
                 {/* CONTENT */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-x-16">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-x-12">
 
                     {/* FIAT COLUMN */}
                     <div className="space-y-8">
                         {fiatBalances.length === 0 ? (
-                            <FiatRow img="/icons/usa.png" label="USD" value="0.00" />
+                            <FiatRow img="/icons/usa.svg" label="USD" value="0.00" />
                         ) : (
                             fiatBalances.map((f, i) => (
                                 <FiatRow

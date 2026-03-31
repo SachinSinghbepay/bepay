@@ -12,9 +12,9 @@ export default function BalanceBreakdown({ wallets = [], fiatBalances = [], load
     // Helper to get icons
     const getTokenIcon = (currency) => {
         const c = currency?.toLowerCase();
-        if (c === 'usdc') return "/icons/USDC.svg";
-        if (c === 'usdt') return "/icons/USDT.svg";
-        return "/icons/USDC.svg"; // default
+        if (c === 'usdc') return "/icons/USDC.png";
+        if (c === 'usdt') return "/icons/USDT.png";
+        return "/icons/USDC.png"; 
     }
 
     const getChainIcon = (chain) => {
@@ -22,7 +22,7 @@ export default function BalanceBreakdown({ wallets = [], fiatBalances = [], load
         if (c === 'polygon') return "/icons/Polygon.png";
         if (c === 'solana') return "/icons/Solana.svg";
         if (c === 'tron') return "/icons/TRON.svg";
-        if (c === 'ethereum') return "/icons/Eth.png";
+        if (c === 'ethereum') return "/icons/eth.png";
         return "/icons/Polygon.png";
     }
 
@@ -58,7 +58,7 @@ export default function BalanceBreakdown({ wallets = [], fiatBalances = [], load
                         e.stopPropagation();
                         setOpen(prev => !prev);
                     }}
-                    className="absolute top-3 right-3 h-10 w-10 rounded-lg bg-[#EBEBEB] flex items-center justify-center"
+                    className="absolute top-3 right-3 h-10 w-10  cursor-pointer rounded-lg bg-[#EBEBEB] flex items-center justify-center"
                 >
                     <svg
                         className={`h-6 w-6 text-gray-600 transition-transform ${open ? "rotate-180" : ""}`}

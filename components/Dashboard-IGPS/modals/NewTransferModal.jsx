@@ -99,6 +99,7 @@ function TransferCard({ title, desc, icon, flags, badge, onClick }) {
         hover:bg-[#F3F3F3]
         transition
         h-[200px]
+         cursor-pointer
       "
     >
       {/* TOP */}

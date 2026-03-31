@@ -125,7 +125,7 @@ function MenuItem({ label, danger, onClick }) {
     return (
         <button
             onClick={onClick}
-            className={`w-full text-left px-4 py-5 rounded-2xl text-[16px] font-medium transition
+            className={`w-full text-left px-4 py-5 rounded-2xl text-[16px] font-medium transition  cursor-pointer
          ${danger
                     ? "text-gray-800 hover:bg-gray-50"
                     : "text-gray-700 hover:bg-gray-50"

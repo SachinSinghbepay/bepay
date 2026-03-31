@@ -160,10 +160,10 @@ export default function InnerLayout() {
         return <Payments onOpenModal={openModal} />;
 
       case "privacy-policies":
-        return <LegalPolicy />;
+        return <LegalPolicy setActivePage={setActivePage} />;
 
       case "terms":
-        return <Terms />;
+        return <Terms setActivePage={setActivePage} />;
 
       default:
         return (

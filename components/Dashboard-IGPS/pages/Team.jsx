@@ -285,7 +285,7 @@ function ActionMenu({ onResend, onEdit, onRemove }) {
             <div ref={triggerRef} className="relative">
                 <button
                     onClick={() => setOpen(v => !v)}
-                    className="h-10 w-10 rounded-2xl bg-[#F3F3F3] flex items-center justify-center hover:bg-gray-200 transition"
+                    className="h-10 w-10 rounded-2xl bg-[#F3F3F3] flex items-center justify-center hover:bg-gray-200 transition cursor-pointer"
                 >
                     <span className="text-lg tracking-widest">•••</span>
                 </button>
@@ -296,7 +296,7 @@ function ActionMenu({ onResend, onEdit, onRemove }) {
                     <div
                         ref={menuRef}
                         style={{ position: "absolute", top: position.top, left: position.left }}
-                        className="w-56 bg-white rounded-3xl shadow-xl p-3 z-[9999]"
+                        className="w-56 bg-white rounded-3xl shadow-xl p-3 z-[9999] flex flex-col gap-2"
                     >
                         <MenuItem
                             label="Resend invite"
@@ -324,7 +324,7 @@ function MenuItem({ label, onClick, highlighted, danger }) {
         <button
             onClick={onClick}
             className={`
-                w-full text-left px-5 py-4 rounded-2xl transition text-sm font-medium
+                w-full text-left px-5 py-4 rounded-2xl transition text-sm font-medium cursor-pointer
                 ${highlighted ? "bg-[#F4F4F4]" : ""}
                 ${danger ? "text-red-600 hover:bg-red-50" : "hover:bg-gray-100"}
             `}

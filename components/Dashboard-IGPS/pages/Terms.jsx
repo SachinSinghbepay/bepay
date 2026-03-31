@@ -1,11 +1,22 @@
 "use client";
+import Image from "next/image";
 
-export default function Terms() {
+export default function Terms({ setActivePage }) {
   return (
-    <div className="max-w-[979px] py-8 space-y-12 text-justify">
+    <div className="min-h-screen px-8 py-12 text-justify">
+      <div className="max-w-5xl mx-auto text-[#6A6A6A] leading-relaxed space-y-10">
+
+      <button
+        className="text-xl text-gray-500 cursor-pointer"
+        onClick={() => setActivePage("profile")}
+      >
+        <Image src="/icons/back.svg" alt="" width={24} height={24} />
+      </button>
+
+      <h1 className="text-3xl font-semibold text-black">Terms &amp; Conditions</h1>
 
       {/* Preamble */}
-      <section className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+      <section className="space-y-4">
         <p>This corporate group is indirectly controlled by BEPAY PRODUCTS HOLDING LTD (BVI). BEPAY MONEY EUROPE SRL (hereinafter: the &quot;Company&quot;) operates under the explicit legal exemption under OUG 10/2025 of Romania, which modified, completed and amended Law 129/2019 (EU&apos;s AMLD5 national implementing act). A VASP registration is not required by law. A MiCA License is not required by law given the fully decentralized nature of the dApp and lack of any custodial services. The client has full control over his digital assets and custody at any given moment.</p>
         <p>Welcome to BEPAY MONEY EUROPE (bepay), a reliable ally in the realm of digital currencies and decentralized peer-to-peer crypto payments, without any intermediary. Bepay is distributed ledger technology software provider that only offers merchants an innovative manner to seamlessly receive orders of services or goods from users for a decentralized exchange of crypto assets. At BEPAY MONEY EUROPE (bepay), our top priority is ensuring the utmost security and efficiency for our users when it comes to working with cryptocurrency. We strive to provide a platform that is reliable and trustworthy for handling virtual currency, digital currency, and digital assets. Nevertheless, it is crucial to acknowledge that engaging with digital currencies carries substantial risks (see Risk Disclosure Statement).</p>
         <p className="uppercase font-semibold text-sm">THIS DOCUMENT OR ACTIVITY YOU AIM OR WILL PERFORM THORUGH BEPAY IS NOT A SOLICITATION FOR INVESTMENT AND DOES NOT CONSTITUTE AN OFFER OF E-MONEY, COMMODITY, SECURITY OR ANY FINANCIAL INSTRUMENT, TRANSFERABLE SECURITIES OR ANY FORMS OF SECURITY OFFERINGS TO THE PUBLIC OR A COLLECTIVE INVESTMENT SCHEME. THE USER BEARS ALL THE RISKS INLINE WITH THE DISCLOSED ONES AND UNANTICIPATED ONES SINCE THE TRANSACTION ARE DECENTRALIZED AND PEER-TO-PEER, WITHOUT NAY INTERMEDIARY. BEPAY IS NOT AN INTERMEDIATIARY AND DOES NOT PROVIDE ANY INTERMEDIATION SERVICE. BEPAY IS A SOFTWARE LICENSE DISTRIBUTOR TO MERCHANTS AND ONLY ONBOARDS USER IN ITS ECOSYSTEM TO CREATE TRUST AND COMMUNITIES INTERESTED IN DIFFERENT ONLINE OR PHYSICAL GOODS AND SERVICES.</p>
@@ -16,8 +27,8 @@ export default function Terms() {
 
       {/* Section 1 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">1. Introduction</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">1. Introduction</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>1.1</strong> Welcome to the General Terms and Conditions of Use (the &quot;Terms of Use&quot;) of our website, www.bepay.com (the &quot;Website&quot;). This Website is owned and collectively managed by DIRECTPAY FINTECH LTD – CANADA MSB (REGISTERED), BEPAY MONEY EUROPE SRL – ROMANIA VASP, BEPAY MONEY INC – USA MSB, BEPAY MONEY HOLDING LTD, BEPAY MONEY PRODUCTS HOLDING LTD. Each company is held by Bepay Money Products Holding and ultimately by the ultimate beneficiary owner, a private limited liability company registered under the laws of the British Virgin Islands (hereinafter: BVI), having company registration number 2185015, and its registered address situated at SR Corporate Services Limited of Wattley Building, 2nd Floor, 160 Main Street, P.O. Box 3410, Road Town, Tortola, British Virgin Islands (&quot;BEPAY&quot;, the &quot;Company&quot;, &quot;us&quot;, &quot;we&quot; or &quot;our&quot;).</p>
           <p><strong>1.1.1</strong> For clarity, if you use the services of only one BEPAY entity, you agree to these terms and conditions, and they shall be applicable only between you and that specific entity in compliance with the applicable laws of country of registration of that specific legal person.</p>
           <p><strong>1.2</strong> BEPAY will seek voluntary authorization from the Romania Financial Supervision Authority (ASF) for the relevant activity according to the national legal framework. No application is received or accepted by the national competent authority for review at the moment, namely ASF. Thus, the activity is out of the regulatory scope now, which is confirmed by local specialized lawyers via Bepay Money&apos;s secured legal opinion. All necessary AML/CFT rules are carefully followed and duly implemented in the course of business for the BVI, Romania, Lithuania, Dubai, USA and EU operations as well as at international level. BEPAY MONEY EUROPE owns local operational subsidiaries with VASP registrations in Lithuania (the EU), United States of America, India, and carries out due diligence with its activities in line with the AML/CFT requirements in the Cayman Islands, British Virgin Islands and the United Arab Emirates (Dubai).</p>
@@ -28,8 +39,8 @@ export default function Terms() {
 
       {/* Section 2 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">2. Definitions</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">2. Definitions</h2>
+        <div className="space-y-4 leading-relaxed">
           <ul className="space-y-4">
             <li>
               <strong>AML/CTF</strong> — refers to Anti-Money Laundering and Countering the Financing of Terrorism.
@@ -151,8 +162,8 @@ export default function Terms() {
 
       {/* Section 3 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">3. General Terms</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">3. General Terms</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>3.1</strong> The provisions of these Terms of Use will govern the entry, access, connection to or use of our Website by general user(s) (the &quot;User(s)&quot;, &quot;you&quot;, &quot;your&quot; or &quot;yours&quot;). For the avoidance of doubt, any reference in these Terms of Use to &apos;use&apos; shall refer to any sort of use of the Website, inclusive of simple entry, access or connection to the same Website. These Terms of Use form a legally binding agreement between the User and BEPAY and you should therefore take the time to read them carefully. By entering, accessing, connecting to or using this Website in any manner, you are deemed to have read, understood and agreed to these Terms of Use. If you do not agree with these Terms of Use, please refrain from using our Website.</p>
           <p><strong>3.2</strong> The use of this Website does not imply that you can acquire BEPAY or any other cryptoassets. Should you wish to acquire Cryptoassets, you will be required to pass our client acceptance and onboarding procedures in line with BEPAY&apos;s KYC/KYB and AML procedures, as well as confirm your agreement to the specific T&amp;Cs for the purpose of self-issuance and auto-distribution of cryptoassets via the use of the smart contract of BEPAY.</p>
           <p><strong>3.3</strong> Any accepted contribution is made by the respective USER(S) or Participant for an Initial Coin Offering or the so-called Pre-Sale of Bepay, which also represents the Cryptoasset Allocation in the BVI and is exempted by the FSC under the VASP Act of 2022 in the BVI.</p>
@@ -170,8 +181,8 @@ export default function Terms() {
 
       {/* Section 4 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">4. Eligibility, Access and Use</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">4. Eligibility, Access and Use</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>4.1</strong> To use most of our services, you need to create an account with us. Your account may hold Digital Assets. To use any of our services, or to create an account, you must meet at least the following conditions:</p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>if you are an individual, be old enough to legally form a binding contract in your jurisdiction (18 years old or above, but it may be different where you live),</li>
@@ -205,8 +216,8 @@ export default function Terms() {
 
       {/* Section 5 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">5. Services Use Terms and Conditions</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">5. Services Use Terms and Conditions</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>5.1</strong> Where a User qualified as a User(s), it hereby agrees to abide by the following principles and information readily available and easily accessible in the whitepaper of Bepay:</p>
           <p><strong>5.1.1</strong> The User(s) is not eligible to acquire any Cryptoassets if the User(s) is a Prohibited Participant;</p>
           <p><strong>5.1.2</strong> The Cryptoassets or any ability to buy or sell goods or services are not available to any Prohibited Participant, User or Merchant, who is prohibited from complying with the terms set out in the Documents and acquiring, holding, using and benefiting from the Cryptoassets or any other VFA generally or to a User(s) in a country where any special or particular approval or licence is required or similar event without obtaining such approval or licence and consequently would be excluded from bepay by termination of the relationship without any outstanding claims or any option to claim damages in any court (if any such event);</p>
@@ -228,16 +239,16 @@ export default function Terms() {
 
       {/* Section 6 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">6. Allocation of Funds</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">6. Allocation of Funds</h2>
+        <div className="space-y-4 leading-relaxed">
           <p>Each User only allocates self-custodial funds on his own wallet address on Bepay Money dApp.</p>
         </div>
       </section>
 
       {/* Section 7 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">7. Dissolution Event</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">7. Dissolution Event</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>7.1</strong> In case of a Dissolution Event at any moment during the VFA Allocation Event, the Company will only refund an amount equal to the Subscription Amount, subject to section 7.2, and payable to the User(s) immediately before, or in tandem with the consummation of the Dissolution Event, subject to the rights and ranking of creditors under the Laws of the BVI.</p>
           <p><strong>7.2</strong> If immediately prior to the consummation of the Dissolution Event, the assets of the Company that remain legally available for distribution to the participants, as determined in good faith by the Company&apos;s board of directors, are insufficient to allow distribution to all the participants of their respective Subscription Amounts, then the remaining assets of the Company that are legally available for distribution, following all distributions to the shareholders and creditors, will be distributed with equal priority and pro rata among the participants in proportion to their Subscription Amount.</p>
           <p><strong>7.3</strong> Any distributed amount may be made in Fiat or any other VFA as the Company may at its discretion decide to distribute and on the basis of its reserves at that time, especially in context of eventual debts by taking into account hierarchy of creditors and security rights of such counterparties BEPAY entered in a commercial relationship with for adequately and properly justified reasons, or stemming from certain allocations into financial instruments of short- or long-term vesting or lock-up period on the basis of its own discretion aligned with its internal financial risk control models and/or on the basis of regulatory requirements (e.g., liquidity, subscribed capital and available reserves).</p>
@@ -247,8 +258,8 @@ export default function Terms() {
 
       {/* Section 8 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">8. Suspension, Termination, and Cancellation</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">8. Suspension, Termination, and Cancellation</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>8.1</strong> BEPAY may (a) refuse to complete, or block or cancel what you have authorised, (b) suspend, restrict, or terminate your access to any or all of the BEPAY Services, and/or (c) deactivate or cancel your BEPAY Account with immediate effect for any reason, including but not limited to where:</p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>The Issuer is required to do so by valid court order, or binding order of a governmental authority; or</li>
@@ -273,8 +284,8 @@ export default function Terms() {
 
       {/* Section 9 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">9. Risk Factors</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">9. Risk Factors</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>9.1</strong> The acquisition of Cryptoassets through the VFA Allocation Event carries with it substantial risks. The User(s) should carefully weigh all the risks and possible costs, including the risks set out in the Whitepaper and the non-exhaustive list of risks described hereunder:</p>
           <ul className="list-disc list-inside space-y-3 ml-4">
             <li>The Company maintains sole discretion in the conduct of its business including as related to the VFA Allocation Event, maintenance, and use of the Cryptoassets;</li>
@@ -290,8 +301,8 @@ export default function Terms() {
 
       {/* Section 10 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">10. Taxes</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">10. Taxes</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>10.1</strong> User(s)s shall be responsible to pay all applicable taxes and duties, if any, that may arise in connection with the acquisition of the Cryptoassets.</p>
           <p><strong>10.2</strong> The Issuer bears no liability or responsibility with respect to any tax consequences to a User(s) arising from the subsequent sale of the Cryptoassets.</p>
         </div>
@@ -299,8 +310,8 @@ export default function Terms() {
 
       {/* Section 11 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">11. Warranties</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">11. Warranties</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>11.1</strong> Upon using the Website you warrant that:</p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>you are over eighteen (18) years of age and are not classified as a &apos;minor&apos; in your country of residence;</li>
@@ -314,8 +325,8 @@ export default function Terms() {
 
       {/* Section 12 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">12. Acceptable Use</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">12. Acceptable Use</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>12.1</strong> When accessing or using the Website, you agree that you will not violate any law, contract, Intellectual Property or other rights. Without limiting the generality of the foregoing, you agree that you will not:</p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>use the Website in any manner which could interfere with, disrupt, negatively affect or inhibit other user(s) from fully enjoying the Website, or that could damage, disable, overburden or impair the functioning of said Website, in any manner;</li>
@@ -336,8 +347,8 @@ export default function Terms() {
 
       {/* Section 13 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">13. Liability &amp; Indemnity</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">13. Liability &amp; Indemnity</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>13.1</strong> To the extent allowed by law, BEPAY shall not be liable, in any event, for any direct, indirect or consequential damages, losses or liabilities whatsoever incurred or suffered by the User, or any third party, including, without limitation, damages for loss of profit, loss of information, business interruption, or loss of revenue or goodwill, as a result of or in connection with any of the following:</p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>any downtime or reduced service availability attributable to any third party;</li>
@@ -367,8 +378,8 @@ export default function Terms() {
 
       {/* Section 14 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">14. Intellectual Property</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">14. Intellectual Property</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>14.1</strong> Any and all Intellectual Property related in any manner whatsoever to the Website or BEPAY is the sole and exclusive property or controlled by BEPAY and is subject to protection under the applicable law.</p>
           <p><strong>14.2</strong> The User is prohibited from copying, editing, amending, transmitting, distributing, displaying, modifying, adapting, sub-licencing, emulating, reverse-engineering, decompiling, disassembling, combining, processing, encoding, deriving source code, decrypting, translating, selling, or in any other way using any of the Intellectual Property, or the Website or any of its content or to create any derivative works of the Website or any of its content or functionality.</p>
         </div>
@@ -376,8 +387,8 @@ export default function Terms() {
 
       {/* Section 15 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">15. Disclaimers and Warnings</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">15. Disclaimers and Warnings</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>15.1</strong> The acquisition of the Cryptoasset(s), and/or the use of the Cryptoassets are provided as outlined in the Documents, Policies, Whitepaper and/or this Website. The Company makes no representations of any kind, express, implied, statutory, or otherwise, regarding the acquisition of the Cryptoassets. The Company, its directors, officers, employees, agents, attorneys, representatives and associates do not accept any liability for any damage or loss, including loss of business, revenue, or profits, or loss of or damage to data, equipment or software resulting from any use of or inability to use the Cryptoassets, as well as from the acquiring of Cryptoassets, regardless of the basis, upon which the liability is claimed. User(s)s assume all risk of loss resulting from, concerning or associated with risks set forth in the Documents.</p>
           <p><strong>15.2</strong> BEPAY does not provide investment advice of any kind. Any investment in or purchase of crypto assets is a risky action due to the volatility of the market, which may result in you losing a part or all of your investment, and other regulatory and technological risks and uncertainty. Thus, Bepay does not encourage, recommends or pursues any user, lead, customer, or investor to use its services or cryptoassets given the associated identified, declared and publicly announced potential risks, deficiencies and weaknesses of its products and services.</p>
           <p><strong>15.3</strong> Such crypto assets are classified as Other Crypto Assets under MiCA, Cryptoassets under Maltese law, Virtual Assets in the UAE (Dubai) and the British Birgin Islands, and, as such, are not regulated under investment services legislation in the sense of traditional transferable equities, securities, or other financial instruments. In the BVI, virtual assets are seen as utility cryptoassets and the Pre-Sale operation is exempted as per the Guidelines of the FSC in and from the BVI.</p>
@@ -390,8 +401,8 @@ export default function Terms() {
 
       {/* Section 16 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">16. Privacy Policy</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">16. Privacy Policy</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>16.1</strong> In line with its Privacy Policy, the Company values the User(s)&apos;s privacy by not requesting any information that is unnecessary for the holding and use of the Cryptoassets. The Company may request information in order to abide with obligations under the applicable law. The Company is committed to preserving the privacy of the User(s) and is compliant with the General Data Protection Regulation (EU) 2016/679.</p>
           <p><strong>16.2</strong> The Company commits itself to do its utmost to ensure that, its directors, officers, secretaries, employees, agents, attorneys, representatives, affiliates, and associates shall not disclose to any person, any non-public proprietary, documents or confidential information which may have been obtained as a result of the relationship between the Parties except to the extent necessary further to any law, regulations, rules or agreement.</p>
           <p><strong>16.3</strong> Nevertheless, the Company shall be entitled, at any time, to request from the User(s) information and/or documentation that the Company, in its sole discretion, deems fit and necessary in order to comply with any applicable law or regulation in connection with the holding and using of the Cryptoassets. The User(s) agrees to provide the Company with such information promptly upon request and it acknowledges that the Company may not provide any assistance and/or services to the User(s) until it provides such requested information, and the Company has determined that it is permissible under applicable law or regulation. The Company reserves the right to require more KYC documentation in order to be compliant with the AML Regulations and/or any other laws and regulations that may come in force in the future.</p>
@@ -402,16 +413,16 @@ export default function Terms() {
 
       {/* Section 17 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">17. Your Relationship With BEPAY</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">17. Your Relationship With BEPAY</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>17.1</strong> Nothing in these Terms of Use shall be deemed to constitute, create, imply, give effect to, or otherwise recognize a partnership, collaboration, agency, employment, joint venture or formal business entity of any kind, or any other similar relationship between yourself and BEPAY.</p>
         </div>
       </section>
 
       {/* Section 18 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">18. Fees</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">18. Fees</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>18.1</strong> BEPAY reserves the right to charge fees for the products and services it offers. BEPAY may also earn rebate commissions from its onboarded third party agents, which provide their services via the decentralized marketplace of Bepay Money. These fees shall be communicated to the User via the dApp interface, email, or other electronic means.</p>
           <p><strong>18.2</strong> BEPAY establishes that it shall charge a EUR 20 fee for opening a bank account through its services.</p>
           <p><strong>18.3</strong> <strong>Exchange Orders and Visibility:</strong> The base fee for exchange Orders (acquire/sell/swap of Digital Assets) is 0.015% of the Order amount plus transactional expenses that may vary depending on the corresponding banking/network fees. All fees payable under this Agreement are displayed prior to the purchase or sale of Digital Assets by using the Services, and shall be paid in the applicable fiat currency. Please note, our fees are made clear to you at the point of sale, and at this point, you will be asked to confirm that you are clear about the fee and that, in proceeding, you agree to the fee before BEPAY facilitates the Order.</p>
@@ -422,8 +433,8 @@ export default function Terms() {
       </section>
       {/* Section 19 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">19. Cancellations, Refunds, and Right of Withdrawal</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">19. Cancellations, Refunds, and Right of Withdrawal</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>19.1</strong> You have 14 (thirty) calendar days to exercise your right of withdrawal from this Agreement, without having to justify any reason or pay any penalty. This withdrawal period begins on the day after the date that your application is accepted by us.</p>
           <p><strong>19.2</strong> We will not usually provide the Services during the withdrawal period. Any Services or Orders that are fully performed before a withdrawal cannot be reversed.</p>
           <p><strong>19.3</strong> You must notify us of your withdrawal request.</p>
@@ -439,8 +450,8 @@ export default function Terms() {
 
       {/* Section 20 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">20. Security</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">20. Security</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>20.1</strong> You will be provided with security details from us, which will be needed in order for you to access your Account with us. You must keep all such security details (including usernames and passwords) private and not share such details with any third party.</p>
           <p><strong>20.2</strong> You must monitor your Account and read all messages that have been sent to you. If you suspect that any feature of your Account (for example, login details, password, or other security feature) has been lost, stolen, misappropriated, used without authorisation, or otherwise compromised, you must contact us immediately notifying us of such action, and you agree to change your password immediately if necessary.</p>
           <p><strong>20.3</strong> We will never ask you to share your password with us or with any third party, and you must never disclose this to anybody or allow someone to watch you when you are accessing your Account. It is advised that in order to keep your Account safe, you change your password regularly, as this will minimise the risk of your Account being compromised.</p>
@@ -450,24 +461,24 @@ export default function Terms() {
 
       {/* Section 21 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">21. Questions and Complaints</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">21. Questions and Complaints</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>21.1</strong> Should you encounter any problem when utilizing the Website, or wish to raise a complaint in relation to the same, kindly make use of and follow our Complaints Handling Process. For any other questions or remarks, please contact us. BEPAY is directly involved in actively listening to its user(s) for feedback implementation to provide the best, most suitable, and potentially desired features, products, services, and about the Website.</p>
         </div>
       </section>
 
       {/* Section 22 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">22. Amendments to these Terms of Use</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">22. Amendments to these Terms of Use</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>22.1</strong> BEPAY reserves the right to make any changes to these Terms of Use at any given time without incurring any liability towards you or any third party. Any such updated Terms of Use shall become immediately applicable and enforceable upon publication on the Website and shall supersede any previously published Terms of Use. Should we be required by law, as set out in section 22 below, to obtain your consent or provide you with prior notice in respect of any such changes, we shall do so.</p>
         </div>
       </section>
 
       {/* Section 23 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">23. Governing Law and Jurisdiction</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">23. Governing Law and Jurisdiction</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>23.1</strong> These Terms of Use shall be governed by the laws of BVI. Any disputes which may arise between yourself and BEPAY in relation to these Terms of Use shall be subject to the exclusive jurisdiction of the Netherlands Court of Arbitration as a last resort.</p>
           <p><strong>23.2</strong> All disputes arising in connection with the present agreement, or further agreements resulting therefrom, shall be settled, first by mediation, or in accordance with the arbitration rules of Netherlands Commercial Court. The place of arbitration shall be Amsterdam (the Netherlands). The proceedings shall be conducted in English. Any court proceedings in the Netherlands before, during or after the arbitration will - to the extent allowed by law - exclusively be dealt with by the Amsterdam District Court or the Amsterdam Court of Appeal, whichever has jurisdiction, following proceedings in English before the Chambers for International Commercial Matters (Netherlands Commercial Court, which consists of the NCC District Court, the NCC Court in Summary Proceedings and the NCC Court of Appeal). The NCC Rules of Procedure (see www.ncc.gov.nl) apply to these proceedings. This clause is not intended to exclude Supreme Court appeal.</p>
           <p><strong>23.3</strong> By the use of the website of bepay.com, acceptance of the specific T&amp;C for the issuance and distribution of the cryptoassets, or general enjoyment of access to the protocol, the user freely, unequivocally, and voluntarily gives his or her valid consent for the general use of terms and conditions of the website, acknowledges the risk associated and accepts them and these terms and conditions of use. The user also acknowledged that these terms and conditions are easily and readily accessible for consultation. By raising no further question to BEPAY, the user declares and virtually indicates that (s)he deems himself/herself sufficiently, adequately and appropriately informed of his/her legal rights and obligations without consultation of the legal counsel of BEPAY or his/her own third-party counsel.</p>
@@ -476,48 +487,48 @@ export default function Terms() {
 
       {/* Section 24 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">24. Waiver</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">24. Waiver</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>24.1</strong> No exercise or failure to exercise or delay in exercising any right or remedy available to BEPAY under these Terms of Use will constitute a waiver by BEPAY of that or any other right or remedy available to it.</p>
         </div>
       </section>
 
       {/* Section 25 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">25. Severability</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">25. Severability</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>25.1</strong> In the event that any provision, or part thereof, of these Terms of Use is found by a competent adjudicatory body or court of law to be invalid, unlawful or unenforceable to any extent, then such provision, or part thereof, shall be severed from the remainder of these Terms of Use, which shall continue to be valid and enforceable to the fullest extent permitted by law.</p>
         </div>
       </section>
 
       {/* Section 26 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">26. Assignment</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">26. Assignment</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>26.1</strong> No assignment, novation, or transfer of any of the User&apos;s rights or obligations forming part of these Terms of Use, whether in whole or in part, is permitted, unless with BEPAY&apos;s express and prior consent.</p>
         </div>
       </section>
 
       {/* Section 27 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">27. Conflict of Interpretation</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">27. Conflict of Interpretation</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>27.1</strong> Should a conflict of interpretation or application arise between these Terms of Use and the T&amp;Cs, the terms contained in the latter shall prevail over these Terms of Use.</p>
         </div>
       </section>
 
       {/* Section 28 */}
       <section className="space-y-6">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">28. Data Protection</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">28. Data Protection</h2>
+        <div className="space-y-4 leading-relaxed">
           <p><strong>28.1</strong> You acknowledge that we may process personal data in relation to you (if you are an individual) and personal data that you may provide to us in relation to your employees or associates or other individuals (if you are a legal person, such as a company) in connection with these Terms of Use and your use of the Website. We shall process this personal data in strict compliance with all data protection and data privacy laws, particularly Regulation (EU) 2016/679 (the General Data Protection Regulation or hereinafter: &quot;GDPR&quot;), and in accordance with our Privacy Policy. The aforementioned statements are to be amended in line with the GDPR review and continuous observance of guidelines and case law development, the EU&apos;s Data Governance Act, and other regulations and national laws dealing with data protection and privacy of user(s).</p>
         </div>
       </section>
 
       {/* Contact */}
       <section className="space-y-6 border-t pt-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#080808] mb-6">Contact</h2>
-        <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
+        <h2 className="text-xl font-semibold text-black">Contact</h2>
+        <div className="space-y-4 leading-relaxed">
           <p>If you have any questions or comments about our Terms and Conditions of service as outlined above, please contact us at:</p>
           <div className="bg-gray-50 p-4 rounded-lg">
             <p>Email:{" "}
@@ -528,6 +539,7 @@ export default function Terms() {
           </div>
         </div>
       </section>
+      </div>
     </div>
   );
 }

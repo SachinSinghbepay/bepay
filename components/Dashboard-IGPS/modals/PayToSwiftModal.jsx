@@ -108,7 +108,7 @@ export default function PayToSwiftModal({
               </p>
               <button
                 onClick={onAddBeneficiary}
-                className="mt-4 px-6 py-3 bg-black text-white rounded-xl font-medium"
+                className="mt-4 px-6 py-3 bg-black text-white rounded-xl font-medium  cursor-pointer"
               >
                 Add new beneficiary +
               </button>
@@ -122,7 +122,7 @@ export default function PayToSwiftModal({
                 <h3 className="text-sm font-medium text-gray-500">Beneficiaries with bank details</h3>
                 <button
                   onClick={onAddBeneficiary}
-                  className="text-sm font-medium underline"
+                  className="text-sm font-medium underline cursor-pointer"
                 >
                   Add new beneficiary +
                 </button>
@@ -155,9 +155,12 @@ function BeneficiaryRow({ id, name, bank, country, status = "active", flag, onPa
   return (
     <div className="flex items-center justify-between p-4 bg-[#F9F9F9] rounded-2xl">
       <div className="flex items-center gap-4">
-        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border shadow-sm overflow-hidden">
-          {/* Placeholder or Flag */}
-          <span className="text-xs font-bold">{country?.substring(0, 2).toUpperCase()}</span>
+        <div className="w-10 h-10 bg-[#F5F5F5] rounded-xl p-2 flex items-center justify-center border shadow-sm overflow-hidden">
+          {flag ? (
+            <Image src={flag} alt={country ?? ""} width={28} height={28} className="w-full h-full object-cover rounded-full" />
+          ) : (
+            <span className="text-xs font-bold">{country?.substring(0, 2).toUpperCase()}</span>
+          )}
         </div>
         <div>
           <p className="font-medium">{name}</p>
@@ -171,7 +174,7 @@ function BeneficiaryRow({ id, name, bank, country, status = "active", flag, onPa
       <button
         onClick={onPay}
         disabled={status !== "verified" && status !== "active" && status !== "pending"} // Allow pending for now based on rules
-        className={`px-6 py-2 rounded-full text-sm font-medium transition-colors
+        className={`px-6 py-4 rounded-full text-sm font-medium transition-colors  cursor-pointer
           ${status === "verification_in_progress"
             ? "bg-gray-200 text-gray-400 cursor-not-allowed"
             : "bg-black text-white hover:bg-gray-800"
@@ -183,9 +186,24 @@ function BeneficiaryRow({ id, name, bank, country, status = "active", flag, onPa
   );
 }
 
-function getCountryFlag(countryName) {
-  // Simple mock map or logic provided here
-  // In a real app, use a library or the existing icon system
-  return null;
+const COUNTRY_FLAGS = {
+  US: "/icons/usa.svg",
+  USA: "/icons/usa.svg",
+  IN: "/icons/india.svg",
+  IND: "/icons/india.svg",
+  DE: "/icons/europe.png",
+  FR: "/icons/europe.png",
+  IT: "/icons/europe.png",
+  ES: "/icons/europe.png",
+  NL: "/icons/europe.png",
+  BE: "/icons/europe.png",
+  AT: "/icons/europe.png",
+  PT: "/icons/europe.png",
+  EU: "/icons/europe.png",
+};
+
+function getCountryFlag(countryCode) {
+  if (!countryCode) return null;
+  return COUNTRY_FLAGS[countryCode.toUpperCase()] ?? null;
 }
 
