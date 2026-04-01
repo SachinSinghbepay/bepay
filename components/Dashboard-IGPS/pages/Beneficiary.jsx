@@ -96,7 +96,7 @@ export default function Beneficiary({ onOpenModal }) {
                                 <RefreshCw size={18} className={refreshing ? "animate-spin" : ""} />
                             </button>
                             <div className="flex items-center gap-2 px-4 py-3 rounded-full border border-[#C0C0C099]/60 text-sm text-gray-500 w-80">
-                                <Image src='/icons/lens.png' width={20} height={20} />
+                                <Image src='/icons/lens.png' width={20} height={20} alt="search" />
                                 <input
                                     value={search}
                                     onChange={e => setSearch(e.target.value)}

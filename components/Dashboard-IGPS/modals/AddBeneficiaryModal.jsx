@@ -52,6 +52,25 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
         BR: {
             paymentType: "pix",
             fields: ["pixKeyId", "taxId"]
+        },
+
+        GB: {
+            paymentType: "bank_account",
+            fields: ["accountNumber", "sortCode"]
+        }, 
+        AE: {
+            paymentType: "bank_account",
+            fields: ["accountNumber", "swiftCode", "bankId", "remittancePurpose"]
+        },
+
+        SG: {
+            paymentType: "bank_account",
+            fields: ["accountNumber", "bankId"]
+        },
+
+        ZA: {
+            paymentType: "bank_account",
+            fields: ["accountNumber", "bankCode", "bankId"]
         }
     };
 
@@ -82,7 +101,29 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
     const [wallets, setWallets] = useState([{ id: 1, address: "", network: "" }]);
     const networkOptions = [
         { label: "Polygon", value: "polygon", icon: "/icons/Polygon.png" },
-        { label: "Ethereum", value: "ethereum", icon: "/icons/Eth.png" }
+        { label: "Ethereum", value: "ethereum", icon: "/icons/eth.png" }
+    ];
+
+    const remittancePurposeOptions = [
+        { label: "Family Support", value: "FAMILY_SUPPORT" },
+        { label: "Education", value: "EDUCATION" },
+        { label: "Gift and Donation", value: "GIFT_AND_DONATION" },
+        { label: "Maintenance Expenses", value: "MAINTENANCE_EXPENSES" },
+        { label: "Travel", value: "TRAVEL" },
+        { label: "Construction Expenses", value: "CONSTRUCTION_EXPENSES" },
+        { label: "Advisory Fees", value: "ADVISORY_FEES" },
+        { label: "Business Insurance", value: "BUSINESS_INSURANCE" },
+        { label: "Insurance Claims", value: "INSURANCE_CLAIMS" },
+        { label: "Exported Goods", value: "EXPORTED_GOODS" },
+        { label: "Service Charges", value: "SERVICE_CHARGES" },
+        { label: "Loan Payment", value: "LOAN_PAYMENT" },
+        { label: "Property Purchase", value: "PROPERTY_PURCHASE" },
+        { label: "Property Rental", value: "PROPERTY_RENTAL" },
+        { label: "Tax Payment", value: "TAX_PAYMENT" },
+        { label: "Utility Bills", value: "UTILITY_BILLS" },
+        { label: "Personal Transfer", value: "PERSONAL_TRANSFER" },
+        { label: "Salary Payment", value: "SALARY_PAYMENT" },
+        { label: "Computer Services", value: "COMPUTER_SERVICES" }
     ];
 
     const transferTypeOptions = [
@@ -108,6 +149,10 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
     const [accountType, setAccountType] = useState("");
     const [pixKeyId, setPixKeyId] = useState(""); //BR
     const [taxId, setTaxId] = useState(""); //BR
+    const [swiftCode, setSwiftCode] = useState(""); //AE
+    const [remittancePurpose, setRemittancePurpose] = useState(""); //AE
+    const [bankCode, setBankCode] = useState(""); //ZA
+
 
 
 
@@ -167,6 +212,9 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
         setAccountNumber("");
         setRoutingNumber("");
         setSortCode("");
+        setSwiftCode("");
+        setRemittancePurpose("");
+        setBankCode("");
         setIfscCode("");
         setBankId("");
         setAccountType("");
@@ -224,7 +272,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
             if (!businessName.trim() || !businessRegistrationNumber.trim()) return false;
         }
         if (!email.trim()) return false;
-        if (!country || !addressLine1.trim() || !city.trim() || !selectedState.trim() || !zip.trim()) return false;
+        if (!country || !addressLine1.trim() || !city.trim() || (states.length > 0 && !selectedState.trim()) || !zip.trim()) return false;
         return wallets.every(w => w.address.trim() && w.network);
     };
 
@@ -238,7 +286,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
         }
 
         if (!email.trim()) return false;
-        if (!country || !addressLine1.trim() || !city.trim() || !selectedState.trim() || !zip.trim()) return false;
+        if (!country || !addressLine1.trim() || !city.trim() || (states.length > 0 && !selectedState.trim()) || !zip.trim()) return false;
 
         const fieldValues = {
             accountNumber,
@@ -247,6 +295,9 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
             ifscCode,
             routingNumber,
             sortCode,
+            swiftCode,
+            remittancePurpose,
+            bankCode,
             pixKeyId,
             taxId,
             transferType
@@ -361,6 +412,9 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                 ifscCode,
                 routingNumber,
                 sortCode,
+                swiftCode,
+                remittancePurpose,
+                bankCode,
                 pixKeyId,
                 taxId,
                 transferType
@@ -378,7 +432,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                 country: country,
                 street: addressLine1,
                 city: city,
-                state: selectedState,
+                ...(states.length > 0 && { state: selectedState }),
                 postalCode: zip
             };
 
@@ -393,7 +447,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                         lastName: lastName
                     }),
                     ...(beneficiaryType === "business" && {
-                        fullName: businessName,
+                        fullName: businessName.replace(/[^a-zA-Z0-9 '\-]/g, ""),
                         businessRegistrationNumber
                     }),
                     email: email,
@@ -414,7 +468,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                         lastName
                     }),
                     ...(beneficiaryType === "business" && {
-                        fullName: businessName,
+                        fullName: businessName.replace(/[^a-zA-Z0-9 '\-]/g, ""),
                         businessRegistrationNumber
                     }),
                     email,
@@ -526,6 +580,11 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                     placeholder="Your Business Name"
                                     className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
                                 />
+                                {/[^a-zA-Z0-9 '\-]/.test(businessName) && (
+                                    <p className="text-xs text-amber-600">
+                                        Special characters like {[...new Set(businessName.match(/[^a-zA-Z0-9 '\-]/g))].map(c => `"${c}"`).join(", ")} are not allowed. Use only letters, numbers, spaces, hyphens, and apostrophes.
+                                    </p>
+                                )}
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm text-[#6A6A6A]">Business Registration Number</label>
@@ -653,12 +712,60 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                 {/* Account Number */}
                                 {fields.includes("accountNumber") && (
                                     <div className="space-y-2">
-                                        <label className="text-sm text-gray-500">Account Number</label>
+                                        <label className="text-sm text-gray-500">{country === "AE" ? "IBAN" : "Account Number"}</label>
                                         <input
-                                            placeholder="Account Number"
+                                            placeholder={country === "AE" ? "e.g. AE070331234567890123456" : "Account Number"}
                                             value={accountNumber}
                                             onChange={(e) => setAccountNumber(e.target.value)}
                                             className="w-full py-4 px-4 text-sm border rounded-xl dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                        />
+                                    </div>
+                                )}
+
+                                {fields.includes("sortCode") && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-gray-500">Sort Code</label>
+                                        <input
+                                            placeholder="Sort Code"
+                                            value={sortCode}
+                                            onChange={(e) => setSortCode(e.target.value)}
+                                            className="w-full py-4 px-4 text-sm border rounded-xl dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                        />
+                                    </div>
+                                )}
+
+                                {fields.includes("swiftCode") && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-gray-500">SWIFT Code</label>
+                                        <input
+                                            placeholder="SWIFT Code"
+                                            value={swiftCode}
+                                            onChange={(e) => setSwiftCode(e.target.value)}
+                                            className="w-full py-4 px-4 text-sm border rounded-xl dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                        />
+                                    </div>
+                                )}
+
+                                {fields.includes("bankCode") && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-gray-500">Bank Code</label>
+                                        <input
+                                            placeholder="Bank Code"
+                                            value={bankCode}
+                                            onChange={(e) => setBankCode(e.target.value)}
+                                            className="w-full py-4 px-4 text-sm border rounded-xl dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                        />
+                                    </div>
+                                )}
+
+                                {fields.includes("remittancePurpose") && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-gray-500">Remittance Purpose</label>
+                                        <CustomSelect
+                                            options={remittancePurposeOptions}
+                                            value={remittancePurpose}
+                                            onChange={setRemittancePurpose}
+                                            placeholder="Select remittance purpose"
                                         />
                                     </div>
                                 )}
@@ -823,6 +930,11 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                             placeholder="New York"
                                             className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
                                         />
+                                        {/[^a-zA-Z0-9\s]/.test(city) && (
+                                            <p className="text-xs text-amber-600">
+                                                Special characters like {[...new Set(city.match(/[^a-zA-Z0-9\s]/g))].map(c => `"${c}"`).join(", ")} are not allowed. Use only letters, numbers, and spaces.
+                                            </p>
+                                        )}
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-sm text-[#6A6A6A]">State</label>
@@ -836,12 +948,15 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                                 searchable
                                             />
                                         ) : (
-                                            <input
-                                                value={selectedState}
-                                                onChange={(e) => setSelectedState(e.target.value)}
-                                                placeholder="Enter state"
-                                                className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
-                                            />
+                                            <div>
+                                                <input
+                                                    value={selectedState}
+                                                    onChange={(e) => setSelectedState(e.target.value)}
+                                                    placeholder={country ? `e.g. ${country}-GP` : "Enter state code"}
+                                                    className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                                />
+                                                <p className="text-xs text-gray-400 mt-1">Enter ISO state code, e.g. {country ? `${country}-GP` : "ZA-GP"}</p>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
@@ -885,11 +1000,11 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                         </div>
                     )}
                     {/* FOOTER */}
-                    <div className="px-8 pb-8 pt-4 space-y-4 bg-white border-t">
+                    <div className=" pb-8 pt-4 space-y-4 bg-white border-t">
                         <button
                             disabled={!isValid || loading}
                             onClick={handleSubmit}
-                            className={`w-full h-14 rounded-xl text-white text-base transition-colors ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-400 cursor-not-allowed"}`}
+                            className={`w-full h-14 rounded-xl text-white text-base transition-colors cursor-pointer ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-400 cursor-not-allowed"}`}
                         >
                             {loading ? "Adding..." : "Add beneficiary"}
                         </button>
