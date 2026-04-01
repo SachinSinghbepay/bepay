@@ -45,6 +45,7 @@ export default function ConfirmGlobalPayoutModal({
                 purpose: paymentDetails?.purpose || "Gift",
                 sourceOfFunds: paymentDetails?.sourceOfFunds || "Savings",
                 beneficiaryRelationship: paymentDetails?.beneficiaryRelationship || "Partner",
+                customerReferenceId: paymentDetails?.customerReferenceId || undefined,
                 documents: paymentDetails?.documents // Pass documents if any
             };
 
@@ -140,6 +141,12 @@ export default function ConfirmGlobalPayoutModal({
                             <span className="text-gray-500">Fees</span>
                             <span className="font-medium">{quote.fee} {quote.sourceCurrency}</span>
                         </div>
+                        {paymentDetails?.customerReferenceId && (
+                            <div className="flex justify-between">
+                                <span className="text-gray-500">Reference</span>
+                                <span className="font-medium">{paymentDetails.customerReferenceId}</span>
+                            </div>
+                        )}
                         <div className="flex justify-between">
                             <span className="text-gray-500">Arrival Time</span>
                             <span className="font-medium">1-3 Business Days</span>

@@ -59,6 +59,7 @@ export default function SendGlobalPayoutModal({
     const [relationship, setRelationship] = useState("");
 
     const [targetCurrency, setTargetCurrency] = useState("USD");
+    const [customerReferenceId, setCustomerReferenceId] = useState("");
     const [invoice, setInvoice] = useState(null);
     const [fiatBalances, setFiatBalances] = useState([]);
 
@@ -282,6 +283,7 @@ export default function SendGlobalPayoutModal({
                 purpose: purposeCode,
                 sourceOfFunds: sourceOfFunds,
                 beneficiaryRelationship: relationship,
+                customerReferenceId: customerReferenceId || undefined,
                 documents: invoice ? [invoice] : []
             },
             onBack: () => onOpenModal("send-globalpayout"),
@@ -502,6 +504,18 @@ export default function SendGlobalPayoutModal({
                             value={relationship}
                             onChange={setRelationship}
                             placeholder="Select relationship"
+                        />
+                    </div>
+
+                    {/* REFERENCE */}
+                    <div className="space-y-2">
+                        <label className="text-sm text-gray-500">Reference <span className="text-gray-400">(optional)</span></label>
+                        <input
+                            type="text"
+                            value={customerReferenceId}
+                            onChange={(e) => setCustomerReferenceId(e.target.value)}
+                            placeholder="e.g. INV-2026-001, PO#1234"
+                            className="w-full h-12 px-4 rounded-2xl bg-[#F7F7F7] text-sm text-gray-800 placeholder:text-gray-400 border border-transparent focus:border-gray-300 focus:outline-none"
                         />
                     </div>
 
