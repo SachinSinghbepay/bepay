@@ -129,10 +129,10 @@ function MiniCalendar({ rangeStart, rangeEnd, onSelect }) {
     );
 }
 
-export default function DownloadStatementModal({ onClose, transactions = [], onFilterChange, initialPeriod = "this_month", initialCustomStart = null, initialCustomEnd = null }) {
-    const [period, setPeriod] = useState(initialPeriod);
-    const [customStart, setCustomStart] = useState(initialCustomStart);
-    const [customEnd, setCustomEnd] = useState(initialCustomEnd);
+export default function DownloadStatementModal({ onClose, transactions = [] }) {
+    const [period, setPeriod] = useState("this_month");
+    const [customStart, setCustomStart] = useState(null);
+    const [customEnd, setCustomEnd] = useState(null);
     const [pickingSecond, setPickingSecond] = useState(false);
     const [downloading, setDownloading] = useState(false);
     const [calendarOpen, setCalendarOpen] = useState(false);
@@ -169,10 +169,6 @@ export default function DownloadStatementModal({ onClose, transactions = [], onF
     };
 
     const filtered = filterTxns(transactions, period, customStart, customEnd);
-
-    useEffect(() => {
-        onFilterChange?.(filtered, period, customStart, customEnd);
-    }, [period, customStart, customEnd]);
 
     const txCount = filtered.length;
     const countLabel = txCount === 0 ? "(No transactions found)" : `(${txCount} transaction${txCount > 1 ? "s" : ""} found)`;
@@ -249,66 +245,34 @@ export default function DownloadStatementModal({ onClose, transactions = [], onF
 
     return (
         <ModalFrame size="sm" height="h-auto">
-                   {/* HEADER */}
-                <div className="relative flex items-center justify-center p-4 sm:px-8 pt-6 mb-5">
-                  
+            {/* HEADER */}
+            <div className="relative flex items-center justify-center p-4 sm:px-8 pt-6 mb-5">
+                <h2 className="text-lg font-semibold text-gray-900">Statement</h2>
+                <button
+                    className="absolute right-8 text-xl text-gray-400 hover:text-gray-600 cursor-pointer"
+                    onClick={onClose}
+                >
+                    <Image src="/icons/close.png" alt="close" width={16} height={16} />
+                </button>
+            </div>
 
-                    <h2 className="text-lg font-semibold text-gray-900">
-                       Download statement
-                    </h2>
+            <div className="px-8 pb-8 flex flex-col gap-5 h-[75vh]">
 
-                    {/* Close */}
-                    <button
-                        className="absolute right-8 text-xl text-gray-400 hover:text-gray-600 cursor-pointer"
-                        onClick={onClose}
-                    >
-                        <Image src="/icons/close.png" alt="close" width={16} height={16} />
-                    </button>
-                </div>
-            <div className="bg-white rounded-3xl px-8  relative h-[60vh] flex flex-col gap-6">
-
-         
-
-                <div>
-                    <p className="text-sm font-medium text-gray-700 mb-4">Select period</p>
-                    <div className="space-y-4">
+                {/* Period selector */}
+                <div className="shrink-0">
+                    <p className="text-sm font-medium text-gray-700 mb-3">Select period</p>
+                    <div className="flex flex-wrap gap-2">
                         {PERIODS.map(p => {
                             const active = period === p.value;
-                            const isThisPeriod = p.value !== "custom";
-                            const count = isThisPeriod
-                                ? filterTxns(transactions, p.value, null, null).length
-                                : null;
-
                             return (
-                                <label key={p.value} className="flex items-center gap-3 cursor-pointer select-none">
-                                    {/* Checkbox */}
-                                    <div
-                                        onClick={() => setPeriod(active ? null : p.value)}
-                                        className={`h-5 w-5 rounded-md border-2 flex items-center justify-center shrink-0 transition
-                                            ${active ? "bg-black border-black" : "border-gray-300"}`}
-                                    >
-                                        {active && (
-                                            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-                                                <path d="M1 4l3 3 5-6" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                                            </svg>
-                                        )}
-                                    </div>
-
-                                    <span
-                                        onClick={() => setPeriod(active ? null : p.value)}
-                                        className="text-sm text-gray-800"
-                                    >
-                                        {p.label}
-                                        {active && isThisPeriod && (
-                                            <span className="text-gray-400 ml-2">
-                                                {count === 0 ? "(No transactions found)" : `(${count} transaction${count !== 1 ? "s" : ""} found)`}
-                                            </span>
-                                        )}
-                                        {active && p.value === "custom" && customStart && customEnd && (
-                                            <span className="text-gray-400 ml-2">{countLabel}</span>
-                                        )}
-                                    </span>
-                                </label>
+                                <button
+                                    key={p.value}
+                                    onClick={() => setPeriod(p.value)}
+                                    className={`px-4 py-2 rounded-full text-sm font-medium border transition cursor-pointer
+                                        ${active ? "bg-black text-white border-black" : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"}`}
+                                >
+                                    {p.label}
+                                </button>
                             );
                         })}
                     </div>
@@ -316,58 +280,78 @@ export default function DownloadStatementModal({ onClose, transactions = [], onF
 
                 {/* Custom date range */}
                 {period === "custom" && (
-                    <div className="space-y-3 ">
-                        {/* Date range display */}
-                        <div className="relative">
-                            <button
-                                onClick={() => setCalendarOpen(v => !v)}
-                                className="w-full flex items-center gap-2 px-4 py-3 rounded-xl border border-[#B7B7B7] text-sm text-gray-700 bg-[#F6F6F6] hover:border-gray-400 transition text-left"
-                            >
-                             <Image 
-                             alt="calender"
-                             width={20}
-                             height={20}
-                             className=""
-                             src="/icons/calendar.png"
-                             />
-                                <span className={customStart ? "text-gray-800" : "text-gray-400"}>
-                                    {customStart ? fmt(customStart) : "Start date"}
-                                </span>
-                                <span className="text-gray-300">–</span>
-                                <span className={customEnd ? "text-gray-800" : "text-gray-400"}>
-                                    {customEnd ? fmt(customEnd) : "End date"}
-                                </span>
-                                {pickingSecond && customStart && (
-                                    <span className="ml-auto text-xs text-gray-400">Pick end date</span>
-                                )}
-                            </button>
-
-                            {/* Floating calendar */}
-                            {calendarOpen && (
-                                <div ref={calendarRef} className="absolute bottom-full mb-2 left-0 z-50">
-                                    <MiniCalendar
-                                        rangeStart={customStart}
-                                        rangeEnd={customEnd}
-                                        onSelect={handleCalendarSelect}
-                                    />
-                                </div>
+                    <div className="shrink-0 relative">
+                        <button
+                            onClick={() => setCalendarOpen(v => !v)}
+                            className="w-full flex items-center gap-2 px-4 py-3 rounded-xl border border-[#B7B7B7] text-sm text-gray-700 bg-[#F6F6F6] hover:border-gray-400 transition text-left cursor-pointer"
+                        >
+                            <Image alt="calendar" width={20} height={20} src="/icons/calendar.png" />
+                            <span className={customStart ? "text-gray-800" : "text-gray-400"}>
+                                {customStart ? fmt(customStart) : "Start date"}
+                            </span>
+                            <span className="text-gray-300">–</span>
+                            <span className={customEnd ? "text-gray-800" : "text-gray-400"}>
+                                {customEnd ? fmt(customEnd) : "End date"}
+                            </span>
+                            {pickingSecond && customStart && (
+                                <span className="ml-auto text-xs text-gray-400">Pick end date</span>
                             )}
-                        </div>
+                        </button>
+                        {calendarOpen && (
+                            <div ref={calendarRef} className="absolute top-full mt-2 left-0 z-50">
+                                <MiniCalendar
+                                    rangeStart={customStart}
+                                    rangeEnd={customEnd}
+                                    onSelect={handleCalendarSelect}
+                                />
+                            </div>
+                        )}
                     </div>
                 )}
 
+                {/* Transaction list */}
+                <div className="flex-1 min-h-0 flex flex-col">
+                    <p className="text-sm font-medium text-gray-700 mb-3 shrink-0">
+                        Transactions
+                        <span className="text-gray-400 font-normal ml-2">{countLabel}</span>
+                    </p>
+                    <div className="flex-1 overflow-y-auto space-y-2 pr-1">
+                        {filtered.length === 0 ? (
+                            <p className="text-sm text-gray-400 text-center py-8">No transactions in this period</p>
+                        ) : (
+                            filtered.map((tx, i) => {
+                                const isSent = tx.type === "sent";
+                                return (
+                                    <div key={tx.id || i} className="flex items-center justify-between px-4 py-3 rounded-xl bg-[#F6F6F6]">
+                                        <div className="min-w-0">
+                                            <p className="text-sm font-medium text-gray-800 truncate">{tx.email || "—"}</p>
+                                            <p className="text-xs text-gray-400">{tx.date}</p>
+                                        </div>
+                                        <div className="text-right shrink-0 ml-4">
+                                            <p className={`text-sm font-semibold ${isSent ? "text-red-500" : "text-green-600"}`}>
+                                                {isSent ? "-" : "+"}{tx.amount} {tx.currency}
+                                            </p>
+                                            <p className="text-xs text-gray-400">{tx.status}</p>
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        )}
+                    </div>
+                </div>
+
                 {/* Download button */}
-                <div className="mt-auto">
+                <div className="shrink-0">
                     <button
                         onClick={handleDownload}
                         disabled={txCount === 0 || downloading || (period === "custom" && (!customStart || !customEnd))}
                         className={`w-full h-14 rounded-2xl text-white font-medium transition
                             ${txCount === 0 || (period === "custom" && (!customStart || !customEnd))
-                                ? "bg-gray-400 cursor-not-allowed"
-                                : "bg-black hover:bg-gray-800"
+                                ? "bg-gray-300 cursor-not-allowed text-gray-500"
+                                : "bg-black hover:bg-gray-800 cursor-pointer"
                             }`}
                     >
-                        {downloading ? "Generating..." : "Download PDF"}
+                        {downloading ? "Generating..." : `Download PDF${txCount > 0 ? ` (${txCount})` : ""}`}
                     </button>
                 </div>
             </div>

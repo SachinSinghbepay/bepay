@@ -172,7 +172,7 @@ function CryptoRow({ main, chain, label, value, action, subLabel }) {
 
             {/* RIGHT */}
             {action ? (
-                <button className="text-sm underline text-gray-600 text-right">
+                <button className="text-sm underline text-gray-600 text-right cursor-pointer">
                     {action}
                 </button>
             ) : (

@@ -4,6 +4,7 @@ import BalanceDropdown from "./BalanceDropdown";
 import Image from "next/image";
 
 export default function BalanceBreakdown({ wallets = [], fiatBalances = [], loading }) {
+    console.log("[BalanceBreakdown] wallets:", wallets, "fiatBalances:", fiatBalances, "loading:", loading);
     const [open, setOpen] = useState(false);
     const wrapperRef = useRef(null);
 

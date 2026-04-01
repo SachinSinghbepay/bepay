@@ -77,7 +77,7 @@ export default function Team({ onOpenModal }) {
                     </div>
                     <div className="flex flex-col sm:flex-row items-center gap-4">
                         <button
-                            className="flex items-center gap-2 text-[#080808] px-6 py-3 rounded-full text-sm"
+                            className="flex items-center gap-2 text-[#080808] px-6 py-3 rounded-full text-sm cursor-pointer"
                             onClick={() => onOpenModal("learn-about-roles")}
                         >
                             <span>Learn more about roles</span>
@@ -92,7 +92,7 @@ export default function Team({ onOpenModal }) {
                         {memberList.length > 0 && (
                             <button
                                 onClick={() => onOpenModal("add-new-member", { refresh: mutate })}
-                                className="mt-4 px-8 py-3 rounded-full bg-black text-white">
+                                className="mt-4 px-8 py-3 rounded-full bg-black text-white cursor-pointer">
                                 Add team member
                             </button>
                         )}
@@ -199,7 +199,7 @@ function EmptyState({ onOpenModal, onRefresh }) {
             </p>
             <button
                 onClick={() => onOpenModal("add-new-member", { refresh: onRefresh })}
-                className="mt-4 px-8 py-3 rounded-full bg-black text-white">
+                className="mt-4 px-8 py-3 rounded-full bg-black text-white cursor-pointer">
                 Add team member
             </button>
         </div>

@@ -90,7 +90,7 @@ export default function StepCredentials({
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-4 text-gray-400"
+                className="absolute right-4 top-4 text-gray-400 cursor-pointer"
               >
                 {showPassword ? (
                   <AiOutlineEyeInvisible size={20} />
@@ -102,7 +102,7 @@ export default function StepCredentials({
           </div>
           <div className="flex gap-2 justify-between items-center ">
             <div className="flex gap-2 items-center text-[#080808]">
-              <input type="checkbox" className="w-5 h-5 border border-[#C0C0C080]" />
+              <input type="checkbox" className="w-5 h-5 border border-[#C0C0C080] cursor-pointer" />
               <p className="text-sm">Remember me</p>
             </div>
             <div>

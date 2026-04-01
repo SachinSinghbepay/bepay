@@ -6,7 +6,7 @@ import Image from "next/image";
 const COIN_ICONS = {
     USDC:    "/icons/USDC.png",
     USDT:    "/icons/USDT.png",
-    ETH:     "/icons/Eth.png",
+    ETH:     "/icons/eth.png",
     SOL:     "/icons/Sol.png",
     TRX:     "/icons/TRON.png",
     MATIC:   "/icons/Polygon.png",
@@ -21,7 +21,7 @@ const NETWORK_ICONS = {
     SOLANA:  "/icons/Sol.png",
     TRX:     "/icons/TRON.png",
     TRON:    "/icons/TRON.png",
-    ETH:     "/icons/Eth.png",
+    ETH:     "/icons/eth.png",
 };
 
 // Supports "USDC_POL", "USDC (POL)", "USDC" + optional chain string like "polygon"

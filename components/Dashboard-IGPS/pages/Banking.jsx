@@ -105,7 +105,7 @@ export default function Banking() {
             ) : !selectedAccount ? (
               <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 text-center">
                 <p className="text-sm text-yellow-700 font-medium">
-                  KYC is in processing. Banking details will appear once verification is completed.
+                  No Account Found
                 </p>
               </div>
 

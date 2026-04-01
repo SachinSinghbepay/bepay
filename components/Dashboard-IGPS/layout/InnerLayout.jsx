@@ -543,6 +543,10 @@ export default function InnerLayout() {
           {modal === "download-statement" && (
             <DownloadStatementModal
               transactions={modalProps?.transactions || []}
+              initialPeriod={modalProps?.initialPeriod}
+              initialCustomStart={modalProps?.initialCustomStart}
+              initialCustomEnd={modalProps?.initialCustomEnd}
+              onFilterChange={modalProps?.onFilterChange}
               onClose={closeModal}
             />
           )}
