@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import ModalFrame from "../modals/ModalFrame";
+import jsPDF from "jspdf";
 
 const TOKEN_ICONS = {
     USDC: "/icons/USDC.png",
@@ -61,7 +62,7 @@ function CopyButton({ text }) {
     }
 
     return (
-        <button onClick={handleCopy}>
+        <button onClick={handleCopy} className="cursor-pointer">
             <Image
                 src={copied ? "/icons/check.svg" : "/icons/copy.svg"}
                 width={18}
@@ -105,6 +106,61 @@ export default function PaymentDetailsModal({ order, onClose }) {
     const summaryLine = isSend
         ? <p className="text-center text-[#6A6A6A] text-md mb-1">You sent <b className="text-black">{requestedAmount}</b> to <b className="text-black">{payer}</b></p>
         : <p className="text-center text-[#6A6A6A] text-md mb-1">You requested <b  className="text-black">{requestedAmount}</b> from <b  className="text-black">{payer}</b></p>;
+
+    const handleDownloadFIRA = () => {
+        const doc = new jsPDF();
+        const pageW = doc.internal.pageSize.getWidth();
+
+        // Title
+        doc.setFontSize(18);
+        doc.setFont("helvetica", "bold");
+        doc.text("e-FIRA Transaction Receipt", pageW / 2, 20, { align: "center" });
+
+        // Subtitle
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(100);
+        doc.text(`Generated: ${new Date().toLocaleString()}`, pageW / 2, 28, { align: "center" });
+
+        // Divider
+        doc.setDrawColor(220);
+        doc.line(14, 33, pageW - 14, 33);
+
+        // Fields
+        doc.setTextColor(0);
+        doc.setFontSize(11);
+        const rows = [
+            ["Status", raw || "—"],
+            ["Amount", `${srcCurrency} ${srcAmount}`],
+            [isSend ? "Sent to" : "Requested from", payer],
+            ["Destination", destination],
+            ["Date & Time", dateTimeStr || "—"],
+            ...(order.invoiceNo ? [["Invoice No.", order.invoiceNo]] : []),
+            ...(order.purposeCode ? [["Purpose Code", order.purposeCode]] : []),
+            ...(order.dueDate ? [["Due Date", formatDate(order.dueDate)]] : []),
+            ...(order.id ? [["Transaction ID", order.id]] : []),
+        ];
+
+        let y = 44;
+        rows.forEach(([label, value], i) => {
+            if (i % 2 === 0) {
+                doc.setFillColor(248, 248, 248);
+                doc.rect(14, y - 5, pageW - 28, 9, "F");
+            }
+            doc.setFont("helvetica", "bold");
+            doc.text(label, 16, y);
+            doc.setFont("helvetica", "normal");
+            doc.text(String(value), 80, y);
+            y += 12;
+        });
+
+        // Footer
+        doc.setFontSize(8);
+        doc.setTextColor(150);
+        doc.text("bepay money — Official Transaction Receipt", pageW / 2, 285, { align: "center" });
+
+        doc.save(`bepay-efira-${order.id || Date.now()}.pdf`);
+    };
 
     return (
         <ModalFrame size="md" height="h-auto max-h-[90vh]">
@@ -278,7 +334,7 @@ export default function PaymentDetailsModal({ order, onClose }) {
                     {/* BUTTON */}
                     <div className="mt-4">
                         {isReceived && (
-                            <button className="w-full bg-black text-white rounded-2xl py-4 text-sm font-medium">
+                            <button onClick={handleDownloadFIRA} className="w-full bg-black text-white rounded-2xl py-4 text-sm font-medium cursor-pointer">
                                 Download e-FIRA
                             </button>
                         )}

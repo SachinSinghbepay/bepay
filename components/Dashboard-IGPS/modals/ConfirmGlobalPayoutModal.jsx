@@ -66,7 +66,7 @@ export default function ConfirmGlobalPayoutModal({
             <ModalFrame size="lg">
                 <div className="p-8 text-center flex flex-col items-center justify-center h-[50vh]">
                     <p className="text-red-500 mb-4">Missing transaction details.</p>
-                    <button onClick={onBack} className="text-black underline font-medium">Go Back</button>
+                    <button onClick={onBack} className="text-black underline font-medium cursor-pointer">Go Back</button>
                 </div>
             </ModalFrame>
         );

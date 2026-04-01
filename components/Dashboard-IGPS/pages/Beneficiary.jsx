@@ -197,14 +197,14 @@ function DeleteConfirmModal({ item, loading, onConfirm, onClose }) {
                     <button
                         onClick={onClose}
                         disabled={loading}
-                        className="flex-1 h-14 rounded-2xl border text-gray-700 hover:bg-gray-50 transition disabled:opacity-50"
+                        className="flex-1 h-14 rounded-2xl border text-gray-700 hover:bg-gray-50 transition disabled:opacity-50 cursor-pointer"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={onConfirm}
                         disabled={loading}
-                        className="flex-1 h-14 rounded-2xl bg-black text-white hover:bg-gray-900 transition disabled:opacity-50"
+                        className="flex-1 h-14 rounded-2xl bg-black text-white hover:bg-gray-900 transition disabled:opacity-50 cursor-pointer"
                     >
                         {loading ? "Deleting..." : "Delete"}
                     </button>
@@ -250,7 +250,7 @@ function BeneficiaryRow({ item, index, onDelete }) {
                     <div className="flex justify-end">
                         <button
                             onClick={onDelete}
-                            className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-red-500 hover:bg-red-50 transition"
+                            className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center text-red-500 hover:bg-red-50 transition cursor-pointer"
                             title="Delete beneficiary"
                         >
                             <Image src="/icons/delete.png" alt="Delete" width={20} height={20} />

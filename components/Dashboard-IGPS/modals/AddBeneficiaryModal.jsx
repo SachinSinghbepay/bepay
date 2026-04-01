@@ -894,7 +894,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                             {loading ? "Adding..." : "Add beneficiary"}
                         </button>
 
-                        <button onClick={onClose} className="w-full text-center text-base hover:text-gray-700">
+                        <button onClick={onClose} className="w-full text-center text-base hover:text-gray-700 cursor-pointer">
                             Cancel
                         </button>
                     </div>

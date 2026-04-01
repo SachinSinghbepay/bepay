@@ -149,7 +149,7 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
             <button
               onClick={handleUpdate}
               disabled={!isValid || loading}
-              className={`w-full h-14 rounded-2xl text-white font-medium
+              className={`w-full h-14 rounded-2xl text-white font-medium cursor-pointer
     ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-400"}
   `}
             >
@@ -158,7 +158,7 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
 
             <button
               onClick={onClose}
-              className="w-full text-center text-gray-700"
+              className="w-full text-center text-gray-700 cursor-pointer"
             >
               Cancel
             </button>

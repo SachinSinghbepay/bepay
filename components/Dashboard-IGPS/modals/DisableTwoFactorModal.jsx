@@ -53,7 +53,7 @@ export default function DisableTwoFactorModal({ onClose }) {
                 </p>
               </div>
 
-              <button onClick={onClose}>
+              <button onClick={onClose} className="cursor-pointer">
                 <FiX size={20} />
               </button>
             </div>

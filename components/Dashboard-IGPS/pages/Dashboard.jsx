@@ -7,6 +7,10 @@ import useSWR from 'swr';
 export default function Dashboard({ onOpenModal, setActivePage }) {
   const { user, igpsService } = useAuth();
   const [activeFilter, setActiveFilter] = useState("All");
+  const [statementFiltered, setStatementFiltered] = useState(null);
+  const [statementPeriod, setStatementPeriod] = useState("this_month");
+  const [statementCustomStart, setStatementCustomStart] = useState(null);
+  const [statementCustomEnd, setStatementCustomEnd] = useState(null);
   const { kycStatus } = useAuth();
 
   const { data, isValidating, mutate } = useSWR(
@@ -20,11 +24,17 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
       let wallets = [];
       let fiatBalances = [];
       let totalBalance = 0;
+      console.log("[Dashboard] balRes:", balRes);
       if (balRes.success) {
         const wData = balRes.data.wallets || [];
         wallets = [...wData].sort((a, b) => (parseFloat(b.balance) || 0) - (parseFloat(a.balance) || 0));
         fiatBalances = balRes.data.fiatBalances || [];
         totalBalance = balRes.data.totalBalance ?? wallets.reduce((acc, w) => acc + parseFloat(w.balance || 0), 0);
+        console.log("[Dashboard] wallets:", wallets);
+        console.log("[Dashboard] fiatBalances:", fiatBalances);
+        console.log("[Dashboard] totalBalance:", totalBalance);
+      } else {
+        console.warn("[Dashboard] balRes failed:", balRes);
       }
 
       let allTransactions = [];
@@ -70,9 +80,10 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
   const loading = !data && isValidating;
   const refreshing = !!data && isValidating;
 
+  const baseTransactions = statementFiltered ?? allTransactions;
   const transactions = activeFilter === "All"
-    ? allTransactions
-    : allTransactions.filter(tx => tx.statusRaw === activeFilter.toLowerCase());
+    ? baseTransactions
+    : baseTransactions.filter(tx => tx.statusRaw === activeFilter.toLowerCase());
 
   const filterOptions = ["All", ...Array.from(new Set(allTransactions.map(tx => tx.status)))];
 
@@ -194,7 +205,18 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
             ))}
           </div>
           <button
-            onClick={() => onOpenModal("download-statement", { transactions: allTransactions })}
+            onClick={() => onOpenModal("download-statement", {
+              transactions: allTransactions,
+              initialPeriod: statementPeriod,
+              initialCustomStart: statementCustomStart,
+              initialCustomEnd: statementCustomEnd,
+              onFilterChange: (txns, period, start, end) => {
+                setStatementFiltered(txns);
+                setStatementPeriod(period);
+                setStatementCustomStart(start);
+                setStatementCustomEnd(end);
+              },
+            })}
             className="p-2 rounded-lg bg-[#EBEBEB] transition shrink-0 cursor-pointer"
             title="Download statement"
           >
@@ -207,7 +229,10 @@ export default function Dashboard({ onOpenModal, setActivePage }) {
         ) : transactions.length === 0 ? (
           <div className="text-center py-16 space-y-4">
             <p className="text-sm text-gray-500">No transactions yet.</p>
-            <button className="px-6 py-2 rounded-full bg-black text-white text-sm">Deposit</button>
+            <button
+              onClick={() => onOpenModal("deposit-select", { showOtherTokens: true, showBackButton: false, heading: "Deposit", previousModal: null })}
+              className="px-6 py-2 rounded-full bg-black text-white text-sm cursor-pointer"
+            >Deposit</button>
           </div>
         ) : (
           <div className="space-y-4">
@@ -299,7 +324,7 @@ function ActionCard({ title, bg, icon, iconClassName, onClick }) {
         ${bg}
         h-[180px] sm:h-[220px] lg:h-[270px]
         rounded-4xl p-4 sm:p-5 lg:p-6
-        flex flex-col justify-between group
+        flex flex-col justify-between group cursor-pointer
       `}
     >
       <div>

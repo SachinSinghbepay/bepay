@@ -100,7 +100,7 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
                                 </p>
                             </div>
 
-                            <button onClick={onClose}>
+                            <button onClick={onClose} className="cursor-pointer">
                                 <FiX size={20} />
                             </button>
                         </div>

@@ -51,7 +51,7 @@ export default function RemoveMemberModal({ onClose, member, refresh }) {
     };
 
     return (
-        <ModalFrame size="sm">
+        <ModalFrame size="sm" height='h-auto'>
             <div className="relative bg-white rounded-3xl px-10 py-14 text-center">
 
                 {/* Close X */}
@@ -92,14 +92,14 @@ export default function RemoveMemberModal({ onClose, member, refresh }) {
                 <div className="flex gap-4 mt-30">
                     <button
                         onClick={onClose}
-                        className="flex-1 h-14 rounded-2xl border text-gray-700 hover:bg-gray-50 transition"
+                        className="flex-1 h-14 rounded-2xl border text-gray-700 hover:bg-gray-50 transition cursor-pointer"
                     >
                         Cancel
                     </button>
 
                     <button
                         disabled={loading}
-                        className="flex-1 h-14 rounded-2xl bg-black text-white hover:bg-gray-900 transition"
+                        className="flex-1 h-14 rounded-2xl bg-black text-white hover:bg-gray-900 transition cursor-pointer"
                         onClick={handleRemove}
                     >
                         {loading ? "Removing..." : "Remove"}
