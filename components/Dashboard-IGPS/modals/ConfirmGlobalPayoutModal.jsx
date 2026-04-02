@@ -135,11 +135,11 @@ export default function ConfirmGlobalPayoutModal({
                     <div className="space-y-4 text-sm">
                         <div className="flex justify-between">
                             <span className="text-gray-500">Exchange Rate</span>
-                            <span className="font-medium">1 {quote.sourceCurrency} = {quote.exchangeRate} {quote.targetCurrency}</span>
+                            <span className="font-medium">1 {quote.sourceCurrency} = {parseFloat(quote.exchangeRate || 0).toFixed(4)} {quote.targetCurrency}</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-gray-500">Fees</span>
-                            <span className="font-medium">{quote.fee} {quote.sourceCurrency}</span>
+                            <span className="font-medium">{parseFloat(quote.totalFee || 0).toFixed(2)} {quote.sourceCurrency}</span>
                         </div>
                         {paymentDetails?.customerReferenceId && (
                             <div className="flex justify-between">
