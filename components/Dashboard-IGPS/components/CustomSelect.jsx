@@ -5,7 +5,9 @@ export default function CustomSelect({
     options = [],
     placeholder = "Select",
     value,
-    onChange
+    onChange,
+    className = "",
+    searchable = false,
 }) {
 
     const normalizedOptions = options.map((opt) => {
@@ -19,10 +21,16 @@ export default function CustomSelect({
         return opt;
     });
     const dropdownRef = useRef(null);
+    const searchRef = useRef(null);
     const [open, setOpen] = useState(false);
     const [direction, setDirection] = useState("down");
+    const [search, setSearch] = useState("");
     const wrapperRef = useRef(null);
-    const selected = normalizedOptions.find(o => o.value === value);;
+    const selected = normalizedOptions.find(o => o.value === value);
+
+    const filteredOptions = searchable && search.trim()
+        ? normalizedOptions.filter(o => o.label.toLowerCase().includes(search.toLowerCase()))
+        : normalizedOptions;
 
     useEffect(() => {
         const el = dropdownRef.current;
@@ -53,6 +61,8 @@ export default function CustomSelect({
             const spaceBelow = window.innerHeight - rect.bottom;
             const spaceAbove = rect.top;
             setDirection(spaceAbove > spaceBelow ? "up" : "down");
+            setSearch("");
+            setTimeout(() => searchRef.current?.focus(), 50);
         }
         setOpen((v) => !v);
     };
@@ -71,7 +81,7 @@ export default function CustomSelect({
             <button
                 type="button"
                 onClick={toggle}
-                className="w-full h-12 rounded-xl border px-4 flex justify-between items-center bg-white"
+                className={`w-full py-4 px-4 text-sm rounded-xl border flex justify-between items-center bg-white focus:outline-none focus:border-gray-200 focus:ring-0 ${className}`}
             >
                 {selected ? (
                     <div className="flex items-center gap-2">
@@ -99,29 +109,44 @@ export default function CustomSelect({
 
             {open && (
                 <div
-                    ref={dropdownRef}
                     className={`absolute left-0 w-full bg-white rounded-xl shadow-lg border z-50
             ${direction === "down" ? "top-[110%]" : "bottom-[110%]"}
-            max-h-[40vh] overflow-y-auto`}
+            flex flex-col max-h-[40vh]`}
                 >
-                    {normalizedOptions.map((opt) => (
-                        <div
-                            key={opt.value}
-                            className="px-4 py-3 flex items-center gap-3 hover:bg-gray-100 cursor-pointer"
-                            onClick={() => {
-                                onChange(opt.value);
-                                setOpen(false);
-                            }}
-                        >
-                            {opt.icon && (
-                                <img src={opt.icon} alt="" className="w-5 h-5" />
-                            )}
-                            <span>{opt.label}</span>
+                    {searchable && (
+                        <div className="px-3 pt-3 pb-2 border-b">
+                            <input
+                                ref={searchRef}
+                                type="text"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                placeholder="Search..."
+                                className="w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:border-gray-300"
+                            />
                         </div>
-                    ))}
+                    )}
+                    <div ref={dropdownRef} className="overflow-y-auto">
+                        {filteredOptions.length === 0 ? (
+                            <p className="px-4 py-3 text-sm text-gray-400">No results</p>
+                        ) : filteredOptions.map((opt) => (
+                            <div
+                                key={opt.value}
+                                className="px-4 py-3 flex items-center gap-3 hover:bg-gray-100 cursor-pointer"
+                                onClick={() => {
+                                    onChange(opt.value);
+                                    setOpen(false);
+                                    setSearch("");
+                                }}
+                            >
+                                {opt.icon && (
+                                    <img src={opt.icon} alt="" className="w-5 h-5" />
+                                )}
+                                <span>{opt.label}</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            )
-            }
+            )}
         </div >
     );
 }

@@ -19,6 +19,7 @@ import KycBanner from "../components/KycBanner"
 
 
 import ModalRoot from "../layout/ModalRoot";
+import { ToastProvider } from "../context/ToastContext";
 import ModalFrame from "../modals/ModalFrame";
 import KycRequiredModal from "../modals/KycRequiredModal";
 import KycVerificationForm from "../pages/KycVerificationFormNew";
@@ -51,6 +52,7 @@ import BackupCodesModal from "../modals/BackupCodesModal";
 import DisableTwoFactorModal from "../modals/DisableTwoFactorModal";
 import ShareInviteModal from "../modals/ShareInviteModal";
 import PaymentDetailsModal from "../modals/PaymentDetailsModal";
+import DownloadStatementModal from "../modals/DownloadStatementModal";
 
 
 
@@ -75,6 +77,19 @@ export default function InnerLayout() {
   // 🔴 MODAL STATE (ONLY HERE)
   const [modal, setModal] = useState(null);
   const [modalProps, setModalProps] = useState({});
+  const [pendingModal, setPendingModal] = useState(null);
+  const [pendingModalProps, setPendingModalProps] = useState({});
+
+  // When KYC finishes loading, open the pending modal if there was one
+  useEffect(() => {
+    if (kycStatus !== "loading" && pendingModal) {
+      const type = pendingModal;
+      const props = pendingModalProps;
+      setPendingModal(null);
+      setPendingModalProps({});
+      openModal(type, props);
+    }
+  }, [kycStatus]);
 
   useEffect(() => {
     if (sidebarOpen) {
@@ -89,8 +104,10 @@ export default function InnerLayout() {
 
     const requiresKyc = KYC_REQUIRED_MODALS.includes(type);
 
-    // If KYC still loading → show loading state
+    // If KYC still loading → show loading state, remember what to open after
     if (requiresKyc && kycStatus === "loading") {
+      setPendingModal(type);
+      setPendingModalProps(props);
       setModal("kyc-loading");
       return;
     }
@@ -158,10 +175,10 @@ export default function InnerLayout() {
         return <Payments onOpenModal={openModal} />;
 
       case "privacy-policies":
-        return <LegalPolicy />;
+        return <LegalPolicy setActivePage={setActivePage} />;
 
       case "terms":
-        return <Terms />;
+        return <Terms setActivePage={setActivePage} />;
 
       default:
         return (
@@ -174,10 +191,10 @@ export default function InnerLayout() {
   };
 
   return (
-    <>
+    <ToastProvider>
       {/* ===== MAIN LAYOUT ===== */}
       <div className="min-h-screen bg-[#F9F9F9] p-2 sm:p-4 lg:p-6">
-        <div className="relative mx-auto max-w-full bg-[#fafafa] rounded-2xl lg:rounded-3xl flex overflow-hidden">
+        <div className="relative mx-auto max-w-full bg-[#F9F9F9] rounded-2xl lg:rounded-3xl flex overflow-hidden">
 
           {/* Mobile Overlay */}
           {sidebarOpen && (
@@ -203,7 +220,7 @@ export default function InnerLayout() {
               onMenuClick={() => setSidebarOpen(true)}
             />
 
-            <div className="flex-1 overflow-y-auto">
+            <div id="main-scroll-container" className="flex-1 overflow-y-auto">
               {renderPage()}
             </div>
           </div>
@@ -375,7 +392,7 @@ export default function InnerLayout() {
           )}
 
           {modal === "add-new-email" && (
-            <AddNewEmail onClose={closeModal} />
+            <AddNewEmail onClose={closeModal} onBack={() => openModal("pay-to-email")} />
           )}
 
           {modal === "payment-sent" && (
@@ -538,12 +555,23 @@ export default function InnerLayout() {
             />
           )}
 
+          {modal === "download-statement" && (
+            <DownloadStatementModal
+              transactions={modalProps?.transactions || []}
+              initialPeriod={modalProps?.initialPeriod}
+              initialCustomStart={modalProps?.initialCustomStart}
+              initialCustomEnd={modalProps?.initialCustomEnd}
+              onFilterChange={modalProps?.onFilterChange}
+              onClose={closeModal}
+            />
+          )}
+
 
 
           {/* ends here */}
         </ModalRoot>
       )}
 
-    </>
+    </ToastProvider>
   );
 }

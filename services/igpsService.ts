@@ -31,13 +31,19 @@ import {
   PaginationParams,
 } from "./igpsTypes";
 
+const DEFAULT_IGPS_BASE_URL = "http://app.bepay.money/api/igps";
+
+const IGPS_BASE_URL =
+  process.env.NEXT_PUBLIC_IGPS_BASE_URL?.trim().replace(/\/+$/, "") ||
+  DEFAULT_IGPS_BASE_URL;
+
 export class IgpsService {
   private baseUrl: string;
   private accessToken: string | null = null;
   private refreshToken: string | null = null;
 
-  constructor(baseUrl: string = "https://dev.bepay.money/api/igps") {
-    this.baseUrl = baseUrl;
+  constructor(baseUrl: string = IGPS_BASE_URL) {
+    this.baseUrl = baseUrl.trim().replace(/\/+$/, "");
 
     // Auto-load tokens from cookies if in browser
     if (typeof window !== "undefined" && typeof document !== "undefined") {
@@ -742,7 +748,44 @@ export class IgpsService {
     IgpsService.beneficiaryCache = null;
     if (typeof window !== "undefined")
       localStorage.removeItem("igps_beneficiaries");
-    return this.request<any>("DELETE", `/beneficiaries/${id}`);
+
+    const method = "DELETE";
+    const signaturePath = `/api/igps/beneficiaries/${id}`;
+    const bodyStr = "";
+    const timestamp = new Date().toISOString();
+    const signature = await this.hmacSha256(
+      method + signaturePath + timestamp + bodyStr,
+    );
+
+    const url = `${this.baseUrl}/beneficiaries/${id}`;
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${this.accessToken}`,
+      "X-Date": timestamp,
+      "X-Signature": signature,
+    };
+
+    try {
+      const response = await fetch(url, { method, headers });
+      const result = await response.json();
+      if (!response.ok)
+        throw new Error(
+          result.message ||
+            result.error ||
+            `Request failed with status ${response.status}`,
+        );
+      return {
+        success: true,
+        data: result.data || result,
+        message: result.message,
+      };
+    } catch (error: any) {
+      return {
+        success: false,
+        data: null as any,
+        error: error.message || "Unknown error occurred",
+      };
+    }
   }
 
   // 7. Quotes & Orders

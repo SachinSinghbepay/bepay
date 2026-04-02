@@ -51,7 +51,7 @@ export async function middleware(request) {
         <html lang="en">
           <head>
             <meta charset="utf-8">
-            <title>Opening BePay Money...</title>
+            <title>Opening bepay money...</title>
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <style>
               :root { color-scheme: light dark; }
@@ -83,16 +83,16 @@ export async function middleware(request) {
           </head>
           <body>
             <div class="container">
-              <div class="logo">BePay Money</div>
+              <div class="logo">bepay money</div>
               <div class="spinner"></div>
-              <h1>Opening BePay Money...</h1>
+              <h1>Opening bepay money...</h1>
               <p>If the app doesn’t open automatically, you can download it below.</p>
               <a href="${
                 isAndroid ? PLAY_STORE_URL : APP_STORE_URL
               }" class="store-button" id="storeLink">
                 Open ${isAndroid ? "Play Store" : "App Store"}
               </a>
-              <footer>© 2025 BePay Money</footer>
+              <footer>© 2025 bepay money</footer>
             </div>
 
             <script>

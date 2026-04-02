@@ -1,4 +1,5 @@
 import ModalFrame from "./ModalFrame";
+import Image from "next/image";
 
 export default function TransferRequestSubmittedModal({
     onClose,
@@ -9,9 +10,9 @@ export default function TransferRequestSubmittedModal({
             {/* CLOSE */}
             <button
                 onClick={onClose}
-                className="absolute right-8 top-6 text-xl text-gray-400"
+                className="absolute right-8 top-6 text-xl text-gray-400 cursor-pointer"
             >
-                ✕
+                <Image src="/icons/close.png" alt="close" width={16} height={16} />
             </button>
 
             {/* CONTENT */}

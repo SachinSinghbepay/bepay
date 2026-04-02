@@ -3,7 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import BalanceDropdown from "./BalanceDropdown";
 import Image from "next/image";
 
-export default function BalanceBreakdown({ wallets = [], loading }) {
+export default function BalanceBreakdown({ wallets = [], fiatBalances = [], loading }) {
+    console.log("[BalanceBreakdown] wallets:", wallets, "fiatBalances:", fiatBalances, "loading:", loading);
     const [open, setOpen] = useState(false);
     const wrapperRef = useRef(null);
 
@@ -12,9 +13,9 @@ export default function BalanceBreakdown({ wallets = [], loading }) {
     // Helper to get icons
     const getTokenIcon = (currency) => {
         const c = currency?.toLowerCase();
-        if (c === 'usdc') return "/icons/USDC.svg";
-        if (c === 'usdt') return "/icons/USDT.svg";
-        return "/icons/USDC.svg"; // default
+        if (c === 'usdc') return "/icons/USDC.png";
+        if (c === 'usdt') return "/icons/USDT.png";
+        return "/icons/USDC.png"; 
     }
 
     const getChainIcon = (chain) => {
@@ -22,8 +23,16 @@ export default function BalanceBreakdown({ wallets = [], loading }) {
         if (c === 'polygon') return "/icons/Polygon.png";
         if (c === 'solana') return "/icons/Solana.svg";
         if (c === 'tron') return "/icons/TRON.svg";
-        if (c === 'ethereum') return "/icons/eth.svg";
+        if (c === 'ethereum') return "/icons/eth.png";
         return "/icons/Polygon.png";
+    }
+
+    const getFiatIcon = (currency) => {
+        const c = currency?.toUpperCase();
+        if (c === 'USD') return "/icons/usa.png";
+        if (c === 'EUR') return "/icons/europe.png";
+        if (c === 'GBP') return "/icons/usa.png";
+        return "/icons/usa.png";
     }
 
     useEffect(() => {
@@ -50,7 +59,7 @@ export default function BalanceBreakdown({ wallets = [], loading }) {
                         e.stopPropagation();
                         setOpen(prev => !prev);
                     }}
-                    className="absolute top-3 right-3 h-10 w-10 rounded-lg bg-[#EBEBEB] flex items-center justify-center"
+                    className="absolute top-3 right-3 h-10 w-10  cursor-pointer rounded-lg bg-[#EBEBEB] flex items-center justify-center"
                 >
                     <svg
                         className={`h-6 w-6 text-gray-600 transition-transform ${open ? "rotate-180" : ""}`}
@@ -72,11 +81,24 @@ export default function BalanceBreakdown({ wallets = [], loading }) {
                 xl:gap-x-16
                 items-start
                 ">
-                    {/* FIAT COLUMN - Keeping static for now as API returns crypto wallets */}
+                    {/* FIAT COLUMN */}
                     <div className="px-4 sm:px-6 py-4 sm:py-5">
                         <p className="text-sm text-gray-500 mb-5">Fiat</p>
                         <div className="space-y-5 max-h-64 overflow-y-auto pr-2">
-                            <FiatRow img="/icons/usa.png" label="USD" value="0.00" />
+                            {loading && fiatBalances.length === 0 ? (
+                                <WalletShimmer />
+                            ) : fiatBalances.length === 0 ? (
+                                <FiatRow img="/icons/usa.png" label="USD" value="0.00" />
+                            ) : (
+                                fiatBalances.map((f, i) => (
+                                    <FiatRow
+                                        key={i}
+                                        img={getFiatIcon(f.currency)}
+                                        label={f.currency}
+                                        value={parseFloat(f.balance || 0).toFixed(2)}
+                                    />
+                                ))
+                            )}
                         </div>
                     </div>
 
@@ -114,7 +136,7 @@ export default function BalanceBreakdown({ wallets = [], loading }) {
 
             </div>
 
-            {open && <BalanceDropdown wallets={wallets} onClose={() => setOpen(false)} />}
+            {open && <BalanceDropdown wallets={wallets} fiatBalances={fiatBalances} onClose={() => setOpen(false)} />}
         </div>
     );
 }

@@ -110,7 +110,7 @@ export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
                                 </p>
                             </div>
 
-                            <button onClick={onClose}>
+                            <button onClick={onClose} className="cursor-pointer">
                                 <FiX size={20} />
                             </button>
                         </div>

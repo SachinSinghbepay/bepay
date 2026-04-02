@@ -199,7 +199,7 @@ export default function Header() {
                   <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">Get in touch</span>
                 </Button>
                 <Button
-                  onClick={() => window.location.href = `/igps?v=${Date.now()}`}
+                  onClick={() => window.location.href = `/igps/entity?v=${Date.now()}`}
                   className="hidden lg:flex lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-pointer hover:scale-105"
                 >
                   <span

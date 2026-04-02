@@ -1,8 +1,10 @@
 "use client";
 import { useState, useEffect, useRef} from "react";
+import Image from "next/image";
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 
 
 const roleOptions = [
@@ -36,6 +38,7 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
       }, []);
 
   const { igpsService } = useAuth();
+  const { toast } = useToast();
   const [firstName, setFirstName] = useState(data?.name?.split(" ")[0] || "");
   const [lastName, setLastName] = useState(data?.name?.split(" ")[1] || "");
   const [role, setRole] = useState("");
@@ -56,11 +59,15 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
       console.log("Update response:", res);
 
       if (res.success) {
+        toast.success("Member updated");
         refresh?.();
         onClose();
+      } else {
+        toast.error(res.error || "Failed to update member");
       }
     } catch (err) {
       console.error("Failed to update member", err);
+      toast.error("Failed to update member");
     } finally {
       setLoading(false);
     }
@@ -85,8 +92,8 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
             Edit {data?.email}
           </h2>
 
-          <button onClick={onClose} className="text-gray-500">
-            ✕
+          <button onClick={onClose} className="text-gray-500 cursor-pointer">
+            <Image src="/icons/close.png" alt="close" width={16} height={16} />
           </button>
         </div>
 
@@ -142,7 +149,7 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
             <button
               onClick={handleUpdate}
               disabled={!isValid || loading}
-              className={`w-full h-14 rounded-2xl text-white font-medium
+              className={`w-full h-14 rounded-2xl text-white font-medium cursor-pointer
     ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-400"}
   `}
             >
@@ -151,7 +158,7 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
 
             <button
               onClick={onClose}
-              className="w-full text-center text-gray-700"
+              className="w-full text-center text-gray-700 cursor-pointer"
             >
               Cancel
             </button>
@@ -170,7 +177,7 @@ function Input({ label, value, onChange }) {
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full h-14 rounded-2xl border px-4 outline-none"
+        className="w-full py-4 px-4 text-sm rounded-2xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
       />
     </div>
   );

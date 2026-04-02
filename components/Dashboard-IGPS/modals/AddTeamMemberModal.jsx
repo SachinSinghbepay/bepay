@@ -99,14 +99,14 @@ export default function AddTeamMemberModal({
                 {/* HEADER */}
                 <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
                     <button
-                        className="absolute left-8 text-xl text-gray-500"
+                        className="absolute left-8 text-xl text-gray-500 cursor-pointer"
                         onClick={onBack}
                     >
                         <Image
                             src="/icons/back.svg"
                             alt=""
-                            width={24}
-                            height={24}
+                            width={18}
+                            height={18}
                         />
                     </button>
 
@@ -115,10 +115,10 @@ export default function AddTeamMemberModal({
                     </h2>
 
                     <button
-                        className="absolute right-8 text-xl text-gray-400 hover:text-gray-600"
+                        className="absolute right-8 text-xl text-gray-400 hover:text-gray-600 cursor-pointer"
                         onClick={onClose}
                     >
-                        ✕
+                        <Image src="/icons/close.png" alt="close" width={16} height={16} />
                     </button>
                 </div>
 
@@ -218,7 +218,7 @@ function Input({ label, placeholder, value, onChange }) {
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="w-full h-14 rounded-2xl border px-4 outline-none text-gray-700"
+                className="w-full py-4 px-4 text-sm rounded-2xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
             />
         </div>
     );

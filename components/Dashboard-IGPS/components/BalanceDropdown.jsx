@@ -1,7 +1,7 @@
 import React from "react";
 import { useRef, useEffect } from "react";
 import Image from "next/image";
-export default function BalanceDropdown({ wallets = [], onClose }) {
+export default function BalanceDropdown({ wallets = [], fiatBalances = [], onClose }) {
 
     const scrollRef = useRef(null);
 
@@ -28,9 +28,9 @@ export default function BalanceDropdown({ wallets = [], onClose }) {
     // Helper to get icons
     const getTokenIcon = (currency) => {
         const c = currency?.toLowerCase();
-        if (c === 'usdc') return "/icons/USDC.svg";
-        if (c === 'usdt') return "/icons/USDT.svg";
-        return "/icons/USDC.svg"; // default
+        if (c === 'usdc') return "/icons/USDC.png";
+        if (c === 'usdt') return "/icons/USDT.png";
+        return "/icons/USDC.png"; // default
     }
 
     const getChainIcon = (chain) => {
@@ -38,8 +38,16 @@ export default function BalanceDropdown({ wallets = [], onClose }) {
         if (c === 'polygon') return "/icons/Polygon.png";
         if (c === 'solana') return "/icons/Solana.svg";
         if (c === 'tron') return "/icons/TRON.svg";
-        if (c === 'ethereum') return "/icons/eth.SVg";
+        if (c === 'ethereum') return "/icons/eth.png";
         return "/icons/Polygon.png";
+    }
+
+    const getFiatIcon = (currency) => {
+        const c = currency?.toUpperCase();
+        if (c === 'USD') return "/icons/usa.svg";
+        if (c === 'EUR') return "/icons/europe.png";
+        if (c === 'GBP') return "/icons/usa.svg";
+        return "/icons/usa.svg";
     }
 
     return (
@@ -53,11 +61,22 @@ export default function BalanceDropdown({ wallets = [], onClose }) {
                 </div>
 
                 {/* CONTENT */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-x-16">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-x-12">
 
                     {/* FIAT COLUMN */}
                     <div className="space-y-8">
-                        <FiatRow img="/icons/usa.png" label="USD" value="0.00" />
+                        {fiatBalances.length === 0 ? (
+                            <FiatRow img="/icons/usa.svg" label="USD" value="0.00" />
+                        ) : (
+                            fiatBalances.map((f, i) => (
+                                <FiatRow
+                                    key={i}
+                                    img={getFiatIcon(f.currency)}
+                                    label={f.currency}
+                                    value={parseFloat(f.balance || 0).toFixed(2)}
+                                />
+                            ))
+                        )}
                     </div>
 
                     {/* CRYPTO COLUMN */}
@@ -153,7 +172,7 @@ function CryptoRow({ main, chain, label, value, action, subLabel }) {
 
             {/* RIGHT */}
             {action ? (
-                <button className="text-sm underline text-gray-600 text-right">
+                <button className="text-sm underline text-gray-600 text-right cursor-pointer">
                     {action}
                 </button>
             ) : (

@@ -2,11 +2,13 @@ import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useRef, useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 import { PAYMENT_CONFIG } from "../utils/paymentConfig";
 import Image from "next/image";
 
 export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
     const { igpsService } = useAuth();
+    const { toast } = useToast();
     const scrollRef = useRef(null);
 
     const [loading, setLoading] = useState(false);
@@ -57,6 +59,11 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
         { label: "RTP (Real Time Payment)", value: "rtp" },
         { label: "Wire Transfer", value: "wire" },
         { label: "SWIFT (International Wire)", value: "swift" }
+    ];
+
+    const accountTypeOptions = [
+        { label: "Savings", value: "savings" },
+        { label: "Checking / Current account", value: "checking" }
     ];
 
     const categoryOptions = [
@@ -262,13 +269,17 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
             const res = await igpsService.createBeneficiary(payload);
 
             if (res.success) {
+                toast.success("Beneficiary added");
                 onBack();
             } else {
-                setError(res.error || "Failed to create beneficiary");
+                const msg = res.error || "Failed to create beneficiary";
+                setError(msg);
+                toast.error(msg);
             }
 
         } catch (err) {
             setError(err.message);
+            toast.error(err.message);
         } finally {
             setLoading(false);
         }
@@ -308,8 +319,9 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                     <CustomSelect
                         options={countries}
                         value={country}
-                        onChange={setCountry}
+                        onChange={(val) => { setCountry(val); setSelectedState(""); }}
                         placeholder="Select country"
+                        searchable
                     />
 
                     <Input placeholder="Address line 1" value={addressLine1} onChange={setAddressLine1} />
@@ -323,10 +335,11 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                                 options={states}
                                 value={selectedState}
                                 onChange={setSelectedState}
-                                placeholder="Select state"
+                                placeholder={loadingStates ? "Loading..." : "Select state"}
+                                searchable
                             />
                         ) : (
-                            <Input placeholder="State" value={selectedState} onChange={setSelectedState} />
+                            <Input placeholder={loadingStates ? "Loading..." : "State"} value={selectedState} onChange={setSelectedState} />
                         )}
 
                         <Input placeholder="Postal code" value={zip} onChange={setZip} />
@@ -346,11 +359,11 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                                 }}
                                 onFocus={() => setBankDropdownOpen(true)}
                                 placeholder="Search bank"
-                                className="w-full h-12 rounded-xl border px-4 outline-none focus:border-black"
+                                className="w-full py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
                             />
 
                             {bankDropdownOpen && (
-                                <div className="absolute top-full left-0 w-full bg-white border rounded-xl shadow-lg max-h-[250px] overflow-y-auto z-50 mt-2">
+                                <div className="absolute top-full left-0 w-full bg-white border rounded-xl shadow-lg max-h-62 overflow-y-auto z-50 mt-2">
 
                                     {loadingBanks ? (
                                         <div className="p-3 text-sm text-gray-500">
@@ -382,7 +395,15 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                     )}
 
                     {fields.includes("accountType") && (
-                        <Input label="Account type" value={accountType} onChange={setAccountType} />
+                        <div className="space-y-2">
+                            <label className="text-sm text-gray-500">Account type</label>
+                            <CustomSelect
+                                options={accountTypeOptions}
+                                value={accountType}
+                                onChange={setAccountType}
+                                placeholder="Select account type"
+                            />
+                        </div>
                     )}
 
                     {fields.includes("accountNumber") && (
@@ -458,14 +479,14 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
 function Header({ onBack, onClose }) {
     return (
         <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
-            <button onClick={onBack} className="absolute left-8">
-                <Image src="/icons/back.svg" alt="" width={24} height={24} />
+            <button onClick={onBack} className="absolute left-8 cursor-pointer">
+                <Image src="/icons/back.svg" alt="" width={18} height={18} />
             </button>
 
             <h2 className="text-lg font-medium">Add SWIFT beneficiary</h2>
 
-            <button onClick={onClose} className="absolute right-8">
-                ✕
+            <button onClick={onClose} className="absolute right-8 cursor-pointer">
+                <Image src="/icons/close.png" alt="close" width={16} height={16} />
             </button>
         </div>
     );
@@ -502,7 +523,7 @@ function Input({ label, placeholder, value, onChange }) {
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="w-full h-12 rounded-xl border px-4 text-sm outline-none focus:ring-2 focus:ring-black/10"
+                className="w-full py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
             />
         </div>
     );

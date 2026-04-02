@@ -1,6 +1,7 @@
 import ModalFrame from "./ModalFrame";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { px } from "framer-motion";
 
 export default function NewTransferModal({ onClose, onGlobalPayout, onPayToEmail, onPayToWallet, onPayToSwift }) {
   const scrollRef = useRef(null);
@@ -26,7 +27,7 @@ export default function NewTransferModal({ onClose, onGlobalPayout, onPayToEmail
 
 
   return (
-    <ModalFrame size="lg">
+    <ModalFrame size="lg" height="40vh">
       {/* HEADER */}
       <div className="relative flex items-center justify-center px-2 sm:px-8 pt-8 mb-4">
         <h2 className="text-lg font-semibold text-gray-900">
@@ -35,17 +36,17 @@ export default function NewTransferModal({ onClose, onGlobalPayout, onPayToEmail
 
         <button
           onClick={onClose}
-          className="absolute right-8 text-xl text-gray-400 hover:text-gray-600"
+          className="absolute right-8 text-xl text-gray-400 hover:text-gray-600 cursor-pointer"
         >
-          ✕
+          <Image src="/icons/close.png" alt="close" width={16} height={16} />
         </button>
       </div>
 
       {/* CONTENT */}
-      <div className="px-2 sm:px-8 py-10">
+      <div className="px-6 sm:px-8 py-10">
         <div
           ref={scrollRef}
-          className="grid sm:grid-cols-2 gap-6 max-h-[60vh] overflow-y-auto">
+          className="grid sm:grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto">
           <TransferCard
             title="Global payouts"
             desc="Pay anyone globally via local payment rails"
@@ -98,6 +99,7 @@ function TransferCard({ title, desc, icon, flags, badge, onClick }) {
         hover:bg-[#F3F3F3]
         transition
         h-[200px]
+         cursor-pointer
       "
     >
       {/* TOP */}
@@ -114,7 +116,7 @@ function TransferCard({ title, desc, icon, flags, badge, onClick }) {
                 className="rounded-full border border-white"
               />
             ))}
-            <span className="text-sm text-gray-500 ml-2">+ more</span>
+            <span className="text-sm text-gray-500 ml-4"> + more</span>
           </div>
         )}
 
@@ -128,7 +130,7 @@ function TransferCard({ title, desc, icon, flags, badge, onClick }) {
         )}
 
         {badge && (
-          <span className="ml-auto rounded-full bg-green-100 px-3 py-1 text-xs text-green-700">
+          <span className="ml-auto rounded-full bg-[#0E763014]/80 px-3 py-1 text-xs text-[#0E7630] font-medium">
             {badge}
           </span>
         )}

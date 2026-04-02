@@ -150,7 +150,7 @@ function SecurityCard({ title, desc, action, onClick }) {
             </div>
 
             <button
-                className="px-8 py-3 rounded-full bg-black text-white text-base font-medium hover:opacity-90 transition"
+                className="px-8 py-3 cursor-pointer rounded-full bg-black text-white text-base font-medium hover:opacity-90 transition"
                 onClick={onClick}
             >
                 {action}
@@ -227,13 +227,13 @@ function TwoFactorCard({ enabled, onEnable, onDisable }) {
                 {enabled ? (
                     <button
                         onClick={onDisable}
-                        className="px-8 py-3 rounded-full border border-red-500 text-red-500 text-base font-medium hover:bg-red-50 transition"
+                        className="px-8 py-3 cursor-pointer rounded-full border border-red-500 text-red-500 text-base font-medium hover:bg-red-50 transition"
                     >
                         Disable 2FA
                     </button>
                 ) : (
                     <button
-                        className="px-8 py-3 rounded-full bg-black text-white text-base font-medium hover:opacity-90 transition"
+                        className="px-8 py-3 cursor-pointer rounded-full bg-black text-white text-base font-medium hover:opacity-90 transition"
                         onClick={onEnable}
                     >
                         Enable two-factor authentication

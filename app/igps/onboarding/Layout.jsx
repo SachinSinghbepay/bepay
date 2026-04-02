@@ -5,11 +5,11 @@ import ScrollableCard from "../login/ScrollableCard";
 import Link from "next/link";
 
 export default function CreateAccountLayout({ children }) {
-    return (
-        <div className="min-h-screen w-full font-sans bg-[#F6F6F6] flex">
+  return (
+    <div className="min-h-screen w-full font-sans bg-[#F6F6F6] flex">
 
-            {/* LEFT SIDE (STATIC) */}
-              <div className="hidden lg:flex lg:w-1/2 relative bg-black items-center justify-center overflow-hidden">
+      {/* LEFT SIDE (STATIC) */}
+      <div className="hidden lg:flex lg:w-1/2 relative bg-black items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <video
             autoPlay
@@ -42,35 +42,35 @@ export default function CreateAccountLayout({ children }) {
         </div>
       </div>
 
-            {/* RIGHT SIDE */}
-            <div className="w-full lg:w-1/2 flex flex-col items-center px-6 py-12">
+      {/* RIGHT SIDE */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-evenly items-center px-6 py-4">
 
-                {/* Logo */}
-                <div className="mb-12">
-                    <div className="flex items-center justify-center">
-                        <img src="/bepayicon.png" alt="Logo" className="w-10 h-10 mr-2" />
-                        <div className="font-bold text-xl tracking-tight">
+        {/* Logo */}
+        <div>
+          <div className="flex items-center justify-center">
+            <Image src="/bepay_business_logo.png" alt="Logo" className="mr-2" width={180} height={180} />
+            {/* <div className="font-bold text-xl tracking-tight">
                             bepay <span className="font-light">IGPS</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Card Wrapper (THIS CONTROLS HEIGHT) */}
-                <div className="w-full max-w-xl">
-                    <ScrollableCard>{children}</ScrollableCard>
-                </div>
-
-                {/* Bottom Link */}
-                <div className="mt-10 text-sm text-center">
-                    Already have an account?{" "}
-                    <Link href="/igps/login">
-                        <span className="font-semibold text-black cursor-pointer">
-                            Login
-                        </span>
-                    </Link>
-                </div>
-            </div>
-
+                        </div> */}
+          </div>
         </div>
-    );
+
+        {/* Card Wrapper (THIS CONTROLS HEIGHT) */}
+        <div className="w-full max-w-xl">
+          <ScrollableCard>{children}</ScrollableCard>
+        </div>
+
+        {/* Bottom Link */}
+        <div className="text-sm text-center">
+          Already have an account?{" "}
+          <Link href="/igps/login">
+            <span className="font-semibold text-black cursor-pointer">
+              Login
+            </span>
+          </Link>
+        </div>
+      </div>
+
+    </div>
+  );
 }

@@ -11,6 +11,8 @@ export default function ConfirmGlobalPayoutModal({
     onConfirm,
     quote,
     beneficiary,
+    sourceType = 'crypto',
+    transferType,
     paymentDetails
 }) {
     const { igpsService } = useAuth();
@@ -43,6 +45,7 @@ export default function ConfirmGlobalPayoutModal({
                 purpose: paymentDetails?.purpose || "Gift",
                 sourceOfFunds: paymentDetails?.sourceOfFunds || "Savings",
                 beneficiaryRelationship: paymentDetails?.beneficiaryRelationship || "Partner",
+                customerReferenceId: paymentDetails?.customerReferenceId || undefined,
                 documents: paymentDetails?.documents // Pass documents if any
             };
 
@@ -64,7 +67,7 @@ export default function ConfirmGlobalPayoutModal({
             <ModalFrame size="lg">
                 <div className="p-8 text-center flex flex-col items-center justify-center h-[50vh]">
                     <p className="text-red-500 mb-4">Missing transaction details.</p>
-                    <button onClick={onBack} className="text-black underline font-medium">Go Back</button>
+                    <button onClick={onBack} className="text-black underline font-medium cursor-pointer">Go Back</button>
                 </div>
             </ModalFrame>
         );
@@ -75,16 +78,16 @@ export default function ConfirmGlobalPayoutModal({
             <div className="bg-white rounded-3xl h-[85vh] flex flex-col">
                 {/* HEADER */}
                 <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
-                    <button onClick={onBack} className="absolute left-8 text-xl text-gray-500">
+                    <button onClick={onBack} className="absolute left-8 text-xl text-gray-500 cursor-pointer">
                         <Image
                             src="/icons/back.svg"
                             alt=""
-                            width={24}
-                            height={24}
+                            width={18}
+                            height={18}
                         />
                     </button>
                     <h2 className="text-lg font-medium">Review & Confirm</h2>
-                    <button onClick={onClose} className="absolute right-8 text-xl text-gray-500">✕</button>
+                    <button onClick={onClose} className="absolute right-8 text-xl text-gray-500 cursor-pointer"><Image src="/icons/close.png" alt="close" width={16} height={16} /></button>
                 </div>
 
                 {/* SCROLLABLE BODY */}
@@ -100,7 +103,12 @@ export default function ConfirmGlobalPayoutModal({
                         <div className="flex justify-between items-start">
                             <div>
                                 <p className="text-sm text-gray-500 mb-1">From</p>
-                                <p className="font-medium text-gray-900">My USDC Wallet</p>
+                                <p className="font-medium text-gray-900">
+                                    {sourceType === 'fiat' ? `My ${quote.sourceCurrency} Balance` : `My ${quote.sourceCurrency} Wallet`}
+                                </p>
+                                {sourceType === 'fiat' && transferType && (
+                                    <p className="text-xs text-gray-400 mt-0.5">via {transferType}</p>
+                                )}
                             </div>
                             <div className="text-right">
                                 <p className="text-gray-900 font-bold text-lg">{quote.sourceAmount} {quote.sourceCurrency}</p>
@@ -127,12 +135,18 @@ export default function ConfirmGlobalPayoutModal({
                     <div className="space-y-4 text-sm">
                         <div className="flex justify-between">
                             <span className="text-gray-500">Exchange Rate</span>
-                            <span className="font-medium">1 {quote.sourceCurrency} = {quote.exchangeRate} {quote.targetCurrency}</span>
+                            <span className="font-medium">1 {quote.sourceCurrency} = {parseFloat(quote.exchangeRate || 0).toFixed(4)} {quote.targetCurrency}</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-gray-500">Fees</span>
-                            <span className="font-medium">{quote.fee} {quote.sourceCurrency}</span>
+                            <span className="font-medium">{parseFloat(quote.totalFee || 0).toFixed(2)} {quote.sourceCurrency}</span>
                         </div>
+                        {paymentDetails?.customerReferenceId && (
+                            <div className="flex justify-between">
+                                <span className="text-gray-500">Reference</span>
+                                <span className="font-medium">{paymentDetails.customerReferenceId}</span>
+                            </div>
+                        )}
                         <div className="flex justify-between">
                             <span className="text-gray-500">Arrival Time</span>
                             <span className="font-medium">1-3 Business Days</span>
@@ -142,7 +156,7 @@ export default function ConfirmGlobalPayoutModal({
                     {/* CONFIRMATION TEXT */}
                     <div className="pt-4">
                         <p className="text-xs text-center text-gray-400">
-                            By clicking confirm, you authorize the transfer of {quote.sourceAmount} {quote.sourceCurrency} from your wallet.
+                            By clicking confirm, you authorize the transfer of {quote.sourceAmount} {quote.sourceCurrency} from your {sourceType === 'fiat' ? 'account' : 'wallet'}.
                         </p>
                     </div>
 
