@@ -85,7 +85,7 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
 
     return (
         <ModalFrame size="sm">
-            <div className="flex flex-col bg-white rounded-3xl p-8 max-h-[90vh] overflow-hidden">
+            <div className="flex flex-col h-full bg-white rounded-3xl p-8 max-h-[90vh] overflow-hidden">
 
                 {mode === "form" ? (
                     <>
@@ -100,14 +100,14 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
                                 </p>
                             </div>
 
-                            <button onClick={onClose}>
+                            <button onClick={onClose} className="cursor-pointer">
                                 <FiX size={20} />
                             </button>
                         </div>
                         {/* BODY */}
                         <div
                             ref={scrollRef}
-                            className="space-y-6  overflow-y-auto">
+                            className="space-y-6 overflow-y-auto flex-1">
 
                             <input
                                 type="password"
@@ -157,27 +157,28 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
                                     {error}
                                 </p>
                             )}
-                            {/* FOOTER */}
-                            <div className="flex gap-4 mt-10">
-                                <button
-                                    onClick={onClose}
-                                    className="flex-1 h-14 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 transition"
-                                >
-                                    Cancel
-                                </button>
+                        </div>
 
-                                <button
-                                    onClick={handleSubmit}
-                                    disabled={!isValid || loading}
-                                    className={`flex-1 h-14 rounded-full text-white font-medium transition
-                                    ${isValid && !loading
-                                            ? "bg-black hover:bg-gray-800"
-                                            : "bg-gray-300 cursor-not-allowed"}
-                                    `}
-                                >
-                                    {loading ? "Updating..." : "Update password"}
-                                </button>
-                            </div>
+                        {/* FOOTER — outside scroll, always at bottom */}
+                        <div className="flex gap-4 pt-6">
+                            <button
+                                onClick={onClose}
+                                className="flex-1 h-14 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={handleSubmit}
+                                disabled={!isValid || loading}
+                                className={`flex-1 h-14 rounded-lg text-white font-medium transition
+                                ${isValid && !loading
+                                        ? "bg-black hover:bg-gray-800"
+                                        : "bg-gray-300 cursor-not-allowed"}
+                                `}
+                            >
+                                {loading ? "Updating..." : "Update password"}
+                            </button>
                         </div>
 
 

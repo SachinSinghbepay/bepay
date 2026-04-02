@@ -2,61 +2,17 @@
 
 import { Trash2, Mail, Landmark, Wallet } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-
 import { createPortal } from "react-dom";
 import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
+import useSWR from 'swr';
 
 export default function Team({ onOpenModal }) {
-    // 🔥 Toggle this to test empty vs populated
-    // const members = [
-    //     {
-    //         id: 1,
-    //         name: "bepay money europe SRL",
-    //         email: "info@bepay.money",
-    //         role: "Owner",
-    //         status: "Active"
-    //     },
-    //     {
-    //         id: 2,
-    //         name: "Chahat soni",
-    //         email: "Chahatsoni9@gmail.com",
-    //         role: "Employee",
-    //         status: "Invited"
-    //     },
-    //     {
-    //         id: 3,
-    //         name: "Chahat soni",
-    //         email: "Chahatsoni9@gmail.com",
-    //         role: "Bookkeeper",
-    //         status: "Invited"
-    //     },
-    //     {
-    //         id: 4,
-    //         name: "Chahat soni",
-    //         email: "Chahatsoni9@gmail.com",
-    //         role: "Admin",
-    //         status: "Invited"
-    //     },
-    //     {
-    //         id: 5,
-    //         name: "Chahat soni",
-    //         email: "Chahatsoni9@gmail.com",
-    //         role: "Manager",
-    //         status: "Invited"
-    //     },
-
-    // ];
     const { igpsService } = useAuth();
-    const [members, setMembers] = useState([]);
-    const [loading, setLoading] = useState(true);
 
-
-    // fetching team members 
-    const fetchMembers = async () => {
-        try {
-            setLoading(true);
-
+    const { data: members, isValidating, mutate } = useSWR(
+        'igps-team',
+        async () => {
             const [membersRes, invitesRes] = await Promise.all([
                 igpsService.listMembers(),
                 igpsService.listInvites(),
@@ -65,7 +21,6 @@ export default function Team({ onOpenModal }) {
             let activeMembers = [];
             let pendingInvites = [];
 
-            // ACTIVE MEMBERS
             if (membersRes.success && Array.isArray(membersRes.data)) {
                 activeMembers = membersRes.data.map((m) => ({
                     id: m.id,
@@ -77,7 +32,6 @@ export default function Team({ onOpenModal }) {
                 }));
             }
 
-            // PENDING INVITES
             if (invitesRes.success && Array.isArray(invitesRes.data)) {
                 pendingInvites = invitesRes.data.map((i) => ({
                     id: i.id,
@@ -89,19 +43,12 @@ export default function Team({ onOpenModal }) {
                 }));
             }
 
-            // MERGE BOTH
-            setMembers([...activeMembers, ...pendingInvites]);
-
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setLoading(false);
+            return [...activeMembers, ...pendingInvites];
         }
-    };
+    );
 
-    useEffect(() => {
-        fetchMembers();
-    }, []);
+    const loading = members === undefined && isValidating;
+    const updating = members !== undefined && isValidating;
 
     if (loading) {
         return (
@@ -111,17 +58,26 @@ export default function Team({ onOpenModal }) {
         );
     }
 
+    const memberList = members ?? [];
+
     return (
         <div className="flex-1 px-2 sm:px-8 py-8 pb-22">
 
-            <div className=" mx-auto space-y-8">
+            <div className="mx-auto space-y-8">
 
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <h1 className="text-2xl font-semibold">Manage Teams</h1>
-                    <div className="flex flex-col sm:flex-row  items-center gap-4">
+                    <div className="flex items-center gap-3">
+                        <h1 className="text-2xl font-semibold">Manage Teams</h1>
+                        {updating && (
+                            <svg className="animate-spin h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M4 4v6h6" /><path d="M20 20v-6h-6" /><path d="M5 15a7 7 0 0011 2l4-4" /><path d="M19 9a7 7 0 00-11-2L4 11" />
+                            </svg>
+                        )}
+                    </div>
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
                         <button
-                            className="flex items-center gap-2 text-[#080808] px-6 py-3 rounded-full text-sm"
+                            className="flex items-center gap-2 text-[#080808] px-6 py-3 rounded-full text-sm cursor-pointer"
                             onClick={() => onOpenModal("learn-about-roles")}
                         >
                             <span>Learn more about roles</span>
@@ -133,18 +89,19 @@ export default function Team({ onOpenModal }) {
                                 className="rotate-180 w-4 h-4"
                             />
                         </button>
-                        {members.length > 0 && (
+                        {memberList.length > 0 && (
                             <button
-                                onClick={() => onOpenModal("add-new-member", { refresh: fetchMembers, })}
-                                className="mt-4 px-8 py-3 rounded-full bg-black text-white">
+                                onClick={() => onOpenModal("add-new-member", { refresh: mutate })}
+                                className="mt-4 px-8 py-3 rounded-full bg-black text-white cursor-pointer">
                                 Add team member
                             </button>
                         )}
                     </div>
                 </div>
+
                 {/* CONDITIONAL RENDER */}
-                {members.length === 0 ? (
-                    <EmptyState onOpenModal={onOpenModal} />
+                {memberList.length === 0 ? (
+                    <EmptyState onOpenModal={onOpenModal} onRefresh={mutate} />
                 ) : (
                     <div className="w-full pb-22">
 
@@ -157,15 +114,11 @@ export default function Team({ onOpenModal }) {
                         </div>
 
                         {/* ROWS */}
-                        <div
-                            className="overflow-x-auto">
-                            {members.map((member) => (
-
+                        <div className="overflow-x-auto">
+                            {memberList.map((member) => (
                                 <div key={member.id} className="min-w-[600px]">
-                                    <div
+                                    <div className="grid grid-cols-[2.5fr_1fr_1fr_0.5fr] items-center px-6 py-5 border-b hover:bg-gray-50 transition">
 
-                                        className="grid grid-cols-[2.5fr_1fr_1fr_0.5fr] items-center px-6 py-5 border-b hover:bg-gray-50 transition"
-                                    >
                                         {/* MEMBER */}
                                         <div className="flex items-center gap-4">
                                             <Avatar name={member.name} />
@@ -214,20 +167,19 @@ export default function Team({ onOpenModal }) {
                                                 onEdit={() =>
                                                     onOpenModal("edit-member", {
                                                         member,
-                                                        refresh: fetchMembers,
+                                                        refresh: mutate,
                                                     })
                                                 }
                                                 onRemove={() =>
                                                     onOpenModal("remove-member", {
                                                         member,
-                                                        refresh: fetchMembers,
+                                                        refresh: mutate,
                                                     })
                                                 }
                                             />
                                         </div>
                                     </div>
                                 </div>
-
                             ))}
                         </div>
                     </div>
@@ -238,7 +190,7 @@ export default function Team({ onOpenModal }) {
 }
 
 
-function EmptyState({ onOpenModal }) {
+function EmptyState({ onOpenModal, onRefresh }) {
     return (
         <div className="text-center py-24 space-y-4">
             <p className="text-gray-500 text-lg">No team members yet</p>
@@ -246,8 +198,8 @@ function EmptyState({ onOpenModal }) {
                 Invite your team to collaborate on your IGPS account. Assign roles and control access permissions securely.
             </p>
             <button
-                onClick={() => onOpenModal("add-new-member", { refresh: fetchMembers, })}
-                className="mt-4 px-8 py-3 rounded-full bg-black text-white">
+                onClick={() => onOpenModal("add-new-member", { refresh: onRefresh })}
+                className="mt-4 px-8 py-3 rounded-full bg-black text-white cursor-pointer">
                 Add team member
             </button>
         </div>
@@ -256,7 +208,6 @@ function EmptyState({ onOpenModal }) {
 
 function Avatar({ name }) {
     const initial = name?.charAt(0).toUpperCase();
-
     return (
         <div className="h-12 w-12 rounded-2xl bg-[#E9E1CF] flex items-center justify-center text-gray-600 font-medium">
             {initial}
@@ -274,14 +225,10 @@ function RolePill({ role }) {
 
 function StatusPill({ status }) {
     const isActive = status === "Active";
-
     return (
         <span
             className={`px-4 py-2 rounded-full text-sm font-medium w-fit
-                ${isActive
-                    ? "bg-green-100 text-green-700"
-                    : "bg-orange-100 text-orange-600"
-                }
+                ${isActive ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-600"}
             `}
         >
             {status}
@@ -295,11 +242,11 @@ function ActionMenu({ onResend, onEdit, onRemove }) {
     const ref = useRef(null);
     const triggerRef = useRef(null);
     const menuRef = useRef(null);
+    const [position, setPosition] = useState({ top: 0, left: 0 });
 
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (!open) return;
-
             if (
                 triggerRef.current &&
                 !triggerRef.current.contains(e.target) &&
@@ -309,11 +256,8 @@ function ActionMenu({ onResend, onEdit, onRemove }) {
                 setOpen(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
-
-        return () =>
-            document.removeEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [open]);
 
     useEffect(() => {
@@ -321,77 +265,52 @@ function ActionMenu({ onResend, onEdit, onRemove }) {
 
         const updatePosition = () => {
             const rect = ref.current.getBoundingClientRect();
-
             setPosition({
                 top: rect.bottom + window.scrollY,
-                left: rect.right - 224 + window.scrollX, // 224 = w-56
+                left: rect.right - 224 + window.scrollX,
             });
         };
 
-        // run immediately
         updatePosition();
-
-        // update on scroll & resize
         window.addEventListener("scroll", updatePosition);
         window.addEventListener("resize", updatePosition);
-
         return () => {
             window.removeEventListener("scroll", updatePosition);
             window.removeEventListener("resize", updatePosition);
         };
     }, [open]);
 
-    const [position, setPosition] = useState({ top: 0, left: 0 });
-
     return (
         <div ref={ref} className="relative z-20">
-
-            {/* 3 DOT BUTTON */}
             <div ref={triggerRef} className="relative">
                 <button
                     onClick={() => setOpen(v => !v)}
-                    className="h-10 w-10 rounded-2xl bg-[#F3F3F3] flex items-center justify-center hover:bg-gray-200 transition"
+                    className="h-10 w-10 rounded-2xl bg-[#F3F3F3] flex items-center justify-center hover:bg-gray-200 transition cursor-pointer"
                 >
                     <span className="text-lg tracking-widest">•••</span>
                 </button>
             </div>
 
-            {/* DROPDOWN */}
             {open &&
                 createPortal(
                     <div
                         ref={menuRef}
-                        style={{
-                            position: "absolute",
-                            top: position.top,
-                            left: position.left,
-                        }}
-                        className="w-56 bg-white rounded-3xl shadow-xl p-3 z-[9999]"
+                        style={{ position: "absolute", top: position.top, left: position.left }}
+                        className="w-56 bg-white rounded-3xl shadow-xl p-3 z-[9999] flex flex-col gap-2"
                     >
                         <MenuItem
                             label="Resend invite"
                             highlighted
-                            onClick={() => {
-                                onResend?.();
-                                setOpen(false);
-                            }}
+                            onClick={() => { onResend?.(); setOpen(false); }}
                         />
-
                         <MenuItem
                             label="Edit"
-                            onClick={() => {
-                                onEdit?.();
-                                setOpen(false);
-                            }}
+                            onClick={() => { onEdit?.(); setOpen(false); }}
                         />
-
                         <MenuItem
                             label="Remove member"
                             danger
-                            onClick={() => {
-                                onRemove?.();
-                                setOpen(false);
-                            }}
+                            onClick={() => { onRemove?.(); setOpen(false); }}
                         />
                     </div>,
                     document.body
@@ -405,7 +324,7 @@ function MenuItem({ label, onClick, highlighted, danger }) {
         <button
             onClick={onClick}
             className={`
-                w-full text-left px-5 py-4 rounded-2xl transition text-sm font-medium
+                w-full text-left px-5 py-4 rounded-2xl transition text-sm font-medium cursor-pointer
                 ${highlighted ? "bg-[#F4F4F4]" : ""}
                 ${danger ? "text-red-600 hover:bg-red-50" : "hover:bg-gray-100"}
             `}

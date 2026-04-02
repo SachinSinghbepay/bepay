@@ -94,14 +94,14 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
         {/* HEADER */}
         <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
           <button
-            className="absolute left-8 text-xl text-gray-500"
+            className="absolute left-8 text-xl text-gray-500 cursor-pointer"
             onClick={onBack}
           >
             <Image
               src="/icons/back.svg"
               alt=""
-              width={24}
-              height={24}
+              width={18}
+              height={18}
             />
           </button>
 
@@ -110,10 +110,10 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
           </h2>
 
           <button
-            className="absolute right-8 text-xl text-gray-400 hover:text-gray-600"
+            className="absolute right-8 text-xl text-gray-400 hover:text-gray-600 cursor-pointer"
             onClick={onClose}
           >
-            ✕
+            <Image src="/icons/close.png" alt="close" width={16} height={16} />
           </button>
         </div>
 
@@ -136,7 +136,7 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
               placeholder="Enter beneficiary nickname"
-              className="w-full mt-2 rounded-xl border px-4 py-3"
+              className="w-full mt-2 rounded-xl border px-4 py-4 dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
             />
           </div>
 
@@ -150,7 +150,7 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter beneficiary email"
-              className="w-full mt-2 rounded-xl border px-4 py-3"
+              className="w-full mt-2 rounded-xl border px-4 py-4 dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
             />
           </div>
 
@@ -168,7 +168,7 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
                 value={wallet.address}
                 onChange={(e) => handleAddressChange(e.target.value)}
                 placeholder="Enter beneficiary wallet address"
-                className="w-full mt-2 rounded-xl border px-4 py-3"
+                className="w-full mt-2 rounded-xl border px-4 py-4 dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
               />
 
               <div className="mt-2 text-[12px] text-orange-600 flex items-start gap-1">

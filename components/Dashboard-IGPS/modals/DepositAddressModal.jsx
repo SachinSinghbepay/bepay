@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import QRCodeStyling from "qr-code-styling";
 import ModalFrame from "./ModalFrame";
 import Image from "next/image";
@@ -14,15 +14,6 @@ export default function DepositAddressModal({
   currencyLogo,
   networkLogo,
 }) {
-
-  // the props should be passed when opening the modal, for example:
-  // openModal("deposit-address", {
-  //   network: "Polygon",
-  //   address: "0x12345abcde...",
-  //   currencyLogo: "/icons/usdc.svg",
-  //   networkLogo: "/icons/polygon.png"
-  // });
-
 
   const scrollRef = useRef(null);
 
@@ -81,8 +72,12 @@ export default function DepositAddressModal({
     qrInstance.current.append(qrRef.current);
   }, [address]);
 
+  const [copied, setCopied] = useState(false);
+
   const copyAddress = async () => {
     await navigator.clipboard.writeText(address);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -90,14 +85,14 @@ export default function DepositAddressModal({
       {/* HEADER */}
       <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
         <button
-          className="absolute left-8 text-xl text-gray-500"
+          className="absolute left-8 text-xl text-gray-500 cursor-pointer"
           onClick={onBack}
         >
           <Image
             src="/icons/back.svg"
             alt=""
-            width={24}
-            height={24}
+            width={18}
+            height={18}
           />
         </button>
 
@@ -106,10 +101,10 @@ export default function DepositAddressModal({
         </h2>
 
         <button
-          className="absolute right-8 text-xl text-gray-400 hover:text-gray-600"
+          className="absolute right-8 text-xl text-gray-400 hover:text-gray-600 cursor-pointer"
           onClick={onClose}
         >
-          ✕
+          <Image src="/icons/close.png" alt="close" width={16} height={16} />
         </button>
       </div>
 
@@ -127,17 +122,17 @@ export default function DepositAddressModal({
             className="h-10 w-10"
           />
 
-          {network} network
+          {network ? network.charAt(0).toUpperCase() + network.slice(1).toLowerCase() : ""} network
         </div>
 
         {/* WARNING */}
-        <p className="text-center text-sm text-orange-600 max-w-lg">
+        <p className="text-center text-xs text-[#C07417] max-w-md">
           Only send USDC to this address on {network} network. Sending wrong
           token or wrong network will cause loss of funds.
         </p>
 
         {/* QR CARD */}
-        <div className="w-full max-w-[388px] h-[388px] bg-white rounded-2xl border p-6 flex flex-col items-center gap-4">
+        <div className="w-full max-w-[388px] bg-white rounded-2xl border p-6 flex flex-col items-center gap-4">
 
           {/* QR CONTAINER */}
           <div className="relative">
@@ -159,7 +154,6 @@ export default function DepositAddressModal({
                     alt=""
                     width={26}
                     height={26}
-                    className=""
                   />
                 </div>
               </div>
@@ -167,23 +161,22 @@ export default function DepositAddressModal({
           </div>
 
           {/* ADDRESS + COPY */}
-          <div className="flex items-center gap-3 w-full justify-between">
-            <p className="text-[12px] text-center text-gray-500 break-all pr-2">
+          <div className="flex items-center gap-3 w-full rounded-xl px-4 py-3">
+            <p className="text-[12px] text-center text-gray-500 break-all flex-1 min-w-0 leading-relaxed">
               {address}
             </p>
-
             <button
               onClick={copyAddress}
-              className="h-12 w-12 flex items-center justify-center rounded-lg hover:bg-gray-50"
+              className="shrink-0 h-12 w-12 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
               title="Copy address"
             >
-              <Image
-                src="/icons/copy.svg"
-                alt="Copy"
-                width={36}
-                height={36}
-                className="h-9 w-9"
-              />
+              {copied ? (
+                <svg className="h-5 w-5 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              ) : (
+                <Image src="/icons/copy.svg" alt="Copy" width={50} height={50} className="h-12 w-12" />
+              )}
             </button>
           </div>
         </div>

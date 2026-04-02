@@ -1,9 +1,17 @@
 import React from "react";
+import Image from "next/image";
 
-export default function LegalPolicy() {
+export default function LegalPolicy({ setActivePage }) {
     return (
-        <div className="min-h-screen bg-white px-8 py-12 text-justify">
+        <div className="min-h-screen px-8 py-12 text-justify">
             <div className="max-w-5xl mx-auto text-[#6A6A6A] leading-relaxed space-y-10">
+
+                <button
+                    className="text-xl text-gray-500 cursor-pointer"
+                    onClick={() => setActivePage("profile")}
+                >
+                    <Image src="/icons/back.svg" alt="" width={24} height={24} />
+                </button>
 
                 <h1 className="text-3xl font-semibold text-black">
                     Privacy Policy

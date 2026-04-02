@@ -83,7 +83,7 @@ export default function BepayStorySection() {
               textTransform: "uppercase",
             }}
           >
-            THE bepay Money STORY
+            THE bepay money STORY
           </p>
           <h2 className="text-3xl lg:text-[60px] font-bold leading-tight">
             <span style={{ color: "#C0C0C0" }}>From </span>

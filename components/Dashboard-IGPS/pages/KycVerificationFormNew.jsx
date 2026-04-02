@@ -1129,6 +1129,7 @@ const identityDocumentTypes = [
                           }))
                         }
                         placeholder="Select country"
+                        searchable
                       />
                     </div>
                     <div>
@@ -1147,6 +1148,7 @@ const identityDocumentTypes = [
                             }))
                           }
                           placeholder={loadingStates ? "Loading..." : "Select state"}
+                          searchable
                         />
                       ) : (
                         <input
@@ -1555,6 +1557,7 @@ const identityDocumentTypes = [
                           }))
                         }
                         placeholder="Select country"
+                        searchable
                       />
                     </div>
 
@@ -1578,6 +1581,7 @@ const identityDocumentTypes = [
                             }))
                           }
                           placeholder={loadingUboStates ? "Loading..." : "Select state"}
+                          searchable
                         />
                       ) : (
                         <input
@@ -1647,6 +1651,7 @@ const identityDocumentTypes = [
                           }))
                         }
                         placeholder="Select country"
+                        searchable
                       />
                     </div>
 

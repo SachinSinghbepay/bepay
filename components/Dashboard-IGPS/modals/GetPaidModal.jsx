@@ -14,27 +14,27 @@ export default function GetPaidModal({
 
         <button
           onClick={onClose}
-          className="absolute right-8 text-xl text-gray-500"
+          className="absolute right-8 text-xl text-gray-500 cursor-pointer"
         >
-          ✕
+          <Image src="/icons/close.png" alt="close" width={16} height={16} />
         </button>
       </div>
 
       {/* BODY */}
       <div className="px-8 py-8 space-y-8">
         {/* BANNER */}
-        <div className="relative rounded-3xl overflow-hidden bg-[#EEF3F8] h-32 flex items-center">
+        <div className="relative rounded-3xl overflow-hidden bg-[#EEF3F8] h-26 flex items-center">
           {/* Your banner image */}
           <Image
             src="/icons/bannergetpaid.svg"
             alt="banner"
             fill
-            className="object-contain opacity-80 pointer-events-none"
+            className="object-fill opacity-80 pointer-events-none"
           />
         </div>
 
         {/* SECTION TITLE */}
-        <p className="text-gray-600 text-sm">
+        <p className="text-[#6A6A6A] text-xs mb-1.5">
           Select an option to receive funds
         </p>
 

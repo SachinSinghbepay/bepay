@@ -1,169 +1,101 @@
 "use client";
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Copy } from "lucide-react";
-import { SlidersHorizontal } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { useEffect, useState } from "react";
+import { useToast } from "../context/ToastContext";
 import jsPDF from "jspdf";
 import Image from 'next/image';
+import useSWR from 'swr';
 
 export default function Banking() {
   const [tab, setTab] = useState(null);
   const { igpsService } = useAuth();
-  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
   const [copiedAll, setCopiedAll] = useState(false);
-  // const accountDetails = [
-  //   {
-  //     label: "Beneficiary name",
-  //     value: "bepay money europe S.R.L"
-  //   },
-  //   {
-  //     label: "Account number",
-  //     value: "211493669471"
-  //   },
-  //   {
-  //     label: "ABA Routing number",
-  //     value: "101019644"
-  //   },
-  //   {
-  //     label: "Bank name",
-  //     value: "Lead Bank"
-  //   },
-  //   {
-  //     label: "Bank address",
-  //     value: "1801 Main St., Kansas City, MO, US, 64108"
-  //   }
-  // ];
-  const [accounts, setAccounts] = useState([]);
+
+  const { data, isValidating } = useSWR(
+    'igps-banking',
+    async () => {
+      const senderRes = await igpsService.getSenderProfile();
+      if (!senderRes.success) return [];
+      const depositRes = await igpsService.getDepositAccounts(senderRes.data.id);
+      if (!depositRes.success || !depositRes.data?.length) return [];
+      return depositRes.data;
+    }
+  );
+
+  const accounts = data ?? [];
+  const loading = !data && isValidating;
+  const updating = !!data && isValidating;
+
+  useEffect(() => {
+    if (accounts.length > 0 && !tab) {
+      setTab(accounts[0].currency);
+    }
+  }, [accounts]);
+
+  const selectedAccount = accounts.find(acc => acc.currency === tab);
+
+  const accountDetails = selectedAccount
+    ? [
+        { label: "Beneficiary name", value: selectedAccount?.name },
+        { label: "Account number", value: selectedAccount?.accountNumber },
+        { label: "BIC", value: selectedAccount?.bic },
+        { label: "Routing number", value: selectedAccount?.routingDetails?.[0]?.routingNumber },
+        { label: "Bank name", value: selectedAccount?.bankDetails?.name },
+        { label: "Bank address", value: selectedAccount?.bankDetails?.address }
+      ].filter(item => item.value)
+    : [];
+
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
+    toast.info("Copied");
   };
 
-  
   const handleDownloadPDF = () => {
     if (!selectedAccount) return;
-
     const doc = new jsPDF();
-
     doc.setFontSize(18);
     doc.text("Bank Account Details", 20, 20);
-
     doc.setFontSize(12);
     doc.text(`Beneficiary name: ${selectedAccount?.name || ""}`, 20, 40);
     doc.text(`Account number: ${selectedAccount?.accountNumber || ""}`, 20, 50);
     doc.text(`BIC: ${selectedAccount?.bic || ""}`, 20, 60);
     doc.text(`Bank name: ${selectedAccount?.bankDetails?.name || ""}`, 20, 70);
     doc.text(`Bank address: ${selectedAccount?.bankDetails?.address || ""}`, 20, 80);
-
     doc.save("bank-details.pdf");
   };
-
-  useEffect(() => {
-    const fetchBankingDetails = async () => {
-      try {
-        setLoading(true);
-
-        // Step 1: Get sender profile
-        const senderRes = await igpsService.getSenderProfile();
-
-        if (!senderRes.success) return;
-
-        const senderId = senderRes.data.id;
-        console.log("Sender response:", senderRes);
-        // Step 2: Get deposit accounts
-        const depositRes = await igpsService.getDepositAccounts(senderId);
-
-        if (!depositRes.success || !depositRes.data?.length) {
-          setAccounts([]);
-          setTab(null);
-          return;
-        }
-
-        const depositAccounts = depositRes.data || [];
-        console.log(depositAccounts)
-        setAccounts(depositAccounts);
-
-        if (depositAccounts.length > 0) {
-          setTab(depositAccounts[0].currency);
-        }
-
-      } catch (err) {
-        console.error("Banking fetch error", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBankingDetails();
-  }, [igpsService]);
-
-  const selectedAccount = accounts.find(acc => acc.currency === tab);
-
-const accountDetails = selectedAccount
-  ? [
-      { label: "Beneficiary name", value: selectedAccount?.name },
-      { label: "Account number", value: selectedAccount?.accountNumber },
-      { label: "BIC", value: selectedAccount?.bic },
-      { label: "Routing number", value: selectedAccount?.routingDetails?.[0]?.routingNumber },
-      { label: "Bank name", value: selectedAccount?.bankDetails?.name },
-      { label: "Bank address", value: selectedAccount?.bankDetails?.address }
-    ].filter(item => item.value) // remove empty values
-  : [];
-
 
   return (
     <div className="flex-1 px-2 sm:px-10 py-8">
       <div className="mx-auto w-full max-w-[772px]">
+
         {/* Tabs */}
-        <div className="flex gap-8 mb-6 text-base">
+        <div className="flex items-center gap-8 mb-6 text-base">
           {accounts.map((acc, i) => (
             <button
               key={i}
               onClick={() => setTab(acc.currency)}
               className={`pb-2 border-b-2 transition ${tab === acc.currency
-                ? "border-black font-medium"
-                : "border-transparent text-gray-500"
+                ? "border-black font-medium cursor-pointer"
+                : "border-transparent text-gray-500 cursor-pointer"
                 }`}
             >
               {acc.currency} Account
             </button>
           ))}
+          {updating && (
+            <svg className="ml-auto animate-spin h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M4 4v6h6" /><path d="M20 20v-6h-6" /><path d="M5 15a7 7 0 0011 2l4-4" /><path d="M19 9a7 7 0 00-11-2L4 11" />
+            </svg>
+          )}
         </div>
 
         {/* Account Card */}
-        <div className="bg-[#FDFDFD] rounded-3xl  p-2 sm:p-8 max-w-[820px]">
-
-          {/* Top Info Box */}
-          {selectedAccount && (
-            <div className="bg-[#F6F6F6] rounded-2xl px-6 py-8 flex flex-col sm:flex-row  justify-between items-center mb-8">
-              <div>
-                <h3 className="font-semibold text-lg">
-                  Your USD account details
-                </h3>
-                <p className="text-sm text-orange-600 mt-1">
-                  Note: We only accept ACH payments
-                </p>
-              </div>
-
-              <div className="flex gap-3 mt-2 sm:mt-0">
-                <div className="bg-[#F2E6DA] text-sm px-4 py-2 rounded-full font-semibold">
-                  Minimum transfer $2
-                </div>
-
-                <div className="bg-[#E6ECF8] text-sm px-4 py-2 rounded-full cursor-pointer font-semibold">
-                  Fees and limits →
-                </div>
-              </div>
-            </div>
-          )}
-
-
-          {/* Details List */}
-          {/* Details List */}
+        <div className="bg-[#FDFDFD] rounded-3xl p-2 sm:p-8 max-w-[820px]">
           <div className="space-y-6">
 
             {loading ? (
-              /* LOADING STATE */
               <div className="flex justify-center py-12">
                 <h2 className="text-md text-gray-500 animate-pulse">
                   Loading banking details...
@@ -171,16 +103,14 @@ const accountDetails = selectedAccount
               </div>
 
             ) : !selectedAccount ? (
-              /* KYC PENDING STATE */
               <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 text-center">
                 <p className="text-sm text-yellow-700 font-medium">
-                  KYC is in processing. Banking details will appear once verification is completed.
+                  No Account Found
                 </p>
               </div>
 
             ) : (
               <>
-                {/* ACCOUNT DETAILS */}
                 {accountDetails.map((item, i) => (
                   <div key={i} className="flex justify-between items-center border-b pb-4 px-2">
                     <div>
@@ -191,22 +121,15 @@ const accountDetails = selectedAccount
                         {item.value}
                       </p>
                     </div>
-
                     <button
                       onClick={() => handleCopy(item.value)}
                       className="bg-white p-4 rounded-xl hover:bg-gray-100 transition"
                     >
-                      <Image
-                        src="/icons/copy.svg"
-                        alt="Copy"
-                        width={40}
-                        height={40}
-                      />
+                      <Image src="/icons/copy.svg" alt="Copy" width={40} height={40} />
                     </button>
                   </div>
                 ))}
 
-                {/* Buttons */}
                 <div className="flex gap-4 mt-8">
                   <button
                     onClick={handleDownloadPDF}
@@ -218,7 +141,6 @@ const accountDetails = selectedAccount
                   <button
                     onClick={async () => {
                       if (!selectedAccount) return;
-
                       const text = [
                         `Beneficiary name: ${selectedAccount?.name || ""}`,
                         `Account number: ${selectedAccount?.accountNumber || ""}`,
@@ -226,11 +148,11 @@ const accountDetails = selectedAccount
                         `Bank name: ${selectedAccount?.bankDetails?.name || ""}`,
                         `Bank address: ${selectedAccount?.bankDetails?.address || ""}`
                       ].join("\n");
-
                       try {
                         await navigator.clipboard.writeText(text);
                         setCopiedAll(true);
                         setTimeout(() => setCopiedAll(false), 2000);
+                        toast.info("All details copied");
                       } catch (err) {
                         console.error("Copy failed", err);
                       }
@@ -239,32 +161,13 @@ const accountDetails = selectedAccount
                   >
                     {copiedAll ? "Copied ✓" : "Copy all details"}
                   </button>
-
                 </div>
               </>
             )}
           </div>
-
-
-
-
         </div>
 
       </div>
-
-
-    </div >
+    </div>
   );
 }
-
-function Filter({ label, active }) {
-  return (
-    <button
-      className={`px-4 py-1.5 rounded-full text-sm ${active ? "bg-black text-white" : "border text-gray-600"
-        }`}
-    >
-      {label}
-    </button>
-  );
-}
-
