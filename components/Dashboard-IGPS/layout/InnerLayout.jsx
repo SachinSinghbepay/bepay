@@ -77,6 +77,19 @@ export default function InnerLayout() {
   // 🔴 MODAL STATE (ONLY HERE)
   const [modal, setModal] = useState(null);
   const [modalProps, setModalProps] = useState({});
+  const [pendingModal, setPendingModal] = useState(null);
+  const [pendingModalProps, setPendingModalProps] = useState({});
+
+  // When KYC finishes loading, open the pending modal if there was one
+  useEffect(() => {
+    if (kycStatus !== "loading" && pendingModal) {
+      const type = pendingModal;
+      const props = pendingModalProps;
+      setPendingModal(null);
+      setPendingModalProps({});
+      openModal(type, props);
+    }
+  }, [kycStatus]);
 
   useEffect(() => {
     if (sidebarOpen) {
@@ -91,8 +104,10 @@ export default function InnerLayout() {
 
     const requiresKyc = KYC_REQUIRED_MODALS.includes(type);
 
-    // If KYC still loading → show loading state
+    // If KYC still loading → show loading state, remember what to open after
     if (requiresKyc && kycStatus === "loading") {
+      setPendingModal(type);
+      setPendingModalProps(props);
       setModal("kyc-loading");
       return;
     }

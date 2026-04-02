@@ -5,17 +5,22 @@ import { IgpsService } from "../../../services/igpsService";
 import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
 
-
-const COUNTRY_FLAGS = {
-    US: "/icons/usa.svg", USA: "/icons/usa.svg",
-    IN: "/icons/india.svg", IND: "/icons/india.svg",
-    DE: "/icons/europe.png", FR: "/icons/europe.png",
-    IT: "/icons/europe.png", ES: "/icons/europe.png",
-    NL: "/icons/europe.png", BE: "/icons/europe.png",
-    AT: "/icons/europe.png", PT: "/icons/europe.png",
-    EU: "/icons/europe.png",
-    GB: "/icons/usa.png",
+const CURRENCY_TO_COUNTRY = {
+    USD: 'us', EUR: 'eu', GBP: 'gb', INR: 'in', BRL: 'br', AED: 'ae',
+    ZAR: 'za', MXN: 'mx', SGD: 'sg', PHP: 'ph', IDR: 'id', THB: 'th',
+    VND: 'vn', MYR: 'my', COP: 'co', ARS: 'ar', JPY: 'jp', AUD: 'au',
+    CAD: 'ca', CHF: 'ch', SEK: 'se', NOK: 'no', DKK: 'dk', NZD: 'nz',
+    HKD: 'hk', KRW: 'kr', CNY: 'cn', NGN: 'ng', KES: 'ke', GHS: 'gh',
+    EGP: 'eg', PKR: 'pk', BDT: 'bd', LKR: 'lk', NPR: 'np', PEN: 'pe',
+    CLP: 'cl', UYU: 'uy', TRY: 'tr', SAR: 'sa', QAR: 'qa', KWD: 'kw',
+    BHD: 'bh', OMR: 'om', JOD: 'jo', ILS: 'il',
 };
+
+function getCurrencyFlagUrl(currency) {
+    const code = CURRENCY_TO_COUNTRY[currency?.toUpperCase()];
+    if (code) return `https://flagcdn.com/w80/${code}.png`;
+    return "/icons/usa.svg";
+}
 
 export default function SendGlobalPayoutModal({
     onClose,
@@ -100,7 +105,22 @@ export default function SendGlobalPayoutModal({
             "France": "EUR", "FR": "EUR",
             "Ireland": "EUR", "IE": "EUR",
             "Netherlands": "EUR", "NL": "EUR",
-            "United States": "USD", "US": "USD"
+            "United States": "USD", "US": "USD",
+            "Brazil": "BRL", "BR": "BRL",
+            "United Arab Emirates": "AED", "AE": "AED",
+            "Mexico": "MXN", "MX": "MXN",
+            "South Africa": "ZAR", "ZA": "ZAR",
+            "Philippines": "PHP", "PH": "PHP",
+            "Indonesia": "IDR", "ID": "IDR",
+            "Thailand": "THB", "TH": "THB",
+            "Vietnam": "VND", "VN": "VND",
+            "Malaysia": "MYR", "MY": "MYR",
+            "Colombia": "COP", "CO": "COP",
+            "Argentina": "ARS", "AR": "ARS",
+            "Singapore": "SGD", "SG": "SGD",
+            "Japan": "JPY", "JP": "JPY",
+            "Australia": "AUD", "AU": "AUD",
+            "Canada": "CAD", "CA": "CAD",
         };
 
         const target = map[country] || map[country?.toUpperCase()] || "USD";
@@ -198,8 +218,14 @@ export default function SendGlobalPayoutModal({
         const fetchQuote = async () => {
             const amt = parseFloat(amount);
 
-            // basic validation — always show minimum hint
-            if (!amount || isNaN(amt) || amt <= 0 || amt < 50) {
+            // basic validation
+            if (!amount || isNaN(amt) || amt <= 0) {
+                setQuote(null);
+                setQuoteError("");
+                return;
+            }
+
+            if (amt < 50) {
                 setQuote(null);
                 setQuoteError("Minimum amount should be $50");
                 return;
@@ -362,12 +388,10 @@ export default function SendGlobalPayoutModal({
                             <div className="flex items-center gap-4 bg-[#F7F7F7] rounded-2xl p-4">
                                 <div className="p-[1.5px] rounded-xl bg-[#CECECE]">
                                     <div className="bg-[#F5F5F5] rounded-xl p-2">
-                                        <Image
-                                            src={COUNTRY_FLAGS[selectedBeneficiary.addressCountry || selectedBeneficiary.address?.country] || "/icons/usa.svg"}
-                                            alt=""
-                                            width={28}
-                                            height={28}
-                                            className="rounded-full"
+                                        <img
+                                            src={selectedBeneficiary.countryFlagUrl || "/icons/usa.svg"}
+                                            alt={selectedBeneficiary.countryName || ""}
+                                            className="w-7 h-7 rounded-full object-cover"
                                         />
                                     </div>
                                 </div>
@@ -582,13 +606,13 @@ export default function SendGlobalPayoutModal({
                                     <>
                                         <SummaryRow
                                             label="Exchange rate"
-                                            value={`1 ${quote.sourceCurrency} ≈ ${quote.exchangeRate} ${quote.targetCurrency}`}
+                                            value={`1 ${quote.sourceCurrency} ≈ ${parseFloat(quote.exchangeRate || 0).toFixed(4)} ${quote.targetCurrency}`}
                                         />
 
                                         <SummaryRow
                                             label="Processing fee"
-                                            value={`${quote.fee} ${quote.sourceCurrency}`}
-                                            info={<FeeInfo />}
+                                            value={`${parseFloat(quote.totalFee || 0).toFixed(2)} ${quote.sourceCurrency}`}
+                                            // info={<FeeInfo />}
                                         />
 
                                         <SummaryRow
@@ -687,7 +711,7 @@ function AmountBox({
                         {/* TOKEN + NETWORK ICONS */}
                         {fiatBalances.some(f => f.currency === currency) ? (
                             <div className="relative h-10 w-10 pl-2">
-                                <Image src="/icons/usa.png" alt="USD" width={32} height={32} className="rounded-full mt-1" />
+                                <img src={getCurrencyFlagUrl(currency)} alt={currency} className="w-8 h-8 rounded-full mt-1 object-cover" />
                             </div>
                         ) : sourceCurrencies.filter(w => w.fullCurrency === currency).map(w => (
                             <div key={w.fullCurrency} className="relative h-10 w-10 pl-2">
@@ -830,7 +854,7 @@ function AmountBox({
                         {/* TOKEN + NETWORK ICONS */}
                         {fiatBalances.some(f => f.currency === currency) ? (
                             <div className="relative h-10 w-10 pl-2">
-                                <Image src="/icons/usa.svg" alt="USD" width={32} height={32} className="rounded-full mt-1" />
+                                <img src={getCurrencyFlagUrl(currency)} alt={currency} className="w-8 h-8 rounded-full mt-1 object-cover" />
                             </div>
                         ) : sourceCurrencies.filter(w => w.fullCurrency === currency).map(w => (
                             <div key={w.fullCurrency} className="relative h-10 w-10 pl-2">
@@ -843,7 +867,7 @@ function AmountBox({
                             </div>
                         ))}
                         {/* SELECT DROPDOWN */}
-                        <div ref={dropdownRef} className="relative">
+                        <div ref={dropdownRef} className="relative ">
 
                             {/* BUTTON */}
                             <button
@@ -852,7 +876,7 @@ function AmountBox({
                                         setOpen(v => !v);
                                     }
                                 }}
-                                className="flex items-center gap-3 bg-[#EBEBEB] px-4 py-3 rounded-xl border text-[18px] font-semibold min-w-[120px]"
+                                className="flex items-center gap-3 bg-[#EBEBEB] px-4 py-3 rounded-xl text-[18px] font-semibold min-w-[120px] cursor-pointer"
                             >
                                 {sourceCurrencies.length === 0 && fiatBalances.length === 0 ? (
                                     <span className="text-gray-400 text-sm">Loading...</span>
@@ -876,7 +900,7 @@ function AmountBox({
 
                             {/* DROPDOWN */}
                             {open && (sourceCurrencies.length > 0 || fiatBalances.some(f => f.currency === 'USD')) && (
-                                <div className="absolute mt-2 -right-2 bg-white border rounded-xl shadow-lg z-50 w-45 max-h-64 overflow-y-auto">
+                                <div className="absolute mt-2 -right-2 bg-white border rounded-xl shadow-lg z-50 w-45 max-h-64 overflow-y-auto ">
                                     {fiatBalances.some(f => f.currency === 'USD') && (
                                         <>
                                             <div className="px-4 py-1.5 text-xs text-gray-400 font-medium border-b">Fiat</div>
@@ -888,10 +912,10 @@ function AmountBox({
                                                         setSourceType('fiat');
                                                         setOpen(false);
                                                     }}
-                                                    className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm"
+                                                    className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm cursor-pointer"
                                                 >
                                                     {f.currency}{" "}
-                                                    <span className="font-light">
+                                                    <span className="font-light ">
                                                         (${parseFloat(f.balance || 0).toFixed(2)})
                                                     </span>
                                                 </button>
@@ -909,7 +933,7 @@ function AmountBox({
                                                         setSourceType('crypto');
                                                         setOpen(false);
                                                     }}
-                                                    className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm"
+                                                    className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm cursor-pointer"
                                                 >
                                                     {c.currency}{" "}
                                                     <span className="font-light">
@@ -957,7 +981,7 @@ function AmountBox({
 
                 <CurrencyPill
                     label={targetCurrency || "USD"}
-                    icon={targetCurrency === "INR" ? "/icons/india.svg" : "/icons/usa.svg"}
+                    icon={getCurrencyFlagUrl(targetCurrency || "USD")}
                 />
             </div>
         </div>
@@ -1045,9 +1069,9 @@ function CurrencyPill({ label, icon }) {
             <Image
                 src={icon}
                 alt=""
-                width={24}
-                height={24}
-                className="rounded-full"
+                width={28}
+                height={28}
+                className="rounded-sm w-8 h-5"
             />
             <span className="text-[20px] font-semibold">{label}</span>
         </div>

@@ -228,14 +228,21 @@ function BeneficiaryRow({ item, index, onDelete }) {
             <div className="min-w-[600px]">
                 <div className="grid grid-cols-3 items-center bg-white rounded-2xl px-2 sm:px-6 py-5 shadow-sm hover:shadow-md transition">
 
-                    {/* Name + Avatar */}
+                    {/* Name + Avatar + Flag */}
                     <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-medium text-lg ${avatarColors[index % avatarColors.length]}`}>
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-medium text-lg relative ${avatarColors[index % avatarColors.length]}`}>
                             {name.charAt(0).toUpperCase()}
+                            {item.countryFlagUrl && (
+                                <img
+                                    src={item.countryFlagUrl}
+                                    alt={item.countryName || item.addressCountry || ""}
+                                    className="w-5 h-4 rounded-sm absolute -bottom-1 -right-1 border border-white shadow-sm object-cover"
+                                />
+                            )}
                         </div>
                         <div>
                             <div className="font-medium">{name}</div>
-                            <div className="text-xs text-gray-400">{item.email}</div>
+                            <div className="text-xs text-gray-400">{item.email} {item.countryName ? `· ${item.countryName}` : ""}</div>
                         </div>
                     </div>
 

@@ -1,7 +1,8 @@
 import ModalFrame from "./ModalFrame";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
+import useSWR from 'swr';
 
 
 
@@ -12,8 +13,17 @@ export default function GlobalPayoutModal({
   onPay
 }) {
   const { igpsService } = useAuth();
-  const [beneficiaries, setBeneficiaries] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const { data, isValidating } = useSWR(
+    'igps-beneficiaries',
+    async () => {
+      const res = await igpsService.listBeneficiaries(true);
+      return res.success ? res.data : [];
+    }
+  );
+
+  const beneficiaries = data ?? [];
+  const loading = !data && isValidating;
   const scrollRef = useRef(null);
   useEffect(() => {
     const el = scrollRef.current;
@@ -35,26 +45,6 @@ export default function GlobalPayoutModal({
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
 
-  useEffect(() => {
-    fetchBeneficiaries();
-  }, []);
-
-  const fetchBeneficiaries = async () => {
-    try {
-      setLoading(true);
-      const response = await igpsService.listBeneficiaries();
-      if (response.success) {
-        setBeneficiaries(response.data);
-        console.log(response.data)
-      } else {
-        console.error("Failed to fetch beneficiaries:", response.error);
-      }
-    } catch (error) {
-      console.error("Error fetching beneficiaries:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Helper to format address
   const formatAddress = (b) => {
@@ -136,9 +126,9 @@ export default function GlobalPayoutModal({
                     id={b.id}
                     name={b.type === 'business' ? b.fullName : `${b.firstName} ${b.lastName}`}
                     bank={getBankName(b)}
-                    country={b.addressCountry || b.address?.country}
+                    country={b.countryName || b.addressCountry || b.address?.country}
                     status={b.status}
-                    flag={getCountryFlag(b.addressCountry || b.address?.country)}
+                    flag={b.countryFlagUrl || getCountryFlag(b.addressCountry || b.address?.country)}
                     onPay={() => onPay(b)}
                   />
                 ))}
@@ -158,7 +148,7 @@ function BeneficiaryRow({ id, name, bank, country, status = "active", flag, onPa
       <div className="flex items-center gap-4 p-[1.5px] rounded-xl ">
         <div className="w-10 h-10 bg-[#F5F5F5] rounded-xl p-2 flex items-center justify-center border shadow-sm overflow-hidden">
           {flag ? (
-            <Image src={flag} alt={country ?? ""} width={28} height={28} className="w-full h-full object-cover rounded-full" />
+            <img src={flag} alt={country ?? ""} className="w-full h-full object-cover rounded-full" />
           ) : (
             <span className="text-xs font-bold">{country?.substring(0, 2).toUpperCase()}</span>
           )}
@@ -192,6 +182,22 @@ const COUNTRY_FLAGS = {
   USA: "/icons/usa.svg",
   IN: "/icons/india.svg",
   IND: "/icons/india.svg",
+  BR: "/icons/brazil.svg",
+  AE: "/icons/uae.svg",
+  ZA: "/icons/south-africa.svg",
+  MX: "/icons/mexico.svg",
+  GB: "/icons/uk.svg",
+  SG: "/icons/singapore.svg",
+  PH: "/icons/philippines.svg",
+  ID: "/icons/indonesia.svg",
+  TH: "/icons/thailand.svg",
+  VN: "/icons/vietnam.svg",
+  MY: "/icons/malaysia.svg",
+  CO: "/icons/colombia.svg",
+  AR: "/icons/argentina.svg",
+  JP: "/icons/japan.svg",
+  AU: "/icons/australia.svg",
+  CA: "/icons/canada.svg",
   // Europe / EUR countries
   DE: "/icons/europe.png",
   FR: "/icons/europe.png",

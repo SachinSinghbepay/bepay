@@ -1,7 +1,8 @@
 import ModalFrame from "./ModalFrame";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
+import useSWR from 'swr';
 
 
 
@@ -12,8 +13,17 @@ export default function PayToSwiftModal({
   onPay
 }) {
   const { igpsService } = useAuth();
-  const [beneficiaries, setBeneficiaries] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const { data, isValidating } = useSWR(
+    'igps-beneficiaries',
+    async () => {
+      const res = await igpsService.listBeneficiaries(true);
+      return res.success ? res.data : [];
+    }
+  );
+
+  const beneficiaries = data ?? [];
+  const loading = !data && isValidating;
   const scrollRef = useRef(null);
   useEffect(() => {
     const el = scrollRef.current;
@@ -35,25 +45,6 @@ export default function PayToSwiftModal({
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
 
-  useEffect(() => {
-    fetchBeneficiaries();
-  }, []);
-
-  const fetchBeneficiaries = async () => {
-    try {
-      setLoading(true);
-      const response = await igpsService.listBeneficiaries();
-      if (response.success) {
-        setBeneficiaries(response.data);
-      } else {
-        console.error("Failed to fetch beneficiaries:", response.error);
-      }
-    } catch (error) {
-      console.error("Error fetching beneficiaries:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Helper to format address
   const formatAddress = (b) => {
@@ -135,9 +126,9 @@ export default function PayToSwiftModal({
                     id={b.id}
                     name={b.type === 'business' ? b.fullName : `${b.firstName} ${b.lastName}`}
                     bank={getBankName(b)}
-                    country={b.addressCountry || b.address?.country}
+                    country={b.countryName || b.addressCountry || b.address?.country}
                     status={b.status}
-                    flag={getCountryFlag(b.addressCountry || b.address?.country)}
+                    flag={b.countryFlagUrl || getCountryFlag(b.addressCountry || b.address?.country)}
                     onPay={() => onPay(b)}
                   />
                 ))}
