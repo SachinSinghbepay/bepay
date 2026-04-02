@@ -71,6 +71,11 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
         ZA: {
             paymentType: "bank_account",
             fields: ["accountNumber", "bankCode", "bankId"]
+        },
+
+        MX: {
+            paymentType: "bank_account",
+            fields: ["accountNumber", "targetName", "targetBankAccountId"]
         }
     };
 
@@ -133,6 +138,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
         { label: "SWIFT (International Wire)", value: "swift" }
     ];
 
+
     // --- BANK STATE (Simplified/Ported) ---
     // If Bank selected, we might want Business Name? 
     // For now, let's stick to the requested change which focused on Crypto beneficiary payload.
@@ -152,6 +158,8 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
     const [swiftCode, setSwiftCode] = useState(""); //AE
     const [remittancePurpose, setRemittancePurpose] = useState(""); //AE
     const [bankCode, setBankCode] = useState(""); //ZA
+    const [targetName, setTargetName] = useState(""); //MX
+    const [targetBankAccountId, setTargetBankAccountId] = useState(""); //MX
 
 
 
@@ -215,6 +223,8 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
         setSwiftCode("");
         setRemittancePurpose("");
         setBankCode("");
+        setTargetName("");
+        setTargetBankAccountId("");
         setIfscCode("");
         setBankId("");
         setAccountType("");
@@ -298,6 +308,8 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
             swiftCode,
             remittancePurpose,
             bankCode,
+            targetName,
+            targetBankAccountId,
             pixKeyId,
             taxId,
             transferType
@@ -415,6 +427,8 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                 swiftCode,
                 remittancePurpose,
                 bankCode,
+                targetName,
+                targetBankAccountId,
                 pixKeyId,
                 taxId,
                 transferType
@@ -753,6 +767,30 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                             placeholder="Bank Code"
                                             value={bankCode}
                                             onChange={(e) => setBankCode(e.target.value)}
+                                            className="w-full py-4 px-4 text-sm border rounded-xl dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                        />
+                                    </div>
+                                )}
+
+                                {fields.includes("targetName") && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-gray-500">Target Name</label>
+                                        <input
+                                            placeholder="Full name as registered with the bank"
+                                            value={targetName}
+                                            onChange={(e) => setTargetName(e.target.value)}
+                                            className="w-full py-4 px-4 text-sm border rounded-xl dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                        />
+                                    </div>
+                                )}
+
+                                {fields.includes("targetBankAccountId") && (
+                                    <div className="space-y-2">
+                                        <label className="text-sm text-gray-500">CLABE / Bank Account ID</label>
+                                        <input
+                                            placeholder="18-digit CLABE number"
+                                            value={targetBankAccountId}
+                                            onChange={(e) => setTargetBankAccountId(e.target.value)}
                                             className="w-full py-4 px-4 text-sm border rounded-xl dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
                                         />
                                     </div>
