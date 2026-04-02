@@ -9,6 +9,7 @@ import StepTwoFactor from "./StepTwoFactor";
 import BackupCode from "./BackupCode";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
+import StepEntitySelect from "./StepEntitySelect";
 import GoogleAuthButton from "@/components/Dashboard-IGPS/components/GoogleAuthButton";
 import { useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
@@ -57,9 +58,7 @@ export default function LoginPage() {
       setStep(2);
     } else if (result.success) {
       setLoginSuccess(true);
-      setTimeout(() => {
-        router.push("/igps/dashboard");
-      }, 1000);
+      router.push("/igps/dashboard");
     } else {
       setError(result.error || "Login failed");
     }
@@ -205,6 +204,15 @@ export default function LoginPage() {
     }
   };
 
+
+  // ================= Entity Select =================
+  const handleEntitySelect = (type) => {
+    if (type === "indian") {
+      window.location.href = "https://igps.bepay.money";
+    } else {
+      setStep(1);
+    }
+  };
 
   // ================= Google Auth =================
 
@@ -357,6 +365,9 @@ console.log(idToken)
         />
       )}
 
+      {step === 6 && (
+        <StepEntitySelect onSelect={handleEntitySelect} />
+      )}
 
     </>
   );
