@@ -1,7 +1,8 @@
 import ModalFrame from "./ModalFrame";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
+import useSWR from 'swr';
 
 
 
@@ -12,8 +13,17 @@ export default function GlobalPayoutModal({
   onPay
 }) {
   const { igpsService } = useAuth();
-  const [beneficiaries, setBeneficiaries] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const { data, isValidating } = useSWR(
+    'igps-beneficiaries',
+    async () => {
+      const res = await igpsService.listBeneficiaries(true);
+      return res.success ? res.data : [];
+    }
+  );
+
+  const beneficiaries = data ?? [];
+  const loading = !data && isValidating;
   const scrollRef = useRef(null);
   useEffect(() => {
     const el = scrollRef.current;
@@ -35,26 +45,6 @@ export default function GlobalPayoutModal({
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
 
-  useEffect(() => {
-    fetchBeneficiaries();
-  }, []);
-
-  const fetchBeneficiaries = async () => {
-    try {
-      setLoading(true);
-      const response = await igpsService.listBeneficiaries(true);
-      if (response.success) {
-        setBeneficiaries(response.data);
-        console.log(response.data)
-      } else {
-        console.error("Failed to fetch beneficiaries:", response.error);
-      }
-    } catch (error) {
-      console.error("Error fetching beneficiaries:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Helper to format address
   const formatAddress = (b) => {

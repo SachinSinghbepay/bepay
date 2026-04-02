@@ -218,8 +218,14 @@ export default function SendGlobalPayoutModal({
         const fetchQuote = async () => {
             const amt = parseFloat(amount);
 
-            // basic validation — always show minimum hint
-            if (!amount || isNaN(amt) || amt <= 0 || amt < 50) {
+            // basic validation
+            if (!amount || isNaN(amt) || amt <= 0) {
+                setQuote(null);
+                setQuoteError("");
+                return;
+            }
+
+            if (amt < 50) {
                 setQuote(null);
                 setQuoteError("Minimum amount should be $50");
                 return;
@@ -606,7 +612,7 @@ export default function SendGlobalPayoutModal({
                                         <SummaryRow
                                             label="Processing fee"
                                             value={`${parseFloat(quote.totalFee || 0).toFixed(2)} ${quote.sourceCurrency}`}
-                                            info={<FeeInfo />}
+                                            // info={<FeeInfo />}
                                         />
 
                                         <SummaryRow
@@ -861,7 +867,7 @@ function AmountBox({
                             </div>
                         ))}
                         {/* SELECT DROPDOWN */}
-                        <div ref={dropdownRef} className="relative">
+                        <div ref={dropdownRef} className="relative ">
 
                             {/* BUTTON */}
                             <button
@@ -870,7 +876,7 @@ function AmountBox({
                                         setOpen(v => !v);
                                     }
                                 }}
-                                className="flex items-center gap-3 bg-[#EBEBEB] px-4 py-3 rounded-xl border text-[18px] font-semibold min-w-[120px]"
+                                className="flex items-center gap-3 bg-[#EBEBEB] px-4 py-3 rounded-xl text-[18px] font-semibold min-w-[120px] cursor-pointer"
                             >
                                 {sourceCurrencies.length === 0 && fiatBalances.length === 0 ? (
                                     <span className="text-gray-400 text-sm">Loading...</span>
@@ -894,7 +900,7 @@ function AmountBox({
 
                             {/* DROPDOWN */}
                             {open && (sourceCurrencies.length > 0 || fiatBalances.some(f => f.currency === 'USD')) && (
-                                <div className="absolute mt-2 -right-2 bg-white border rounded-xl shadow-lg z-50 w-45 max-h-64 overflow-y-auto">
+                                <div className="absolute mt-2 -right-2 bg-white border rounded-xl shadow-lg z-50 w-45 max-h-64 overflow-y-auto ">
                                     {fiatBalances.some(f => f.currency === 'USD') && (
                                         <>
                                             <div className="px-4 py-1.5 text-xs text-gray-400 font-medium border-b">Fiat</div>
@@ -906,10 +912,10 @@ function AmountBox({
                                                         setSourceType('fiat');
                                                         setOpen(false);
                                                     }}
-                                                    className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm"
+                                                    className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm cursor-pointer"
                                                 >
                                                     {f.currency}{" "}
-                                                    <span className="font-light">
+                                                    <span className="font-light ">
                                                         (${parseFloat(f.balance || 0).toFixed(2)})
                                                     </span>
                                                 </button>
@@ -927,7 +933,7 @@ function AmountBox({
                                                         setSourceType('crypto');
                                                         setOpen(false);
                                                     }}
-                                                    className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm"
+                                                    className="text-[#6A6A6A] w-full text-left px-6 py-3 font-medium hover:bg-gray-100 text-sm cursor-pointer"
                                                 >
                                                     {c.currency}{" "}
                                                     <span className="font-light">
@@ -1063,9 +1069,9 @@ function CurrencyPill({ label, icon }) {
             <Image
                 src={icon}
                 alt=""
-                width={24}
-                height={24}
-                className="rounded-full"
+                width={28}
+                height={28}
+                className="rounded-sm w-8 h-5"
             />
             <span className="text-[20px] font-semibold">{label}</span>
         </div>

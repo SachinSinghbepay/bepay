@@ -77,8 +77,8 @@ export default function Banking() {
               key={i}
               onClick={() => setTab(acc.currency)}
               className={`pb-2 border-b-2 transition ${tab === acc.currency
-                ? "border-black font-medium"
-                : "border-transparent text-gray-500"
+                ? "border-black font-medium cursor-pointer"
+                : "border-transparent text-gray-500 cursor-pointer"
                 }`}
             >
               {acc.currency} Account
