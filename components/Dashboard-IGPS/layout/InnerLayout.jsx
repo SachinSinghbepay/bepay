@@ -368,6 +368,7 @@ export default function InnerLayout() {
               onClose={closeModal}
               onBack={modalProps?.onBack}
               onConfirm={modalProps?.onConfirm}
+              onOpenModal={openModal}
             />
           )}
 

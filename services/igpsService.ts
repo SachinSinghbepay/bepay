@@ -281,6 +281,10 @@ export class IgpsService {
     return this.request<any>("POST", "/auth/2fa/disable", { password });
   }
 
+  async getTwoFactorStatus(): Promise<ApiResponse<{ enabled: boolean; required: boolean; backupCodesRemaining: number }>> {
+    return this.request<{ enabled: boolean; required: boolean; backupCodesRemaining: number }>("GET", "/auth/2fa/status");
+  }
+
   // 2. Team Methods
   async inviteMember(
     data: InviteMemberRequest,

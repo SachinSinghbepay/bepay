@@ -112,14 +112,20 @@ export default function EnableTwoFactorModal({
                         <div className="flex gap-6">
 
                             {/* QR PLACEHOLDER */}
-                            <div className="w-54 h-54 rounded-2xl bg-gray-100 shadow-sm relative">
-                                <Image
-                                    src={qrCode}
-                                    alt="QR Code"
-                                    width={216}
-                                    height={216}
-                                    className="rounded-2xl shadow-sm"
-                                />
+                            <div className="w-54 h-54 rounded-2xl bg-gray-100 shadow-sm relative flex items-center justify-center">
+                                {qrCode ? (
+                                    <Image
+                                        src={qrCode}
+                                        alt="QR Code"
+                                        width={216}
+                                        height={216}
+                                        className="rounded-2xl shadow-sm"
+                                    />
+                                ) : (
+                                    <div className="w-[216px] h-[216px] flex items-center justify-center">
+                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-400" />
+                                    </div>
+                                )}
                             </div>
 
                             {/* MANUAL KEY BOX */}

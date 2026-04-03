@@ -137,6 +137,7 @@ export default function SendGlobalPayoutModal({
     const [walletBalances, setWalletBalances] = useState([]);
 
 
+
     const selectedWalletBalance = useMemo(() => {
         if (['USD', 'EUR', 'GBP'].includes(currency)) {
             const fiat = fiatBalances.find(f => f.currency === currency);
