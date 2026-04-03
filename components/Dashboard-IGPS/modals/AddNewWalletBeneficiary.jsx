@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 import Image from "next/image";
 
 
@@ -9,9 +10,9 @@ import Image from "next/image";
 
 export default function AddNewWalletBeneficiary({ onClose, onBack }) {
   const { igpsService } = useAuth();
+  const { toast } = useToast();
   const scrollRef = useRef(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -33,55 +34,97 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
 
-  const [nickname, setNickname] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("");
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const [states, setStates] = useState([]);
+  const [countries, setCountries] = useState([]);
 
-  // We will support adding one wallet for the beneficiary for now
-  const [wallet, setWallet] = useState({ address: "", network: "" });
+  useEffect(() => {
+    const load = async () => {
+      const res = await igpsService.getCountries();
+      if (res.success && Array.isArray(res.data)) {
+        setCountries(res.data.map(c => ({ label: c.name, value: c.code })));
+      }
+    };
+    load();
+  }, []);
+
+  useEffect(() => {
+    if (!country) { setStates([]); setSelectedState(""); return; }
+    setSelectedState("");
+    const loadStates = async () => {
+      const res = await igpsService.getStates(country);
+      if (res.success && Array.isArray(res.data)) {
+        setStates(res.data.map(s => ({ label: s.name, value: s.code })));
+      } else {
+        setStates([]);
+      }
+    };
+    loadStates();
+  }, [country]);
+
+  const [wallet, setWallet] = useState({ address: "", chain: "" });
 
   const networkOptions = [
-    { label: "Polygon", value: "POL", icon: "/icons/polygon.svg" },
-    { label: "Ethereum", value: "ETH", icon: "/icons/eth.svg" }
+    { label: "Ethereum", value: "ethereum", icon: "/icons/eth.svg" },
+    { label: "Polygon", value: "polygon", icon: "/icons/polygon.svg" },
+    { label: "Solana", value: "solana", icon: "/icons/Polygon.png" },
+    { label: "Tron", value: "tron" },
+    { label: "Stellar", value: "stellar" },
   ];
 
-  const handleAddressChange = (value) => {
-    setWallet(prev => ({ ...prev, address: value }));
-  };
-
-  const handleNetworkChange = (value) => {
-    setWallet(prev => ({ ...prev, network: value }));
-  };
-
-  const isFormValid = nickname.trim() !== "" && email.trim() !== "" && wallet.address.trim() !== "" && wallet.network.trim() !== "";
+  const isFormValid =
+    firstName.trim() !== "" &&
+    lastName.trim() !== "" &&
+    email.trim() !== "" &&
+    country !== "" &&
+    street.trim() !== "" &&
+    city.trim() !== "" &&
+    postalCode.trim() !== "" &&
+    (states.length === 0 || selectedState !== "") &&
+    wallet.address.trim() !== "" &&
+    wallet.chain !== "";
 
   const handleSubmit = async () => {
     if (!isFormValid || loading) return;
     setLoading(true);
-    setError("");
 
     try {
       const payload = {
-        type: 'individual', // Defaulting to individual for wallet beneficiaries often
-        fullName: nickname,
+        type: 'individual',
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
         email: email,
+        address: {
+          country,
+          street: street.trim(),
+          city: city.trim(),
+          postalCode: postalCode.trim(),
+          ...(states.length > 0 && { state: selectedState }),
+        },
         paymentInfo: {
           paymentType: 'crypto_wallet',
           walletAddress: wallet.address,
-          network: wallet.network
+          chain: wallet.chain
         }
       };
 
       const res = await igpsService.createBeneficiary(payload);
 
       if (res.success) {
+        toast.success("Wallet beneficiary added successfully");
         onClose();
-        // Ideally trigger refresh on parent
-        // We can assume parent auto-refreshes or user manually refreshes
       } else {
-        setError(res.error || res.message || "Failed to create beneficiary");
+        toast.error(res.error || res.message || "Failed to create beneficiary");
       }
     } catch (err) {
-      setError(err.message || "An error occurred");
+      toast.error(err.message || "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -97,12 +140,7 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
             className="absolute left-8 text-xl text-gray-500 cursor-pointer"
             onClick={onBack}
           >
-            <Image
-              src="/icons/back.svg"
-              alt=""
-              width={18}
-              height={18}
-            />
+            <Image src="/icons/back.svg" alt="" width={18} height={18} />
           </button>
 
           <h2 className="text-lg font-semibold text-gray-900">
@@ -118,33 +156,35 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
         </div>
 
         {/* SCROLL BODY */}
-        <div
-          ref={scrollRef}
-          className="flex-1 overflow-y-auto px-10 pb-40 space-y-8"
-        >
-          {error && (
-            <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">{error}</div>
-          )}
+        <div ref={scrollRef} className="flex-1 overflow-y-auto px-10 pb-40 space-y-6">
 
-          {/* Nickname */}
-          <div>
-            <label className="text-sm font-medium text-[#6A6A6A] ">
-              Nickname
-            </label>
-            <input
-              type="text"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-              placeholder="Enter beneficiary nickname"
-              className="w-full mt-2 rounded-xl border px-4 py-4 dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
-            />
+          {/* First & Last Name */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium text-[#6A6A6A]">First Name</label>
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="First name"
+                className="w-full mt-2 rounded-xl border px-4 py-4 dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-[#6A6A6A]">Last Name</label>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Last name"
+                className="w-full mt-2 rounded-xl border px-4 py-4 dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+              />
+            </div>
           </div>
 
-          {/* Email (Added Field) */}
+          {/* Email */}
           <div>
-            <label className="text-sm font-medium text-[#6A6A6A] ">
-              Email
-            </label>
+            <label className="text-sm font-medium text-[#6A6A6A]">Email</label>
             <input
               type="email"
               value={email}
@@ -154,46 +194,94 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
             />
           </div>
 
+          {/* Country */}
+          <div>
+            <label className="text-sm font-medium text-[#6A6A6A]">Country</label>
+            <CustomSelect
+              options={countries}
+              value={country}
+              onChange={setCountry}
+              placeholder="Select country"
+              searchable
+            />
+          </div>
+
+          {/* Street */}
+          <div>
+            <label className="text-sm font-medium text-[#6A6A6A]">Street Address</label>
+            <input
+              type="text"
+              value={street}
+              onChange={(e) => setStreet(e.target.value)}
+              placeholder="123 Main St"
+              className="w-full mt-2 rounded-xl border px-4 py-4 dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+            />
+          </div>
+
+          {/* City & Postal Code */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium text-[#6A6A6A]">City</label>
+              <input
+                type="text"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder="City"
+                className="w-full mt-2 rounded-xl border px-4 py-4 dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-[#6A6A6A]">Postal Code</label>
+              <input
+                type="text"
+                value={postalCode}
+                onChange={(e) => setPostalCode(e.target.value)}
+                placeholder="Postal code"
+                className="w-full mt-2 rounded-xl border px-4 py-4 dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+              />
+            </div>
+          </div>
+
+          {/* State — only shown when states are available for the country */}
+          {states.length > 0 && (
+            <div>
+              <label className="text-sm font-medium text-[#6A6A6A]">State</label>
+              <CustomSelect
+                options={states}
+                value={selectedState}
+                onChange={setSelectedState}
+                placeholder="Select state"
+                searchable
+              />
+            </div>
+          )}
+
           {/* Wallet Block */}
           <div className="space-y-4">
-            <div className="border-t pt-6" />
+            <div className="border-t pt-4" />
 
             <div>
-              <label className="text-sm font-medium text-[#6A6A6A] ">
-                Wallet address
-              </label>
-
+              <label className="text-sm font-medium text-[#6A6A6A]">Wallet Address</label>
               <input
                 type="text"
                 value={wallet.address}
-                onChange={(e) => handleAddressChange(e.target.value)}
+                onChange={(e) => setWallet(prev => ({ ...prev, address: e.target.value }))}
                 placeholder="Enter beneficiary wallet address"
                 className="w-full mt-2 rounded-xl border px-4 py-4 dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
               />
-
               <div className="mt-2 text-[12px] text-orange-600 flex items-start gap-1">
-                <Image
-                  src="/icons/iorange.svg"
-                  alt=""
-                  width={16}
-                  height={16}
-                  className="w-4"
-                />
-
+                <Image src="/icons/iorange.svg" alt="" width={16} height={16} className="w-4" />
                 Please verify the wallet address and network carefully.
               </div>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-[#6A6A6A] ">
-                Network
-              </label>
-
+              <label className="text-sm font-medium text-[#6A6A6A]">Network</label>
               <CustomSelect
                 options={networkOptions}
-                placeholder="Select wallet address’ network"
-                value={wallet.network}
-                onChange={handleNetworkChange}
+                placeholder="Select wallet network"
+                value={wallet.chain}
+                onChange={(val) => setWallet(prev => ({ ...prev, chain: val }))}
               />
             </div>
           </div>
@@ -207,7 +295,7 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
             onClick={handleSubmit}
             className={`w-full py-4 rounded-2xl transition-all
               ${isFormValid && !loading
-                ? "bg-black text-white hover:bg-gray-800"
+                ? "bg-black text-white hover:bg-gray-800 cursor-pointer"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
           >
@@ -216,6 +304,6 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
         </div>
 
       </div>
-    </ModalFrame >
+    </ModalFrame>
   );
 }

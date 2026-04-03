@@ -103,10 +103,13 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
     const [countries, setCountries] = useState([]);
 
     // --- WALLET STATE ---
-    const [wallets, setWallets] = useState([{ id: 1, address: "", network: "" }]);
+    const [wallets, setWallets] = useState([{ id: 1, address: "", chain: "" }]);
     const networkOptions = [
-        { label: "Polygon", value: "polygon", icon: "/icons/Polygon.png" },
-        { label: "Ethereum", value: "ethereum", icon: "/icons/eth.png" }
+        { label: "Ethereum", value: "ethereum", icon: "/icons/eth.svg" },
+        { label: "Polygon", value: "polygon", icon: "/icons/polygon.svg" },
+        { label: "Solana", value: "solana", icon: "/icons/Polygon.png" },
+        { label: "Tron", value: "tron" },
+        { label: "Stellar", value: "stellar" },
     ];
 
     const remittancePurposeOptions = [
@@ -168,7 +171,6 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
 
 
     const [phoneNumber, setPhoneNumber] = useState("");
-    const [search, setSearch] = useState("");
     const [banks, setBanks] = useState([]);
     const [loadingBanks, setLoadingBanks] = useState(false);
 
@@ -283,7 +285,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
         }
         if (!email.trim()) return false;
         if (!country || !addressLine1.trim() || !city.trim() || (states.length > 0 && !selectedState.trim()) || !zip.trim()) return false;
-        return wallets.every(w => w.address.trim() && w.network);
+        return wallets.every(w => w.address.trim() && w.chain);
     };
 
     const isBankFormValid = () => {
@@ -440,8 +442,6 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
         });
 
         try {
-            let payload = {};
-
             const commonAddress = {
                 country: country,
                 street: addressLine1,
@@ -450,60 +450,64 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                 postalCode: zip
             };
 
+            const commonIdentity = {
+                type: beneficiaryType,
+                ...(beneficiaryType === "individual" && { firstName, lastName }),
+                ...(beneficiaryType === "business" && {
+                    fullName: businessName.replace(/[^a-zA-Z0-9 '\-]/g, ""),
+                    businessRegistrationNumber
+                }),
+                email,
+                ...(fullPhone && { phone: fullPhone }),
+                address: commonAddress,
+            };
+
+            let anySuccess = false;
+
+            if (addBank) {
+                if (!isBankFormValid()) throw new Error("Please fill all required bank fields.");
+                const bankPayload = { ...commonIdentity, paymentInfo };
+                console.log("BANK PAYLOAD:", bankPayload);
+                const res = await igpsService.createBeneficiary(bankPayload);
+                if (res.success) {
+                    anySuccess = true;
+                } else {
+                    const msg = res.error || res.message || "Failed to create bank beneficiary";
+                    setError({ message: msg, details: Array.isArray(res.details) ? res.details : [] });
+                    toast.error(msg);
+                    setLoading(false);
+                    return;
+                }
+            }
+
             if (addWallet) {
                 if (!isWalletFormValid()) throw new Error("Please fill all required wallet fields.");
                 const w = wallets[0];
-
-                payload = {
-                    type: beneficiaryType,
-                    ...(beneficiaryType === "individual" && {
-                        firstName: firstName,
-                        lastName: lastName
-                    }),
-                    ...(beneficiaryType === "business" && {
-                        fullName: businessName.replace(/[^a-zA-Z0-9 '\-]/g, ""),
-                        businessRegistrationNumber
-                    }),
-                    email: email,
-                    address: commonAddress,
+                const walletPayload = {
+                    ...commonIdentity,
                     paymentInfo: {
                         paymentType: 'crypto_wallet',
                         walletAddress: w.address,
-                        network: w.network
+                        chain: w.chain
                     }
                 };
-            } else if (addBank) {
-                if (!isBankFormValid()) throw new Error("Please fill all required bank fields.");
-
-                payload = {
-                    type: beneficiaryType,
-                    ...(beneficiaryType === "individual" && {
-                        firstName,
-                        lastName
-                    }),
-                    ...(beneficiaryType === "business" && {
-                        fullName: businessName.replace(/[^a-zA-Z0-9 '\-]/g, ""),
-                        businessRegistrationNumber
-                    }),
-                    email,
-                    ...(fullPhone && { phone: fullPhone }),
-                    address: commonAddress,
-                    paymentInfo
-                };
+                console.log("WALLET PAYLOAD:", walletPayload);
+                const res = await igpsService.createBeneficiary(walletPayload);
+                if (res.success) {
+                    anySuccess = true;
+                } else {
+                    const msg = res.error || res.message || "Failed to create wallet beneficiary";
+                    setError({ message: msg, details: Array.isArray(res.details) ? res.details : [] });
+                    toast.error(msg);
+                    setLoading(false);
+                    return;
+                }
             }
-            console.log("PAYLOAD:", payload);
-            const res = await igpsService.createBeneficiary(payload);
-            if (res.success) {
+
+            if (anySuccess) {
                 toast.success("Beneficiary added");
                 onClose();
                 onSuccess?.();
-            } else {
-                const msg = res.error || res.message || "Failed to create beneficiary";
-                setError({
-                    message: msg,
-                    details: Array.isArray(res.details) ? res.details : [],
-                });
-                toast.error(msg);
             }
         } catch (err) {
             setError({ message: err.message, details: [] });
@@ -515,8 +519,9 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
 
 
     const isValid =
-        (addBank && isBankFormValid()) ||
-        (addWallet && isWalletFormValid());
+        (addBank || addWallet) &&
+        (!addBank || isBankFormValid()) &&
+        (!addWallet || isWalletFormValid());
 
     return (
         <ModalFrame size="lg">
@@ -625,6 +630,141 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
 
 
 
+                    {/* Country — always shown */}
+                    <div className="space-y-2">
+                        <label className="text-sm text-[#6A6A6A]">Country</label>
+                        <CustomSelect
+                            options={countries}
+                            value={country}
+                            onChange={(val) => { setCountry(val); setSelectedState(""); }}
+                            placeholder="Select Country"
+                            searchable
+                        />
+                    </div>
+
+                    {/* Address Section — always shown */}
+                    <div className="space-y-4">
+                        <h3 className="text-sm font-medium text-gray-900">Address</h3>
+
+                        <div className="space-y-2">
+                            <label className="text-sm text-[#6A6A6A]">Street Address</label>
+                            <input
+                                value={addressLine1}
+                                onChange={(e) => setAddressLine1(e.target.value)}
+                                placeholder="123 Main St"
+                                className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
+                            />
+                            {/[^a-zA-Z0-9\s]/.test(addressLine1) && (
+                                <p className="text-xs text-amber-600">
+                                    Special characters like {[...new Set(addressLine1.match(/[^a-zA-Z0-9\s]/g))].map(c => `"${c}"`).join(", ")} are not allowed. Use only letters, numbers, and spaces.
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-sm text-[#6A6A6A]">City</label>
+                                <input
+                                    value={city}
+                                    onChange={(e) => setCity(e.target.value)}
+                                    placeholder="New York"
+                                    className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
+                                />
+                                {/[^a-zA-Z0-9\s]/.test(city) && (
+                                    <p className="text-xs text-amber-600">
+                                        Special characters like {[...new Set(city.match(/[^a-zA-Z0-9\s]/g))].map(c => `"${c}"`).join(", ")} are not allowed. Use only letters, numbers, and spaces.
+                                    </p>
+                                )}
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm text-[#6A6A6A]">State</label>
+                                {states.length > 0 ? (
+                                    <CustomSelect
+                                        options={states}
+                                        value={selectedState}
+                                        onChange={setSelectedState}
+                                        placeholder={loadingStates ? "Loading..." : "Select state"}
+                                        searchable
+                                    />
+                                ) : (
+                                    <div>
+                                        <input
+                                            value={selectedState}
+                                            onChange={(e) => setSelectedState(e.target.value)}
+                                            placeholder={country ? `e.g. ${country}-GP` : "Enter state code"}
+                                            className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+                                        />
+                                        <p className="text-xs text-gray-400 mt-1">Enter ISO state code, e.g. {country ? `${country}-GP` : "ZA-GP"}</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm text-[#6A6A6A]">Postal Code</label>
+                            <input
+                                value={zip}
+                                onChange={(e) => setZip(e.target.value)}
+                                placeholder="10001"
+                                className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Phone — always shown */}
+                    <div className="space-y-2">
+                        <label className="text-sm text-[#6A6A6A]">Phone number (optional)</label>
+                        <div className="flex gap-2">
+                            <div className="relative" ref={phoneCodeRef}>
+                                <button
+                                    type="button"
+                                    onClick={() => { setPhoneCodeOpen(v => !v); setPhoneCodeSearch(""); }}
+                                    className="h-12 px-3 rounded-xl border flex items-center gap-1.5 text-sm whitespace-nowrap bg-white hover:bg-gray-50 min-w-[90px] cursor-pointer"
+                                >
+                                    <span className="text-base leading-none">{selectedPhoneOption?.flag}</span>
+                                    <span className="font-medium">{selectedPhoneOption?.dialCode}</span>
+                                    <svg className="w-3 h-3 text-gray-400 ml-0.5" viewBox="0 0 10 6" fill="none">
+                                        <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                                    </svg>
+                                </button>
+                                {phoneCodeOpen && (
+                                    <div className="absolute top-full left-0 mt-1 w-64 bg-white border rounded-xl shadow-xl z-50 flex flex-col">
+                                        <div className="p-2 border-b">
+                                            <input
+                                                autoFocus
+                                                value={phoneCodeSearch}
+                                                onChange={(e) => setPhoneCodeSearch(e.target.value)}
+                                                placeholder="Search country or code..."
+                                                className="w-full h-9 rounded-lg border px-3 text-sm outline-none focus:border-black"
+                                            />
+                                        </div>
+                                        <div className="overflow-y-auto max-h-52">
+                                            {filteredPhoneCodes.length > 0 ? filteredPhoneCodes.map(opt => (
+                                                <div
+                                                    key={opt.value}
+                                                    onClick={() => { setPhoneCode(opt.value); setPhoneCodeOpen(false); setPhoneCodeSearch(""); }}
+                                                    className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-gray-50 text-sm ${phoneCode === opt.value ? "bg-gray-50 font-medium" : ""}`}
+                                                >
+                                                    <span className="text-base w-6 text-center leading-none">{opt.flag}</span>
+                                                    <span className="text-gray-500 w-12 shrink-0">{opt.dialCode}</span>
+                                                    <span className="truncate text-gray-700">{opt.name}</span>
+                                                </div>
+                                            )) : (
+                                                <div className="p-3 text-sm text-gray-400 text-center">No results</div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            <input
+                                value={phoneNumber}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                placeholder="Enter beneficiary phone number"
+                                className="flex-1 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
+                            />
+                        </div>
+                    </div>
+
                     {/* SELECTOR */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
                         <OptionCard
@@ -643,18 +783,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
 
                     {/* --- BANK FORM --- */}
                     {addBank && (
-                        <div className="pt-8 space-y-6">
-                            <div className="space-y-2">
-                                <label className="text-sm text-[#6A6A6A]">Country</label>
-
-                                <CustomSelect
-                                    options={countries}
-                                    value={country}
-                                    onChange={(val) => { setCountry(val); setSelectedState(""); }}
-                                    placeholder="Select Country"
-                                    searchable
-                                />
-                            </div>
+                        <div className="pt-4 space-y-6">
                             {fields.includes("bankId") && (
                                 <div className="space-y-2 relative">
                                     <label className="text-sm text-[#6A6A6A]">Bank</label>
@@ -877,137 +1006,6 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                                     className="w-full py-3 px-4 text-sm border rounded-xl"
                                 /> */}
 
-                                <div className="space-y-2">
-                                    <label className="text-sm text-[#6A6A6A]">
-                                        Phone number (optional)
-                                    </label>
-                                    <div className="flex gap-2">
-                                        {/* Custom Phone Code Picker */}
-                                        <div className="relative" ref={phoneCodeRef}>
-                                            <button
-                                                type="button"
-                                                onClick={() => { setPhoneCodeOpen(v => !v); setPhoneCodeSearch(""); }}
-                                                className="h-12 px-3 rounded-xl border flex items-center gap-1.5 text-sm whitespace-nowrap bg-white hover:bg-gray-50 min-w-[90px]"
-                                            >
-                                                <span className="text-base leading-none">{selectedPhoneOption?.flag}</span>
-                                                <span className="font-medium">{selectedPhoneOption?.dialCode}</span>
-                                                <svg className="w-3 h-3 text-gray-400 ml-0.5" viewBox="0 0 10 6" fill="none">
-                                                    <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                                                </svg>
-                                            </button>
-
-                                            {phoneCodeOpen && (
-                                                <div className="absolute top-full left-0 mt-1 w-64 bg-white border rounded-xl shadow-xl z-50 flex flex-col">
-                                                    <div className="p-2 border-b">
-                                                        <input
-                                                            autoFocus
-                                                            value={phoneCodeSearch}
-                                                            onChange={(e) => setPhoneCodeSearch(e.target.value)}
-                                                            placeholder="Search country or code..."
-                                                            className="w-full h-9 rounded-lg border px-3 text-sm outline-none focus:border-black"
-                                                        />
-                                                    </div>
-                                                    <div className="overflow-y-auto max-h-52">
-                                                        {filteredPhoneCodes.length > 0 ? filteredPhoneCodes.map(opt => (
-                                                            <div
-                                                                key={opt.value}
-                                                                onClick={() => {
-                                                                    setPhoneCode(opt.value);
-                                                                    setPhoneCodeOpen(false);
-                                                                    setPhoneCodeSearch("");
-                                                                }}
-                                                                className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer hover:bg-gray-50 text-sm ${phoneCode === opt.value ? "bg-gray-50 font-medium" : ""}`}
-                                                            >
-                                                                <span className="text-base w-6 text-center leading-none">{opt.flag}</span>
-                                                                <span className="text-gray-500 w-12 shrink-0">{opt.dialCode}</span>
-                                                                <span className="truncate text-gray-700">{opt.name}</span>
-                                                            </div>
-                                                        )) : (
-                                                            <div className="p-3 text-sm text-gray-400 text-center">No results</div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Phone Number Input */}
-                                        <input
-                                            value={phoneNumber}
-                                            onChange={(e) => setPhoneNumber(e.target.value)}
-                                            placeholder="Enter beneficiary phone number"
-                                            className="flex-1 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            {/* Address Section */}
-                            <div className="space-y-4 pt-2">
-                                <h3 className="text-sm font-medium text-gray-900">Address</h3>
-
-                                <div className="space-y-2">
-                                    <label className="text-sm text-[#6A6A6A]">Street Address</label>
-                                    <input
-                                        value={addressLine1}
-                                        onChange={(e) => setAddressLine1(e.target.value)}
-                                        placeholder="123 Main St"
-                                        className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
-                                    />
-                                    {/[^a-zA-Z0-9\s]/.test(addressLine1) && (
-                                        <p className="text-xs text-amber-600">
-                                            Special characters like {[...new Set(addressLine1.match(/[^a-zA-Z0-9\s]/g))].map(c => `"${c}"`).join(", ")} are not allowed. Use only letters, numbers, and spaces.
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <label className="text-sm text-[#6A6A6A]">City</label>
-                                        <input
-                                            value={city}
-                                            onChange={(e) => setCity(e.target.value)}
-                                            placeholder="New York"
-                                            className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
-                                        />
-                                        {/[^a-zA-Z0-9\s]/.test(city) && (
-                                            <p className="text-xs text-amber-600">
-                                                Special characters like {[...new Set(city.match(/[^a-zA-Z0-9\s]/g))].map(c => `"${c}"`).join(", ")} are not allowed. Use only letters, numbers, and spaces.
-                                            </p>
-                                        )}
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm text-[#6A6A6A]">State</label>
-
-                                        {states.length > 0 ? (
-                                            <CustomSelect
-                                                options={states}
-                                                value={selectedState}
-                                                onChange={setSelectedState}
-                                                placeholder={loadingStates ? "Loading..." : "Select state"}
-                                                searchable
-                                            />
-                                        ) : (
-                                            <div>
-                                                <input
-                                                    value={selectedState}
-                                                    onChange={(e) => setSelectedState(e.target.value)}
-                                                    placeholder={country ? `e.g. ${country}-GP` : "Enter state code"}
-                                                    className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 focus:outline-none focus:ring-0 focus:border-gray-200"
-                                                />
-                                                <p className="text-xs text-gray-400 mt-1">Enter ISO state code, e.g. {country ? `${country}-GP` : "ZA-GP"}</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-sm text-[#6A6A6A]">Postal Code</label>
-                                    <input
-                                        value={zip}
-                                        onChange={(e) => setZip(e.target.value)}
-                                        placeholder="10001"
-                                        className="w-full mt-2 py-4 px-4 text-sm rounded-xl border dashboard-input text-gray-800 active:border-black focus:outline-none focus:ring-0 focus:border-gray-200"
-                                    />
-                                </div>
                             </div>
                         </div>
                     )}
@@ -1030,7 +1028,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                             ))}
                             {/* Hide add button since we only support 1 for API right now to be safe, or allow UI but API takes first */}
                             <button
-                                onClick={() => setWallets(prev => [...prev, { id: Date.now(), address: "", network: "" }])}
+                                onClick={() => setWallets(prev => [...prev, { id: Date.now(), address: "", chain: "" }])}
                                 className="w-full rounded-xl border border-dashed py-3 text-sm hover:bg-gray-50 transition"
                             >
                                 + Add another wallet address
@@ -1104,8 +1102,8 @@ function WalletAddressBlock({ index, data, networkOptions, canRemove, onRemove, 
                     <CustomSelect
                         options={networkOptions}
                         placeholder="Select network"
-                        value={data.network}
-                        onChange={(val) => onChange("network", val)}
+                        value={data.chain}
+                        onChange={(val) => onChange("chain", val)}
                     />
                 </div>
                 <div className="relative ">

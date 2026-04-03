@@ -81,7 +81,7 @@ export default function CustomSelect({
             <button
                 type="button"
                 onClick={toggle}
-                className={`w-full py-4 px-4 text-sm rounded-xl border flex justify-between items-center bg-white focus:outline-none focus:border-gray-200 focus:ring-0 ${className}`}
+                className={`w-full py-4 px-4 text-sm rounded-xl border flex justify-between items-center bg-white focus:outline-none focus:border-gray-200 focus:ring-0 cursor-pointer ${className}`}
             >
                 {selected ? (
                     <div className="flex items-center gap-2">
