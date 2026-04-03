@@ -79,7 +79,7 @@ export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
                         <div className="flex justify-between mb-2">
                             <label className="text-sm font-medium text-[#6A6A6A]">Beneficiary wallet</label>
                             <button
-                                className="text-sm underline"
+                                className="text-sm underline cursor-pointer"
                                 onClick={() =>
                                     onOpenModal("add-new-wallet", {
                                         previousModal: "pay-to-wallet"

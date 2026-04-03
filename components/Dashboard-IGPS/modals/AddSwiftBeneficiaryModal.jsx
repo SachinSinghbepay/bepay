@@ -3,7 +3,7 @@ import CustomSelect from "../components/CustomSelect";
 import { useRef, useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
-import { PAYMENT_CONFIG } from "../utils/paymentConfig";
+import { PAYMENT_CONFIG, remittancePurposeOptions, transferTypeOptions as defaultTransferTypeOptions } from "../utils/paymentConfig";
 import Image from "next/image";
 
 export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
@@ -14,11 +14,24 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    // Business Info
+    // Beneficiary type
+    const [beneficiaryType, setBeneficiaryType] = useState("individual");
     const [nickname, setNickname] = useState("");
+
+    // Individual fields
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+
+    // Business fields
     const [businessName, setBusinessName] = useState("");
     const [registrationNumber, setRegistrationNumber] = useState("");
+
     const [email, setEmail] = useState("");
+
+    const beneficiaryTypeOptions = [
+        { label: "Individual", value: "individual" },
+        { label: "Business", value: "business" }
+    ];
 
     // Address
     const [country, setCountry] = useState("");
@@ -40,6 +53,11 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
     const [ifscCode, setIfscCode] = useState("");
     const [transferType, setTransferType] = useState("");
     const [swiftCode, setSwiftCode] = useState("");
+    const [sortCode, setSortCode] = useState("");
+    const [bankCode, setBankCode] = useState("");
+    const [remittancePurpose, setRemittancePurpose] = useState("");
+    const [targetName, setTargetName] = useState("");
+    const [targetBankAccountId, setTargetBankAccountId] = useState("");
     const [pixKeyId, setPixKeyId] = useState("");
     const [taxId, setTaxId] = useState("");
 
@@ -54,12 +72,7 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
     const [purpose, setPurpose] = useState("");
     const [description, setDescription] = useState("");
 
-    const transferTypeOptions = [
-        { label: "ACH (Standard Bank Transfer)", value: "ach" },
-        { label: "RTP (Real Time Payment)", value: "rtp" },
-        { label: "Wire Transfer", value: "wire" },
-        { label: "SWIFT (International Wire)", value: "swift" }
-    ];
+    const transferTypeOptions = defaultTransferTypeOptions;
 
     const accountTypeOptions = [
         { label: "Savings", value: "savings" },
@@ -88,6 +101,11 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
         ifscCode,
         transferType,
         swiftCode,
+        sortCode,
+        bankCode,
+        remittancePurpose,
+        targetName,
+        targetBankAccountId,
         pixKeyId,
         taxId
     };
@@ -114,6 +132,13 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
             el.removeEventListener("wheel", onWheel);
         };
     }, []);
+
+    useEffect(() => {
+        setAccountNumber(""); setAccountType(""); setBankId(""); setRoutingNumber("");
+        setIfscCode(""); setTransferType(""); setSwiftCode(""); setSortCode("");
+        setBankCode(""); setRemittancePurpose(""); setTargetName(""); setTargetBankAccountId("");
+        setPixKeyId(""); setTaxId(""); setBankSearch("");
+    }, [country]);
 
     useEffect(() => {
         if (!country) return;
@@ -147,16 +172,19 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
 
     const isFormValid = () => {
         if (
-            !nickname.trim() ||
-            !businessName.trim() ||
-            !registrationNumber.trim() ||
             !email.trim() ||
             !country ||
             !addressLine1 ||
             !city ||
-            !selectedState ||
+            (states.length > 0 && !selectedState) ||
             !zip
         ) return false;
+
+        if (beneficiaryType === "individual") {
+            if (!firstName.trim() || !lastName.trim()) return false;
+        } else {
+            if (!businessName.trim() || !registrationNumber.trim()) return false;
+        }
 
         for (const field of fields) {
             const value = fieldValues[field];
@@ -243,16 +271,18 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
             });
 
             const payload = {
-                type: "business",
-                referenceName: nickname,
-                fullName: businessName,
-                businessRegistrationNumber: registrationNumber,
+                type: beneficiaryType,
+                ...(nickname.trim() && { referenceName: nickname.trim() }),
+                ...(beneficiaryType === "individual"
+                    ? { firstName: firstName.trim(), lastName: lastName.trim() }
+                    : { fullName: businessName.trim(), businessRegistrationNumber: registrationNumber.trim() }
+                ),
                 email,
 
                 address: {
                     street: `${addressLine1} ${addressLine2}`.trim(),
                     city,
-                    state: selectedState,
+                    ...(states.length > 0 && { state: selectedState }),
                     postalCode: zip,
                     country
                 },
@@ -304,13 +334,31 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                         </div>
                     )}
 
-                    <SectionTitle title="Business information" />
+                    <SectionTitle title="Beneficiary information" />
 
-                    <Input label="Nickname" value={nickname} onChange={setNickname} />
+                    <div className="space-y-2">
+                        <label className="text-sm text-gray-500">Beneficiary type</label>
+                        <CustomSelect
+                            options={beneficiaryTypeOptions}
+                            value={beneficiaryType}
+                            onChange={setBeneficiaryType}
+                            placeholder="Select type"
+                        />
+                    </div>
 
-                    <Input label="Business name" value={businessName} onChange={setBusinessName} />
+                    <Input label="Nickname (optional)" value={nickname} onChange={setNickname} />
 
-                    <Input label="Registration number" value={registrationNumber} onChange={setRegistrationNumber} />
+                    {beneficiaryType === "individual" ? (
+                        <div className="grid grid-cols-2 gap-4">
+                            <Input label="First name" value={firstName} onChange={setFirstName} />
+                            <Input label="Last name" value={lastName} onChange={setLastName} />
+                        </div>
+                    ) : (
+                        <>
+                            <Input label="Business name" value={businessName} onChange={setBusinessName} />
+                            <Input label="Registration number" value={registrationNumber} onChange={setRegistrationNumber} />
+                        </>
+                    )}
 
                     <Input label="Email" value={email} onChange={setEmail} />
 
@@ -419,12 +467,15 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
                     )}
 
                     {fields.includes("transferType") && (
-                        <CustomSelect
-                            options={transferTypeOptions}
-                            value={transferType}
-                            onChange={setTransferType}
-                            placeholder="Transfer type"
-                        />
+                        <div className="space-y-2">
+                            <label className="text-sm text-gray-500">Transfer type</label>
+                            <CustomSelect
+                                options={transferTypeOptions}
+                                value={transferType}
+                                onChange={setTransferType}
+                                placeholder="Select transfer type"
+                            />
+                        </div>
                     )}
 
                     {fields.includes("swiftCode") && (
@@ -437,6 +488,34 @@ export default function AddSwiftBeneficiaryModal({ onClose, onBack }) {
 
                     {fields.includes("taxId") && (
                         <Input label="Tax ID" value={taxId} onChange={setTaxId} />
+                    )}
+
+                    {fields.includes("sortCode") && (
+                        <Input label="Sort Code" value={sortCode} onChange={setSortCode} />
+                    )}
+
+                    {fields.includes("bankCode") && (
+                        <Input label="Bank Code" value={bankCode} onChange={setBankCode} />
+                    )}
+
+                    {fields.includes("targetName") && (
+                        <Input label="Target Name" placeholder="Full name as registered with the bank" value={targetName} onChange={setTargetName} />
+                    )}
+
+                    {fields.includes("targetBankAccountId") && (
+                        <Input label="CLABE / Bank Account ID" placeholder="18-digit CLABE number" value={targetBankAccountId} onChange={setTargetBankAccountId} />
+                    )}
+
+                    {fields.includes("remittancePurpose") && (
+                        <div className="space-y-2">
+                            <label className="text-sm text-gray-500">Remittance Purpose</label>
+                            <CustomSelect
+                                options={remittancePurposeOptions}
+                                value={remittancePurpose}
+                                onChange={setRemittancePurpose}
+                                placeholder="Select remittance purpose"
+                            />
+                        </div>
                     )}
 
                     <SectionTitle title="Transfer details" />
@@ -498,7 +577,7 @@ function Footer({ loading, disabled, onSubmit }) {
             <button
                 disabled={disabled || loading}
                 onClick={onSubmit}
-                className={`w-full h-14 rounded-2xl ${disabled ? "bg-gray-300 text-gray-500" : "bg-black text-white"
+                className={`w-full h-14 rounded-2xl ${disabled ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-black text-white cursor-pointer"
                     }`}
             >
                 {loading ? "Adding..." : "Add SWIFT account"}

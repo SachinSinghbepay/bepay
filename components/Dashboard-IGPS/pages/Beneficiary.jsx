@@ -248,7 +248,7 @@ function BeneficiaryRow({ item, index, onDelete }) {
 
                     {/* Pay Via Pills */}
                     <div className="flex gap-3 ml-3">
-                        {type === "bank_account" && <MethodPill icon={<Landmark size={16} />} label="Bank" />}
+                        {(type === "bank_account" || type === "pix") && <MethodPill icon={<Landmark size={16} />} label="Bank" />}
                         {type === "crypto_wallet" && <MethodPill icon={<Wallet size={16} />} label="Wallet" />}
                         {!type && <MethodPill icon={<Mail size={16} />} label="Email" />}
                     </div>
