@@ -301,10 +301,13 @@ export default function SendGlobalPayoutModal({
     const handleSend = () => {
         if (!quote || !selectedBeneficiary) return;
 
+        const senderWallet = sourceCurrencies.find(w => w.fullCurrency === currency) || null;
+
         onOpenModal("confirm-globalpayout", {
             quote: quote,
             beneficiary: selectedBeneficiary,
             sourceType,
+            senderWallet,
             transferType: sourceType === 'fiat' ? transferType : undefined,
             paymentDetails: {
                 purpose: purposeCode,
@@ -414,32 +417,24 @@ export default function SendGlobalPayoutModal({
                             </div>
                         ) : (
                             <div className="space-y-3">
-                                <select
-                                    className="w-full py-3 px-4 text-sm rounded-xl border outline-none"
-                                    onChange={(e) => {
-                                        const b = beneficiaries.find(
-                                            (x) => x.id === e.target.value
-                                        );
+                                <CustomSelect
+                                    options={beneficiaries.map((b) => ({
+                                        value: b.id,
+                                        label: b.type === "business"
+                                            ? b.fullName
+                                            : `${b.firstName} ${b.lastName}`,
+                                    }))}
+                                    value={selectedBeneficiary?.id || ""}
+                                    onChange={(id) => {
+                                        const b = beneficiaries.find((x) => x.id === id);
                                         setSelectedBeneficiary(b);
                                     }}
-                                    defaultValue=""
-                                >
-                                    <option value="" disabled>
-                                        Select a beneficiary
-                                    </option>
-
-                                    {beneficiaries.map((b) => (
-                                        <option key={b.id} value={b.id}>
-                                            {b.type === "business"
-                                                ? b.fullName
-                                                : `${b.firstName} ${b.lastName}`}
-                                        </option>
-                                    ))}
-                                </select>
+                                    placeholder="Select a beneficiary"
+                                />
 
                                 <button
-                                    onClick={() => onOpenModal("add-new-swift")}
-                                    className="text-sm text-blue-600 font-medium"
+                                    onClick={() => onOpenModal("add-beneficiary")}
+                                    className="text-sm text-blue-600 font-medium cursor-pointer"
                                 >
                                     + Add new beneficiary
                                 </button>
@@ -597,7 +592,7 @@ export default function SendGlobalPayoutModal({
                     {(loadingQuote || quote) && (
                         <>
                             <hr />
-                            <div className="grid grid-cols-2 gap-y-4 text-sm pt-4 p-20">
+                            <div className="grid grid-cols-2 gap-y-4 text-sm pt-4 lg:px-20">
 
                                 {loadingQuote ? (
                                     <div className="col-span-2 text-center text-gray-500 py-4">
@@ -634,11 +629,11 @@ export default function SendGlobalPayoutModal({
 
                     )}
                     {/* FOOTER */}
-                    <div className=" py-6 border-t bg-white">
+                    <div className=" py-6 bg-white">
                         <button
                             onClick={handleSend}
                             disabled={!quote || !selectedBeneficiary}
-                            className={`w-full h-14 rounded-2xl text-white text-base font-medium transition-all
+                            className={`w-full h-14 rounded-2xl text-white text-base font-medium transition-all cursor-pointer
                             ${(!quote || !selectedBeneficiary) ? "bg-gray-300 cursor-not-allowed" : "bg-black hover:bg-gray-800"}
                         `}
                         >
