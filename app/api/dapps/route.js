@@ -2,20 +2,6 @@ import { NextResponse } from "next/server"
 import { DAPPS_DATA } from "@/lib/dappsData"
 
 /**
- * Available Networks (as shown in the networks page)
- * These networks are synchronized with app/networks/[networkId]/page.jsx
- */
-export const AVAILABLE_NETWORKS = [
-  "Ethereum",
-  "Arbitrum",
-  "Avalanche",
-  "Base",
-  "Solana",
-  "Polygon",
-  "Tron",
-]
-
-/**
  * GET /api/dapps
  * Fetches dapps filtered by category and network
  * 

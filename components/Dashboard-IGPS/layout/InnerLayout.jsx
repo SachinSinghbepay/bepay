@@ -303,6 +303,7 @@ export default function InnerLayout() {
           {modal === "new-transfer" && (
             <NewTransferModal
               onClose={closeModal}
+              onOpenModal={openModal}
               onGlobalPayout={() => openModal("global-payout")}
               onPayToEmail={() =>
                 openModal("pay-to-email", {

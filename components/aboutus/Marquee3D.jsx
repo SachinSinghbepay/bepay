@@ -5,15 +5,19 @@ import Image from "next/image"; // 1. Import next/image
 const reviews = [
   {
     img: "/images/aboutus/m1.png",
+    alt: "bepay community member",
   },
   {
     img: "/images/aboutus/m2.png",
+    alt: "bepay community member",
   },
   {
     img: "/images/aboutus/m3.png",
+    alt: "bepay community member",
   },
   {
     img: "/images/aboutus/m4.png",
+    alt: "bepay community member",
   },
 ];
 
@@ -26,13 +30,13 @@ const thirdRow = reviews.slice(0, reviews.length / 2);
 const fourthRow = reviews.slice(reviews.length / 2);
 
 // 3. Update ReviewCard to use next/Image
-const ReviewCard = ({ img }) => {
+const ReviewCard = ({ img, alt }) => {
   return (
     <Image
       className="rounded-full"
       width={32} // Pass width as a number
       height={32} // Pass height as a number
-      alt=""
+      alt={alt}
       src={img}
     />
   );

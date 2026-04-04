@@ -224,8 +224,8 @@ export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
                         </div>
 
                         <div className="flex flex-col items-center text-center space-y-6 py-8">
-                            <div className="w-20 h-20 rounded-full bg-green-600 flex items-center justify-center">
-                                <Image src="/icons/check.png" alt="check" width={24} height={24} />
+                            <div className="w-20 h-20 rounded-full  flex items-center justify-center">
+                                <Image src="/icons/check.png" alt="check" width={50} height={50} className="w-16 "/>
                             </div>
                             <p className="text-xl font-semibold">
                                 Two-factor authentication (2FA) has been enabled successfully!

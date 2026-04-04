@@ -2,8 +2,21 @@ import ModalFrame from "./ModalFrame";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { px } from "framer-motion";
+import { useAuth } from "../context/AuthContext";
 
-export default function NewTransferModal({ onClose, onGlobalPayout, onPayToEmail, onPayToWallet, onPayToSwift }) {
+export default function NewTransferModal({ onClose, onGlobalPayout, onPayToEmail, onPayToWallet, onPayToSwift, onOpenModal }) {
+  const { twoFactorEnabled, igpsService } = useAuth();
+  const [showTwoFactorGate, setShowTwoFactorGate] = useState(false);
+  const pendingAction = useRef(null);
+
+  const guard = (action) => {
+    if (!twoFactorEnabled) {
+      pendingAction.current = action;
+      setShowTwoFactorGate(true);
+    } else {
+      action();
+    }
+  };
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -25,6 +38,59 @@ export default function NewTransferModal({ onClose, onGlobalPayout, onPayToEmail
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
 
+
+  if (showTwoFactorGate) {
+    return (
+      <ModalFrame key="2fa-gate" size="md" height="h-auto">
+        <div className="bg-white rounded-3xl flex flex-col" style={{ minHeight: "420px" }}>
+          {/* Header */}
+          <div className="relative flex items-center justify-center px-8 pt-6 pb-6">
+            <button onClick={onClose} className="absolute right-8 text-gray-500 cursor-pointer">
+              <Image src="/icons/close.png" alt="close" width={16} height={16} />
+            </button>
+          </div>
+
+          {/* Body */}
+          <div className="flex-1 px-8 pb-6 text-center space-y-5">
+            <div className="flex justify-center">
+              <Image src="/icons/lock2.png" alt="2FA" width={40} height={40} className="h-12 w-auto" />
+            </div>
+            <div>
+              <p className="font-semibold text-gray-900 text-lg mb-2">Enable 2FA to Send Payments</p>
+              <p className="text-sm text-gray-500 leading-relaxed">
+                For your security, two-factor authentication (2FA) is required to send money from your IGPS account.
+              </p>
+            </div>
+          </div>
+
+          {/* CTAs */}
+          <div className="px-8 pb-8 flex gap-3 mt-auto">
+            <button
+              onClick={onClose}
+              className="flex-1 h-14 rounded-2xl border border-gray-300 text-gray-700 text-base font-medium cursor-pointer hover:bg-gray-50 transition-all"
+            >
+              I&apos;ll do later
+            </button>
+            <button
+              onClick={async () => {
+                const res = await igpsService.setupTwoFactor();
+                if (res.success) {
+                  onOpenModal("enable-two-factor", {
+                    qrCode: res.data.qrCode,
+                    secret: res.data.secret,
+                    backupCodes: res.data.backupCodes,
+                  });
+                }
+              }}
+              className="flex-1 h-14 rounded-2xl bg-black text-white text-base font-medium cursor-pointer hover:bg-gray-800 transition-all"
+            >
+              Enable 2FA
+            </button>
+          </div>
+        </div>
+      </ModalFrame>
+    );
+  }
 
   return (
     <ModalFrame size="lg" height="40vh">
@@ -56,14 +122,14 @@ export default function NewTransferModal({ onClose, onGlobalPayout, onPayToEmail
               "/icons/india.svg",
               "/icons/china.svg",
             ]}
-            onClick={onGlobalPayout}
+            onClick={() => guard(onGlobalPayout)}
           />
 
           <TransferCard
             title="Pay USD via SWIFT"
             desc="Pay anyone globally with SWIFT payments"
             icon="/icons/swift.svg"
-            onClick={onPayToSwift}
+            onClick={() => guard(onPayToSwift)}
           />
 
           <TransferCard
@@ -71,14 +137,14 @@ export default function NewTransferModal({ onClose, onGlobalPayout, onPayToEmail
             desc="Send money using an email address. Works just like PayPal. (Money will be transferred directly to the bepay account linked to that email)."
             icon="/icons/email.svg"
             badge="Free"
-            onClick={onPayToEmail}
+            onClick={() => guard(onPayToEmail)}
           />
 
           <TransferCard
             title="Pay to wallet"
             desc="Send stablecoins directly to a wallet address (Onchain transfer)."
             icon="/icons/wallet.svg"
-            onClick={onPayToWallet}
+            onClick={() => guard(onPayToWallet)}
           />
         </div>
       </div>
