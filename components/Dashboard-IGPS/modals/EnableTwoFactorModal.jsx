@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import ModalFrame from "./ModalFrame";
-import { FiX, FiCopy } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 
 import Image from "next/image";
@@ -77,10 +76,10 @@ export default function EnableTwoFactorModal({
     };
     return (
         <ModalFrame size="lg">
-            <div className="bg-white rounded-3xl max-h-[90vh] flex flex-col p">
+            <div className="bg-white rounded-3xl max-h-[90vh] flex flex-col py-6 ">
 
                 {/* HEADER */}
-                <div className="flex justify-between items-start mb-6 px-8 py-4">
+                <div className="flex justify-between items-start mb-4 px-8 py-4">
                     <div>
                         <h2 className="text-xl font-semibold">
                             Enable two-factor authentication
@@ -91,7 +90,7 @@ export default function EnableTwoFactorModal({
                     </div>
 
                     <button onClick={onClose} className="cursor-pointer">
-                        <FiX size={20} />
+                        <Image src="/icons/close.png" alt="close" width={16} height={16} />
                     </button>
                 </div>
 
@@ -112,14 +111,20 @@ export default function EnableTwoFactorModal({
                         <div className="flex gap-6">
 
                             {/* QR PLACEHOLDER */}
-                            <div className="w-54 h-54 rounded-2xl bg-gray-100 shadow-sm relative">
-                                <Image
-                                    src={qrCode}
-                                    alt="QR Code"
-                                    width={216}
-                                    height={216}
-                                    className="rounded-2xl shadow-sm"
-                                />
+                            <div className="w-54 h-54 rounded-2xl bg-gray-100 shadow-sm relative flex items-center justify-center">
+                                {qrCode ? (
+                                    <Image
+                                        src={qrCode}
+                                        alt="QR Code"
+                                        width={216}
+                                        height={216}
+                                        className="rounded-2xl shadow-sm"
+                                    />
+                                ) : (
+                                    <div className="w-[216px] h-[216px] flex items-center justify-center">
+                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-400" />
+                                    </div>
+                                )}
                             </div>
 
                             {/* MANUAL KEY BOX */}
@@ -132,22 +137,26 @@ export default function EnableTwoFactorModal({
                                     {secret}
                                 </p>
 
-                                <button
-                                    onClick={handleCopy}
-                                    className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center"
-                                >
-                                    <Image
-                                        src="/icons/copy.svg"
-                                        alt=""
-                                        width={24}
-                                        height={24}
-                                    />
-                                </button>
-                                {copied && (
-                                    <p className="text-sm text-green-600 mt-3">
-                                        Copied to clipboard
-                                    </p>
-                                )}
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={handleCopy}
+                                        className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center cursor-pointer"
+                                    >
+                                        <Image
+                                            src="/icons/copy.svg"
+                                            alt=""
+                                            width={24}
+                                            height={24}
+                                        />
+                                    </button>
+                                    {copied && (
+                                        <p className="text-sm text-green-600 mt-3">
+                                            Copied to clipboard
+                                        </p>
+                                    )}
+                                </div>
+
+
                             </div>
 
                         </div>
@@ -170,20 +179,21 @@ export default function EnableTwoFactorModal({
                     </div>
 
                     {/* BUTTON */}
+                      {error && (
+                        <p className="text-sm text-red-600 mb-2 ml-2 -mt-5">
+                            {error}
+                        </p>
+                    )}
                     <button
                         onClick={handleEnable}
                         disabled={!isValid}
-                        className={`w-full h-14 rounded-xl text-white font-medium transition
-                        ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-300 cursor-not-allowed"}
+                        className={`w-full h-14 rounded-2xl text-white font-medium transition
+                        ${isValid ? "bg-black hover:bg-gray-800 cursor-pointer" : "bg-gray-300 cursor-not-allowed"}
                     `}
                     >
                         Enable two-factor authentication
                     </button>
-                    {error && (
-                        <p className="text-sm text-red-600 mt-2">
-                            {error}
-                        </p>
-                    )}
+                  
                 </div>
             </div>
         </ModalFrame>

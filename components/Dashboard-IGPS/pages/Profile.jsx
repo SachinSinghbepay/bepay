@@ -6,7 +6,7 @@ import { IgpsService } from "../../../services/igpsService";
 
 
 export default function Profile({ onOpenModal, setActivePage }) {
-const { igpsService } = useAuth();
+    const { igpsService } = useAuth();
     const { user, organization, loading } = useAuth();
     if (loading) return <div>Loading...</div>;
 
@@ -38,21 +38,19 @@ const { igpsService } = useAuth();
                     alt=""
                     width={24}
                     height={24}
-                /> 
+                />
             </button>
             {/* USER CARD */}
             <div className="bg-white rounded-3xl p-6 flex items-center justify-between shadow-sm">
                 <div className="flex items-center gap-4">
-                    <div className="h-[88px] w-[88px] rounded-3xl bg-[#D1D1D1] p-[2px]">
-                        <div className="h-full w-full rounded-3xl overflow-hidden bg-[#B6B6B6]">
-                            <Image
-                                src="/profile.png"
-                                alt="profile"
-                                width={40}
-                                height={40}
-                                className="h-full w-full object-cover"
-                            />
-                        </div>
+                    <div
+                        className="h-22 w-22 rounded-[12.71px] bg-[#FFD4B8] flex items-center justify-center text-2xl font-semibold text-gray-700 shrink-0"
+                        style={{
+                            border: "1.59px solid #B6B6B6",
+                            boxShadow: "3.18px 3.18px 7.94px 0px rgba(0,0,0,0.15)"
+                        }}
+                    >
+                        {displayName.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()}
                     </div>
 
                     <div>
@@ -65,22 +63,12 @@ const { igpsService } = useAuth();
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 bg-green-100  px-4 py-2 rounded-full text-sm font-medium">
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-green-600">
-                        <svg
-                            className="h-3 w-3 text-white font-semibold"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
-                            <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                            />
-                        </svg>
+                <div className="flex items-center gap-2 bg-[#0E76301A]/70 px-4 py-2 rounded-full text-sm font-medium">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full ">
+                       <Image src="/icons/check.png" alt="check" width={30} height={30}  className="w-5 h-5"/>
                     </span>
 
-                    {status}
+                  KYC  {status}
                 </div>
 
             </div>
@@ -212,13 +200,11 @@ function TwoFactorCard({ enabled, onEnable, onDisable }) {
 
                 {/* Toggle (Visual Only) */}
                 <div
-                    className={`relative w-[62px] h-[34px] rounded-xl p-1 transition ${enabled ? "bg-green-600" : "bg-gray-300"
-                        }`}
-                >
-                    <div
-                        className={`h-[26px] w-[26px] rounded-lg bg-white shadow-md transition-all duration-300 ${enabled ? "translate-x-[28px]" : "translate-x-0"
-                            }`}
-                    />
+                    className=" w-20h-auto rounded-xl p-1 transition">
+                    {enabled ? <Image src="/icons/2fa-disabled.png" alt="check" width={60} height={60} className="w-20" />
+                        :
+                     <Image src="/icons/2fa-enabled.png" alt="check" width={60} height={60} className="w-20" />
+                    }
                 </div>
             </div>
 

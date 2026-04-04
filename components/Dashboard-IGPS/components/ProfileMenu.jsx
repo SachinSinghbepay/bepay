@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState, useRef, useEffect } from "react";
-import Image from "next/image";
 import { useAuth } from "../context/AuthContext";
 
 export default function ProfileMenu({ onProfile }) {
@@ -41,16 +40,14 @@ export default function ProfileMenu({ onProfile }) {
 
                 {/* LEFT GROUP */}
                 <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-xl bg-[#D1D1D1] p-[2px] flex-shrink-0">
-                        <div className="h-full w-full rounded-lg overflow-hidden bg-[#B6B6B6]">
-                            <Image
-                                src="/profile.png"
-                                alt="profile"
-                                width={40}
-                                height={40}
-                                className="h-full w-full object-cover"
-                            />
-                        </div>
+                    <div
+                        className="h-10 w-10 rounded-[12.71px] bg-[#FFD4B8] flex items-center justify-center text-sm font-semibold text-gray-700 shrink-0"
+                        style={{
+                            border: "1.59px solid #B6B6B6",
+                            boxShadow: "3.18px 3.18px 7.94px 0px rgba(0,0,0,0.15)"
+                        }}
+                    >
+                        {displayName.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()}
                     </div>
 
                     <span className="text-sm font-semibold text-[#414141] whitespace-nowrap">

@@ -107,6 +107,9 @@ export function AuthProvider({ children }) {
     const [kycStatus, setKycStatus] = useState("loading");
     // values: "loading" | "complete" | "incomplete"
 
+    const [twoFactorEnabled, setTwoFactorEnabled] = useState(null);
+    // null = not yet fetched, true/false = known state
+
     // ─── Unified Token Setter (sets both cookie + localStorage) ──────────────────
     const setTokens = useCallback((accessToken, refreshToken, setInService = true) => {
         // Set in IgpsService
@@ -572,6 +575,14 @@ export function AuthProvider({ children }) {
 
     }, [user]);
 
+    // ─── Fetch 2FA Status ─────────────────────────────────────────────────────────
+    useEffect(() => {
+        if (!user) return;
+        igpsService.getTwoFactorStatus().then(res => {
+            if (res.success) setTwoFactorEnabled(res.data.enabled);
+        }).catch(() => {});
+    }, [user]);
+
     // Add this function inside AuthProvider:
 const refreshKycStatus = useCallback(async () => {
     if (!user) return;
@@ -604,7 +615,9 @@ const refreshKycStatus = useCallback(async () => {
             completeLogin,
             refreshToken,
             kycStatus,
-            refreshKycStatus 
+            refreshKycStatus,
+            twoFactorEnabled,
+            setTwoFactorEnabled,
         }}>
             {children}
         </AuthContext.Provider>
