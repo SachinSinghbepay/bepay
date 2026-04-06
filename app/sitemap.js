@@ -1,26 +1,22 @@
 import { getAllBlogs } from "@/lib/blogs";
-import { DAPPS_DATA } from "@/lib/dappsData";
 
 export default async function sitemap() {
   const baseUrl = "https://www.bepay.money";
 
   // Static routes
-  const staticRoutes = [
-    { path: "", priority: 1.0, changeFrequency: "daily" },
-    { path: "/personal", priority: 0.9, changeFrequency: "weekly" },
-    { path: "/business", priority: 0.9, changeFrequency: "weekly" },
-    { path: "/upi", priority: 0.9, changeFrequency: "weekly" },
-    { path: "/blogs", priority: 0.8, changeFrequency: "daily" },
-    { path: "/contact-us", priority: 0.7, changeFrequency: "monthly" },
-    { path: "/about-us", priority: 0.8, changeFrequency: "monthly" },
-    { path: "/airdrops", priority: 0.7, changeFrequency: "daily" },
-    { path: "/bepay-foundations", priority: 0.7, changeFrequency: "monthly" },
-    { path: "/dapps", priority: 0.8, changeFrequency: "weekly" },
-  ].map(({ path, priority, changeFrequency }) => ({
-    url: `${baseUrl}${path}`,
+  const routes = [
+    "",
+    "/personal",
+    "/business",
+    "/upi",
+    "/blogs",
+    "/contact-us",
+    "/about-us",
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
     lastModified: new Date(),
-    changeFrequency,
-    priority,
+    changeFrequency: "daily",
+    priority: route === "" ? 1 : 0.8,
   }));
 
   // Dynamic blog routes
@@ -32,13 +28,5 @@ export default async function sitemap() {
     priority: 0.7,
   }));
 
-  // Dynamic dApp routes
-  const dappRoutes = DAPPS_DATA.map((dapp) => ({
-    url: `${baseUrl}/dapps/${encodeURIComponent(dapp.name)}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.6,
-  }));
-
-  return [...staticRoutes, ...blogRoutes, ...dappRoutes];
+  return [...routes, ...blogRoutes];
 }

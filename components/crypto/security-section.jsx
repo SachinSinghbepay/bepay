@@ -59,7 +59,7 @@ const SecurityCard = ({ icon, title, description, items, className = "" }) => {
       {icon && (
         <Image
           src={icon || "/placeholder.svg"}
-          alt={`${title} icon`}
+          alt=""
           width={128}
           height={128}
           className="w-28 h-28"

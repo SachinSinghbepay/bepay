@@ -2,42 +2,6 @@ import { notFound } from "next/navigation"
 import SharePopup from "@/components/SharePopup"
 import TableOfContents from "@/components/TableOfContents"
 
-/* ---------------- METADATA ---------------- */
-export async function generateMetadata({ params }) {
-  const { slug } = await params
-  const blog = await getBlog(slug)
-  if (!blog) return {}
-
-  const title = `${blog.title} | bepay Blog`
-  const description = blog.excerpt || blog.description || blog.title
-  const image = blog.thumbnail || "/thumbnail.png"
-  const url = `https://www.bepay.money/blogs/${slug}`
-
-  return {
-    title,
-    description,
-    alternates: { canonical: url },
-    openGraph: {
-      title,
-      description,
-      url,
-      siteName: "bepay",
-      images: [{ url: image, width: 1200, height: 630, alt: blog.title }],
-      locale: "en_US",
-      type: "article",
-      publishedTime: blog.publishedAt,
-      modifiedTime: blog.updatedAt ? new Date(blog.updatedAt.seconds * 1000).toISOString() : undefined,
-      authors: [blog.author || "bepay team"],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [image],
-    },
-  }
-}
-
 /* ---------------- FETCH BLOG ---------------- */
 async function getBlog(slug) {
   const URL = 'https://bepay.money';
@@ -117,26 +81,8 @@ export default async function BlogPostPage({ params }) {
   const headings = extractHeadings(contentWithIds)
   const readingTime = calculateReadingTime(blog.content)
 
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: blog.title,
-    description: blog.excerpt || blog.description || blog.title,
-    image: blog.thumbnail || "https://www.bepay.money/thumbnail.png",
-    datePublished: blog.publishedAt,
-    dateModified: blog.updatedAt ? new Date(blog.updatedAt.seconds * 1000).toISOString() : blog.publishedAt,
-    author: { "@type": "Person", name: blog.author || "bepay team" },
-    publisher: {
-      "@type": "Organization",
-      name: "bepay",
-      logo: { "@type": "ImageObject", url: "https://www.bepay.money/logo.png" },
-    },
-    mainEntityOfPage: { "@type": "WebPage", "@id": `https://www.bepay.money/blogs/${blog.slug}` },
-  }
-
   return (
     <main className="max-w-7xl mx-auto px-6 py-16 flex gap-12 scroll-smooth">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
 
       {/* ---------------- LEFT SIDEBAR (TABLE OF CONTENTS) ---------------- */}
       <aside className="hidden lg:block w-64 sticky top-24 self-start">
