@@ -27,7 +27,7 @@ export default function Profile({ onOpenModal, setActivePage }) {
         }
     };
     return (
-        <div className="px-8 space-y-8 max-w-full">
+        <div className="px-4 sm:px-8 space-y-8 py-2 max-w-full">
 
             <button
                 className="  text-xl text-gray-500 cursor-pointer"
@@ -41,8 +41,8 @@ export default function Profile({ onOpenModal, setActivePage }) {
                 />
             </button>
             {/* USER CARD */}
-            <div className="bg-white rounded-3xl p-6 flex items-center justify-between shadow-sm">
-                <div className="flex items-center gap-4">
+            <div className="bg-white rounded-3xl p-6 flex flex-col sm:flex-row  items-center justify-between shadow-sm">
+                <div className="flex flex-col sm:flex-row items-center gap-4">
                     <div
                         className="h-22 w-22 rounded-[12.71px] bg-[#FFD4B8] flex items-center justify-center text-2xl font-semibold text-gray-700 shrink-0"
                         style={{
@@ -54,7 +54,7 @@ export default function Profile({ onOpenModal, setActivePage }) {
                     </div>
 
                     <div>
-                        <p className="text-lg font-semibold text-gray-900">
+                        <p className=" text-center sm:text-start text-lg font-semibold text-gray-900">
                             {displayName}
                         </p>
                         <p className="text-sm text-gray-500">
@@ -63,11 +63,10 @@ export default function Profile({ onOpenModal, setActivePage }) {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 bg-[#0E76301A]/70 px-4 py-2 rounded-full text-sm font-medium">
+                <div className="mt-3 sm:mt-0 flex items-center gap-2 bg-[#0E76301A]/70 px-4 py-2 rounded-full text-sm font-medium">
                     <span className="flex h-8 w-8 items-center justify-center rounded-full ">
                        <Image src="/icons/check.png" alt="check" width={30} height={30}  className="w-5 h-5"/>
                     </span>
-
                   KYC  {status}
                 </div>
 
@@ -126,7 +125,7 @@ function Section({ title, children }) {
 
 function SecurityCard({ title, desc, action, onClick }) {
     return (
-        <div className="bg-[#F7F7F7] border border-gray-200 rounded-3xl px-8 py-8 flex items-center justify-between">
+        <div className="bg-[#F7F7F7] border border-gray-200 rounded-3xl px-8 py-8 flex flex-col sm:flex-row items-start gap-2 sm:gap-0 sm:items-center justify-between">
 
             <div>
                 <p className="text-xl font-semibold text-gray-900">
@@ -138,7 +137,7 @@ function SecurityCard({ title, desc, action, onClick }) {
             </div>
 
             <button
-                className="px-8 py-3 cursor-pointer rounded-full bg-black text-white text-base font-medium hover:opacity-90 transition"
+                className="mt-3 sm:mt-0 px-8 py-3 cursor-pointer rounded-full bg-black text-white text-base font-medium hover:opacity-90 transition"
                 onClick={onClick}
             >
                 {action}
@@ -183,7 +182,7 @@ function Divider() {
 
 function TwoFactorCard({ enabled, onEnable, onDisable }) {
     return (
-        <div className="bg-[#F7F7F7] border border-gray-200 rounded-3xl px-8 py-8 space-y-6">
+        <div className="bg-[#F7F7F7] border border-gray-200 rounded-3xl px-8  pr-2 sm:pr-8 py-8 space-y-6">
 
             {/* Top Row */}
             <div className="flex items-start justify-between">
@@ -200,16 +199,16 @@ function TwoFactorCard({ enabled, onEnable, onDisable }) {
 
                 {/* Toggle (Visual Only) */}
                 <div
-                    className=" w-20h-auto rounded-xl p-1 transition">
-                    {enabled ? <Image src="/icons/2fa-disabled.png" alt="check" width={60} height={60} className="w-20" />
+                    className=" w-20h-auto rounded-xl p-1 transition ">
+                    {enabled ? <Image src="/icons/2fa-enabled.png" alt="check" width={60} height={60} className="w-25 sm:w-20" />
                         :
-                     <Image src="/icons/2fa-enabled.png" alt="check" width={60} height={60} className="w-20" />
+                     <Image src="/icons/2fa-disabled.png" alt="check" width={60} height={60} className="w-25 sm:w-20" />
                     }
                 </div>
             </div>
 
             {/* Bottom Action */}
-            <div className="flex justify-end">
+            <div className="flex sm:justify-end">
                 {enabled ? (
                     <button
                         onClick={onDisable}
