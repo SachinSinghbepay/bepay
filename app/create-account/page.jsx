@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import CreateAccountLayout from "./Layout";
+import CreateAccountLayout from "./CreateAccountShell";
 import StepEmail from "./StepEmail";
 import StepVerifyCode from "./StepVerifyCode";
 import StepPersonalDetails from "./StepPersonalDetails";

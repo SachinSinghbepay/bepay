@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import ModalFrame from "./ModalFrame";
-import { useAuth } from "../context/AuthContext";
 import Image from "next/image";
+import ModalFrame from "./ModalFrame";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useAuth } from "../context/AuthContext";
 
 
 
@@ -11,6 +12,7 @@ export default function DisableTwoFactorModal({ onClose }) {
   const { igpsService } = useAuth();
   const { refreshUser } = useAuth();
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [mode, setMode] = useState("form");
@@ -25,21 +27,21 @@ export default function DisableTwoFactorModal({ onClose }) {
       const res = await igpsService.disableTwoFactor(password);
 
       if (res.success) {
-        await refreshUser();   // 🔥 important
+        await refreshUser();
         setMode("success");
       } else {
         setError(res.message || "Failed to disable 2FA");
       }
     } catch (err) {
-      setError("Something went wrong.");
+      setError(err?.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <ModalFrame size="md" height="h-auto">
-      <div className="bg-white rounded-3xl flex flex-col" style={{ minHeight: "380px" }}>
+    <ModalFrame size={mode === "success" ? "sm" : "md"} height={mode === "success" ? "h-auto" : undefined}>
+      <div className="bg-white rounded-3xl flex flex-col" style={{ minHeight: mode === "form" ? "380px" : undefined }}>
         {mode === "form" ? (
           <>
             {/* Header */}
@@ -60,13 +62,22 @@ export default function DisableTwoFactorModal({ onClose }) {
                   {error}
                 </div>
               )}
-              <input
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-14 rounded-2xl border px-4 outline-none focus:border-black transition"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full h-14 rounded-2xl border px-4 pr-12 outline-none focus:border-black transition"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 cursor-pointer"
+                >
+                  {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </button>
+              </div>
             </div>
 
             {/* CTA pinned to bottom */}
@@ -92,7 +103,9 @@ export default function DisableTwoFactorModal({ onClose }) {
 
             {/* Body */}
             <div className="flex-1 flex flex-col items-center justify-center text-center px-8 py-6 space-y-4">
-              <div className="w-16 h-16 rounded-full bg-green-600 flex items-center justify-center text-white text-2xl">✓</div>
+              <div className="w-16 h-16 rounded-full bg-green-600 flex items-center justify-center">
+                <Image src="/icons/check.svg" alt="Check" width={32} height={32} />
+              </div>
               <p className="text-xl font-semibold">Two-factor authentication disabled</p>
             </div>
 
