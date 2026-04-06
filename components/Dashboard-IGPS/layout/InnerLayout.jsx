@@ -258,6 +258,12 @@ export default function InnerLayout() {
               transaction={modalProps?.transaction}
               onClose={closeModal}
               onBack={() => closeModal()}
+              onSendAgain={(beneficiary) =>
+                openModal("send-globalpayout", {
+                  beneficiary,
+                  onBack: () => openModal("txn-details", { transaction: modalProps?.transaction }),
+                })
+              }
             />
           )}
 

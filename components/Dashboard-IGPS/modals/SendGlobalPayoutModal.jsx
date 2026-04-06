@@ -27,6 +27,7 @@ export default function SendGlobalPayoutModal({
     onBack,
     onOpenModal,
     beneficiary, // Pre-selected beneficiary if any
+    preselectEmail, // Email from transaction history to auto-match beneficiary
 }) {
     const { igpsService } = useAuth();
     const scrollRef = useRef(null);
@@ -185,6 +186,20 @@ export default function SendGlobalPayoutModal({
                 console.log("WALLET JSON:", JSON.stringify(walletRes, null, 2));
                 if (benRes.success && Array.isArray(benRes.data)) {
                     setBeneficiaries(benRes.data);
+
+                    // Auto-select beneficiary from transaction history
+                    if (!beneficiary && preselectEmail) {
+                        const match = benRes.data.find((b) => {
+                            const name = b.type === "business"
+                                ? b.fullName
+                                : `${b.firstName} ${b.lastName}`;
+                            return (
+                                b.email === preselectEmail ||
+                                name?.toLowerCase() === preselectEmail?.toLowerCase()
+                            );
+                        });
+                        if (match) setSelectedBeneficiary(match);
+                    }
                 }
 
                 if (walletRes.success && Array.isArray(walletRes.data?.wallets)) {
@@ -381,7 +396,7 @@ export default function SendGlobalPayoutModal({
                             selectedBeneficiary && (
                                 <button
                                     onClick={() => setSelectedBeneficiary(null)}
-                                    className="text-sm underline"
+                                    className="text-sm underline cursor-pointer"
                                 >
                                     Change
                                 </button>
