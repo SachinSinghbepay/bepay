@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Copy } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
@@ -24,17 +24,15 @@ export default function Banking() {
     }
   );
 
-  const accounts = data ?? [];
+  const CURRENCY_ORDER = ["USD", "EUR", "GBP"];
+  const accounts = [...(data ?? [])].sort(
+    (a, b) => (CURRENCY_ORDER.indexOf(a.currency) + 1 || 99) - (CURRENCY_ORDER.indexOf(b.currency) + 1 || 99)
+  );
   const loading = !data && isValidating;
   const updating = !!data && isValidating;
 
-  useEffect(() => {
-    if (accounts.length > 0 && !tab) {
-      setTab(accounts[0].currency);
-    }
-  }, [accounts]);
-
-  const selectedAccount = accounts.find(acc => acc.currency === tab);
+  const activeTab = accounts.find(acc => acc.currency === tab) ? tab : accounts[0]?.currency ?? null;
+  const selectedAccount = accounts.find(acc => acc.currency === activeTab);
 
   const accountDetails = selectedAccount
     ? [
@@ -76,7 +74,7 @@ export default function Banking() {
             <button
               key={i}
               onClick={() => setTab(acc.currency)}
-              className={`pb-2 border-b-2 transition ${tab === acc.currency
+              className={`pb-2 border-b-2 transition ${activeTab === acc.currency
                 ? "border-black font-medium cursor-pointer"
                 : "border-transparent text-gray-500 cursor-pointer"
                 }`}

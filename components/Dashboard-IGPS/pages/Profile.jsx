@@ -1,13 +1,91 @@
+"use client";
 import Image from "next/image";
 import { useAuth } from "../context/AuthContext";
 import React from "react";
 import { useState } from "react";
-import { IgpsService } from "../../../services/igpsService";
 
+function downloadCSV(filename, rows) {
+    const csv = rows.map(r => r.map(cell => `"${String(cell ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+}
 
 export default function Profile({ onOpenModal, setActivePage }) {
     const { igpsService } = useAuth();
     const { user, organization, loading } = useAuth();
+    const [exportingTransactions, setExportingTransactions] = useState(false);
+    const [exportingBanks, setExportingBanks] = useState(false);
+    const [exportingPayees, setExportingPayees] = useState(false);
+
+    const handleExportTransactions = async () => {
+        setExportingTransactions(true);
+        try {
+            const res = await igpsService.listOrders({ page: 1, limit: 1000 });
+            const orders = res.success ? (res.data?.orders ?? []) : [];
+            const header = ["Date", "Payer", "Source Amount", "Source Currency", "Target Amount", "Target Currency", "Status"];
+            const rows = orders.map(o => {
+                const b = o.beneficiary;
+                const payer = b ? (b.firstName && b.lastName ? `${b.firstName} ${b.lastName}` : b.fullName ?? "-") : "-";
+                return [
+                    o.quote?.createdAt ? new Date(o.quote.createdAt).toLocaleString("en-IN") : "-",
+                    payer,
+                    o.sourceAmount ?? "",
+                    o.sourceCurrency ?? "",
+                    o.targetAmount ?? "",
+                    o.targetCurrency ?? "",
+                    o.status ?? "",
+                ];
+            });
+            downloadCSV("transactions.csv", [header, ...rows]);
+        } finally {
+            setExportingTransactions(false);
+        }
+    };
+
+    const handleExportBankAccounts = async () => {
+        setExportingBanks(true);
+        try {
+            const senderRes = await igpsService.getSenderProfile();
+            if (!senderRes.success) return;
+            const depositRes = await igpsService.getDepositAccounts(senderRes.data.id);
+            const accounts = depositRes.success ? (depositRes.data ?? []) : [];
+            const header = ["Currency", "Beneficiary Name", "Account Number", "BIC", "Routing Number", "Bank Name", "Bank Address"];
+            const rows = accounts.map(acc => [
+                acc.currency ?? "",
+                acc.name ?? "",
+                acc.accountNumber ?? "",
+                acc.bic ?? "",
+                acc.routingDetails?.[0]?.routingNumber ?? "",
+                acc.bankDetails?.name ?? "",
+                acc.bankDetails?.address ?? "",
+            ]);
+            downloadCSV("bank-accounts.csv", [header, ...rows]);
+        } finally {
+            setExportingBanks(false);
+        }
+    };
+
+    const handleExportPayees = async () => {
+        setExportingPayees(true);
+        try {
+            const res = await igpsService.listBeneficiaries();
+            const beneficiaries = res.success ? (res.data ?? []) : [];
+            const header = ["Name", "Type", "Email", "Phone", "Payment Type", "Account Number / IBAN / Address", "Status"];
+            const rows = beneficiaries.map(b => {
+                const name = b.firstName && b.lastName ? `${b.firstName} ${b.lastName}` : (b.fullName ?? "-");
+                const paymentId = b.paymentInfo?.accountNumber ?? b.paymentInfo?.iban ?? b.paymentInfo?.address ?? b.paymentInfo?.pixKeyId ?? "";
+                return [name, b.type ?? "", b.email ?? "", b.phone ?? "", b.paymentInfo?.paymentType ?? "", paymentId, b.status ?? ""];
+            });
+            downloadCSV("payees.csv", [header, ...rows]);
+        } finally {
+            setExportingPayees(false);
+        }
+    };
     if (loading) return <div>Loading...</div>;
 
     const displayName = organization?.name || user?.organizationName || (user?.firstName ? `${user.firstName} ${user.lastName}` : "User");
@@ -29,7 +107,7 @@ export default function Profile({ onOpenModal, setActivePage }) {
     return (
         <div className="px-4 sm:px-8 space-y-8 py-2 max-w-full">
 
-            <button
+            {/* <button
                 className="  text-xl text-gray-500 cursor-pointer"
                 onClick={() => setActivePage("dashboard")}
             >
@@ -39,7 +117,7 @@ export default function Profile({ onOpenModal, setActivePage }) {
                     width={24}
                     height={24}
                 />
-            </button>
+            </button> */}
             {/* USER CARD */}
             <div className="bg-white rounded-3xl p-6 flex flex-col sm:flex-row  items-center justify-between shadow-sm">
                 <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -90,9 +168,9 @@ export default function Profile({ onOpenModal, setActivePage }) {
 
             {/* EXPORT DATA */}
             <Section title="Export data">
-                <ExportRow title="Export transactions" desc="Download your transaction history" />
-                <ExportRow title="Export payees" desc="Download your saved payees" />
-                <ExportRow title="Export bank accounts" desc="Download your saved bank accounts" />
+                <ExportRow title="Export transactions" desc="Download your transaction history" loading={exportingTransactions} onClick={handleExportTransactions} />
+                <ExportRow title="Export payees" desc="Download your saved payees" loading={exportingPayees} onClick={handleExportPayees} />
+                <ExportRow title="Export bank accounts" desc="Download your saved bank accounts" loading={exportingBanks} onClick={handleExportBankAccounts} />
             </Section>
 
             {/* LEGAL */}
@@ -146,22 +224,27 @@ function SecurityCard({ title, desc, action, onClick }) {
     );
 }
 
-function ExportRow({ title, desc }) {
+function ExportRow({ title, desc, onClick, loading }) {
     return (
         <div className="flex items-center justify-between bg-gray-50 rounded-2xl px-4 py-6">
             <div>
                 <p className="font-medium text-gray-900">{title}</p>
                 <p className="text-sm text-gray-500">{desc}</p>
             </div>
-            <div className="text-sm text-gray-500 flex flex-col justify-center  items-center cursor-pointer">
-                <Image
-                    src="/icons/export.svg"
-                    width={25}
-                    height={25}
-                    alt="export"
-                />
+            <button
+                onClick={onClick}
+                disabled={loading}
+                className="text-sm text-gray-500 flex flex-col justify-center items-center cursor-pointer disabled:opacity-50"
+            >
+                {loading ? (
+                    <svg className="animate-spin h-6 w-6 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M4 4v6h6" /><path d="M20 20v-6h-6" /><path d="M5 15a7 7 0 0011 2l4-4" /><path d="M19 9a7 7 0 00-11-2L4 11" />
+                    </svg>
+                ) : (
+                    <Image src="/icons/export.svg" width={25} height={25} alt="export" />
+                )}
                 <p>CSV</p>
-            </div>
+            </button>
         </div>
     );
 }

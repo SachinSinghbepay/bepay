@@ -140,7 +140,7 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
                                 </button>
                             </div>
 
-                            <div className="grid grid-col sm:grid-cols-2 gap-y-3 text-sm">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-2 text-sm">
                                 <RuleItem valid={rules.length} label="At least 8 characters long" />
                                 <RuleItem valid={rules.number} label="At least one number" />
                                 <RuleItem valid={rules.special} label="At least one special character" />

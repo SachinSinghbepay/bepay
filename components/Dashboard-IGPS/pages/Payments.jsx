@@ -6,6 +6,18 @@ import { useAuth } from "../context/AuthContext";
 import useSWR from 'swr';
 
 
+const STATUS_LABELS = {
+  failed:                 { label: "Failed",           cls: "bg-red-100 text-red-600" },
+  completed:              { label: "Received",         cls: "bg-green-100 text-green-600" },
+  received:               { label: "Received",         cls: "bg-green-100 text-green-600" },
+  cancelled:              { label: "Cancelled",        cls: "bg-gray-200 text-gray-600" },
+  pending:                { label: "Pending",          cls: "bg-blue-100 text-blue-600" },
+  created:                { label: "Created",          cls: "bg-blue-100 text-blue-600" },
+  awaiting_funds_timeout: { label: "Awaiting Timeout", cls: "bg-yellow-100 text-yellow-700" },
+  awaiting_funds:         { label: "Awaiting",         cls: "bg-yellow-100 text-yellow-700" },
+  processing:             { label: "Processing",       cls: "bg-blue-100 text-blue-600" },
+};
+
 export default function Payments({ onOpenModal }) {
   const { igpsService } = useAuth();
   const [activeFilter, setActiveFilter] = useState("All");
@@ -15,24 +27,37 @@ export default function Payments({ onOpenModal }) {
   const { data, isValidating } = useSWR(
     ['igps-payments', currentPage, rowsPerPage],
     async () => {
-      const res = await igpsService.listOrders({ page: currentPage, limit: rowsPerPage });
+      const res = await igpsService.getTransactions({ page: currentPage, limit: rowsPerPage });
       if (res.success && res.data) {
-        return { orders: res.data.orders || [], pagination: res.data.pagination || null };
+        return {
+          orders: res.data.transactions || [],
+          pagination: res.data.pagination || null,
+          byStatus: res.data.summary?.byStatus || {},
+        };
       }
-      return { orders: [], pagination: null };
+      return { orders: [], pagination: null, byStatus: {} };
     }
   );
 
   const orders = data?.orders ?? [];
   const pagination = data?.pagination ?? null;
+  const byStatus = data?.byStatus ?? {};
   const loading = !data && isValidating;
   const updating = !!data && isValidating;
 
+  // Build filters from summary — only statuses with count > 0
   const filters = [
-    "All",
-    ...Array.from(new Set(orders.map(o => o.status).filter(Boolean)))
-      .map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()),
+    { key: "All", label: "All" },
+    ...Object.entries(byStatus)
+      .filter(([, count]) => count > 0)
+      .map(([key]) => ({
+        key,
+        label: STATUS_LABELS[key]?.label ?? (key.charAt(0).toUpperCase() + key.slice(1)),
+      })),
   ];
+
+  const TOKEN_ICON_SIZE = 40;
+  const FIAT_ICON_SIZE = 28;
 
   const tokenIcons = {
     USDC: "/icons/USDC.svg",
@@ -40,9 +65,6 @@ export default function Payments({ onOpenModal }) {
     DAI: "/icons/dai.svg",
     BTC: "/icons/btc.svg",
     ETH: "/icons/Eth.png",
-    USD: "/icons/usa.svg",
-    EUR: "/icons/europe.png",
-    GBP: "/icons/usa.svg",
   };
 
   const fiatIcons = {
@@ -52,10 +74,13 @@ export default function Payments({ onOpenModal }) {
     GBP: "/icons/uk.svg"
   };
 
-  const getTokenIcon = (sourceCurrency) => {
-    if (!sourceCurrency) return "/icons/default-token.svg";
+  // Returns { src, isFiat } so renderConversion can pick the right size
+  const getSourceIcon = (sourceCurrency) => {
+    if (!sourceCurrency) return { src: "/icons/default-token.svg", isFiat: false };
     const token = sourceCurrency.split("_")[0];
-    return tokenIcons[token] || "/icons/default-token.svg";
+    if (tokenIcons[token]) return { src: tokenIcons[token], isFiat: false };
+    if (fiatIcons[token]) return { src: fiatIcons[token], isFiat: true };
+    return { src: "/icons/default-token.svg", isFiat: false };
   };
 
   const getFiatIcon = (currency) => {
@@ -76,27 +101,30 @@ export default function Payments({ onOpenModal }) {
   };
 
   const getPayerName = (order) => {
-    const b = order.beneficiary;
-    if (!b) return "-";
-    if (b.firstName && b.lastName) return `${b.firstName} ${b.lastName}`;
-    return b.fullName || "-";
+    return order.to?.name || order.from?.name || order.beneficiary?.fullName
+      || (order.beneficiary?.firstName ? `${order.beneficiary.firstName} ${order.beneficiary.lastName}` : null)
+      || "-";
   };
 
   const renderConversion = (order) => {
-    const sourceAmount = Number(order.sourceAmount || 0).toLocaleString();
+    // getTransactions: amount + currency = source, targetAmount + targetCurrency = dest
+    const sourceAmount = Number(order.amount ?? order.sourceAmount ?? 0).toLocaleString();
+    const sourceCurrency = order.currency ?? order.sourceCurrency ?? "";
     const targetAmount = Number(order.targetAmount || 0).toLocaleString();
+    const { src: sourceSrc, isFiat: sourceIsFiat } = getSourceIcon(sourceCurrency);
+    const sourceSize = sourceIsFiat ? FIAT_ICON_SIZE : TOKEN_ICON_SIZE;
     return (
       <div className="flex items-center gap-8">
         <div className="flex items-center gap-3">
-          <Image src={getTokenIcon(order.sourceCurrency)} width={32} height={32} alt={order.sourceCurrency} />
+          <Image src={sourceSrc} width={sourceSize} height={sourceSize} alt={sourceCurrency} className="shrink-0" style={{ width: sourceSize, height: sourceSize }} />
           <div>
             <div className="font-semibold text-gray-900 leading-tight">{sourceAmount}</div>
-            <div className="text-xs text-gray-500">{order.sourceCurrency}</div>
+            <div className="text-xs text-gray-500">{sourceCurrency}</div>
           </div>
         </div>
         <div className="text-gray-400 text-lg">→</div>
         <div className="flex items-center gap-3">
-          <Image src={getFiatIcon(order.targetCurrency)} width={28} height={28} alt={order.targetCurrency} />
+          <Image src={getFiatIcon(order.targetCurrency)} width={FIAT_ICON_SIZE} height={FIAT_ICON_SIZE} alt={order.targetCurrency} className="shrink-0" style={{ width: FIAT_ICON_SIZE, height: FIAT_ICON_SIZE }} />
           <div>
             <div className="font-semibold text-gray-900 leading-tight">{targetAmount}</div>
             <div className="text-xs text-gray-500">{order.targetCurrency}</div>
@@ -107,33 +135,34 @@ export default function Payments({ onOpenModal }) {
   };
 
   const renderStatus = (status) => {
-    const s = status?.toLowerCase();
-    const base = "inline-flex items-center justify-center rounded-full text-xs font-medium px-3 py-1";
-    if (s === "failed") return <span className={`${base} bg-red-100 text-red-600`}>Failed</span>;
-    if (s === "completed" || s === "received") return <span className={`${base} bg-green-100 text-green-600`}>Received</span>;
-    if (s === "cancelled") return <span className={`${base} bg-gray-200 text-gray-600`}>Cancelled</span>;
-    return <span className={`${base} bg-gray-200 text-gray-600`}>{status}</span>;
+    const key = status?.toLowerCase();
+    const base = "inline-flex items-center justify-center rounded-full text-xs font-medium px-3 py-1 whitespace-nowrap";
+    const { label, cls } = STATUS_LABELS[key] ?? { label: status, cls: "bg-gray-200 text-gray-600" };
+    return <span className={`${base} ${cls}`}>{label}</span>;
   };
 
   const filteredOrders = activeFilter === "All"
     ? orders
-    : orders.filter(order => order.status?.toLowerCase() === activeFilter.toLowerCase());
+    : orders.filter(order => order.status === activeFilter);
+
+  // Reset filter if it's no longer valid (e.g. page change)
+
 
   return (
-    <div className="w-full p-8">
+    <div className="w-full px-2 py-4 sm:p-8">
 
       {/* Filters */}
       <div className="flex items-center justify-between gap-6 mb-8">
         <div className="flex-1 overflow-x-auto">
           <div className="flex gap-3 min-w-max">
-            {filters.map((filter, i) => (
+            {filters.map((filter) => (
               <button
-                key={i}
-                onClick={() => { setActiveFilter(filter); setCurrentPage(1); }}
-                className={`px-5 h-10 rounded-full text-sm whitespace-nowrap transition-colors
-                  ${activeFilter === filter ? "bg-black text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+                key={filter.key}
+                onClick={() => { setActiveFilter(filter.key); setCurrentPage(1); }}
+                className={`px-5 h-10 rounded-full text-sm whitespace-nowrap transition-colors cursor-pointer
+                  ${activeFilter === filter.key ? "bg-black text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
               >
-                {filter}
+                {filter.label}
               </button>
             ))}
           </div>
@@ -150,7 +179,7 @@ export default function Payments({ onOpenModal }) {
         <div className="min-w-[900px]">
 
           {/* Header */}
-          <div className="grid grid-cols-[1.2fr_2.8fr_0.8fr_1.4fr_0.8fr] text-sm text-gray-500 px-6 pb-4 border-b">
+          <div className="grid grid-cols-[1fr_2.5fr_1fr_1.6fr_0.8fr] text-sm text-gray-500 px-6 pb-4 border-b">
             <div>Payer</div>
             <div>Conversion</div>
             <div>Status</div>
@@ -168,16 +197,49 @@ export default function Payments({ onOpenModal }) {
               filteredOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="grid grid-cols-[1.2fr_2.8fr_0.8fr_1.4fr_0.8fr] items-center bg-gray-100 rounded-2xl px-6 py-6 text-[16px]"
+                  className="grid grid-cols-[1fr_2.5fr_1fr_1.6fr_0.8fr] items-center bg-gray-100 rounded-2xl px-6 py-6 text-[16px]"
                 >
                   <div className="font-semibold text-gray-900">{getPayerName(order)}</div>
                   <div className="flex items-center">{renderConversion(order)}</div>
-                  <div className="pr-6">{renderStatus(order.status)}</div>
-                  <div className="text-gray-600 font-medium">{formatDate(order.quote?.createdAt)}</div>
+                  <div>{renderStatus(order.statusRaw ?? order.status)}</div>
+                  <div className="text-gray-600 font-medium">{formatDate(order.createdAt ?? order.timestamp ?? order.quote?.createdAt)}</div>
                   <div>
                     <button
-                      onClick={() => onOpenModal("payment-details", { order })}
-                      className="underline text-gray-800  cursor-pointer"
+                      onClick={() => {
+                        const subType = order.subType ?? "";
+                        const isSent = order.from?.type === "user";
+                        const KIND_LABELS = {
+                          crypto_to_fiat: "Crypto → Fiat",
+                          fiat_to_fiat:   "Fiat Transfer",
+                          fiat_to_crypto: "Fiat → Crypto",
+                          deposit:        "Deposit",
+                        };
+                        const tx = {
+                          id: order.id,
+                          amount: order.amount,
+                          currency: order.currency,
+                          sourceCurrency: order.currency,
+                          status: STATUS_LABELS[order.status]?.label ?? order.status,
+                          statusRaw: order.statusRaw ?? order.status,
+                          isSent,
+                          kind: subType,
+                          type: KIND_LABELS[subType] ?? "Transfer",
+                          email: order.to?.name || order.to?.email || "—",
+                          destination: order.to?.name || "—",
+                          source: order.from?.name || order.from?.address || "—",
+                          createdAt: order.createdAt,
+                          depositChain: order.network,
+                          exchangeRate: order.exchangeRate
+                            ? `1 ${order.currency?.split("_")[0]} = ${order.exchangeRate} ${order.targetCurrency}`
+                            : null,
+                          recipientAmount: `${order.targetCurrency} ${order.targetAmount}`,
+                          networkFee: `${order.fees?.total ?? 0} ${order.currency?.split("_")[0]}`,
+                          hash: order.hash,
+                          raw: order,
+                        };
+                        onOpenModal("txn-details", { transaction: tx });
+                      }}
+                      className="underline text-gray-800 cursor-pointer"
                     >
                       View details
                     </button>
@@ -191,41 +253,72 @@ export default function Payments({ onOpenModal }) {
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between mt-8 text-sm text-gray-600">
-        <div>Showing {startItem}–{endItem} of {totalItems}</div>
-        <div className="flex items-center gap-4">
-          <select
-            value={rowsPerPage}
-            onChange={(e) => { setRowsPerPage(Number(e.target.value)); setCurrentPage(1); }}
-            className="border rounded-full px-4 py-2 bg-white"
-          >
-            <option value={10}>10 rows per page</option>
-            <option value={20}>20 rows per page</option>
-            <option value={50}>50 rows per page</option>
-          </select>
-
-          <div className="border rounded-full px-4 py-2 bg-white">
-            {startItem}–{endItem} of {totalItems}
-          </div>
-
-          <div className="flex border rounded-full overflow-hidden bg-white">
-            <button
-              onClick={() => setCurrentPage((prev) => prev - 1)}
-              disabled={currentPage <= 1 || isValidating}
-              className="px-4 py-2 disabled:opacity-40"
+      {totalItems > 0 && (
+        <div className="flex flex-wrap items-center justify-between gap-4 mt-8 text-sm text-gray-600">
+          <div>Showing {startItem}–{endItem} of {totalItems}</div>
+          <div className="flex items-center gap-3">
+            <select
+              value={rowsPerPage}
+              onChange={(e) => { setRowsPerPage(Number(e.target.value)); setCurrentPage(1); }}
+              className="border rounded-full px-4 py-2 bg-white cursor-pointer"
             >
-              ‹
-            </button>
-            <button
-              onClick={() => setCurrentPage((prev) => prev + 1)}
-              disabled={currentPage >= totalPages || isValidating}
-              className="px-4 py-2 disabled:opacity-40"
-            >
-              ›
-            </button>
+              <option value={10}>10 / page</option>
+              <option value={20}>20 / page</option>
+              <option value={50}>50 / page</option>
+            </select>
+
+            <div className="flex items-center gap-1">
+              {/* Prev */}
+              <button
+                onClick={() => setCurrentPage((p) => p - 1)}
+                disabled={currentPage <= 1 || isValidating}
+                className="w-9 h-9 flex items-center justify-center rounded-full border bg-white disabled:opacity-40 hover:bg-gray-50 cursor-pointer"
+              >
+                ‹
+              </button>
+
+              {/* Page numbers */}
+              {(() => {
+                const pages = [];
+                const delta = 2;
+                const left = Math.max(2, currentPage - delta);
+                const right = Math.min(totalPages - 1, currentPage + delta);
+
+                pages.push(1);
+                if (left > 2) pages.push("...");
+                for (let i = left; i <= right; i++) pages.push(i);
+                if (right < totalPages - 1) pages.push("...");
+                if (totalPages > 1) pages.push(totalPages);
+
+                return pages.map((p, i) =>
+                  p === "..." ? (
+                    <span key={`ellipsis-${i}`} className="w-9 h-9 flex items-center justify-center text-gray-400">…</span>
+                  ) : (
+                    <button
+                      key={p}
+                      onClick={() => setCurrentPage(p)}
+                      disabled={isValidating}
+                      className={`w-9 h-9 flex items-center justify-center rounded-full border text-sm cursor-pointer transition-colors
+                        ${p === currentPage ? "bg-black text-white border-black" : "bg-white hover:bg-gray-50"}`}
+                    >
+                      {p}
+                    </button>
+                  )
+                );
+              })()}
+
+              {/* Next */}
+              <button
+                onClick={() => setCurrentPage((p) => p + 1)}
+                disabled={currentPage >= totalPages || isValidating}
+                className="w-9 h-9 flex items-center justify-center rounded-full border bg-white disabled:opacity-40 hover:bg-gray-50 cursor-pointer"
+              >
+                ›
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
     </div>
   );

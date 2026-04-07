@@ -1040,7 +1040,7 @@ export default function AddBeneficiaryModal({ onClose, onBack, onOpenModal, onSu
                         <button
                             disabled={!isValid || loading}
                             onClick={handleSubmit}
-                            className={`w-full h-14 rounded-xl text-white text-base transition-colors cursor-pointer ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-400 cursor-not-allowed"}`}
+                            className={`w-full h-14 rounded-xl text-white text-base transition-colors cursor-pointer ${isValid ? "bg-black hover:bg-gray-800" : "bg-black/50 cursor-not-allowed"}`}
                         >
                             {loading ? "Adding..." : "Add beneficiary"}
                         </button>

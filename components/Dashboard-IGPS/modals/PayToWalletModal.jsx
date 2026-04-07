@@ -2,9 +2,15 @@ import ModalFrame from "./ModalFrame";
 import CustomSelect from "../components/CustomSelect";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { useAuth } from "../context/AuthContext";
 
-export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
+export default function PayToWalletModal({ onClose, onBack, onOpenModal, beneficiary }) {
+    const { igpsService } = useAuth();
     const scrollRef = useRef(null);
+    const [beneficiaries, setBeneficiaries] = useState([]);
+    const [selectedBeneficiary, setSelectedBeneficiary] = useState(beneficiary || null);
+    const [currency, setCurrency] = useState("");
+    const [amount, setAmount] = useState("");
 
     useEffect(() => {
         const el = scrollRef.current;
@@ -26,14 +32,32 @@ export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
         return () => el.removeEventListener("wheel", onWheel);
     }, []);
 
-    const [email, setEmail] = useState("");
-    const [currency, setCurrency] = useState("");
-    const [amount, setAmount] = useState("");
+    useEffect(() => {
+        const load = async () => {
+            try {
+                const res = await igpsService.listBeneficiaries();
+                if (res.success && Array.isArray(res.data)) {
+                    const walletBeneficiaries = res.data.filter(
+                        (b) => b.paymentInfo?.paymentType === "crypto_wallet"
+                    );
+                    setBeneficiaries(walletBeneficiaries);
+
+                    // Auto-select pre-passed beneficiary if not already set
+                    if (beneficiary && !selectedBeneficiary) {
+                        const match = walletBeneficiaries.find((b) => b.id === beneficiary.id);
+                        if (match) setSelectedBeneficiary(match);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to load beneficiaries", err);
+            }
+        };
+        load();
+    }, []);
 
     const isFormValid =
-        email.trim() &&
+        !!selectedBeneficiary &&
         currency.trim() &&
-
         Number(amount) > 0;
 
     return (
@@ -74,7 +98,7 @@ export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
                     className="flex-1 overflow-y-auto px-10 py-8 space-y-8"
                 >
 
-                    {/* EMAIL */}
+                    {/* BENEFICIARY */}
                     <div>
                         <div className="flex justify-between mb-2">
                             <label className="text-sm font-medium text-[#6A6A6A]">Beneficiary wallet</label>
@@ -91,16 +115,17 @@ export default function PayToWalletModal({ onClose, onBack, onOpenModal }) {
                         </div>
 
                         <CustomSelect
-                            options={[
-                                "fsadfsdfsdfsd54fdfdsf",
-                                "fsf4sd56f4dfsdfsdfsd54fdfdsf,",
-                                "edfdfsdf54612"
-                            ]}
-                            placeholder="Select an email contact"
-                            value={email}
-                            onChange={setEmail}
+                            options={beneficiaries.map((b) => ({
+                                value: b.id,
+                                label: b.fullName || (b.firstName ? `${b.firstName} ${b.lastName}` : b.email),
+                            }))}
+                            placeholder="Select a wallet beneficiary"
+                            value={selectedBeneficiary?.id || ""}
+                            onChange={(id) => {
+                                const match = beneficiaries.find((b) => b.id === id);
+                                setSelectedBeneficiary(match || null);
+                            }}
                         />
-
 
                         <div className="flex gap-1 justify-start items-start p-0 text-[#C07417]">
                             <Image

@@ -72,11 +72,10 @@ export default function AddNewWalletBeneficiary({ onClose, onBack }) {
   const [wallet, setWallet] = useState({ address: "", chain: "" });
 
   const networkOptions = [
-    { label: "Ethereum", value: "ethereum", icon: "/icons/eth.svg" },
-    { label: "Polygon", value: "polygon", icon: "/icons/polygon.svg" },
-    { label: "Solana", value: "solana", icon: "/icons/Polygon.png" },
-    { label: "Tron", value: "tron" },
-    { label: "Stellar", value: "stellar" },
+    { label: "Ethereum", value: "ethereum", icon: "/icons/eth.png" },
+    { label: "Polygon", value: "polygon", icon: "/icons/Polygon.png" },
+    { label: "Solana", value: "solana", icon: "/icons/Solana.png" },
+    { label: "Tron", value: "tron", icon: "/icons/TRON.png" },
   ];
 
   const isFormValid =
