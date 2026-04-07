@@ -134,7 +134,7 @@ export default function StepCredentials({
             disabled={loading}
             className={`mt-2 w-full h-10 md:h-16 rounded-xl font-medium transition cursor-pointer
     ${loading
-                ? "bg-gray-400 text-white cursor-not-allowed"
+                ? "bg-black/50 text-white cursor-not-allowed"
                 : "bg-black hover:bg-gray-800 text-white"}
   `}
           >

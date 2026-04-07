@@ -139,7 +139,7 @@ export default function TransactionDetails({ transaction, onClose, onBack, onSen
             },
             {
                 label: "Type",
-                value: transaction?.type || "Transfer",
+                value: transaction?.type || (transaction?.kind === "crypto_to_fiat" ? "Crypto → Fiat" : transaction?.kind === "fiat_to_fiat" ? "Fiat Transfer" : "Transfer"),
             },
             ...(transaction?.hash ? [{
                 label: "Hash",
@@ -236,7 +236,10 @@ export default function TransactionDetails({ transaction, onClose, onBack, onSen
 
                     <div className="text-center space-y-1 mb-6">
                         <p className="text-gray-700">
-                            You’ve sent <b>{amount} {currencyLabel}</b> to <b>{destination}</b>
+                            {transaction?.isSent === false
+                                ? <>You received <b>{amount} {currencyLabel}</b> from <b>{transaction?.source || destination}</b></>
+                                : <>You sent <b>{amount} {currencyLabel}</b> to <b>{destination}</b></>
+                            }
                         </p>
                         {dateStr && (
                             <p className="text-sm text-gray-500">{dateStr}</p>

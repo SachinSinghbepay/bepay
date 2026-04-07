@@ -8,7 +8,7 @@ import { useToast } from "../context/ToastContext";
 
 
 const roleOptions = [
-  { label: "Owner", value: "owner" },
+  // { label: "Owner", value: "owner" },
   { label: "Admin", value: "admin" },
   { label: "Manager", value: "manager" },
   { label: "Bookkeeper", value: "bookkeeper" },
@@ -83,8 +83,8 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
   const currentRoleLabel =
     roleOptions.find(r => r.value === data?.role)?.label || data?.role;
   return (
-    <ModalFrame size="sm">
-      <div className="relative bg-white rounded-3xl">
+    <ModalFrame size="md">
+      <div className="relative bg-white rounded-3xl overflow-hidden">
 
         {/* HEADER */}
         <div className="flex items-center justify-between px-8 pt-8 pb-6 border-b">
@@ -97,7 +97,7 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
           </button>
         </div>
 
-         <div ref={scrollRef} className="max-h-[90vh] overflow-y-auto px-8 py-8 space-y-8 pb-20">
+         <div ref={scrollRef} className="max-h-[calc(90vh-80px)] overflow-y-auto px-8 py-8 space-y-8 pb-8">
 
           {/* INFO CARD */}
           <div className="bg-[#F7F7F7] rounded-3xl p-6 space-y-3">
@@ -150,7 +150,7 @@ export default function EditTeamMemberModal({ onClose, member: data, refresh }) 
               onClick={handleUpdate}
               disabled={!isValid || loading}
               className={`w-full h-14 rounded-2xl text-white font-medium cursor-pointer
-    ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-400"}
+    ${isValid ? "bg-black hover:bg-gray-800" : "bg-black/50"}
   `}
             >
               {loading ? "Updating..." : "Update"}

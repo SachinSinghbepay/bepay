@@ -220,7 +220,7 @@ export default function InnerLayout() {
               onMenuClick={() => setSidebarOpen(true)}
             />
 
-            <div id="main-scroll-container" className="flex-1 overflow-y-auto">
+            <div id="main-scroll-container" className="flex-1 overflow-auto">
               {renderPage()}
             </div>
           </div>
@@ -440,6 +440,7 @@ export default function InnerLayout() {
                   : closeModal()
               }
               onOpenModal={openModal}
+              beneficiary={modalProps?.beneficiary}
             />
           )}
 

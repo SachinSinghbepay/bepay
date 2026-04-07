@@ -363,7 +363,7 @@ export default function DownloadStatementModal({ onClose, transactions = [], onF
                         disabled={txCount === 0 || downloading || (period === "custom" && (!customStart || !customEnd))}
                         className={`mb-2 w-full h-14 rounded-2xl text-white font-medium transition
                             ${txCount === 0 || (period === "custom" && (!customStart || !customEnd))
-                                ? "bg-gray-400 cursor-not-allowed"
+                                ? "bg-black/50 cursor-not-allowed"
                                 : "bg-black hover:bg-gray-800"
                             }`}
                     >
