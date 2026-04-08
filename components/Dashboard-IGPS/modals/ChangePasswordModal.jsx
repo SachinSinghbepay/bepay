@@ -181,7 +181,7 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
                         <div className="flex gap-4 pt-6">
                             <button
                                 onClick={onClose}
-                                className="flex-1 h-14 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition"
+                                className="flex-1 h-14 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition cursor-pointer"
                             >
                                 Cancel
                             </button>
@@ -189,7 +189,7 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
                             <button
                                 onClick={handleSubmit}
                                 disabled={!isValid || loading}
-                                className={`flex-1 h-14 rounded-lg text-white font-medium transition
+                                className={`flex-1 h-14 rounded-lg text-white font-medium transition cursor-pointer
                                 ${isValid && !loading
                                         ? "bg-black hover:bg-gray-800"
                                         : "bg-gray-300 cursor-not-allowed"}

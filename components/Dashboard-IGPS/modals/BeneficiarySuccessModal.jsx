@@ -37,14 +37,14 @@ export default function BeneficiarySuccessModal({
       <div className="flex gap-4 px-10 pb-10">
         <button
           onClick={onAddAnother}
-          className="flex-1 h-16 rounded-2xl border border-[#C0C0C0] text-base font-medium"
+          className="flex-1 h-16 rounded-2xl border border-[#C0C0C0] text-base font-medium cursor-pointer"
         >
           Add another beneficiary
         </button>
 
         <button
           onClick={onClose}
-          className="flex-1 h-16 rounded-2xl bg-black text-white text-base font-medium"
+          className="flex-1 h-16 rounded-2xl bg-black text-white text-base font-medium cursor-pointer"
         >
           Done
         </button>
