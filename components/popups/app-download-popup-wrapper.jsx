@@ -26,7 +26,8 @@ export function AppDownloadPopupWrapper({ children, onClose, isVisible }) {
         style={{ visibility: isVisible ? "visible" : "hidden" }}
       >
         <motion.div
-          className="bg-white rounded-t-3xl sm:rounded-3xl flex justify-center items-center shadow-xl p-6 sm:p-8 w-full max-w-[960px] h-auto sm:h-[600px] relative pointer-events-auto"
+          className="bg-white rounded-t-3xl sm:rounded-3xl flex justify-center items-center shadow-xl p-6 sm:p-8 w-full max-w-[960px] h-auto sm:h-[600px] relative"
+          style={{ pointerEvents: isVisible ? "auto" : "none" }}
           initial={false}
           animate={
             isVisible

@@ -20,5 +20,10 @@ export const metadata = {
 };
 
 export default function PersonalLayout({ children }) {
-  return children;
+  return (
+    <>
+      <link rel="preload" as="image" href="/logo.png" />
+      {children}
+    </>
+  );
 }
