@@ -1,6 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ModalFrame from "./ModalFrame";
 import Image from "next/image";
+import { Check } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 // Main coin icons
 const COIN_ICONS = {
@@ -46,8 +48,26 @@ function parseCurrencyIcons(currency, chain) {
     return { coin, network };
 }
 
-export default function TransactionDetails({ transaction, onClose, onBack }) {
+export default function TransactionDetails({ transaction, onClose, onBack, onSendAgain }) {
+    const { igpsService } = useAuth();
+    const [sendingAgain, setSendingAgain] = useState(false);
     const scrollRef = useRef(null);
+
+    const handleSendAgain = async () => {
+        try {
+            setSendingAgain(true);
+            const res = await igpsService.listBeneficiaries();
+            const list = res.success ? res.data : [];
+            const recipientEmail = transaction?.raw?.to?.email;
+            const match = list.find((b) => b.email === recipientEmail);
+            onSendAgain(match || null);
+        } catch (err) {
+            console.error("Failed to fetch beneficiaries", err);
+            onSendAgain(null);
+        } finally {
+            setSendingAgain(false);
+        }
+    };
 
     const status = transaction?.status?.toLowerCase() || "pending";
     const { coin: coinIcon, network: networkIcon } = parseCurrencyIcons(
@@ -114,18 +134,20 @@ export default function TransactionDetails({ transaction, onClose, onBack }) {
             {
                 label: "Destination",
                 value: transaction?.destination || transaction?.email || "0xce40...j6gf270",
+                copyValue: transaction?.depositWalletAddress || transaction?.destination || transaction?.email,
                 copy: true,
             },
             {
                 label: "Type",
-                value: transaction?.type || "Transfer",
+                value: transaction?.type || (transaction?.kind === "crypto_to_fiat" ? "Crypto → Fiat" : transaction?.kind === "fiat_to_fiat" ? "Fiat Transfer" : "Transfer"),
             },
-            {
+            ...(transaction?.hash ? [{
                 label: "Hash",
-                value: transaction?.hash || "0x7hgt40...j6gf40i",
+                value: `${transaction.hash.slice(0, 6)}...${transaction.hash.slice(-6)}`,
+                copyValue: transaction.hash,
                 copy: true,
                 share: true,
-            },
+            }] : []),
             {
                 label: "ID",
                 value: transaction?.id || "d46798...4448",
@@ -214,7 +236,10 @@ export default function TransactionDetails({ transaction, onClose, onBack }) {
 
                     <div className="text-center space-y-1 mb-6">
                         <p className="text-gray-700">
-                            You’ve sent <b>{amount} {currencyLabel}</b> to <b>{destination}</b>
+                            {transaction?.isSent === false
+                                ? <>You received <b>{amount} {currencyLabel}</b> from <b>{transaction?.source || destination}</b></>
+                                : <>You sent <b>{amount} {currencyLabel}</b> to <b>{destination}</b></>
+                            }
                         </p>
                         {dateStr && (
                             <p className="text-sm text-gray-500">{dateStr}</p>
@@ -259,8 +284,12 @@ export default function TransactionDetails({ transaction, onClose, onBack }) {
                             Cancel transaction
                         </button>
                     ) : (
-                        <button className="w-full h-14 rounded-2xl bg-black text-white text-base font-medium mt-8">
-                            Send again
+                        <button
+                            onClick={handleSendAgain}
+                            disabled={sendingAgain}
+                            className="w-full h-14 rounded-2xl bg-black text-white text-base font-medium mt-8 cursor-pointer disabled:opacity-60"
+                        >
+                            {sendingAgain ? "Loading..." : "Send again"}
                         </button>
                     )}
                 </div>
@@ -269,11 +298,14 @@ export default function TransactionDetails({ transaction, onClose, onBack }) {
     );
 }
 
-function DetailRow({ label, value, copy, share }) {
+function DetailRow({ label, value, copyValue, copy, share }) {
+    const [copied, setCopied] = useState(false);
+
     const handleCopy = async () => {
         try {
-            await navigator.clipboard.writeText(value);
-            console.log("Copied:", value);
+            await navigator.clipboard.writeText(copyValue ?? value);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
         } catch (err) {
             console.error("Copy failed", err);
         }
@@ -303,22 +335,28 @@ function DetailRow({ label, value, copy, share }) {
                 {copy && (
                     <button
                         onClick={handleCopy}
-                        className="text-gray-400 hover:text-gray-700"
-                        title="Copy"
+                        className="text-gray-400 hover:text-gray-700 cursor-pointer"
+                        title={copied ? "Copied!" : "Copy"}
                     >
-                        <Image
-                            src="/icons/copy.svg"
-                            alt="Copy"
-                            width={36}
-                            height={36}
-                        />
+                        <span className="flex items-center justify-center w-9 h-9">
+                            {copied ? (
+                                <Check size={18} className="text-green-500" />
+                            ) : (
+                                <Image
+                                    src="/icons/copy.svg"
+                                    alt="Copy"
+                                    width={36}
+                                    height={36}
+                                />
+                            )}
+                        </span>
                     </button>
                 )}
 
                 {share && (
                     <button
                         onClick={handleShare}
-                        className="text-gray-400 hover:text-gray-700"
+                        className="text-gray-400 hover:text-gray-700 cursor-pointer"
                         title="Share"
                     >
                         <Image

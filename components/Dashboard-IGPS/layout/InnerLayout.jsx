@@ -220,7 +220,7 @@ export default function InnerLayout() {
               onMenuClick={() => setSidebarOpen(true)}
             />
 
-            <div id="main-scroll-container" className="flex-1 overflow-y-auto">
+            <div id="main-scroll-container" className="flex-1 overflow-auto">
               {renderPage()}
             </div>
           </div>
@@ -258,6 +258,12 @@ export default function InnerLayout() {
               transaction={modalProps?.transaction}
               onClose={closeModal}
               onBack={() => closeModal()}
+              onSendAgain={(beneficiary) =>
+                openModal("send-globalpayout", {
+                  beneficiary,
+                  onBack: () => openModal("txn-details", { transaction: modalProps?.transaction }),
+                })
+              }
             />
           )}
 
@@ -303,6 +309,7 @@ export default function InnerLayout() {
           {modal === "new-transfer" && (
             <NewTransferModal
               onClose={closeModal}
+              onOpenModal={openModal}
               onGlobalPayout={() => openModal("global-payout")}
               onPayToEmail={() =>
                 openModal("pay-to-email", {
@@ -368,6 +375,7 @@ export default function InnerLayout() {
               onClose={closeModal}
               onBack={modalProps?.onBack}
               onConfirm={modalProps?.onConfirm}
+              onOpenModal={openModal}
             />
           )}
 
@@ -432,6 +440,7 @@ export default function InnerLayout() {
                   : closeModal()
               }
               onOpenModal={openModal}
+              beneficiary={modalProps?.beneficiary}
             />
           )}
 

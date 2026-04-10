@@ -82,17 +82,17 @@ export default function Team({ onOpenModal }) {
                         >
                             <span>Learn more about roles</span>
                             <Image
-                                src="/icons/back.svg"
+                                src="/icons/right-angle.png"
                                 alt=""
                                 width={24}
                                 height={24}
-                                className="rotate-180 w-4 h-4"
+                                className=" w-2 h-2 object-contain"
                             />
                         </button>
                         {memberList.length > 0 && (
                             <button
                                 onClick={() => onOpenModal("add-new-member", { refresh: mutate })}
-                                className="mt-4 px-8 py-3 rounded-full bg-black text-white cursor-pointer">
+                                className="bg-black text-white px-6 py-3 rounded-full text-sm flex items-center gap-2 cursor-pointer hover:bg-gray-800 transition shrink-0">
                                 Add team member
                             </button>
                         )}
@@ -136,47 +136,49 @@ export default function Team({ onOpenModal }) {
 
                                         {/* ACTION */}
                                         <div className="flex justify-end">
-                                            <ActionMenu
-                                                onResend={async () => {
-                                                    try {
-                                                        const res = await igpsService.inviteMember({
-                                                            email: member.email,
-                                                            role: member.role,
-                                                        });
-
-                                                        if (res.success) {
-                                                            onOpenModal("invite-success", {
-                                                                type: "success",
-                                                                name: member.name,
+                                            {member.role === "owner" ? null : (
+                                                <ActionMenu
+                                                    onResend={async () => {
+                                                        try {
+                                                            const res = await igpsService.inviteMember({
                                                                 email: member.email,
                                                                 role: member.role,
                                                             });
-                                                        } else {
+
+                                                            if (res.success) {
+                                                                onOpenModal("invite-success", {
+                                                                    type: "success",
+                                                                    name: member.name,
+                                                                    email: member.email,
+                                                                    role: member.role,
+                                                                });
+                                                            } else {
+                                                                onOpenModal("invite-success", {
+                                                                    type: "error",
+                                                                    message: res.error || "Failed to resend invite",
+                                                                });
+                                                            }
+                                                        } catch (err) {
                                                             onOpenModal("invite-success", {
                                                                 type: "error",
-                                                                message: res.error || "Failed to resend invite",
+                                                                message: "Something went wrong",
                                                             });
                                                         }
-                                                    } catch (err) {
-                                                        onOpenModal("invite-success", {
-                                                            type: "error",
-                                                            message: "Something went wrong",
-                                                        });
+                                                    }}
+                                                    onEdit={() =>
+                                                        onOpenModal("edit-member", {
+                                                            member,
+                                                            refresh: mutate,
+                                                        })
                                                     }
-                                                }}
-                                                onEdit={() =>
-                                                    onOpenModal("edit-member", {
-                                                        member,
-                                                        refresh: mutate,
-                                                    })
-                                                }
-                                                onRemove={() =>
-                                                    onOpenModal("remove-member", {
-                                                        member,
-                                                        refresh: mutate,
-                                                    })
-                                                }
-                                            />
+                                                    onRemove={() =>
+                                                        onOpenModal("remove-member", {
+                                                            member,
+                                                            refresh: mutate,
+                                                        })
+                                                    }
+                                                />
+                                            )}
                                         </div>
                                     </div>
                                 </div>

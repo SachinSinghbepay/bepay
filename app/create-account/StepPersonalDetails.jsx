@@ -131,7 +131,7 @@ export default function StepPersonalDetails({ data, setData, onNext, onBack, loa
                     </div>
 
                     {/* Password Rules */}
-                    <div className="grid grid-cols-2 gap-y-2 text-sm">
+                    <div className="grid grid-cols-2 gap-y-2 gap-x-2 text-sm">
                         <Rule condition={hasMinLength} text="At least 8 characters long" />
                         <Rule condition={hasNumber} text="At least one number" />
                         <Rule condition={hasSpecial} text="At least one special character" />

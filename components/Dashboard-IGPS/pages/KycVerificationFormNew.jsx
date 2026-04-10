@@ -1726,7 +1726,7 @@ const identityDocumentTypes = [
                 disabled={loading}
                 className={`px-8 h-12 rounded-full text-white text-sm font-medium transition flex items-center gap-2 cursor-pointer
         ${loading
-                    ? "bg-gray-400 cursor-not-allowed"
+                    ? "bg-black/50 cursor-not-allowed"
                     : "bg-black hover:bg-gray-800"
                   }`}
               >

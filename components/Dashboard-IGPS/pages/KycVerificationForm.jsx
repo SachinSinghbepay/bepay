@@ -750,7 +750,7 @@ function FileUpload({ label, onFileChange }) {
                         type="submit"
                         disabled={loading}
                         className={`px-8 h-12 rounded-full text-white text-sm font-medium transition ${
-                            loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:bg-gray-800'
+                            loading ? 'bg-black/50 cursor-not-allowed' : 'bg-black hover:bg-gray-800'
                         }`}
                     >
                         {loading ? 'Submitting...' : 'Submit'}

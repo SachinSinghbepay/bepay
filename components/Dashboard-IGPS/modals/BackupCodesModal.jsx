@@ -2,8 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import ModalFrame from "./ModalFrame";
-import { FiX, FiCopy, FiDownload, FiPrinter } from "react-icons/fi";
+import { FiCopy, FiDownload, FiPrinter } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
+import Image from "next/image";
 
 export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
     const { refreshUser } = useAuth();
@@ -12,6 +13,7 @@ export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
     const [allCopied, setAllCopied] = useState(false);
     const [mode, setMode] = useState("codes");
 
+    console.log(codes)
     const scrollRef = useRef(null);
 
     useEffect(() => {
@@ -94,7 +96,7 @@ export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
 
 
     return (
-        <ModalFrame size={mode === "success" ? "sm" : "lg"}>
+        <ModalFrame size={mode === "success" ? "sm" : "lg"} height={mode === "success" ? "h-auto" : ""}>
             <div className="flex flex-col bg-white rounded-3xl p-8 max-h-[80vh] min-h-0">
                 {mode === "codes" ? (
                     <>
@@ -111,7 +113,7 @@ export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
                             </div>
 
                             <button onClick={onClose} className="cursor-pointer">
-                                <FiX size={20} />
+                                <Image src="/icons/close.png" alt="close" width={16} height={16} />
                             </button>
                         </div>
 
@@ -152,7 +154,7 @@ export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
                         <div className="flex gap-3 flex-wrap mb-6">
                             <button
                                 onClick={copyAll}
-                                className="flex items-center gap-2 px-4 py-2 border rounded-full text-sm hover:bg-gray-50"
+                                className="flex items-center gap-2 px-4 py-2 border rounded-full text-sm hover:bg-gray-50 cursor-pointer"
                             >
                                 <FiCopy size={16} />
                                 Copy all codes
@@ -160,7 +162,7 @@ export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
 
                             <button
                                 onClick={downloadCodes}
-                                className="flex items-center gap-2 px-4 py-2 border rounded-full text-sm hover:bg-gray-50"
+                                className="flex items-center gap-2 px-4 py-2 border rounded-full text-sm hover:bg-gray-50 cursor-pointer"
                             >
                                 <FiDownload size={16} />
                                 Download codes
@@ -168,7 +170,7 @@ export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
 
                             <button
                                 onClick={printCodes}
-                                className="flex items-center gap-2 px-4 py-2 border rounded-full text-sm hover:bg-gray-50"
+                                className="flex items-center gap-2 px-4 py-2 border rounded-full text-sm hover:bg-gray-50 cursor-pointer"
                             >
                                 <FiPrinter size={16} />
                                 Print
@@ -181,12 +183,12 @@ export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
                         </div>
 
                         {/* CONFIRMATION CHECKBOX */}
-                        <div className="flex justify-start items-center gap-3 mb-6">
+                        <div className="flex justify-start items-center gap-3 mb-6 ">
                             <input
                                 type="checkbox"
                                 checked={confirmed}
                                 onChange={() => setConfirmed(!confirmed)}
-                                className=" w-5 h-5 accent-black"
+                                className=" w-5 h-5 accent-black cursor-pointer"
                             />
                             <p className="text-sm text-gray-600">
                                 I have saved these backup codes in a safe place and understand
@@ -201,47 +203,42 @@ export default function BackupCodesModal({ onClose, codes = [], onContinue }) {
                                 await refreshUser();
                                 setMode("success");
                             }}
-                            className={`w-full h-14 rounded-xl text-white font-medium transition
-                        ${confirmed ? "bg-black hover:bg-gray-800" : "bg-gray-300 cursor-not-allowed"}
+                            className={`w-full h-14 rounded-2xl text-white text-base font-medium transition
+                        ${confirmed ? "bg-black hover:bg-gray-800 cursor-pointer" : "bg-gray-300 cursor-not-allowed"}
                     `}
                         >
                             Continue
                         </button>
                     </>
                 ) : (
-                    <div className="flex flex-col items-center justify-center py-16 text-center relative">
-
-                        <button
-                            onClick={async () => {
-                                await refreshUser();
-                                onClose();
-                            }}
-                            className="absolute top-0 right-0"
-                        >
-                            <FiX size={20} />
-                        </button>
-
-                        <div className="w-20 h-20 rounded-full bg-green-600 flex items-center justify-center mb-6">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="w-10 h-10 text-white"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth={3}
+                    <>
+                        {/* Header */}
+                        <div className="relative flex items-center justify-center mb-8">
+                            <h2 className="text-lg font-medium">2FA Enabled</h2>
+                            <button
+                                onClick={async () => { await refreshUser(); onClose(); }}
+                                className="absolute right-0 cursor-pointer"
                             >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M5 13l4 4L19 7"
-                                />
-                            </svg>
+                                <Image src="/icons/close.png" alt="close" width={16} height={16} />
+                            </button>
                         </div>
 
-                        <h2 className="text-xl font-semibold">
-                            Two-factor authentication (2FA) has been enabled successfully!
-                        </h2>
-                    </div>
+                        <div className="flex flex-col items-center text-center space-y-6 py-8">
+                            <div className="w-20 h-20 rounded-full  flex items-center justify-center">
+                                <Image src="/icons/check.png" alt="check" width={50} height={50} className="w-16 "/>
+                            </div>
+                            <p className="text-xl font-semibold">
+                                Two-factor authentication (2FA) has been enabled successfully!
+                            </p>
+                        </div>
+
+                        <button
+                            onClick={async () => { await refreshUser(); onClose(); }}
+                            className="w-full h-14 rounded-2xl bg-black text-white text-base font-medium cursor-pointer hover:bg-gray-800 transition mt-auto"
+                        >
+                            Done
+                        </button>
+                    </>
                 )}
 
 

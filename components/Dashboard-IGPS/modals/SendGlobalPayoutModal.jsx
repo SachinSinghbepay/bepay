@@ -27,6 +27,7 @@ export default function SendGlobalPayoutModal({
     onBack,
     onOpenModal,
     beneficiary, // Pre-selected beneficiary if any
+    preselectEmail, // Email from transaction history to auto-match beneficiary
 }) {
     const { igpsService } = useAuth();
     const scrollRef = useRef(null);
@@ -137,6 +138,7 @@ export default function SendGlobalPayoutModal({
     const [walletBalances, setWalletBalances] = useState([]);
 
 
+
     const selectedWalletBalance = useMemo(() => {
         if (['USD', 'EUR', 'GBP'].includes(currency)) {
             const fiat = fiatBalances.find(f => f.currency === currency);
@@ -184,6 +186,20 @@ export default function SendGlobalPayoutModal({
                 console.log("WALLET JSON:", JSON.stringify(walletRes, null, 2));
                 if (benRes.success && Array.isArray(benRes.data)) {
                     setBeneficiaries(benRes.data);
+
+                    // Auto-select beneficiary from transaction history
+                    if (!beneficiary && preselectEmail) {
+                        const match = benRes.data.find((b) => {
+                            const name = b.type === "business"
+                                ? b.fullName
+                                : `${b.firstName} ${b.lastName}`;
+                            return (
+                                b.email === preselectEmail ||
+                                name?.toLowerCase() === preselectEmail?.toLowerCase()
+                            );
+                        });
+                        if (match) setSelectedBeneficiary(match);
+                    }
                 }
 
                 if (walletRes.success && Array.isArray(walletRes.data?.wallets)) {
@@ -300,10 +316,13 @@ export default function SendGlobalPayoutModal({
     const handleSend = () => {
         if (!quote || !selectedBeneficiary) return;
 
+        const senderWallet = sourceCurrencies.find(w => w.fullCurrency === currency) || null;
+
         onOpenModal("confirm-globalpayout", {
             quote: quote,
             beneficiary: selectedBeneficiary,
             sourceType,
+            senderWallet,
             transferType: sourceType === 'fiat' ? transferType : undefined,
             paymentDetails: {
                 purpose: purposeCode,
@@ -377,7 +396,7 @@ export default function SendGlobalPayoutModal({
                             selectedBeneficiary && (
                                 <button
                                     onClick={() => setSelectedBeneficiary(null)}
-                                    className="text-sm underline"
+                                    className="text-sm underline cursor-pointer"
                                 >
                                     Change
                                 </button>
@@ -413,32 +432,24 @@ export default function SendGlobalPayoutModal({
                             </div>
                         ) : (
                             <div className="space-y-3">
-                                <select
-                                    className="w-full py-3 px-4 text-sm rounded-xl border outline-none"
-                                    onChange={(e) => {
-                                        const b = beneficiaries.find(
-                                            (x) => x.id === e.target.value
-                                        );
+                                <CustomSelect
+                                    options={beneficiaries.map((b) => ({
+                                        value: b.id,
+                                        label: b.type === "business"
+                                            ? b.fullName
+                                            : `${b.firstName} ${b.lastName}`,
+                                    }))}
+                                    value={selectedBeneficiary?.id || ""}
+                                    onChange={(id) => {
+                                        const b = beneficiaries.find((x) => x.id === id);
                                         setSelectedBeneficiary(b);
                                     }}
-                                    defaultValue=""
-                                >
-                                    <option value="" disabled>
-                                        Select a beneficiary
-                                    </option>
-
-                                    {beneficiaries.map((b) => (
-                                        <option key={b.id} value={b.id}>
-                                            {b.type === "business"
-                                                ? b.fullName
-                                                : `${b.firstName} ${b.lastName}`}
-                                        </option>
-                                    ))}
-                                </select>
+                                    placeholder="Select a beneficiary"
+                                />
 
                                 <button
-                                    onClick={() => onOpenModal("add-new-swift")}
-                                    className="text-sm text-blue-600 font-medium"
+                                    onClick={() => onOpenModal("add-beneficiary")}
+                                    className="text-sm text-blue-600 font-medium cursor-pointer"
                                 >
                                     + Add new beneficiary
                                 </button>
@@ -596,7 +607,7 @@ export default function SendGlobalPayoutModal({
                     {(loadingQuote || quote) && (
                         <>
                             <hr />
-                            <div className="grid grid-cols-2 gap-y-4 text-sm pt-4 p-20">
+                            <div className="grid grid-cols-2 gap-y-4 text-sm pt-4 lg:px-20">
 
                                 {loadingQuote ? (
                                     <div className="col-span-2 text-center text-gray-500 py-4">
@@ -612,7 +623,7 @@ export default function SendGlobalPayoutModal({
                                         <SummaryRow
                                             label="Processing fee"
                                             value={`${parseFloat(quote.totalFee || 0).toFixed(2)} ${quote.sourceCurrency}`}
-                                            // info={<FeeInfo />}
+                                        // info={<FeeInfo />}
                                         />
 
                                         <SummaryRow
@@ -633,11 +644,11 @@ export default function SendGlobalPayoutModal({
 
                     )}
                     {/* FOOTER */}
-                    <div className=" py-6 border-t bg-white">
+                    <div className=" py-6 bg-white">
                         <button
                             onClick={handleSend}
                             disabled={!quote || !selectedBeneficiary}
-                            className={`w-full h-14 rounded-2xl text-white text-base font-medium transition-all
+                            className={`w-full h-14 rounded-2xl text-white text-base font-medium transition-all cursor-pointer
                             ${(!quote || !selectedBeneficiary) ? "bg-gray-300 cursor-not-allowed" : "bg-black hover:bg-gray-800"}
                         `}
                         >
@@ -815,11 +826,19 @@ function AmountBox({
                             Amount you want to send
                         </p>
 
-                        <div className="gap-4 text-sm text-gray-400 pb-1 font-medium hidden md:flex">
-                            <button onClick={() => setAmount((availableBalance * 0.1).toFixed(2))}>10%</button>
-                            <button onClick={() => setAmount((availableBalance * 0.25).toFixed(2))}>25%</button>
-                            <button onClick={() => setAmount((availableBalance * 0.5).toFixed(2))}>50%</button>
-                            <button onClick={() => setAmount(availableBalance.toFixed(2))}>MAX</button>
+                        <div className="gap-4 text-sm text-gray-400 pb-1 font-medium hidden md:flex ">
+                            <button onClick={() => setAmount((availableBalance * 0.1).toFixed(2))} className="cursor-pointer hover:text-gray-700">
+                                10%
+                            </button>
+                            <button onClick={() => setAmount((availableBalance * 0.25).toFixed(2))} className="cursor-pointer hover:text-gray-700">
+                                25%
+                            </button>
+                            <button onClick={() => setAmount((availableBalance * 0.5).toFixed(2))} className="cursor-pointer hover:text-gray-700">
+                                50%
+                            </button>
+                            <button onClick={() => setAmount(availableBalance.toFixed(2))} className="cursor-pointer hover:text-gray-700">
+                                MAX
+                            </button>
                         </div>
                     </div>
 

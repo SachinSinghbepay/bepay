@@ -10,6 +10,7 @@ const roleOptions = [
     { label: "Owner", value: "owner" },
     { label: "Admin", value: "admin" },
     { label: "Member", value: "member" },
+    { label: "Book keeper", value: "book keeper" },
 ];
 
 export default function AddTeamMemberModal({
@@ -52,9 +53,11 @@ export default function AddTeamMemberModal({
     const [error, setError] = useState("");
 
     const roleOptions = [
-        { label: "Owner", value: "owner" },
+        { label: "Manager", value: "manager" },
         { label: "Admin", value: "admin" },
         { label: "Member", value: "member" },
+            { label: "Bookkeeper", value: "book keeper" },
+
     ];
 
     const handleInvite = async () => {
@@ -93,8 +96,8 @@ export default function AddTeamMemberModal({
 
 
     return (
-        <ModalFrame size="sm">
-            <div className="flex flex-col bg-white rounded-3xl">
+        <ModalFrame size="md">
+            <div className="flex flex-col h-[85vh] bg-white rounded-3xl">
 
                 {/* HEADER */}
                 <div className="relative flex items-center justify-center px-8 pt-6 mb-8">
@@ -123,7 +126,7 @@ export default function AddTeamMemberModal({
                 </div>
 
                 {/* BODY */}
-                <div className="px-8 space-y-6">
+                <div ref={scrollRef} className="flex-1 overflow-y-auto px-8 space-y-6 pb-4">
 
                     {/* FIRST + LAST NAME */}
                     <div className="grid grid-cols-2 gap-4">
@@ -185,8 +188,8 @@ export default function AddTeamMemberModal({
                     <button
                         disabled={!isValid}
                         onClick={handleInvite}
-                        className={`w-full h-14 rounded-2xl text-white font-medium transition
-                        ${isValid ? "bg-black hover:bg-gray-800" : "bg-gray-400 cursor-not-allowed"}
+                        className={`w-full h-14 rounded-2xl text-white font-medium transition cursor-pointer
+                        ${isValid ? "bg-black hover:bg-gray-800" : "bg-black/50 cursor-not-allowed "}
                         `}
                     >
                         {loading ? "Sending..." : "Send invitation"}
@@ -194,7 +197,7 @@ export default function AddTeamMemberModal({
 
                     <button
                         onClick={onClose}
-                        className="w-full text-center text-gray-700"
+                        className="w-full text-center text-gray-700 cursor-pointer"
                     >
                         Cancel
                     </button>

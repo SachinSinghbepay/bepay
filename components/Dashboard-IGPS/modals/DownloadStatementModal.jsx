@@ -85,13 +85,13 @@ function MiniCalendar({ rangeStart, rangeEnd, onSelect }) {
         <div className="bg-white rounded-2xl shadow-lg p-5 w-[280px]">
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
-                <button onClick={prevMonth} className="p-1 hover:bg-gray-100 rounded-lg">
+                <button onClick={prevMonth} className="p-1 hover:bg-gray-100 rounded-lg cursor-pointer">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
                 </button>
                 <span className="font-semibold text-sm">
                     {MONTHS[view.getMonth()].toUpperCase()}, {view.getFullYear()}
                 </span>
-                <button onClick={nextMonth} className="p-1 hover:bg-gray-100 rounded-lg">
+                <button onClick={nextMonth} className="p-1 hover:bg-gray-100 rounded-lg cursor-pointer">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
                 </button>
             </div>
@@ -114,7 +114,7 @@ function MiniCalendar({ rangeStart, rangeEnd, onSelect }) {
                         <button
                             key={i}
                             onClick={() => onSelect(d)}
-                            className={`h-8 w-8 mx-auto rounded-xl text-sm flex items-center justify-center transition
+                            className={`h-8 w-8 mx-auto rounded-xl text-sm flex items-center justify-center transition cursor-pointer
                                 ${isStart || isEnd ? "bg-black text-white font-semibold" : ""}
                                 ${between ? "bg-gray-200 text-gray-800" : ""}
                                 ${!isStart && !isEnd && !between ? "hover:bg-gray-100 text-gray-700" : ""}
@@ -321,7 +321,7 @@ export default function DownloadStatementModal({ onClose, transactions = [], onF
                         <div className="relative">
                             <button
                                 onClick={() => setCalendarOpen(v => !v)}
-                                className="w-full flex items-center gap-2 px-4 py-3 rounded-xl border border-[#B7B7B7] text-sm text-gray-700 bg-[#F6F6F6] hover:border-gray-400 transition text-left"
+                                className="w-full flex items-center gap-2 px-4 py-3 cursor-pointer rounded-xl border border-[#B7B7B7] text-sm text-gray-700 bg-[#F6F6F6] hover:border-gray-400 transition text-left"
                             >
                              <Image 
                              alt="calender"
@@ -361,9 +361,9 @@ export default function DownloadStatementModal({ onClose, transactions = [], onF
                     <button
                         onClick={handleDownload}
                         disabled={txCount === 0 || downloading || (period === "custom" && (!customStart || !customEnd))}
-                        className={`w-full h-14 rounded-2xl text-white font-medium transition
+                        className={`mb-2 w-full h-14 rounded-2xl text-white font-medium transition cursor-pointer
                             ${txCount === 0 || (period === "custom" && (!customStart || !customEnd))
-                                ? "bg-gray-400 cursor-not-allowed"
+                                ? "bg-black/50 cursor-not-allowed"
                                 : "bg-black hover:bg-gray-800"
                             }`}
                     >

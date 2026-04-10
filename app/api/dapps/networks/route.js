@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { AVAILABLE_NETWORKS } from "../route"
+import { AVAILABLE_NETWORKS } from "../../../../lib/dappsData"
 
 /**
  * GET /api/dapps/networks

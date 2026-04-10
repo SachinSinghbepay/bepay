@@ -2,14 +2,16 @@
 
 import { useState, useRef, useEffect } from "react";
 import ModalFrame from "./ModalFrame";
-import { FiX } from "react-icons/fi";
-import { FiCheck } from "react-icons/fi";
+import { FiX, FiCheck, FiEye, FiEyeOff } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 export default function ChangePasswordModal({ onClose, onSubmit }) {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [mode, setMode] = useState("form");
+    const [showCurrent, setShowCurrent] = useState(false);
+    const [showNew, setShowNew] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
     const { igpsService } = useAuth();
     const scrollRef = useRef(null);
     const [loading, setLoading] = useState(false);
@@ -84,7 +86,7 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
     };
 
     return (
-        <ModalFrame size="sm">
+        <ModalFrame size="">
             <div className="flex flex-col h-full bg-white rounded-3xl p-8 max-h-[90vh] overflow-hidden">
 
                 {mode === "form" ? (
@@ -107,27 +109,38 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
                         {/* BODY */}
                         <div
                             ref={scrollRef}
-                            className="space-y-6 overflow-y-auto flex-1">
+                            className="space-y-6 overflow-y-auto flex-1 pr-2"
+                            style={{ scrollbarGutter: "stable" }}>
 
-                            <input
-                                type="password"
-                                placeholder="Current password"
-                                value={currentPassword}
-                                onChange={(e) => setCurrentPassword(e.target.value)}
-                                className="w-full h-14 rounded-2xl border px-4 outline-none focus:border-black transition"
-                            />
+                            <div className="relative">
+                                <input
+                                    type={showCurrent ? "text" : "password"}
+                                    placeholder="Current password"
+                                    value={currentPassword}
+                                    onChange={(e) => setCurrentPassword(e.target.value)}
+                                    className="w-full h-14 rounded-2xl border px-4 pr-12 outline-none focus:border-black transition"
+                                />
+                                <button type="button" onClick={() => setShowCurrent(v => !v)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer">
+                                    {showCurrent ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                                </button>
+                            </div>
 
                             <hr className="border-gray-200" />
 
-                            <input
-                                type="password"
-                                placeholder="Enter new password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                className="w-full h-14 rounded-2xl border px-4 outline-none focus:border-black transition"
-                            />
+                            <div className="relative">
+                                <input
+                                    type={showNew ? "text" : "password"}
+                                    placeholder="Enter new password"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    className="w-full h-14 rounded-2xl border px-4 pr-12 outline-none focus:border-black transition"
+                                />
+                                <button type="button" onClick={() => setShowNew(v => !v)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer">
+                                    {showNew ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                                </button>
+                            </div>
 
-                            <div className="grid grid-cols-2 gap-y-3 text-sm">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-2 text-sm">
                                 <RuleItem valid={rules.length} label="At least 8 characters long" />
                                 <RuleItem valid={rules.number} label="At least one number" />
                                 <RuleItem valid={rules.special} label="At least one special character" />
@@ -136,15 +149,20 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
                             </div>
 
                             <div>
-                                <input
-                                    type="password"
-                                    placeholder="Confirm new password"
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className={`w-full h-14 rounded-2xl border px-4 outline-none transition
+                                <div className="relative">
+                                    <input
+                                        type={showConfirm ? "text" : "password"}
+                                        placeholder="Confirm new password"
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        className={`w-full h-14 rounded-2xl border px-4 pr-12 outline-none transition
                         ${showMismatch ? "border-red-500 focus:border-red-500" : "focus:border-black"}
                     `}
-                                />
+                                    />
+                                    <button type="button" onClick={() => setShowConfirm(v => !v)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer">
+                                        {showConfirm ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                                    </button>
+                                </div>
 
                                 {showMismatch && (
                                     <p className="text-sm text-red-500 mt-2">
@@ -163,7 +181,7 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
                         <div className="flex gap-4 pt-6">
                             <button
                                 onClick={onClose}
-                                className="flex-1 h-14 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition"
+                                className="flex-1 h-14 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition cursor-pointer"
                             >
                                 Cancel
                             </button>
@@ -171,7 +189,7 @@ export default function ChangePasswordModal({ onClose, onSubmit }) {
                             <button
                                 onClick={handleSubmit}
                                 disabled={!isValid || loading}
-                                className={`flex-1 h-14 rounded-lg text-white font-medium transition
+                                className={`flex-1 h-14 rounded-lg text-white font-medium transition cursor-pointer
                                 ${isValid && !loading
                                         ? "bg-black hover:bg-gray-800"
                                         : "bg-gray-300 cursor-not-allowed"}
