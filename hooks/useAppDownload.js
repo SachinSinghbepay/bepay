@@ -1,6 +1,9 @@
 "use client"
 import { useState } from "react"
 
+const androidLink = "https://play.google.com/store/apps/details?id=com.bepay.user"
+const iosLink = "https://testflight.apple.com/join/51JVNh5g"
+
 export function useAppDownload() {
   const [isOSPopupOpen, setIsOSPopupOpen] = useState(false)
   const [isQRPopupOpen, setIsQRPopupOpen] = useState(false)
@@ -15,18 +18,17 @@ export function useAppDownload() {
       /iPad|iPhone|iPod/.test(userAgent) ||
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
 
-    // 📱 Mobile → direct store redirect
     if (isAndroid) {
-      window.location.href = process.env.NEXT_PUBLIC_ANDROID_APP_URL
+      window.location.href = androidLink
       return
     }
 
     if (isIOS) {
-      window.location.href = process.env.NEXT_PUBLIC_IOS_APP_URL
+      window.location.href = iosLink
       return
     }
 
-    // 💻 Desktop → open OS popup
+    // Desktop → open OS selection popup
     setIsOSPopupOpen(true)
   }
 
