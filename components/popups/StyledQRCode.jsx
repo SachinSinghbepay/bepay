@@ -2,43 +2,41 @@
 import { useEffect, useRef, useState } from "react"
 import QRCodeStyling from "qr-code-styling"
 
-export default function StyledQRCode({ url, isVisible }) {
+export default function StyledQRCode({ url }) {
   const qrRef = useRef(null)
   const qrCode = useRef(null)
   const [isReady, setIsReady] = useState(false)
 
-  // Pre-initialize the QR instance on mount so it's ready when popup opens
+  // Generate QR on mount — wrapper keeps this always mounted so it pre-warms on page load
   useEffect(() => {
-    if (!qrCode.current) {
-      qrCode.current = new QRCodeStyling({
-        width: 220,
-        height: 220,
-        data: url,
-        image: "/logo.png",
-        dotsOptions: { color: "#000000", type: "rounded" },
-        backgroundOptions: { color: "#ffffff" },
-        cornersSquareOptions: { type: "extra-rounded" },
-      })
-    }
-    // Cleanup: clear qr-code-styling's DOM nodes before React unmounts
-    // (prevents "removeChild" conflict since qr-code-styling manages DOM outside React)
-    return () => {
-      if (qrRef.current) {
-        qrRef.current.innerHTML = ""
-      }
-    }
-  }, [])
+    if (!qrRef.current) return
 
-  useEffect(() => {
-    if (!isVisible || !qrRef.current || !qrCode.current) return
+    qrCode.current = new QRCodeStyling({
+      width: 220,
+      height: 220,
+      data: url,
+      image: "/logo.png",
+      dotsOptions: { color: "#000000", type: "rounded" },
+      backgroundOptions: { color: "#ffffff" },
+      cornersSquareOptions: { type: "extra-rounded" },
+    })
 
-    setIsReady(false)
-    qrCode.current.update({ data: url })
     qrRef.current.innerHTML = ""
     qrCode.current.append(qrRef.current)
-    // Give one frame for the canvas to paint before revealing
-    requestAnimationFrame(() => setIsReady(true))
-  }, [url, isVisible])
+
+    // Wait for logo.png to load inside the QR before revealing
+    const timer = setTimeout(() => setIsReady(true), 800)
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Update QR if URL changes (e.g. user switches iOS ↔ Android)
+  useEffect(() => {
+    if (!qrCode.current) return
+    setIsReady(false)
+    qrCode.current.update({ data: url })
+    const timer = setTimeout(() => setIsReady(true), 800)
+    return () => clearTimeout(timer)
+  }, [url])
 
   return (
     <div className="relative flex justify-center items-center" style={{ minHeight: 220, minWidth: 220 }}>
