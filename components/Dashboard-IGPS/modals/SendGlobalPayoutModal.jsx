@@ -623,7 +623,7 @@ export default function SendGlobalPayoutModal({
                                         <SummaryRow
                                             label="Processing fee"
                                             value={`${parseFloat(quote.totalFee || 0).toFixed(2)} ${quote.sourceCurrency}`}
-                                            // info={<FeeInfo />}
+                                        // info={<FeeInfo />}
                                         />
 
                                         <SummaryRow
@@ -826,11 +826,19 @@ function AmountBox({
                             Amount you want to send
                         </p>
 
-                        <div className="gap-4 text-sm text-gray-400 pb-1 font-medium hidden md:flex">
-                            <button onClick={() => setAmount((availableBalance * 0.1).toFixed(2))}>10%</button>
-                            <button onClick={() => setAmount((availableBalance * 0.25).toFixed(2))}>25%</button>
-                            <button onClick={() => setAmount((availableBalance * 0.5).toFixed(2))}>50%</button>
-                            <button onClick={() => setAmount(availableBalance.toFixed(2))}>MAX</button>
+                        <div className="gap-4 text-sm text-gray-400 pb-1 font-medium hidden md:flex ">
+                            <button onClick={() => setAmount((availableBalance * 0.1).toFixed(2))} className="cursor-pointer hover:text-gray-700">
+                                10%
+                            </button>
+                            <button onClick={() => setAmount((availableBalance * 0.25).toFixed(2))} className="cursor-pointer hover:text-gray-700">
+                                25%
+                            </button>
+                            <button onClick={() => setAmount((availableBalance * 0.5).toFixed(2))} className="cursor-pointer hover:text-gray-700">
+                                50%
+                            </button>
+                            <button onClick={() => setAmount(availableBalance.toFixed(2))} className="cursor-pointer hover:text-gray-700">
+                                MAX
+                            </button>
                         </div>
                     </div>
 
