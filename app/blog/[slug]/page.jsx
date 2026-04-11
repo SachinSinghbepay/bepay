@@ -14,10 +14,24 @@ async function getPost(slug) {
 export async function generateMetadata({ params }) {
   const post = await getPost(params.slug);
   if (!post) return {};
+  const title = post.metaTitle || post.title;
+  const description = post.metaDesc || post.excerpt;
   return {
-    title: post.metaTitle || post.title,
-    description: post.metaDesc || post.excerpt,
-    openGraph: post.coverImage ? { images: [post.coverImage] } : undefined,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `${BASE}/blog/${post.slug}`,
+      type: "article",
+      ...(post.coverImage ? { images: [{ url: post.coverImage }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(post.coverImage ? { images: [post.coverImage] } : {}),
+    },
   };
 }
 
@@ -100,7 +114,7 @@ export default async function BlogPostPage({ params }) {
             {post.publishedAt ? formatDate(post.publishedAt) : ""}&emsp;|&emsp;{readingTime} min read
           </p>
           <SharePopup
-            url={`${process.env.NEXT_PUBLIC_SITE_URL}/blog/${post.slug}`}
+            slug={post.slug}
             title={post.title}
           />
         </div>

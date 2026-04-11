@@ -11,10 +11,7 @@ function toSlug(str) {
     .replace(/^-|-$/g, "");
 }
 
-export async function GET(req) {
-  const { authError } = await requireAuth(req);
-  if (authError) return authError;
-
+export async function GET() {
   await connectDB();
   const topics = await Topic.find().sort({ createdAt: -1 }).lean();
   return NextResponse.json({ success: true, data: topics });

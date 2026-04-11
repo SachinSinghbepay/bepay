@@ -3,8 +3,9 @@
 import { useState } from "react"
 import { FaXTwitter, FaFacebookF, FaLinkedinIn, FaWhatsapp, FaLink } from "react-icons/fa6"
 
-export default function SharePopup({ url, title }) {
+export default function SharePopup({ slug, url: urlProp, title }) {
     const [open, setOpen] = useState(false)
+    const url = urlProp ?? (typeof window !== "undefined" ? `${window.location.origin}/blog/${slug}` : "")
 
     const shareLinks = [
         {

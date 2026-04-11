@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 import { connectDB } from "@/lib/mongodb";
 import Topic from "@/models/Topic";
 import { requireAuth } from "@/lib/cms-auth";
@@ -14,6 +15,9 @@ function toSlug(str) {
 export async function PUT(req, { params }) {
   const { authError } = await requireAuth(req);
   if (authError) return authError;
+
+  if (!mongoose.isValidObjectId(params.id))
+    return NextResponse.json({ success: false, error: "Invalid ID" }, { status: 400 });
 
   await connectDB();
   const { name, color } = await req.json();
@@ -41,6 +45,9 @@ export async function PUT(req, { params }) {
 export async function DELETE(req, { params }) {
   const { authError } = await requireAuth(req);
   if (authError) return authError;
+
+  if (!mongoose.isValidObjectId(params.id))
+    return NextResponse.json({ success: false, error: "Invalid ID" }, { status: 400 });
 
   await connectDB();
   const topic = await Topic.findByIdAndDelete(params.id);
