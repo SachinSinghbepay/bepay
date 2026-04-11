@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PenSquare, Eye, Trash2, Loader2 } from "lucide-react";
+import { PenSquare, Eye, Trash2, Loader2, Link2, Check } from "lucide-react";
 
 const STATUS_STYLES = {
   published: "bg-[#D1F5E0] text-[#1A6B3A]",
@@ -198,6 +198,7 @@ export default function PostsListPage({ onNewPost, onEditPost }) {
                       >
                         <Eye className="w-3.5 h-3.5" />
                       </a>
+                      <CopyLinkButton slug={post.slug} />
                       <button
                         onClick={() => setConfirmDelete(post)}
                         className="p-1.5 rounded-lg hover:bg-red-50 text-[#AAAA9A] hover:text-red-500 transition"
@@ -221,5 +222,27 @@ export default function PostsListPage({ onNewPost, onEditPost }) {
         </p>
       )}
     </div>
+  );
+}
+
+function CopyLinkButton({ slug }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    const url = `${window.location.origin}/blog/${slug}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className={`p-1.5 rounded-lg transition ${copied ? "text-green-500 bg-green-50" : "hover:bg-[#EFEDE8] text-[#5A5A4A]"}`}
+      title="Copy link"
+    >
+      {copied ? <Check className="w-3.5 h-3.5" /> : <Link2 className="w-3.5 h-3.5" />}
+    </button>
   );
 }

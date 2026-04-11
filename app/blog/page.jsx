@@ -8,7 +8,7 @@ import Link from "next/link"
 export default function BlogListPage() {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
-  const [selectedFilter, setSelectedFilter] = useState("Latest")
+  const [selectedFilter, setSelectedFilter] = useState("All")
 
   const [displayedPosts, setDisplayedPosts] = useState([])
   const [page, setPage] = useState(1)
@@ -37,7 +37,7 @@ export default function BlogListPage() {
       title: post.title,
       slug: post.slug,
       featuredImage: post.coverImage,
-      category: post.categories?.[0] || "Latest",
+      category: post.categories?.[0] || "",
       isFeatured: false,
       createdAt: post.publishedAt,
       content: post.excerpt || "",
@@ -46,18 +46,14 @@ export default function BlogListPage() {
 
   const sections = useMemo(() => {
     const cats = new Set(normalizedPosts.map(p => p.category).filter(Boolean))
-    cats.delete("Latest")
-    return [
-      { name: "Latest", title: "Latest" },
-      ...Array.from(cats).map(c => ({ name: c, title: c })),
-    ]
+    return Array.from(cats).map(c => ({ name: c, title: c }))
   }, [normalizedPosts])
 
   useEffect(() => {
     setPage(1)
     setHasMore(true)
     const filtered = normalizedPosts.filter(post => {
-      if (selectedFilter === "All" || selectedFilter === "Latest") return true
+      if (selectedFilter === "All") return true
       return post.category?.toLowerCase() === selectedFilter.toLowerCase()
     })
     setDisplayedPosts(filtered.slice(0, POSTS_PER_PAGE))
@@ -65,7 +61,7 @@ export default function BlogListPage() {
 
   const loadMore = useCallback(() => {
     const filtered = normalizedPosts.filter(post => {
-      if (selectedFilter === "All" || selectedFilter === "Latest") return true
+      if (selectedFilter === "All") return true
       return post.category?.toLowerCase() === selectedFilter.toLowerCase()
     })
     const next = filtered.slice(0, (page + 1) * POSTS_PER_PAGE)
