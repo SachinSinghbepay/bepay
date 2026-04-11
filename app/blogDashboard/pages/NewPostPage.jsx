@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { ArrowLeft, Save, Eye, Send, Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 
@@ -29,6 +29,14 @@ export default function NewPostPage({ onBack, initialPost = null }) {
   const [metaTitle, setMetaTitle] = useState(ip?.metaTitle ?? "");
   const [metaDesc, setMetaDesc]   = useState(ip?.metaDesc  ?? "");
   const [coverImage, setCoverImage] = useState(ip?.coverImage ?? "");
+  const [topics, setTopics] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/topics")
+      .then((r) => r.json())
+      .then((data) => { if (data.success) setTopics(data.data); })
+      .catch(() => {});
+  }, []);
 
   // Save state
   const [savedId, setSavedId]       = useState(ip?._id ?? null);
@@ -328,9 +336,9 @@ export default function NewPostPage({ onBack, initialPost = null }) {
                 className="w-full px-3 py-2 rounded-lg border border-[#E4E2DC] bg-white text-sm text-[#3A3A2A] outline-none focus:border-[#1A1A1A] transition"
               >
                 <option value="">Select a category...</option>
-                <option>Engineering</option>
-                <option>Product</option>
-                <option>Design</option>
+                {topics.map((t) => (
+                  <option key={t._id} value={t.name}>{t.name}</option>
+                ))}
               </select>
             </SidebarSection>
 

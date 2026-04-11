@@ -1,5 +1,7 @@
 import { getAllBlogs } from "@/lib/blogs";
 import { DAPPS_DATA } from "@/lib/dappsData";
+import { connectDB } from "@/lib/mongodb";
+import Post from "@/models/Post";
 
 export default async function sitemap() {
   const baseUrl = "https://www.bepay.money";
@@ -26,7 +28,7 @@ export default async function sitemap() {
     priority,
   }));
 
-  // Dynamic blog routes
+  // Old blog routes (Firebase/Medium)
   const blogs = await getAllBlogs();
   const blogRoutes = blogs.map((blog) => ({
     url: `${baseUrl}/blogs/${blog.slug}`,
@@ -34,6 +36,19 @@ export default async function sitemap() {
     changeFrequency: "weekly",
     priority: 0.7,
   }));
+
+  // CMS blog posts from MongoDB
+  let cmsRoutes = [];
+  try {
+    await connectDB();
+    const posts = await Post.find({ status: "published" }, { slug: 1, updatedAt: 1 }).lean();
+    cmsRoutes = posts.map((post) => ({
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    }));
+  } catch {};
 
   // Dynamic dApp routes
   const dappRoutes = DAPPS_DATA.map((dapp) => ({
@@ -43,5 +58,5 @@ export default async function sitemap() {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...blogRoutes, ...dappRoutes];
+  return [...staticRoutes, ...blogRoutes, ...cmsRoutes, ...dappRoutes];
 }

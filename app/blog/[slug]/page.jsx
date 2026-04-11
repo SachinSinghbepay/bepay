@@ -122,7 +122,10 @@ export default async function BlogPostPage({ params }) {
             [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:mt-20 [&_h2]:mb-8 [&_h2]:leading-snug [&_h2]:scroll-mt-32
             [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:mt-14 [&_h3]:mb-6 [&_h3]:leading-snug [&_h3]:scroll-mt-32
             [&_p]:text-[17px] [&_p]:leading-8 [&_p]:mb-6 [&_p]:text-gray-700
-            [&_ul]:my-6 [&_ol]:my-6 [&_li]:my-2
+            [&_ul]:my-6 [&_ul]:pl-6 [&_ul]:list-disc
+            [&_ol]:my-6 [&_ol]:pl-6 [&_ol]:list-decimal
+            [&_li]:my-2 [&_li]:text-[17px] [&_li]:leading-8 [&_li]:text-gray-700
+            [&_blockquote]:border-l-4 [&_blockquote]:border-gray-300 [&_blockquote]:pl-5 [&_blockquote]:py-1 [&_blockquote]:my-6 [&_blockquote]:italic [&_blockquote]:text-gray-500
             [&_img]:rounded-xl [&_img]:shadow-md [&_img]:my-12
           "
           dangerouslySetInnerHTML={{ __html: contentWithIds }}

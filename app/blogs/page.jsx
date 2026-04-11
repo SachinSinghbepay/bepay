@@ -13,6 +13,14 @@ export default function BlogsPage() {
   const [loading, setLoading] = useState(true)
 
   const [selectedFilter, setSelectedFilter] = useState("Latest")
+  const [topics, setTopics] = useState([])
+
+  useEffect(() => {
+    fetch("/api/topics")
+      .then((r) => r.json())
+      .then((data) => { if (data.success) setTopics(data.data); })
+      .catch(() => {})
+  }, [])
 
   // Infinite Scroll State
   const [displayedBlogs, setDisplayedBlogs] = useState([])
@@ -119,15 +127,7 @@ export default function BlogsPage() {
 
   const sections = [
     { name: "Latest", title: "Latest" },
-    // { name: "Featured", title: "Featured" },
-    // { name: "Crypto & stablecoins", title: "Crypto & stablecoins" },
-    // { name: "Payments", title: "Payments" },
-    // { name: "Multi-currency accounts", title: "Multi-currency accounts" },
-    // { name: "Discussion", title: "Discussion" },
-    // { name: "Tech", title: "Tech" },
-    // { name: "Product updates", title: "Product updates" },
-    // { name: "Compliance/tax", title: "Compliance/tax" },
-    // ...categories.map(c => ({ name: c.name, title: c.name }))
+    ...topics.map((t) => ({ name: t.name, title: t.name })),
   ]
 
   // Render "All" View (Horizontal Scroll Sections)
