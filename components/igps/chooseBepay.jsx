@@ -250,7 +250,7 @@ export default function BepayLanding() {
               try {
                 AnalyticsService.sendEvent("BepayLanding Get Started Clicked");
               } catch (e) { }
-              window.location.href = "https://igps.bepay.money";
+              window.location.href = process.env.NEXT_PUBLIC_IGPS_URL;
             }}
             className="cursor-pointer flex items-center justify-center gap-2 bg-black text-white px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[180px] md:text-[14px] mx-auto"
           >

@@ -236,7 +236,7 @@ export default function BuiltForMerchants() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="flex items-center gap-2 bg-[#1A1A1A] text-white text-[14px] font-medium px-8 h-[56px] rounded-full hover:bg-black transition-colors"
           style={{ fontFamily: 'Montserrat, sans-serif', letterSpacing: '-0.01em', cursor: 'pointer' }}
-          onClick={() => window.location.href = "https://igps.bepay.money"}
+          onClick={() => window.location.href = process.env.NEXT_PUBLIC_IGPS_URL}
         >
           Find your solution
           <ArrowUpRight size={18} strokeWidth={1.8} />

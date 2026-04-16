@@ -396,7 +396,7 @@ const StepContent = ({ step, isMobile, onOpenPopup }) => {
             try {
               AnalyticsService.sendEvent("Global Account Get Started Clicked");
             } catch (e) {}
-            window.location.href = "https://igps.bepay.money";
+            window.location.href = process.env.NEXT_PUBLIC_IGPS_URL;
           }}
           className={`bg-black ${
             isMobile ? "w-full" : "w-[250px]"
