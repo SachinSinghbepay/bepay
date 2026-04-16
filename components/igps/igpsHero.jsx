@@ -66,7 +66,7 @@ const IgpsHero = () => {
     setPopup(type)
   }
 
-  const handleGetStarted = () => handleOpenPopup("getstarted", "IGPS Get Started Clicked")
+  const handleGetStarted = () => window.location.href = "https://igps.bepay.money"
 
   const [popup, setPopup] = useState(null)
   const pillRef = useRef(null)
