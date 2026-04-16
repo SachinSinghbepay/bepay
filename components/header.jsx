@@ -199,7 +199,7 @@ export default function Header() {
                   <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">Get in touch</span>
                 </Button>
                 <Button
-                  onClick={() => window.location.href = `/igps/entity?v=${Date.now()}`}
+                  onClick={() => window.location.href = `${process.env.NEXT_PUBLIC_IGPS_URL}`}
                   className="hidden lg:flex lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-pointer hover:scale-105"
                 >
                   <span
@@ -359,7 +359,18 @@ export default function Header() {
                 >
                   UPI
                 </Link>
-
+         
+    <Button
+                  onClick={() => window.location.href = `${process.env.NEXT_PUBLIC_IGPS_URL}`}
+                  className=" lg:hidden lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-pointer hover:scale-105"
+                >
+                  <span
+                    className="font-semibold text-[12px] lg:text-[12px] whitespace-nowrap text-[#080808] leading-[100%] text-center"
+                    style={{ fontFamily: 'Montserrat, sans-serif' }}
+                  >
+                    Login
+                  </span>
+                </Button>
                 {/* Mobile Download Button */}
                 {/* UPDATED: buttonLocation now uses the calculated value */}
                 <Button

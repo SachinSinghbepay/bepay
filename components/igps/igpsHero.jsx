@@ -66,7 +66,7 @@ const IgpsHero = () => {
     setPopup(type)
   }
 
-  const handleGetStarted = () => handleOpenPopup("getstarted", "IGPS Get Started Clicked")
+  const handleGetStarted = () => window.location.href = process.env.NEXT_PUBLIC_IGPS_URL
 
   const [popup, setPopup] = useState(null)
   const pillRef = useRef(null)

@@ -554,7 +554,7 @@ const Footer = ({
                   GO GLOBAL WITHOUT COMPLEXITY!
                 </h3>
                 <button
-                  onClick={() => setIsGetStartedPopupOpen(true)}
+                  onClick={() => window.location.href = process.env.NEXT_PUBLIC_IGPS_URL}
                   className="flex items-center justify-center font-[600] gap-2 bg-white text-[#080808] px-6 py-4 h-[56px] rounded-full mt-8 text-xs font-medium md:w-[200px] md:text-[14px] mx-auto"
                 >
                   <span>Get Started Now</span>
