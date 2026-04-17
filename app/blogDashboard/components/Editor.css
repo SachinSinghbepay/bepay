@@ -398,3 +398,10 @@
 .image-alt-input::placeholder {
   color: #CCCCBC;
 }
+
+.tiptap-editor-content a {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
