@@ -6,6 +6,7 @@ import { Node, mergeAttributes, Extension } from "@tiptap/core";
 import Suggestion from "@tiptap/suggestion";
 import { useRef, useState, forwardRef, useEffect, useImperativeHandle } from "react";
 import FloatingToolbar from "./FloatingToolbar";
+import Link from "@tiptap/extension-link";
 import "./Editor.css";
 
 // ─── ImageWithAlt node ───────────────────────────────────────────────────────
@@ -68,35 +69,37 @@ const COMMANDS = [
   { title: "Numbered List", description: "Ordered list", icon: ListOrdered, command: ({ editor, range }) => editor.chain().focus().deleteRange(range).toggleOrderedList().run() },
   { title: "Blockquote", description: "Indented quote", icon: Quote, command: ({ editor, range }) => editor.chain().focus().deleteRange(range).toggleBlockquote().run() },
   { title: "Divider", description: "Horizontal rule", icon: Minus, command: ({ editor, range }) => editor.chain().focus().deleteRange(range).setHorizontalRule().run() },
-  { title: "Image", description: "Upload from device", icon: ImageIcon, command: ({ editor, range }) => {
-    editor.chain().focus().deleteRange(range).run();
-    const input = document.createElement("input"); input.type = "file"; input.accept = "image/*";
-    input.onchange = async (e) => {
-      const file = e.target.files?.[0]; if (!file) return;
-      // Optimistic local preview
-      const localUrl = URL.createObjectURL(file);
-      editor.chain().focus().insertContent({ type: "imageWithAlt", attrs: { src: localUrl, alt: "" } }).run();
-      // Upload to S3
-      try {
-        const form = new FormData();
-        form.append("file", file);
-        form.append("type", "inline");
-        const res  = await fetch("/api/upload", { method: "POST", body: form });
-        const data = await res.json();
-        if (!data.success) throw new Error(data.error);
-        // Swap local blob URL with permanent S3/CDN URL in the editor
-        const { state, dispatch } = editor.view;
-        state.doc.descendants((node, pos) => {
-          if (node.type.name === "imageWithAlt" && node.attrs.src === localUrl) {
-            const tr = state.tr.setNodeMarkup(pos, null, { ...node.attrs, src: data.url });
-            dispatch(tr);
-          }
-        });
-      } catch (err) {
-        console.error("Inline image upload failed:", err);
-      }
-    }; input.click();
-  }},
+  {
+    title: "Image", description: "Upload from device", icon: ImageIcon, command: ({ editor, range }) => {
+      editor.chain().focus().deleteRange(range).run();
+      const input = document.createElement("input"); input.type = "file"; input.accept = "image/*";
+      input.onchange = async (e) => {
+        const file = e.target.files?.[0]; if (!file) return;
+        // Optimistic local preview
+        const localUrl = URL.createObjectURL(file);
+        editor.chain().focus().insertContent({ type: "imageWithAlt", attrs: { src: localUrl, alt: "" } }).run();
+        // Upload to S3
+        try {
+          const form = new FormData();
+          form.append("file", file);
+          form.append("type", "inline");
+          const res = await fetch("/api/upload", { method: "POST", body: form });
+          const data = await res.json();
+          if (!data.success) throw new Error(data.error);
+          // Swap local blob URL with permanent S3/CDN URL in the editor
+          const { state, dispatch } = editor.view;
+          state.doc.descendants((node, pos) => {
+            if (node.type.name === "imageWithAlt" && node.attrs.src === localUrl) {
+              const tr = state.tr.setNodeMarkup(pos, null, { ...node.attrs, src: data.url });
+              dispatch(tr);
+            }
+          });
+        } catch (err) {
+          console.error("Inline image upload failed:", err);
+        }
+      }; input.click();
+    }
+  },
 ];
 
 const SlashMenuList = forwardRef(({ items, command, clientRect }, ref) => {
@@ -155,6 +158,14 @@ export default function TiptapEditor({ onChange, autoSaveStatus, initialContent 
     extensions: [
       StarterKit.configure({ heading: { levels: [1, 2, 3, 4] }, image: false }),
       ImageWithAlt,
+      Link.configure({
+        openOnClick: false, // important (editor mode)
+        autolink: true,
+        linkOnPaste: true,
+        HTMLAttributes: {
+          class: "editor-link",
+        },
+      }),
       Extension.create({
         name: "slashMenu",
         addOptions() { return { suggestion: { char: "/", command: ({ editor, range, props }) => props.command({ editor, range }) } }; },

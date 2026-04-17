@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Bold, Italic, Underline, Heading1, Heading2, Heading3, List, ListOrdered, Quote } from "lucide-react";
+import { Link as LinkIcon } from "lucide-react";
 
 export default function FloatingToolbar({ editor }) {
   const toolbarRef = useRef(null);
@@ -47,8 +48,10 @@ export default function FloatingToolbar({ editor }) {
     };
 
     editor.on("selectionUpdate", updateToolbar);
-    editor.on("blur", () => setVisible(false));
-
+    editor.on("blur", () => {
+      // small delay so toolbar click doesn't instantly hide
+      setTimeout(() => setVisible(false), 150);
+    });
     return () => {
       editor.off("selectionUpdate", updateToolbar);
     };
@@ -68,6 +71,30 @@ export default function FloatingToolbar({ editor }) {
     { icon: List, action: () => editor.chain().focus().toggleBulletList().run(), active: editor.isActive("bulletList"), label: "Bullet" },
     { icon: ListOrdered, action: () => editor.chain().focus().toggleOrderedList().run(), active: editor.isActive("orderedList"), label: "Numbered" },
     { icon: Quote, action: () => editor.chain().focus().toggleBlockquote().run(), active: editor.isActive("blockquote"), label: "Quote" },
+    {
+      icon: LinkIcon,
+      action: () => {
+        // ✅ store selection BEFORE prompt
+        const { from, to } = editor.state.selection;
+
+        const previousUrl = editor.getAttributes("link").href;
+        const url = prompt("Enter URL", previousUrl || "");
+
+        if (url === null) return;
+
+        // restore selection
+        editor.chain().focus().setTextSelection({ from, to });
+
+        if (url === "") {
+          editor.chain().focus().unsetLink().run();
+          return;
+        }
+
+        editor.chain().focus().setLink({ href: url }).run();
+      },
+      active: editor.isActive("link"),
+      label: "Link",
+    }
   ];
 
   return (
