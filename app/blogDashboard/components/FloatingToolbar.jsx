@@ -38,11 +38,14 @@ export default function FloatingToolbar({ editor }) {
 
       // Position above the selection, centred
       let left = rect.left + rect.width / 2 - toolbarWidth / 2;
-      let top = rect.top - toolbarHeight - 8 + window.scrollY;
+    let top = rect.top - toolbarHeight - 8;
 
       // Clamp to viewport
       left = Math.max(8, Math.min(left, window.innerWidth - toolbarWidth - 8));
 
+      if (top < 8) {
+  top = rect.bottom + 8;
+}
       setPos({ top, left });
       setVisible(true);
     };
