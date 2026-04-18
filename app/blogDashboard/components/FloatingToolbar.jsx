@@ -5,9 +5,56 @@ import { Bold, Italic, Underline, Heading1, Heading2, Heading3, List, ListOrdere
 import { Link as LinkIcon } from "lucide-react";
 
 export default function FloatingToolbar({ editor }) {
+  
+  const applyLink = () => {
+    const { from, to } = editor.state.selection;
+    let url = linkValue.trim();
+
+    if (!url) {
+      editor.chain().focus().setTextSelection({ from, to }).unsetLink().run();
+      setShowLinkInput(false);
+      return;
+    }
+
+    if (!/^https?:\/\//i.test(url)) {
+      url = "https://" + url;
+    }
+
+    const isValidUrl = (url) => {
+      try {
+        const parsed = new URL(url);
+        return parsed.hostname.includes("."); // must have domain like google.com
+      } catch {
+        return false;
+      }
+    };
+
+    if (!isValidUrl(url)) {
+      alert("Enter a valid URL (e.g. https://bepay.money)");
+      return;
+    }
+
+    editor
+      .chain()
+      .focus()
+      .setTextSelection({ from, to })
+      .setLink({ href: url })
+      .run();
+
+    setShowLinkInput(false);
+  };
+
   const toolbarRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [pos, setPos] = useState({ top: 0, left: 0 });
+
+  const [showLinkInput, setShowLinkInput] = useState(false);
+  const [linkValue, setLinkValue] = useState("");
+  const linkInputOpenRef = useRef(false);
+
+  useEffect(() => {
+    linkInputOpenRef.current = showLinkInput;
+  }, [showLinkInput]);
 
   useEffect(() => {
     if (!editor) return;
@@ -38,22 +85,25 @@ export default function FloatingToolbar({ editor }) {
 
       // Position above the selection, centred
       let left = rect.left + rect.width / 2 - toolbarWidth / 2;
-    let top = rect.top - toolbarHeight - 8;
+      let top = rect.top - toolbarHeight - 8;
 
       // Clamp to viewport
       left = Math.max(8, Math.min(left, window.innerWidth - toolbarWidth - 8));
 
       if (top < 8) {
-  top = rect.bottom + 8;
-}
+        top = rect.bottom + 8;
+      }
       setPos({ top, left });
       setVisible(true);
     };
 
     editor.on("selectionUpdate", updateToolbar);
     editor.on("blur", () => {
-      // small delay so toolbar click doesn't instantly hide
-      setTimeout(() => setVisible(false), 150);
+      setTimeout(() => {
+        if (!linkInputOpenRef.current) {
+          setVisible(false);
+        }
+      }, 150);
     });
     return () => {
       editor.off("selectionUpdate", updateToolbar);
@@ -77,23 +127,9 @@ export default function FloatingToolbar({ editor }) {
     {
       icon: LinkIcon,
       action: () => {
-        // ✅ store selection BEFORE prompt
-        const { from, to } = editor.state.selection;
-
-        const previousUrl = editor.getAttributes("link").href;
-        const url = prompt("Enter URL", previousUrl || "");
-
-        if (url === null) return;
-
-        // restore selection
-        editor.chain().focus().setTextSelection({ from, to });
-
-        if (url === "") {
-          editor.chain().focus().unsetLink().run();
-          return;
-        }
-
-        editor.chain().focus().setLink({ href: url }).run();
+        const previousUrl = editor.getAttributes("link").href || "";
+        setLinkValue(previousUrl);
+        setShowLinkInput(true);
       },
       active: editor.isActive("link"),
       label: "Link",
@@ -130,6 +166,44 @@ export default function FloatingToolbar({ editor }) {
           </button>
         )
       )}
+
+      {showLinkInput && (
+        <div
+          className="absolute top-full mt-2 flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-2 py-1 shadow-md"
+          onMouseDown={(e) => e.stopPropagation()}
+        >
+          <input
+            autoFocus
+            value={linkValue}
+            onChange={(e) => setLinkValue(e.target.value)}
+            placeholder="Paste link"
+            className="text-sm px-2 py-1 outline-none w-40"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") applyLink();
+              if (e.key === "Escape") setShowLinkInput(false);
+            }}
+          />
+
+          <button
+            onClick={applyLink}
+            className="text-xs px-2 py-1 bg-black text-white rounded"
+          >
+            ✓
+          </button>
+
+          <button
+            onClick={() => {
+              editor.chain().focus().unsetLink().run();
+              setShowLinkInput(false);
+            }}
+            className="text-xs text-gray-400 hover:text-red-500"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
     </div>
   );
 }
+
