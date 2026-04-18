@@ -159,11 +159,12 @@ export default function TiptapEditor({ onChange, autoSaveStatus, initialContent 
       StarterKit.configure({ heading: { levels: [1, 2, 3, 4] }, image: false }),
       ImageWithAlt,
       Link.configure({
-        openOnClick: false, // important (editor mode)
+        openOnClick: false,
         autolink: true,
         linkOnPaste: true,
         HTMLAttributes: {
-          class: "editor-link",
+          target: "_blank",
+          rel: "noopener noreferrer",
         },
       }),
       Extension.create({
