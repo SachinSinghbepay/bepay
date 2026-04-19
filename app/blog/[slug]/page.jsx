@@ -6,13 +6,23 @@ import SharePopup from "@/components/SharePopup";
 const BASE = process.env.SITE_URL || "http://localhost:3000";
 
 async function getPost(slug) {
-  const res = await fetch(`${BASE}/api/blogPosts?slug=${slug}`, { cache: "no-store" });
+  console.log("🚀 getPost slug:", slug);
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogPosts?slug=${slug}`);
+
+  console.log("📡 status:", res.status);
+
   const data = await res.json();
-  return data.success ? data.data : null;
+  console.log("📦 response:", data);
+
+  if (!data.success) return null;
+
+  return data.data;
 }
 
 export async function generateMetadata({ params }) {
-  const post = await getPost(params.slug);
+const { slug } = await params;
+const post = await getPost(slug);
   if (!post) return {};
   const title = post.metaTitle || post.title;
   const description = post.metaDesc || post.excerpt;
@@ -70,7 +80,8 @@ function formatDate(dateString) {
 }
 
 export default async function BlogPostPage({ params }) {
-  const post = await getPost(params.slug);
+  const { slug } = await params;
+  const post = await getPost(slug);
   if (!post) notFound();
 
   const rawHtml = tiptapToHtml(post.content);
@@ -132,16 +143,17 @@ export default async function BlogPostPage({ params }) {
         {/* BLOG BODY */}
         <article
           className="
-            max-w-none blog-content
-            [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:mt-20 [&_h2]:mb-8 [&_h2]:leading-snug [&_h2]:scroll-mt-32
-            [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:mt-14 [&_h3]:mb-6 [&_h3]:leading-snug [&_h3]:scroll-mt-32
-            [&_p]:text-[17px] [&_p]:leading-8 [&_p]:mb-6 [&_p]:text-gray-700
-            [&_ul]:my-6 [&_ul]:pl-6 [&_ul]:list-disc
-            [&_ol]:my-6 [&_ol]:pl-6 [&_ol]:list-decimal
-            [&_li]:my-2 [&_li]:text-[17px] [&_li]:leading-8 [&_li]:text-gray-700
-            [&_blockquote]:border-l-4 [&_blockquote]:border-gray-300 [&_blockquote]:pl-5 [&_blockquote]:py-1 [&_blockquote]:my-6 [&_blockquote]:italic [&_blockquote]:text-gray-500
-            [&_img]:rounded-xl [&_img]:shadow-md [&_img]:my-12
-          "
+    max-w-none blog-content
+    [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:mt-20 [&_h2]:mb-8 [&_h2]:leading-snug [&_h2]:scroll-mt-32
+    [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:mt-14 [&_h3]:mb-6 [&_h3]:leading-snug [&_h3]:scroll-mt-32
+    [&_p]:text-[17px] [&_p]:leading-8 [&_p]:mb-6 [&_p]:text-gray-700
+    [&_ul]:my-6 [&_ul]:pl-6 [&_ul]:list-disc
+    [&_ol]:my-6 [&_ol]:pl-6 [&_ol]:list-decimal
+    [&_li]:my-2 [&_li]:text-[17px] [&_li]:leading-8 [&_li]:text-gray-700
+    [&_blockquote]:border-l-4 [&_blockquote]:border-gray-300 [&_blockquote]:pl-5 [&_blockquote]:py-1 [&_blockquote]:my-6 [&_blockquote]:italic [&_blockquote]:text-gray-500
+    [&_img]:rounded-xl [&_img]:shadow-md [&_img]:my-12
+    [&_a]:text-blue-600 [&_a]:underline [&_a]:underline-offset-2 [&_a]:cursor-pointer
+  "
           dangerouslySetInnerHTML={{ __html: contentWithIds }}
         />
       </div>
