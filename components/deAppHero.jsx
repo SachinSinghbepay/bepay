@@ -29,7 +29,7 @@ const SectionHeader = ({ title, actionText, secondaryTitle = null, href }) => (
       </Link>
     ) : (
       <span className="flex items-center text-sm font-semibold text-gray-500 shrink-0">
-        {actionText}
+        {actionText} <ChevronRight size={16} className="ml-1" />
       </span>
     )}
   </div>
@@ -37,7 +37,7 @@ const SectionHeader = ({ title, actionText, secondaryTitle = null, href }) => (
 
 const DAppCard = ({ iconUrl, name, tag, url, dappId, onVisit }) => {
   const [imgError, setImgError] = useState(false);
-  
+
   const handleClick = () => {
     if (onVisit && dappId) {
       onVisit(dappId);
@@ -45,17 +45,17 @@ const DAppCard = ({ iconUrl, name, tag, url, dappId, onVisit }) => {
   };
 
   return (
-    <a 
-      href={url} 
-      target="_blank" 
-      rel="noopener noreferrer" 
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
       onClick={handleClick}
       className="flex flex-col items-center flex-shrink-0 w-24 text-center hover:opacity-80 transition-opacity"
     >
       {!imgError && iconUrl ? (
-        <Image 
-          src={iconUrl} 
-          alt={`${name} logo`} 
+        <Image
+          src={iconUrl}
+          alt={`${name} logo`}
           width={64}
           height={64}
           className="rounded-2xl mb-2"
@@ -78,7 +78,7 @@ const DAppCard = ({ iconUrl, name, tag, url, dappId, onVisit }) => {
 
 const DAppListItem = ({ iconUrl, name, tag, description, url, dappId, onVisit }) => {
   const [imgError, setImgError] = useState(false);
-  
+
   const handleClick = () => {
     if (onVisit && dappId) {
       onVisit(dappId);
@@ -86,11 +86,11 @@ const DAppListItem = ({ iconUrl, name, tag, description, url, dappId, onVisit })
   };
 
   return (
-    <div className="flex items-center space-x-4 bg-gray-50 rounded-2xl p-3">
+    <div className="flex items-center space-x-4 bg-[#C0C0C033]/60 rounded-2xl p-3">
       {!imgError && iconUrl ? (
-        <Image 
-          src={iconUrl} 
-          alt={`${name} logo`} 
+        <Image
+          src={iconUrl}
+          alt={`${name} logo`}
           width={48}
           height={48}
           className="rounded-lg flex-shrink-0"
@@ -108,18 +108,18 @@ const DAppListItem = ({ iconUrl, name, tag, description, url, dappId, onVisit })
       <div className="flex-grow overflow-hidden">
         <div className="flex items-center space-x-2">
           <p className="font-bold text-gray-900">{name}</p>
-          <span className="text-xs font-medium text-gray-600 bg-gray-200 px-2 py-0.5 rounded-full">{tag}</span>
+          <span className="text-sm font-medium text-[#080808] bg-[#FFFFFF] px-2 py-0.5 rounded-full">{tag}</span>
         </div>
         <p className="text-sm text-gray-500 truncate">{description}</p>
       </div>
-      <a 
-        href={url} 
-        target="_blank" 
-        rel="noopener noreferrer" 
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
         onClick={handleClick}
-        className="flex-shrink-0 bg-white p-2 rounded-lg shadow-sm hover:bg-gray-100 transition"
+        className="flex-shrink-0 bg-white p-4 rounded-lg shadow-sm hover:bg-gray-100 transition"
       >
-        <ArrowUpRight size={20} className="text-gray-600" />
+        <Image src='/icons/aero-right-up.png' width={40} height={40} className='w-4' alt='visit' />
       </a>
     </div>
   );
@@ -132,6 +132,7 @@ const DAppPage = () => {
   const [recentDapps, setRecentDapps] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [activeTab, setActiveTab] = useState("favourites");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -218,12 +219,12 @@ const DAppPage = () => {
 
   // Get featured dApps from the top dApps endpoint
   const featuredDapps = topDapps
-    .slice(0, 5)
+    .slice(0, 6)
     .map(d => ({
       id: d.id,
       name: d.name,
       tag: d.category,
-      iconUrl: d.logo_url,
+      iconUrl: d.logo_url,  
       url: d.website_url,
     }));
 
@@ -270,8 +271,8 @@ const DAppPage = () => {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <p className="text-red-600 mb-2">{error}</p>
-            <button 
-              onClick={() => window.location.reload()} 
+            <button
+              onClick={() => window.location.reload()}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               Retry
@@ -285,7 +286,7 @@ const DAppPage = () => {
   return (
     // Mobile: max-w-md mx-auto p-4. Desktop: max-w-7xl, larger padding
     <div className="bg-white max-w-md mx-auto p-4 font-sans lg:max-w-7xl lg:px-8 lg:py-10">
-      
+
       {/* 1. Header/Banner Area (Wider on desktop) */}
       <div className="relative text-white rounded-2xl overflow-hidden mb-4 cursor-pointer lg:rounded-3xl lg:mb-6">
         <Image
@@ -297,15 +298,80 @@ const DAppPage = () => {
           priority
         />
         {/* Added overlay content for desktop banner visibility */}
-       
+
       </div>
-      
+
       {/* 2. Main Content Layout (Desktop Grid - Mobile is single column default) */}
       <div className="lg:grid lg:grid-cols-3 lg:gap-8">
-        
+
         {/* === LEFT COLUMN: Primary DApp List (Takes 2/3 width on desktop) === */}
         <div className="lg:col-span-2">
-          
+
+          <div className="flex items-center justify-between mb-4">
+
+            <div className="flex gap-6">
+
+              <button
+                onClick={() => setActiveTab("favourites")}
+                className={`text-[16px] font-semibold ${activeTab === "favourites"
+                  ? "text-black"
+                  : "text-gray-400"
+                  }`}
+              >
+                Favourites
+              </button>
+
+              <button
+                onClick={() => setActiveTab("recent")}
+                className={`text-[16px] font-semibold ${activeTab === "recent"
+                  ? "text-black"
+                  : "text-gray-400"
+                  }`}
+              >
+                Recent
+              </button>
+
+            </div>
+
+<SectionHeader
+  actionText="All"
+  href={
+    activeTab === "recent" && recentDappsList.length > 0
+      ? "/dapps/recently-visited"
+      : null
+  }
+/>
+          </div>
+          {activeTab === "favourites" && (
+            <div className="text-center py-6">
+              <p className="text-gray-600 font-medium">No favourites yet.</p>
+              <p className="text-sm text-gray-400">
+                Open a dApp and tap ☆ to add to your favourite list
+              </p>
+            </div>
+          )}
+
+          {activeTab === "recent" && (
+            <div className="mt-4 flex gap-4 overflow-x-auto pb-4">
+              {recentDappsList.length > 0 ? (
+                recentDappsList.map((dapp, index) => (
+                  <DAppCard
+                    key={dapp.id || `${dapp.name}-recent-${index}`}
+                    {...dapp}
+                    dappId={dapp.id}
+                    onVisit={handleDAppVisit}
+                  />
+                ))
+              ) : (
+                <div className="text-center w-full pt-6 pb-2">
+                  <p className="text-gray-600 font-medium">No Recent yet.</p>
+                  <p className="text-sm text-gray-400">
+                    Your recently visited dApps will appear here. Start exploring!
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
           {/* Featured dApps Section */}
           <div className="mb-8 lg:mb-10">
             <SectionHeader title="Featured dApps" actionText="All" href="#" />
@@ -317,19 +383,15 @@ const DAppPage = () => {
             </div>
           </div>
 
-          {/* Recently Visited dApps Section */}
-          <div className="mb-8 lg:mb-10">
-            <SectionHeader title="Recently Visited" actionText="View All" href="/dapps/recently-visited" />
-            {/* Mobile and Desktop: horizontal scroll with gap */}
-            <div className="mt-4 flex gap-4 overflow-x-auto pb-4 lg:gap-6">
-              {recentDappsList.length > 0 ? (
-                recentDappsList.map((dapp, index) => (
-                  <DAppCard key={dapp.id || `${dapp.name}-recent-${index}`} {...dapp} dappId={dapp.id} onVisit={handleDAppVisit} />
-                ))
-              ) : (
-                <p className="text-gray-500 text-sm py-4">No recently visited dApps yet</p>
-              )}
-            </div>
+
+
+          {/* DApps Section Header */}
+          <div className="mb-2 lg:mb-6">
+            <SectionHeader
+              title="DApps"
+              actionText="All Networks"
+              href="/allNetworks"
+            />
           </div>
 
           {/* Category Filter */}
@@ -339,11 +401,10 @@ const DAppPage = () => {
               <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                 <button
                   onClick={() => setSelectedCategory('all')}
-                  className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
-                    selectedCategory === 'all'
-                      ? 'bg-blue-600 text-white shadow-md'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
+                  className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${selectedCategory === 'all'
+                    ? 'bg-[#333333] text-[#F9F9F9] shadow-md'
+                    : 'text-[#6A6A6A] hover:bg-gray-200'
+                    }`}
                 >
                   All
                 </button>
@@ -351,11 +412,10 @@ const DAppPage = () => {
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap capitalize transition-all ${
-                      selectedCategory === category
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap capitalize transition-all ${selectedCategory === category
+                     ? 'bg-[#333333] text-[#F9F9F9] shadow-md'
+                    : 'text-[#6A6A6A] hover:bg-gray-200'
+                      }`}
                   >
                     {category}
                   </button>
@@ -363,16 +423,6 @@ const DAppPage = () => {
               </div>
             </div>
           )}
-
-          {/* DApps Section Header */}
-          <div className="mb-2 lg:mb-6">
-            <SectionHeader
-              title="All dApps"
-              actionText="All Networks"
-              href="/allNetworks"
-            />
-          </div>
-
           {/* The List at the bottom */}
           <div className="space-y-3 lg:space-y-4">
             {dAppList.length > 0 ? (
