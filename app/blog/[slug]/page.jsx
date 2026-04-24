@@ -6,42 +6,18 @@ import SharePopup from "@/components/SharePopup";
 const BASE = process.env.SITE_URL || "http://localhost:3000";
 
 async function getPost(slug) {
-  console.log("🚀 getPost slug:", slug);
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/blogPosts?slug=${slug}`);
-
-  console.log("📡 status:", res.status);
-
+  const res = await fetch(`${BASE}/api/blogPosts?slug=${slug}`, { cache: "no-store" });
   const data = await res.json();
-  console.log("📦 response:", data);
-
-  if (!data.success) return null;
-
-  return data.data;
+  return data.success ? data.data : null;
 }
 
 export async function generateMetadata({ params }) {
-const { slug } = await params;
-const post = await getPost(slug);
+  const post = await getPost(params.slug);
   if (!post) return {};
-  const title = post.metaTitle || post.title;
-  const description = post.metaDesc || post.excerpt;
   return {
-    title,
-    description,
-    openGraph: {
-      title,
-      description,
-      url: `${BASE}/blog/${post.slug}`,
-      type: "article",
-      ...(post.coverImage ? { images: [{ url: post.coverImage }] } : {}),
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      ...(post.coverImage ? { images: [post.coverImage] } : {}),
-    },
+    title: post.metaTitle || post.title,
+    description: post.metaDesc || post.excerpt,
+    openGraph: post.coverImage ? { images: [post.coverImage] } : undefined,
   };
 }
 
@@ -80,8 +56,7 @@ function formatDate(dateString) {
 }
 
 export default async function BlogPostPage({ params }) {
-  const { slug } = await params;
-  const post = await getPost(slug);
+  const post = await getPost(params.slug);
   if (!post) notFound();
 
   const rawHtml = tiptapToHtml(post.content);
@@ -125,7 +100,7 @@ export default async function BlogPostPage({ params }) {
             {post.publishedAt ? formatDate(post.publishedAt) : ""}&emsp;|&emsp;{readingTime} min read
           </p>
           <SharePopup
-            slug={post.slug}
+            url={`${process.env.NEXT_PUBLIC_SITE_URL}/blog/${post.slug}`}
             title={post.title}
           />
         </div>
@@ -143,17 +118,13 @@ export default async function BlogPostPage({ params }) {
         {/* BLOG BODY */}
         <article
           className="
-    max-w-none blog-content
-    [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:mt-20 [&_h2]:mb-8 [&_h2]:leading-snug [&_h2]:scroll-mt-32
-    [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:mt-14 [&_h3]:mb-6 [&_h3]:leading-snug [&_h3]:scroll-mt-32
-    [&_p]:text-[17px] [&_p]:leading-8 [&_p]:mb-6 [&_p]:text-gray-700
-    [&_ul]:my-6 [&_ul]:pl-6 [&_ul]:list-disc
-    [&_ol]:my-6 [&_ol]:pl-6 [&_ol]:list-decimal
-    [&_li]:my-2 [&_li]:text-[17px] [&_li]:leading-8 [&_li]:text-gray-700
-    [&_blockquote]:border-l-4 [&_blockquote]:border-gray-300 [&_blockquote]:pl-5 [&_blockquote]:py-1 [&_blockquote]:my-6 [&_blockquote]:italic [&_blockquote]:text-gray-500
-    [&_img]:rounded-xl [&_img]:shadow-md [&_img]:my-12
-    [&_a]:text-blue-600 [&_a]:underline [&_a]:underline-offset-2 [&_a]:cursor-pointer
-  "
+            max-w-none blog-content
+            [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:mt-20 [&_h2]:mb-8 [&_h2]:leading-snug [&_h2]:scroll-mt-32
+            [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:mt-14 [&_h3]:mb-6 [&_h3]:leading-snug [&_h3]:scroll-mt-32
+            [&_p]:text-[17px] [&_p]:leading-8 [&_p]:mb-6 [&_p]:text-gray-700
+            [&_ul]:my-6 [&_ol]:my-6 [&_li]:my-2
+            [&_img]:rounded-xl [&_img]:shadow-md [&_img]:my-12
+          "
           dangerouslySetInnerHTML={{ __html: contentWithIds }}
         />
       </div>

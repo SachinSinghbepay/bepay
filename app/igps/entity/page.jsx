@@ -26,7 +26,7 @@ export default function EntitySelectPage() {
                         playsInline
                         className="w-full h-full object-cover opacity-70"
                     >
-                        <source src="/videos/bg-video.mp4" type="video/mp4" />
+                        <source src="https://assets.bepay.money/website_assets/bg-video2.mp4" type="video/mp4" />
                     </video>
                 </div>
                 <div className="relative z-10 py-6 max-w-2xl text-white px-6 h-full">
