@@ -6,6 +6,7 @@ import { Node, mergeAttributes, Extension } from "@tiptap/core";
 import Suggestion from "@tiptap/suggestion";
 import { useRef, useState, forwardRef, useEffect, useImperativeHandle } from "react";
 import FloatingToolbar from "./FloatingToolbar";
+import Underline from "@tiptap/extension-underline";
 import Link from "@tiptap/extension-link";
 import "./Editor.css";
 
@@ -157,6 +158,7 @@ export default function TiptapEditor({ onChange, autoSaveStatus, initialContent 
     content: initialContent ?? undefined,
     extensions: [
       StarterKit.configure({ heading: { levels: [1, 2, 3, 4] }, image: false }),
+        Underline,
       ImageWithAlt,
       Link.configure({
         openOnClick: false,

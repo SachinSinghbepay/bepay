@@ -12,8 +12,10 @@ async function getPost(slug) {
 }
 
 export async function generateMetadata({ params }) {
-  const post = await getPost(params.slug);
-  if (!post) return {};
+  const { slug } = await params;
+  const post = await getPost(slug);
+
+  if (!post) notFound(); if (!post) return {};
   return {
     title: post.metaTitle || post.title,
     description: post.metaDesc || post.excerpt,
@@ -31,13 +33,29 @@ function addIdsToHeadings(html) {
   });
 }
 
+function decodeHtml(str) {
+  return str
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+}
+
 function extractHeadings(html) {
   const regex = /<(h2|h3) id="(.*?)">(.*?)<\/\1>/g;
   const headings = [];
   let match;
+
   while ((match = regex.exec(html)) !== null) {
-    headings.push({ id: match[2], text: match[3].replace(/<[^>]*>/g, ""), level: match[1] });
+    const cleanText = match[3].replace(/<[^>]*>/g, "");
+    headings.push({
+      id: match[2],
+      text: decodeHtml(cleanText), 
+      level: match[1],
+    });
   }
+
   return headings;
 }
 
@@ -56,7 +74,10 @@ function formatDate(dateString) {
 }
 
 export default async function BlogPostPage({ params }) {
-  const post = await getPost(params.slug);
+  const { slug } = await params;
+  const post = await getPost(slug);
+
+  if (!post) notFound();
   if (!post) notFound();
 
   const rawHtml = tiptapToHtml(post.content);
@@ -124,6 +145,9 @@ export default async function BlogPostPage({ params }) {
             [&_p]:text-[17px] [&_p]:leading-8 [&_p]:mb-6 [&_p]:text-gray-700
             [&_ul]:my-6 [&_ol]:my-6 [&_li]:my-2
             [&_img]:rounded-xl [&_img]:shadow-md [&_img]:my-12
+            [&_a]:text-blue-600 [&_a]:underline [&_a]:underline-offset-2 [&_a]:cursor-pointer
+            [&_u]:underline 
+            
           "
           dangerouslySetInnerHTML={{ __html: contentWithIds }}
         />

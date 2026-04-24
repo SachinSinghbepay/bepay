@@ -69,7 +69,7 @@ export default function TableOfContents({ headings }) {
                             >
                                 {/* Arrow */}
                                 <span
-                                    className={`mt-1 transition ${isActive ? "opacity-100" : "opacity-0"
+                                    className={` transition ${isActive ? "opacity-100" : "opacity-0"
                                         }`}
                                 >
                                     ▶
