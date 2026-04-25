@@ -5,18 +5,19 @@ import { Plus, LogOut, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const titleMap = {
-  posts:      "All Posts",
+  posts: "All Posts",
   "new-post": "New Post",
-  topics:     "Topics",
-  media:      "Media Library",
-  settings:   "Settings",
+  topics: "Topics",
+  media: "Media Library",
+  settings: "Settings",
 };
 
 export default function BlogTopHeader({ activePage, onMenuClick, onNewPost }) {
-  const [open, setOpen]       = useState(false);
+  const [open, setOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
-  const dropdownRef           = useRef(null);
-  const router                = useRouter();
+  const dropdownRef = useRef(null);
+  const router = useRouter();
+  const [user, setUser] = useState(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -27,6 +28,23 @@ export default function BlogTopHeader({ activePage, onMenuClick, onNewPost }) {
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("/api/blog-auth/me");
+        const data = await res.json();
+
+        if (data.success) {
+          setUser(data.user);
+        }
+      } catch (err) {
+        console.error("Failed to load user");
+      }
+    };
+
+    fetchUser();
   }, []);
 
   const handleLogout = async () => {
@@ -54,10 +72,10 @@ export default function BlogTopHeader({ activePage, onMenuClick, onNewPost }) {
             {titleMap[activePage] || "Blog CMS"}
           </h2>
           <p className="text-[11px] text-[#9A9A8A] hidden sm:block">
-            {activePage === "posts"    && "Manage your blog content"}
+            {activePage === "posts" && "Manage your blog content"}
             {activePage === "new-post" && "Write something great"}
-            {activePage === "topics"   && "Organise content by topic"}
-            {activePage === "media"    && "Images, videos, and files"}
+            {activePage === "topics" && "Organise content by topic"}
+            {activePage === "media" && "Images, videos, and files"}
             {activePage === "settings" && "Site and SEO configuration"}
           </p>
         </div>
@@ -90,8 +108,13 @@ export default function BlogTopHeader({ activePage, onMenuClick, onNewPost }) {
           {open && (
             <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl border border-[#E8E6E0] shadow-lg py-1 z-50">
               <div className="px-3 py-2 border-b border-[#ECEAE4]">
-                <p className="text-xs font-semibold text-[#1A1A1A]">Admin</p>
-                <p className="text-[11px] text-[#9A9A8A] truncate">admin@bepay.money</p>
+                <p className="text-xs font-semibold">
+                  {user?.name || "User"}
+                </p>
+
+                <p className="text-[11px] truncate">
+                  {user?.email || "loading..."}
+                </p>
               </div>
               <button
                 onClick={handleLogout}

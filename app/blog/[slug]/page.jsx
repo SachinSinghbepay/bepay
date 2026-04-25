@@ -51,7 +51,7 @@ function extractHeadings(html) {
     const cleanText = match[3].replace(/<[^>]*>/g, "");
     headings.push({
       id: match[2],
-      text: decodeHtml(cleanText), 
+      text: decodeHtml(cleanText),
       level: match[1],
     });
   }
@@ -129,7 +129,9 @@ export default async function BlogPostPage({ params }) {
         {/* AUTHOR */}
         <p className="text-sm text-gray-500 mt-8 mb-2">Written By</p>
         <div className="flex items-center gap-3 mb-12">
-          <div className="w-10 h-10 rounded-full bg-gray-300" />
+          <div className="w-10 h-10 rounded-full bg-white border border-gray-300 flex justify-center items-center"  >
+            <img src='/bepayiconlogo.png' alt='author' className="w-[80%] object-cover " />
+          </div>
           <div>
             <p className="font-semibold">{post.author || "bepay money"}</p>
             <p className="text-sm text-gray-500">Author</p>
@@ -140,14 +142,15 @@ export default async function BlogPostPage({ params }) {
         <article
           className="
             max-w-none blog-content
-            [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:mt-20 [&_h2]:mb-8 [&_h2]:leading-snug [&_h2]:scroll-mt-32
-            [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:mt-14 [&_h3]:mb-6 [&_h3]:leading-snug [&_h3]:scroll-mt-32
-            [&_p]:text-[17px] [&_p]:leading-8 [&_p]:mb-6 [&_p]:text-gray-700
-            [&_ul]:my-6 [&_ol]:my-6 [&_li]:my-2
-            [&_img]:rounded-xl [&_img]:shadow-md [&_img]:my-12
+            [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:mt-12 [&_h2]:mb-4 [&_h2]:leading-snug [&_h2]:scroll-mt-32
+            [&_h3]:text-2xl [&_h3]:font-semibold [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:leading-snug [&_h3]:scroll-mt-32
+            [&_p]:text-[17px] [&_p]:leading-7 [&_p]:mb-3 [&_p]:text-gray-700
+            [&_ul]:my-4 [&_ol]:my-4
+            [&_li]:my-1.5 [&_li]:text-[17px] [&_li]:leading-7 [&_li]:text-gray-700
+            [&_blockquote]:my-4 [&_blockquote]:pl-4
+            [&_img]:rounded-xl [&_img]:shadow-md [&_img]:my-8
             [&_a]:text-blue-600 [&_a]:underline [&_a]:underline-offset-2 [&_a]:cursor-pointer
-            [&_u]:underline 
-            
+            [&_u]:underline
           "
           dangerouslySetInnerHTML={{ __html: contentWithIds }}
         />
