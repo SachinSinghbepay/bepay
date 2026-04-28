@@ -540,7 +540,7 @@ const Footer = ({
                 "Whether you’re scaling exports, managing global payroll, collecting international invoices, or paying suppliers across continents, bepay provides a single, intelligent infrastructure to streamline your global money movement."
               ) : (
                 <>
-                  Join millions of users who trust bepay for their crypto
+                  Join millions of users who trust bepay money for their crypto
                   financial needs. Start earning, spending, and growing your
                   wealth today with the most comprehensive crypto financial
                   platform.

@@ -40,10 +40,10 @@ export default function DisclaimerContent() {
           <p>
             bepay money functions as a next-generation payment infrastructure
             designed to support seamless value transfer across countries,
-            currencies, and financial systems. The bepay ecosystem includes
-            digital products and technological solutions such as the bepay user
-            application, the bepay merchant application, and the IGPS
-            cross-border payment infrastructure. bepay money does not function
+            currencies, and financial systems. The bepay money ecosystem includes
+            digital products and technological solutions such as the bepay money user
+            application, the bepay money merchant application, and the IGPS
+            cross-border payment infrastructure. bepay money money does not function
             as a credit institution, payment (initiation) institution, money
             transmitter business, cryptoasset service provider, or financial
             service provider, and does not possess user funds or private keys.
@@ -51,11 +51,11 @@ export default function DisclaimerContent() {
           <p>
             The bepay money interface facilitates user interaction with
             decentralised ledger technologies (DLTs) and third-party platforms
-            through the utilisation of open-source public APIs. The bepay user
+            through the utilisation of open-source public APIs. The bepay money user
             application enables individuals to interact with digital assets and
             payment functionalities through a non-custodial wallet environment
             where users retain full control over their private keys and digital
-            assets. The bepay merchant application provides technological tools
+            assets. The bepay money merchant application provides technological tools
             that enable merchants to accept and manage digital asset payments
             and related transaction data within their business environments. The
             IGPS cross-border infrastructure facilitates technological
@@ -65,7 +65,7 @@ export default function DisclaimerContent() {
           </p>
           <p>
             The bepay money group operates through several entities globally,
-            including Bepay Money Europe S.R.L registered in Romania with
+            including bepay money Europe S.R.L registered in Romania with
             Unique Registration Code (CUI):{" "}
             <span className="font-semibold">52474864</span>, Bepay Technologies
             Private Limited in India, IGPS Technology LLC SCO in Dubai holding
@@ -75,13 +75,13 @@ export default function DisclaimerContent() {
             Provider (PSP) registrations, and Bepay Fintech Products Holding
             LTD in the British Virgin Islands. These entities support various
             operational, technological, regulatory, and partnership functions of
-            the bepay ecosystem across different jurisdictions.
+            the bepay money ecosystem across different jurisdictions.
           </p>
           <p>
-            The bepay platform may interact with licensed financial
+            The bepay money platform may interact with licensed financial
             institutions, payment processors, custodians, and regulated service
             providers for certain payment processing, settlement, liquidity
-            management, or fiat-related services associated with the bepay
+            management, or fiat-related services associated with the bepay money
             merchant application or the IGPS cross-border infrastructure. Such
             services, where applicable, are provided by regulated third-party
             partners and not directly by bepay money.
@@ -96,7 +96,7 @@ export default function DisclaimerContent() {
             financial regulatory authorization or supervisory approval.
           </p>
           <p>
-            All interactions conducted through the bepay ecosystem are subject
+            All interactions conducted through the bepay money ecosystem are subject
             to applicable regulatory standards. It is the responsibility of
             users, merchants, and partners to ensure adherence to the local
             laws that govern the use of digital assets, payment technologies,
@@ -115,7 +115,7 @@ export default function DisclaimerContent() {
           <p>
             The use of the bepay money wallet, merchant platform, IGPS
             infrastructure, or any related application or service within the
-            bepay ecosystem constitutes an explicit acceptance of the terms
+            bepay money ecosystem constitutes an explicit acceptance of the terms
             herein and a recognition of all inherent risks associated with the
             use of digital assets, decentralised systems, and cross-border
             payment technologies.

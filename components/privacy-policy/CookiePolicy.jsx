@@ -9,7 +9,7 @@ export default function CookiesPolicyContent() {
           Last Updated: <span className="text-black font-semibold">01/03/2026</span>
         </div>
         <p className="text-base md:text-lg leading-relaxed text-[#080808]">
-          <span className="font-semibold">BEPAY MONEY</span> makes use of cookies and
+          <span className="font-semibold">bepay money</span> makes use of cookies and
           similar technologies throughout our websites to ensure your visit to our website
           goes smoothly. Our websites (and some emails) use &quot;cookies&quot; and other
           technologies, which store small amounts of information on your computer or device,
@@ -21,7 +21,7 @@ export default function CookiesPolicyContent() {
           of the website you visit.
         </p>
         <p className="text-base md:text-lg leading-relaxed text-[#080808]">
-          BEPAY MONEY uses functional, analytical, and marketing cookies. Functional and
+          bepay money uses functional, analytical, and marketing cookies. Functional and
           analytical cookies are used to ensure your visit to our websites goes smoothly.
           By contrast marketing cookies are not necessary for the proper functioning of our
           websites but are used for promotional purposes. For more information about the
@@ -46,7 +46,7 @@ export default function CookiesPolicyContent() {
         <div className="space-y-4 text-base md:text-lg leading-relaxed text-[#080808]">
           <p>
             Many of the websites you visit place small, encrypted text files on your device
-            (smartphone, computer, or tablet). We call these text files cookies. BEPAY MONEY
+            (smartphone, computer, or tablet). We call these text files cookies. bepay money
             uses cookies or similar techniques whenever you interact with our website. A
             cookie is sent by a web server to a web browser that enables the server to
             collect information back from the browser creating connectivity between a company
@@ -96,7 +96,7 @@ export default function CookiesPolicyContent() {
                 These cookies may store your browser name, the type of computer and technical
                 information about your means of connection to our website, such as the
                 operating system and the Internet Service Providers utilized and other similar
-                information. BEPAY MONEY uses this information to technically facilitate the
+                information. bepay money uses this information to technically facilitate the
                 visitors of this website. In addition, functional cookies may be used to store
                 personal settings, such as language or to log your information for next visits
                 to save you the trouble of having to change these every time you enter our
@@ -109,7 +109,7 @@ export default function CookiesPolicyContent() {
                 2. Analytical cookies
               </h3>
               <p>
-                BEPAY MONEY uses cookies to help us understand and improve the customer
+                bepay money uses cookies to help us understand and improve the customer
                 experience on our website. We use Google Analytics, a web analysis service,
                 to generate statistical and other analytical information to learn about visitor
                 preferences and provide them with the right information more quickly. The goal
@@ -132,7 +132,7 @@ export default function CookiesPolicyContent() {
                 easy for you to share pages on social media or to display social content about a
                 topic (content timeline LinkedIn, for instance). If you would like to know more
                 about how these social media platforms use data, please refer to the privacy
-                notices of these platforms. When visiting this website, BEPAY MONEY will ask for
+                notices of these platforms. When visiting this website, bepay money will ask for
                 your consent to use these cookies. In other words, we only place advertising,
                 marketing and social media cookies if you give us your permission to do this.
               </p>

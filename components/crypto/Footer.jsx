@@ -71,7 +71,7 @@ const Footer = () => {
             Ready to transform your financial future?
           </h2>
           <p className="text-gray-400 leading-relaxed">
-            Join millions of users who trust bepay for their crypto financial
+            Join millions of users who trust bepay money for their crypto financial
             needs. Start earning, spending, and growing your wealth today with
             the most comprehensive crypto financial platform.
           </p>
