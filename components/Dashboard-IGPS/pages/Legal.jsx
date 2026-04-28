@@ -24,19 +24,19 @@ export default function LegalPolicy({ setActivePage }) {
                     </h2>
 
                     <p>
-                        This is the Privacy Policy of BEPAY MONEY EUROPE SRL, a company incorporated under the laws of Romania, whose registered number is 52474864, with a registered office located at Street Alexandru Donici, nr. 19, Ground Floor, Ap. 4, office no. 2, Sector 2, Bucharest, Romania (hereinafter referred to BEPAY MONEY.io as “BEPAY MONEY”).
+                        This is the Privacy Policy of bepay money EUROPE SRL, a company incorporated under the laws of Romania, whose registered number is 52474864, with a registered office located at Street Alexandru Donici, nr. 19, Ground Floor, Ap. 4, office no. 2, Sector 2, Bucharest, Romania (hereinafter referred to bepay money.io as “bepay money”).
                     </p>
 
                     <p>
-                        This privacy policy also applies to all subsidiaries and branches of BEPAY MONEY to the extent that they process personal data, including Bepay Fintech Inc (USA Registered MSB Entity), Directpay Fintech LTD (Canada Registered MSB Entity) and Bepay Technologies Private Limited (India). Hereinafter, all companies are to be collectively referred to as “BEPAY MONEY”. They are all compliant with the GDPR standards and other privacy laws in each jurisdiction.
+                        This privacy policy also applies to all subsidiaries and branches of bepay money to the extent that they process personal data, including Bepay Fintech Inc (USA Registered MSB Entity), Directpay Fintech LTD (Canada Registered MSB Entity) and Bepay Technologies Private Limited (India). Hereinafter, all companies are to be collectively referred to as “bepay money”. They are all compliant with the GDPR standards and other privacy laws in each jurisdiction.
                     </p>
 
                     <p>
-                        BEPAY MONEY treats personal data which it receives through its websites, portals and any other means with due care and is dedicated to safeguarding any personal data it receives. BEPAY MONEY is bound by the General Data Protection Regulation (Regulation (EU) 2016/679).
+                        bepay money treats personal data which it receives through its websites, portals and any other means with due care and is dedicated to safeguarding any personal data it receives. bepay money is bound by the General Data Protection Regulation (Regulation (EU) 2016/679).
                     </p>
 
                     <p>
-                        This Privacy Policy is designed to inform you about the type of information that BEPAY MONEY collects when using our website and our application and the purposes for which this information is being processed, used, maintained, and disclosed (together the “Services”).
+                        This Privacy Policy is designed to inform you about the type of information that bepay money collects when using our website and our application and the purposes for which this information is being processed, used, maintained, and disclosed (together the “Services”).
                     </p>
 
                     <p>
@@ -48,7 +48,7 @@ export default function LegalPolicy({ setActivePage }) {
                             The legal representatives and ultimate beneficial owners of all past, present, and prospective commercial contracting parties. We are legally obliged to retain personal data of these persons, also for a certain period after the relationship has ended, in compliance with ‘know your customer’ (“KYC”) regulations.
                         </li>
                         <li>
-                            Anyone visiting the BEPAY MONEY website.
+                            Anyone visiting the bepay money website.
                         </li>
                     </ul>
 
@@ -64,7 +64,7 @@ export default function LegalPolicy({ setActivePage }) {
                     </h2>
 
                     <p>
-                        Personal data refers to any information that tells us something about you or that we can link to you. BEPAY MONEY processes any information we receive from you, including personal and financial information you provide to us including when you or your business: enquire or make an application for BEPAY MONEY its services, register to use and/or use any of our services and when you communicate with us through email, SMS, WhatsApp, a website or portal, telephone, or any other electronic means.
+                        Personal data refers to any information that tells us something about you or that we can link to you. bepay money processes any information we receive from you, including personal and financial information you provide to us including when you or your business: enquire or make an application for bepay money its services, register to use and/or use any of our services and when you communicate with us through email, SMS, WhatsApp, a website or portal, telephone, or any other electronic means.
                     </p>
 
                     <p>
@@ -72,7 +72,7 @@ export default function LegalPolicy({ setActivePage }) {
                     </p>
 
                     <p>
-                        BEPAY MONEY collects and processes your personal data in accordance with the EU’s General Data Protection Regulation (hereinafter: “GDPR”) in the event at least one of the following applies:
+                        bepay money collects and processes your personal data in accordance with the EU’s General Data Protection Regulation (hereinafter: “GDPR”) in the event at least one of the following applies:
                     </p>
 
                     <ul className="list-disc pl-6 space-y-3">
@@ -85,7 +85,7 @@ export default function LegalPolicy({ setActivePage }) {
                         </li>
 
                         <li>
-                            Processing is necessary for compliance with a legal obligation to which the controller is subject (refer to Article 6.1(c) GDPR) and processing is necessary for the performance of a task carried out in the public interest or in the exercise of official authority vested in the controller (refer to Article 6.1(e) GDPR). BEPAY MONEY is subject to several legal obligations as well as regulatory requirements. Please refer to Section 5.
+                            Processing is necessary for compliance with a legal obligation to which the controller is subject (refer to Article 6.1(c) GDPR) and processing is necessary for the performance of a task carried out in the public interest or in the exercise of official authority vested in the controller (refer to Article 6.1(e) GDPR). bepay money is subject to several legal obligations as well as regulatory requirements. Please refer to Section 5.
                         </li>
 
                         <li>
@@ -114,7 +114,7 @@ export default function LegalPolicy({ setActivePage }) {
                     </p>
 
                     <p>
-                        Nonetheless, all rights under the GDPR and other Privacy Laws are applicable and respected by BEPAY MONEY.
+                        Nonetheless, all rights under the GDPR and other Privacy Laws are applicable and respected by bepay money.
                     </p>
                 </section>
 
@@ -195,18 +195,18 @@ export default function LegalPolicy({ setActivePage }) {
                     </h2>
 
                     <p>
-                        Whenever we share personal data internally or with third parties in other countries, we ensure the necessary safeguards are in place to protect it. For this, BEPAY MONEY relies on EU Model clauses, which are standardized contractual clauses used in agreements with service providers to ensure personal data transferred outside of the European Economic Area complies with EU data protection law.
+                        Whenever we share personal data internally or with third parties in other countries, we ensure the necessary safeguards are in place to protect it. For this, bepay money relies on EU Model clauses, which are standardized contractual clauses used in agreements with service providers to ensure personal data transferred outside of the European Economic Area complies with EU data protection law.
                     </p>
 
                     <p>
-                        To be able to offer you the best possible services and remain competitive in our business, we share certain data both internally as well as outside of BEPAY MONEY and the entities in the Group.
+                        To be able to offer you the best possible services and remain competitive in our business, we share certain data both internally as well as outside of bepay money and the entities in the Group.
                     </p>
 
                     <p>This includes:</p>
 
-                    <h3 className="font-semibold text-black">BEPAY MONEY entities</h3>
+                    <h3 className="font-semibold text-black">bepay money entities</h3>
                     <p>
-                        We transfer data across BEPAY MONEY businesses and branches for operational, regulatory, or reporting purposes, for example to comply with certain laws, secure IT systems or provide certain services (see section 4 (What we do with your personal data). We may also transfer data to centralized storage systems or to process it globally for more efficiency.
+                        We transfer data across bepay money businesses and branches for operational, regulatory, or reporting purposes, for example to comply with certain laws, secure IT systems or provide certain services (see section 4 (What we do with your personal data). We may also transfer data to centralized storage systems or to process it globally for more efficiency.
                     </p>
 
                     <h3 className="font-semibold text-black">Government authorities</h3>
@@ -241,7 +241,7 @@ export default function LegalPolicy({ setActivePage }) {
 
                     <h3 className="font-semibold text-black">Business transfers</h3>
                     <p>
-                        BEPAY MONEY or any of its entities in the Group may buy or sell business units or affiliates. In such circumstances, we may transfer customer information as a business asset. Without limiting the foregoing, if our business enters into a joint venture with or is sold to or merged with another business entity, your information may be disclosed to our new business partners or owners.
+                        bepay money or any of its entities in the Group may buy or sell business units or affiliates. In such circumstances, we may transfer customer information as a business asset. Without limiting the foregoing, if our business enters into a joint venture with or is sold to or merged with another business entity, your information may be disclosed to our new business partners or owners.
                     </p>
 
                     <h3 className="font-semibold text-black">With your permission</h3>
@@ -250,7 +250,7 @@ export default function LegalPolicy({ setActivePage }) {
                     </p>
 
                     <p>
-                        The fundamental principle of the GDPR is data minimization, which is at the core of any activity of BEPAY MONEY. We use your data only if needed or required as described above. Your privacy is of utmost importance to BEPAY MONEY.
+                        The fundamental principle of the GDPR is data minimization, which is at the core of any activity of bepay money. We use your data only if needed or required as described above. Your privacy is of utmost importance to bepay money.
                     </p>
                 </section>
 
@@ -261,11 +261,11 @@ export default function LegalPolicy({ setActivePage }) {
                     </h2>
 
                     <p>
-                        BEPAY MONEY makes use of cookies and similar technologies throughout our websites to ensure your visit to our website goes smoothly. Our websites (and some emails) use “cookies” and other technologies, which store small amounts of information on your computer or device, to allow certain information from your web browser to be collected. Cookies (and similar technologies) are widely used on the internet and allow a website/portal to recognize a user’s device, without uniquely identifying the individual person using the computer. These technologies help to make it easier for you to log on and use our websites and provide information to us, for example which parts of the website you visit.
+                        bepay money makes use of cookies and similar technologies throughout our websites to ensure your visit to our website goes smoothly. Our websites (and some emails) use “cookies” and other technologies, which store small amounts of information on your computer or device, to allow certain information from your web browser to be collected. Cookies (and similar technologies) are widely used on the internet and allow a website/portal to recognize a user’s device, without uniquely identifying the individual person using the computer. These technologies help to make it easier for you to log on and use our websites and provide information to us, for example which parts of the website you visit.
                     </p>
 
                     <p>
-                        BEPAY MONEY uses functional, analytical, and marketing cookies. Functional and analytical cookies are used to ensure your visit to our websites goes smoothly. By contrast marketing cookies are not necessary for the proper functioning of our websites but are used for promotional purposes. For more information about the specific cookies read the subsection in our Cookie Policy about what types of cookies we use.
+                        bepay money uses functional, analytical, and marketing cookies. Functional and analytical cookies are used to ensure your visit to our websites goes smoothly. By contrast marketing cookies are not necessary for the proper functioning of our websites but are used for promotional purposes. For more information about the specific cookies read the subsection in our Cookie Policy about what types of cookies we use.
                     </p>
 
                     <p>
@@ -295,7 +295,7 @@ export default function LegalPolicy({ setActivePage }) {
 
                     <h3 className="font-semibold text-black">Right to object to processing</h3>
                     <p>
-                        You can object to BEPAY MONEY using your personal data for its own legitimate interests. There is a list of contact details at the end of this Privacy Policy. We will consider your objection and whether processing your information has any undue impact on you that requires us to stop doing so.
+                        You can object to bepay money using your personal data for its own legitimate interests. There is a list of contact details at the end of this Privacy Policy. We will consider your objection and whether processing your information has any undue impact on you that requires us to stop doing so.
                     </p>
 
                     <p>
@@ -315,7 +315,7 @@ export default function LegalPolicy({ setActivePage }) {
                     <ul className="list-disc pl-6 space-y-2">
                         <li>You believe the information is inaccurate.</li>
                         <li>We are processing the data unlawfully.</li>
-                        <li>BEPAY MONEY no longer needs the data, but you want us to keep it for use in a legal claim.</li>
+                        <li>bepay money no longer needs the data, but you want us to keep it for use in a legal claim.</li>
                         <li>You have objected to us processing your data for our own legitimate interests.</li>
                     </ul>
 
@@ -333,13 +333,13 @@ export default function LegalPolicy({ setActivePage }) {
                         <li>We no longer need it for its original purpose.</li>
                         <li>You withdraw your consent for processing it.</li>
                         <li>You object to us processing your data for our own legitimate interests or for personalized commercial messages.</li>
-                        <li>BEPAY MONEY unlawfully processes your personal data.</li>
-                        <li>A law of the European Union or a member state of the European Union requires BEPAY MONEY to erase your personal data.</li>
+                        <li>bepay money unlawfully processes your personal data.</li>
+                        <li>A law of the European Union or a member state of the European Union requires bepay money to erase your personal data.</li>
                     </ul>
 
                     <h3 className="font-semibold text-black">Right to complain</h3>
                     <p>
-                        Should you for any reason be unhappy with the way BEPAY MONEY treats your personal data, you 	can 	file 	a 	complaint 	with 	BEPAY 	MONEY 	its 	compliance 	department via compliance@bepay.money
+                        Should you for any reason be unhappy with the way bepay money treats your personal data, you 	can 	file 	a 	complaint with bepay money its 	compliance 	department via compliance@bepay.money
                     </p>
 
                     <p>
@@ -348,7 +348,7 @@ export default function LegalPolicy({ setActivePage }) {
 
                     <h3 className="font-semibold text-black">Exercising your rights</h3>
                     <p>
-                        How you can exercise your rights depends on the type of personal data BEPAY MONEY processes. It could be through our website, by fulfilling our KYC obligations or by processing a transaction. We aim to respond to your request as quickly as possible. In certain cases, we may deny your request. If it’s legally permitted, we will let you know within a reasonable timeframe why we denied it. If you want to exercise your rights or submit a complaint, please contact us via the email address provided below.
+                        How you can exercise your rights depends on the type of personal data bepay money processes. It could be through our website, by fulfilling our KYC obligations or by processing a transaction. We aim to respond to your request as quickly as possible. In certain cases, we may deny your request. If it’s legally permitted, we will let you know within a reasonable timeframe why we denied it. If you want to exercise your rights or submit a complaint, please contact us via the email address provided below.
                     </p>
                 </section>
                 {/* SECTION 8 */}
@@ -373,7 +373,7 @@ export default function LegalPolicy({ setActivePage }) {
                     </p>
 
                     <p>
-                        In addition, BEPAY MONEY employees are subject to confidentiality and may not disclose your personal data unlawfully or unnecessarily.
+                        In addition, bepay money employees are subject to confidentiality and may not disclose your personal data unlawfully or unnecessarily.
                     </p>
                 </section>
 
@@ -400,7 +400,7 @@ export default function LegalPolicy({ setActivePage }) {
                     </h2>
 
                     <p>
-                        As per the GDPR, BEPAY MONEY will store and process your personal data only as long as it is necessary to perform our obligations under the agreement with you or as long as the law requires to store it. Therefore, we keep your personal data as long as you are using our Services and for five (5) years after termination of the agreement to comply with the law. There may be circumstances (e.g. fraud or anti-money laundering) whereby we are obliged to store your personal data even longer.                     </p>
+                        As per the GDPR, bepay money will store and process your personal data only as long as it is necessary to perform our obligations under the agreement with you or as long as the law requires to store it. Therefore, we keep your personal data as long as you are using our Services and for five (5) years after termination of the agreement to comply with the law. There may be circumstances (e.g. fraud or anti-money laundering) whereby we are obliged to store your personal data even longer.                     </p>
                 </section>
                 {/* SECTION 10 */}
                 <section className="space-y-6 text-[#6A6A6A]">
@@ -409,97 +409,10 @@ export default function LegalPolicy({ setActivePage }) {
                     </h2>
 
                     <p>
-                        If you want to know more about BEPAY MONEY its data policies and how we use your personal data, you can send us an e-mail at the following dedicated email address: compliance@bepay.money                     </p>
+                        If you want to know more about bepay money its data policies and how we use your personal data, you can send us an e-mail at the following dedicated email address: compliance@bepay.money                     </p>
                 </section>
             </div>
-            <section className="space-y-8 text-[#6A6A6A]">
-
-                <h1 className="text-2xl font-semibold text-black">
-                    Cookies Policy
-                </h1>
-
-                <p>
-                    BEPAY MONEY makes use of cookies and similar technologies throughout our websites to ensure your visit to our website goes smoothly. Our websites (and some emails) use “cookies” and other technologies, which store small amounts of information on your computer or device, to allow certain information from your web browser to be collected. Cookies (and similar technologies) are widely used on the internet and allow a website/portal to recognize a user’s device, without uniquely identifying the individual person using the computer. These technologies help to make it easier for you to log on and use our websites and provide information to us, for example which parts of the website you visit.
-                </p>
-
-                <p>
-                    BEPAY MONEY uses functional, analytical, and marketing cookies. Functional and analytical cookies are used to ensure your visit to our websites goes smoothly. By contrast marketing cookies are not necessary for the proper functioning of our websites but are used for promotional purposes. For more information about the specific cookies read the subsection in our Cookie Policy about what types of cookies we use.
-                </p>
-
-                <p>
-                    But first, some background information. Cookies (and similar technologies) are widely used nowadays. Also, fintech businesses that provide their services to consumers online are subject to the EU Directive on Privacy and Electronic Communications (2002/58/EC). requires businesses to notify consumers and obtain their consent for the use of cookies (opt-in). Opt-in means that before placing a cookie, the visitor would have to give permission.
-                </p>
-
-                <h2 className="text-xl font-semibold text-black">
-                    What are Cookies?
-                </h2>
-
-                <p>
-                    Many of the websites you visit place small, encrypted text files on your device (smartphone, computer, or tablet). We call these text files cookies. BEPAY MONEY uses cookies or similar techniques whenever you interact with our website. A cookie is sent by a web server to a web browser that enables the server to collect information back from the browser creating connectivity between a company and the customer. In other words, the cookies on the websites (and some e-mails) store small amounts of information on your device to allow browser information from your web browser to be collected. This information could be used to make it easier for you to use the website or for marketing purposes. Cookies generally process your IP-address, but they do not save your personal information such as your e-mail address or phone number (only if you give us permission to act in this manner). Above all, cookies allow websites to monitor website visitor’s behavior.
-                </p>
-
-                <p>
-                    You can find more information on the website All about cookies.
-                </p>
-
-                <h2 className="text-xl font-semibold text-black">
-                    What types of cookies do we use?
-                </h2>
-
-                <p>
-                    The way responsible and ethical web developers deal with privacy issues caused by cookie tracking is by including clear descriptions of how cookies are deployed on their site (informed consent). The cookies our website uses falls into the following three categories:
-                </p>
-
-                <h3 className="text-lg font-semibold text-black">
-                    1. Functional cookies
-                </h3>
-
-                <p>
-                    These cookies may store your browser name, the type of computer and technical information about your means of connection to our website, such as the operating system and the Internet Service Providers utilized and other similar information. BEPAY MONEY uses this information to technically facilitate the visitors of this website. In addition, functional cookies may be used to store personal settings, such as language or to log your information for next visits to save you the trouble of having to change these every time you enter our website. To conclude, our website could not work properly without these cookies.
-                </p>
-
-                <h3 className="text-lg font-semibold text-black">
-                    2. Analytical cookies
-                </h3>
-
-                <p>
-                    BEPAY MONEY uses cookies to help us understand and improve the customer experience on our website. We use Google Analytics, a web analysis service, to generate statistical and other analytical information to learn about visitor preferences and provide them with the right information more quickly. The goal is to provide much greater functionality to visitors. Therefore, we also examine whether visitors experience any forms of errors or inaccuracies on the website. We use the analytical cookies also to test different designs and features for our sites. All information is collected in a pseudonymized or anonymized form.
-                </p>
-
-                <h3 className="text-lg font-semibold text-black">
-                    3. Marketing cookies
-                </h3>
-
-                <p>
-                    This website contains cookies from third-party websites, mainly social media cookies. When placed on your computer, they automatically activate handy extras, for example, to share information on LinkedIn or HubSpot. These cookies inform our website whether you are logged into such social media and they also make it easy for you to share pages on social media or to display social content about a topic (content timeline LinkedIn, for instance). If you would like to know more about how these social media platforms use data, please refer to the privacy notices of these platforms. When visiting this website, BEPAY MONEY will ask for your consent to use these cookies. In other words, we only place advertising, marketing and social media cookies if you give us your permission to do this.
-                </p>
-
-                <h2 className="text-xl font-semibold text-black">
-                    Manage cookies
-                </h2>
-
-                <p>
-                    To see what cookies have been set and how to manage, block and/or delete them, please read this subsection on how you object to cookies. If you do not want to have cookies stored on your computer or want to remove cookies that have already been stored, you can change settings, at any time on this website by clicking the change cookie settings on the cookie button on the homepage. Another option is to arrange the settings (privacy & security) in your web browser. This so-called “Do Not Track” is a function that allows visitors not to be tracked by websites.
-                </p>
-
-                <p>
-                    Do Not Track options are available in several browsers including:
-                </p>
-
-                <ul className="list-disc pl-6 space-y-2">
-                    <li>Chrome</li>
-                    <li>Firefox</li>
-                    <li>Internet Explorer</li>
-                    <li>Safari</li>
-                    <li>Opera</li>
-                </ul>
-
-                <p>
-                    The advantage of this method is that consumers are less likely to be confronted with cookie banners (a pop-up that appears when a visitor comes to a website), which improves your browsing experience.
-                </p>
-
-            </section>
-
+       
         </div>
     );
 }
