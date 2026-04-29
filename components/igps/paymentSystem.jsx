@@ -491,7 +491,7 @@ const PaymentSystemUI = () => {
           color: "#080808",
         }}
       >
-        Zero Fees. Global Infrastructure. Local Experience.
+        Low Cost. Global Infrastructure. Local Experience.
       </h2>
 
       <div className="w-full px-4 md:px-14">
