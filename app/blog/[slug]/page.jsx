@@ -2,24 +2,48 @@ import { notFound } from "next/navigation";
 import { tiptapToHtml } from "@/lib/tiptapToHtml";
 import TableOfContents from "@/components/TableOfContents";
 import SharePopup from "@/components/SharePopup";
-
-const BASE = process.env.SITE_URL || "http://localhost:3000";
+import { connectDB } from "@/lib/mongodb";
+import Post from "@/models/Post";
 
 async function getPost(slug) {
-  const res = await fetch(`${BASE}/api/blogPosts?slug=${slug}`, { cache: "no-store" });
-  const data = await res.json();
-  return data.success ? data.data : null;
+  await connectDB();
+  const post = await Post.findOne({ slug }).lean();
+  if (!post) return null;
+  return JSON.parse(JSON.stringify(post));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = await getPost(slug);
 
-  if (!post) notFound(); if (!post) return {};
+  if (!post) return {};
+
+  const title = post.metaTitle || post.title;
+  const description = post.metaDesc || post.excerpt || post.title;
+  const image = post.coverImage || "/thumbnail.png";
+  const url = `https://www.bepay.money/blog/${slug}`;
+
   return {
-    title: post.metaTitle || post.title,
-    description: post.metaDesc || post.excerpt,
-    openGraph: post.coverImage ? { images: [post.coverImage] } : undefined,
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: "bepay",
+      images: [{ url: image, width: 1200, height: 630, alt: post.title }],
+      locale: "en_US",
+      type: "article",
+      publishedTime: post.publishedAt,
+      authors: [post.author || "bepay team"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
   };
 }
 

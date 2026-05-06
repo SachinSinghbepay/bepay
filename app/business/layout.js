@@ -19,7 +19,7 @@ export const metadata = {
     description: "Accept stablecoin payments and manage cross-border payouts with bepay for Business. Reduce fees, settle instantly, and integrate with your existing workflow.",
     url: "https://www.bepay.money/business",
     siteName: "bepay",
-    images: [{ url: "/thumbnail.png", width: 1200, height: 630, alt: "bepay Business Payments" }],
+    images: [{ url: "/pages/business.png", width: 1200, height: 630, alt: "bepay Business Payments" }],
     locale: "en_US",
     type: "website",
   },
@@ -27,7 +27,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Business Payments - bepay | Accept Crypto, Pay Globally",
     description: "Accept stablecoin payments and manage cross-border payouts with bepay for Business.",
-    images: ["/thumbnail.png"],
+    images: ["/pages/business.png"],
   },
 };
 
