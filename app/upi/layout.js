@@ -7,7 +7,7 @@ export const metadata = {
     description: "Use bepay to make UPI payments seamlessly using stablecoins. Fast, secure, and low-cost digital payments for India and beyond.",
     url: "https://www.bepay.money/upi",
     siteName: "bepay",
-    images: [{ url: "/thumbnail.png", width: 1200, height: 630, alt: "bepay UPI Payments" }],
+    images: [{ url: "/pages/upi.png", width: 1200, height: 630, alt: "bepay UPI Payments" }],
     locale: "en_US",
     type: "website",
   },
@@ -15,7 +15,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "UPI Payments - bepay | Pay with UPI via Stablecoins",
     description: "Use bepay to make UPI payments seamlessly using stablecoins.",
-    images: ["/thumbnail.png"],
+    images: ["/pages/upi.png"],
   },
 };
 
