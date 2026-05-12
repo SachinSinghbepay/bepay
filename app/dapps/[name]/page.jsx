@@ -22,10 +22,11 @@ const DAppDetailPage = () => {
   const [dontShowAgain, setDontShowAgain] = useState(false);
 
   // Redirect /dapps/index to the index page
-  if (params.name === "index") {
-    router.push("/dapps/index");
-    return null;
-  }
+  useEffect(() => {
+    if (params.name === "index") {
+      router.push("/dapps/index");
+    }
+  }, [params.name, router]);
 
   // Check if warning should be shown from URL parameter
   useEffect(() => {
