@@ -18,6 +18,12 @@ export async function middleware(request) {
   const { pathname, search } = request.nextUrl;
   const userAgent = request.headers.get("user-agent") || "";
 
+  if (pathname === "/dapps/index" || pathname.startsWith("/dapps/index/")) {
+    const directoryPath = pathname.replace(/^\/dapps\/index/, "/dapps/directory");
+    const rewriteUrl = new URL(`${directoryPath}${search}`, request.url);
+    return NextResponse.rewrite(rewriteUrl);
+  }
+
   // ─────────────────────────────────────────────
   // 🔐 BLOG CMS AUTH GUARD
   // ─────────────────────────────────────────────
@@ -131,6 +137,8 @@ export const config = {
     "/transactions-screen/:path*",
     "/explore-screen/:path*",
     "/app/:path*",
+    "/dapps/index",
+    "/dapps/index/:path*",
     "/blogDashboard/:path*",
     "/blogDashboard",
   ],
