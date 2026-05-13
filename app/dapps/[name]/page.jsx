@@ -21,13 +21,6 @@ const DAppDetailPage = () => {
   const [showWarning, setShowWarning] = useState(false);
   const [dontShowAgain, setDontShowAgain] = useState(false);
 
-  // Redirect /dapps/index to the index page
-  useEffect(() => {
-    if (params.name === "index") {
-      router.push("/dapps/index");
-    }
-  }, [params.name, router]);
-
   // Check if warning should be shown from URL parameter
   useEffect(() => {
     if (searchParams.get('showWarning') === 'true') {
