@@ -9,7 +9,7 @@ export async function generateMetadata({ params }) {
 
   const title = `${blog.title} | bepay Blog`
   const description = blog.excerpt || blog.description || blog.title
-  const image = blog.thumbnail || "/thumbnail.png"
+  const image = blog.thumbnail || "/pages/blog-default.png"
   const url = `https://www.bepay.money/blogs/${slug}`
 
   return {
@@ -121,7 +121,7 @@ export default async function BlogPostPage({ params }) {
     "@type": "Article",
     headline: blog.title,
     description: blog.excerpt || blog.description || blog.title,
-    image: blog.thumbnail || "https://www.bepay.money/thumbnail.png",
+    image: blog.thumbnail || "https://www.bepay.money/pages/blog-default.png",
     datePublished: blog.publishedAt,
     dateModified: blog.updatedAt ? new Date(blog.updatedAt.seconds * 1000).toISOString() : blog.publishedAt,
     author: { "@type": "Person", name: blog.author || "bepay team" },

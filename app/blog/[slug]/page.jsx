@@ -20,7 +20,7 @@ export async function generateMetadata({ params }) {
 
   const title = post.metaTitle || post.title;
   const description = post.metaDesc || post.excerpt || post.title;
-  const image = post.coverImage || "/thumbnail.png";
+  const image = post.coverImage || "/pages/blog-default.png";
   const url = `https://www.bepay.money/blog/${slug}`;
 
   return {
