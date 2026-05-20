@@ -7,7 +7,7 @@ export const metadata = {
     description: "Discover the latest crypto airdrops on bepay. Find and claim free token distributions from top blockchain projects across multiple networks.",
     url: "https://www.bepay.money/airdrops",
     siteName: "bepay",
-    images: [{ url: "/pages/airdrops.png", width: 1200, height: 630, alt: "bepay Crypto Airdrops" }],
+    images: [{ url: "/pages/airdrop.jpeg", width: 1200, height: 630, alt: "bepay Crypto Airdrops" }],
     locale: "en_US",
     type: "website",
   },
@@ -15,7 +15,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Crypto Airdrops - bepay | Discover & Claim Token Airdrops",
     description: "Discover the latest crypto airdrops on bepay.",
-    images: ["/pages/airdrops.png"],
+    images: ["/pages/airdrop.jpeg"],
   },
 };
 

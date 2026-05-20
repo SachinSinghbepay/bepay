@@ -7,7 +7,7 @@ export const metadata = {
     description: "Have questions about bepay? Contact our support team for help with payments, accounts, integrations, or partnerships.",
     url: "https://www.bepay.money/contact-us",
     siteName: "bepay",
-    images: [{ url: "/pages/contact-us.png", width: 1200, height: 630, alt: "Contact bepay" }],
+    images: [{ url: "/pages/contact-us.jpeg", width: 1200, height: 630, alt: "Contact bepay" }],
     locale: "en_US",
     type: "website",
   },
@@ -15,7 +15,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Contact Us - bepay | Get in Touch",
     description: "Have questions about bepay? Contact our support team.",
-    images: ["/pages/contact-us.png"],
+    images: ["/pages/contact-us.jpeg"],
   },
 };
 

@@ -7,7 +7,7 @@ export const metadata = {
     description: "Browse and access top decentralized applications (dApps) directly from bepay. Explore DeFi protocols, DEXes, lending platforms, and more across multiple blockchain networks.",
     url: "https://www.bepay.money/dapps",
     siteName: "bepay",
-    images: [{ url: "/pages/dapps.png", width: 1200, height: 630, alt: "bepay DApps Explorer" }],
+    images: [{ url: "/pages/dapps.jpeg", width: 1200, height: 630, alt: "bepay DApps Explorer" }],
     locale: "en_US",
     type: "website",
   },
@@ -15,7 +15,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "DApps - bepay | Explore Decentralized Applications",
     description: "Browse and access top decentralized applications directly from bepay.",
-    images: ["/pages/dapps.png"],
+    images: ["/pages/dapps.jpeg"],
   },
 };
 

@@ -10,7 +10,7 @@ export const metadata = {
     description: "Send, receive and accept stablecoin payments globally. bepay offers fast cross-border transfers, multi-currency accounts, merchant payment tools, and DeFi yields — all in one platform.",
     url: "https://www.bepay.money",
     siteName: "bepay",
-    images: [{ url: "/pages/home.png", width: 1200, height: 630, alt: "bepay - Global Stablecoin Payment Platform" }],
+    images: [{ url: "/pages/home.jpeg", width: 1200, height: 630, alt: "bepay - Global Stablecoin Payment Platform" }],
     locale: "en_US",
     type: "website",
   },
@@ -18,7 +18,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "bepay - Global Stablecoin Payments & Merchant Solutions",
     description: "Send, receive and accept stablecoin payments globally. bepay offers fast cross-border transfers, multi-currency accounts, merchant payment tools, and DeFi yields.",
-    images: ["/pages/home.png"],
+    images: ["/pages/home.jpeg"],
   },
 };
 
