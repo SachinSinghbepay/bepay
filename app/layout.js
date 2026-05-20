@@ -38,7 +38,7 @@ export const metadata = {
     siteName: "bepay",
     images: [
       {
-        url: "/pages/home.png",
+        url: "/pages/home.jpeg",
         width: 1200,
         height: 630,
         alt: "bepay money",
@@ -51,7 +51,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "bepay - Stablecoin Payment, Wallet, Merchant Payment",
     description: "A simple and secure way to pay your bills",
-    images: ["/pages/home.png"],
+    images: ["/pages/home.jpeg"],
   },
 };
 
