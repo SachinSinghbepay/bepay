@@ -448,7 +448,7 @@ const DesktopView = ({ onDownloadClick }) => {
                     />
                   </div>
                   <h3 className="text-sm font-medium text-black">
-                    bepay App Integration & Advanced Security.
+                    bepay money App Integration & Advanced Security.
                   </h3>
                 </div>
                 <div className="flex items-center space-x-4">
@@ -1536,7 +1536,7 @@ const MobileView = ({ onDownloadClick }) => {
 
                     <p className="text-xs font-medium text-black">
 
-                      bepay App Integration & Advanced Security.
+                      bepay money App Integration & Advanced Security.
                     </p>
                   </div>
                 </div>
