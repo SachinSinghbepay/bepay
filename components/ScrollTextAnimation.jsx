@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { AnalyticsService } from "@/services/analyticsService";
 import { AppDownloadPopups } from "@/components/AppDownloadPopups"
+import { APP_DOWNLOAD_LINKS } from "@/lib/appDownloadLinks";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -56,9 +57,9 @@ const openSmartDownload = (targetOS) => {
   const isAndroid = /android/i.test(ua)
 
   const links = {
-    ios: process.env.NEXT_PUBLIC_IOS_APP_URL,
-    android: process.env.NEXT_PUBLIC_ANDROID_APP_URL,
-    gallery: process.env.NEXT_PUBLIC_GALLERY_APP_URL,
+    ios: APP_DOWNLOAD_LINKS.ios,
+    android: APP_DOWNLOAD_LINKS.android,
+    gallery: APP_DOWNLOAD_LINKS.gallery,
   }
 
   if ((isIOS && targetOS === "ios") || (isAndroid && targetOS === "android")) {

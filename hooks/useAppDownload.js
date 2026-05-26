@@ -1,8 +1,6 @@
 "use client"
 import { useState } from "react"
-
-const androidLink = "https://play.google.com/store/apps/details?id=com.bepay.user"
-const iosLink = "https://testflight.apple.com/join/51JVNh5g"
+import { APP_DOWNLOAD_LINKS } from "@/lib/appDownloadLinks"
 
 export function useAppDownload() {
   const [isOSPopupOpen, setIsOSPopupOpen] = useState(false)
@@ -19,12 +17,12 @@ export function useAppDownload() {
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
 
     if (isAndroid) {
-      window.location.href = androidLink
+      window.location.href = APP_DOWNLOAD_LINKS.android
       return
     }
 
     if (isIOS) {
-      window.location.href = iosLink
+      window.location.href = APP_DOWNLOAD_LINKS.ios
       return
     }
 

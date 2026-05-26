@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AnalyticsService } from "@/services/analyticsService";
 import { useAppDownload } from "@/hooks/useAppDownload"
 import { AppDownloadPopups } from "@/components/AppDownloadPopups"
+import { APP_DOWNLOAD_LINKS } from "@/lib/appDownloadLinks"
 
 // --- Font Optimization: The BEST way to improve LCP for text elements ---
 import { Montserrat, Open_Sans } from "next/font/google";
@@ -528,8 +529,8 @@ export default function Hero() {
     const isMobile = isIOS || isAndroid
 
     const links = {
-      ios: process.env.NEXT_PUBLIC_IOS_APP_URL,
-      android: process.env.NEXT_PUBLIC_ANDROID_APP_URL,
+      ios: APP_DOWNLOAD_LINKS.ios,
+      android: APP_DOWNLOAD_LINKS.android,
     }
 
     // If mobile & OS matches → redirect
