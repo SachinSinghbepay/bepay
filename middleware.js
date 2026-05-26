@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { APP_DOWNLOAD_LINKS } from "./lib/appDownloadLinks";
 
 // Define routes that should trigger app deep linking
 const APP_DEEP_LINK_ROUTES = [
@@ -6,13 +7,6 @@ const APP_DEEP_LINK_ROUTES = [
   "/explore-screen",
   "/app",
 ];
-
-// Play Store and App Store URLs
-const PLAY_STORE_URL =
-"https://play.google.com/store/apps/details?id=com.bepay.user";
-const APP_STORE_URL = "https://apps.apple.com/app/6749352458"; // Replace with your actual App Store ID
-
-
 
 export async function middleware(request) {
   const { pathname, search } = request.nextUrl;
@@ -94,7 +88,7 @@ export async function middleware(request) {
               <h1>Opening bepay money...</h1>
               <p>If the app doesn’t open automatically, you can download it below.</p>
               <a href="${
-                isAndroid ? PLAY_STORE_URL : APP_STORE_URL
+                isAndroid ? APP_DOWNLOAD_LINKS.android : APP_DOWNLOAD_LINKS.ios
               }" class="store-button" id="storeLink">
                 Open ${isAndroid ? "Play Store" : "App Store"}
               </a>
@@ -103,7 +97,7 @@ export async function middleware(request) {
 
             <script>
               const deepLink = '${deepLinkUrl}';
-              const storeUrl = '${isAndroid ? PLAY_STORE_URL : APP_STORE_URL}';
+              const storeUrl = '${isAndroid ? APP_DOWNLOAD_LINKS.android : APP_DOWNLOAD_LINKS.ios}';
               const startTime = Date.now();
 
               window.location.href = deepLink;

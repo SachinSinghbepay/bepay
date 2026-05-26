@@ -11,6 +11,7 @@ import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Im
 import GetStartedPopup from "@/components/popups/getStartedPopup";
 import { useAppDownload } from "@/hooks/useAppDownload"
 import { AppDownloadPopups } from "@/components/AppDownloadPopups"
+import { APP_DOWNLOAD_LINKS } from "@/lib/appDownloadLinks";
 
 const AppStoreButton = (
   { iconSrc, iconAlt, line1, line2, onClick } // ANALYTICS: Added onClick prop
@@ -163,9 +164,9 @@ const Footer = ({
     const isMobile = isIOS || isAndroid
 
     const links = {
-      ios: process.env.NEXT_PUBLIC_IOS_APP_URL,
-      android: process.env.NEXT_PUBLIC_ANDROID_APP_URL,
-      gallery: process.env.NEXT_PUBLIC_GALLERY_APP_URL,
+      ios: APP_DOWNLOAD_LINKS.ios,
+      android: APP_DOWNLOAD_LINKS.android,
+      gallery: APP_DOWNLOAD_LINKS.gallery,
     }
 
     //If mobile AND OS matches → redirect to store

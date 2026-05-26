@@ -3,9 +3,7 @@ import Image from "next/image"
 import { AppDownloadPopupWrapper } from "./app-download-popup-wrapper"
 import { CountryPhoneInput } from "@/components/ui/country-phone-input"
 import StyledQRCode from "./StyledQRCode"
-
-const androidLink = "https://play.google.com/store/apps/details?id=com.bepay.user"
-const iosLink = "https://testflight.apple.com/join/51JVNh5g"
+import { APP_DOWNLOAD_LINKS } from "@/lib/appDownloadLinks"
 
 
 export function QRCodePopup({ isVisible, onClose, selectedOS }) {
@@ -14,7 +12,7 @@ export function QRCodePopup({ isVisible, onClose, selectedOS }) {
     alert(`SMS link sent to ${countryCode}${phoneNumber}! (Simulated)`)
   }
 
-  const qrUrl = selectedOS === "ios" ? iosLink : androidLink
+  const qrUrl = selectedOS === "ios" ? APP_DOWNLOAD_LINKS.ios : APP_DOWNLOAD_LINKS.android
 
   return (
     <AppDownloadPopupWrapper isVisible={isVisible} onClose={onClose} direction="right">

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { APP_DOWNLOAD_LINKS } from '@/lib/appDownloadLinks'
 
 export default function NotFound() {
   // 1. Start with 'null' to indicate we haven't checked yet.
@@ -25,8 +26,8 @@ export default function NotFound() {
     }
   }, [])
 
-  const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.bepay.android'
-  const appStoreUrl = 'https://apps.apple.com/in/app/bepay-money/id6444730033'
+  const playStoreUrl = APP_DOWNLOAD_LINKS.android
+  const appStoreUrl = APP_DOWNLOAD_LINKS.ios
 
   const getStoreButton = () => {
     // 2. Don't render any button until the check is complete
