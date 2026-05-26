@@ -10,7 +10,7 @@ const steps = [
   {
     number: 1,
     icon: Smartphone,
-    text: "Download bepay App",
+    text: "Download bepay money App",
   },
   {
     number: 2,

@@ -76,7 +76,7 @@ const DownloadRedirect = () => {
   return (
     <div style={styles.container}>
       <p style={styles.message}>
-        {needsStoreChoice ? 'Choose your app store to continue.' : 'Redirecting to the Bepay app store...'}
+        {needsStoreChoice ? 'Choose your app store to continue.' : 'Redirecting to the bepay money app store...'}
       </p>
       {needsStoreChoice && (
         <button
