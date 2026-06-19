@@ -14,6 +14,7 @@ import InvestmentSuite from "@/components/crypto/investment-suite";
 import DefiYieldSection from "@/components/crypto/DefiYieldSection ";
 import WaitlistPopup from "@/components/waitlist-popup";
 import ScrollTextMobile from "@/components/crypto/ScrollTextMobile";
+import ComplianceSection from "@/components/igps/compliance";
 
 const Page = () => {
   useEffect(() => {
@@ -33,7 +34,7 @@ const Page = () => {
         <InvestmentSuite />
         <UtilitySection />
         <FinancialServicesSection />
-        {/* <ComplianceSection /> */}
+        <ComplianceSection />
         {/* <SecuritySection /> */}
         <CryptoScrollSection />
         <PaymentProofSection />
