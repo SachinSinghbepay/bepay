@@ -9,7 +9,6 @@ export default function ConditionalHeader() {
   // Don't render header on specific pages
   if (
     pathname.startsWith('/admin') ||
-    pathname.startsWith('/igps') ||
     pathname.startsWith('/dapps') ||
     pathname === '/allNetworks' ||
     pathname === '/airdrops'

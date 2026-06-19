@@ -2,7 +2,18 @@
 
 import { useState } from "react";
 import { FiChevronLeft } from "react-icons/fi";
-import CustomSelect from "@/components/Dashboard-IGPS/components/CustomSelect";
+const CustomSelect = ({ options, value, onChange, placeholder }) => (
+  <select
+    value={value}
+    onChange={(e) => onChange(e.target.value)}
+    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-black"
+  >
+    {placeholder && <option value="">{placeholder}</option>}
+    {options.map((opt) => (
+      <option key={opt.value ?? opt} value={opt.value ?? opt}>{opt.label ?? opt}</option>
+    ))}
+  </select>
+);
 import DummyProfileMenu from "./DummyProfileMenu";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

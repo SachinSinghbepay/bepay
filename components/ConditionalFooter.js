@@ -15,9 +15,7 @@ export default function ConditionalFooter() {
     pathname === '/allNetworks' ||
     pathname === '/airdrops' ||
     // Exclude admin routes
-    pathname.startsWith('/admin') ||
-    // Exclude IGPS routes
-    pathname.startsWith('/igps')
+    pathname.startsWith('/admin')
   ) {
     return null;
   }
@@ -43,7 +41,6 @@ export default function ConditionalFooter() {
   if (pathname === '/') {
     return <Footer
       heading="Ready to Accept International Payments?"
-      isIGPSPage={true}
       isLandingPage={true}
     />;
   }

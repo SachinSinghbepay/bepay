@@ -1,5 +1,5 @@
 import React from 'react';
-import IgpsHero from '@/components/igps/igpsHero';
+import Link from 'next/link';
 
 export const metadata = {
   title: "bepay - Global Stablecoin Payments & Merchant Solutions",
@@ -44,49 +44,27 @@ const websiteSchema = {
   },
 };
 
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    { "@type": "Question", name: "What currencies does bepay IGPS support?", acceptedAnswer: { "@type": "Answer", text: "We support over 30 major global currencies, including USD, EUR, GBP, AED, CNY and INR, plus major stablecoins for instant settlement where permitted." } },
-    { "@type": "Question", name: "How do I get started with bepay IGPS?", acceptedAnswer: { "@type": "Answer", text: "Sign up, complete a quick KYB, add your business details, and activate your preferred corridors. The process typically takes under 5 minutes for standard accounts." } },
-    { "@type": "Question", name: "Is bepay IGPS safe & regulated?", acceptedAnswer: { "@type": "Answer", text: "Yes, licensed as RBI's PA-CB (Payment Aggregator Cross Border), FEMA, MSB (USA), MSB (Canada), VASP (EU), and compliant with DORA, MiCA, DPDP & CFT." } },
-    { "@type": "Question", name: "Are there any account maintenance or setup fees?", acceptedAnswer: { "@type": "Answer", text: "No, creating and maintaining your bepay IGPS global account is free." } },
-    { "@type": "Question", name: "What can I do with my multi-currency bank account?", acceptedAnswer: { "@type": "Answer", text: "Receive global payments, collect marketplace payouts, generate statements, convert currencies, and withdraw to your local bank account." } },
-    { "@type": "Question", name: "Does bepay IGPS support stablecoin-based rails?", acceptedAnswer: { "@type": "Answer", text: "Yes, wherever permitted by regulation, stablecoin rails can be used for faster settlement and lower fees, paired with full compliance controls." } },
-    { "@type": "Question", name: "Do you support receiving payments from Amazon?", acceptedAnswer: { "@type": "Answer", text: "Yes, you can receive your Amazon marketplace payouts directly into your bepay IGPS multi-currency virtual accounts." } },
-  ],
-};
-import GlobalNetworkCoverage from '@/components/igps/globeNetwork';
-import ImageComparisonTable from '@/components/igps/comparison';
-import App from '@/components/igps/transfer';
-import BepayLanding from '@/components/igps/chooseBepay';
-import ComplianceSection from '@/components/igps/compliance';
-import FAQSection from '@/components/igps/faqs';
-import PaymentSystemUI from '@/components/igps/paymentSystem';
-import SetupGlobalAccount from '@/components/igps/globalAccount';
-import VerticalScrollingSection from '@/components/igps/verticalScroll';
-import BuiltForMerchants from '@/components/igps/builtForMerchants';
-
-const IgpsPage = () => {
+const HomePage = () => {
   return (
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <IgpsHero />
-      <BuiltForMerchants/>
-      <GlobalNetworkCoverage/>
-      <ImageComparisonTable/>
-      {/* <App/> */}
-      <PaymentSystemUI/>
-      <BepayLanding/>
-      {/* <VerticalScrollingSection/> */}
-      <SetupGlobalAccount/>
-      <ComplianceSection/>
-      <FAQSection/>
+      <div className="min-h-screen flex flex-col items-center justify-center text-center px-6">
+        <h1 className="text-4xl font-bold mb-4">Global Payments, Simplified</h1>
+        <p className="text-gray-500 text-lg mb-8 max-w-xl">
+          bepay IGPS lets businesses send and receive international payments instantly. Multi-currency accounts, stablecoin rails, and full compliance — all in one place.
+        </p>
+        <a
+          href="https://igps.bepay.money"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-black text-white px-8 py-4 rounded-full font-semibold text-sm hover:scale-105 transition-all duration-200"
+        >
+          Go to IGPS →
+        </a>
+      </div>
     </div>
   );
 };
 
-export default IgpsPage;
+export default HomePage;

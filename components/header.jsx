@@ -47,7 +47,6 @@ export default function Header() {
   // Check if current page is contact us
   const isContactPage = pathname === "/contact" || pathname === "/contact-us";
 
-  // Make header background white on the IGPS page (now the home page)
   const isIgpsPage = pathname === "/";
 
   // Check if it is the blogs page
@@ -134,18 +133,6 @@ export default function Header() {
             ) : (
               <>
                 <Link
-                  href="/"
-                  className={getLinkClasses(
-                    "/",
-                    "text-sm lg:text-[14px] tracking-wide uppercase"
-                  )}
-                  onClick={() => {
-                    AnalyticsService.sendEvent("igps_nav_clicked");
-                  }}
-                >
-                  IGPS
-                </Link>
-                <Link
                   href="/personal"
                   className={getLinkClasses(
                     "/personal",
@@ -199,7 +186,7 @@ export default function Header() {
                   <span className="font-semibold text-xs lg:text-[12px] whitespace-nowrap">Get in touch</span>
                 </Button>
                 <Button
-                  onClick={() => window.location.href = `${process.env.NEXT_PUBLIC_IGPS_URL}`}
+                  onClick={() => window.location.href = `https://igps.bepay.money`}
                   className="hidden lg:flex lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-pointer hover:scale-105"
                 >
                   <span
@@ -319,16 +306,6 @@ export default function Header() {
             ) : (
               <>
                 <Link
-                  href="/"
-                  className={getLinkClasses(
-                    "/",
-                    "text-sm uppercase tracking-wide py-2"
-                  )}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  IGPS
-                </Link>
-                <Link
                   href="/personal"
                   className={getLinkClasses(
                     "/personal",
@@ -361,7 +338,7 @@ export default function Header() {
                 </Link>
          
     <Button
-                  onClick={() => window.location.href = `${process.env.NEXT_PUBLIC_IGPS_URL}`}
+                  onClick={() => window.location.href = `https://igps.bepay.money`}
                   className=" lg:hidden lg:w-[120px] lg:h-[56px] items-center bg-[#C0C0C0] text-black rounded-full transition-all duration-200 opacity-100 cursor-pointer hover:scale-105"
                 >
                   <span
