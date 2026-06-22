@@ -102,15 +102,43 @@ export default async function BlogPostPage({ params }) {
   const post = await getPost(slug);
 
   if (!post) notFound();
-  if (!post) notFound();
 
   const rawHtml = tiptapToHtml(post.content);
   const contentWithIds = addIdsToHeadings(rawHtml);
   const headings = extractHeadings(contentWithIds);
   const readingTime = calculateReadingTime(rawHtml);
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.metaDesc || post.excerpt || post.title,
+    image: post.coverImage || "https://www.bepay.money/pages/blog-default.png",
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt || post.publishedAt,
+    author: { "@type": "Person", name: post.author || "bepay team" },
+    publisher: {
+      "@type": "Organization",
+      name: "bepay",
+      logo: { "@type": "ImageObject", url: "https://www.bepay.money/logo.png" },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `https://www.bepay.money/blog/${slug}` },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.bepay.money" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.bepay.money/blog" },
+      { "@type": "ListItem", position: 3, name: post.title, item: `https://www.bepay.money/blog/${slug}` },
+    ],
+  };
+
   return (
     <main className="max-w-7xl mx-auto px-6 py-16 flex gap-12 scroll-smooth">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
       {/* LEFT SIDEBAR (TABLE OF CONTENTS) */}
       <aside className="hidden lg:block w-64 sticky top-24 self-start">

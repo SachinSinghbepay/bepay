@@ -3,7 +3,7 @@ export default function robots() {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: '/admin/',
+      disallow: ['/admin/', '/blogDashboard/'],
     },
     sitemap: 'https://www.bepay.money/sitemap.xml',
   }

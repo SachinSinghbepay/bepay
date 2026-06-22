@@ -3,11 +3,11 @@ import IgpsHero from '@/components/igps/igpsHero';
 
 export const metadata = {
   title: "bepay - Global Stablecoin Payments & Merchant Solutions",
-  description: "Send, receive and accept stablecoin payments globally. bepay offers fast cross-border transfers, multi-currency accounts, merchant payment tools, and DeFi yields — all in one platform.",
+  description: "Send, receive and accept stablecoin payments globally. bepay offers cross-border transfers, multi-currency accounts, merchant payment tools, and DeFi yields.",
   alternates: { canonical: "https://www.bepay.money" },
   openGraph: {
     title: "bepay - Global Stablecoin Payments & Merchant Solutions",
-    description: "Send, receive and accept stablecoin payments globally. bepay offers fast cross-border transfers, multi-currency accounts, merchant payment tools, and DeFi yields — all in one platform.",
+    description: "Send, receive and accept stablecoin payments globally. bepay offers cross-border transfers, multi-currency accounts, merchant payment tools, and DeFi yields.",
     url: "https://www.bepay.money",
     siteName: "bepay",
     images: [{ url: "/pages/home.jpeg", width: 1200, height: 630, alt: "bepay - Global Stablecoin Payment Platform" }],
@@ -30,6 +30,12 @@ const organizationSchema = {
   logo: "https://www.bepay.money/logo.png",
   description: "bepay is a global stablecoin payment platform offering cross-border transfers, multi-currency accounts, merchant payment tools, crypto wallets, and DeFi yield products.",
   contactPoint: { "@type": "ContactPoint", contactType: "customer support", availableLanguage: "English" },
+  sameAs: [
+    "https://x.com/bepaymoney",
+    "https://www.linkedin.com/company/bepaymoney/",
+    "https://www.facebook.com/bepaymoney/",
+    "https://t.me/officialbepay",
+  ],
 };
 
 const websiteSchema = {

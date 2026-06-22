@@ -12,6 +12,7 @@ export default async function sitemap() {
     { path: "/business",             priority: 0.9, changeFrequency: "weekly" },
     { path: "/upi",                  priority: 0.9, changeFrequency: "weekly" },
     { path: "/blogs",                priority: 0.8, changeFrequency: "daily" },
+    { path: "/blog",                 priority: 0.8, changeFrequency: "daily" },
     { path: "/about-us",             priority: 0.8, changeFrequency: "monthly" },
     { path: "/dapps",                priority: 0.8, changeFrequency: "weekly" },
     { path: "/airdrops",             priority: 0.7, changeFrequency: "daily" },
