@@ -100,6 +100,24 @@ const nextConfig = {
           },
         ],
       },
+      {
+        // Stellar SEP-1 requires text/plain + CORS so anchors (MoneyGram) can fetch it.
+        source: "/.well-known/stellar.toml",
+        headers: [
+          {
+            key: "Content-Type",
+            value: "text/plain; charset=utf-8",
+          },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*",
+          },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=3600, must-revalidate",
+          },
+        ],
+      },
     ];
   },
 };
