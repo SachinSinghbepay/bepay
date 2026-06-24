@@ -136,6 +136,10 @@ export async function fetchRecentDApps() {
       credentials: 'include', // Include cookies for authenticated requests
     });
 
+    if (response.status === 401) {
+      return [];
+    }
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('[dappsService] Error response:', errorText);
@@ -143,7 +147,7 @@ export async function fetchRecentDApps() {
     }
 
     const result = await response.json();
-    
+
     if (!result.success) {
       throw new Error(result.message || 'Failed to fetch recent dApps');
     }

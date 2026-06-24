@@ -5,7 +5,7 @@ import { ChevronRight, Star, ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
 import allNetworks from "@/components/allNetworks";
 import Link from 'next/link'; // Import the Link component for navigation
-import { fetchDApps, fetchTopDApps, /* fetchRecentDApps, */ fetchCategories, trackDAppVisit } from '@/services/dappsService';
+import { fetchDApps, fetchTopDApps, fetchRecentDApps, fetchCategories, trackDAppVisit } from '@/services/dappsService';
 
 
 
@@ -129,7 +129,7 @@ const DAppListItem = ({ iconUrl, name, tag, description, url, dappId, onVisit })
 const DAppPage = () => {
   const [dapps, setDapps] = useState([]);
   const [topDapps, setTopDapps] = useState([]);
-  // const [recentDapps, setRecentDapps] = useState([]);
+  const [recentDapps, setRecentDapps] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [loading, setLoading] = useState(true);
@@ -191,18 +191,17 @@ const DAppPage = () => {
     loadTopDApps();
   }, []);
 
-  // Fetch recent dApps — requires auth, skipped until section is re-enabled
-  // useEffect(() => {
-  //   const loadRecentDApps = async () => {
-  //     try {
-  //       const data = await fetchRecentDApps();
-  //       setRecentDapps(data || []);
-  //     } catch (err) {
-  //       console.error('[DAppPage] Failed to load recent dApps:', err);
-  //     }
-  //   };
-  //   loadRecentDApps();
-  // }, []);
+  useEffect(() => {
+    const loadRecentDApps = async () => {
+      try {
+        const data = await fetchRecentDApps();
+        setRecentDapps(data || []);
+      } catch (err) {
+        console.error('[DAppPage] Failed to load recent dApps:', err);
+      }
+    };
+    loadRecentDApps();
+  }, []);
 
   // Fetch categories
   useEffect(() => {
@@ -237,15 +236,15 @@ const DAppPage = () => {
       url: d.website_url,
     }));
 
-  // const recentDappsList = recentDapps
-  //   .slice(0, 5)
-  //   .map(item => ({
-  //     id: item.dapp.id,
-  //     name: item.dapp.name,
-  //     tag: item.dapp.category,
-  //     iconUrl: item.dapp.logo_url,
-  //     url: item.dapp.website_url,
-  //   }));
+  const recentDappsList = recentDapps
+    .slice(0, 5)
+    .map(item => ({
+      id: item.dapp.id,
+      name: item.dapp.name,
+      tag: item.dapp.category,
+      iconUrl: item.dapp.logo_url,
+      url: item.dapp.website_url,
+    }));
 
   // Get all dApps for the list
   const dAppList = dapps.map(d => ({
@@ -379,9 +378,26 @@ const DAppPage = () => {
               )}
             </div>
           )} */}
+          {/* Recent dApps Section */}
+          <div className="mb-8 lg:mb-10">
+            <SectionHeader title="Recent" actionText="All" href="/dapps/recently-visited" />
+            <div className="mt-4 flex gap-4 overflow-x-auto pb-4 lg:gap-6">
+              {recentDappsList.length > 0 ? (
+                recentDappsList.map((dapp, index) => (
+                  <DAppCard key={dapp.id || `${dapp.name}-recent-${index}`} {...dapp} dappId={dapp.id} onVisit={handleDAppVisit} />
+                ))
+              ) : (
+                <div className="text-center w-full pt-6 pb-2">
+                  <p className="text-gray-600 font-medium">No Recent yet.</p>
+                  <p className="text-sm text-gray-400">Your recently visited dApps will appear here. Start exploring!</p>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Featured dApps Section */}
           <div className="mb-8 lg:mb-10">
-            <SectionHeader title="Featured dApps" actionText="All" href="#" />
+            <SectionHeader title="Featured dApps" actionText="All" href="/dapps/featured" />
             <div className="mt-4 flex gap-4 overflow-x-auto pb-4 lg:gap-6">
               {featuredDapps.map((dapp, index) => (
                 <DAppCard key={dapp.id || `${dapp.name}-featured-${index}`} {...dapp} dappId={dapp.id} onVisit={handleDAppVisit} />
