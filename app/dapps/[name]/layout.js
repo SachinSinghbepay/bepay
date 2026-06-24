@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
       description,
       url: `https://www.bepay.money/dapps/${encodeURIComponent(dapp.name)}`,
       siteName: "bepay",
-      images: [{ url: "/thumbnail.png", width: 1200, height: 630, alt: `${dapp.name} on bepay` }],
+      images: [{ url: "/pages/dapps-detail.png", width: 1200, height: 630, alt: `${dapp.name} on bepay` }],
       locale: "en_US",
       type: "website",
     },
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }) {
       card: "summary_large_image",
       title,
       description,
-      images: ["/thumbnail.png"],
+      images: ["/pages/dapps-detail.png"],
     },
   };
 }

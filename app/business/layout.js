@@ -1,3 +1,12 @@
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://www.bepay.money" },
+    { "@type": "ListItem", position: 2, name: "Business Payments", item: "https://www.bepay.money/business" },
+  ],
+};
+
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -12,11 +21,11 @@ const faqSchema = {
 
 export const metadata = {
   title: "Business Payments - bepay | Accept Crypto, Pay Globally",
-  description: "Accept stablecoin payments and manage cross-border payouts with bepay for Business. Reduce fees, settle instantly, and integrate with your existing workflow.",
+  description: "Accept crypto and stablecoin payments with bepay for Business. Payment gateway for merchants — reduce fees, settle instantly, and integrate with your existing workflow.",
   alternates: { canonical: "https://www.bepay.money/business" },
   openGraph: {
     title: "Business Payments - bepay | Accept Crypto, Pay Globally",
-    description: "Accept stablecoin payments and manage cross-border payouts with bepay for Business. Reduce fees, settle instantly, and integrate with your existing workflow.",
+    description: "Accept crypto and stablecoin payments with bepay for Business. Payment gateway for merchants — reduce fees, settle instantly, and integrate with your existing workflow.",
     url: "https://www.bepay.money/business",
     siteName: "bepay",
     images: [{ url: "/pages/business.jpeg", width: 1200, height: 630, alt: "bepay Business Payments" }],
@@ -34,6 +43,7 @@ export const metadata = {
 export default function BusinessLayout({ children }) {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       {children}
     </>

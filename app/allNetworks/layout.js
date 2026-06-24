@@ -7,7 +7,7 @@ export const metadata = {
     description: "Explore all blockchain networks supported by bepay including Ethereum, Solana, Polygon, Arbitrum, Avalanche, Base, and Tron for stablecoin payments.",
     url: "https://www.bepay.money/allNetworks",
     siteName: "bepay",
-    images: [{ url: "/thumbnail.png", width: 1200, height: 630, alt: "bepay Supported Networks" }],
+    images: [{ url: "/pages/allNetworks.png", width: 1200, height: 630, alt: "bepay Supported Networks" }],
     locale: "en_US",
     type: "website",
   },
@@ -15,7 +15,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "All Networks - bepay | Supported Blockchain Networks",
     description: "Explore all blockchain networks supported by bepay.",
-    images: ["/thumbnail.png"],
+    images: ["/pages/allNetworks.png"],
   },
 };
 
