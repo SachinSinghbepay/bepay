@@ -4,7 +4,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronRight, Star, ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
 import allNetworks from "@/components/allNetworks";
-import Link from 'next/link'; // Import the Link component for navigation
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { fetchDApps, fetchTopDApps, fetchRecentDApps, fetchCategories, trackDAppVisit } from '@/services/dappsService';
 
 
@@ -19,10 +20,9 @@ const SectionHeader = ({ title, actionText, secondaryTitle = null, href }) => (
         <span className="text-lg text-gray-400">{secondaryTitle}</span>
       )}
     </div>
-    {href ? (
+    {actionText && (href ? (
       <Link
         href={href}
-        // Mobile text-[14px] is default, Desktop is lg:text-base
         className="flex items-center text-[14px] lg:text-base font-medium text-[#6A6A6A] shrink-0 hover:text-gray-900 transition-colors"
       >
         {actionText} <ChevronRight size={16} className="ml-1" />
@@ -31,7 +31,7 @@ const SectionHeader = ({ title, actionText, secondaryTitle = null, href }) => (
       <span className="flex items-center text-sm font-semibold text-gray-500 shrink-0">
         {actionText} <ChevronRight size={16} className="ml-1" />
       </span>
-    )}
+    ))}
   </div>
 );
 
@@ -127,6 +127,10 @@ const DAppListItem = ({ iconUrl, name, tag, description, url, dappId, onVisit })
 
 // --- The Main Page Component ---
 const DAppPage = () => {
+  const searchParams = useSearchParams();
+  const networkParam = searchParams.get('network');
+  const activeNetwork = !networkParam || networkParam === 'all' ? undefined : networkParam;
+
   const [dapps, setDapps] = useState([]);
   const [topDapps, setTopDapps] = useState([]);
   const [recentDapps, setRecentDapps] = useState([]);
@@ -162,7 +166,7 @@ const DAppPage = () => {
           setFiltering(true);
         }
         const category = selectedCategory === 'all' ? undefined : selectedCategory;
-        const data = await fetchDApps({ limit: 100, category });
+        const data = await fetchDApps({ limit: 100, category, network: activeNetwork });
         setDapps(data.dapps || []);
         setError(null);
       } catch (err) {
@@ -176,7 +180,7 @@ const DAppPage = () => {
     };
 
     loadDApps();
-  }, [selectedCategory]);
+  }, [selectedCategory, activeNetwork]);
 
   // Fetch top dApps
   useEffect(() => {
@@ -411,8 +415,8 @@ const DAppPage = () => {
           <div className="mb-2 lg:mb-6">
             <SectionHeader
               title="DApps"
-              actionText="All Networks"
-              href="/allNetworks"
+              // actionText={activeNetwork ? activeNetwork.charAt(0).toUpperCase() + activeNetwork.slice(1) : "All Networks"}
+              // href="/allNetworks"
             />
           </div>
 
