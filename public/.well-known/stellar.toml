@@ -1,0 +1,19 @@
+# stellar.toml — Stellar SEP-1 metadata for bepay money
+# Hosted at: https://bepay.money/.well-known/stellar.toml
+# Used by MoneyGram Ramps to whitelist the bepay money wallet (SEP-10 client domain auth).
+
+VERSION="2.0.0"
+NETWORK_PASSPHRASE="Public Global Stellar Network ; September 2015"
+
+# SEP-10 domain signing key (client domain authentication).
+# The matching SECRET key must live only in the wallet backend's secret store — never here.
+SIGNING_KEY="GBFCIVC4RDJQPSOEV4Z2G6EC2YFMZMKXORKHRWULPFGOMDJUDTPSUKGT"
+
+[DOCUMENTATION]
+ORG_NAME="bepay money"
+ORG_DBA="bepay money"
+ORG_URL="https://bepay.money"
+ORG_LOGO="https://bepay.money/bepaylogo.png"
+ORG_DESCRIPTION="bepay money is a non-custodial wallet for sending, receiving, and managing digital assets."
+ORG_OFFICIAL_EMAIL="nawal@bepay.money"
+ORG_SUPPORT_EMAIL="nawal@bepay.money"
