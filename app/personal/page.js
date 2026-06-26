@@ -1,10 +1,12 @@
 "use client"; // ← top of file
 import { useEffect } from "react";
 
-import ScrollTextAnimation from "@/components/crypto/scroll-text-animation";
+import dynamic from "next/dynamic";
 import CryptoHeroSection from "@/components/crypto/CryptoHero";
 import CryptoWalletSection from "@/components/crypto/crypto-wallet-section";
-import OneWallet from "@/components/crypto/OneWallet";
+
+const ScrollTextAnimation = dynamic(() => import("@/components/crypto/scroll-text-animation"), { ssr: false });
+const OneWallet = dynamic(() => import("@/components/crypto/OneWallet"), { ssr: false });
 import { PaymentProofSection } from "@/components/crypto/payment-proof-section";
 import { SecuritySection } from "@/components/crypto/security-section";
 import { UtilitySection } from "@/components/crypto/utility-section";

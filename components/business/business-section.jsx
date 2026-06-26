@@ -18,11 +18,12 @@ export default function BusinessSection() {
           >
             {/* Background Video */}
             <video
-              src="/videos/crypto/i1.mp4"
+              src="https://assets.bepay.money/website_assets/i1.mp4"
               autoPlay
               muted
               loop
               playsInline
+              preload="none"
               className="absolute inset-0 w-full h-full object-cover"
             />
 
@@ -62,11 +63,12 @@ export default function BusinessSection() {
           >
             {/* Background Video */}
             <video
-              src="/videos/crypto/i2.mp4"
+              src="https://assets.bepay.money/website_assets/i2.mp4"
               autoPlay
               muted
               loop
               playsInline
+              preload="none"
               className="absolute inset-0 w-full h-full object-cover"
             />
 

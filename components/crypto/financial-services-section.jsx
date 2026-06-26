@@ -19,7 +19,7 @@ const servicesData = [
       "No credit check required.",
       "Flexible repayment terms.",
     ],
-    video: "/videos/crypto/co1.mp4", // Video for first 3
+    video: "https://assets.bepay.money/website_assets/co1.mp4",
   },
   {
     title: "Savings Products",
@@ -28,7 +28,7 @@ const servicesData = [
       "No minimum balance.",
       "Instant withdrawals.",
     ],
-    video: "/videos/crypto/co2.mp4", // Video for first 3
+    video: "https://assets.bepay.money/website_assets/co2.mp4",
   },
   {
     title: "Insurance Products",
@@ -37,7 +37,7 @@ const servicesData = [
       "Health, Travel & Life Coverage.",
       "Flexible Plans & Instant Claims.",
     ],
-    video: "/videos/crypto/co3.mp4", // Video for first 3
+    video: "https://assets.bepay.money/website_assets/co3.mp4",
   },
   {
     title: "Cross-Border Payments",

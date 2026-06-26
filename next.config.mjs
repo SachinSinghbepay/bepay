@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  compress: true,
+  poweredByHeader: false,
   transpilePackages: [
     "@tiptap/core",
     "@tiptap/react",
@@ -64,6 +66,7 @@ const nextConfig = {
   },
   experimental: {
     scrollRestoration: false,
+    optimizePackageImports: ["@tabler/icons-react", "lucide-react", "framer-motion"],
   },
   webpack: (config) => {
     config.resolve.extensionAlias = {
@@ -74,6 +77,42 @@ const nextConfig = {
   },
   async headers() {
     return [
+      {
+        source: "/_next/static/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/fonts/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/(.*\\.mp4|.*\\.webm|.*\\.gif)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
+      {
+        source: "/(.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.svg|.*\\.webp|.*\\.ico)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800",
+          },
+        ],
+      },
       {
         source: "/.well-known/apple-app-site-association",
         headers: [
