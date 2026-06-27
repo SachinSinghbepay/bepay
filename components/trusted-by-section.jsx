@@ -100,6 +100,7 @@ export default function TrustedBySection() {
             whileInView="visible"
             viewport={{ once: true }}
           />
+        
           <motion.h2
             className="text-[#F9F9F9] uppercase text-base lg:text-xl font-medium tracking-wide text-center"
             variants={titleVariants}
