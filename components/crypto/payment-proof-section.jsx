@@ -60,8 +60,7 @@ export const PaymentProofSection = () => {
         playsInline
         preload="metadata"
       >
-        <source src="/videos/crypto/new.mp4" type="video/mp4" />
-        <source src="/videos/crypto/new.webm" type="video/webm" />
+        <source src="https://assets.bepay.money/website_assets/new.mp4" type="video/mp4" />
         
         <Image
           src="/images/crypto/bgimg.png"

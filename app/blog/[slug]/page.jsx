@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { tiptapToHtml } from "@/lib/tiptapToHtml";
 import TableOfContents from "@/components/TableOfContents";
 import SharePopup from "@/components/SharePopup";
@@ -160,10 +161,12 @@ export default async function BlogPostPage({ params }) {
         </h1>
 
         {post.coverImage && (
-          <img
+          <Image
             src={post.coverImage}
             alt={post.title}
-            className="w-full rounded-xl mb-8"
+            width={1200}
+            height={630}
+            className="w-full h-auto rounded-xl mb-8"
           />
         )}
 
@@ -182,7 +185,7 @@ export default async function BlogPostPage({ params }) {
         <p className="text-sm text-gray-500 mt-8 mb-2">Written By</p>
         <div className="flex items-center gap-3 mb-12">
           <div className="w-10 h-10 rounded-full bg-white border border-gray-300 flex justify-center items-center"  >
-            <img src='/bepayiconlogo.png' alt='author' className="w-[80%] object-cover " />
+            <Image src='/bepayiconlogo.png' alt='author' width={32} height={32} className="w-[80%] object-cover" />
           </div>
           <div>
             <p className="font-semibold">{post.author || "bepay money"}</p>

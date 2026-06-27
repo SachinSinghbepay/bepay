@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function BlogLoginPage() {
   const router = useRouter();
@@ -99,7 +99,7 @@ export default function BlogLoginPage() {
                 onClick={() => setShowPass(!showPass)}
                 className="absolute right-3.5 top-3.5 text-[#AAAA9A] hover:text-[#5A5A4A] transition"
               >
-                {showPass ? <AiOutlineEyeInvisible size={18} /> : <AiOutlineEye size={18} />}
+                {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
           </div>

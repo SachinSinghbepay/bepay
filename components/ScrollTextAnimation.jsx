@@ -137,7 +137,7 @@ const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? w
         description: "",
       },
       rightCard: {
-        video: "/videos/crypto/invest1.mp4",
+        video: "https://assets.bepay.money/website_assets/invest1.mp4",
         alt: "Investment Platform",
       },
     },
@@ -150,7 +150,7 @@ const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? w
         description: "",
       },
       rightCard: {
-        video: "/videos/crypto/withdraw.mp4",
+        video: "https://assets.bepay.money/website_assets/withdraw.mp4",
         alt: "Digital Banking",
       },
     },
@@ -163,7 +163,7 @@ const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? w
         description: "send via QR, phone, email, or bepay ID",
       },
       rightCard: {
-        video: "/videos/crypto/gym.mp4",
+        video: "https://assets.bepay.money/website_assets/gym.mp4",
         alt: "Digital Banking",
       },
     },
@@ -673,6 +673,7 @@ const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? w
                             loop
                             muted
                             playsInline
+                            preload="none"
                             className="absolute inset-0 w-full h-full object-cover rounded-2xl lg:rounded-3xl"
                           />
                         ) : (

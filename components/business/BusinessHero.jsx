@@ -296,7 +296,7 @@ const BusinessHero = () => {
                         poster="/images/business/video_mockup.svg" // <-- CRITICAL: Efficient static poster for LCP
                       >
                         <source
-                          src="/videos/crypto/business_mockup.mp4"
+                          src="https://assets.bepay.money/website_assets/business_mockup.mp4"
                           type="video/mp4"
                         />
                         Your browser does not support the video tag.
@@ -458,7 +458,7 @@ const BusinessHero = () => {
                           poster="/images/business/video_mockup.svg" // <-- CRITICAL: Efficient static poster for LCP
                         >
                           <source
-                            src="/videos/crypto/business_mockup.mp4"
+                            src="https://assets.bepay.money/website_assets/business_mockup.mp4"
                             type="video/mp4"
                           />
                           Your browser does not support the video tag.

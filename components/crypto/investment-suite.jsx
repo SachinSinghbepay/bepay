@@ -12,7 +12,7 @@ const investmentData = [
   {
     id: 1,
     image: "/images/crypto/invest1.png",
-    video: "/videos/crypto/invest1.mp4",
+    video: "https://assets.bepay.money/website_assets/invest1.mp4",
     title: "Tokenized Real Estate",
     description:
       "Invest in premium real estate properties with fractional ownership using crypto",
@@ -31,7 +31,7 @@ const investmentData = [
   {
     id: 3,
     image: "/images/crypto/invest3.png",
-    video: "/videos/crypto/invest3.mp4",
+    video: "https://assets.bepay.money/website_assets/invest3.mp4",
     title: "Tokenized Equity",
     description: "Invest in company shares through tokenized equity platforms",
     details: "Access to global equity markets",
@@ -40,7 +40,7 @@ const investmentData = [
   {
     id: 4,
     image: "/images/crypto/invest4.png",
-    video: "/videos/crypto/invest4.mp4",
+    video: "https://assets.bepay.money/website_assets/invest4.mp4",
     title: "Tokenized Bonds",
     description:
       "Diversify with government and corporate bonds as digital tokens",
@@ -50,7 +50,7 @@ const investmentData = [
   {
     id: 5,
     image: "/images/crypto/invest5.png",
-    video: "/videos/crypto/invest5.mp4",
+    video: "https://assets.bepay.money/website_assets/invest5.mp4",
     title: "Tokenized Energy",
     description: "Invest in renewable energy projects and green initiatives",
     details: "Sustainable investment options",
@@ -162,7 +162,7 @@ const VideoCard = ({ item, isInView, index }) => {
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="none"
               onLoadedData={handleVideoLoad}
               // 5. Removed the problematic onCanPlay handler
               onError={handleVideoError}

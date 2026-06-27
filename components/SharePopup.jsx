@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { FaXTwitter, FaFacebookF, FaLinkedinIn, FaWhatsapp, FaLink } from "react-icons/fa6"
+import Image from "next/image"
+import { IconBrandX, IconBrandFacebook, IconBrandLinkedin, IconBrandWhatsapp, IconLink } from "@tabler/icons-react"
 
 export default function SharePopup({ slug, url: urlProp, title }) {
     const [open, setOpen] = useState(false)
@@ -10,22 +11,22 @@ export default function SharePopup({ slug, url: urlProp, title }) {
     const shareLinks = [
         {
             name: "Twitter",
-            icon: <FaXTwitter className="text-black" />,
+            icon: <IconBrandX className="text-black" size={18} />,
             url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
         },
         {
             name: "Facebook",
-            icon: <FaFacebookF className="text-blue-600" />,
+            icon: <IconBrandFacebook className="text-blue-600" size={18} />,
             url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
         },
         {
             name: "LinkedIn",
-            icon: <FaLinkedinIn className="text-blue-700" />,
+            icon: <IconBrandLinkedin className="text-blue-700" size={18} />,
             url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
         },
         {
             name: "WhatsApp",
-            icon: <FaWhatsapp className="text-green-500" />,
+            icon: <IconBrandWhatsapp className="text-green-500" size={18} />,
             url: `https://api.whatsapp.com/send?text=${encodeURIComponent(title + " " + url)}`,
         },
     ]
@@ -39,7 +40,7 @@ export default function SharePopup({ slug, url: urlProp, title }) {
         <div className="relative">
             {/* Share Button */}
             <button onClick={() => setOpen(!open)}>
-                <img src="/icons/share.svg" alt="Share" className="w-10 h-10" />
+                <Image src="/icons/share.svg" alt="Share" width={40} height={40} className="w-10 h-10" />
             </button>
 
             {/* Popup */}
@@ -62,7 +63,7 @@ export default function SharePopup({ slug, url: urlProp, title }) {
                         onClick={copyLink}
                         className="flex items-center gap-3 w-full text-left hover:bg-gray-100 p-2 rounded-lg"
                     >
-                        <FaLink />
+                        <IconLink size={18} />
                         Copy link
                     </button>
                 </div>
