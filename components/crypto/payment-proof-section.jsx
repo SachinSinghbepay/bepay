@@ -58,7 +58,7 @@ export const PaymentProofSection = () => {
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="none"
       >
         <source src="https://assets.bepay.money/website_assets/new.mp4" type="video/mp4" />
         
