@@ -1,14 +1,12 @@
 'use client';
-import React from "react";
-
+import React, { Suspense } from "react";
 import DAppPage from "@/components/deAppHero";
 
 const Page = () => {
   return (
-    <>
+    <Suspense fallback={null}>
       <DAppPage />
-
-    </>
+    </Suspense>
   );
 };
 

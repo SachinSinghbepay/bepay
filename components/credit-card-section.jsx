@@ -506,7 +506,7 @@ const DesktopCreditCardView = ({ scrollYProgress, handleStartClick }) => {
             className="z-50 hidden md:block"
           >
             <Image
-              src="/creditcard.png"
+              src="/creditcard.jpg"
               alt="Credit card mockup"
               fill
               className="absolute z-50 p-2"
