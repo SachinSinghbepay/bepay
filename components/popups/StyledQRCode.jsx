@@ -31,7 +31,7 @@ export default function StyledQRCode({ url }) {
     observer.observe(qrRef.current, { childList: true })
 
     qrCode.current.append(qrRef.current)
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update QR if URL changes (iOS ↔ Android)
   useEffect(() => {
