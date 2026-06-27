@@ -63,7 +63,7 @@ export const PaymentProofSection = () => {
         <source src="https://assets.bepay.money/website_assets/new.mp4" type="video/mp4" />
         
         <Image
-          src="/images/crypto/bgimg.png"
+          src="/images/crypto/bgimg.jpg"
           alt="Two women looking at a smartphone"
           fill
           style={{ objectFit: "cover" }}

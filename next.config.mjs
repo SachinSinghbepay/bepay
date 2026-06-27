@@ -68,13 +68,6 @@ const nextConfig = {
     scrollRestoration: false,
     optimizePackageImports: ["@tabler/icons-react", "lucide-react", "framer-motion"],
   },
-  webpack: (config) => {
-    config.resolve.extensionAlias = {
-      ".js": [".js", ".ts", ".tsx"],
-    };
-    config.resolve.conditionNames = ["import", "module", "require", "default"];
-    return config;
-  },
   async headers() {
     return [
       {

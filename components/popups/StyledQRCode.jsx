@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
 import QRCodeStyling from "qr-code-styling"
 
 export default function StyledQRCode({ url }) {
@@ -66,9 +67,11 @@ export default function StyledQRCode({ url }) {
         {/* Logo overlaid on top of QR via CSS — no async fetch inside qr-code-styling */}
         {isReady && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <img
+            <Image
               src="/logo.png"
               alt="bepay"
+              width={40}
+              height={40}
               className="w-10 h-10 object-contain rounded-md bg-white p-0.5"
             />
           </div>
