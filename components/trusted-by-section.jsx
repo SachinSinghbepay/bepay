@@ -152,7 +152,7 @@ export default function TrustedBySection() {
         >
           <motion.div variants={logoVariants} className="w-full max-w-7xl">
             <Image
-              src="/trusted.png"
+              src="/trusted1.png"
               alt="A collage of industry-leading brands supported by bepay"
               width={1100}
               height={100}
