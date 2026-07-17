@@ -22,6 +22,7 @@ export default async function sitemap() {
     { path: "/privacy-policy",       priority: 0.4, changeFrequency: "yearly" },
     { path: "/terms-and-conditions", priority: 0.4, changeFrequency: "yearly" },
     { path: "/cookie-policy",        priority: 0.4, changeFrequency: "yearly" },
+    { path: "/service-providers",    priority: 0.4, changeFrequency: "monthly" },
   ].map(({ path, priority, changeFrequency }) => ({
     url: `${baseUrl}${path}`,
     lastModified: new Date(),
