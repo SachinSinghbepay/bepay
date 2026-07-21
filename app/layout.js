@@ -3,7 +3,6 @@ import { Open_Sans, Montserrat } from 'next/font/google';
 import "./globals.css";
 import SmoothScroll from "@/components/smoothScroll";
 import Header from "@/components/header";
-import { AuthProvider } from "@/lib/auth";
 import ConditionalFooter from "@/components/ConditionalFooter";
 import ConditionalHeader from "@/components/ConditionalHeader";
 import ConditionalCookieConsent from "@/components/ConditionalCookieConsent";
@@ -57,13 +56,17 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://assets.bepay.money" />
+        <link rel="dns-prefetch" href="https://assets.bepay.money" />
+      </head>
       <body className={`${openSans.variable} ${montserrat.variable} antialiased`}>
         <MixpanelProvider>
           <SmoothScroll>
             <ConditionalHeader  />
             <ConditionalCookieConsent />
             <CampaignTracker />
-            <AuthProvider>{children}</AuthProvider>
+            {children}
             <ConditionalFooter />
           </SmoothScroll>
         </MixpanelProvider>

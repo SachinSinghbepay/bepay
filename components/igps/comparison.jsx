@@ -238,7 +238,6 @@ const ImageComparisonTable = () => {
                 src={TABLE_IMAGE_URL}
                 alt="Comparison table of fees for Traditional Banks, Payment Gateways, and bepay IGPS"
                 fill={true}
-                priority={true}
                 className="object-contain"
               />
             </div>

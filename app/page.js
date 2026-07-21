@@ -1,4 +1,5 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 import IgpsHero from '@/components/igps/igpsHero';
 
 export const metadata = {
@@ -63,16 +64,15 @@ const faqSchema = {
     { "@type": "Question", name: "Do you support receiving payments from Amazon?", acceptedAnswer: { "@type": "Answer", text: "Yes, you can receive your Amazon marketplace payouts directly into your bepay IGPS multi-currency virtual accounts." } },
   ],
 };
-import GlobalNetworkCoverage from '@/components/igps/globeNetwork';
-import ImageComparisonTable from '@/components/igps/comparison';
-import App from '@/components/igps/transfer';
-import BepayLanding from '@/components/igps/chooseBepay';
-import ComplianceSection from '@/components/igps/compliance';
-import FAQSection from '@/components/igps/faqs';
-import PaymentSystemUI from '@/components/igps/paymentSystem';
-import SetupGlobalAccount from '@/components/igps/globalAccount';
-import VerticalScrollingSection from '@/components/igps/verticalScroll';
 import BuiltForMerchants from '@/components/igps/builtForMerchants';
+
+const GlobalNetworkCoverage = dynamic(() => import('@/components/igps/globeNetwork'));
+const ImageComparisonTable = dynamic(() => import('@/components/igps/comparison'));
+const PaymentSystemUI = dynamic(() => import('@/components/igps/paymentSystem'));
+const BepayLanding = dynamic(() => import('@/components/igps/chooseBepay'));
+const SetupGlobalAccount = dynamic(() => import('@/components/igps/globalAccount'));
+const ComplianceSection = dynamic(() => import('@/components/igps/compliance'));
+const FAQSection = dynamic(() => import('@/components/igps/faqs'));
 
 const IgpsPage = () => {
   return (

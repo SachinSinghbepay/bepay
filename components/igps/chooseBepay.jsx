@@ -44,7 +44,6 @@ export default function BepayLanding() {
           width={100}
           height={100}
           className="w-25 h-25 object-contain"
-          priority={true}
         />
       </div>
     </div>
