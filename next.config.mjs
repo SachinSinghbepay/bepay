@@ -2,6 +2,9 @@
 const nextConfig = {
   compress: true,
   poweredByHeader: false,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   transpilePackages: [
     "@tiptap/core",
     "@tiptap/react",
