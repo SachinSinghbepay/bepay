@@ -54,7 +54,7 @@ export default function BepayLanding() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-11">
-          <h1
+          <h2
             className="
             text-[30px] leading-[30px] font-semibold text-[#C0C0C0]
             tracking-[-0.04em] text-center md:whitespace-nowrap
@@ -64,7 +64,7 @@ export default function BepayLanding() {
           >
             Why Businesses Choose{" "}
             <span className="text-[#080808]">bepay IGPS</span>
-          </h1>
+          </h2>
 
           <p
             className="text-[#080808] text-[14px] md:text-[24px] mt-5"
@@ -228,7 +228,7 @@ export default function BepayLanding() {
 
         {/* CTA Section */}
         <div className="text-center">
-          <h2
+          <h3
             className="
             font-semibold text-[#080808] mb-8 mt-10
             md:text-[24px] md:font-semibold   /* Desktop stays same */
@@ -242,7 +242,7 @@ export default function BepayLanding() {
             }}
           >
             Ready to Receive International Payments?
-          </h2>
+          </h3>
 
           <button
             onClick={() => {
