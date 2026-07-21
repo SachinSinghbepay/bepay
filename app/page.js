@@ -66,13 +66,8 @@ const faqSchema = {
 };
 import BuiltForMerchants from '@/components/igps/builtForMerchants';
 
-const GlobalNetworkCoverage = dynamic(() => import('@/components/igps/globeNetwork'));
-const ImageComparisonTable = dynamic(() => import('@/components/igps/comparison'));
-const PaymentSystemUI = dynamic(() => import('@/components/igps/paymentSystem'));
-const BepayLanding = dynamic(() => import('@/components/igps/chooseBepay'));
-const SetupGlobalAccount = dynamic(() => import('@/components/igps/globalAccount'));
-const ComplianceSection = dynamic(() => import('@/components/igps/compliance'));
-const FAQSection = dynamic(() => import('@/components/igps/faqs'));
+const BelowFoldGroupA = dynamic(() => import('@/components/igps/belowFoldGroupA'));
+const BelowFoldGroupB = dynamic(() => import('@/components/igps/belowFoldGroupB'));
 
 const IgpsPage = () => {
   return (
@@ -82,15 +77,8 @@ const IgpsPage = () => {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <IgpsHero />
       <BuiltForMerchants/>
-      <GlobalNetworkCoverage/>
-      <ImageComparisonTable/>
-      {/* <App/> */}
-      <PaymentSystemUI/>
-      <BepayLanding/>
-      {/* <VerticalScrollingSection/> */}
-      <SetupGlobalAccount/>
-      <ComplianceSection/>
-      <FAQSection/>
+      <BelowFoldGroupA/>
+      <BelowFoldGroupB/>
     </div>
   );
 };
