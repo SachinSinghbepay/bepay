@@ -8,7 +8,6 @@ import CryptoWalletSection from "@/components/crypto/crypto-wallet-section";
 const ScrollTextAnimation = dynamic(() => import("@/components/crypto/scroll-text-animation"), { ssr: false });
 const OneWallet = dynamic(() => import("@/components/crypto/OneWallet"), { ssr: false });
 import { PaymentProofSection } from "@/components/crypto/payment-proof-section";
-import { SecuritySection } from "@/components/crypto/security-section";
 import { UtilitySection } from "@/components/crypto/utility-section";
 import { FinancialServicesSection } from "@/components/crypto/financial-services-section";
 import CryptoScrollSection from "@/components/crypto/crypto-scroll-section";

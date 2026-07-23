@@ -1,6 +1,5 @@
 'use client';
 import Footer from "@/components/Footer1";
-import CookiePolicyFooter from "@/components/privacy-policy/cookie-policy-footer";
 import CookiesPolicyContent from "@/components/privacy-policy/CookiePolicy";
 import HeaderContent from "@/components/privacy-policy/HeaderContent";
 import React from "react";

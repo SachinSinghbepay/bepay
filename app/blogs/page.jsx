@@ -4,7 +4,6 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 
 import BlogCard from "@/components/BlogCard"
 import BlogCardSkeleton from "@/components/BlogCardSkeleton"
-import { ChevronRight } from "lucide-react"
 import HorizontalBlogSection from "./blogWidget/HorizontalBlogSection"
 import Link from "next/link"
 

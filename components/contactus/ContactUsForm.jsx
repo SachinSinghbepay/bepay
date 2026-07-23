@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { db } from "@/lib/firebase"
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore"
+import { collection, addDoc } from "firebase/firestore"
 
 // Zod validation schema
 const contactFormSchema = z.object({

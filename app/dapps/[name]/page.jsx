@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import {
   ChevronLeft,
-  ArrowUpRight,
   Star,
   AlertTriangle,
   X,
