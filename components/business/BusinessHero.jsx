@@ -517,6 +517,7 @@ const BusinessHero = () => {
                             src="/s1_6.png"
                             alt="Bepay Mobile Interface"
                             fill
+                            sizes="(max-width: 793px) 41vw, 325px"
                             className="object-contain"
                             priority // <-- CRITICAL LCP IMAGE
                           />

@@ -66,6 +66,7 @@ export const PaymentProofSection = () => {
           src="/images/crypto/bgimg.jpg"
           alt="Two women looking at a smartphone"
           fill
+          sizes="100vw"
           style={{ objectFit: "cover" }}
           loading="lazy"
         />
@@ -76,6 +77,7 @@ export const PaymentProofSection = () => {
         src="/images/crypto/subset.png"
         alt="Geometric overlay"
         fill
+        sizes="100vw"
         style={{ objectFit: "cover" }}
         loading="lazy"
         className="z-10"

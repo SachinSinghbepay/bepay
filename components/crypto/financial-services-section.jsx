@@ -142,6 +142,7 @@ const ServicePanel = ({ service, index, progress, totalServices }) => {
               src={service.image || "/placeholder.svg"}
               alt={service.title}
               fill
+              sizes="(max-width: 360px) 100vw, 360px"
               className="object-cover"
               loading="lazy"
             />
@@ -297,6 +298,7 @@ const MobileView = ({ onDownloadClick }) => {
                         src={service.image || "/placeholder.svg"}
                         alt={service.title}
                         fill
+                        sizes="(max-width: 639px) 75vw, 65vw"
                         className="object-cover"
                         loading="lazy"
                       />
