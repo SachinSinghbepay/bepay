@@ -19,16 +19,17 @@ export const metadata = {
   },
 };
 
-import AboutSection from "@/components/aboutus/about-section";
+import dynamic from "next/dynamic";
 import HeroSection from "@/components/aboutus/AboutHero";
-import BepayStorySection from "@/components/aboutus/bepay-story-section";
-import CoreValuesSection from "@/components/aboutus/core-values-section";
-import CTASection from "@/components/aboutus/cta-section";
-import WhatMakesYouDifferent from "@/components/aboutus/different-section";
-import MissionVisionSection from "@/components/aboutus/mission-vision-section";
-import PartnershipSection from "@/components/aboutus/partnership-section";
-import Header from "@/components/header";
 import React from "react";
+
+const AboutSection = dynamic(() => import("@/components/aboutus/about-section"));
+const BepayStorySection = dynamic(() => import("@/components/aboutus/bepay-story-section"));
+const CoreValuesSection = dynamic(() => import("@/components/aboutus/core-values-section"));
+const CTASection = dynamic(() => import("@/components/aboutus/cta-section"));
+const WhatMakesYouDifferent = dynamic(() => import("@/components/aboutus/different-section"));
+const MissionVisionSection = dynamic(() => import("@/components/aboutus/mission-vision-section"));
+const PartnershipSection = dynamic(() => import("@/components/aboutus/partnership-section"));
 
 const page = () => {
   return (

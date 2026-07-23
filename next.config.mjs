@@ -71,6 +71,15 @@ const nextConfig = {
     scrollRestoration: false,
     optimizePackageImports: ["@tabler/icons-react", "lucide-react", "framer-motion"],
   },
+  async redirects() {
+    return [
+      {
+        source: "/register",
+        destination: "/download",
+        permanent: false,
+      },
+    ];
+  },
   async headers() {
     return [
       {

@@ -12,8 +12,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { db } from "@/lib/firebase"
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore"
 
 // Zod validation schema
 const contactFormSchema = z.object({
@@ -115,6 +113,10 @@ export default function ContactForm() {
     setIsSubmitting(true)
 
     try {
+      const [{ db }, { collection, addDoc }] = await Promise.all([
+        import("@/lib/firebase"),
+        import("firebase/firestore"),
+      ])
       await addDoc(collection(db, "contact-submissions"), {
         ...data,
         timestamp: new Date(),

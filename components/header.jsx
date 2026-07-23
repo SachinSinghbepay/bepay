@@ -5,13 +5,15 @@ import { Smartphone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import WaitlistTriggerButton from "./waitlist-trigger-button";
-import GetStartedPopup from "./popups/getStartedPopup";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 import { useAppDownload } from "@/hooks/useAppDownload"
 import { AppDownloadPopups } from "@/components/AppDownloadPopups"
+
+const GetStartedPopup = dynamic(() => import("./popups/getStartedPopup"), { ssr: false });
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

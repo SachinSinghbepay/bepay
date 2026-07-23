@@ -1,12 +1,12 @@
 'use client';
 import dynamic from "next/dynamic";
-import SavingSection from "@/components/SavingSection";
-import FdSection from "@/components/fd-section";
-import HowItWorksSection from "@/components/HowItWorks";
 
 const Hero = dynamic(() => import("@/components/Hero"), { ssr: false });
 const CreditCardSection = dynamic(() => import("@/components/credit-card-section"), { ssr: false });
 const ScrollTextAnimation = dynamic(() => import("@/components/ScrollTextAnimation"), { ssr: false });
+const SavingSection = dynamic(() => import("@/components/SavingSection"), { ssr: false });
+const FdSection = dynamic(() => import("@/components/fd-section"), { ssr: false });
+const HowItWorksSection = dynamic(() => import("@/components/HowItWorks"), { ssr: false });
 
 
 const page = () => {

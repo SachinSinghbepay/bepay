@@ -376,6 +376,7 @@ export default function CryptoHeroSection() {
                                 src={icon.src || "/placeholder.svg"}
                                 alt={icon.alt}
                                 fill
+                                sizes="48px"
                                 className="object-cover rounded-full"
                               />
                             </div>
@@ -399,6 +400,7 @@ export default function CryptoHeroSection() {
                               src={icon.src || "/placeholder.svg"}
                               alt={icon.alt}
                               fill
+                              sizes="48px"
                               className="object-cover"
                             />
                           </div>

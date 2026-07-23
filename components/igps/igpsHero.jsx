@@ -183,11 +183,12 @@ const IgpsHero = () => {
               <div className="relative w-full aspect-[4/5] rounded-[52px] overflow-hidden shadow-lg border border-gray-100 bg-white">
                 <video
                   src="https://assets.bepay.money/website_assets/merchant_video.mp4"
+                  poster="/merchant-video-poster.webp"
                   autoPlay
                   muted
                   loop
                   playsInline
-                  preload="auto"
+                  preload="metadata"
                   fetchPriority="high"
                   className="w-full h-full object-cover"
                 />

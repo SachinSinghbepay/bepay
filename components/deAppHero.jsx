@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronRight, Star, ArrowUpRight } from 'lucide-react';
 import Image from 'next/image';
-import allNetworks from "@/components/allNetworks";
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { fetchDApps, fetchTopDApps, fetchRecentDApps, fetchCategories, trackDAppVisit } from '@/services/dappsService';

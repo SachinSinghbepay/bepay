@@ -359,6 +359,7 @@ export default function HowCryptoWorksSection() {
                   src={stepsData[0].image}
                   alt={stepsData[0].alt}
                   fill
+                  sizes="380px"
                   className="object-contain"
                 />
               </div>
@@ -372,6 +373,7 @@ export default function HowCryptoWorksSection() {
                   src={stepsData[1].image}
                   alt={stepsData[1].alt}
                   fill
+                  sizes="380px"
                   className="object-contain"
                 />
               </div>
@@ -385,6 +387,7 @@ export default function HowCryptoWorksSection() {
                   src={stepsData[2].image}
                   alt={stepsData[2].alt}
                   fill
+                  sizes="380px"
                   className="object-contain"
                 />
               </div>
@@ -398,6 +401,7 @@ export default function HowCryptoWorksSection() {
                   src={stepsData[3].image}
                   alt={stepsData[3].alt}
                   fill
+                  sizes="380px"
                   className="object-contain"
                 />
               </div>

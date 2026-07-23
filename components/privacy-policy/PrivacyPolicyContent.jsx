@@ -1,5 +1,3 @@
-"use client";
-
 export default function PrivacyPolicyContent() {
   return (
     <div className="w-full py-8 space-y-12 text-justify">
