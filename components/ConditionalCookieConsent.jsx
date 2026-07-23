@@ -1,7 +1,9 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import CookieConsentProvider from './cookie-consent-provider';
+import dynamic from 'next/dynamic';
+
+const CookieConsentProvider = dynamic(() => import('./cookie-consent-provider'), { ssr: false });
 
 export default function ConditionalCookieConsent() {
   const pathname = usePathname();

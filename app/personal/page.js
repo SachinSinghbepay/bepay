@@ -3,8 +3,8 @@ import { useEffect } from "react";
 
 import dynamic from "next/dynamic";
 import CryptoHeroSection from "@/components/crypto/CryptoHero";
-import WaitlistPopup from "@/components/waitlist-popup";
 
+const WaitlistPopup = dynamic(() => import("@/components/waitlist-popup"), { ssr: false });
 const ScrollTextAnimation = dynamic(() => import("@/components/crypto/scroll-text-animation"), { ssr: false });
 const OneWallet = dynamic(() => import("@/components/crypto/OneWallet"), { ssr: false });
 const CryptoWalletSection = dynamic(() => import("@/components/crypto/crypto-wallet-section"), { ssr: false });
