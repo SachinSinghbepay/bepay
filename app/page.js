@@ -1,4 +1,5 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 import IgpsHero from '@/components/igps/igpsHero';
 
 export const metadata = {
@@ -63,16 +64,10 @@ const faqSchema = {
     { "@type": "Question", name: "Do you support receiving payments from Amazon?", acceptedAnswer: { "@type": "Answer", text: "Yes, you can receive your Amazon marketplace payouts directly into your bepay IGPS multi-currency virtual accounts." } },
   ],
 };
-import GlobalNetworkCoverage from '@/components/igps/globeNetwork';
-import ImageComparisonTable from '@/components/igps/comparison';
-import App from '@/components/igps/transfer';
-import BepayLanding from '@/components/igps/chooseBepay';
-import ComplianceSection from '@/components/igps/compliance';
-import FAQSection from '@/components/igps/faqs';
-import PaymentSystemUI from '@/components/igps/paymentSystem';
-import SetupGlobalAccount from '@/components/igps/globalAccount';
-import VerticalScrollingSection from '@/components/igps/verticalScroll';
 import BuiltForMerchants from '@/components/igps/builtForMerchants';
+
+const BelowFoldGroupA = dynamic(() => import('@/components/igps/belowFoldGroupA'));
+const BelowFoldGroupB = dynamic(() => import('@/components/igps/belowFoldGroupB'));
 
 const IgpsPage = () => {
   return (
@@ -82,15 +77,8 @@ const IgpsPage = () => {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <IgpsHero />
       <BuiltForMerchants/>
-      <GlobalNetworkCoverage/>
-      <ImageComparisonTable/>
-      {/* <App/> */}
-      <PaymentSystemUI/>
-      <BepayLanding/>
-      {/* <VerticalScrollingSection/> */}
-      <SetupGlobalAccount/>
-      <ComplianceSection/>
-      <FAQSection/>
+      <BelowFoldGroupA/>
+      <BelowFoldGroupB/>
     </div>
   );
 };

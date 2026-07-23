@@ -91,7 +91,6 @@ const PaymentSystemUI = () => {
     width: 200,
     height: 200,
     className: "max-w-full h-auto card-image",
-    priority: true,
   };
 
   const cardsData = [

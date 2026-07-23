@@ -3,9 +3,11 @@
 import React from "react";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Users } from "lucide-react";
-import WaitlistPopup from "./waitlist-popup";
+
+const WaitlistPopup = dynamic(() => import("./waitlist-popup"), { ssr: false });
 
 export default function WaitlistTriggerButton({
   variant = "default",

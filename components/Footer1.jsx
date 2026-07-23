@@ -4,8 +4,6 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import Link from "next/link";
 import { AnalyticsService } from "@/services/analyticsService"; // ANALYTICS: Import the service
 import GetStartedPopup from "@/components/popups/getStartedPopup";
@@ -1112,26 +1110,53 @@ const Footer = ({
         <p className="text-[8px] font-[400] lg:tracking-[2%] lg:leading-[20px] max-w-[1359px] mx-auto lg:text-[10px] text-[#6A6A6A]">
           {isUpiPage ? (
             <>
-              bepay operates under the brand name “bepay money”, with its
-              registered legal entity Bepay Technologies Private Limited.
-              Payment services on this platform are provided in partnership with
-              authorized banking and payment partners, in compliance with
-              guidelines issued by the Reserve Bank of India (RBI) and the
-              National Payments Corporation of India (NPCI). The information and
-              services presented on this website are intended for general
-              informational purposes only and do not constitute financial,
-              investment, or legal advice. bepay money does not operate as a
-              bank, financial institution, or digital asset exchange.
-              Availability of services is subject to regulatory approvals and
-              partner bank policies.
+              bepay operates under the brand name &ldquo;bepay money&rdquo;
+              through its registered legal entity, Bepay Technologies Private
+              Limited. Payment services available on this platform are
+              facilitated in partnership with authorized banking institutions,
+              payment service providers, and regulated payment partners, in
+              compliance with the guidelines issued by the Reserve Bank of
+              India (RBI), the National Payments Corporation of India (NPCI),
+              and other applicable regulatory authorities.
+              <br />
+              <br />
+              The information and services presented on this website are
+              provided for general informational purposes only and do not
+              constitute financial, investment, legal, tax, or professional
+              advice. bepay money is a financial technology company and does not
+              operate as a bank, financial institution, or digital asset
+              exchange. It does not independently hold, custody, or process
+              customer funds outside the infrastructure of its licensed
+              banking and regulated payment partners.
+              <br />
+              <br />
+              All payment services are subject to applicable regulatory
+              requirements, partner bank policies, and mandatory compliance
+              procedures, including Know Your Customer (KYC), Anti-Money
+              Laundering (AML), sanctions screening, and fraud prevention
+              checks. Cards, IBAN accounts, and other regulated banking services are
+              issued and provided by licensed banking and regulated financial
+              institution partners. Service availability may vary depending
+              on jurisdiction, regulatory approvals, eligibility, and partner
+              bank policies.
             </>
           ) : isLandingPage ? (
             <>
-              bepay money operates through its legal entities registered across multiple jurisdictions worldwide The cross-border payment services available through the bepay platform are facilitated in partnership with an RBI-authorized Payment Aggregator – Cross Border (PA-CB) licensed partner, along with authorized banking and payment network partners, and are provided in compliance with applicable guidelines issued by the Reserve Bank of India (RBI) and relevant payment network regulations. The information and services presented on this website are intended for general informational purposes only and do not constitute financial, investment, legal, or tax advice. bepay money does not operate as a bank, financial institution, or digital asset exchange, and does not independently hold or process customer funds outside of its regulated partner infrastructure. All services are subject to regulatory requirements, partner bank policies, and applicable compliance checks, including but not limited to KYC, AML, and transaction monitoring obligations.
+              bepay money operates through its legal entities registered across multiple jurisdictions worldwide. Cross-border payment services available through the bepay money platform are facilitated in partnership with an RBI-authorized Payment Aggregator – Cross Border (PA-CB) licensed partner, together with authorized banking institutions and payment network partners, in accordance with applicable guidelines issued by the Reserve Bank of India (RBI) and relevant payment network regulations.
+              <br />
+              <br />
+              The information and services presented on this website are provided for general informational purposes only and do not constitute financial, investment, legal, tax, or professional advice. bepay money is a financial technology company and does not operate as a bank, financial institution, or digital asset exchange. It does not independently hold, custody, or process customer funds outside the infrastructure of its licensed and regulated partners. All services are subject to applicable laws, regulatory requirements, partner bank policies, and mandatory compliance procedures, including Know Your Customer (KYC), Anti-Money Laundering (AML), sanctions screening, and transaction monitoring obligations.
             </>
           ) : (
             <>
-              bepay money operates through its legal entities registered across multiple jurisdictions worldwide: Bepay Fintech Products Holding LTD, British Virgin Islands (Registration No: 2185015); bepay money Europe S.R.L, Romania (Registration No: 52474864); IGPS technology LLC SCO, Dubai; Bepay Fintech Inc, United States (Registration No: 31000294520372) and Directpay Fintech LTD, Canada (Registration No: 1001340184). The information and services presented on this website are provided for informational purposes only and do not constitute financial, investment, or legal advice. bepay does not operate as a bank, financial institution, or digital asset exchange. All wallet and payment-related services are provided in a non-custodial capacity, leveraging public distributed ledger technologies and open-source data from integrated platforms and partners. Cryptocurrency trading is highly volatile, and users may lose their entire investment; all activities are undertaken at your own risk. bepay money holds ISO 9001, ISO 20022, and ISO 27001 certifications, and is licensed/registered under applicable frameworks including MSB, DORA, MiCA, VASP, and DPDP.            </>
+              bepay money operates through its legal entities registered across multiple jurisdictions worldwide, including Bepay Fintech Products Holding LTD (British Virgin Islands, Registration No. 2185015), bepay money Europe S.R.L. (Romania, Registration No. 52474864), IGPS Technology LLC SCO (Dubai), Bepay Fintech Inc. (United States, Registration No. 31000294520372), Bepay Technologies Private Limited (India, CIN: U62099DL2023PTC422577), and Directpay Fintech LTD (Canada, Registration No. 1001340184).
+              <br />
+              <br />
+              bepay money operates as a financial institution and digital asset service provider through its licensed entities and regulated partners in applicable jurisdictions. Digital asset and payment services are provided in a non-custodial capacity, leveraging public distributed ledger technologies and integrations with trusted third-party platforms and service providers. Users retain control of their digital assets at all times unless expressly stated otherwise. Cards, IBAN accounts, and other regulated banking services are issued and provided by licensed banking and regulated partners. Availability of these services is subject to jurisdiction, eligibility, regulatory approvals, and partner bank policies. bepay money maintains internationally recognized security and compliance standards, including PCI DSS, SOC 2, ISO 9001, ISO 20022, and ISO 27001, and operates under applicable registrations and regulatory frameworks, including MSB, VASP, MiCA, DORA, and DPDP, where applicable.
+              <br />
+              <br />
+              The information and services presented on this website are provided for informational purposes only and do not constitute financial, investment, legal, tax, or professional advice. Digital asset markets are highly volatile and involve significant risk. Users should carefully evaluate their financial circumstances before engaging in any digital asset transactions and acknowledge that they may lose the entire value of their investment.
+            </>
           )}
         </p>
       </footer>

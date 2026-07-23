@@ -1,21 +1,30 @@
 // src/services/analyticsService.js
-import mixpanel from "mixpanel-browser";
 import { v4 as uuidv4 } from 'uuid'; // Make sure you have installed uuid: npm install uuid
 
 export class AnalyticsService {
   static isInitialized = false;
+  static _mixpanel = null;
+  static _initPromise = null;
+  static _pendingEvents = [];
 
   static init(mixpanelToken) {
-    if (!mixpanelToken || this.isInitialized) return;
+    if (!mixpanelToken || this.isInitialized || this._initPromise) return;
 
-    mixpanel.init(mixpanelToken, {
-      debug: process.env.NODE_ENV !== "production",
-      persistence: "localStorage",
-      autotrack: false,
+    this._initPromise = import("mixpanel-browser").then(({ default: mixpanel }) => {
+      mixpanel.init(mixpanelToken, {
+        debug: process.env.NODE_ENV !== "production",
+        persistence: "localStorage",
+        autotrack: false,
+      });
+
+      this._mixpanel = mixpanel;
+      this.isInitialized = true;
+      console.log("Mixpanel Initialized");
+
+      const queued = this._pendingEvents;
+      this._pendingEvents = [];
+      queued.forEach(({ eventName, params }) => this.sendEvent(eventName, params));
     });
-
-    this.isInitialized = true;
-    console.log("Mixpanel Initialized");
   }
 
   /**
@@ -46,8 +55,7 @@ export class AnalyticsService {
 
   static getDistinctId() {
     try {
-      const distinctId = mixpanel.get_distinct_id();
-      return distinctId;
+      return this._mixpanel?.get_distinct_id();
     } catch (err) {
       console.error("err", err);
       return null;
@@ -55,9 +63,10 @@ export class AnalyticsService {
   }
 
   static createWaitlistUser(email, extraData = {}) {
-    if (!this.isInitialized) return;
+    if (!this.isInitialized || !this._mixpanel) return;
 
     try {
+      const mixpanel = this._mixpanel;
       const distinctId = mixpanel.get_distinct_id() || email; // fallback to email if no ID
 
       // 1. Identify this user with distinct_id
@@ -67,7 +76,7 @@ export class AnalyticsService {
       mixpanel.people.set({
         $email: email,                        // reserved property
         created_at: new Date().toISOString(), // join timestamp
-        source: "waitlist",                       
+        source: "waitlist",
       });
 
       console.log(`[Analytics] Waitlist user created: ${email}, distinctId: ${distinctId}`);
@@ -82,12 +91,18 @@ export class AnalyticsService {
    * @param {object} params - Additional properties for the event.
    */
   static async sendEvent(eventName, params = {}) {
-    if (!this.isInitialized) {
-      console.warn("Analytics not initialized yet. Event dropped:", eventName);
+    if (!this.isInitialized || !this._mixpanel) {
+      if (this._initPromise) {
+        this._pendingEvents.push({ eventName, params });
+        console.log(`[Analytics] Queued until ready: ${eventName}`);
+      } else {
+        console.warn("Analytics not initialized yet. Event dropped:", eventName);
+      }
       return;
     }
 
     try {
+      const mixpanel = this._mixpanel;
       var distinctId = await mixpanel?.get_distinct_id();
 
       const { sessionId } = this.getSessionData();
@@ -106,9 +121,11 @@ export class AnalyticsService {
   }
 
   static checkcampaignId() {
+    if (!this._mixpanel) return;
+    const mixpanel = this._mixpanel;
     try {
       const campaignId = localStorage.getItem("campaignId");
-      
+
       if (campaignId) {
         if (mixpanel.get_property("campaignId") !== campaignId) {
           mixpanel.register({ campaignId });
@@ -130,7 +147,7 @@ export class AnalyticsService {
    * Uses the reliable `sendBeacon` transport to ensure delivery.
    */
   static endSession() {
-    if (!this.isInitialized) return;
+    if (!this.isInitialized || !this._mixpanel) return;
 
     const { sessionId, sessionStartTime } = this.getSessionData();
     if (sessionId && sessionStartTime) {
@@ -141,9 +158,9 @@ export class AnalyticsService {
         sessionId: sessionId,
         sessionDuration_seconds: durationInSeconds,
       };
-      
+
       // Use `sendBeacon` for reliability when the page is closing.
-      mixpanel.track("Session End", eventProperties, { transport: 'sendBeacon' });
+      this._mixpanel.track("Session End", eventProperties, { transport: 'sendBeacon' });
 
       // Clean up sessionStorage for the next visit.
       localStorage.removeItem("campaignId");
@@ -157,8 +174,8 @@ export class AnalyticsService {
    * Resets the Mixpanel instance on user logout.
    */
   static reset() {
-    if (this.isInitialized) {
-      mixpanel.reset();
+    if (this.isInitialized && this._mixpanel) {
+      this._mixpanel.reset();
       console.log("Mixpanel instance has been reset.");
     }
   }
